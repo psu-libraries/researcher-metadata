@@ -41,10 +41,13 @@ gem 'bugsnag'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'byebug', platform: :mri
 
   # Default test framework
   gem 'rspec-rails'
+
+  # Generate fake test data
+  gem 'ffaker'
 end
 
 group :development do
@@ -63,6 +66,21 @@ group :test do
   gem 'selenium-webdriver'
   # Easy installation and use of chromedriver to run system tests with Chrome
   gem 'chromedriver-helper'
+
+  # Clean out database between test runs
+  gem 'database_cleaner'
+
+  # See what your headless browser is seeing with save_and_open_page
+  gem 'launchy'
+
+  # Fancy rspec matchers for rails
+  gem 'shoulda-matchers', require: false
+
+  # Test object factory
+  gem 'factory_girl_rails'
+
+  # Integration test helpers for mailers
+  gem 'capybara-email'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
