@@ -76,7 +76,7 @@ group :test do
   gem 'shoulda-matchers', require: false
 
   # Test object factory
-  gem 'factory_bot'
+  gem 'factory_bot_rails'
 
   # Integration test helpers for mailers
   gem 'capybara-email'
