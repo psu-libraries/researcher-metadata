@@ -1,7 +1,7 @@
 RSpec.configure do |config|
 
   # Allow direct use of .build and .create rather than having to say
-  # FactoryGirl.build and FactoryGirl.create.
-  config.include FactoryGirl::Syntax::Methods
+  # FactoryBot.build and FactoryBot.create.
+  config.include FactoryBot::Syntax::Methods
 
 end
