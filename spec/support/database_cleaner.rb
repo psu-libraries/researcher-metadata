@@ -13,7 +13,7 @@ RSpec.configure do |config|
     DatabaseCleaner.clean_with(:truncation)
 
     # Make sure all known factories produce #valid? objects.
-    FactoryGirl.lint
+    FactoryBot.lint
 
     # Clean up again from the lint check above.
     DatabaseCleaner.clean_with(:truncation)
