@@ -94,3 +94,6 @@ RSpec.configure do |config|
   Kernel.srand config.seed
 =end
 end
+
+# Define the root of the project (for specs that don't load Rails).
+ROOT = Pathname.new(File.expand_path(File.dirname(__FILE__) + '/..'))
