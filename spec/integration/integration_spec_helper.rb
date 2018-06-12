@@ -1,0 +1,6 @@
+require 'rails_helper'
+require 'support/capybara'
+require 'support/database_cleaner'
+require 'support/factory_bot'
+require 'support/fixture'
+require 'support/mail'
