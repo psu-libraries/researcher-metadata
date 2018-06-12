@@ -26,7 +26,7 @@ bundle install --no-color --local
 echo '========== Prepare Database ============================================='
 bin/rake db:create:all
 bin/rake db:migrate
-bin/rake db:test:clone
+bin/rake db:test:prepare
 
 echo '========== Unit Tests ==================================================='
 bin/rspec spec/unit
