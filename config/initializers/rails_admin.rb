@@ -26,7 +26,9 @@ RailsAdmin.config do |config|
   config.excluded_models = ['ActiveStorage::Blob', 'ActiveStorage::Attachment']
 
   config.actions do
-    dashboard                     # mandatory
+    dashboard do
+      statistics false
+    end
     index                         # mandatory
     new
     export
