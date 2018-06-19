@@ -36,6 +36,9 @@ gem 'bootsnap', '>= 1.1.0', require: false
 # Notify the team of any exceptions
 gem 'bugsnag'
 
+# Simple, efficient CSV processing for Ruby
+gem 'smarter_csv'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
