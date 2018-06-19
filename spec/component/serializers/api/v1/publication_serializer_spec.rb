@@ -1,6 +1,6 @@
 require 'component/component_spec_helper'
 
-describe PublicationSerializer do
+describe API::V1::PublicationSerializer do
   let(:publication) { create(:publication, title: 'publication 1') }
 
   describe "data attributes" do
