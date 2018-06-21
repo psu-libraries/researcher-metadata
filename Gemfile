@@ -39,6 +39,9 @@ gem 'bugsnag'
 # Simple, efficient CSV processing for Ruby
 gem 'smarter_csv'
 
+# Library for bulk inserting data using ActiveRecord
+gem 'activerecord-import'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
