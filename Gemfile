@@ -45,6 +45,9 @@ gem 'activerecord-import'
 # The ultimate text progress bar library for Ruby
 gem 'progressbar'
 
+# RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
+gem "rails_admin", "~> 1.3"
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
