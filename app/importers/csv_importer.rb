@@ -1,0 +1,63 @@
+class CSVImporter
+  class ParseError < RuntimeError; end
+
+  attr_accessor :filename,
+                :fatal_errors,
+                :batch_size
+
+  def initialize(filename:, batch_size: 500)
+    @fatal_errors = []
+    @filename = filename
+    @fatal_errors << "Cannot find file #{filename.inspect}" unless File.exists?( filename )
+    @fatal_errors << "File is empty #{filename.inspect}" if File.zero?( filename )
+    @fatal_errors << "File has no records #{filename.inspect}" unless File.new(filename).readlines.size > 1
+    @batch_size = batch_size
+  end
+
+  def call
+    pbar = ProgressBar.create(title: 'Importing CSV', total: line_count)
+    chunk_number = 0
+    SmarterCSV.process(filename, chunk_size: batch_size, headers_in_file: true) do |chunk|
+      objects = []
+      chunk.each_with_index.map do |row, index|
+        pbar.increment
+        row_number = (chunk_number * batch_size) + index + 1
+        begin
+          object = row_to_object(row)
+          object.validate!
+          objects << object
+        rescue => e
+          add_error(message: e.message, row_number: row_number)
+        end
+      end
+      bulk_import(objects)
+      chunk_number += 1
+    end
+    pbar.finish
+    raise ParseError, fatal_errors if fatal_errors_encountered?
+  end
+
+  def row_to_object(row)
+    # Defined in parent class
+    raise NotImplementedError
+  end
+
+  def bulk_import(objects)
+    # Defined in parent class
+    raise NotImplementedError
+  end
+
+  def fatal_errors_encountered?
+    fatal_errors.length > 0
+  end
+
+  private
+
+  def add_error(message:, row_number:)
+    fatal_errors << "Line #{row_number}: #{message}"
+  end
+
+  def line_count
+    `wc -l #{filename}`.to_i - 1
+  end
+end
