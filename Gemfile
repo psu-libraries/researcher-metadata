@@ -48,6 +48,9 @@ gem 'progressbar'
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem "rails_admin", "~> 1.3"
 
+# A lightning fast JSON:API serializer for Ruby Objects
+gem 'fast_jsonapi'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
