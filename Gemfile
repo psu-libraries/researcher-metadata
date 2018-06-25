@@ -54,6 +54,9 @@ gem 'fast_jsonapi'
 # Swagger::Blocks is a DSL for pure Ruby code blocks that can be turned into JSON
 gem 'swagger-blocks'
 
+# Include swagger-ui as a Raile engine
+gem 'swagger_ui_engine'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
