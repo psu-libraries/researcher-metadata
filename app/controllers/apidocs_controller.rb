@@ -15,15 +15,7 @@ class ApidocsController < ActionController::Base
     key :produces, ['application/json']
   end
 
-  # A list of all classes that have swagger_* declarations.
-  SWAGGERED_CLASSES = [
-    API::V1::PublicationsController,
-    Publication,
-    ErrorModel,
-    self,
-  ].freeze
-
   def index
-    render json: Swagger::Blocks.build_root_json(SWAGGERED_CLASSES)
+    render json: Swagger::Blocks.build_root_json(SwaggeredClasses.all)
   end
 end
