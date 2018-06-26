@@ -66,6 +66,10 @@ group :development, :test do
 
   # Generate fake test data
   gem 'ffaker'
+
+  # Automatically test your rails API against its OpenAPI (Swagger) description
+  # of end-points, models, and query parameters
+  gem 'apivore'
 end
 
 group :development do
