@@ -7,4 +7,10 @@ class ActivityInsightPublicationImporter < CSVImporter
   def bulk_import(objects)
     Publication.import(objects)
   end
+
+  private
+
+  def encoding
+    'bom|utf-8'
+  end
 end

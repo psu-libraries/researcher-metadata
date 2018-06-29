@@ -17,7 +17,7 @@ class CSVImporter
   def call
     pbar = ProgressBar.create(title: 'Importing CSV', total: line_count) unless Rails.env.test?
     chunk_number = 0
-    SmarterCSV.process(filename, chunk_size: batch_size, headers_in_file: true) do |chunk|
+    SmarterCSV.process(filename, chunk_size: batch_size, headers_in_file: true, file_encoding: encoding) do |chunk|
       objects = []
       chunk.each_with_index.map do |row, index|
         pbar.increment unless Rails.env.test?
@@ -59,5 +59,9 @@ class CSVImporter
 
   def line_count
     `wc -l #{filename}`.to_i - 1
+  end
+
+  def encoding
+    'utf-8'
   end
 end
