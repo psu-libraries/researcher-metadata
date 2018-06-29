@@ -1,4 +1,4 @@
-class PublicationImporter < CSVImporter
+class ActivityInsightPublicationImporter < CSVImporter
 
   def row_to_object(row)
     Publication.new(row)
