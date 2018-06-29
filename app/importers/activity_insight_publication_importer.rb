@@ -42,9 +42,25 @@ class ActivityInsightPublicationImporter < CSVImporter
   end
 
   def row_to_object(row)
-    p = Publication.new
-    p.title = row[:title]
-    p
+    if row[:contype] == "Journal Article, Academic Journal" ||
+      row[:contype2] == "Journal Article, Academic Journal" ||
+      row[:contype3] == "Journal Article, Academic Journal" ||
+      row[:contype4] == "Journal Article, Academic Journal" ||
+      row[:contype5] == "Journal Article, Academic Journal" ||
+      row[:contype6] == "Journal Article, Academic Journal" ||
+      row[:contype7] == "Journal Article, Academic Journal" ||
+      row[:contype8] == "Journal Article, Academic Journal" ||
+      row[:contype9] == "Journal Article, Academic Journal" ||
+      row[:contype10] == "Journal Article, Academic Journal" ||
+      row[:contype11] == "Journal Article, Academic Journal" ||
+      row[:contype12] == "Journal Article, Academic Journal"
+
+      p = Publication.new
+      p.title = row[:title]
+      p
+    else
+      nil
+    end
   end
 
   def bulk_import(objects)

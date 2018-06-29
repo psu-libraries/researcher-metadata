@@ -24,8 +24,10 @@ class CSVImporter
         row_number = (chunk_number * batch_size) + index + 1
         begin
           object = row_to_object(row)
-          object.validate!
-          objects << object
+          if object
+            object.validate!
+            objects << object
+          end
         rescue => e
           add_error(message: e.message, row_number: row_number)
         end
