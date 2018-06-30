@@ -3,8 +3,7 @@ class SwaggeredClasses
     [
       API::V1::PublicationsController,
       ApidocsController,
-      Publication,
-      ErrorModel
+      Publication
     ].freeze
   end
 end

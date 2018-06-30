@@ -10,7 +10,7 @@ class ApidocsController < ActionController::Base
                         'research data at Penn State University ' \
                         'in the swagger-2.0 specification'
     end
-    key :basePath, '/api'
+    key :basePath, '/'
     key :consumes, ['application/json']
     key :produces, ['application/json']
   end

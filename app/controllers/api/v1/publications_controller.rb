@@ -11,7 +11,7 @@ module API::V1
       render json: API::V1::PublicationSerializer.new(@publication).serializable_hash
     end
 
-    swagger_path '/publications/{id}' do
+    swagger_path '/v1/publications/{id}' do
       operation :get do
         key :summary, 'Find Publication by ID'
         key :description, 'Returns a single publication if the user has access'
@@ -33,16 +33,24 @@ module API::V1
             key :'$ref', :Publication
           end
         end
-        response :default do
-          key :description, 'unexpected error'
+        response 404 do
+          key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModel
+            key :'$ref', :Publication
+            key :required, [:code, :message]
+            property :code do
+              key :type, :integer
+              key :format, :int32
+            end
+            property :message do
+              key :type, :string
+            end
           end
         end
       end
     end
 
-    swagger_path '/publications' do
+    swagger_path '/v1/publications' do
       operation :get do
         key :summary, 'All Publications'
         key :description, 'Returns all publications from the system that the user has access to'
@@ -57,16 +65,10 @@ module API::V1
         response 200 do
           key :description, 'publication response'
           schema do
-            key :type, :array
+            key :type, :object
             items do
               key :'$ref', :Publication
             end
-          end
-        end
-        response :default do
-          key :description, 'unexpected error'
-          schema do
-            key :'$ref', :ErrorModel
           end
         end
       end
