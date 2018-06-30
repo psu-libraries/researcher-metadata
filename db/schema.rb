@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_30_191350) do
+ActiveRecord::Schema.define(version: 2018_06_30_193214) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "authorships", force: :cascade do |t|
+    t.integer "person_id"
+    t.integer "publication_id"
+    t.integer "author_number"
+    t.string "activity_insight_identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["person_id"], name: "index_authorships_on_person_id"
+    t.index ["publication_id"], name: "index_authorships_on_publication_id"
+  end
 
   create_table "people", force: :cascade do |t|
     t.string "activity_insight_identifier"
@@ -41,5 +52,7 @@ ActiveRecord::Schema.define(version: 2018_06_30_191350) do
     t.index ["person_id"], name: "index_users_on_person_id"
   end
 
+  add_foreign_key "authorships", "people", name: "authorships_person_id_fk"
+  add_foreign_key "authorships", "publications", name: "authorships_publication_id_fk"
   add_foreign_key "users", "people", name: "users_person_id_fk"
 end

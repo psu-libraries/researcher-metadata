@@ -6,6 +6,11 @@ RSpec.describe Publication, type: :model do
     it { is_expected.to have_db_column(:title).of_type(:string) }
   end
 
+  describe 'associations' do
+    it { is_expected.to have_many(:authorships) }
+    it { is_expected.to have_many(:people).through(:authorships) }
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
   end
