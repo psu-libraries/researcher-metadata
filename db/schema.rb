@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_30_193214) do
+ActiveRecord::Schema.define(version: 2018_07_01_163339) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -41,6 +41,20 @@ ActiveRecord::Schema.define(version: 2018_06_30_193214) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "activity_insight_identifier"
+    t.datetime "activity_insight_updated_at"
+    t.string "characteristic"
+    t.text "secondary_title"
+    t.string "source"
+    t.string "status"
+    t.string "volume"
+    t.string "issue"
+    t.string "edition"
+    t.string "page_range"
+    t.text "url"
+    t.string "isbn_issn"
+    t.text "abstract"
+    t.datetime "published_at"
   end
 
   create_table "users", force: :cascade do |t|
