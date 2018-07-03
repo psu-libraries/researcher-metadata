@@ -1,1 +1,14 @@
-<h1>Research Metadata <%= @env.titleize %></h1>
+<div class="container">
+  <div class="jumbotron">
+    <h1>PSU Libraries Research Metadata</h1>
+    <p>
+       The authority for information about profiles, publications, and teaching
+       history of Penn State’s research faculty, research staff, and graduate students.
+       The data is drawn from several sources including Pure and Activity Insight.
+    </p>
+    <p>
+      <%= link_to "Admin", rails_admin_path, class: "btn btn-lg btn-primary" %>
+      <%= link_to "API Docs", "/api_docs", class: "btn btn-lg btn-secondary" %>
+    </p>
+  </div>
+</div>
