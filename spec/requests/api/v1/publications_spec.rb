@@ -1,6 +1,6 @@
 require 'requests/requests_spec_helper'
 
-describe 'Publications API::V1' do
+describe 'API::V1 Publications' do
   describe 'GET /v1/publications' do
     let!(:publications) { create_list(:publication, 10) }
 

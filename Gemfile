@@ -48,6 +48,12 @@ gem "rails_admin", "~> 1.3"
 # A lightning fast JSON:API serializer for Ruby Objects
 gem 'fast_jsonapi'
 
+# Swagger::Blocks is a DSL for pure Ruby code blocks that can be turned into JSON
+gem 'swagger-blocks'
+
+# Include swagger-ui as a Raile engine
+gem 'swagger_ui_engine'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -57,6 +63,10 @@ group :development, :test do
 
   # Generate fake test data
   gem 'ffaker'
+
+  # Automatically test your rails API against its OpenAPI (Swagger) description
+  # of end-points, models, and query parameters
+  gem 'apivore'
 end
 
 group :development do
