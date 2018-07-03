@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_01_163339) do
+ActiveRecord::Schema.define(version: 2018_07_03_204628) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2018_07_01_163339) do
     t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["activity_insight_identifier"], name: "index_people_on_activity_insight_identifier"
   end
 
   create_table "publications", force: :cascade do |t|
@@ -55,6 +56,7 @@ ActiveRecord::Schema.define(version: 2018_07_01_163339) do
     t.string "isbn_issn"
     t.text "abstract"
     t.datetime "published_at"
+    t.index ["activity_insight_identifier"], name: "index_publications_on_activity_insight_identifier"
   end
 
   create_table "users", force: :cascade do |t|

@@ -20,6 +20,8 @@ RSpec.describe Publication, type: :model do
     it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+
+    it { is_expected.to have_db_index :activity_insight_identifier }
   end
 
   describe 'associations' do
