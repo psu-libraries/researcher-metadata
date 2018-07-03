@@ -27,7 +27,7 @@ RailsAdmin.config do |config|
 
   config.actions do
     dashboard do
-      statistics false
+#     statistics false
     end
     index                         # mandatory
     new
