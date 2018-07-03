@@ -48,8 +48,7 @@ class ActivityInsightAuthorshipImporter < CSVImporter
     if row[:faculty_name].present?
       authorship.person = Person.find_by(activity_insight_identifier: row[:user_id])
     else
-      p = Person.find_or_create_by!(first_name: row[:fname], middle_name: row[:mname], last_name: row[:lname])
-      authorship.person = p
+      authorship.person = Person.create!(first_name: row[:fname], middle_name: row[:mname], last_name: row[:lname])
     end
     authorship.publication = Publication.find_by(activity_insight_identifier: row[:parent_id])
     authorship.author_number = row[:ordinal].to_i
