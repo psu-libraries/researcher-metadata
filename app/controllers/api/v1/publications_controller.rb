@@ -3,7 +3,7 @@ module API::V1
     include Swagger::Blocks
 
     def index
-      render json: API::V1::PublicationSerializer.new(Publication.all)
+      render json: API::V1::PublicationSerializer.new(Publication.limit(100))
     end
 
     def show
