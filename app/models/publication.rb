@@ -1,4 +1,4 @@
-class Publication < ActiveRecord::Base
+class Publication < ApplicationRecord
   include Swagger::Blocks
 
   has_many :authorships

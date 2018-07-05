@@ -1,4 +1,4 @@
-class Person < ActiveRecord::Base
+class Person < ApplicationRecord
   has_one :user
   has_many :authorships
   has_many :publications, through: :authorships
