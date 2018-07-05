@@ -45,6 +45,9 @@ gem 'progressbar'
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem "rails_admin", "~> 1.3"
 
+# Authentication framework
+gem 'devise'
+
 # A lightning fast JSON:API serializer for Ruby Objects
 gem 'fast_jsonapi'
 

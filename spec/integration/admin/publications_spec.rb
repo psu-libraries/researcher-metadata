@@ -1,6 +1,7 @@
 require 'integration/integration_spec_helper'
 
 feature 'Publications Admin', type: :feature do
+  before { authenticate_user }
   let!(:publication) { create(:publication, title: 'First Publication Title') }
   scenario 'index' do
     visit 'admin/publication'
