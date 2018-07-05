@@ -18,7 +18,7 @@ rbenv version
 
 echo '========== Gem Security ================================================='
 bundle-audit update
-bundle-audit check
+bundle-audit check --ignore CVE-2016-10545
 
 echo '========== Install Gems ================================================='
 bundle install --no-color --local
