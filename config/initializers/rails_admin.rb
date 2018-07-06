@@ -8,6 +8,13 @@ RailsAdmin.config do |config|
   end
   config.current_user_method(&:current_user)
 
+  config.authorize_with do
+    unless current_user.admin?
+      flash[:alert] = I18n.t('admin.authorization.not_authorized')
+      redirect_to main_app.root_path unless current_user.is_admin
+    end
+  end
+
   ## == Cancan ==
   # config.authorize_with :cancan
 

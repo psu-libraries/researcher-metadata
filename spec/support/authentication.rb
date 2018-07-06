@@ -48,6 +48,14 @@ def authenticate_user
   sign_in_as current_user
 end
 
+def authenticate_admin_user
+  sign_in_as current_admin_user
+end
+
 def current_user
-  @current_user ||= create(:user)
+  @current_user ||= create(:user, is_admin: false)
+end
+
+def current_admin_user
+  @current_admin_user ||= create(:user, is_admin: true)
 end

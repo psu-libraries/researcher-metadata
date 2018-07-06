@@ -8,4 +8,8 @@ class User < ApplicationRecord
 
   belongs_to :person
   validates :webaccess_id, :person_id, presence: true, uniqueness: true
+
+  def admin?
+    is_admin
+  end
 end
