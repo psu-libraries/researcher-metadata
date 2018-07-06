@@ -7,5 +7,5 @@ class User < ApplicationRecord
   devise :http_header_authenticatable
 
   belongs_to :person
-  validates :webaccess_id, :person_id, presence: true
+  validates :webaccess_id, :person_id, presence: true, uniqueness: true
 end

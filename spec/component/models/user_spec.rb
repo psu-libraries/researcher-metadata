@@ -22,5 +22,10 @@ RSpec.describe User, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:webaccess_id) }
     it { is_expected.to validate_presence_of(:person_id) }
+
+    context "given an otherwise valid record" do
+      subject { User.new(webaccess_id: 'abc123') }
+      it { is_expected.to validate_uniqueness_of(:webaccess_id) }
+    end
   end
 end
