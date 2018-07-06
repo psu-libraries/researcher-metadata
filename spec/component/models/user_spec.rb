@@ -10,6 +10,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
 
     it { is_expected.to have_db_index :person_id }
+    it { is_expected.to have_db_index :webaccess_id }
 
     it { is_expected.to have_db_foreign_key :person_id }
   end
