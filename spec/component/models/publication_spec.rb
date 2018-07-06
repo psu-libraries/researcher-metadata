@@ -26,6 +26,7 @@ RSpec.describe Publication, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
+    it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:people).through(:authorships) }
   end
 
