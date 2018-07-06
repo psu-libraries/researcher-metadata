@@ -5,8 +5,6 @@ class Publication < ApplicationRecord
   has_many :people, through: :authorships
   has_many :imports, class_name: :PublicationImport
 
-  validates :title, presence: true
-
   swagger_schema :Publication do
     property :id do
       key :type, :integer

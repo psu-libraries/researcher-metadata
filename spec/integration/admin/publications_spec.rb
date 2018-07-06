@@ -1,14 +1,13 @@
 require 'integration/integration_spec_helper'
 
 feature 'Admin publication list', type: :feature do
-  let!(:publication) { create(:publication, title: 'First Publication Title') }
+  let!(:publication) { create(:publication) }
 
   context "when the current user is an admin" do
     before { authenticate_admin_user }
     it 'shows a list of the publications' do
       visit 'admin/publication'
       expect(page).to have_content 'List of Publications'
-      expect(page).to have_content 'First Publication Title'
     end
   end
 
