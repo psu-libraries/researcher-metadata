@@ -37,9 +37,9 @@ bin/rspec spec/component
 echo '========== Integration Tests ============================================'
 bin/rspec spec/integration
 
-#echo '========== Deploy To Staging ============================================'
-#current_revision=`git show | awk '/^commit / { print $2 }'`
-#bin/deploy staging -t $current_revision
+echo '========== Deploy To Staging ============================================'
+current_revision=`git show | awk '/^commit / { print $2 }'`
+bin/cap staging deploy -s branch=$current_revision
 
 #echo '========== System Tests ================================================='
 #bin/rspec --no-color spec.system
