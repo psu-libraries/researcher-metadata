@@ -3,11 +3,11 @@ require 'component/component_spec_helper'
 RSpec.describe User, type: :model do
   describe 'the users table' do
     subject { User.new }
-    it { is_expected.to have_db_column(:webaccess_id).of_type(:string) }
+    it { is_expected.to have_db_column(:webaccess_id).of_type(:string).with_options(null: false) }
     it { is_expected.to have_db_column(:person_id).of_type(:integer) }
     it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
-    it { is_expected.to have_db_column(:created_at).of_type(:datetime) }
-    it { is_expected.to have_db_column(:updated_at).of_type(:datetime) }
+    it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
+    it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
     it { is_expected.to have_db_index :person_id }
     it { is_expected.to have_db_index :webaccess_id }
