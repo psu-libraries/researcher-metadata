@@ -22,6 +22,7 @@ describe 'the publication_imports table', type: :model do
   it { is_expected.to have_db_column(:issn).of_type(:string) }
   it { is_expected.to have_db_column(:doi).of_type(:string) }
   it { is_expected.to have_db_column(:abstract).of_type(:text) }
+  it { is_expected.to have_db_column(:outside_contributors).of_type(:text) }
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
@@ -44,4 +45,6 @@ describe PublicationImport, type: :model do
   it { is_expected.to validate_presence_of(:import_source) }
   it { is_expected.to validate_presence_of(:source_identifier) }
   it { is_expected.to validate_presence_of(:type) }
+
+  it { is_expected.to serialize(:outside_contributors) }
 end

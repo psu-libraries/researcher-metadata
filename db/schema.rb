@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_06_214358) do
+ActiveRecord::Schema.define(version: 2018_07_11_194629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema.define(version: 2018_07_06_214358) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "outside_contributors"
     t.index ["import_source"], name: "index_publication_imports_on_import_source"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier"], name: "index_publication_imports_on_source_identifier"
