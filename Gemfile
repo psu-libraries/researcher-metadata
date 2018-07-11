@@ -45,6 +45,8 @@ gem 'progressbar'
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem "rails_admin", "~> 1.3"
 
+gem 'rails_admin_toggleable'
+
 # Authentication framework
 gem 'devise'
 
