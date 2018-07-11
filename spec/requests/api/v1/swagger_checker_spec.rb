@@ -9,7 +9,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let(:invalid_params) { { "id" => -2000 } }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_params ) }
-    it { is_expected.to validate( :get, '/v1/publications', 200 ) }
+    it { is_expected.to validate( :get, '/v1/publications', 200, {"_query_string" => "limit=1"} ) }
   end
 
   context 'and' do

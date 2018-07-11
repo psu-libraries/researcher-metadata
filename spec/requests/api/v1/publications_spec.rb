@@ -3,9 +3,10 @@ require 'requests/requests_spec_helper'
 describe 'API::V1 Publications' do
   describe 'GET /v1/publications' do
     let!(:publications) { create_list(:publication, 10) }
+    let(:params) { '' }
 
     before do
-      get '/v1/publications', headers: { 'Accept': 'application/vnd' }
+      get "/v1/publications#{params}", headers: { 'Accept': 'application/vnd' }
     end
 
     it 'returns HTTP status 200' do
@@ -13,6 +14,15 @@ describe 'API::V1 Publications' do
     end
     it 'returns all publications' do
       expect(json_response[:data].size).to eq(10)
+    end
+
+    describe 'params:' do
+      describe 'limit' do
+        let(:params) { "?limit=5"}
+        it 'returns the specified number of publications' do
+          expect(json_response[:data].size).to eq(5)
+        end
+      end
     end
   end
 

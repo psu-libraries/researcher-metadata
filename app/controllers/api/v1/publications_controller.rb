@@ -3,7 +3,8 @@ module API::V1
     include Swagger::Blocks
 
     def index
-      render json: API::V1::PublicationSerializer.new(Publication.limit(100))
+      params[:limit].present? ? limit = params[:limit] : limit = 100
+      render json: API::V1::PublicationSerializer.new(Publication.limit(limit))
     end
 
     def show
@@ -62,6 +63,14 @@ module API::V1
         key :tags, [
           'publications'
         ]
+        parameter do
+          key :name, :limit
+          key :in, :query
+          key :description, 'max number publications to return'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
+        end
         response 200 do
           key :description, 'publication response'
           schema do
