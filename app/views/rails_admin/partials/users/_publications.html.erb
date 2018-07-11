@@ -1,0 +1,18 @@
+<table class="table table-condensed table-striped">
+  <thead>
+    <tr>
+      <th class="header">Year</th>
+      <th class="header">Journal</th>
+      <th class="header">Title</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% publications.each do |p| %>
+      <tr class="publication_row">
+        <td><%= p.published_at.present? ? p.published_at.year : '' %></td>
+        <td><%= p.source.present? ? p.source : '' %></td>
+        <td><%= p.title %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
