@@ -1,7 +1,7 @@
 class Authorship < ApplicationRecord
-  belongs_to :person
+  belongs_to :user
   belongs_to :publication
-  validates :person_id,
+  validates :user_id,
     :publication_id,
     :author_number, presence: true
 end

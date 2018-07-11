@@ -8,7 +8,7 @@ describe 'the publication_imports table', type: :model do
   it { is_expected.to have_db_column(:import_source).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:source_identifier).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:source_updated_at).of_type(:datetime) }
-  it { is_expected.to have_db_column(:type).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:publication_type).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:journal_title).of_type(:text) }
   it { is_expected.to have_db_column(:publisher).of_type(:text) }
   it { is_expected.to have_db_column(:secondary_title).of_type(:text) }
@@ -44,7 +44,7 @@ describe PublicationImport, type: :model do
   it { is_expected.to validate_presence_of(:publication) }
   it { is_expected.to validate_presence_of(:import_source) }
   it { is_expected.to validate_presence_of(:source_identifier) }
-  it { is_expected.to validate_presence_of(:type) }
+  it { is_expected.to validate_presence_of(:publication_type) }
 
   it { is_expected.to serialize(:outside_contributors) }
 end
