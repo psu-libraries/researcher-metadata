@@ -46,10 +46,8 @@ class AddActivityInsightIdentifierToPeopleImporter < CSVImporter
     webaccess_id = row[:username]
     activity_insight_identifier = row[:user_id]
     user = User.find_by(webaccess_id: webaccess_id)
-    if user.person.present?
-      user.person.update_column(:activity_insight_identifier, activity_insight_identifier)
-    end
-    "object"
+    user.update_column(:activity_insight_identifier, activity_insight_identifier)
+    nil
   end
 
   def bulk_import(objects)
