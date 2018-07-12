@@ -1,25 +1,25 @@
 class ActivityInsightUserImporter < CSVImporter
 
   def row_to_object(row)
-    p = Person.new
-    p.first_name = row[:first_name]
-    p.middle_name = row[:middle_name]
-    p.last_name = row[:last_name]
-    p.institution = 'Penn State University'
-    p.build_user(webaccess_id: row[:username])
-#   p.email = row[:email]
-#   p.campus_abbreviation = row[:campus]
-#   p.campus_name = row[:campus_name]
-#   p.college_abbreviation = row[:college]
-#   p.college_name = row[:college_name]
-#   p.department = row[:department]
-#   p.division = row[:division]
-#   p.institute = row[:institute]
-#   p.school = row[:school]
-    p
+    u = User.new
+    u.first_name = row[:first_name]
+    u.middle_name = row[:middle_name]
+    u.last_name = row[:last_name]
+    u.institution = 'Penn State University'
+    u.webaccess_id = row[:username]
+#   u.email = row[:email]
+#   u.campus_abbreviation = row[:campus]
+#   u.campus_name = row[:campus_name]
+#   u.college_abbreviation = row[:college]
+#   u.college_name = row[:college_name]
+#   u.department = row[:department]
+#   u.division = row[:division]
+#   u.institute = row[:institute]
+#   u.school = row[:school]
+    u
   end
 
   def bulk_import(objects)
-    Person.import(objects, recursive: true)
+    User.import(objects)
   end
 end
