@@ -4,4 +4,6 @@ class Authorship < ApplicationRecord
   validates :user_id,
     :publication_id,
     :author_number, presence: true
+
+  validates :user_id, uniqueness: {scope: :publication_id}
 end

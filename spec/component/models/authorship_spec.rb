@@ -27,5 +27,10 @@ describe Authorship, type: :model do
     it { is_expected.to validate_presence_of(:user_id) }
     it { is_expected.to validate_presence_of(:publication_id) }
     it { is_expected.to validate_presence_of(:author_number) }
+
+    context "given otherwise valid data" do
+      subject { Authorship.new(user: create(:user), publication: create(:publication)) }
+      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:publication_id) }
+    end
   end
 end
