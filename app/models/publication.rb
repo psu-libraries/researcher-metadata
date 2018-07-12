@@ -6,6 +6,7 @@ class Publication < ApplicationRecord
   has_many :imports, class_name: :PublicationImport
 
   validates :publication_type, :title, presence: true
+  validates :publication_type, inclusion: {in: PublicationImport.publication_types }
 
   swagger_schema :Publication do
     property :id do

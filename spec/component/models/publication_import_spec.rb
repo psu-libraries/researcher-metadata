@@ -46,5 +46,25 @@ describe PublicationImport, type: :model do
   it { is_expected.to validate_presence_of(:source_identifier) }
   it { is_expected.to validate_presence_of(:publication_type) }
 
+  it { is_expected.to validate_inclusion_of(:import_source).in_array(PublicationImport.import_sources) }
+  it { is_expected.to validate_inclusion_of(:publication_type).in_array(PublicationImport.publication_types) }
+
+  context "given an otherwise valid record" do
+    subject { build :publication_import }
+    it { is_expected.to validate_uniqueness_of(:source_identifier).scoped_to(:import_source) }
+  end
+
   it { is_expected.to serialize(:outside_contributors) }
+
+  describe '.import_sources' do
+    it "returns the list of valid import sources" do
+      expect(PublicationImport.import_sources).to eq ["Activity Insight"]
+    end
+  end
+
+  describe '.publication_types' do
+    it "returns the list of valid publication types" do
+      expect(PublicationImport.publication_types).to eq ["Academic Journal Article"]
+    end
+  end
 end

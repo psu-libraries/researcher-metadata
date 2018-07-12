@@ -30,6 +30,8 @@ describe Publication, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
+
+    it { is_expected.to validate_inclusion_of(:publication_type).in_array(PublicationImport.publication_types) }
   end
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
