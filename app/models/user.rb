@@ -7,6 +7,7 @@ class User < ApplicationRecord
   devise :http_header_authenticatable
 
   validates :webaccess_id, presence: true, uniqueness: true
+  validates :activity_insight_identifier, uniqueness: { allow_nil: true }
   validates :first_name, :last_name, presence: true
 
   has_many :authorships

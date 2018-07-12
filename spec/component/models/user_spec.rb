@@ -14,7 +14,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-    it { is_expected.to have_db_index :activity_insight_identifier }
+    it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
     it { is_expected.to have_db_index(:webaccess_id).unique(true) }
   end
 
@@ -34,6 +34,7 @@ RSpec.describe User, type: :model do
       context "given an otherwise valid record" do
         subject { User.new(webaccess_id: 'abc123') }
         it { is_expected.to validate_uniqueness_of(:webaccess_id) }
+        it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
       end
     end
 
