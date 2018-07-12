@@ -15,7 +15,7 @@ RSpec.describe User, type: :model do
     it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
     it { is_expected.to have_db_index :activity_insight_identifier }
-    it { is_expected.to have_db_index :webaccess_id }
+    it { is_expected.to have_db_index(:webaccess_id).unique(true) }
   end
 
   describe User, type: :model do

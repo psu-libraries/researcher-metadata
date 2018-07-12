@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_11_212906) do
+ActiveRecord::Schema.define(version: 2018_07_12_171822) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,7 +91,7 @@ ActiveRecord::Schema.define(version: 2018_07_11_212906) do
     t.boolean "is_admin", default: false
     t.string "webaccess_id", null: false
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier"
-    t.index ["webaccess_id"], name: "index_users_on_webaccess_id"
+    t.index ["webaccess_id"], name: "index_users_on_webaccess_id", unique: true
   end
 
   add_foreign_key "authorships", "publications", name: "authorships_publication_id_fk"
