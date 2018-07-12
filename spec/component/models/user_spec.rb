@@ -37,6 +37,22 @@ describe User, type: :model do
     end
   end
 
+  describe "saving a value for webaccess_id" do
+    let(:u) { create :user, webaccess_id: wa_id }
+    context "when the value contains uppercase letters" do
+      let(:wa_id) { 'ABC123' }
+      it "converts letters to lowercase before saving" do
+        expect(u.webaccess_id).to eq 'abc123'
+      end
+    end
+    context "when the value does not contain uppercase letters" do
+      let(:wa_id) { 'xyz789' }
+      it "saves the string without modifying it" do
+        expect(u.webaccess_id).to eq 'xyz789'
+      end
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }

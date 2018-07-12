@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  before_validation :downcase_webaccess_id
+
   Devise.add_module(:http_header_authenticatable,
                     strategy: true,
                     controller: 'user/sessions',
@@ -15,5 +17,11 @@ class User < ApplicationRecord
 
   def admin?
     is_admin
+  end
+
+  private
+
+  def downcase_webaccess_id
+    self.webaccess_id = self.webaccess_id.downcase if self.webaccess_id.present?
   end
 end
