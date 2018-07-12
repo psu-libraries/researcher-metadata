@@ -3,8 +3,8 @@ require 'component/component_spec_helper'
 describe 'the authorships table', type: :model do
   subject { Authorship.new }
 
-  it { is_expected.to have_db_column(:user_id).of_type(:integer) }
-  it { is_expected.to have_db_column(:publication_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:user_id).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:publication_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:author_number).of_type(:integer) }
   it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }

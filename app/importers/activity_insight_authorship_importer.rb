@@ -1,6 +1,9 @@
 class ActivityInsightAuthorshipImporter < ActivityInsightCSVImporter
   def row_to_object(row)
-
+    if row[:faculty_name].present?
+      authorship = Authorship.new
+      authorship.user = User.find_by(activity_insight_identifier: row[:user_id])
+    end
     authorship = Authorship.new
 
     if row[:faculty_name].present?

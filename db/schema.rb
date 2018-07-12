@@ -10,14 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_173855) do
+ActiveRecord::Schema.define(version: 2018_07_12_211349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
   create_table "authorships", force: :cascade do |t|
-    t.integer "user_id"
-    t.integer "publication_id"
+    t.integer "user_id", null: false
+    t.integer "publication_id", null: false
     t.integer "author_number"
     t.string "activity_insight_identifier"
     t.datetime "created_at", null: false
