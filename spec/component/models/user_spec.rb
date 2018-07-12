@@ -33,7 +33,7 @@ RSpec.describe User, type: :model do
 
       context "given an otherwise valid record" do
         subject { User.new(webaccess_id: 'abc123') }
-        it { is_expected.to validate_uniqueness_of(:webaccess_id) }
+        it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
         it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
       end
     end
