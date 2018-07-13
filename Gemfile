@@ -115,7 +115,7 @@ group :test do
   gem 'launchy'
 
   # Fancy rspec matchers for rails
-  gem 'shoulda-matchers', require: false
+  gem 'shoulda-matchers', git: "https://github.com/thoughtbot/shoulda-matchers", require: false
 
   # Test object factory
   gem 'factory_bot_rails'

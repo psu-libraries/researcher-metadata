@@ -1,5 +1,6 @@
 FactoryBot.define do
   factory :publication do
-    sequence(:title) { |sn| "Publication ##{sn}" }
+    title { 'Test' }
+    publication_type { 'Academic Journal Article' }
   end
 end
