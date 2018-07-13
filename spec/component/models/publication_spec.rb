@@ -18,7 +18,6 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:issn).of_type(:string) }
   it { is_expected.to have_db_column(:doi).of_type(:string) }
   it { is_expected.to have_db_column(:abstract).of_type(:text) }
-  it { is_expected.to have_db_column(:outside_contributors).of_type(:text) }
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
@@ -37,5 +36,6 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:users).through(:authorships) }
+    it { is_expected.to have_many(:contributors) }
   end
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_12_211349) do
+ActiveRecord::Schema.define(version: 2018_07_13_192758) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,6 +24,28 @@ ActiveRecord::Schema.define(version: 2018_07_12_211349) do
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
+  end
+
+  create_table "contributor_imports", force: :cascade do |t|
+    t.integer "publication_import_id", null: false
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_import_id"], name: "index_contributor_imports_on_publication_import_id"
+  end
+
+  create_table "contributors", force: :cascade do |t|
+    t.integer "publication_id", null: false
+    t.string "first_name"
+    t.string "middle_name"
+    t.string "last_name"
+    t.integer "position", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_id"], name: "index_contributors_on_publication_id"
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -50,7 +72,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_211349) do
     t.datetime "published_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.text "outside_contributors"
     t.index ["import_source"], name: "index_publication_imports_on_import_source"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier"], name: "index_publication_imports_on_source_identifier"
@@ -76,7 +97,6 @@ ActiveRecord::Schema.define(version: 2018_07_12_211349) do
     t.text "abstract"
     t.boolean "authors_et_al"
     t.datetime "published_at"
-    t.text "outside_contributors"
   end
 
   create_table "users", force: :cascade do |t|
@@ -96,5 +116,7 @@ ActiveRecord::Schema.define(version: 2018_07_12_211349) do
 
   add_foreign_key "authorships", "publications", name: "authorships_publication_id_fk"
   add_foreign_key "authorships", "users"
+  add_foreign_key "contributor_imports", "publication_imports", name: "contributor_imports_publication_import_id_fk"
+  add_foreign_key "contributors", "publications", name: "contributors_publication_id_fk"
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
 end

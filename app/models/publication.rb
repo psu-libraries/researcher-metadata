@@ -4,6 +4,7 @@ class Publication < ApplicationRecord
   has_many :authorships
   has_many :users, through: :authorships
   has_many :imports, class_name: :PublicationImport
+  has_many :contributors
 
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: PublicationImport.publication_types }
