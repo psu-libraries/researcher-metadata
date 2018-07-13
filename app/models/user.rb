@@ -19,6 +19,26 @@ class User < ApplicationRecord
     is_admin
   end
 
+ def name
+    if middle_name.present?
+      first_name + ' ' + middle_name + ' ' + last_name
+    else
+      first_name + ' ' + last_name
+    end
+  end
+
+  rails_admin do
+    configure :publications do
+      pretty_value do
+        bindings[:view].render :partial => "rails_admin/partials/users/publications.html.erb", :locals => { :publications => value }
+      end
+    end
+
+    show do
+      field :publications
+    end
+  end
+
   private
 
   def downcase_webaccess_id

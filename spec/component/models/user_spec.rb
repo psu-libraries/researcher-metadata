@@ -68,4 +68,20 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#name' do
+    before { user.first_name = 'Buck'; user.last_name = 'Murphy' }
+    context "when middle_name is not blank" do
+      before { user.middle_name = 'X' }
+      it "returns the first, middle, and last name" do
+        expect(user.name).to eq 'Buck X Murphy'
+      end
+    end
+    context "when middle_name is blank" do
+      before { user.middle_name = '' }
+      it "returns the first and last name" do
+        expect(user.name).to eq 'Buck Murphy'
+      end
+    end
+  end
 end

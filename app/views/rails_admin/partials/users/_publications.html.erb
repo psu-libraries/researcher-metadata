@@ -10,8 +10,8 @@
     <% publications.each do |p| %>
       <tr class="publication_row">
         <td><%= p.published_at.present? ? p.published_at.year : '' %></td>
-        <td><%= p.source.present? ? p.source : '' %></td>
-        <td><%= p.title %></td>
+        <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
+        <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
       </tr>
     <% end %>
   </tbody>
