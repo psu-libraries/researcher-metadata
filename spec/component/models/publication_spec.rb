@@ -38,4 +38,15 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:users).through(:authorships) }
     it { is_expected.to have_many(:contributors) }
   end
+
+  describe '#contributors' do
+    let(:pub) { create :publication }
+    let!(:c1) { create :contributor, position: 2, publication: pub }
+    let!(:c2) { create :contributor, position: 3, publication: pub }
+    let!(:c3) { create :contributor, position: 1, publication: pub }
+
+    it "returns the publication's contributors in order by position" do
+      expect(pub.contributors).to eq [c3, c1, c2]
+    end
+  end
 end
