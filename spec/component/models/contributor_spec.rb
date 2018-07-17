@@ -17,8 +17,84 @@ describe 'the contributors_table', type: :model do
 end
 
 describe Contributor, type: :model do
+  subject(:contributor) { Contributor.new }
+
   it { is_expected.to validate_presence_of :publication }
   it { is_expected.to validate_presence_of :position }
 
   it { is_expected.to belong_to :publication }
+
+  describe '#name' do
+    context "when the first, middle, and last names of the contributor are nil" do
+      it "returns an empty string" do
+        expect(contributor.name).to eq ''
+      end
+    end
+    context "when the contributor has a first name" do
+      before { contributor.first_name = 'first' }
+      context "when the contributor has a middle name" do
+        before { contributor.middle_name = 'middle' }
+        context "when the contributor has a last name" do
+          before { contributor.last_name = 'last' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'first middle last'
+          end
+        end
+        context "when the contributor has no last name" do
+          before { contributor.last_name = '' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'first middle'
+          end
+        end
+      end
+      context "when the contributor has no middle name" do
+        before { contributor.middle_name = '' }
+        context "when the contributor has a last name" do
+          before { contributor.last_name = 'last' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'first last'
+          end
+        end
+        context "when the contributor has no last name" do
+          before { contributor.last_name = '' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'first'
+          end
+        end
+      end
+    end
+    context "when the contributor has no first name" do
+      before { contributor.first_name = '' }
+      context "when the contributor has a middle name" do
+        before { contributor.middle_name = 'middle' }
+        context "when the contributor has a last name" do
+          before { contributor.last_name = 'last' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'middle last'
+          end
+        end
+        context "when the contributor has no last name" do
+          before { contributor.last_name = '' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'middle'
+          end
+        end
+      end
+      context "when the contributor has no middle name" do
+        before { contributor.middle_name = '' }
+        context "when the contributor has a last name" do
+          before { contributor.last_name = 'last' }
+          it "returns the full name of the contributor" do
+            expect(contributor.name).to eq 'last'
+          end
+        end
+        context "when the contributor has no last name" do
+          before { contributor.last_name = '' }
+          it "returns an empty string" do
+            expect(contributor.name).to eq ''
+          end
+        end
+      end
+    end
+  end
 end
