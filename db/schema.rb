@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_13_192758) do
+ActiveRecord::Schema.define(version: 2018_07_17_154955) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,11 @@ ActiveRecord::Schema.define(version: 2018_07_13_192758) do
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "import_source", null: false
+    t.string "source_identifier", null: false
+    t.index ["import_source"], name: "index_contributor_imports_on_import_source"
     t.index ["publication_import_id"], name: "index_contributor_imports_on_publication_import_id"
+    t.index ["source_identifier"], name: "index_contributor_imports_on_source_identifier"
   end
 
   create_table "contributors", force: :cascade do |t|
