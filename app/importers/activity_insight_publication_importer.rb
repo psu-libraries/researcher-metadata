@@ -101,10 +101,10 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
     value = nil
     header_count.times do |i|
       if i == 0
-        value = row[header_key] if row[header_key].present?
+        value = row[header_key] if row[header_key].present? && row[header_key].to_s.downcase != 'other'
       else
         key = header_key.to_s + (i+1).to_s
-        value = row[key.to_sym] if row[key.to_sym].present?
+        value = row[key.to_sym] if row[key.to_sym].present? && row[key.to_sym].to_s.downcase != 'other'
       end
     end
     value
