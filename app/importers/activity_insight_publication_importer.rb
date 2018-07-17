@@ -1,18 +1,6 @@
 class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def row_to_object(row)
-    if row[:contype] == "Journal Article, Academic Journal" ||
-      row[:contype2] == "Journal Article, Academic Journal" ||
-      row[:contype3] == "Journal Article, Academic Journal" ||
-      row[:contype4] == "Journal Article, Academic Journal" ||
-      row[:contype5] == "Journal Article, Academic Journal" ||
-      row[:contype6] == "Journal Article, Academic Journal" ||
-      row[:contype7] == "Journal Article, Academic Journal" ||
-      row[:contype8] == "Journal Article, Academic Journal" ||
-      row[:contype9] == "Journal Article, Academic Journal" ||
-      row[:contype10] == "Journal Article, Academic Journal" ||
-      row[:contype11] == "Journal Article, Academic Journal" ||
-      row[:contype12] == "Journal Article, Academic Journal"
-
+    if publication_type(row) == "Journal Article, Academic Journal"
       unless PublicationImport.find_by(import_source: "Activity Insight", source_identifier: row[:id])
         pi = PublicationImport.new
 
@@ -67,6 +55,10 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   end
 
   private
+
+  def publication_type(row)
+    extract_value(row: row, header_key: :contype, header_count: 12) || row[:contypeother]
+  end
 
   def journal_title(row)
     extract_value(row: row, header_key: :journal_name, header_count: 3) || row[:journal_name_other]
