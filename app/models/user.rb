@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  include Swagger::Blocks
+
   before_validation :downcase_webaccess_id
 
   Devise.add_module(:http_header_authenticatable,
@@ -14,6 +16,12 @@ class User < ApplicationRecord
 
   has_many :authorships
   has_many :publications, through: :authorships
+
+  swagger_schema :User do
+    property :webaccess_id do
+      key :type, :string
+    end
+  end
 
   def admin?
     is_admin

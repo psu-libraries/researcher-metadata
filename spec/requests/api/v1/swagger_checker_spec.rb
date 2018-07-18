@@ -5,11 +5,17 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
 
   context 'has valid paths' do
     let!(:publication_1) { create :publication }
-    let(:params) { { "id" => publication_1.id } }
-    let(:invalid_params) { { "id" => -2000 } }
-    it { is_expected.to validate( :get, '/v1/publications/{id}', 200, params ) }
-    it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_params ) }
+    let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
+    let(:publications_params) { { "id" => publication_1.id } }
+    let(:user_publications_params) { { "webaccess_id" => user.webaccess_id } }
+    let(:invalid_publications_params) { { "id" => -2000 } }
+    let(:invalid_user_publications_params) { { "webaccess_id" => "aaa" } }
+    it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publications_params ) }
+    it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_publications_params ) }
     it { is_expected.to validate( :get, '/v1/publications', 200, {"_query_string" => "limit=1"} ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_publications_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, {"webaccess_id" => "xyz321", "_query_string" => "limit=1"} ) }
   end
 
   context 'and' do

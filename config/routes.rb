@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   scope module: 'api' do
     namespace :v1 do
       resources :publications
+      get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
     end
   end
 end
