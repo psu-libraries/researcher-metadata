@@ -1,6 +1,6 @@
 class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def row_to_object(row)
-    if publication_type(row) == "Journal Article, Academic Journal"
+    if publication_type(row) =~ /journal article/i
       unless PublicationImport.find_by(import_source: "Activity Insight", source_identifier: row[:id])
         pi = PublicationImport.new
 
