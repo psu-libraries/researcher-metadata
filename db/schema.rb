@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_17_154955) do
+ActiveRecord::Schema.define(version: 2018_07_19_185331) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -114,7 +114,9 @@ ActiveRecord::Schema.define(version: 2018_07_17_154955) do
     t.datetime "updated_at", null: false
     t.boolean "is_admin", default: false
     t.string "webaccess_id", null: false
+    t.string "pure_uuid"
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
+    t.index ["pure_uuid"], name: "index_users_on_pure_uuid", unique: true
     t.index ["webaccess_id"], name: "index_users_on_webaccess_id", unique: true
   end
 
