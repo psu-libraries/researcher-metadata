@@ -12,6 +12,7 @@ describe 'the authorships table', type: :model do
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
+  it { is_expected.to have_db_index(:activity_insight_identifier).unique }
 
   it { is_expected.to have_db_foreign_key :user_id }
   it { is_expected.to have_db_foreign_key :publication_id }
