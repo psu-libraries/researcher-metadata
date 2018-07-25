@@ -1,6 +1,6 @@
 class PublicationImport < ApplicationRecord
   def self.import_sources
-    ["Activity Insight"]
+    ["Activity Insight", "Pure"]
   end
 
   def self.publication_types
