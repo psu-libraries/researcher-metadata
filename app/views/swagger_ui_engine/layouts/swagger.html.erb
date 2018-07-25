@@ -18,7 +18,9 @@
   <body class="swagger-section">
     <div id='header'>
       <div class="swagger-ui-wrap">
-        <a id="logo" href="http://swagger.io"><img class="logo__img" alt="swagger" height="30" width="30" src="<%= image_path('swagger_ui_engine/logo_small.png') %>" /><span class="logo__title">swagger</span></a>
+        <%= link_to "Log out", "/user/sign_out", method: :delete %>
+        <%= link_to "Admin", "/admin" if current_user.is_admin? %>
+        <%= link_to "Home", "/" %>
       </div>
     </div>
 
