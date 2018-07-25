@@ -1,6 +1,9 @@
 class PureUserImporter
+  attr_reader :errors
+
   def initialize(filename: filename)
     @filename = filename
+    @errors = []
   end
 
   def call
@@ -9,7 +12,7 @@ class PureUserImporter
       first_and_middle_name = user['name']['firstName']
       first_name = first_and_middle_name.split(' ')[0].try(:strip)
       middle_name = first_and_middle_name.split(' ')[1].try(:strip)
-      webaccess_id = user['externalableInfo']['sourceId'].downcase
+      webaccess_id = user['ids'].detect { |id| id['type'] == 'Employee ID' }['value'].downcase
 
       u = User.find_by(webaccess_id: webaccess_id) || User.new
       u.first_name = first_name unless u.first_name.present?
@@ -19,7 +22,11 @@ class PureUserImporter
       u.webaccess_id = webaccess_id unless u.webaccess_id.present?
       u.pure_uuid = user['uuid'] unless u.pure_uuid.present?
 
-      u.save!
+      begin
+        u.save!
+      rescue ActiveRecord::RecordNotUnique => e
+        @errors << e
+      end
     end
     nil
   end
