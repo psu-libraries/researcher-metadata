@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <meta http-equiv="x-ua-compatible" content="IE=edge">
+    <title>Swagger UI</title>
+    <link rel="icon" type="image/png" href="<%= image_path('swagger_ui_engine/favicon-32x32.png') %>" sizes="32x32" />
+    <link rel="icon" type="image/png" href="<%= image_path('swagger_ui_engine/favicon-16x16.png') %>" sizes="16x16" />
+
+    <%= stylesheet_link_tag "swagger_ui_engine/application", media: "screen" %>
+    <%= stylesheet_link_tag "swagger_ui_engine/print", media: "print" %>
+
+    <%= javascript_include_tag "swagger_ui_engine/application" %>
+    <%= csrf_meta_tags %>
+    <link rel="stylesheet" media="screen" href="/swagger_customizations.css"/>
+    <%= yield :head %>
+  </head>
+
+  <body class="swagger-section">
+    <div id='custom-header'>
+      <div class="swagger-ui-wrap">
+        <%= link_to "Admin", "/admin" if current_user.is_admin? %>
+        <%= link_to "Home", "/" %>
+      </div>
+    </div>
+
+    <div id="message-bar" class="swagger-ui-wrap" data-sw-translate>&nbsp;</div>
+    <div id="swagger-ui-container" class="swagger-ui-wrap">
+      <%= yield %>
+    </div>
+  </body>
+</html>

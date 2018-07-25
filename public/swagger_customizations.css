@@ -1,0 +1,13 @@
+.swagger-section #custom-header {
+  font-family: sans-serif;
+  background-color: #2a4d69;
+  height: 50px;
+}
+.swagger-section #custom-header a {
+  float: right;
+  text-align: center;
+  color: #fff;
+  text-decoration: none;
+  padding: 18px 10px;
+  font-size: 14px;
+}
