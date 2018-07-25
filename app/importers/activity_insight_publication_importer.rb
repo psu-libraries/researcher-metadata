@@ -23,7 +23,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
           issn: row[:isbnissn],
           abstract: row[:abstract],
           authors_et_al: authors_et_al(row),
-          published_at: published_at(row)})
+          published_on: published_on(row)})
 
         pi.publication = p
 
@@ -41,7 +41,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
         pi.issn = row[:isbnissn]
         pi.abstract = row[:abstract]
         pi.authors_et_al = authors_et_al(row)
-        pi.published_at = published_at(row)
+        pi.published_on = published_on(row)
 
         pi.source_identifier = row[:id]
         pi.import_source = "Activity Insight"
@@ -89,7 +89,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
     row[:authors_etal] == 'true'
   end
 
-  def published_at(row)
+  def published_on(row)
     extract_value(row: row, header_key: :pub_start, header_count: 5)
   end
 
