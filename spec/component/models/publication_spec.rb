@@ -19,7 +19,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:doi).of_type(:string) }
   it { is_expected.to have_db_column(:abstract).of_type(:text) }
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
-  it { is_expected.to have_db_column(:published_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 end
