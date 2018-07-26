@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_26_174605) do
+ActiveRecord::Schema.define(version: 2018_07_26_175517) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -78,6 +78,7 @@ ActiveRecord::Schema.define(version: 2018_07_26_174605) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "confidential", default: false
+    t.integer "citation_count"
     t.index ["import_source"], name: "index_publication_imports_on_import_source"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier"], name: "index_publication_imports_on_source_identifier"
@@ -103,6 +104,7 @@ ActiveRecord::Schema.define(version: 2018_07_26_174605) do
     t.text "abstract"
     t.boolean "authors_et_al"
     t.date "published_on"
+    t.integer "citation_count"
   end
 
   create_table "users", force: :cascade do |t|
