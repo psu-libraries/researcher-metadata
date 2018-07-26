@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_25_140017) do
+ActiveRecord::Schema.define(version: 2018_07_26_174605) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -77,6 +77,7 @@ ActiveRecord::Schema.define(version: 2018_07_25_140017) do
     t.date "published_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "confidential", default: false
     t.index ["import_source"], name: "index_publication_imports_on_import_source"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier"], name: "index_publication_imports_on_source_identifier"
