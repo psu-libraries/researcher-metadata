@@ -1,0 +1,30 @@
+#!/usr/bin/env ruby
+
+require 'json'
+require 'pathname'
+
+print "Enter Pure API key:  "
+api_key = gets.chomp
+
+root_dir = Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
+
+Dir.mkdir root_dir.join('db', 'data') unless Dir.exists? root_dir.join('db', 'data')
+Dir.mkdir root_dir.join('db', 'data', 'pure_publications') unless Dir.exists? root_dir.join('db', 'data', 'pure_publications')
+
+first_pub_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=1&offset=0'`
+
+page_size = 1000
+total_pubs = JSON.parse(first_pub_result)['count']
+
+download_dir = root_dir.join('db', 'data', 'pure_publications')
+
+total_pages = (total_pubs / page_size.to_f).ceil
+
+1.upto(total_pages) do |i|
+  offset = (i-1) * page_size
+  pubs = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=#{page_size}&offset=#{offset}'`
+  download_file = download_dir.join("pure_publications_#{i}.json")
+  File.open(download_file, 'w') do |f|
+    f.puts pubs
+  end
+end
