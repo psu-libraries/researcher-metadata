@@ -39,18 +39,22 @@ namespace :import do
     PureUserImporter.new(filename: args.filename).call
   end
 
-# desc 'Import Pure publications'
-# task :pure_publications, [:filename] => :environment do |_task, args|
-#   args.with_defaults(
-#     filename: filename_for(:pure_publications)
-#   )
-#   PurePublicationImporter.new(filename: filename).call
-# end
+  desc 'Import Pure publications'
+  task :pure_publications, [:dirname] => :environment do |_task, args|
+    args.with_defaults(
+      dirname: dirname_for(:pure_publications)
+    )
+    PurePublicationImporter.new(dirname: args.dirname).call
+  end
 
   desc 'Import all data'
   task :all => :environment do
     PureUserImporter.new(
       filename: filename_for(:pure_users)
+    ).call
+
+    PurePublicationImporter.new(
+      dirname: dirname_for(:pure_users)
     ).call
 
     ActivityInsightUserImporter.new(
@@ -77,5 +81,11 @@ def filename_for(key)
   when :ai_users then Rails.root.join('db/data/ai_users.csv')
   when :ai_publications then Rails.root.join('db/data/ai_publications.csv')
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
+  end
+end
+
+def dirname_for(key)
+  case key
+  when :pure_publications then Rails.root.join('db/data/pure_publications')
   end
 end

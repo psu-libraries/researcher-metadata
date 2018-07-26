@@ -16,7 +16,7 @@ class PurePublicationImporter
     import_files = Dir.children(dirname)
     pbar = ProgressBar.create(title: 'Importing Pure Publications', total: import_files.count) unless Rails.env.test?
     import_files.each do |filename|
-      File.open(dirname + '/' + filename, 'r') do |file|
+      File.open(dirname.join(filename), 'r') do |file|
         MultiJson.load(file)['items'].each do |publication|
           if publication['type'].detect { |t| t['value'] == 'Article' }
             unless PublicationImport.find_by(import_source: "Pure", source_identifier: publication['uuid'])
@@ -64,7 +64,7 @@ class PurePublicationImporter
 
                 authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
 
-                  ra['personRole'].detect { |r| r['value'] == 'Author' }.present? }
+                  a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
                 authorships.each_with_index do |a, i|
                   if a['person'].present?
                     u = User.find_by(pure_uuid: a['person']['uuid'])
