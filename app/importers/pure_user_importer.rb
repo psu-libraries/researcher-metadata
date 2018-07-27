@@ -1,5 +1,5 @@
 class PureUserImporter
-  def initialize(filename: filename)
+  def initialize(filename:)
     @filename = filename
     @errors = []
   end
