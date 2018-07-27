@@ -16,7 +16,7 @@ class ActivityInsightUserImporter < CSVImporter
   end
 
   def bulk_import(objects)
-    unique_users = objects.uniq { |o| o.webaccess_id }
+    unique_users = objects.uniq { |o| o.webaccess_id.downcase }
     if objects.count != unique_users.count
       fatal_errors << "The file contains at least one duplicate user."
     end
