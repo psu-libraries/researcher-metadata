@@ -19,7 +19,7 @@
   <body class="swagger-section">
     <div id='custom-header'>
       <div class="swagger-ui-wrap">
-        <%= link_to "Admin", "/admin" if current_user.is_admin? %>
+        <%= link_to "Admin", "/admin" if current_user && current_user.is_admin? %>
         <%= link_to "Home", "/" %>
       </div>
     </div>
