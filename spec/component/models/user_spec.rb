@@ -9,6 +9,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:institution).of_type(:string) }
   it { is_expected.to have_db_column(:title).of_type(:string) }
   it { is_expected.to have_db_column(:webaccess_id).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:penn_state_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
