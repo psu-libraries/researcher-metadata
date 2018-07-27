@@ -6,7 +6,10 @@ class PureUserImporter
 
   def call
     json = MultiJson.load(file)
+    pbar = ProgressBar.create(title: 'Importing Pure users', total: json['items'].count) unless Rails.env.test?
+
     json['items'].each do |user|
+      pbar.increment unless Rails.env.test?
       first_and_middle_name = user['name']['firstName']
       first_name = first_and_middle_name.split(' ')[0].try(:strip)
       middle_name = first_and_middle_name.split(' ')[1].try(:strip)
@@ -22,6 +25,7 @@ class PureUserImporter
 
       u.save!
     end
+    pbar.finish unless Rails.env.test?
     nil
   end
 
