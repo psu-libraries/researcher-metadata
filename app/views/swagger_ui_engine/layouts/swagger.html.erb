@@ -17,7 +17,10 @@
   </head>
 
   <body class="swagger-section">
-    <div id='custom-header'>
+    <div id="custom-header">
+      <a class="swagger-ui-navbar-brand" href="#">
+        <%= image_tag("penn-state-logo.png") %>
+      </a>
       <div class="swagger-ui-wrap">
         <%= link_to "Admin", "/admin" if current_user && current_user.is_admin? %>
         <%= link_to "Home", "/" %>
