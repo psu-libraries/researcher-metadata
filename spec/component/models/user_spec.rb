@@ -56,6 +56,15 @@ describe User, type: :model do
     end
   end
 
+  describe "deleting a user with authorships" do
+    let(:u) { create :user }
+    let!(:a) { create :authorship, user: u}
+    it "also deletes the user's authorships" do
+      u.destroy
+      expect { a.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }

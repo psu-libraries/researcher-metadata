@@ -40,6 +40,24 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:contributors) }
   end
 
+  describe "deleting a publication with authorships" do
+    let(:p) { create :publication }
+    let!(:a) { create :authorship, publication: p}
+    it "also deletes the publication's authorships" do
+      p.destroy
+      expect { a.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a publication with contributors" do
+    let(:p) { create :publication }
+    let!(:c) { create :contributor, publication: p}
+    it "also deletes the publication's authorships" do
+      p.destroy
+      expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '#contributors' do
     let(:pub) { create :publication }
     let!(:c1) { create :contributor, position: 2, publication: pub }

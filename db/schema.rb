@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_07_31_135541) do
+ActiveRecord::Schema.define(version: 2018_07_31_161101) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -126,9 +126,9 @@ ActiveRecord::Schema.define(version: 2018_07_31_135541) do
     t.index ["webaccess_id"], name: "index_users_on_webaccess_id", unique: true
   end
 
-  add_foreign_key "authorships", "publications", name: "authorships_publication_id_fk"
-  add_foreign_key "authorships", "users"
+  add_foreign_key "authorships", "publications", on_delete: :cascade
+  add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "contributor_imports", "publication_imports", name: "contributor_imports_publication_import_id_fk"
-  add_foreign_key "contributors", "publications", name: "contributors_publication_id_fk"
+  add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
 end
