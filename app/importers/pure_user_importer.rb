@@ -16,14 +16,20 @@ class PureUserImporter
       webaccess_id = user['externalId'].downcase
 
       u = User.find_by(webaccess_id: webaccess_id) || User.new
-      u.first_name = first_name unless u.first_name.present?
-      u.middle_name = middle_name unless u.middle_name.present?
-      u.last_name = user['name']['lastName'] unless u.last_name.present?
-      u.institution = 'Penn State University' unless u.institution.present?
-      u.webaccess_id = webaccess_id unless u.webaccess_id.present?
-      u.pure_uuid = user['uuid'] unless u.pure_uuid.present?
 
-      u.save!
+      # Create the user with Pure data if we don't have a record at all, and update
+      # it with new Pure data if we've never imported the user from Activity Insight,
+      # but we assume that Activity Insight is a better source of user data, so
+      # we don't overwrite AI data with data from Pure.
+      if u.new_record? || u.activity_insight_identifier.blank?
+        u.first_name = first_name
+        u.middle_name = middle_name
+        u.last_name = user['name']['lastName']
+        u.institution = 'Penn State University'
+        u.webaccess_id = webaccess_id if u.new_record?
+        u.pure_uuid = user['uuid']
+        u.save!
+      end
     end
     pbar.finish unless Rails.env.test?
     nil
