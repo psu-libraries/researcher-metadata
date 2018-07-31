@@ -58,7 +58,6 @@ class PurePublicationImporter
                 pi.published_on = Date.new(status['publicationDate']['year'].to_i,
                                            published_month,
                                            published_day.to_i)
-                pi.confidential = publication['confidential']
                 pi.citation_count = publication['totalScopusCitations']
                 pi.save!
 
