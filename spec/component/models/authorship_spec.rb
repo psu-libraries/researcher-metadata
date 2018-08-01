@@ -34,6 +34,8 @@ describe Authorship, type: :model do
     context "given otherwise valid data" do
       subject { Authorship.new(user: create(:user), publication: create(:publication)) }
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:publication_id) }
+      it { is_expected.to validate_uniqueness_of(:pure_identifier).allow_nil }
+      it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
     end
   end
 end
