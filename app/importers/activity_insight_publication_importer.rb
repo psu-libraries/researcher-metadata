@@ -1,57 +1,31 @@
 class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def row_to_object(row)
     if publication_type(row) =~ /journal article/i
-      unless PublicationImport.find_by(import_source: "Activity Insight", source_identifier: row[:id])
-        pi = PublicationImport.new
+      p = Publication.find_by(activity_insight_identifier: row[:id]) || Publication.new
 
-        # For now we assume that there are no existing publications in the database to associate
-        # with a new import since we only have one import source. When we have multiple import sources,
-        # this assumption may be wrong, and we'll have to make an attempt to find (and perhaps update)
-        # existing publications before creating new ones.
-        p = Publication.create!({
-          title: row[:title],
-          publication_type: "Academic Journal Article",
-          journal_title: journal_title(row),
-          publisher: publisher(row),
-          secondary_title: row[:title_secondary],
-          status: status(row),
-          volume: volume(row),
-          issue: row[:issue],
-          edition: row[:edition],
-          page_range: page_range(row),
-          url: url(row),
-          issn: row[:isbnissn],
-          abstract: row[:abstract],
-          authors_et_al: authors_et_al(row),
-          published_on: published_on(row)})
+      p.title = row[:title]
+      p.publication_type = "Academic Journal Article" if p.new_record?
+      p.journal_title = journal_title(row)
+      p.publisher = publisher(row)
+      p.secondary_title = row[:title_secondary]
+      p.status = status(row)
+      p.volume = volume(row)
+      p.issue = row[:issue]
+      p.edition = row[:edition]
+      p.page_range = page_range(row)
+      p.url = url(row)
+      p.issn = row[:isbnissn]
+      p.abstract = row[:abstract]
+      p.authors_et_al = authors_et_al(row)
+      p.published_on = published_on(row)
+      p.activity_insight_identifier = row[:id] if p.new_record?
 
-        pi.publication = p
-
-        pi.title = row[:title]
-        pi.publication_type = "Academic Journal Article"
-        pi.journal_title = journal_title(row)
-        pi.publisher = publisher(row)
-        pi.secondary_title = row[:title_secondary]
-        pi.status = status(row)
-        pi.volume = volume(row)
-        pi.issue = row[:issue]
-        pi.edition = row[:edition]
-        pi.page_range = page_range(row)
-        pi.url = url(row)
-        pi.issn = row[:isbnissn]
-        pi.abstract = row[:abstract]
-        pi.authors_et_al = authors_et_al(row)
-        pi.published_on = published_on(row)
-
-        pi.source_identifier = row[:id]
-        pi.import_source = "Activity Insight"
-        pi
-      end
+      p
     end
   end
 
   def bulk_import(objects)
-    PublicationImport.import(objects)
+    Publication.import(objects)
   end
 
   private
