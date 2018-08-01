@@ -2,6 +2,7 @@ class Contributor < ApplicationRecord
   belongs_to :publication
 
   validates :publication, :position, presence: true
+  validates :pure_identifier, :activity_insight_identifier, uniqueness: {allow_nil: true}
 
   def name
     full_name = first_name.to_s
