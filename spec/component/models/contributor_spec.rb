@@ -9,11 +9,15 @@ describe 'the contributors_table', type: :model do
   it { is_expected.to have_db_column(:middle_name).of_type(:string) }
   it { is_expected.to have_db_column(:last_name).of_type(:string) }
   it { is_expected.to have_db_column(:position).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:pure_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
   it { is_expected.to have_db_foreign_key(:publication_id) }
   it { is_expected.to have_db_index(:publication_id) }
+  it { is_expected.to have_db_index(:activity_insight_identifier).unique }
+  it { is_expected.to have_db_index(:pure_identifier).unique }
 end
 
 describe Contributor, type: :model do
@@ -21,6 +25,12 @@ describe Contributor, type: :model do
 
   it { is_expected.to validate_presence_of :publication }
   it { is_expected.to validate_presence_of :position }
+
+  context "given otherwise valid data" do
+    subject { build :contributor }
+    it { is_expected.to validate_uniqueness_of(:pure_identifier).allow_nil }
+    it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
+  end
 
   it { is_expected.to belong_to :publication }
 

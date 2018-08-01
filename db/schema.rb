@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_01_161232) do
+ActiveRecord::Schema.define(version: 2018_08_01_201046) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,11 @@ ActiveRecord::Schema.define(version: 2018_08_01_161232) do
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "pure_identifier"
+    t.string "activity_insight_identifier"
+    t.index ["activity_insight_identifier"], name: "index_contributors_on_activity_insight_identifier", unique: true
     t.index ["publication_id"], name: "index_contributors_on_publication_id"
+    t.index ["pure_identifier"], name: "index_contributors_on_pure_identifier", unique: true
   end
 
   create_table "publications", force: :cascade do |t|
