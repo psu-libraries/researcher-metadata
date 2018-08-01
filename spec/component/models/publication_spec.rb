@@ -31,11 +31,10 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
 
-    it { is_expected.to validate_inclusion_of(:publication_type).in_array(PublicationImport.publication_types) }
+    it { is_expected.to validate_inclusion_of(:publication_type).in_array(Publication.publication_types) }
   end
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
-    it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:users).through(:authorships) }
     it { is_expected.to have_many(:contributors) }
   end
@@ -55,6 +54,12 @@ describe Publication, type: :model do
     it "also deletes the publication's authorships" do
       p.destroy
       expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe '.publication_types' do
+    it "returns the list of valid publication types" do
+      expect(Publication.publication_types).to eq ["Academic Journal Article"]
     end
   end
 
