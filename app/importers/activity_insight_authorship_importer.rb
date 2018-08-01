@@ -1,16 +1,19 @@
 class ActivityInsightAuthorshipImporter < ActivityInsightCSVImporter
   def row_to_object(row)
     if row[:faculty_name].present?
-      if ! Authorship.find_by(activity_insight_identifier: row[:id])
-        authorship = Authorship.new
-        authorship.user = User.find_by(activity_insight_identifier: row[:faculty_name])
-        authorship.publication = PublicationImport.find_by(import_source: "Activity Insight",
-                                                           source_identifier: row[:parent_id]).publication
-        authorship.author_number = row[:ordinal].to_i
-        authorship.activity_insight_identifier = row[:id]
-        authorship
-      else
+      u = User.find_by(activity_insight_identifier: row[:faculty_name])
+      p = Publication.find_by(activity_insight_identifier: row[:parent_id])
+      a = Authorship.find_by(user: u, publication: p)
+
+      if a
+        a.update_attributes!(author_number: row[:ordinal].to_i,
+                             activity_insight_identifier: row[:id])
         nil
+      else
+        Authorship.new(user: u,
+                       publication: p,
+                       author_number: row[:ordinal].to_i,
+                       activity_insight_identifier: row[:id])
       end
     end
   end
