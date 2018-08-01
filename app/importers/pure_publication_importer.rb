@@ -1,7 +1,7 @@
 class PurePublicationImporter
   # This importer is initialized with a path to a directory containing one or more JSON
   # files of exported "research-outputs" data from Pure
-  # (https://pennstate.pure.elsevier.com/ws/api/510/api-docs/index.html#!/research45outputs/listResearchOutputs_2)
+  # (https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html#!/research45outputs/listResearchOutputs_2)
   # The directory is assumed to only contain files of this type, and the exports should be batched
   # such that none of the files are larger than around 20 MB for efficient parsing/importing.
 
