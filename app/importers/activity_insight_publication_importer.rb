@@ -25,7 +25,21 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   end
 
   def bulk_import(objects)
-    Publication.import(objects)
+    Publication.import(objects, on_duplicate_key_update: {conflict_target: [:activity_insight_identifier],
+                                                          columns: [:title,
+                                                                    :journal_title,
+                                                                    :publisher,
+                                                                    :secondary_title,
+                                                                    :status,
+                                                                    :volume,
+                                                                    :issue,
+                                                                    :edition,
+                                                                    :page_range,
+                                                                    :url,
+                                                                    :issn,
+                                                                    :abstract,
+                                                                    :authors_et_al,
+                                                                    :published_on]})
   end
 
   private
