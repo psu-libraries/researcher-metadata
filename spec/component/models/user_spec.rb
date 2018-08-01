@@ -37,6 +37,7 @@ describe User, type: :model do
       subject { User.new(webaccess_id: 'abc123') }
       it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
       it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
+      it { is_expected.to validate_uniqueness_of(:pure_uuid).allow_nil }
     end
   end
 
