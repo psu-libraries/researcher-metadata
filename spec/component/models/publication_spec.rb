@@ -22,6 +22,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:citation_count).of_type(:integer) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
+  it { is_expected.to have_db_column(:pure_updated_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
