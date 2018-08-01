@@ -7,7 +7,7 @@
     </tr>
   </thead>
   <tbody>
-    <% publications.each do |p| %>
+    <% publications.order("date_trunc('year', published_on) DESC").order(journal_title: :asc).order(title: :asc).each do |p| %>
       <tr class="publication_row">
         <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
         <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
