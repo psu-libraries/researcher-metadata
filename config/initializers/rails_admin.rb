@@ -33,7 +33,8 @@ RailsAdmin.config do |config|
   config.excluded_models = [
     'ActiveStorage::Blob',
     'ActiveStorage::Attachment',
-    'Authorship'
+    'Authorship',
+    'Contributor'
   ]
 
   config.actions do
