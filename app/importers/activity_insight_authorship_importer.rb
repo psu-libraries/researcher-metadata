@@ -5,16 +5,19 @@ class ActivityInsightAuthorshipImporter < ActivityInsightCSVImporter
       p = Publication.find_by(activity_insight_identifier: row[:parent_id])
       a = Authorship.find_by(user: u, publication: p)
 
-      if a
-        a.update_attributes!(author_number: row[:ordinal].to_i,
-                             activity_insight_identifier: row[:id])
-        nil
-      else
-        Authorship.new(user: u,
-                       publication: p,
-                       author_number: row[:ordinal].to_i,
-                       activity_insight_identifier: row[:id])
+      if p && u # Depends on users and publications being imported from Activity Insight first
+        if a
+          a.update_attributes!(author_number: row[:ordinal].to_i,
+                               activity_insight_identifier: row[:id])
+          nil
+        else
+          Authorship.new(user: u,
+                         publication: p,
+                         author_number: row[:ordinal].to_i,
+                         activity_insight_identifier: row[:id])
+        end
       end
+      nil
     end
   end
 
