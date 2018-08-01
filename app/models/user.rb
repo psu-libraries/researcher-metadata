@@ -43,6 +43,16 @@ class User < ApplicationRecord
     end
 
     show do
+      field :webaccess_id
+      field :pure_uuid
+      field :activity_insight_identifier
+      field :penn_state_identifier
+      field :title
+      field :institution
+      field :is_admin
+      field :created_at
+      field :updated_at
+
       field :publications
     end
   end
