@@ -21,8 +21,13 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:citation_count).of_type(:integer) }
+  it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
+  it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+
+  it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
+  it { is_expected.to have_db_index(:pure_uuid).unique(true) }
 end
 
 
@@ -32,6 +37,12 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:publication_type) }
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(Publication.publication_types) }
+
+    context "given an otherwise valid record" do
+      subject { build :publication }
+      it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
+      it { is_expected.to validate_uniqueness_of(:pure_uuid).allow_nil }
+    end
   end
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }

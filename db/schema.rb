@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_01_154447) do
+ActiveRecord::Schema.define(version: 2018_08_01_161232) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,10 @@ ActiveRecord::Schema.define(version: 2018_08_01_154447) do
     t.boolean "authors_et_al"
     t.date "published_on"
     t.integer "citation_count"
+    t.string "pure_uuid"
+    t.string "activity_insight_identifier"
+    t.index ["activity_insight_identifier"], name: "index_publications_on_activity_insight_identifier", unique: true
+    t.index ["pure_uuid"], name: "index_publications_on_pure_uuid", unique: true
   end
 
   create_table "users", force: :cascade do |t|
