@@ -5,6 +5,7 @@ describe API::V1::PublicationSerializer do
                              title: 'publication 1',
                              secondary_title: 'pub 1 subtitle',
                              journal_title: 'prestegious journal',
+                             publication_type: 'Journal Article',
                              status: 'published',
                              volume: '1',
                              issue: '2',
@@ -19,6 +20,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:title => 'publication 1') }
     it { is_expected.to include(:secondary_title => 'pub 1 subtitle') }
     it { is_expected.to include(:journal_title => 'prestegious journal') }
+    it { is_expected.to include(:publication_type => 'Journal Article') }
     it { is_expected.to include(:status => 'published') }
     it { is_expected.to include(:volume => '1') }
     it { is_expected.to include(:issue => '2') }
