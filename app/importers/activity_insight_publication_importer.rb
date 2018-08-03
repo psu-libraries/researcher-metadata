@@ -4,7 +4,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
       p = Publication.find_by(activity_insight_identifier: row[:id]) || Publication.new
 
       p.title = row[:title]
-      p.publication_type = "Academic Journal Article" if p.new_record?
+      p.publication_type = publication_type(row)
       p.journal_title = journal_title(row)
       p.publisher = publisher(row)
       p.secondary_title = row[:title_secondary]
@@ -27,6 +27,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def bulk_import(objects)
     Publication.import(objects, on_duplicate_key_update: {conflict_target: [:activity_insight_identifier],
                                                           columns: [:title,
+                                                                    :publication_type,
                                                                     :journal_title,
                                                                     :publisher,
                                                                     :secondary_title,
@@ -45,7 +46,24 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   private
 
   def publication_type(row)
-    extract_value(row: row, header_key: :contype, header_count: 12) || row[:contypeother]
+    ai_type = extract_value(row: row, header_key: :contype, header_count: 12) || row[:contypeother]
+    cleaned_ai_type = ai_type.downcase.strip
+
+    if cleaned_ai_type == 'journal article, academic journal'
+      'Academic Journal Article'
+    elsif cleaned_ai_type == 'journal article, in-house journal' ||
+      cleaned_ai_type == 'journal article, in-house'
+      'In-house Journal Article'
+    elsif cleaned_ai_type == 'journal article, professional journal'
+      'Professional Journal Article'
+    elsif cleaned_ai_type == 'journal article, public or trade journal' ||
+      cleaned_ai_type == 'magazine or trade journal article'
+      'Trade Journal Article'
+    elsif cleaned_ai_type == 'journal article'
+      'Journal Article'
+    else
+      nil
+    end
   end
 
   def journal_title(row)

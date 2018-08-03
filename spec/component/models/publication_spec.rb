@@ -71,7 +71,11 @@ describe Publication, type: :model do
 
   describe '.publication_types' do
     it "returns the list of valid publication types" do
-      expect(Publication.publication_types).to eq ["Academic Journal Article"]
+      expect(Publication.publication_types).to eq ["Academic Journal Article",
+                                                   "In-house Journal Article",
+                                                   "Professional Journal Article",
+                                                   "Trade Journal Article",
+                                                   "Journal Article"]
     end
   end
 

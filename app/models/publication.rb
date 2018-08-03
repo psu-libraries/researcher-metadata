@@ -2,7 +2,11 @@ class Publication < ApplicationRecord
   include Swagger::Blocks
 
   def self.publication_types
-    ["Academic Journal Article"]
+    ["Academic Journal Article",
+     "In-house Journal Article",
+     "Professional Journal Article",
+     "Trade Journal Article",
+     "Journal Article"]
   end
 
   has_many :authorships
