@@ -6,13 +6,15 @@ describe API::V1::PublicationSerializer do
                              secondary_title: 'pub 1 subtitle',
                              journal_title: 'prestegious journal',
                              publication_type: 'Journal Article',
+                             publisher: 'a publisher',
                              status: 'published',
                              volume: '1',
                              issue: '2',
                              edition: '3',
                              page_range: '4-5',
                              authors_et_al: true,
-                             published_on: date }
+                             published_on: date,
+                             abstract: 'an abstract' }
   let(:date) { nil }
 
   describe "data attributes" do
@@ -21,12 +23,14 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:secondary_title => 'pub 1 subtitle') }
     it { is_expected.to include(:journal_title => 'prestegious journal') }
     it { is_expected.to include(:publication_type => 'Journal Article') }
+    it { is_expected.to include(:publisher => 'a publisher') }
     it { is_expected.to include(:status => 'published') }
     it { is_expected.to include(:volume => '1') }
     it { is_expected.to include(:issue => '2') }
     it { is_expected.to include(:edition => '3') }
     it { is_expected.to include(:page_range => '4-5') }
     it { is_expected.to include(:authors_et_al => true) }
+    it { is_expected.to include(:abstract => 'an abstract') }
 
     context "when the publication has a published_on date" do
       let(:date) { Date.new(2018, 8, 3) }
