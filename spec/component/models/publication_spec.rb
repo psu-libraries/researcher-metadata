@@ -49,6 +49,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:users).through(:authorships) }
     it { is_expected.to have_many(:contributors) }
+    it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
   end
 
   describe "deleting a publication with authorships" do

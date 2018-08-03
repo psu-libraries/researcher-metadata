@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_01_211629) do
+ActiveRecord::Schema.define(version: 2018_08_03_205629) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -42,6 +42,17 @@ ActiveRecord::Schema.define(version: 2018_08_01_211629) do
     t.index ["activity_insight_identifier"], name: "index_contributors_on_activity_insight_identifier", unique: true
     t.index ["publication_id"], name: "index_contributors_on_publication_id"
     t.index ["pure_identifier"], name: "index_contributors_on_pure_identifier", unique: true
+  end
+
+  create_table "publication_imports", force: :cascade do |t|
+    t.integer "publication_id", null: false
+    t.string "source", null: false
+    t.string "source_identifier", null: false
+    t.datetime "source_updated_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
+    t.index ["source_identifier", "source"], name: "index_publication_imports_on_source_identifier_and_source", unique: true
   end
 
   create_table "publications", force: :cascade do |t|
@@ -93,4 +104,5 @@ ActiveRecord::Schema.define(version: 2018_08_01_211629) do
   add_foreign_key "authorships", "publications", on_delete: :cascade
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
 end
