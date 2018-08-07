@@ -48,7 +48,7 @@ describe Publication, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors) }
+    it { is_expected.to have_many(:contributors).dependent(:destroy) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
   end
 

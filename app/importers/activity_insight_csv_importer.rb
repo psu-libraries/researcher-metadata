@@ -1,4 +1,5 @@
 class ActivityInsightCSVImporter < CSVImporter
+  IMPORT_SOURCE = 'Activity Insight'
   def call
     tf = Tempfile.new("temp_#{self.class.to_s.underscore}")
 

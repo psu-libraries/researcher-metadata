@@ -11,7 +11,7 @@ class Publication < ApplicationRecord
 
   has_many :authorships
   has_many :users, through: :authorships
-  has_many :contributors, -> { order position: :asc }
+  has_many :contributors, -> { order position: :asc }, dependent: :destroy
   has_many :imports, class_name: :PublicationImport
 
   validates :publication_type, :title, presence: true
