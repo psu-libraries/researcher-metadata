@@ -6,7 +6,7 @@ describe 'API::V1 Publications' do
     let(:params) { '' }
 
     before do
-      get "/v1/publications#{params}", headers: { 'Accept': 'application/vnd' }
+      get "/v1/publications#{params}"
     end
 
     it 'returns HTTP status 200' do
@@ -33,7 +33,7 @@ describe 'API::V1 Publications' do
     }
 
     before do
-      get "/v1/publications/#{requested_publication.id}", headers: { 'Accept': 'application/vnd' }
+      get "/v1/publications/#{requested_publication.id}"
     end
 
     it 'returns HTTP status 200' do

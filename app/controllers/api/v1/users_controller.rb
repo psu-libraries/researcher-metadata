@@ -12,14 +12,21 @@ module API::V1
       end
     end
 
+    def users_publications
+      data = {}
+      User.includes(:publications).where(webaccess_id: params[:_json]).each do |u|
+        data[u.webaccess_id] = API::V1::PublicationSerializer.new(u.publications).serializable_hash
+      end
+      render json: data
+    end
+
     swagger_path '/v1/users/{webaccess_id}/publications' do
       operation :get do
         key :summary, "Retrieve a user's publications"
         key :description, 'Returns a publications for a user'
         key :operationId, 'findUserPublications'
         key :tags, [
-          'user',
-          'publications'
+          'user'
         ]
         parameter do
           key :name, :webaccess_id
@@ -55,6 +62,32 @@ module API::V1
               key :type, :string
             end
           end
+        end
+      end
+    end
+
+    swagger_path '/v1/users/publications' do
+      operation :post do
+        key :summary, "Retrieve publications for a group of users"
+        key :description, 'Returns publications for a group of users'
+        key :operationId, 'findUsersPublications'
+        key :tags, [
+          'user'
+        ]
+        parameter do
+          key :in, 'body'
+          key :description, 'Webaccess IDs of users to retrieve publications'
+          key :required, true
+          key :name, :webaccess_ids
+          schema do
+            key :type, :array
+            items do
+              key :type, :string
+            end
+          end
+        end
+        response 200 do
+          key :description, 'OK'
         end
       end
     end

@@ -7,7 +7,7 @@ describe 'API::V1 Users' do
     let(:params) { '' }
 
     before do
-      get "/v1/users/#{webaccess_id}/publications#{params}", headers: { 'Accept': 'application/vnd' }
+      get "/v1/users/#{webaccess_id}/publications#{params}"
     end
 
     context "for a valid webaccess_id" do
@@ -39,6 +39,27 @@ describe 'API::V1 Users' do
       let(:webaccess_id) { "aaa" }
       it "returns 404 not found" do
         expect(response).to have_http_status 404
+      end
+    end
+  end
+
+  describe 'POST /v1/users/publications' do
+    let!(:user_xyz123) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
+    let!(:user_abc123) { create(:user_with_authorships, webaccess_id: 'abc123', authorships_count: 5) }
+    let!(:user_cws161) { create(:user, webaccess_id: 'cws161') }
+    before do
+      post "/v1/users/publications", params: params
+    end
+    context "for a valid set of webaccess_id params" do
+      let(:params) { { '_json': %w(abc123 xyz321 cws161 fake123) } }
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      it "returns publications for each webaccess_id" do
+        expect(json_response.count).to eq(3)
+        expect(json_response[:abc123][:data].count).to eq(5)
+        expect(json_response[:xyz321][:data].count).to eq(10)
+        expect(json_response[:cws161][:data].count).to eq(0)
       end
     end
   end
