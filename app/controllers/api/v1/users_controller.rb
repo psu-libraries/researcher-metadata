@@ -14,7 +14,7 @@ module API::V1
 
     def users_publications
       data = {}
-      User.includes(:publications).where(webaccess_id: params[:webaccess_ids]).each do |u|
+      User.includes(:publications).where(webaccess_id: params[:_json]).each do |u|
         data[u.webaccess_id] = API::V1::PublicationSerializer.new(u.publications).serializable_hash
       end
       render json: data
@@ -26,8 +26,7 @@ module API::V1
         key :description, 'Returns a publications for a user'
         key :operationId, 'findUserPublications'
         key :tags, [
-          'user',
-          'publications'
+          'user'
         ]
         parameter do
           key :name, :webaccess_id

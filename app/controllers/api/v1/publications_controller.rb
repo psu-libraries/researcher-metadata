@@ -61,7 +61,7 @@ module API::V1
           'text/html',
         ]
         key :tags, [
-          'publications'
+          'publication'
         ]
         parameter do
           key :name, :limit

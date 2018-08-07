@@ -48,10 +48,10 @@ describe 'API::V1 Users' do
     let!(:user_abc123) { create(:user_with_authorships, webaccess_id: 'abc123', authorships_count: 5) }
     let!(:user_cws161) { create(:user, webaccess_id: 'cws161') }
     before do
-      post "/v1/users/publications", params: params, headers: { 'Accept': 'application/vnd' }
+      post "/v1/users/publications", params: params
     end
     context "for a valid set of webaccess_id params" do
-      let(:params) { { webaccess_ids: %w(abc123 xyz321 cws161 fake123) } }
+      let(:params) { { '_json': %w(abc123 xyz321 cws161 fake123) } }
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end

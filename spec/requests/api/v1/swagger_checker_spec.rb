@@ -8,7 +8,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let(:publications_params) { { "id" => publication_1.id } }
     let(:user_publications_params) { { "webaccess_id" => user.webaccess_id } }
-    let(:users_publications_params) { { "_data" => { webaccess_ids: %w( xyz123 ) } } }
+    let(:users_publications_params) { { '_json': %w(abc123 xyz321 cws161 fake123) } }
     let(:invalid_publications_params) { { "id" => -2000 } }
     let(:invalid_user_publications_params) { { "webaccess_id" => "aaa" } }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publications_params ) }
