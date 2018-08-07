@@ -40,7 +40,7 @@ class PurePublicationImporter
               pi.save!
 
               p.contributors.delete_all
-              
+
               authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
                 a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
 

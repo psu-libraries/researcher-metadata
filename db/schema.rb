@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_03_205629) do
+ActiveRecord::Schema.define(version: 2018_08_07_213213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -19,13 +19,9 @@ ActiveRecord::Schema.define(version: 2018_08_03_205629) do
     t.integer "user_id", null: false
     t.integer "publication_id", null: false
     t.integer "author_number"
-    t.string "activity_insight_identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "pure_identifier"
-    t.index ["activity_insight_identifier"], name: "index_authorships_on_activity_insight_identifier", unique: true
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
-    t.index ["pure_identifier"], name: "index_authorships_on_pure_identifier", unique: true
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
 
@@ -37,11 +33,7 @@ ActiveRecord::Schema.define(version: 2018_08_03_205629) do
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "pure_identifier"
-    t.string "activity_insight_identifier"
-    t.index ["activity_insight_identifier"], name: "index_contributors_on_activity_insight_identifier", unique: true
     t.index ["publication_id"], name: "index_contributors_on_publication_id"
-    t.index ["pure_identifier"], name: "index_contributors_on_pure_identifier", unique: true
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -76,11 +68,6 @@ ActiveRecord::Schema.define(version: 2018_08_03_205629) do
     t.boolean "authors_et_al"
     t.date "published_on"
     t.integer "citation_count"
-    t.string "pure_uuid"
-    t.string "activity_insight_identifier"
-    t.datetime "pure_updated_at"
-    t.index ["activity_insight_identifier"], name: "index_publications_on_activity_insight_identifier", unique: true
-    t.index ["pure_uuid"], name: "index_publications_on_pure_uuid", unique: true
   end
 
   create_table "users", force: :cascade do |t|
