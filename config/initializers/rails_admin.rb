@@ -32,22 +32,26 @@ RailsAdmin.config do |config|
 
   config.excluded_models = [
     'ActiveStorage::Blob',
-    'ActiveStorage::Attachment',
-    'Authorship',
-    'Contributor'
+    'ActiveStorage::Attachment'
   ]
 
   config.actions do
     dashboard do
 #     statistics false
     end
-    index                         # mandatory
+    index do
+      only [:Publication, :User]
+    end
     new
     export
     bulk_delete
     show
-    edit
-    delete
+    edit do
+      only [:Publication, :User]
+    end
+    delete do
+      only [:Publication, :User]
+    end
     show_in_app
 
     toggle
