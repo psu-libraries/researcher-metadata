@@ -8,6 +8,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let(:publications_params) { { "id" => publication_1.id } }
     let(:user_publications_params) { { "webaccess_id" => user.webaccess_id } }
+    let(:users_publications_params) { { "_data" => { webaccess_ids: %w( xyz123 ) } } }
     let(:invalid_publications_params) { { "id" => -2000 } }
     let(:invalid_user_publications_params) { { "webaccess_id" => "aaa" } }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publications_params ) }
@@ -16,6 +17,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, {"webaccess_id" => "xyz321", "_query_string" => "limit=1"} ) }
+    it { is_expected.to validate( :post, '/v1/users/publications', 200, users_publications_params ) }
   end
 
   context 'and' do

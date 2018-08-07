@@ -14,6 +14,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       resources :publications
       get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
+      post 'users/publications' => 'users#users_publications', as: :users_publications
     end
   end
 end
