@@ -7,7 +7,7 @@ describe 'API::V1 Users' do
     let(:params) { '' }
 
     before do
-      get "/v1/users/#{webaccess_id}/publications#{params}", headers: { 'Accept': 'application/vnd' }
+      get "/v1/users/#{webaccess_id}/publications#{params}"
     end
 
     context "for a valid webaccess_id" do
