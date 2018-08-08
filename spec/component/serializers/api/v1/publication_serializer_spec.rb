@@ -14,7 +14,8 @@ describe API::V1::PublicationSerializer do
                              page_range: '4-5',
                              authors_et_al: true,
                              published_on: date,
-                             abstract: 'an abstract' }
+                             abstract: 'an abstract',
+                             citation_count: 1000 }
   let(:date) { nil }
 
   describe "data attributes" do
@@ -31,6 +32,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:page_range => '4-5') }
     it { is_expected.to include(:authors_et_al => true) }
     it { is_expected.to include(:abstract => 'an abstract') }
+    it { is_expected.to include(:citation_count => 1000) }
 
     context "when the publication has a published_on date" do
       let(:date) { Date.new(2018, 8, 3) }
