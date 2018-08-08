@@ -3,10 +3,10 @@ module API::V1
     include Swagger::Blocks
 
     def publications
-      params[:limit].present? ? limit = params[:limit] : limit = 100
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
-        render json: API::V1::PublicationSerializer.new(user.publications.limit(limit))
+        pubs = API::V1::UserQuery.new(user).publications(params)
+        render json: API::V1::PublicationSerializer.new(pubs)
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
       end
@@ -14,8 +14,9 @@ module API::V1
 
     def users_publications
       data = {}
-      User.includes(:publications).where(webaccess_id: params[:_json]).each do |u|
-        data[u.webaccess_id] = API::V1::PublicationSerializer.new(u.publications).serializable_hash
+      User.includes(:publications).where(webaccess_id: params[:_json]).each do |user|
+        pubs = API::V1::UserQuery.new(user).publications(params)
+        data[user.webaccess_id] = API::V1::PublicationSerializer.new(pubs).serializable_hash
       end
       render json: data
     end
@@ -42,6 +43,48 @@ module API::V1
           key :required, false
           key :type, :integer
           key :format, :int32
+        end
+        parameter do
+          key :name, :start_year
+          key :in, :query
+          key :description, 'Beginning of publication year range'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
+        end
+        parameter do
+          key :name, :end_year
+          key :in, :query
+          key :description, 'End of publication year range'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
+        end
+        parameter do
+          key :name, :order_first_by
+          key :in, :query
+          key :description, 'Orders publications returned'
+          key :required, false
+          key :type, :string
+          key :enum, [
+            :citation_count_desc,
+            :publication_date_asc,
+            :publication_date_desc,
+            :title_asc
+          ]
+        end
+        parameter do
+          key :name, :order_second_by
+          key :in, :query
+          key :description, 'Orders publications returned'
+          key :required, false
+          key :type, :string
+          key :enum, [
+            :citation_count_desc,
+            :publication_date_asc,
+            :publication_date_desc,
+            :title_asc
+          ]
         end
         response 200 do
           key :description, 'user publications response'
@@ -74,6 +117,48 @@ module API::V1
         key :tags, [
           'user'
         ]
+        parameter do
+          key :name, :start_year
+          key :in, :query
+          key :description, 'Beginning of publication year range'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
+        end
+        parameter do
+          key :name, :end_year
+          key :in, :query
+          key :description, 'End of publication year range'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
+        end
+        parameter do
+          key :name, :order_first_by
+          key :in, :query
+          key :description, 'Orders publications returned'
+          key :required, false
+          key :type, :string
+          key :enum, [
+            :citation_count_desc,
+            :publication_date_asc,
+            :publication_date_desc,
+            :title_asc
+          ]
+        end
+        parameter do
+          key :name, :order_second_by
+          key :in, :query
+          key :description, 'Orders publications returned'
+          key :required, false
+          key :type, :string
+          key :enum, [
+            :citation_count_desc,
+            :publication_date_asc,
+            :publication_date_desc,
+            :title_asc
+          ]
+        end
         parameter do
           key :in, 'body'
           key :description, 'Webaccess IDs of users to retrieve publications'
