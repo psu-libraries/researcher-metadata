@@ -22,7 +22,6 @@ class ActivityInsightUserImporter < CSVImporter
       u.first_name = row[:first_name]
       u.middle_name = row[:middle_name]
       u.last_name = row[:last_name]
-      u.institution = 'Penn State University'
       u.webaccess_id = webaccess_id
       u.penn_state_identifier = row[:'psu_id_#']
       u.activity_insight_identifier = row[:user_id]

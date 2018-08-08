@@ -48,7 +48,6 @@ class User < ApplicationRecord
       field :activity_insight_identifier
       field :penn_state_identifier
       field :title
-      field :institution
       field :is_admin
       field :created_at
       field :updated_at

@@ -26,7 +26,6 @@ class PureUserImporter
           u.first_name = first_name
           u.middle_name = middle_name
           u.last_name = user['name']['lastName']
-          u.institution = 'Penn State University'
           u.webaccess_id = webaccess_id if u.new_record?
           u.pure_uuid = user['uuid']
           u.save!
