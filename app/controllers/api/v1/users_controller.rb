@@ -32,17 +32,9 @@ module API::V1
         parameter do
           key :name, :webaccess_id
           key :in, :path
-          key :description, 'ID of user to retrieve publications'
+          key :description, 'Webaccess ID of user to retrieve publications'
           key :required, true
           key :type, :string
-        end
-        parameter do
-          key :name, :limit
-          key :in, :query
-          key :description, 'max number publications to return'
-          key :required, false
-          key :type, :integer
-          key :format, :int32
         end
         parameter do
           key :name, :start_year
@@ -85,6 +77,14 @@ module API::V1
             :publication_date_desc,
             :title_asc
           ]
+        end
+        parameter do
+          key :name, :limit
+          key :in, :query
+          key :description, 'Max number publications to return for the user'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
         end
         response 200 do
           key :description, 'user publications response'
@@ -158,6 +158,14 @@ module API::V1
             :publication_date_desc,
             :title_asc
           ]
+        end
+        parameter do
+          key :name, :limit
+          key :in, :query
+          key :description, 'Max number publications to return for each user'
+          key :required, false
+          key :type, :integer
+          key :format, :int32
         end
         parameter do
           key :in, 'body'
