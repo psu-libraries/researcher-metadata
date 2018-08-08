@@ -7,10 +7,10 @@
   float: right;
   color: #fff;
   text-decoration: none;
-  padding: 30px 0px;
+  padding: 30px 10px;
   font-size: 16px;
 }
 .swagger-section #custom-header .swagger-ui-navbar-brand {
   float: left;
-  padding: 13px 10px 10px 30px;
+  padding: 13px 10px 10px 85px;
 }
