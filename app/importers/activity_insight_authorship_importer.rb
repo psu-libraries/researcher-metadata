@@ -8,14 +8,12 @@ class ActivityInsightAuthorshipImporter < ActivityInsightCSVImporter
 
       if p && u # Depends on users and publications being imported from Activity Insight first
         if a
-          a.update_attributes!(author_number: row[:ordinal].to_i,
-                               activity_insight_identifier: row[:id])
+          a.update_attributes!(author_number: row[:ordinal].to_i)
           return nil
         else
           return Authorship.new(user: u,
                                 publication: p,
-                                author_number: row[:ordinal].to_i,
-                                activity_insight_identifier: row[:id])
+                                author_number: row[:ordinal].to_i)
         end
       end
     end
