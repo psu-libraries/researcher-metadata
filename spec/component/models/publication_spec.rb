@@ -21,8 +21,13 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:citation_count).of_type(:integer) }
+  it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+
+  it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
+
+  it { is_expected.to have_db_index(:duplicate_publication_group_id) }
 end
 
 
@@ -39,6 +44,8 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:users).through(:authorships) }
     it { is_expected.to have_many(:contributors).dependent(:destroy) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
+
+    it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional }
   end
 
   describe "deleting a publication with authorships" do
