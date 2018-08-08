@@ -1,4 +1,5 @@
 class PurePublicationImporter
+  IMPORT_SOURCE = 'Pure'
   # This importer is initialized with a path to a directory containing one or more JSON
   # files of exported "research-outputs" data from Pure
   # (https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html#!/research45outputs/listResearchOutputs_2)
@@ -19,30 +20,26 @@ class PurePublicationImporter
       File.open(dirname.join(filename), 'r') do |file|
         MultiJson.load(file)['items'].each do |publication|
           if publication['type'].detect { |t| t['value'] == 'Article' }
-            issn = publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
-            status = publication['publicationStatuses'].detect { |s| s['current'] == true }
-            published_month = status['publicationDate']['month'].present? ? status['publicationDate']['month'].to_i : 1
-            published_day = status['publicationDate']['day'].present? ? status['publicationDate']['day'].to_i : 1
 
             ActiveRecord::Base.transaction do
-              p = Publication.find_by(pure_uuid: publication['uuid']) || Publication.new
+              pi = PublicationImport.find_by(source: IMPORT_SOURCE,
+                                             source_identifier: publication['uuid']) ||
+                PublicationImport.new(source: IMPORT_SOURCE,
+                                      source_identifier: publication['uuid'])
 
-              p.pure_uuid = publication['uuid'] if p.new_record?
-              p.title = publication['title']
-              p.secondary_title = publication['subTitle']
-              p.publication_type = "Academic Journal Article" if p.new_record?
-              p.pure_updated_at = publication['info']['modifiedDate']
-              p.page_range = publication['pages']
-              p.volume = publication['volume']
-              p.issue = publication['journalNumber']
-              p.journal_title = publication['journalAssociation']['title']['value']
-              p.issn = issn
-              p.status = status['publicationStatus'][0]['value']
-              p.published_on = Date.new(status['publicationDate']['year'].to_i,
-                                         published_month,
-                                         published_day.to_i)
-              p.citation_count = publication['totalScopusCitations']
-              p.save!
+              pi.source_updated_at = publication['info']['modifiedDate']
+
+              if pi.persisted?
+                p = pi.publication
+                p.update_attributes!(pub_attrs(publication))
+              else
+                p = Publication.create!(pub_attrs(publication))
+                pi.publication = p
+              end
+
+              pi.save!
+
+              p.contributors.delete_all
 
               authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
                 a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
@@ -57,7 +54,6 @@ class PurePublicationImporter
                     authorship.user = u if authorship.new_record?
                     authorship.publication = p if authorship.new_record?
                     authorship.author_number = i+1
-                    authorship.pure_identifier = a['pureId']
                     begin
                       authorship.save!
                     rescue ActiveRecord::RecordInvalid => e
@@ -66,13 +62,10 @@ class PurePublicationImporter
                   end
                 end
 
-                c = Contributor.find_by(pure_identifier: a['pureId']) || Contributor.new
-                c.publication = p
-                c.first_name = a['name']['firstName']
-                c.last_name = a['name']['lastName']
-                c.position = i+1
-                c.pure_identifier = a['pureId'] if c.new_record?
-                c.save!
+                Contributor.create!(publication: p,
+                                    first_name: a['name']['firstName'],
+                                    last_name: a['name']['lastName'],
+                                    position: i+1)
               end
             end
           end
@@ -87,4 +80,38 @@ class PurePublicationImporter
   private
 
   attr_reader :dirname
+
+  def pub_attrs(publication)
+    {
+      title: publication['title'],
+      secondary_title: publication['subTitle'],
+      publication_type: "Academic Journal Article",
+      page_range: publication['pages'],
+      volume: publication['volume'],
+      issue: publication['journalNumber'],
+      journal_title: publication['journalAssociation']['title']['value'],
+      issn: issn(publication),
+      status: status(publication)['publicationStatus'][0]['value'],
+      published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
+                             published_month(publication),
+                             published_day(publication)),
+      citation_count: publication['totalScopusCitations']
+    }
+  end
+
+  def issn(publication)
+    publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
+  end
+
+  def status(publication)
+    publication['publicationStatuses'].detect { |s| s['current'] == true }
+  end
+
+  def published_month(publication)
+    status(publication)['publicationDate']['month'].present? ? status(publication)['publicationDate']['month'].to_i : 1
+  end
+
+  def published_day(publication)
+    status(publication)['publicationDate']['day'].present? ? status(publication)['publicationDate']['day'].to_i : 1
+  end
 end

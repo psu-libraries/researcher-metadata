@@ -1,49 +1,47 @@
 class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def row_to_object(row)
     if publication_type(row) =~ /journal article/i
-      p = Publication.find_by(activity_insight_identifier: row[:id]) || Publication.new
+      pi = PublicationImport.find_by(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
+                                     source_identifier: row[:id]) ||
+        PublicationImport.new(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
+                              source_identifier: row[:id],
+                              publication: Publication.create!(pub_attrs(row)))
 
-      p.title = row[:title]
-      p.publication_type = publication_type(row)
-      p.journal_title = journal_title(row)
-      p.publisher = publisher(row)
-      p.secondary_title = row[:title_secondary]
-      p.status = status(row)
-      p.volume = volume(row)
-      p.issue = row[:issue]
-      p.edition = row[:edition]
-      p.page_range = page_range(row)
-      p.url = url(row)
-      p.issn = row[:isbnissn]
-      p.abstract = row[:abstract]
-      p.authors_et_al = authors_et_al(row)
-      p.published_on = published_on(row)
-      p.activity_insight_identifier = row[:id] if p.new_record?
+      if pi.persisted?
+        p = pi.publication
+        p.update_attributes!(pub_attrs(row))
+        return nil
+      end
 
-      p
+      pi
     end
   end
 
   def bulk_import(objects)
-    Publication.import(objects, on_duplicate_key_update: {conflict_target: [:activity_insight_identifier],
-                                                          columns: [:title,
-                                                                    :publication_type,
-                                                                    :journal_title,
-                                                                    :publisher,
-                                                                    :secondary_title,
-                                                                    :status,
-                                                                    :volume,
-                                                                    :issue,
-                                                                    :edition,
-                                                                    :page_range,
-                                                                    :url,
-                                                                    :issn,
-                                                                    :abstract,
-                                                                    :authors_et_al,
-                                                                    :published_on]})
+    PublicationImport.import(objects)
   end
 
   private
+
+  def pub_attrs(row)
+    {
+      title: row[:title],
+      publication_type: publication_type(row),
+      journal_title: journal_title(row),
+      publisher: publisher(row),
+      secondary_title: row[:title_secondary],
+      status: status(row),
+      volume: volume(row),
+      issue: row[:issue],
+      edition: row[:edition],
+      page_range: page_range(row),
+      url: url(row),
+      issn: row[:isbnissn],
+      abstract: row[:abstract],
+      authors_et_al: authors_et_al(row),
+      published_on: published_on(row)
+    }
+  end
 
   def publication_type(row)
     ai_type = extract_value(row: row, header_key: :contype, header_count: 12) || row[:contypeother]
