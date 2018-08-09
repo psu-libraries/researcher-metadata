@@ -28,6 +28,8 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
 
   it { is_expected.to have_db_index(:duplicate_publication_group_id) }
+  it { is_expected.to have_db_index(:volume) }
+  it { is_expected.to have_db_index(:issue) }
 end
 
 
