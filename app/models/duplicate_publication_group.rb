@@ -3,7 +3,7 @@ class DuplicatePublicationGroup < ApplicationRecord
 
   def self.group_duplicates
     pbar = ProgressBar.create(title: 'Grouping duplicate publications',
-                              total: Publication.count) if Rails.env.development?
+                              total: Publication.count) unless Rails.env.test?
 
     Publication.find_each do |p|
       duplicates = Publication.where("volume = ? AND issue = ? AND title ILIKE ? and (journal_title ILIKE ? OR journal_title ILIKE ? OR publisher ILIKE ? OR publisher ILIKE ?) AND EXTRACT(YEAR FROM published_on) = ?",
@@ -28,9 +28,9 @@ class DuplicatePublicationGroup < ApplicationRecord
           duplicates.update_all(duplicate_publication_group_id: new_group.id)
         end
       end
-      pbar.increment if Rails.env.development?
+      pbar.increment unless Rails.env.test?
     end
-    pbar.finish if Rails.env.development?
+    pbar.finish unless Rails.env.test?
 
     nil
   end
