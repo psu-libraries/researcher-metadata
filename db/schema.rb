@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_08_142314) do
+ActiveRecord::Schema.define(version: 2018_08_09_192512) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,6 +34,11 @@ ActiveRecord::Schema.define(version: 2018_08_08_142314) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "index_contributors_on_publication_id"
+  end
+
+  create_table "duplicate_publication_groups", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -68,6 +73,10 @@ ActiveRecord::Schema.define(version: 2018_08_08_142314) do
     t.boolean "authors_et_al"
     t.date "published_on"
     t.integer "citation_count"
+    t.integer "duplicate_publication_group_id"
+    t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
+    t.index ["issue"], name: "index_publications_on_issue"
+    t.index ["volume"], name: "index_publications_on_volume"
   end
 
   create_table "users", force: :cascade do |t|
@@ -91,4 +100,5 @@ ActiveRecord::Schema.define(version: 2018_08_08_142314) do
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
+  add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
 end

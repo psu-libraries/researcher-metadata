@@ -40,11 +40,15 @@ RailsAdmin.config do |config|
 #     statistics false
     end
     index do
+      only [:Publication, :User, :DuplicatePublicationGroup]
+    end
+    new do
+      except [:PublicationImport, :DuplicatePublicationGroup]
+    end
+    export
+    bulk_delete do
       only [:Publication, :User]
     end
-    new
-    export
-    bulk_delete
     show
     edit do
       only [:Publication, :User]
