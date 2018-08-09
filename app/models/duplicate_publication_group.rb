@@ -20,7 +20,9 @@ class DuplicatePublicationGroup < ApplicationRecord
         existing_group = duplicates.detect { |p| p.duplicate_group.present? }.try(:duplicate_group)
 
         if existing_group
-          duplicates.update_all(duplicate_publication_group_id: existing_group.id)
+          duplicates.each do |dp|
+            dp.update_attributes!(duplicate_group: existing_group) unless dp.duplicate_group.present?
+          end
         else
           new_group = create!
           duplicates.update_all(duplicate_publication_group_id: new_group.id)
