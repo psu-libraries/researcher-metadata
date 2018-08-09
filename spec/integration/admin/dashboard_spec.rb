@@ -12,6 +12,7 @@ feature "Admin dashboard", type: :feature do
       before do
         4.times { create :publication }
         4.times { create :user }
+        3.times { create :duplicate_publication_group }
         visit 'admin'
       end
 
@@ -26,6 +27,10 @@ feature "Admin dashboard", type: :feature do
 
         within 'tr.user_links' do
           expect(page).to have_content '5'
+        end
+
+        within 'tr.duplicate_publication_group_links' do
+          expect(page).to have_content '3'
         end
       end
     end
