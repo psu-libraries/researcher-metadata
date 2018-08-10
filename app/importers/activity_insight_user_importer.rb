@@ -10,13 +10,18 @@ class ActivityInsightUserImporter < CSVImporter
       # go ahead and update our data with whatever is currently in Activity Insight
       # regardless of other import data sources. Since the Activity Insight source data
       # doesn't contain information about when the data was last updated in Activity Insight,
-      # we re-import every record each time the import is run.
-      existing_user.first_name = row[:first_name]
-      existing_user.middle_name = row[:middle_name]
-      existing_user.last_name = row[:last_name]
-      existing_user.penn_state_identifier = row[:'psu_id_#']
-      existing_user.activity_insight_identifier = row[:user_id]
-      existing_user
+      # we re-import every record each time the import is run. However, if a user record has
+      # been manually edited, we don't update it with imported data.
+      if existing_user.updated_by_user_at.blank?
+        existing_user.first_name = row[:first_name]
+        existing_user.middle_name = row[:middle_name]
+        existing_user.last_name = row[:last_name]
+        existing_user.penn_state_identifier = row[:'psu_id_#']
+        existing_user.activity_insight_identifier = row[:user_id]
+        existing_user
+      else
+        nil
+      end
     else
       u = User.new
       u.first_name = row[:first_name]

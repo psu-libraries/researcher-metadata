@@ -1,0 +1,399 @@
+{
+  "count" : 3,
+  "items" : [ {
+    "pureId" : 8289293,
+    "externalId" : "SAT1",
+    "externalIdSource" : "synchronisedPerson",
+    "externallyManaged" : true,
+    "uuid" : "9530a014-c29f-4081-88ae-b923dc919001",
+    "name" : {
+      "firstName" : "Susan A",
+      "lastName" : "Tester"
+    },
+    "profiled" : true,
+    "scopusHIndex" : 15,
+    "fte" : 0.0,
+    "info" : {
+      "createdBy" : "root",
+      "createdDate" : "2016-12-23T14:06:33.688+0000",
+      "modifiedBy" : "sync_user",
+      "modifiedDate" : "2018-06-28T06:52:02.603+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/9530a014-c29f-4081-88ae-b923dc919001"
+    },
+    "visibility" : [ {
+      "value" : "Public - No restriction",
+      "key" : "FREE"
+    } ],
+    "ids" : [ {
+      "pureId" : 21183542,
+      "externalId" : "autoid:SAT1-employee-SAT1",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "typeUri" : "/dk/atira/pure/person/personsources/employee",
+      "type" : "Employee ID",
+      "value" : "SAT1"
+    }, {
+      "pureId" : 23578976,
+      "typeUri" : "/dk/atira/pure/person/personsources/scopusauthor",
+      "type" : "Scopus Author ID",
+      "value" : "6603393977"
+    } ],
+    "staffOrganisationAssociations" : [ {
+      "pureId" : 21279128,
+      "externalId" : "autoid:SAT1-SCHOOL-CAM-BD-SCI-Associate Professor-academic-1984-08-14",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "9530a014-c29f-4081-88ae-b923dc919001",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/9530a014-c29f-4081-88ae-b923dc919001"
+        },
+        "name" : [ {
+          "value" : "Susan A Tester"
+        } ]
+      },
+      "period" : {
+        "startDate" : "1984-08-14T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : [ {
+        "value" : "Academic",
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
+      } ],
+      "organisationalUnit" : {
+        "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/937d604c-a16a-499d-80eb-bd6f931a343c"
+        },
+        "name" : [ {
+          "value" : "School of Science (Behrend)"
+        } ],
+        "type" : [ {
+          "value" : "Department",
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department"
+        } ]
+      },
+      "staffType" : [ {
+        "value" : "Academic",
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic"
+      } ],
+      "jobDescription" : [ {
+        "value" : "Associate Professor"
+      } ],
+      "emails" : [ {
+        "pureId" : 21279130,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
+        "type" : "Email",
+        "value" : "SAT1@psu.edu"
+      } ]
+    } ]
+  }, {
+    "pureId" : 8289295,
+    "externalId" : "bbt2",
+    "externalIdSource" : "synchronisedPerson",
+    "externallyManaged" : true,
+    "uuid" : "a9ea5e62-9b39-4281-a759-e1c58f0ec582",
+    "name" : {
+      "firstName" : "Bob B",
+      "lastName" : "Testuser"
+    },
+    "profiled" : true,
+    "scopusHIndex" : 21,
+    "fte" : 0.0,
+    "info" : {
+      "createdBy" : "root",
+      "createdDate" : "2016-12-23T14:06:33.695+0000",
+      "modifiedBy" : "sync_user",
+      "modifiedDate" : "2018-06-28T06:50:19.948+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
+    },
+    "visibility" : [ {
+      "value" : "Public - No restriction",
+      "key" : "FREE"
+    } ],
+    "ids" : [ {
+      "pureId" : 21183537,
+      "externalId" : "autoid:bbt2-employee-bbt2",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "typeUri" : "/dk/atira/pure/person/personsources/employee",
+      "type" : "Employee ID",
+      "value" : "bbt2"
+    }, {
+      "pureId" : 23575031,
+      "typeUri" : "/dk/atira/pure/person/personsources/scopusauthor",
+      "type" : "Scopus Author ID",
+      "value" : "6602150313"
+    } ],
+    "staffOrganisationAssociations" : [ {
+      "pureId" : 21309545,
+      "externalId" : "autoid:bbt2-PROGRAM-COL-EN-ACOUSTICS-Professor-academic-1997-09-01",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "a9ea5e62-9b39-4281-a759-e1c58f0ec582",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
+        },
+        "name" : [ {
+          "value" : "Bob B Testuser"
+        } ]
+      },
+      "period" : {
+        "startDate" : "1997-09-01T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : [ {
+        "value" : "Academic",
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
+      } ],
+      "organisationalUnit" : {
+        "uuid" : "e99fcbec-818a-4b90-a04a-986d05696395",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/e99fcbec-818a-4b90-a04a-986d05696395"
+        },
+        "name" : [ {
+          "value" : "Graduate Program in Acoustics"
+        } ],
+        "type" : [ {
+          "value" : "Department",
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department"
+        } ]
+      },
+      "staffType" : [ {
+        "value" : "Academic",
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic"
+      } ],
+      "jobDescription" : [ {
+        "value" : "Professor"
+      } ],
+      "emails" : [ {
+        "pureId" : 21309546,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
+        "type" : "Email",
+        "value" : "bbt2@psu.edu"
+      } ]
+    }, {
+      "pureId" : 24766061,
+      "externalId" : "autoid:bbt2-COLLEGE-EN-Senior Associate Dean-academic-1997-09-01",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "a9ea5e62-9b39-4281-a759-e1c58f0ec582",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
+        },
+        "name" : [ {
+          "value" : "Bob B Testuser"
+        } ]
+      },
+      "period" : {
+        "startDate" : "1997-09-01T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : [ {
+        "value" : "Academic",
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
+      } ],
+      "organisationalUnit" : {
+        "uuid" : "47bf26c5-18c0-45d1-8aab-9f4597321764",
+        "link" : {
+          "ref" : "content",
+          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/47bf26c5-18c0-45d1-8aab-9f4597321764"
+        },
+        "name" : [ {
+          "value" : "College of Engineering"
+        } ],
+        "type" : [ {
+          "value" : "College",
+          "pureId" : 8288437,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/college"
+        } ]
+      },
+      "staffType" : [ {
+        "value" : "Academic",
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic"
+      } ],
+      "jobDescription" : [ {
+        "value" : "Senior Associate Dean"
+      } ],
+      "emails" : [ {
+        "pureId" : 24766062,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
+        "type" : "Email",
+        "value" : "bbt2@psu.edu"
+      } ]
+    } ]
+  },
+    {
+      "pureId": 8289297,
+      "externalId": "jct3",
+      "externalIdSource": "synchronisedPerson",
+      "externallyManaged": true,
+      "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+      "name": {
+        "firstName": "Jill",
+        "lastName": "Test"
+      },
+      "profiled": true,
+      "scopusHIndex": 2,
+      "fte": 0.0,
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-12-23T14:06:33.697+0000",
+        "modifiedBy": "sync_user",
+        "modifiedDate": "2018-06-28T06:52:54.527+0000",
+        "portalUrl": "https://pennstate.pure.elsevier.com/en/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
+      },
+      "visibility": [
+        {
+          "value": "Public - No restriction",
+          "key": "FREE"
+        }
+      ],
+      "titles": [
+        {
+          "value": "MD",
+          "pureId": 22189043,
+          "externalId": "synchronisedPerson",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/titles/postnominal",
+          "type": "Post-nominal title"
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 8289308,
+          "externalId": "autoid:jct3-scopus-35573635700",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/personsources/scopus",
+          "type": "Scopus ID",
+          "value": "35573635700"
+        },
+        {
+          "pureId": 21183541,
+          "externalId": "autoid:jct3-employee-jct3",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/personsources/employee",
+          "type": "Employee ID",
+          "value": "jct3"
+        },
+        {
+          "pureId": 23580879,
+          "typeUri": "/dk/atira/pure/person/personsources/scopusauthor",
+          "type": "Scopus Author ID",
+          "value": "35573635700"
+        }
+      ],
+      "profilePhotos": [
+        {
+          "pureId": 24891913,
+          "typeUri": "/dk/atira/pure/person/personfiles/portrait",
+          "type": "Portrait",
+          "url": "https://pennstate.pure.elsevier.com/ws/files/24891913/jct3.jpg",
+          "filename": "jct3.jpg",
+          "mimetype": "image/jpeg",
+          "size": 0
+        }
+      ],
+      "staffOrganisationAssociations": [
+        {
+          "pureId": 37242500,
+          "externalId": "autoid:jct3-DEPT-CAM-HY-PEDS-Assistant Professor-academic-1900-01-31",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "person": {
+            "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+            "link": {
+              "ref": "content",
+              "href": "https://pennstate.pure.elsevier.com/ws/api/511/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
+            },
+            "name": [
+              {
+                "value": "Jill Test"
+              }
+            ]
+          },
+          "period": {
+            "startDate": "1900-01-31T12:00:00.000+0000"
+          },
+          "isPrimaryAssociation": false,
+          "employmentType": [
+            {
+              "value": "Academic",
+              "pureId": 4754,
+              "uri": "/dk/atira/pure/person/employmenttypes/academic"
+            }
+          ],
+          "organisationalUnit": {
+            "uuid": "8d55641e-f2d7-4448-8046-ef0672dbee24",
+            "link": {
+              "ref": "content",
+              "href": "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/8d55641e-f2d7-4448-8046-ef0672dbee24"
+            },
+            "name": [
+              {
+                "value": "Department of Pediatrics"
+              }
+            ],
+            "type": [
+              {
+                "value": "Department",
+                "pureId": 855,
+                "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department"
+              }
+            ]
+          },
+          "staffType": [
+            {
+              "value": "Academic",
+              "pureId": 3434337,
+              "uri": "/dk/atira/pure/person/personstafftype/academic"
+            }
+          ],
+          "jobDescription": [
+            {
+              "value": "Assistant Professor"
+            }
+          ],
+          "emails": [
+            {
+              "pureId": 37242501,
+              "externalId": "synchronisedPerson",
+              "externalIdSource": "synchronisedPerson",
+              "externallyManaged": true,
+              "typeUri": "/dk/atira/pure/person/personemailtype/email",
+              "type": "Email",
+              "value": "jct3@psu.edu"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,5 @@
+Last Name,First Name,Middle Name,Email,Username,User ID,PSU ID #,Enabled?,Campus,Campus Name,College,College Name,Department,Division,Institute,School,Security
+Tester,Susan,A,sat1@psu.edu,SAT1,1649499,989465792,No,UP,University Park,BA,Smeal College of Business,BA - Risk Management,,,,Faculty
+Testuser,Bob,B,bbt2@psu.edu,bbt2,1949490,908332714,Yes,UP,University Park,LA,College of the Liberal Arts,LA - Philosophy,,,,Faculty
+Test,Jill,C,jct3@psu.edu,jct3,2081288,978001402,Yes,UP,University Park,AA,College of Arts & Architecture,AA - Architecture,,,AA - Architecture and Landscape Architecture,Faculty
+Testuser,Bob,B,bbt2@psu.edu,bbt2,1949490,908332714,Yes,UP,University Park,LA,College of the Liberal Arts,LA - Philosophy,,,,Faculty
