@@ -51,6 +51,7 @@ class User < ApplicationRecord
       field :is_admin
       field :created_at
       field :updated_at
+      field :updated_by_user_at
 
       field :publications
     end
