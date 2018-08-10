@@ -25,6 +25,9 @@ module RailsAdmin
               sanitize_params_for!(request.xhr? ? :modal : :update)
 
               @object.set_attributes(params[@abstract_model.param_key])
+              if @object.class.base_class.name == 'User'
+                @object.updated_by_user_at = Time.zone.now
+              end
               @authorization_adapter && @authorization_adapter.attributes_for(:update, @abstract_model).each do |name, value|
                 @object.send("#{name}=", value)
               end
