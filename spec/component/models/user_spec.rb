@@ -18,6 +18,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
   it { is_expected.to have_db_index(:webaccess_id).unique(true) }
+  it { is_expected.to have_db_index(:penn_state_identifier).unique(true) }
 end
 
 describe User, type: :model do
@@ -38,6 +39,7 @@ describe User, type: :model do
       it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
       it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
       it { is_expected.to validate_uniqueness_of(:pure_uuid).allow_nil }
+      it { is_expected.to validate_uniqueness_of(:penn_state_identifier).allow_nil }
     end
   end
 

@@ -11,7 +11,10 @@ class User < ApplicationRecord
   devise :http_header_authenticatable
 
   validates :webaccess_id, presence: true, uniqueness: { case_sensitive: false }
-  validates :activity_insight_identifier, :pure_uuid, uniqueness: { allow_nil: true }
+  validates :activity_insight_identifier,
+            :pure_uuid,
+            :penn_state_identifier,
+            uniqueness: { allow_nil: true }
   validates :first_name, :last_name, presence: true
 
   has_many :authorships
