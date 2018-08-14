@@ -1,7 +1,10 @@
 class User < ApplicationRecord
   include Swagger::Blocks
 
-  before_validation :downcase_webaccess_id
+  before_validation :downcase_webaccess_id,
+                    :convert_blank_psu_id_to_nil,
+                    :convert_blank_pure_id_to_nil,
+                    :convert_blank_ai_id_to_nil
 
   Devise.add_module(:http_header_authenticatable,
                     strategy: true,
@@ -64,5 +67,17 @@ class User < ApplicationRecord
 
   def downcase_webaccess_id
     self.webaccess_id = self.webaccess_id.downcase if self.webaccess_id.present?
+  end
+
+  def convert_blank_psu_id_to_nil
+    self.penn_state_identifier = nil if self.penn_state_identifier.blank?
+  end
+
+  def convert_blank_pure_id_to_nil
+    self.pure_uuid = nil if self.pure_uuid.blank?
+  end
+
+  def convert_blank_ai_id_to_nil
+    self.activity_insight_identifier = nil if self.activity_insight_identifier.blank?
   end
 end

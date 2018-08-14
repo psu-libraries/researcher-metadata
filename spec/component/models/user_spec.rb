@@ -59,6 +59,90 @@ describe User, type: :model do
     end
   end
 
+  describe "saving a value for penn_state_identifier" do
+    let(:u) { create :user, penn_state_identifier: psu_id }
+    context "when given nil" do
+      let(:psu_id) { nil }
+      it "saves the value as nil" do
+        expect(u.penn_state_identifier).to eq nil
+      end
+    end
+    context "when given an empty string" do
+      let(:psu_id) { '' }
+      it "saves the value as nil" do
+        expect(u.penn_state_identifier).to eq nil
+      end
+    end
+    context "when given a blank string" do
+      let(:psu_id) { ' ' }
+      it "saves the value as nil" do
+        expect(u.penn_state_identifier).to eq nil
+      end
+    end
+    context "when given a non-blank string" do
+      let(:psu_id) { 'a' }
+      it "saves the value of the string" do
+        expect(u.penn_state_identifier).to eq 'a'
+      end
+    end
+  end
+
+  describe "saving a value for pure_uuid" do
+    let(:u) { create :user, pure_uuid: pure_id }
+    context "when given nil" do
+      let(:pure_id) { nil }
+      it "saves the value as nil" do
+        expect(u.pure_uuid).to eq nil
+      end
+    end
+    context "when given an empty string" do
+      let(:pure_id) { '' }
+      it "saves the value as nil" do
+        expect(u.pure_uuid).to eq nil
+      end
+    end
+    context "when given a blank string" do
+      let(:pure_id) { ' ' }
+      it "saves the value as nil" do
+        expect(u.pure_uuid).to eq nil
+      end
+    end
+    context "when given a non-blank string" do
+      let(:pure_id) { 'a' }
+      it "saves the value of the string" do
+        expect(u.pure_uuid).to eq 'a'
+      end
+    end
+  end
+
+  describe "saving a value for activity_insight_identifier" do
+    let(:u) { create :user, activity_insight_identifier: ai_id }
+    context "when given nil" do
+      let(:ai_id) { nil }
+      it "saves the value as nil" do
+        expect(u.activity_insight_identifier).to eq nil
+      end
+    end
+    context "when given an empty string" do
+      let(:ai_id) { '' }
+      it "saves the value as nil" do
+        expect(u.activity_insight_identifier).to eq nil
+      end
+    end
+    context "when given a blank string" do
+      let(:ai_id) { ' ' }
+      it "saves the value as nil" do
+        expect(u.activity_insight_identifier).to eq nil
+      end
+    end
+    context "when given a non-blank string" do
+      let(:ai_id) { 'a' }
+      it "saves the value of the string" do
+        expect(u.activity_insight_identifier).to eq 'a'
+      end
+    end
+  end
+
   describe "deleting a user with authorships" do
     let(:u) { create :user }
     let!(:a) { create :authorship, user: u}
