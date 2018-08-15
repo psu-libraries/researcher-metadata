@@ -34,4 +34,21 @@ class DuplicatePublicationGroup < ApplicationRecord
 
     nil
   end
+
+  rails_admin do
+    configure :publications do
+      pretty_value do
+        bindings[:view].render :partial => "rails_admin/partials/duplicate_publication_groups/publications.html.erb", :locals => { :publications => value }
+      end
+    end
+
+    list do
+      field :id
+    end
+
+    show do
+      field :id
+      field :publications
+    end
+  end
 end

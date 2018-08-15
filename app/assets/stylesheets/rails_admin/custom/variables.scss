@@ -7,3 +7,15 @@ $btn-primary-border: #497295;
 $btn-info-bg: #dfdfdf;
 $btn-info-border: #dfdfdf;
 $fg-nav-tabs-active: #777;
+
+.grouped-publications {
+  overflow-x: scroll;
+
+  th.publication-field, td.publication-field {
+    min-width: 325px;
+  }
+
+  th.publication-field-label, td.publication-field-label {
+    font-weight: bold;
+  }
+}

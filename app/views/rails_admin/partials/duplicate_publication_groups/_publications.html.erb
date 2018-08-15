@@ -1,0 +1,116 @@
+<div class="grouped-publications">
+  <table class="table table-condensed">
+    <thead>
+    <tr>
+      <th class="publication-field-label">Publication ID</th>
+      <% publications.each do |p| %>
+        <th class="publication-field"><%= p.id %></th>
+      <% end %>
+    </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td class="publication-field-label">Title</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.title %>"><%= link_to p.title, show_path(model_name: :publication, id: p.id) %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Subtitle</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.secondary_title %>"><%= p.secondary_title %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Journal</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.journal_title %>"><%= p.journal_title %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Publisher</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.publisher %>"><%= p.publisher %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Date of Publication</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.published_on %>"><%= p.published_on %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Status</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.status %>"><%= p.status %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Volume</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.volume %>"><%= p.volume %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Issue</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.issue %>"><%= p.issue %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Edition</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.edition %>"><%= p.edition %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Pages</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.page_range %>"><%= p.page_range %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">ISSN</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.issn %>"><%= p.issn %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Type</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.publication_type %>"><%= p.publication_type %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Users</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.users.map { |u| u.name }.join(', ') %>">
+          <%= p.users.map { |u| link_to(u.name, show_path(model_name: :user, id: u.id)) }.join(', ').html_safe %>
+        </td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Contributors</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.contributors.map { |c| c.name }.join(', ') %>"><%= p.contributors.map { |c| c.name }.join(', ') %></td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">AI IDs</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.ai_import_identifiers.join(', ') %>">
+          <%= p.ai_import_identifiers.join(', ') %>
+        </td>
+      <% end %>
+    </tr>
+    <tr>
+      <td class="publication-field-label">Pure IDs</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.pure_import_identifiers.join(', ') %>">
+          <%= p.pure_import_identifiers.join(', ') %>
+        </td>
+      <% end %>
+    </tr>
+    </tbody>
+  </table>
+</div>
