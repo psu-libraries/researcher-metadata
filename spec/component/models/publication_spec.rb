@@ -88,4 +88,66 @@ describe Publication, type: :model do
       expect(pub.contributors).to eq [c3, c1, c2]
     end
   end
+
+  describe '#ai_import_identifiers' do
+    let(:pub) { create :publication }
+
+    before { create :publication_import,
+                    source: "Pure",
+                    source_identifier: "pure-abc123",
+                    publication: pub }
+    
+    context "when the publication does not have imports from Activity Insight" do
+      it "returns an empty array" do
+        expect(pub.ai_import_identifiers).to eq []
+      end
+    end
+    context "when the publication has imports from Activity Insight" do
+      before do
+        create :publication_import,
+               source: "Activity Insight",
+               source_identifier: "ai-abc123",
+               publication: pub
+        create :publication_import,
+               source: "Activity Insight",
+               source_identifier: "ai-xyz789",
+               publication: pub
+      end
+
+      it "returns an array of the source identifiers from the publication's Activity Insight imports" do
+        expect(pub.ai_import_identifiers).to match_array ["ai-abc123", "ai-xyz789"]
+      end
+    end
+  end
+
+  describe '#pure_import_identifiers' do
+    let(:pub) { create :publication }
+
+    before { create :publication_import,
+                    source: "Activity Insight",
+                    source_identifier: "ai-abc123",
+                    publication: pub }
+    
+    context "when the publication does not have imports from Pure" do
+      it "returns an empty array" do
+        expect(pub.pure_import_identifiers).to eq []
+      end
+    end
+    context "when the publication has imports from Pure" do
+      before do
+        create :publication_import,
+               source: "Pure",
+               source_identifier: "pure-abc123",
+               publication: pub
+        create :publication_import,
+               source: "Pure",
+               source_identifier: "pure-xyz789",
+               publication: pub
+      end
+
+      it "returns an array of the source identifiers from the publication's Pure imports" do
+        expect(pub.pure_import_identifiers).to match_array ["pure-abc123", "pure-xyz789"]
+      end
+    end
+  end
 end

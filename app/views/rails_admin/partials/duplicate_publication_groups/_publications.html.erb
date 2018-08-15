@@ -97,16 +97,16 @@
   <tr>
     <td>AI IDs</td>
     <% publications.each do |p| %>
-      <td title="<%= p.imports.where(source: 'Activity Insight').map { |i| i.source_identifier }.join(', ') %>">
-        <%= p.imports.where(source: 'Activity Insight').map { |i| i.source_identifier }.join(', ') %>
+      <td title="<%= p.ai_import_identifiers.join(', ') %>">
+        <%= p.ai_import_identifiers.join(', ') %>
       </td>
     <% end %>
   </tr>
   <tr>
     <td>Pure IDs</td>
     <% publications.each do |p| %>
-      <td title="<%= p.imports.where(source: 'Pure').map { |i| i.source_identifier }.join(', ') %>">
-        <%= p.imports.where(source: 'Pure').map { |i| i.source_identifier }.join(', ') %>
+      <td title="<%= p.pure_import_identifiers.join(', ') %>">
+        <%= p.pure_import_identifiers.join(', ') %>
       </td>
     <% end %>
   </tr>

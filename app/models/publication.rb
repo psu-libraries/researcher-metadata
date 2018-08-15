@@ -28,4 +28,12 @@ class Publication < ApplicationRecord
       key :format, :int64
     end
   end
+
+  def ai_import_identifiers
+    imports.where(source: 'Activity Insight').map { |i| i.source_identifier }
+  end
+
+  def pure_import_identifiers
+    imports.where(source: 'Pure').map { |i| i.source_identifier }
+  end
 end
