@@ -61,6 +61,17 @@ class User < ApplicationRecord
 
       field :publications
     end
+
+    edit do
+      field :first_name
+      field :middle_name
+      field :last_name
+      field :pure_uuid
+      field :activity_insight_identifier
+      field :penn_state_identifier
+      field :title
+      field :is_admin
+    end
   end
 
   private
