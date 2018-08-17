@@ -1,5 +1,5 @@
 class DuplicatePublicationGroup < ApplicationRecord
-  has_many :publications
+  has_many :publications, inverse_of: :duplicate_group
 
   def self.group_duplicates
     pbar = ProgressBar.create(title: 'Grouping duplicate publications',

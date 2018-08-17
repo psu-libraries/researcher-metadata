@@ -24,6 +24,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
 
@@ -42,13 +43,16 @@ describe Publication, type: :model do
   end
 
   describe 'associations' do
-    it { is_expected.to have_many(:authorships) }
+    it { is_expected.to have_many(:authorships).inverse_of(:publication) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors).dependent(:destroy) }
+    it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
 
-    it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional }
+    it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
+
+  it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
     let(:p) { create :publication }

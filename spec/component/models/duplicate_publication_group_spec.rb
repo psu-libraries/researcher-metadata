@@ -11,7 +11,7 @@ end
 describe DuplicatePublicationGroup, type: :model do
   subject(:contributor) { DuplicatePublicationGroup.new }
 
-  it { is_expected.to have_many :publications }
+  it { is_expected.to have_many(:publications).inverse_of(:duplicate_group) }
 
   describe '.group_duplicates' do
     context "when many publications exist, and some have similar data" do

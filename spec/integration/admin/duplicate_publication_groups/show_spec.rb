@@ -139,8 +139,6 @@ feature "Admin duplicate publication group detail page", type: :feature do
         expect(page).to have_link "Test1 User1"
         expect(page).to have_link "Test2 User2"
         expect(page).to have_link "Test3 User3"
-        expect(page).to have_content "Test1 User1"
-        expect(page).to have_content "Test2 User2, Test3 User3"
       end
 
       it "shows the contributor names for the publications in the group" do

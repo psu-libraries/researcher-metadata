@@ -61,6 +61,29 @@ class User < ApplicationRecord
 
       field :publications
     end
+
+    edit do
+      field :webaccess_id do
+        read_only true
+      end
+      field :first_name
+      field :middle_name
+      field :last_name
+      field :pure_uuid
+      field :activity_insight_identifier
+      field :penn_state_identifier
+      field :title
+      field :is_admin
+      field :created_at do
+        read_only true
+      end
+      field :updated_at do
+        read_only true
+      end
+      field :updated_by_user_at do
+        read_only true
+      end
+    end
   end
 
   private
