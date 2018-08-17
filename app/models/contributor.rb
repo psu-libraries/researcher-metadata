@@ -1,7 +1,8 @@
 class Contributor < ApplicationRecord
-  belongs_to :publication
+  belongs_to :publication, inverse_of: :contributors
 
   validates :publication, :position, presence: true
+  validate :at_least_one_name_present
 
   def name
     full_name = first_name.to_s
@@ -10,5 +11,13 @@ class Contributor < ApplicationRecord
     full_name += ' ' if middle_name.present? && last_name.present? || first_name.present? && last_name.present?
     full_name += last_name.to_s if last_name.present?
     full_name
+  end
+
+  private
+
+  def at_least_one_name_present
+    unless first_name.present? || middle_name.present? || last_name.present?
+      errors[:base] << "At least one name must be present."
+    end
   end
 end

@@ -43,7 +43,7 @@ RailsAdmin.config do |config|
       only [:Publication, :User, :DuplicatePublicationGroup]
     end
     new do
-      except [:PublicationImport, :DuplicatePublicationGroup]
+      only [:Publication, :User]
     end
     export
     bulk_delete do

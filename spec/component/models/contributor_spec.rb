@@ -22,7 +22,60 @@ describe Contributor, type: :model do
   it { is_expected.to validate_presence_of :publication }
   it { is_expected.to validate_presence_of :position }
 
-  it { is_expected.to belong_to :publication }
+  it { is_expected.to belong_to(:publication).inverse_of(:contributors) }
+
+  describe "Validating that a contributor has at least one name" do
+    let(:contributor) { Contributor.new(publication: create(:publication),
+                                        position: 1,
+                                        first_name: fn,
+                                        middle_name: mn,
+                                        last_name: ln) }
+    let(:fn) { nil }
+    let(:mn) { nil }
+    let(:ln) { nil }
+    context "when only the contributor's first name is present" do
+      let(:fn) { 'first' }
+      it "is valid" do
+        expect(contributor.valid?).to eq true
+      end
+    end
+    context "when only the contributor's middle name is present" do
+      let(:mn) { 'middle' }
+      it "is valid" do
+        expect(contributor.valid?).to eq true
+      end
+    end
+    context "when only the contributor's last name is present" do
+      let(:ln) { 'last' }
+      it "is valid" do
+        expect(contributor.valid?).to eq true
+      end
+    end
+    context "when all of the contributor's names are nil" do
+      it "is invalid" do
+        expect(contributor.valid?).to eq false
+        expect(contributor.errors[:base]).to include "At least one name must be present."
+      end
+    end
+    context "when all of the contributor's names are empty strings" do
+      let(:fn) { '' }
+      let(:mn) { '' }
+      let(:ln) { '' }
+      it "is invalid" do
+        expect(contributor.valid?).to eq false
+        expect(contributor.errors[:base]).to include "At least one name must be present."
+      end
+    end
+    context "when all of the contributor's names are blank strings" do
+      let(:fn) { ' ' }
+      let(:mn) { ' ' }
+      let(:ln) { ' ' }
+      it "is invalid" do
+        expect(contributor.valid?).to eq false
+        expect(contributor.errors[:base]).to include "At least one name must be present."
+      end
+    end
+  end
 
   describe '#name' do
     context "when the first, middle, and last names of the contributor are nil" do

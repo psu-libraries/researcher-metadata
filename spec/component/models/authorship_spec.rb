@@ -18,8 +18,8 @@ end
 
 describe Authorship, type: :model do
   describe 'associations' do
-    it { is_expected.to belong_to(:user) }
-    it { is_expected.to belong_to(:publication) }
+    it { is_expected.to belong_to(:user).inverse_of(:authorships) }
+    it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
   end
 
   describe 'validations' do

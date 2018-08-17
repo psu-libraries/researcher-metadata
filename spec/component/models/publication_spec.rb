@@ -43,13 +43,16 @@ describe Publication, type: :model do
   end
 
   describe 'associations' do
-    it { is_expected.to have_many(:authorships) }
+    it { is_expected.to have_many(:authorships).inverse_of(:publication) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors).dependent(:destroy) }
+    it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
 
-    it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional }
+    it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
+
+  it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
     let(:p) { create :publication }
