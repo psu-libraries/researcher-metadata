@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_18_141756) do
+ActiveRecord::Schema.define(version: 2018_08_18_143045) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,16 @@ ActiveRecord::Schema.define(version: 2018_08_18_141756) do
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier", "source"], name: "index_publication_imports_on_source_identifier_and_source", unique: true
+  end
+
+  create_table "publication_taggings", force: :cascade do |t|
+    t.integer "publication_id", null: false
+    t.integer "tag_id", null: false
+    t.integer "rank"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_id"], name: "index_publication_taggings_on_publication_id"
+    t.index ["tag_id"], name: "index_publication_taggings_on_tag_id"
   end
 
   create_table "publications", force: :cascade do |t|
@@ -111,5 +121,7 @@ ActiveRecord::Schema.define(version: 2018_08_18_141756) do
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
+  add_foreign_key "publication_taggings", "publications", on_delete: :cascade
+  add_foreign_key "publication_taggings", "tags", on_delete: :cascade
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
 end

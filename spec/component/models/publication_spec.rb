@@ -47,12 +47,15 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:users).through(:authorships) }
     it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
+    it { is_expected.to have_many(:taggings).inverse_of(:publication).class_name(:PublicationTagging) }
+    it { is_expected.to have_many(:tags).through(:taggings).class_name(:PublicationTagging) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:taggings).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
     let(:p) { create :publication }
@@ -69,6 +72,15 @@ describe Publication, type: :model do
     it "also deletes the publication's authorships" do
       p.destroy
       expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a publication with taggings" do
+    let(:p) { create :publication }
+    let!(:pt) { create :publication_tagging, publication: p}
+    it "also deletes the publication's taggings" do
+      p.destroy
+      expect { pt.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
@@ -100,7 +112,7 @@ describe Publication, type: :model do
                     source: "Pure",
                     source_identifier: "pure-abc123",
                     publication: pub }
-    
+
     context "when the publication does not have imports from Activity Insight" do
       it "returns an empty array" do
         expect(pub.ai_import_identifiers).to eq []
@@ -131,7 +143,7 @@ describe Publication, type: :model do
                     source: "Activity Insight",
                     source_identifier: "ai-abc123",
                     publication: pub }
-    
+
     context "when the publication does not have imports from Pure" do
       it "returns an empty array" do
         expect(pub.pure_import_identifiers).to eq []

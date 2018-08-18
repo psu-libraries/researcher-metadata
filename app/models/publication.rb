@@ -11,6 +11,8 @@ class Publication < ApplicationRecord
 
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
+  has_many :taggings, class_name: :PublicationTagging, inverse_of: :publication
+  has_many :tags, through: :taggings, class_name: :PublicationTagging
   has_many :contributors,
            -> { order position: :asc },
            dependent: :destroy,
@@ -28,6 +30,7 @@ class Publication < ApplicationRecord
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
+  accepts_nested_attributes_for :taggings, allow_destroy: true
 
   swagger_schema :Publication do
     property :id do
