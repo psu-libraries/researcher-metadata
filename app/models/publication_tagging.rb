@@ -6,4 +6,6 @@ class PublicationTagging < ApplicationRecord
 
   validates :tag_id, uniqueness: {scope: :publication_id}
   validates :publication_id, uniqueness: {scope: :tag_id}
+
+  delegate :name, to: :tag
 end

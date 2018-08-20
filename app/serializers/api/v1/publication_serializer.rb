@@ -15,5 +15,12 @@ module API::V1
          last_name: c.last_name}
       end
     end
+
+    attribute :tags do |object|
+      object.tags.map do |t|
+        {name: t.name,
+         rank: t.rank}
+      end
+    end
   end
 end

@@ -20,6 +20,8 @@ describe PublicationTagging, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:tag).inverse_of(:publication_taggings) }
     it { is_expected.to belong_to(:publication).inverse_of(:taggings) }
+
+    it { is_expected.to delegate_method(:name).to(:tag) }
   end
 
   describe 'validations' do

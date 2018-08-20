@@ -60,5 +60,23 @@ describe API::V1::PublicationSerializer do
                                                     {first_name: 'a', middle_name: 'b', last_name: 'c'},
                                                     {first_name: 'g', middle_name: 'h', last_name: 'i'}]) }
     end
+
+    context "when the publication does not have tags" do
+      it { is_expected.to include(:tags => []) }
+    end
+
+    context "when the publication has tags" do
+      let(:tag1) { create :tag, name: 'Thing 1' }
+      let(:tag2) { create :tag, name: 'Thing 2' }
+      before do
+        create :publication_tagging, publication: publication, tag: tag1, rank: 1
+        create :publication_tagging, publication: publication, tag: tag2, rank: 100
+      end
+
+      subject { serialized_data_attributes(publication) }
+
+      xit { is_expected.to include(:tags => [{name: 'Thing 2', rank: 100},
+                                            {name: 'Thing 1', rank: 1}] ) }
+    end
   end
 end
