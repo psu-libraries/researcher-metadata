@@ -5,7 +5,7 @@ describe 'the publication_taggings table', type: :model do
 
   it { is_expected.to have_db_column(:tag_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:publication_id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:rank).of_type(:integer) }
+  it { is_expected.to have_db_column(:rank).of_type(:float) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 

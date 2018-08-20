@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_18_143045) do
+ActiveRecord::Schema.define(version: 2018_08_20_205334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,7 +55,7 @@ ActiveRecord::Schema.define(version: 2018_08_18_143045) do
   create_table "publication_taggings", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.integer "tag_id", null: false
-    t.integer "rank"
+    t.float "rank"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "index_publication_taggings_on_publication_id"
