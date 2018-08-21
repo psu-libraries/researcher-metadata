@@ -27,9 +27,6 @@ class PurePublicationTagImporter
         f = Nokogiri::XML(fingerprint_xml)
         f.xpath('fingerprint').xpath('rankedConcept').each do |rc|
           # Collect concept terms and ranks
-          # Tags (or concepts as they're referred to in Pure) are grouped
-          # by categories Pure calls 'Thesauri'. The same tag can appear
-          # multiple times (within different 'thesauri'/cateories)
           term_as_provided = rc.xpath('term').text
           # NOTE: Terms returned don't maintain consistent titleization.
           # Example: "Protein Folding" and "Protein folding"
