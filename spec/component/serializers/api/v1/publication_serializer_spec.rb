@@ -75,7 +75,7 @@ describe API::V1::PublicationSerializer do
 
       subject { serialized_data_attributes(publication) }
 
-      xit { is_expected.to include(:tags => [{name: 'Thing 2', rank: 100},
+      it { is_expected.to include(:tags => [{name: 'Thing 2', rank: 100},
                                             {name: 'Thing 1', rank: 1}] ) }
     end
   end
