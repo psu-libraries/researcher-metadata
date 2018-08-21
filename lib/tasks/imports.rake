@@ -62,7 +62,7 @@ namespace :import do
     ).call
 
     PurePublicationImporter.new(
-      dirname: dirname_for(:pure_users)
+      dirname: dirname_for(:pure_publications)
     ).call
 
     PurePublicationTagImporter.new(
