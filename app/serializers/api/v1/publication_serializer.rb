@@ -17,7 +17,7 @@ module API::V1
     end
 
     attribute :tags do |object|
-      object.tags.map do |t|
+      object.taggings.order(rank: :desc).map do |t|
         {name: t.name,
          rank: t.rank}
       end
