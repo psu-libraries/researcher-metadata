@@ -169,17 +169,75 @@ describe User, type: :model do
   end
 
   describe '#name' do
-    before { user.first_name = 'Buck'; user.last_name = 'Murphy' }
-    context "when middle_name is not blank" do
-      before { user.middle_name = 'X' }
-      it "returns the first, middle, and last name" do
-        expect(user.name).to eq 'Buck X Murphy'
+    context "when the first, middle, and last names of the user are nil" do
+      it "returns an empty string" do
+        expect(user.name).to eq ''
       end
     end
-    context "when middle_name is blank" do
-      before { user.middle_name = '' }
-      it "returns the first and last name" do
-        expect(user.name).to eq 'Buck Murphy'
+    context "when the user has a first name" do
+      before { user.first_name = 'first' }
+      context "when the user has a middle name" do
+        before { user.middle_name = 'middle' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first middle last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first middle'
+          end
+        end
+      end
+      context "when the user has no middle name" do
+        before { user.middle_name = '' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first'
+          end
+        end
+      end
+    end
+    context "when the user has no first name" do
+      before { user.first_name = '' }
+      context "when the user has a middle name" do
+        before { user.middle_name = 'middle' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'middle last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'middle'
+          end
+        end
+      end
+      context "when the user has no middle name" do
+        before { user.middle_name = '' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns an empty string" do
+            expect(user.name).to eq ''
+          end
+        end
       end
     end
   end
