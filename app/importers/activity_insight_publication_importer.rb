@@ -6,10 +6,10 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
         PublicationImport.new(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
                               source_identifier: row[:id],
                               publication: Publication.create!(pub_attrs(row)))
+      p = pi.publication
 
       if pi.persisted?
-        p = pi.publication
-        p.update_attributes!(pub_attrs(row))
+        p.update_attributes!(pub_attrs(row)) unless p.updated_by_user_at.present?
         return nil
       end
 
