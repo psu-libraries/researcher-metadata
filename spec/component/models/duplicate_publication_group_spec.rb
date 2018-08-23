@@ -9,7 +9,7 @@ describe 'the duplicate_publication_groups table', type: :model do
 end
 
 describe DuplicatePublicationGroup, type: :model do
-  subject(:contributor) { DuplicatePublicationGroup.new }
+  subject(:dpg) { DuplicatePublicationGroup.new }
 
   it { is_expected.to have_many(:publications).inverse_of(:duplicate_group) }
 
