@@ -43,12 +43,22 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
 
     list do
-      field :id
+      field(:id)
+      field(:first_publication_title) { label 'Title of first duplicate' }
+      field(:publication_count) { label 'Number of duplicates' }
     end
 
     show do
-      field :id
-      field :publications
+      field(:id)
+      field(:publications)
     end
+  end
+
+  def publication_count
+    publications.count
+  end
+
+  def first_publication_title
+    publications.first.try(:title)
   end
 end

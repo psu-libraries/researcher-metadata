@@ -207,4 +207,32 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
   end
+
+  describe '#publication_count' do
+    let!(:dpg) { create :duplicate_publication_group }
+    before { 2.times { create :publication, duplicate_group: dpg } }
+    it "returns the number of publications that belong to the group" do
+      expect(dpg.publication_count).to eq 2
+    end
+  end
+
+  describe '#first_publication_title' do
+    let!(:dpg) { create :duplicate_publication_group }
+    context "when the group has no publications" do
+      it "returns nil" do
+        expect(dpg.first_publication_title).to be_nil
+      end
+    end
+
+    context "when the group has publications" do
+      before do
+        create :publication, duplicate_group: dpg, title: 'First Pub'
+        create :publication, duplicate_group: dpg, title: 'Second Pub'
+      end
+
+      it "returns the title of the first publication in the group" do
+        expect(dpg.first_publication_title).to eq 'First Pub'
+      end
+    end
+  end
 end
