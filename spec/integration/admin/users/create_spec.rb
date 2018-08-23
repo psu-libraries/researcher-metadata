@@ -14,6 +14,40 @@ feature "Creating a user", type: :feature do
         expect(page).to have_content "New User"
       end
     end
+
+    describe "submitting the form to create a new user" do
+      before do
+        fill_in 'Webaccess', with: 'abc123'
+        fill_in 'First name', with: 'Test'
+        fill_in 'Middle name', with: 'N'
+        fill_in 'Last name', with: 'User'
+        fill_in 'Pure uuid', with: 'pure-12345'
+        fill_in 'Activity insight identifier', with: 'ai-67890'
+        fill_in 'Penn state identifier', with: '9999999'
+        fill_in 'Title', with: 'Test Title'
+        check 'Is admin'
+        click_button 'Save'
+      end
+
+      it "creates a new user record in the database with the provided data" do
+        u = User.find_by(webaccess_id: 'abc123')
+
+        expect(u.first_name).to eq 'Test'
+        expect(u.middle_name).to eq 'N'
+        expect(u.last_name).to eq 'User'
+        expect(u.pure_uuid).to eq 'pure-12345'
+        expect(u.activity_insight_identifier).to eq 'ai-67890'
+        expect(u.penn_state_identifier).to eq '9999999'
+        expect(u.title).to eq 'Test Title'
+        expect(u.is_admin).to eq true
+      end
+
+      it "it marks the new user as having been manually edited" do
+        u = User.find_by(webaccess_id: 'abc123')
+
+        expect(u.updated_by_user_at).not_to be_nil
+      end
+    end
   end
 
   context "when the current user is not an admin" do
