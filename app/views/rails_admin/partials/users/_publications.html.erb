@@ -5,6 +5,7 @@
       <th class="header">Journal</th>
       <th class="header">Publisher</th>
       <th class="header">Title</th>
+      <th class="header">Duplicate Group</th>
     </tr>
   </thead>
   <tbody>
@@ -14,6 +15,13 @@
         <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
         <td><%= p.publisher.present? ? p.publisher : '' %></td>
         <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
+        <td>
+          <% if p.duplicate_publication_group_id.present? %>
+            <%= link_to "Duplicate group ##{p.duplicate_publication_group_id}",
+                       show_path(model_name: :duplicate_publication_group,
+                                 id: p.duplicate_publication_group_id) %>
+          <% end %>
+        </td>
       </tr>
     <% end %>
   </tbody>

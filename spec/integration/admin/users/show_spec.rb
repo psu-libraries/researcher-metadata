@@ -17,7 +17,10 @@ feature "Admin user detail page", type: :feature do
   let!(:pub2) { create :publication, title: "Bob's Second Publication",
                        journal_title: "Second Journal",
                        publisher: "Second Publisher",
-                       published_on: Date.new(2018, 1, 1) }
+                       published_on: Date.new(2018, 1, 1),
+                       duplicate_group: group }
+
+  let(:group) { create :duplicate_publication_group }
 
   context "when the current user is an admin" do
     before do
@@ -50,15 +53,16 @@ feature "Admin user detail page", type: :feature do
       end
 
       it "shows the user's publications" do
-        expect(page).to have_content "Bob's First Publication"
+        expect(page).to have_link "Bob's First Publication"
         expect(page).to have_content "First Journal"
         expect(page).to have_content "First Publisher"
         expect(page).to have_content "2017"
 
-        expect(page).to have_content "Bob's Second Publication"
+        expect(page).to have_link "Bob's Second Publication"
         expect(page).to have_content "Second Journal"
         expect(page).to have_content "Second Publisher"
         expect(page).to have_content "2018"
+        expect(page).to have_link "Duplicate group ##{group.id}"
       end
     end
 
