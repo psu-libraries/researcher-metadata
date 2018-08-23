@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the users table', type: :model do
   subject(:user) { User.new }
@@ -23,6 +24,8 @@ end
 
 describe User, type: :model do
   subject(:user) { User.new }
+
+  it_behaves_like "an application record"
 
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
@@ -239,6 +242,16 @@ describe User, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe '#mark_as_updated_by_user' do
+    let(:user) { User.new }
+    before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
+
+    it "sets the user's updated_by_user_at field to the current time" do
+      user.mark_as_updated_by_user
+      expect(user.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
 end

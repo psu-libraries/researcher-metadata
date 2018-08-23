@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe "the publication_imports table", type: :model do
   subject { PublicationImport.new }
@@ -18,6 +19,8 @@ end
 
 describe PublicationImport, type: :model do
   subject(:pi) { PublicationImport.new }
+
+  it_behaves_like "an application record"
 
   it { is_expected.to belong_to(:publication) }
 

@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the tags_table', type: :model do
   subject { Tag.new }
@@ -14,6 +15,8 @@ end
 
 describe Tag, type: :model do
   subject(:tag) { Tag.new }
+
+  it_behaves_like "an application record"
 
   describe 'associations' do
     it { is_expected.to have_many(:publication_taggings) }

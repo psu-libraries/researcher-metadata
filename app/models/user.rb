@@ -108,6 +108,10 @@ class User < ApplicationRecord
     end
   end
 
+  def mark_as_updated_by_user
+    self.updated_by_user_at = Time.current
+  end
+
   private
 
   def downcase_webaccess_id

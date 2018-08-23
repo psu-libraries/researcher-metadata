@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the publications table', type: :model do
   subject { Publication.new }
@@ -35,6 +36,8 @@ end
 
 
 describe Publication, type: :model do
+  it_behaves_like "an application record"
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }

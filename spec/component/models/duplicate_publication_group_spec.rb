@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the duplicate_publication_groups table', type: :model do
   subject { DuplicatePublicationGroup.new }
@@ -10,6 +11,8 @@ end
 
 describe DuplicatePublicationGroup, type: :model do
   subject(:dpg) { DuplicatePublicationGroup.new }
+
+  it_behaves_like "an application record"
 
   it { is_expected.to have_many(:publications).inverse_of(:duplicate_group) }
 
