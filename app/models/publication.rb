@@ -87,4 +87,8 @@ class Publication < ApplicationRecord
   def pure_import_identifiers
     imports.where(source: 'Pure').map { |i| i.source_identifier }
   end
+
+  def mark_as_updated_by_user
+    self.updated_by_user_at = Time.current
+  end
 end

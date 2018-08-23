@@ -58,7 +58,7 @@ feature "Creating a publication", type: :feature do
         expect(p.citation_count).to eq 5
       end
 
-      xit "it marks the new publication as having been manually edited" do
+      it "it marks the new publication as having been manually edited" do
         p = Publication.find_by(title: 'Test Publication')
         expect(p.updated_by_user_at).not_to be_nil
       end

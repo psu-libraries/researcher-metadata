@@ -169,4 +169,14 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#mark_as_updated_by_user' do
+    let(:pub) { Publication.new }
+    before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
+
+    it "sets the user's updated_by_user_at field to the current time" do
+      pub.mark_as_updated_by_user
+      expect(pub.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
+    end
+  end
 end
