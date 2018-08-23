@@ -49,62 +49,67 @@ class User < ApplicationRecord
       end
     end
 
-    show do
-      field :webaccess_id
-      field :pure_uuid
-      field :activity_insight_identifier
-      field :penn_state_identifier
-      field :title
-      field :is_admin
-      field :created_at
-      field :updated_at
-      field :updated_by_user_at
+    list do
+      field(:id)
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:title)
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at)
+      field(:updated_at)
+      field(:updated_by_user_at)
+    end
 
-      field :publications
+    show do
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:title)
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at)
+      field(:updated_at)
+      field(:updated_by_user_at)
+
+      field(:publications)
     end
 
     create do
-      field :webaccess_id
-      field :first_name
-      field :middle_name
-      field :last_name
-      field :pure_uuid
-      field :activity_insight_identifier
-      field :penn_state_identifier
-      field :title
-      field :is_admin
-      field :created_at do
-        read_only true
-      end
-      field :updated_at do
-        read_only true
-      end
-      field :updated_by_user_at do
-        read_only true
-      end
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:title)
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
     end
 
     edit do
-      field :webaccess_id do
+      field(:webaccess_id) do
         read_only true
+        label 'Penn State WebAccess ID'
       end
-      field :first_name
-      field :middle_name
-      field :last_name
-      field :pure_uuid
-      field :activity_insight_identifier
-      field :penn_state_identifier
-      field :title
-      field :is_admin
-      field :created_at do
-        read_only true
-      end
-      field :updated_at do
-        read_only true
-      end
-      field :updated_by_user_at do
-        read_only true
-      end
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:title)
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
     end
   end
 

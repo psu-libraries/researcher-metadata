@@ -27,13 +27,13 @@ feature "Creating a publication", type: :feature do
         fill_in 'Issue', with: 'Test Issue'
         fill_in 'Edition', with: 'Test Edition'
         fill_in 'Page range', with: 'Test Range'
-        fill_in 'Url', with: 'Test URL'
-        fill_in 'Issn', with: 'Test ISSN'
-        fill_in 'Doi', with: 'Test DOI'
+        fill_in 'URL', with: 'Test URL'
+        fill_in 'ISSN', with: 'Test ISSN'
+        fill_in 'DOI', with: 'Test DOI'
         fill_in 'Abstract', with: 'Test Abstract'
-        check 'Authors et al'
+        check 'Et al authors?'
         fill_in 'Published on', with: 'August 23, 2018'
-        fill_in 'Citation count', with: 5
+        fill_in 'Number of citations', with: 5
 
         click_button 'Save'
       end

@@ -17,15 +17,15 @@ feature "Creating a user", type: :feature do
 
     describe "submitting the form to create a new user" do
       before do
-        fill_in 'Webaccess', with: 'abc123'
+        fill_in 'Penn State WebAccess ID', with: 'abc123'
         fill_in 'First name', with: 'Test'
         fill_in 'Middle name', with: 'N'
         fill_in 'Last name', with: 'User'
-        fill_in 'Pure uuid', with: 'pure-12345'
-        fill_in 'Activity insight identifier', with: 'ai-67890'
-        fill_in 'Penn state identifier', with: '9999999'
+        fill_in 'Pure ID', with: 'pure-12345'
+        fill_in 'Activity Insight ID', with: 'ai-67890'
+        fill_in 'Penn State ID', with: '9999999'
         fill_in 'Title', with: 'Test Title'
-        check 'Is admin'
+        check 'Admin user?'
         click_button 'Save'
       end
 
