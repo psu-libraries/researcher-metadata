@@ -16,18 +16,8 @@ class DuplicatePublicationGroup < ApplicationRecord
                                      p.publisher,
                                      p.published_on.try(:year))
 
-      if duplicates.many?
-        existing_group = duplicates.detect { |p| p.duplicate_group.present? }.try(:duplicate_group)
+      group_publications(duplicates)
 
-        if existing_group
-          duplicates.each do |dp|
-            dp.update_attributes!(duplicate_group: existing_group) unless dp.duplicate_group.present?
-          end
-        else
-          new_group = create!
-          duplicates.update_all(duplicate_publication_group_id: new_group.id)
-        end
-      end
       pbar.increment unless Rails.env.test?
     end
     pbar.finish unless Rails.env.test?
