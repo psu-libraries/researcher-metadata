@@ -12,7 +12,17 @@ describe CustomAdmin::DuplicatePublicationGroupingsController, type: :controller
       end
     end
 
-    context "when not authenticated as an admin" do
+    context "when authenticated as a non-admin user" do
+      before { authenticate_user }
+      it "redirects back to the home page with an error message" do
+        post :create, params: { user_id: user.id }
+
+        expect(response).to redirect_to root_path
+        expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
+      end
+    end
+
+    context "when not authenticated" do
       it "redirects to the admin sign in page" do
         post :create, params: { user_id: user.id }
 

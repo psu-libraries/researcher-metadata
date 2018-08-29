@@ -1,5 +1,6 @@
 class CustomAdmin::DuplicatePublicationGroupingsController < ApplicationController
   before_action :authenticate_user!
+  before_action :check_user_authorization
 
   def create
     if params[:bulk_ids].present? && params[:bulk_ids].many?
@@ -11,5 +12,14 @@ class CustomAdmin::DuplicatePublicationGroupingsController < ApplicationControll
     end
 
     redirect_to rails_admin.show_path(model_name: :user, id: params[:user_id])
+  end
+
+  private
+
+  def check_user_authorization
+    unless current_user.admin?
+      flash[:alert] = I18n.t('admin.authorization.not_authorized')
+      redirect_to main_app.root_path
+    end
   end
 end
