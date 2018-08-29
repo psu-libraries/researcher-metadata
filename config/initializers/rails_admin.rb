@@ -11,7 +11,7 @@ RailsAdmin.config do |config|
   config.authorize_with do
     unless current_user.admin?
       flash[:alert] = I18n.t('admin.authorization.not_authorized')
-      redirect_to main_app.root_path unless current_user.is_admin
+      redirect_to main_app.root_path
     end
   end
 
