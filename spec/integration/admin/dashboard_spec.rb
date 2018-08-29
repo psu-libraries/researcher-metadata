@@ -13,7 +13,7 @@ feature "Admin dashboard", type: :feature do
         4.times { create :publication }
         4.times { create :user }
         3.times { create :duplicate_publication_group }
-        visit 'admin'
+        visit rails_admin.dashboard_path
       end
 
       it "shows the dashboard heading" do
@@ -36,7 +36,7 @@ feature "Admin dashboard", type: :feature do
     end
 
     describe "the page layout" do
-      before { visit 'admin' }
+      before { visit rails_admin.dashboard_path }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -45,7 +45,7 @@ feature "Admin dashboard", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit 'admin'
+      visit rails_admin.dashboard_path
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

@@ -9,7 +9,7 @@ feature "Admin duplicate publication group list", type: :feature do
       let!(:group1) { create :duplicate_publication_group }
       let!(:group2) { create :duplicate_publication_group }
 
-      before { visit 'admin/duplicate_publication_group' }
+      before { visit rails_admin.index_path(model_name: :duplicate_publication_group) }
 
       it "shows the duplicate publication group list heading" do
         expect(page).to have_content 'List of Duplicate publication groups'
@@ -23,7 +23,7 @@ feature "Admin duplicate publication group list", type: :feature do
     end
 
     describe "the page layout" do
-      before { visit 'admin/duplicate_publication_group' }
+      before { visit rails_admin.index_path(model_name: :duplicate_publication_group) }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -32,7 +32,7 @@ feature "Admin duplicate publication group list", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit 'admin/duplicate_publication_group'
+      visit rails_admin.index_path(model_name: :duplicate_publication_group)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

@@ -5,7 +5,7 @@ feature "Creating a user", type: :feature do
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
-      visit 'admin/user/new'
+      visit rails_admin.new_path(model_name: :user)
     end
 
     describe "visiting the form to create a new user" do
@@ -53,7 +53,7 @@ feature "Creating a user", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit 'admin/user/new'
+      visit rails_admin.new_path(model_name: :user)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

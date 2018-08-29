@@ -9,7 +9,7 @@ feature "Admin publication list", type: :feature do
       let!(:publication1) { create(:publication, title: 'Test Publication') }
       let!(:publication2) { create(:publication, title: 'Another Publication') }
 
-      before { visit 'admin/publication' }
+      before { visit rails_admin.index_path(model_name: :publication) }
 
       it "shows the publication list heading" do
         expect(page).to have_content 'List of Publications'
@@ -25,7 +25,7 @@ feature "Admin publication list", type: :feature do
     end
 
     describe "the page layout" do
-      before { visit 'admin/publication' }
+      before { visit rails_admin.index_path(model_name: :publication) }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -34,7 +34,7 @@ feature "Admin publication list", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit 'admin/publication'
+      visit rails_admin.index_path(model_name: :publication)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

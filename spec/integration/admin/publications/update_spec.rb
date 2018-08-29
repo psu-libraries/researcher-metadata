@@ -9,7 +9,7 @@ feature "updating a publication via the admin interface", type: :feature do
 
     describe "submitting the form with new data to update a publication record" do
       before do
-        visit "admin/publication/#{pub.id}/edit"
+        visit rails_admin.edit_path(model_name: :publication, id: pub.id)
         fill_in 'Title', with: 'Updated Title'
         click_on 'Save'
       end
@@ -27,7 +27,7 @@ feature "updating a publication via the admin interface", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit "admin/publication/#{pub.id}/edit"
+      visit rails_admin.edit_path(model_name: :publication, id: pub.id)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
