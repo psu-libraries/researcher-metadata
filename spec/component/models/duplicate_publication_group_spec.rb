@@ -208,6 +208,88 @@ describe DuplicatePublicationGroup, type: :model do
     end
   end
 
+  describe '.group_publications' do
+    let!(:pub1) { create :publication }
+
+    context "when given no publications" do
+      it "does not create any new duplicate publication groups" do
+        expect { DuplicatePublicationGroup.group_publications([]) }.not_to change { DuplicatePublicationGroup.count }
+      end
+    end
+    context "when given one publication" do
+      it "does not create any new duplicate publication groups" do
+        expect { DuplicatePublicationGroup.group_publications([pub1]) }.not_to change { DuplicatePublicationGroup.count }
+      end
+    end
+    context "when given multiple publications" do
+      let!(:pub2) { create :publication }
+      let!(:pub3) { create :publication }
+      let!(:other_pub) { create :publication }
+      let!(:existing_group1) { create :duplicate_publication_group }
+      let!(:existing_group2) { create :duplicate_publication_group }
+      let!(:grouped_pub1) { create :publication, duplicate_group: existing_group1 }
+      let!(:grouped_pub2) { create :publication, duplicate_group: existing_group1 }
+      let!(:grouped_pub3) { create :publication, duplicate_group: existing_group2 }
+      let!(:grouped_pub4) { create :publication, duplicate_group: existing_group2 }
+
+      context "when none of the publications belong to a duplicate group" do
+        it "creates a new duplicate group" do
+          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, pub3]) }.to change { DuplicatePublicationGroup.count }.by 1
+        end
+
+        it "adds each given publication to the group" do
+          DuplicatePublicationGroup.group_publications([pub1, pub2, pub3])
+
+          new_group = pub1.reload.duplicate_group
+
+          expect(new_group.publications).to match_array [pub1, pub2, pub3]
+        end
+      end
+
+      context "when one of the publications already belongs to a duplicate group" do
+        it "does not create any new duplicate publication groups" do
+          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1]) }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "adds all of the given publications to the existing group" do
+          DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1])
+
+          expect(existing_group1.reload.publications).to match_array [pub1, pub2, grouped_pub1, grouped_pub2]
+        end
+      end
+
+      context "when two of the given publications already belong to the same duplicate group" do
+        it "does not create any new duplicate publication groups" do
+          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2]) }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "adds all of the given publications to the existing group" do
+          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2])
+
+          expect(existing_group1.reload.publications).to match_array [pub2, grouped_pub1, grouped_pub2]
+        end
+      end
+
+      context "when two of the given publications already belong to different duplicate groups" do
+        it "removes one of the existing duplicate groups" do
+          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3]) }.to change { DuplicatePublicationGroup.count }.by -1
+        end
+
+        it "adds all of the given publications and the other members of their groups to the remaining existing group" do
+          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3])
+
+          remaining_group = grouped_pub1.reload.duplicate_group || grouped_pub3.reload.duplicate_group
+
+          expect(remaining_group.publications).to match_array [pub2,
+                                                               grouped_pub1,
+                                                               grouped_pub2,
+                                                               grouped_pub3,
+                                                               grouped_pub4]
+        end
+      end
+    end
+  end
+
   describe '#publication_count' do
     let!(:dpg) { create :duplicate_publication_group }
     before { 2.times { create :publication, duplicate_group: dpg } }

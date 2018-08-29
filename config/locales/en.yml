@@ -2,3 +2,7 @@ en:
   admin:
     authorization:
       not_authorized: "Your account is not authorized to visit the administrative portion of this site."
+    duplicate_publication_groupings:
+      create:
+        success: "The selected publications were successfully grouped."
+        no_pub_error: "You must select at least two publications to group together."
