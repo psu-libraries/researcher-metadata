@@ -18,6 +18,9 @@ describe DuplicatePublicationGroup, type: :model do
 
   describe '.group_duplicates' do
     context "when many publications exist, and some have similar data" do
+      let!(:existing_group1) { create :duplicate_publication_group }
+      let!(:existing_group2) { create :duplicate_publication_group }
+
       let!(:p1) { create :publication,
                          title: "Publication with an Exactly Duplicated Title",
                          volume: 1,
@@ -48,7 +51,8 @@ describe DuplicatePublicationGroup, type: :model do
                          issue: 1,
                          journal_title: "Journal 2",
                          publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
+                         published_on: Date.new(2018, 1, 1),
+                         duplicate_group: existing_group1 }
 
       let!(:p5) { create :publication,
                          title: "Publication with an Exactly Duplicated Title",
@@ -56,7 +60,8 @@ describe DuplicatePublicationGroup, type: :model do
                          issue: 1,
                          journal_title: "Journal 1",
                          publisher: "Publisher 2",
-                         published_on: Date.new(2018, 1, 1) }
+                         published_on: Date.new(2018, 1, 1),
+                         duplicate_group: existing_group2 }
 
       let!(:p6) { create :publication,
                          title: "Publication with an Exactly Duplicated Title",
@@ -178,10 +183,13 @@ describe DuplicatePublicationGroup, type: :model do
                           publisher: "Publisher 1",
                           published_on: Date.new(2018, 1, 1) }
 
-      it "finds similar publications and groups them" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 5
+      let!(:p21) { create :publication, duplicate_group: existing_group1 }
+      let!(:p22) { create :publication, duplicate_group: existing_group2 }
 
-        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9]
+      it "finds similar publications and groups them" do
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 3
+
+        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9, p21, p22]
         expect(p2.reload.duplicate_group).to be_nil
         expect(p3.reload.duplicate_group).to be_nil
         expect(p6.reload.duplicate_group).to be_nil
@@ -193,9 +201,9 @@ describe DuplicatePublicationGroup, type: :model do
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 5
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 3
 
-        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9]
+        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9, p21, p22]
         expect(p2.reload.duplicate_group).to be_nil
         expect(p3.reload.duplicate_group).to be_nil
         expect(p6.reload.duplicate_group).to be_nil
