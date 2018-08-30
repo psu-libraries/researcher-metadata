@@ -58,7 +58,6 @@ class User < ApplicationRecord
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:pure_uuid) { label 'Pure ID' }
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
-      field(:title)
       field(:is_admin) { label 'Admin user?' }
       field(:created_at)
       field(:updated_at)
@@ -70,7 +69,6 @@ class User < ApplicationRecord
       field(:pure_uuid) { label 'Pure ID' }
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
-      field(:title)
       field(:is_admin) { label 'Admin user?' }
       field(:created_at)
       field(:updated_at)
@@ -87,7 +85,6 @@ class User < ApplicationRecord
       field(:pure_uuid) { label 'Pure ID' }
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
-      field(:title)
       field(:is_admin) { label 'Admin user?' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
@@ -105,7 +102,6 @@ class User < ApplicationRecord
       field(:pure_uuid) { label 'Pure ID' }
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
-      field(:title)
       field(:is_admin) { label 'Admin user?' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }

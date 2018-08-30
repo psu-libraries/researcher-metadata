@@ -7,7 +7,6 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:first_name).of_type(:string) }
   it { is_expected.to have_db_column(:middle_name).of_type(:string) }
   it { is_expected.to have_db_column(:last_name).of_type(:string) }
-  it { is_expected.to have_db_column(:title).of_type(:string) }
   it { is_expected.to have_db_column(:webaccess_id).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:penn_state_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
