@@ -34,6 +34,7 @@ feature "Creating a publication", type: :feature do
         check 'Et al authors?'
         fill_in 'Published on', with: 'August 23, 2018'
         fill_in 'Number of citations', with: 5
+        check 'Visible via API?'
 
         click_button 'Save'
       end
@@ -56,6 +57,7 @@ feature "Creating a publication", type: :feature do
         expect(p.authors_et_al).to eq true
         expect(p.published_on).to eq Date.new(2018, 8, 23)
         expect(p.citation_count).to eq 5
+        expect(p.visible).to eq true
       end
 
       it "it marks the new publication as having been manually edited" do
