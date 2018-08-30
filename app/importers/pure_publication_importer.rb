@@ -98,7 +98,8 @@ class PurePublicationImporter
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
                              published_day(publication)),
-      citation_count: publication['totalScopusCitations']
+      citation_count: publication['totalScopusCitations'],
+      abstract: abstract(publication)
     }
   end
 
@@ -116,5 +117,9 @@ class PurePublicationImporter
 
   def published_day(publication)
     status(publication)['publicationDate']['day'].present? ? status(publication)['publicationDate']['day'].to_i : 1
+  end
+
+  def abstract(publication)
+    publication['abstract'].try(:first).try(:[], 'value')
   end
 end
