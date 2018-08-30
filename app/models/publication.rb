@@ -97,6 +97,35 @@ class Publication < ApplicationRecord
       field(:visible) { label 'Visible via API?'}
     end
 
+    show do
+      field(:title)
+      field(:secondary_title)
+      field(:publication_type)
+      field(:journal_title)
+      field(:publisher)
+      field(:status)
+      field(:volume)
+      field(:issue)
+      field(:edition)
+      field(:page_range)
+      field(:url) { label 'URL' }
+      field(:issn) { label 'ISSN' }
+      field(:doi) { label 'DOI' }
+      field(:abstract)
+      field(:authors_et_al) { label 'Et al authors?' }
+      field(:published_on)
+      field(:citation_count) { label 'Number of citations' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
+      field(:duplicate_group)
+      field(:users) { read_only true }
+      field(:authorships)
+      field(:contributors)
+      field(:imports)
+      field(:visible) { label 'Visible via API?'}
+    end
+
     edit do
       field(:title)
       field(:secondary_title)
