@@ -78,6 +78,9 @@ describe PurePublicationImporter do
 
           expect(p1.abstract).to be_nil
           expect(p2.abstract).to eq '<p>This is the third abstract.</p>'
+
+          expect(p1.visible).to eq true
+          expect(p2.visible).to eq true
         end
 
         it "saves the correct data for each contributor" do
@@ -152,7 +155,8 @@ describe PurePublicationImporter do
                                     status: 'existing status',
                                     published_on: Date.new(2018, 8, 22),
                                     citation_count: 1,
-                                    abstract: 'existing abstract' }
+                                    abstract: 'existing abstract',
+                                    visible: false }
         
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
@@ -255,6 +259,7 @@ describe PurePublicationImporter do
             expect(updated_pub.published_on).to eq Date.new(1997, 1, 1)
             expect(updated_pub.citation_count).to eq 2
             expect(updated_pub.abstract).to be_nil
+            expect(updated_pub.visible).to eq true
           end
           
           it "creates new publications with the correct data" do
@@ -274,6 +279,7 @@ describe PurePublicationImporter do
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.citation_count).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
+            expect(new_pub.visible).to eq true
           end
         end
         
@@ -365,6 +371,7 @@ describe PurePublicationImporter do
             expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
             expect(existing_pub_reloaded.citation_count).to eq 1
             expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
+            expect(existing_pub_reloaded.visible).to eq false
           end
 
           it "creates new publications with the correct data" do
@@ -384,6 +391,7 @@ describe PurePublicationImporter do
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.citation_count).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
+            expect(new_pub.visible).to eq true
           end
         end
       end

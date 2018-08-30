@@ -99,7 +99,8 @@ class PurePublicationImporter
                              published_month(publication),
                              published_day(publication)),
       citation_count: publication['totalScopusCitations'],
-      abstract: abstract(publication)
+      abstract: abstract(publication),
+      visible: true
     }
   end
 
