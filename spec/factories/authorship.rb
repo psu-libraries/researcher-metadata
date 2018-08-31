@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :authorship do
-    publication { create :publication }
+    publication { create :publication, visible: true }
     user { create :user }
     author_number { 1 }
   end

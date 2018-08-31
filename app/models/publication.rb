@@ -28,6 +28,8 @@ class Publication < ApplicationRecord
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
 
+  scope :visible, -> { where visible: true }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true

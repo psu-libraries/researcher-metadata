@@ -98,6 +98,15 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.visible' do
+    let(:visible_pub1) { create :publication, visible: true }
+    let(:visible_pub2) { create :publication, visible: true }
+    let(:invisible_pub) { create :publication, visible: false }
+    it "returns the publications that are marked as visible" do
+      expect(Publication.visible).to match_array [visible_pub1, visible_pub2]
+    end
+  end
+
   describe '#contributors' do
     let(:pub) { create :publication }
     let!(:c1) { create :contributor, position: 2, publication: pub }
