@@ -17,7 +17,7 @@ describe 'the contracts table', type: :model do
   it { is_expected.to have_db_index(:ospkey).unique(true) }
 end
 
-describe Publication, type: :model do
+describe Contract, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:ospkey) }

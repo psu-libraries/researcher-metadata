@@ -13,7 +13,7 @@ describe "the contract_imports table", type: :model do
   it { is_expected.to have_db_foreign_key(:contract_id) }
 end
 
-describe Publication, type: :model do
+describe ContractImport, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:contract) }
     it { is_expected.to validate_presence_of(:activity_insight_id) }
