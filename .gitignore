@@ -27,3 +27,7 @@
 
 # Ignore import data
 /db/data/*
+
+#Alex's unwanted files
+/vendor/cache/libv8-6.7.288.46.1-x86_64-darwin-16.gem
+/vendor/cache/mini_racer-0.2.0.gem
