@@ -3,6 +3,7 @@ require 'component/component_spec_helper'
 describe 'the contracts table', type: :model do
   subject { Contract.new }
 
+  it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:title).of_type(:text) }
   it { is_expected.to have_db_column(:contract_type).of_type(:string) }
   it { is_expected.to have_db_column(:sponsor).of_type(:text) }
@@ -10,8 +11,10 @@ describe 'the contracts table', type: :model do
   it { is_expected.to have_db_column(:ospkey).of_type(:integer) }
   it { is_expected.to have_db_column(:award_start_on).of_type(:date) }
   it { is_expected.to have_db_column(:award_end_on).of_type(:date) }
+  it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-  it { is_expected.to have_db_index(:ospkey) }
+  it { is_expected.to have_db_index(:ospkey).unique(true) }
 end
 
 describe Publication, type: :model do
@@ -28,8 +31,6 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:user_contracts).inverse_of(:contract) }
     it { is_expected.to have_many(:imports).class_name(:ContractImport) }
   end
-
-  it { is_expected.to accept_nested_attributes_for(:user_contracts).allow_destroy(true) }
 
   describe "deleting a contract with user_contracts" do
     let(:c) { create :contract }
