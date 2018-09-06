@@ -34,6 +34,21 @@ describe ETD, type: :model do
     it { is_expected.to validate_presence_of(:submission_type) }
     it { is_expected.to validate_presence_of(:external_identifier) }
     it { is_expected.to validate_presence_of(:access_level) }
+  end
 
+  describe 'associations' do
+    it { is_expected.to have_many(:committee_memberships).inverse_of(:etd) }
+    it { is_expected.to have_many(:users).through(:committee_memberships) }
+  end
+
+  it { is_expected.to accept_nested_attributes_for(:committee_memberships).allow_destroy(true) }
+
+  describe "deleting a etd with committee_memberships" do
+    let(:etd) { create :etd }
+    let!(:cm) { create :committee_membership, etd: etd}
+    it "also deletes the etd's committee_memberships" do
+      etd.destroy
+      expect { cm.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
   end
 end

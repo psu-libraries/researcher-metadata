@@ -9,4 +9,9 @@ class ETD < ApplicationRecord
             :external_identifier,
             :access_level,
             presence: true
+
+  has_many :committee_memberships, inverse_of: :etd
+  has_many :users, through: :committee_memberships
+
+  accepts_nested_attributes_for :committee_memberships, allow_destroy: true
 end

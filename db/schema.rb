@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_06_185322) do
+ActiveRecord::Schema.define(version: 2018_09_06_190755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -23,6 +23,16 @@ ActiveRecord::Schema.define(version: 2018_09_06_185322) do
     t.datetime "updated_at", null: false
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
+  end
+
+  create_table "committee_memberships", force: :cascade do |t|
+    t.integer "etd_id", null: false
+    t.integer "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
+    t.index ["user_id"], name: "index_committee_memberships_on_user_id"
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -136,6 +146,8 @@ ActiveRecord::Schema.define(version: 2018_09_06_185322) do
 
   add_foreign_key "authorships", "publications", on_delete: :cascade
   add_foreign_key "authorships", "users", on_delete: :cascade
+  add_foreign_key "committee_memberships", "etds", on_delete: :cascade
+  add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade

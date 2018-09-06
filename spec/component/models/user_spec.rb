@@ -29,6 +29,8 @@ describe User, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:publications).through(:authorships) }
+    it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
+    it { is_expected.to have_many(:etds).through(:committee_memberships) }
   end
 
   describe 'validations' do

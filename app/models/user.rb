@@ -22,6 +22,8 @@ class User < ApplicationRecord
 
   has_many :authorships
   has_many :publications, through: :authorships
+  has_many :committee_memberships, inverse_of: :user
+  has_many :etds, through: :committee_memberships
 
   swagger_schema :User do
     property :webaccess_id do
