@@ -34,6 +34,7 @@ describe ETD, type: :model do
     it { is_expected.to validate_presence_of(:submission_type) }
     it { is_expected.to validate_presence_of(:external_identifier) }
     it { is_expected.to validate_presence_of(:access_level) }
+    it { is_expected.to validate_inclusion_of(:submission_type).in_array(ETD.submission_types) }
   end
 
   describe 'associations' do
@@ -49,6 +50,12 @@ describe ETD, type: :model do
     it "also deletes the etd's committee_memberships" do
       etd.destroy
       expect { cm.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe '.submission_types' do
+    it "returns the list of valid etd sbmission types" do
+      expect(ETD.submission_types).to eq ["Dissertation", "Master Thesis"]
     end
   end
 end
