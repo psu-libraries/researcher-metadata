@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_08_30_203141) do
+ActiveRecord::Schema.define(version: 2018_09_06_185322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -39,6 +39,23 @@ ActiveRecord::Schema.define(version: 2018_08_30_203141) do
   create_table "duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "etds", force: :cascade do |t|
+    t.text "title", null: false
+    t.string "author_first_name", null: false
+    t.string "author_last_name", null: false
+    t.string "author_middle_name"
+    t.string "webaccess_id", null: false
+    t.integer "year", null: false
+    t.text "url", null: false
+    t.string "submission_type", null: false
+    t.string "external_identifier", null: false
+    t.string "access_level", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_identifier"], name: "index_etds_on_external_identifier"
+    t.index ["webaccess_id"], name: "index_etds_on_webaccess_id"
   end
 
   create_table "publication_imports", force: :cascade do |t|
