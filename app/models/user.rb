@@ -22,6 +22,8 @@ class User < ApplicationRecord
 
   has_many :authorships
   has_many :publications, through: :authorships
+  has_many :user_contracts
+  has_many :contracts, through: :user_contracts
 
   swagger_schema :User do
     property :webaccess_id do

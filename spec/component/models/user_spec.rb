@@ -27,6 +27,8 @@ describe User, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:publications).through(:authorships) }
+    it { is_expected.to have_many(:user_contracts) }
+    it { is_expected.to have_many(:contracts).through(:user_contracts) }
   end
 
   describe 'validations' do

@@ -34,7 +34,7 @@ describe Contract, type: :model do
 
   describe "deleting a contract with user_contracts" do
     let(:c) { create :contract }
-    let!(:u) { create :user_contracts, contract: c}
+    let!(:u) { create :user_contract, contract: c}
     it "also deletes the contract's user_contracts" do
       c.destroy
       expect { u.reload }.to raise_error ActiveRecord::RecordNotFound

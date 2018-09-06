@@ -17,8 +17,8 @@ end
 
 describe UserContract, type: :model do
   describe 'associations' do
-    it { is_expected.to belong_to(:user).inverse_of(:authorships) }
-    it { is_expected.to belong_to(:contracts).inverse_of(:authorships) }
+    it { is_expected.to belong_to(:user).inverse_of(:user_contracts) }
+    it { is_expected.to belong_to(:contract).inverse_of(:user_contracts) }
   end
 
   describe 'validations' do
@@ -26,7 +26,7 @@ describe UserContract, type: :model do
     it { is_expected.to validate_presence_of(:contract_id) }
 
     context "given otherwise valid data" do
-      subject { Authorship.new(user: create(:user), contract: create(:contract)) }
+      subject { UserContract.new(user: create(:user), contract: create(:contract)) }
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:contract_id) }
     end
   end
