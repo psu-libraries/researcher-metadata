@@ -111,6 +111,15 @@
         </td>
       <% end %>
     </tr>
+    <tr>
+      <td class="publication-field-label">Actions</td>
+      <% publications.each do |p| %>
+        <td><%= button_to "Merge Group",
+                          Rails.application.routes.url_helpers.admin_duplicate_publication_group_merge_path(@object),
+                          params: {publication_id: p.id},
+                          class: 'btn btn-primary', id: "publication_#{p.id}_merge_button"%></td>
+      <% end %>
+    </tr>
     </tbody>
   </table>
 </div>

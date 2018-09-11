@@ -15,4 +15,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'CSV'
   inflect.acronym 'API'
   inflect.acronym 'PSU'
+  inflect.acronym 'ETD'
 end

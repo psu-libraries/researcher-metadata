@@ -51,7 +51,7 @@ feature "Admin publication detail page", type: :feature do
     before { authenticate_admin_user }
 
     describe "the page content" do
-      before { visit "admin/publication/#{pub.id}" }
+      before { visit rails_admin.show_path(model_name: :publication, id: pub.id) }
 
       it "shows the publication detail heading" do
         expect(page).to have_content "Details for Publication 'Bob's Publication'"
@@ -119,7 +119,7 @@ feature "Admin publication detail page", type: :feature do
     end
 
     describe "the page layout" do
-      before { visit "admin/publication/#{pub.id}" }
+      before { visit rails_admin.show_path(model_name: :publication, id: pub.id) }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -128,7 +128,7 @@ feature "Admin publication detail page", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit "admin/publication/#{pub.id}"
+      visit rails_admin.show_path(model_name: :publication, id: pub.id)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

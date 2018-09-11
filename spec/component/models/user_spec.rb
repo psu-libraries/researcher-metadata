@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the users table', type: :model do
   subject(:user) { User.new }
@@ -6,7 +7,6 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:first_name).of_type(:string) }
   it { is_expected.to have_db_column(:middle_name).of_type(:string) }
   it { is_expected.to have_db_column(:last_name).of_type(:string) }
-  it { is_expected.to have_db_column(:title).of_type(:string) }
   it { is_expected.to have_db_column(:webaccess_id).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:penn_state_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
@@ -24,11 +24,15 @@ end
 describe User, type: :model do
   subject(:user) { User.new }
 
+  it_behaves_like "an application record"
+
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:publications).through(:authorships) }
     it { is_expected.to have_many(:user_contracts) }
     it { is_expected.to have_many(:contracts).through(:user_contracts) }
+    it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
+    it { is_expected.to have_many(:etds).through(:committee_memberships) }
   end
 
   describe 'validations' do
@@ -171,18 +175,86 @@ describe User, type: :model do
   end
 
   describe '#name' do
-    before { user.first_name = 'Buck'; user.last_name = 'Murphy' }
-    context "when middle_name is not blank" do
-      before { user.middle_name = 'X' }
-      it "returns the first, middle, and last name" do
-        expect(user.name).to eq 'Buck X Murphy'
+    context "when the first, middle, and last names of the user are nil" do
+      it "returns an empty string" do
+        expect(user.name).to eq ''
       end
     end
-    context "when middle_name is blank" do
-      before { user.middle_name = '' }
-      it "returns the first and last name" do
-        expect(user.name).to eq 'Buck Murphy'
+    context "when the user has a first name" do
+      before { user.first_name = 'first' }
+      context "when the user has a middle name" do
+        before { user.middle_name = 'middle' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first middle last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first middle'
+          end
+        end
       end
+      context "when the user has no middle name" do
+        before { user.middle_name = '' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'first'
+          end
+        end
+      end
+    end
+    context "when the user has no first name" do
+      before { user.first_name = '' }
+      context "when the user has a middle name" do
+        before { user.middle_name = 'middle' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'middle last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'middle'
+          end
+        end
+      end
+      context "when the user has no middle name" do
+        before { user.middle_name = '' }
+        context "when the user has a last name" do
+          before { user.last_name = 'last' }
+          it "returns the full name of the user" do
+            expect(user.name).to eq 'last'
+          end
+        end
+        context "when the user has no last name" do
+          before { user.last_name = '' }
+          it "returns an empty string" do
+            expect(user.name).to eq ''
+          end
+        end
+      end
+    end
+  end
+
+  describe '#mark_as_updated_by_user' do
+    let(:user) { User.new }
+    before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
+
+    it "sets the user's updated_by_user_at field to the current time" do
+      user.mark_as_updated_by_user
+      expect(user.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
 end

@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the publications table', type: :model do
   subject { Publication.new }
@@ -25,6 +26,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: false) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
 
@@ -35,6 +37,8 @@ end
 
 
 describe Publication, type: :model do
+  it_behaves_like "an application record"
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
@@ -91,6 +95,15 @@ describe Publication, type: :model do
                                                    "Professional Journal Article",
                                                    "Trade Journal Article",
                                                    "Journal Article"]
+    end
+  end
+
+  describe '.visible' do
+    let(:visible_pub1) { create :publication, visible: true }
+    let(:visible_pub2) { create :publication, visible: true }
+    let(:invisible_pub) { create :publication, visible: false }
+    it "returns the publications that are marked as visible" do
+      expect(Publication.visible).to match_array [visible_pub1, visible_pub2]
     end
   end
 
@@ -164,6 +177,16 @@ describe Publication, type: :model do
       it "returns an array of the source identifiers from the publication's Pure imports" do
         expect(pub.pure_import_identifiers).to match_array ["pure-abc123", "pure-xyz789"]
       end
+    end
+  end
+
+  describe '#mark_as_updated_by_user' do
+    let(:pub) { Publication.new }
+    before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
+
+    it "sets the user's updated_by_user_at field to the current time" do
+      pub.mark_as_updated_by_user
+      expect(pub.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
 end

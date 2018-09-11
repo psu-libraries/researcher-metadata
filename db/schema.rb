@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_05_193809) do
+ActiveRecord::Schema.define(version: 2018_09_06_190755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -47,6 +47,16 @@ ActiveRecord::Schema.define(version: 2018_09_05_193809) do
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
+  create_table "committee_memberships", force: :cascade do |t|
+    t.integer "etd_id", null: false
+    t.integer "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
+    t.index ["user_id"], name: "index_committee_memberships_on_user_id"
+  end
+
   create_table "contributors", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.string "first_name"
@@ -61,6 +71,23 @@ ActiveRecord::Schema.define(version: 2018_09_05_193809) do
   create_table "duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "etds", force: :cascade do |t|
+    t.text "title", null: false
+    t.string "author_first_name", null: false
+    t.string "author_last_name", null: false
+    t.string "author_middle_name"
+    t.string "webaccess_id", null: false
+    t.integer "year", null: false
+    t.text "url", null: false
+    t.string "submission_type", null: false
+    t.string "external_identifier", null: false
+    t.string "access_level", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["external_identifier"], name: "index_etds_on_external_identifier"
+    t.index ["webaccess_id"], name: "index_etds_on_webaccess_id"
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -107,6 +134,7 @@ ActiveRecord::Schema.define(version: 2018_09_05_193809) do
     t.integer "citation_count"
     t.integer "duplicate_publication_group_id"
     t.datetime "updated_by_user_at"
+    t.boolean "visible", default: false
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
     t.index ["volume"], name: "index_publications_on_volume"
@@ -134,7 +162,6 @@ ActiveRecord::Schema.define(version: 2018_09_05_193809) do
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
-    t.string "title"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "is_admin", default: false
@@ -151,6 +178,8 @@ ActiveRecord::Schema.define(version: 2018_09_05_193809) do
   add_foreign_key "authorships", "publications", on_delete: :cascade
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", name: "contract_imports_contract_id_fk"
+  add_foreign_key "committee_memberships", "etds", on_delete: :cascade
+  add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade

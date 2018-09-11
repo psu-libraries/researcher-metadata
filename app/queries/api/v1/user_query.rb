@@ -11,9 +11,9 @@ module API::V1
       if params[:start_year] && params[:end_year]
         starts_on = Date.new(params[:start_year].to_i)
         ends_on = Date.new(params[:end_year].to_i).end_of_year
-        data = user.publications.where(published_on: starts_on..ends_on)
+        data = user.publications.visible.where(published_on: starts_on..ends_on)
       else
-        data = user.publications
+        data = user.publications.visible
       end
 
       if params[:order_first_by].present?

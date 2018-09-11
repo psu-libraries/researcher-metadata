@@ -4,7 +4,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
   subject { Apivore::SwaggerChecker.instance_for('/api_docs/swagger_docs/v1/swagger.json') }
 
   context 'has valid paths' do
-    let!(:publication_1) { create :publication }
+    let!(:publication_1) { create :publication, visible: true }
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let(:publications_params) { { 'query_string': 'limit=1' } }
     let(:publication_params) { { "id" => publication_1.id, 'query_string': 'limit=1' } }

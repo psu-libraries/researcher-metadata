@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the publication_taggings table', type: :model do
   subject { PublicationTagging.new }
@@ -17,6 +18,8 @@ describe 'the publication_taggings table', type: :model do
 end
 
 describe PublicationTagging, type: :model do
+  it_behaves_like "an application record"
+
   describe 'associations' do
     it { is_expected.to belong_to(:tag).inverse_of(:publication_taggings) }
     it { is_expected.to belong_to(:publication).inverse_of(:taggings) }

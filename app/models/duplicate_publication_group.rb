@@ -16,23 +16,38 @@ class DuplicatePublicationGroup < ApplicationRecord
                                      p.publisher,
                                      p.published_on.try(:year))
 
-      if duplicates.many?
-        existing_group = duplicates.detect { |p| p.duplicate_group.present? }.try(:duplicate_group)
+      group_publications(duplicates)
 
-        if existing_group
-          duplicates.each do |dp|
-            dp.update_attributes!(duplicate_group: existing_group) unless dp.duplicate_group.present?
-          end
-        else
-          new_group = create!
-          duplicates.update_all(duplicate_publication_group_id: new_group.id)
-        end
-      end
       pbar.increment unless Rails.env.test?
     end
     pbar.finish unless Rails.env.test?
 
     nil
+  end
+
+  def self.group_publications(publications)
+    if publications.many?
+      existing_groups = publications.select { |p| p.duplicate_group.present? }.map { |p| p.duplicate_group }
+      group_to_remain = existing_groups.first
+      groups_to_delete = existing_groups - [group_to_remain]
+      pubs_to_regroup = groups_to_delete.map { |g| g.publications }.flatten
+
+      ActiveRecord::Base.transaction do
+        if group_to_remain
+          publications.each do |p|
+            p.update_attributes!(duplicate_group: group_to_remain) unless p.duplicate_group.present?
+          end
+          pubs_to_regroup.each do |p|
+            p.update_attributes!(duplicate_group: group_to_remain)
+          end
+          groups_to_delete.each do |g|
+            g.destroy
+          end
+        else
+          create!(publications: publications)
+        end
+      end
+    end
   end
 
   rails_admin do
@@ -43,12 +58,22 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
 
     list do
-      field :id
+      field(:id)
+      field(:first_publication_title) { label 'Title of first duplicate' }
+      field(:publication_count) { label 'Number of duplicates' }
     end
 
     show do
-      field :id
-      field :publications
+      field(:id)
+      field(:publications)
     end
+  end
+
+  def publication_count
+    publications.count
+  end
+
+  def first_publication_title
+    publications.first.try(:title)
   end
 end

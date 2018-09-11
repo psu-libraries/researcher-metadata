@@ -17,7 +17,10 @@ feature "Admin user detail page", type: :feature do
   let!(:pub2) { create :publication, title: "Bob's Second Publication",
                        journal_title: "Second Journal",
                        publisher: "Second Publisher",
-                       published_on: Date.new(2018, 1, 1) }
+                       published_on: Date.new(2018, 1, 1),
+                       duplicate_group: group }
+
+  let(:group) { create :duplicate_publication_group }
 
   context "when the current user is an admin" do
     before do
@@ -27,7 +30,7 @@ feature "Admin user detail page", type: :feature do
     end
 
     describe "the page content" do
-      before { visit "admin/user/#{user.id}" }
+      before { visit rails_admin.show_path(model_name: :user, id: user.id) }
 
       it "shows the user detail heading" do
         expect(page).to have_content "Details for User 'Bob Testuser'"
@@ -50,20 +53,21 @@ feature "Admin user detail page", type: :feature do
       end
 
       it "shows the user's publications" do
-        expect(page).to have_content "Bob's First Publication"
+        expect(page).to have_link "Bob's First Publication"
         expect(page).to have_content "First Journal"
         expect(page).to have_content "First Publisher"
         expect(page).to have_content "2017"
 
-        expect(page).to have_content "Bob's Second Publication"
+        expect(page).to have_link "Bob's Second Publication"
         expect(page).to have_content "Second Journal"
         expect(page).to have_content "Second Publisher"
         expect(page).to have_content "2018"
+        expect(page).to have_link "Duplicate group ##{group.id}"
       end
     end
 
     describe "the page layout" do
-      before { visit "admin/user/#{user.id}" }
+      before { visit rails_admin.show_path(model_name: :user, id: user.id) }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -72,7 +76,7 @@ feature "Admin user detail page", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit "admin/user/#{user.id}"
+      visit rails_admin.show_path(model_name: :user, id: user.id)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

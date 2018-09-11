@@ -6,7 +6,7 @@ class ActivityInsightAuthorshipImporter < ActivityInsightCSVImporter
                                     source_identifier: row[:parent_id]).try(:publication)
       a = Authorship.find_by(user: u, publication: p)
 
-      if p && u # Depends on users and publications being imported from Activity Insight first
+      if p && u && !p.updated_by_user_at.present? # Depends on users and publications being imported from Activity Insight first
         if a
           a.update_attributes!(author_number: row[:ordinal].to_i)
           return nil

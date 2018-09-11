@@ -24,6 +24,8 @@ class User < ApplicationRecord
   has_many :publications, through: :authorships
   has_many :user_contracts
   has_many :contracts, through: :user_contracts
+  has_many :committee_memberships, inverse_of: :user
+  has_many :etds, through: :committee_memberships
 
   swagger_schema :User do
     property :webaccess_id do
@@ -35,12 +37,13 @@ class User < ApplicationRecord
     is_admin
   end
 
- def name
-    if middle_name.present?
-      first_name + ' ' + middle_name + ' ' + last_name
-    else
-      first_name + ' ' + last_name
-    end
+  def name
+    full_name = first_name.to_s
+    full_name += ' ' if first_name.present? && middle_name.present?
+    full_name += middle_name.to_s if middle_name.present?
+    full_name += ' ' if middle_name.present? && last_name.present? || first_name.present? && last_name.present?
+    full_name += last_name.to_s if last_name.present?
+    full_name
   end
 
   rails_admin do
@@ -50,42 +53,68 @@ class User < ApplicationRecord
       end
     end
 
-    show do
-      field :webaccess_id
-      field :pure_uuid
-      field :activity_insight_identifier
-      field :penn_state_identifier
-      field :title
-      field :is_admin
-      field :created_at
-      field :updated_at
-      field :updated_by_user_at
+    list do
+      field(:id)
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at)
+      field(:updated_at)
+      field(:updated_by_user_at)
+    end
 
-      field :publications
+    show do
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at)
+      field(:updated_at)
+      field(:updated_by_user_at)
+
+      field(:publications)
+    end
+
+    create do
+      field(:webaccess_id) { label 'Penn State WebAccess ID' }
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
     end
 
     edit do
-      field :webaccess_id do
+      field(:webaccess_id) do
         read_only true
+        label 'Penn State WebAccess ID'
       end
-      field :first_name
-      field :middle_name
-      field :last_name
-      field :pure_uuid
-      field :activity_insight_identifier
-      field :penn_state_identifier
-      field :title
-      field :is_admin
-      field :created_at do
-        read_only true
-      end
-      field :updated_at do
-        read_only true
-      end
-      field :updated_by_user_at do
-        read_only true
-      end
+      field(:first_name)
+      field(:middle_name)
+      field(:last_name)
+      field(:pure_uuid) { label 'Pure ID' }
+      field(:activity_insight_identifier) { label 'Activity Insight ID' }
+      field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:is_admin) { label 'Admin user?' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
     end
+  end
+
+  def mark_as_updated_by_user
+    self.updated_by_user_at = Time.current
   end
 
   private

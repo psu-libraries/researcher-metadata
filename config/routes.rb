@@ -5,6 +5,9 @@ Rails.application.routes.draw do
 
   devise_for :users
 
+  post 'admin/user/:user_id/duplicate_publication_groupings' => 'custom_admin/duplicate_publication_groupings#create', as: :admin_user_duplicate_publication_groupings
+  post 'admin/duplicate_publication_group/:duplicate_publication_group_id/merge' => 'custom_admin/publication_merges#create', as: :admin_duplicate_publication_group_merge
+
   get '/user/sign_in' => 'user/sessions#new', as: :new_user_session
   match '/user/sign_out', to: 'user/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
 

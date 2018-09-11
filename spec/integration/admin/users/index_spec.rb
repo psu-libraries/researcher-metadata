@@ -9,7 +9,7 @@ feature "Admin user list", type: :feature do
       let!(:user1) { create(:user, first_name: "Bob", last_name: "Testuser") }
       let!(:user2) { create(:user, first_name: "Susan", last_name: "Tester") }
 
-      before { visit 'admin/user' }
+      before { visit rails_admin.index_path(model_name: :user) }
 
       it "shows the user list heading" do
         expect(page).to have_content 'List of Users'
@@ -27,7 +27,7 @@ feature "Admin user list", type: :feature do
     end
 
     describe "the page layout" do
-      before { visit 'admin/user' }
+      before { visit rails_admin.index_path(model_name: :user) }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -36,7 +36,7 @@ feature "Admin user list", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit 'admin/user'
+      visit rails_admin.index_path(model_name: :user)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

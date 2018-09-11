@@ -3,7 +3,7 @@ class ActivityInsightContributorImporter < ActivityInsightCSVImporter
     p = PublicationImport.find_by(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
                                   source_identifier: row[:parent_id]).try(:publication)
 
-    if p # Depends on publications being imported from Activity Insight first
+    if p && !p.updated_by_user_at.present? # Depends on publications being imported from Activity Insight first
       p.contributors.delete_all
 
       c = Contributor.new

@@ -1,20 +1,33 @@
-<table class="table table-condensed table-striped">
-  <thead>
-    <tr>
-      <th class="header">Year</th>
-      <th class="header">Journal</th>
-      <th class="header">Publisher</th>
-      <th class="header">Title</th>
-    </tr>
-  </thead>
-  <tbody>
-    <% publications.order(Arel.sql("date_trunc('year', published_on) DESC")).order(journal_title: :asc).order(title: :asc).each do |p| %>
-      <tr class="publication_row">
-        <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
-        <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
-        <td><%= p.publisher.present? ? p.publisher : '' %></td>
-        <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
+<%= form_tag Rails.application.routes.url_helpers.admin_user_duplicate_publication_groupings_path(@object) do %>
+  <%= submit_tag "Group Selected", class: 'btn btn-primary' %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th class="header"></th>
+        <th class="header">Year</th>
+        <th class="header">Journal</th>
+        <th class="header">Publisher</th>
+        <th class="header">Title</th>
+        <th class="header">Duplicate Group</th>
       </tr>
-    <% end %>
-  </tbody>
-</table>
+    </thead>
+    <tbody>
+      <% publications.order(Arel.sql("date_trunc('year', published_on) DESC")).order(journal_title: :asc).order(title: :asc).each do |p| %>
+        <tr class="publication_row">
+          <td><%= check_box_tag 'bulk_ids[]', p.id, false, id: "bulk_ids_#{p.id}" %></td>
+          <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
+          <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
+          <td><%= p.publisher.present? ? p.publisher : '' %></td>
+          <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
+          <td>
+            <% if p.duplicate_publication_group_id.present? %>
+              <%= link_to "Duplicate group ##{p.duplicate_publication_group_id}",
+                         show_path(model_name: :duplicate_publication_group,
+                                   id: p.duplicate_publication_group_id) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

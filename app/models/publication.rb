@@ -28,6 +28,8 @@ class Publication < ApplicationRecord
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
 
+  scope :visible, -> { where visible: true }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
@@ -40,43 +42,122 @@ class Publication < ApplicationRecord
   end
 
   rails_admin do
-    edit do
-      field :title
-      field :secondary_title
-      field :publication_type, :enum do
+    list do
+      field(:id)
+      field(:title)
+      field(:secondary_title)
+      field(:publication_type)
+      field(:journal_title)
+      field(:publisher)
+      field(:status)
+      field(:volume)
+      field(:issue)
+      field(:edition)
+      field(:page_range)
+      field(:url) { label 'URL' }
+      field(:issn) { label 'ISSN' }
+      field(:doi) { label 'DOI' }
+      field(:abstract)
+      field(:authors_et_al) { label 'Et al authors?' }
+      field(:published_on)
+      field(:citation_count) { label 'Number of citations' }
+      field(:visible) { label 'Visible via API'}
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
+    end
+
+    create do
+      field(:title)
+      field(:secondary_title)
+      field(:publication_type, :enum) do
         enum do
           Publication.publication_types.map { |t| [t, t] }
         end
       end
-      field :journal_title
-      field :publisher
-      field :status
-      field :volume
-      field :issue
-      field :edition
-      field :page_range
-      field :url
-      field :issn
-      field :doi
-      field :abstract
-      field :authors_et_al
-      field :published_on
-      field :citation_count
-      field :created_at do
-        read_only true
+      field(:journal_title)
+      field(:publisher)
+      field(:status)
+      field(:volume)
+      field(:issue)
+      field(:edition)
+      field(:page_range)
+      field(:url) { label 'URL' }
+      field(:issn) { label 'ISSN' }
+      field(:doi) { label 'DOI' }
+      field(:abstract)
+      field(:authors_et_al) { label 'Et al authors?' }
+      field(:published_on)
+      field(:citation_count) { label 'Number of citations' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
+      field(:duplicate_group)
+      field(:users) { read_only true }
+      field(:authorships)
+      field(:contributors)
+      field(:visible) { label 'Visible via API?'}
+    end
+
+    show do
+      field(:title)
+      field(:secondary_title)
+      field(:publication_type)
+      field(:journal_title)
+      field(:publisher)
+      field(:status)
+      field(:volume)
+      field(:issue)
+      field(:edition)
+      field(:page_range)
+      field(:url) { label 'URL' }
+      field(:issn) { label 'ISSN' }
+      field(:doi) { label 'DOI' }
+      field(:abstract)
+      field(:authors_et_al) { label 'Et al authors?' }
+      field(:published_on)
+      field(:citation_count) { label 'Number of citations' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
+      field(:duplicate_group)
+      field(:users) { read_only true }
+      field(:authorships)
+      field(:contributors)
+      field(:imports)
+      field(:visible) { label 'Visible via API?'}
+    end
+
+    edit do
+      field(:title)
+      field(:secondary_title)
+      field(:publication_type, :enum) do
+        enum do
+          Publication.publication_types.map { |t| [t, t] }
+        end
       end
-      field :updated_at do
-        read_only true
-      end
-      field :updated_by_user_at do
-        read_only true
-      end
-      field :duplicate_group
-      field :users do
-        read_only true
-      end
-      field :authorships
-      field :contributors
+      field(:journal_title)
+      field(:publisher)
+      field(:status)
+      field(:volume)
+      field(:issue)
+      field(:edition)
+      field(:page_range)
+      field(:url) { label 'URL' }
+      field(:issn) { label 'ISSN' }
+      field(:doi) { label 'DOI' }
+      field(:abstract)
+      field(:authors_et_al) { label 'Et al authors?' }
+      field(:published_on)
+      field(:citation_count) { label 'Number of citations' }
+      field(:created_at) { read_only true }
+      field(:updated_at) { read_only true }
+      field(:updated_by_user_at) { read_only true }
+      field(:duplicate_group)
+      field(:users) { read_only true }
+      field(:authorships)
+      field(:contributors)
+      field(:visible) { label 'Visible via API?'}
     end
   end
 
@@ -86,5 +167,9 @@ class Publication < ApplicationRecord
 
   def pure_import_identifiers
     imports.where(source: 'Pure').map { |i| i.source_identifier }
+  end
+
+  def mark_as_updated_by_user
+    self.updated_by_user_at = Time.current
   end
 end

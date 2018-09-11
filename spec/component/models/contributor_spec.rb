@@ -1,4 +1,5 @@
 require 'component/component_spec_helper'
+require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the contributors_table', type: :model do
   subject { Contributor.new }
@@ -18,6 +19,8 @@ end
 
 describe Contributor, type: :model do
   subject(:contributor) { Contributor.new }
+
+  it_behaves_like "an application record"
 
   it { is_expected.to validate_presence_of :publication }
   it { is_expected.to validate_presence_of :position }

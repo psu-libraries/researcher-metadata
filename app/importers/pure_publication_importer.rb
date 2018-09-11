@@ -27,11 +27,12 @@ class PurePublicationImporter
                 PublicationImport.new(source: IMPORT_SOURCE,
                                       source_identifier: publication['uuid'])
 
+              p = pi.publication
+
               pi.source_updated_at = publication['info']['modifiedDate']
 
               if pi.persisted?
-                p = pi.publication
-                p.update_attributes!(pub_attrs(publication))
+                pi.publication.update_attributes!(pub_attrs(publication)) unless p.updated_by_user_at.present?
               else
                 p = Publication.create!(pub_attrs(publication))
                 pi.publication = p
@@ -39,33 +40,35 @@ class PurePublicationImporter
 
               pi.save!
 
-              p.contributors.delete_all
+              unless p.updated_by_user_at.present?
+                p.contributors.delete_all
 
-              authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
-                a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
+                authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
+                  a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
 
-              authorships.each_with_index do |a, i|
-                if a['person'].present?
-                  u = User.find_by(pure_uuid: a['person']['uuid'])
+                authorships.each_with_index do |a, i|
+                  if a['person'].present?
+                    u = User.find_by(pure_uuid: a['person']['uuid'])
 
-                  if u # Depends on users being imported from Pure first
-                    authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
+                    if u # Depends on users being imported from Pure first
+                      authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
 
-                    authorship.user = u if authorship.new_record?
-                    authorship.publication = p if authorship.new_record?
-                    authorship.author_number = i+1
-                    begin
-                      authorship.save!
-                    rescue ActiveRecord::RecordInvalid => e
-                      @errors << e
+                      authorship.user = u if authorship.new_record?
+                      authorship.publication = p if authorship.new_record?
+                      authorship.author_number = i+1
+                      begin
+                        authorship.save!
+                      rescue ActiveRecord::RecordInvalid => e
+                        @errors << e
+                      end
                     end
                   end
-                end
 
-                Contributor.create!(publication: p,
-                                    first_name: a['name']['firstName'],
-                                    last_name: a['name']['lastName'],
-                                    position: i+1)
+                  Contributor.create!(publication: p,
+                                      first_name: a['name']['firstName'],
+                                      last_name: a['name']['lastName'],
+                                      position: i+1)
+                end
               end
             end
           end
@@ -95,7 +98,9 @@ class PurePublicationImporter
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
                              published_day(publication)),
-      citation_count: publication['totalScopusCitations']
+      citation_count: publication['totalScopusCitations'],
+      abstract: abstract(publication),
+      visible: true
     }
   end
 
@@ -113,5 +118,9 @@ class PurePublicationImporter
 
   def published_day(publication)
     status(publication)['publicationDate']['day'].present? ? status(publication)['publicationDate']['day'].to_i : 1
+  end
+
+  def abstract(publication)
+    publication['abstract'].try(:first).try(:[], 'value')
   end
 end

@@ -11,7 +11,7 @@ feature "updating a user via the admin interface", type: :feature do
 
     describe "submitting the form with new data to update a user record" do
       before do
-        visit "admin/user/#{user.id}/edit"
+        visit rails_admin.edit_path(model_name: :user, id: user.id)
         fill_in 'Last name', with: 'Testerson'
         click_on 'Save'
       end
@@ -29,7 +29,7 @@ feature "updating a user via the admin interface", type: :feature do
   context "when the current user is not an admin" do
     before { authenticate_user }
     it "redirects back to the home page with an error message" do
-      visit "admin/user/#{user.id}/edit"
+      visit rails_admin.edit_path(model_name: :user, id: user.id)
       expect(page.current_path).to eq root_path
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
