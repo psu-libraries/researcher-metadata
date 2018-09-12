@@ -42,10 +42,10 @@ describe Contract, type: :model do
     end
   end
 
-  describe "deleting a contract with user_contracts" do
+  describe "deleting a contract with contract_imports" do
     let(:c) { create :contract }
     let!(:ci) { create :contract_import, contract: c}
-    it "also deletes the contract's user_contracts" do
+    it "also deletes the contract's contract_imports" do
       c.destroy
       expect { ci.reload }.to raise_error ActiveRecord::RecordNotFound
     end
