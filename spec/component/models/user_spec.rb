@@ -158,6 +158,15 @@ describe User, type: :model do
     end
   end
 
+  describe "deleting a user with user_contracts" do
+    let(:u) { create :user }
+    let!(:uc) { create :user_contract, user: u}
+    it "also deletes the user's user_contracts" do
+      u.destroy
+      expect { uc.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }
