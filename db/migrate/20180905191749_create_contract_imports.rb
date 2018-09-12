@@ -10,6 +10,6 @@ class CreateContractImports < ActiveRecord::Migration[5.2]
     add_index :contract_imports, :activity_insight_id, unique: true
     add_index :contract_imports, :contract_id
 
-    add_foreign_key :contract_imports, :contracts, name: :contract_imports_contract_id_fk
+    add_foreign_key :contract_imports, :contracts, on_delete: :cascade
   end
 end

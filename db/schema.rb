@@ -180,12 +180,12 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
-  add_foreign_key "contract_imports", "contracts", name: "contract_imports_contract_id_fk"
+  add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
-  add_foreign_key "user_contracts", "contracts", name: "user_contracts_contract_id_fk"
-  add_foreign_key "user_contracts", "users", name: "user_contracts_user_id_fk"
+  add_foreign_key "user_contracts", "contracts", on_delete: :cascade
+  add_foreign_key "user_contracts", "users", on_delete: :cascade
 end

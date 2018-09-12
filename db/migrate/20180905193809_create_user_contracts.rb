@@ -10,7 +10,7 @@ class CreateUserContracts < ActiveRecord::Migration[5.2]
     add_index :user_contracts, :user_id
     add_index :user_contracts, :contract_id
 
-    add_foreign_key :user_contracts, :users, name: :user_contracts_user_id_fk
-    add_foreign_key :user_contracts, :contracts, name: :user_contracts_contract_id_fk
+    add_foreign_key :user_contracts, :users, on_delete: :cascade
+    add_foreign_key :user_contracts, :contracts, on_delete: :cascade
   end
 end
