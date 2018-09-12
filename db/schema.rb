@@ -25,6 +25,16 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
 
+  create_table "committee_memberships", force: :cascade do |t|
+    t.integer "etd_id", null: false
+    t.integer "user_id", null: false
+    t.string "role", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
+    t.index ["user_id"], name: "index_committee_memberships_on_user_id"
+  end
+
   create_table "contract_imports", force: :cascade do |t|
     t.integer "contract_id", null: false
     t.integer "activity_insight_id", null: false
@@ -35,26 +45,17 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
   end
 
   create_table "contracts", force: :cascade do |t|
-    t.text "title"
+    t.text "title", null: false
     t.string "contract_type"
-    t.text "sponsor"
-    t.integer "amount"
-    t.integer "ospkey"
-    t.date "award_start_on"
-    t.date "award_end_on"
+    t.text "sponsor", null: false
+    t.text "status", null: false
+    t.integer "amount", null: false
+    t.integer "ospkey", null: false
+    t.date "award_start_on", null: false
+    t.date "award_end_on", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
-  end
-
-  create_table "committee_memberships", force: :cascade do |t|
-    t.integer "etd_id", null: false
-    t.integer "user_id", null: false
-    t.string "role", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
-    t.index ["user_id"], name: "index_committee_memberships_on_user_id"
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -177,9 +178,9 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
 
   add_foreign_key "authorships", "publications", on_delete: :cascade
   add_foreign_key "authorships", "users", on_delete: :cascade
-  add_foreign_key "contract_imports", "contracts", name: "contract_imports_contract_id_fk"
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
+  add_foreign_key "contract_imports", "contracts", name: "contract_imports_contract_id_fk"
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade

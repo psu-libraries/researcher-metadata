@@ -3,5 +3,6 @@ class Contract < ApplicationRecord
   has_many :users, through: :user_contracts
   has_many :imports, class_name: :ContractImport
 
-  validates :title, :ospkey, :amount, :sponsor, :award_start_on, presence: true
+  validates :title, :ospkey, :amount, :sponsor, :award_start_on, 
+    :award_start_on, :status, presence: true
 end

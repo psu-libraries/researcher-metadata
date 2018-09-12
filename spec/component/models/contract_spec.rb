@@ -4,13 +4,14 @@ describe 'the contracts table', type: :model do
   subject { Contract.new }
 
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:title).of_type(:text) }
+  it { is_expected.to have_db_column(:title).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:contract_type).of_type(:string) }
-  it { is_expected.to have_db_column(:sponsor).of_type(:text) }
-  it { is_expected.to have_db_column(:amount).of_type(:integer) }
-  it { is_expected.to have_db_column(:ospkey).of_type(:integer) }
-  it { is_expected.to have_db_column(:award_start_on).of_type(:date) }
-  it { is_expected.to have_db_column(:award_end_on).of_type(:date) }
+  it { is_expected.to have_db_column(:sponsor).of_type(:text).with_options(null: false) }
+  it { is_expected.to have_db_column(:status).of_type(:text).with_options(null: false) }
+  it { is_expected.to have_db_column(:amount).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:ospkey).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:award_start_on).of_type(:date).with_options(null: false) }
+  it { is_expected.to have_db_column(:award_end_on).of_type(:date).with_options(null: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
