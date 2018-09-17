@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_134245) do
+ActiveRecord::Schema.define(version: 2018_09_17_152432) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,7 +37,7 @@ ActiveRecord::Schema.define(version: 2018_09_17_134245) do
 
   create_table "contract_imports", force: :cascade do |t|
     t.integer "contract_id", null: false
-    t.integer "activity_insight_id", null: false
+    t.bigint "activity_insight_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_insight_id"], name: "index_contract_imports_on_activity_insight_id", unique: true
@@ -51,8 +51,8 @@ ActiveRecord::Schema.define(version: 2018_09_17_134245) do
     t.text "status", null: false
     t.integer "amount", null: false
     t.integer "ospkey", null: false
-    t.date "award_start_on", null: false
-    t.date "award_end_on", null: false
+    t.date "award_start_on"
+    t.date "award_end_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true

@@ -1,20 +1,21 @@
 class ActivityInsightContractImporter < ActivityInsightCSVImporter
   def row_to_object(row)
-    if row[:ospkey].present?
+    if row[:ospkey].present? && row[:status] == 'Awarded'
       u = User.find_by(webaccess_id: row[:username])
 
       ci = ContractImport.find_by(activity_insight_id: row[:id]) ||
            ContractImport.new(activity_insight_id: row[:id],
-                              contract: Contract.create!(contract_attrs(row)))
+                              contract: Contract.find_by(ospkey: row[:ospkey]) || 
+                              Contract.create!(contract_attrs(row)))
 
       c = ci.contract
 
       if ci.persisted?
-        c.update_attributes!(contract_attrs(row)) unless c.updated_by_user_at.present?
+        c.update_attributes!(contract_attrs(row))
         return nil
       else
-        u.contracts << c
-        u.save!
+        u&.contracts&.push(c)
+        u&.save!
       end
 
       ci
