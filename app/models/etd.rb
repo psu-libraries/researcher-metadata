@@ -10,13 +10,15 @@ class ETD < ApplicationRecord
   validates :title,
             :author_first_name,
             :author_last_name,
-            :webaccess_id,
             :year,
             :url,
             :submission_type,
             :external_identifier,
             :access_level,
             presence: true
+
+  validates :webaccess_id, presence: true, uniqueness: { case_sensitive: false }
+  validates :external_identifier, presence: true, uniqueness: true
 
   validates :submission_type, inclusion: {in: submission_types }
 

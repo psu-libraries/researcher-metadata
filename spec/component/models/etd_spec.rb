@@ -17,8 +17,8 @@ describe 'the etds table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-  it { is_expected.to have_db_index(:webaccess_id) }
-  it { is_expected.to have_db_index(:external_identifier) }
+  it { is_expected.to have_db_index(:webaccess_id).unique(true) }
+  it { is_expected.to have_db_index(:external_identifier).unique(true) }
 end
 
 describe ETD, type: :model do
@@ -35,6 +35,24 @@ describe ETD, type: :model do
     it { is_expected.to validate_presence_of(:external_identifier) }
     it { is_expected.to validate_presence_of(:access_level) }
     it { is_expected.to validate_inclusion_of(:submission_type).in_array(ETD.submission_types) }
+
+    context "given an otherwise valid record" do
+      subject {
+        ETD.new(
+          title: 'bucks dissertation',
+          webaccess_id: 'abc123',
+          external_identifier: 'def123',
+          author_first_name: 'buck',
+          author_last_name: 'murphy',
+          year: 2018,
+          url: 'https://etda.libraries.psu.edu/catalog/7332',
+          submission_type: 'Dissertation',
+          access_level: 'Open Access'
+        )
+      }
+      it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
+      it { is_expected.to validate_uniqueness_of(:external_identifier) }
+    end
   end
 
   describe 'associations' do
