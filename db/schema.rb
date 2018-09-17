@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_06_190755) do
+ActiveRecord::Schema.define(version: 2018_09_17_134245) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,6 +33,29 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
     t.datetime "updated_at", null: false
     t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
     t.index ["user_id"], name: "index_committee_memberships_on_user_id"
+  end
+
+  create_table "contract_imports", force: :cascade do |t|
+    t.integer "contract_id", null: false
+    t.integer "activity_insight_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_id"], name: "index_contract_imports_on_activity_insight_id", unique: true
+    t.index ["contract_id"], name: "index_contract_imports_on_contract_id"
+  end
+
+  create_table "contracts", force: :cascade do |t|
+    t.text "title", null: false
+    t.string "contract_type"
+    t.text "sponsor", null: false
+    t.text "status", null: false
+    t.integer "amount", null: false
+    t.integer "ospkey", null: false
+    t.date "award_start_on", null: false
+    t.date "award_end_on", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
   create_table "contributors", force: :cascade do |t|
@@ -126,6 +149,15 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
     t.index ["name"], name: "index_tags_on_name"
   end
 
+  create_table "user_contracts", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "contract_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["contract_id"], name: "index_user_contracts_on_contract_id"
+    t.index ["user_id"], name: "index_user_contracts_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "activity_insight_identifier"
     t.string "first_name"
@@ -148,9 +180,12 @@ ActiveRecord::Schema.define(version: 2018_09_06_190755) do
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
+  add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
+  add_foreign_key "user_contracts", "contracts", on_delete: :cascade
+  add_foreign_key "user_contracts", "users", on_delete: :cascade
 end
