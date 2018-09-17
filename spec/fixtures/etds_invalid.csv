@@ -1,0 +1,4 @@
+submission_id,submission_semester,submission_year,submission_status,submission_acccess_level,submission_title,access_id,first_name,middle_name,last_name,degree_name
+11111,fall,2016,released for publication,open_access,Thesis 1,sat1,,A,Tester,PHD
+22222,NULL,2017,released for publication,restricted_to_institution,Thesis 2,bbt2,Bob,B,Testuser,MS
+33333,Fall,2018,released for publication,open_access,Thesis 3,jct3,Jill,C,,PHD

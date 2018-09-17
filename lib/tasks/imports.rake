@@ -55,6 +55,14 @@ namespace :import do
     PurePublicationTagImporter.new(filename: args.filename).call
   end
 
+  desc 'Import ETDs'
+  task :etds, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:etds)
+    )
+    ETDCSVImporter.new(filename: args.filename).call
+  end
+
   desc 'Import all data'
   task :all => :environment do
     PureUserImporter.new(
@@ -94,6 +102,7 @@ def filename_for(key)
   when :ai_users then Rails.root.join('db/data/ai_users.csv')
   when :ai_publications then Rails.root.join('db/data/ai_publications.csv')
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
+  when :etds then Rails.root.join('db/data/etds.csv')
   end
 end
 
