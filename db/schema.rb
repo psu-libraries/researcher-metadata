@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_175612) do
+ActiveRecord::Schema.define(version: 2018_09_17_185209) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -64,6 +64,7 @@ ActiveRecord::Schema.define(version: 2018_09_17_175612) do
     t.string "access_level", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.datetime "updated_by_user_at"
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
   end
