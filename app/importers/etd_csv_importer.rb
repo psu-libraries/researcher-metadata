@@ -18,7 +18,6 @@ class ETDCSVImporter < CSVImporter
   end
 
   def bulk_import(objects)
-#   ETD.import(objects)
     unique_etds = objects.uniq { |o| o.webaccess_id.downcase }
     if objects.count != unique_etds.count
       fatal_errors << "The file contains at least one duplicate ETD."
