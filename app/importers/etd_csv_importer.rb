@@ -37,8 +37,8 @@ class ETDCSVImporter < CSVImporter
             :url,
             :submission_type
           ]
-        }
-      )
+      }
+    )
   end
 
   private
@@ -53,13 +53,13 @@ class ETDCSVImporter < CSVImporter
       author_last_name: row[:last_name],
       webaccess_id: row[:access_id],
       title: row[:submission_title],
-      url: etd_url(row[:submission_id], row[:access_id]),
+      url: etd_url(row[:submission_public_id], row[:access_id]),
       submission_type: etd_submission_type(row[:degree_name])
     }
   end
 
-  def etd_url(submission_id, webaccess_id)
-    "https://etda.libraries.psu.edu/catalog/#{submission_id}#{webaccess_id}"
+  def etd_url(submission_public_id, webaccess_id)
+    "https://etda.libraries.psu.edu/catalog/#{submission_public_id}"
   end
 
   def etd_submission_type(degree_name)

@@ -20,9 +20,9 @@ describe ETDCSVImporter do
           expect(etd1.author_last_name).to eq 'Tester'
           expect(etd1.year).to eq 2016
           expect(etd1.title).to eq 'Thesis 1'
-          expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111sat1'
+          expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111'
           expect(etd1.submission_type).to eq 'Dissertation'
-          expect(etd1.external_identifier).to eq '11111'
+          expect(etd1.external_identifier).to eq '1'
           expect(etd1.access_level).to eq 'open_access'
 
           expect(etd2.author_first_name).to eq 'Bob'
@@ -30,9 +30,9 @@ describe ETDCSVImporter do
           expect(etd2.author_last_name).to eq 'Testuser'
           expect(etd2.year).to eq 2017
           expect(etd2.title).to eq 'Thesis 2'
-          expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222bbt2'
+          expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
           expect(etd2.submission_type).to eq 'Master Thesis'
-          expect(etd2.external_identifier).to eq '22222'
+          expect(etd2.external_identifier).to eq '2'
           expect(etd2.access_level).to eq 'restricted_to_institution'
 
           expect(etd3.author_first_name).to eq 'Jill'
@@ -40,9 +40,9 @@ describe ETDCSVImporter do
           expect(etd3.author_last_name).to eq 'Test'
           expect(etd3.year).to eq 2018
           expect(etd3.title).to eq 'Thesis 3'
-          expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333jct3'
+          expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333'
           expect(etd3.submission_type).to eq 'Dissertation'
-          expect(etd3.external_identifier).to eq '33333'
+          expect(etd3.external_identifier).to eq '3'
           expect(etd3.access_level).to eq 'open_access'
         end
       end
@@ -55,9 +55,9 @@ describe ETDCSVImporter do
                                       author_last_name: 'Testuser',
                                       year: 2017,
                                       title: 'Bobs Thesis',
-                                      url: 'https://etda.libraries.psu.edu/catalog/22222bbt2',
+                                      url: 'https://etda.libraries.psu.edu/catalog/22222',
                                       submission_type: 'Master Thesis',
-                                      external_identifier: '22222',
+                                      external_identifier: '2',
                                       access_level: 'restricted_to_institution',
                                       updated_by_user_at: timestamp }
 
@@ -75,9 +75,9 @@ describe ETDCSVImporter do
             expect(etd1.author_last_name).to eq 'Tester'
             expect(etd1.year).to eq 2016
             expect(etd1.title).to eq 'Thesis 1'
-            expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111sat1'
+            expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111'
             expect(etd1.submission_type).to eq 'Dissertation'
-            expect(etd1.external_identifier).to eq '11111'
+            expect(etd1.external_identifier).to eq '1'
             expect(etd1.access_level).to eq 'open_access'
 
             expect(etd2.author_first_name).to eq 'Robert'
@@ -85,9 +85,9 @@ describe ETDCSVImporter do
             expect(etd2.author_last_name).to eq 'Testuser'
             expect(etd2.year).to eq 2017
             expect(etd2.title).to eq 'Bobs Thesis'
-            expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222bbt2'
+            expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
             expect(etd2.submission_type).to eq 'Master Thesis'
-            expect(etd2.external_identifier).to eq '22222'
+            expect(etd2.external_identifier).to eq '2'
             expect(etd2.access_level).to eq 'restricted_to_institution'
 
             expect(etd3.author_first_name).to eq 'Jill'
@@ -95,9 +95,9 @@ describe ETDCSVImporter do
             expect(etd3.author_last_name).to eq 'Test'
             expect(etd3.year).to eq 2018
             expect(etd3.title).to eq 'Thesis 3'
-            expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333jct3'
+            expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333'
             expect(etd3.submission_type).to eq 'Dissertation'
-            expect(etd3.external_identifier).to eq '33333'
+            expect(etd3.external_identifier).to eq '3'
             expect(etd3.access_level).to eq 'open_access'
           end
         end
@@ -115,9 +115,9 @@ describe ETDCSVImporter do
             expect(etd1.author_last_name).to eq 'Tester'
             expect(etd1.year).to eq 2016
             expect(etd1.title).to eq 'Thesis 1'
-            expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111sat1'
+            expect(etd1.url).to eq 'https://etda.libraries.psu.edu/catalog/11111'
             expect(etd1.submission_type).to eq 'Dissertation'
-            expect(etd1.external_identifier).to eq '11111'
+            expect(etd1.external_identifier).to eq '1'
             expect(etd1.access_level).to eq 'open_access'
 
             expect(etd2.author_first_name).to eq 'Bob'
@@ -125,9 +125,9 @@ describe ETDCSVImporter do
             expect(etd2.author_last_name).to eq 'Testuser'
             expect(etd2.year).to eq 2017
             expect(etd2.title).to eq 'Thesis 2'
-            expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222bbt2'
+            expect(etd2.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
             expect(etd2.submission_type).to eq 'Master Thesis'
-            expect(etd2.external_identifier).to eq '22222'
+            expect(etd2.external_identifier).to eq '2'
             expect(etd2.access_level).to eq 'restricted_to_institution'
 
             expect(etd3.author_first_name).to eq 'Jill'
@@ -135,9 +135,9 @@ describe ETDCSVImporter do
             expect(etd3.author_last_name).to eq 'Test'
             expect(etd3.year).to eq 2018
             expect(etd3.title).to eq 'Thesis 3'
-            expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333jct3'
+            expect(etd3.url).to eq 'https://etda.libraries.psu.edu/catalog/33333'
             expect(etd3.submission_type).to eq 'Dissertation'
-            expect(etd3.external_identifier).to eq '33333'
+            expect(etd3.external_identifier).to eq '3'
             expect(etd3.access_level).to eq 'open_access'
           end
         end
@@ -160,9 +160,9 @@ describe ETDCSVImporter do
           expect(etd.author_last_name).to eq 'Testuser'
           expect(etd.year).to eq 2017
           expect(etd.title).to eq 'Thesis 2'
-          expect(etd.url).to eq 'https://etda.libraries.psu.edu/catalog/22222bbt2'
+          expect(etd.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
           expect(etd.submission_type).to eq 'Master Thesis'
-          expect(etd.external_identifier).to eq '22222'
+          expect(etd.external_identifier).to eq '2'
           expect(etd.access_level).to eq 'restricted_to_institution'
 
           expect(importer.fatal_errors.count).to eq 2
