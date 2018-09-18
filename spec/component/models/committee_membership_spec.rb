@@ -32,7 +32,7 @@ describe CommitteeMembership, type: :model do
 
     context "given otherwise valid data" do
       subject { CommitteeMembership.new(etd: create(:etd), user: create(:user), role: 'Advisor') }
-      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:etd_id) }
+      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:etd_id, :role) }
     end
   end
 end
