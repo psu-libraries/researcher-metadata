@@ -120,6 +120,7 @@ def filename_for(key)
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
+  when :ai_contracts then Rails.root.join('db/data/ai_contracts.csv')
   end
 end
 
