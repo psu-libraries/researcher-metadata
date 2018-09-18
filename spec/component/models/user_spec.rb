@@ -29,6 +29,8 @@ describe User, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships) }
     it { is_expected.to have_many(:publications).through(:authorships) }
+    it { is_expected.to have_many(:user_contracts) }
+    it { is_expected.to have_many(:contracts).through(:user_contracts) }
     it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:etds).through(:committee_memberships) }
   end
@@ -153,6 +155,15 @@ describe User, type: :model do
     it "also deletes the user's authorships" do
       u.destroy
       expect { a.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a user with user_contracts" do
+    let(:u) { create :user }
+    let!(:uc) { create :user_contract, user: u}
+    it "also deletes the user's user_contracts" do
+      u.destroy
+      expect { uc.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 

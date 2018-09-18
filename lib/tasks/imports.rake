@@ -7,6 +7,14 @@ namespace :import do
     ActivityInsightUserImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight contracts'
+  task :ai_contracts, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:ai_contracts)
+    )
+    ActivityInsightContractImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Activity Insight publications'
   task :ai_publications, [:filename] => :environment do |_task, args|
     args.with_defaults(

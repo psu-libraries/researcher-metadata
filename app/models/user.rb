@@ -22,6 +22,8 @@ class User < ApplicationRecord
 
   has_many :authorships
   has_many :publications, through: :authorships
+  has_many :user_contracts
+  has_many :contracts, through: :user_contracts
   has_many :committee_memberships, inverse_of: :user
   has_many :etds, through: :committee_memberships
 
