@@ -63,6 +63,14 @@ namespace :import do
     ETDCSVImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Committees'
+  task :committees, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:committees)
+    )
+    CommitteeImporter.new(filename: args.filename).call
+  end
+
   desc 'Import all data'
   task :all => :environment do
     PureUserImporter.new(
@@ -103,6 +111,7 @@ def filename_for(key)
   when :ai_publications then Rails.root.join('db/data/ai_publications.csv')
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
   when :etds then Rails.root.join('db/data/etds.csv')
+  when :committees then Rails.root.join('db/data/committees.csv')
   end
 end
 

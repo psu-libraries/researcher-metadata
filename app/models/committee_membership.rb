@@ -6,6 +6,6 @@ class CommitteeMembership < ApplicationRecord
             :role,
             presence: true
 
-  validates :etd_id, uniqueness: {scope: :user_id}
-  validates :user_id, uniqueness: {scope: :etd_id}
+  validates :etd_id, uniqueness: {scope: [:user_id, :role]}
+  validates :user_id, uniqueness: {scope: [:etd_id, :role]}
 end
