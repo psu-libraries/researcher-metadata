@@ -10,8 +10,8 @@ describe 'the contracts table', type: :model do
   it { is_expected.to have_db_column(:status).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:amount).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:ospkey).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:award_start_on).of_type(:date).with_options(null: false) }
-  it { is_expected.to have_db_column(:award_end_on).of_type(:date).with_options(null: false) }
+  it { is_expected.to have_db_column(:award_start_on).of_type(:date) }
+  it { is_expected.to have_db_column(:award_end_on).of_type(:date) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -24,7 +24,6 @@ describe Contract, type: :model do
     it { is_expected.to validate_presence_of(:ospkey) }
     it { is_expected.to validate_presence_of(:amount) }
     it { is_expected.to validate_presence_of(:sponsor) }
-    it { is_expected.to validate_presence_of(:award_start_on) }
   end
 
   describe 'associations' do
