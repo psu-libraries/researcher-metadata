@@ -43,7 +43,15 @@ class CommitteeImporter < CSVImporter
   private
 
   def webaccess_id(row)
-    webaccess_id ||= row[:email].present? ? row[:email].downcase.split('@').first : nil
+    webaccess_id ||= row[:email].present? ? webaccess_from_email(row[:email]) : nil
+  end
+
+  def webaccess_from_email(email)
+    begin
+      email.downcase.split('@').first
+    rescue
+      nil
+    end
   end
 
   def role(role_id)
