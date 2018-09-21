@@ -2,27 +2,31 @@ class CommitteeImporter < CSVImporter
 
   def row_to_object(row)
 
-    existing_user = User.find_by(webaccess_id: webaccess_id(row))
-    existing_etd = ETD.find_by(external_identifier: row[:submission_id])
+    if row[:email].present?
+      existing_user = User.find_by(webaccess_id: webaccess_id(row))
+      existing_etd = ETD.find_by(external_identifier: row[:submission_id])
 
-    if existing_etd && existing_user && preferred_role?(row[:committee_role_id])
+      if existing_etd && existing_user && preferred_role?(row[:committee_role_id])
 
-      existing_committee_membership = CommitteeMembership.find_by(
-        user_id: existing_user.id,
-        etd_id: existing_etd.id,
-        role: role(row[:committee_role_id])
-      )
+        existing_committee_membership = CommitteeMembership.find_by(
+          user_id: existing_user.id,
+          etd_id: existing_etd.id,
+          role: role(row[:committee_role_id])
+        )
 
-      if existing_etd.updated_by_user_at.blank?
-        if existing_committee_membership
-          nil
+        if existing_etd.updated_by_user_at.blank?
+          if existing_committee_membership
+            nil
+          else
+            committee_membership = CommitteeMembership.new(
+              etd_id: existing_etd.id,
+              user_id: existing_user.id,
+              role: role(row[:committee_role_id])
+            )
+            committee_membership
+          end
         else
-          committee_membership = CommitteeMembership.new(
-            etd_id: existing_etd.id,
-            user_id: existing_user.id,
-            role: role(row[:committee_role_id])
-          )
-          committee_membership
+          nil
         end
       else
         nil
@@ -43,15 +47,7 @@ class CommitteeImporter < CSVImporter
   private
 
   def webaccess_id(row)
-    webaccess_id ||= row[:email].present? ? webaccess_from_email(row[:email]) : nil
-  end
-
-  def webaccess_from_email(email)
-    begin
-      email.downcase.split('@').first
-    rescue
-      nil
-    end
+    row[:email].to_s.downcase.split('@').first
   end
 
   def role(role_id)
