@@ -6,10 +6,11 @@ describe 'API::V1 Users' do
     let!(:invisible_pub) { create :publication, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
+    let(:headers) { { "accept" => "application/json" } }
 
     before do
       create :authorship, user: user, publication: invisible_pub
-      get "/v1/users/#{webaccess_id}/publications#{params}"
+      get "/v1/users/#{webaccess_id}/publications#{params}", headers: headers
     end
 
     context "for a valid webaccess_id" do
@@ -34,6 +35,12 @@ describe 'API::V1 Users' do
         let(:webaccess_id) { user_without_publications.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html" } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
         end
       end
     end
