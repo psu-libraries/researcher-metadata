@@ -1,7 +1,7 @@
 class ActivityInsightContractImporter < ActivityInsightCSVImporter
   def row_to_object(row)
     if row[:ospkey].present? && row[:status] == 'Awarded'
-      u = User.find_by(webaccess_id: row[:username])
+      u = User.find_by(webaccess_id: row[:username].downcase)
 
       ci = ContractImport.find_by(activity_insight_id: row[:id]) ||
            ContractImport.new(activity_insight_id: row[:id],

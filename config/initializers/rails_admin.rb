@@ -40,7 +40,7 @@ RailsAdmin.config do |config|
 #     statistics false
     end
     index do
-      only [:Publication, :User, :DuplicatePublicationGroup, :ETD]
+      only [:Publication, :User, :DuplicatePublicationGroup, :ETD, :Contract]
     end
     new do
       only [:Publication, :User]
