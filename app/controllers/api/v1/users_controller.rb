@@ -1,12 +1,16 @@
 module API::V1
   class UsersController < APIController
     include Swagger::Blocks
+    include ActionController::MimeResponds
 
     def publications
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
-        pubs = API::V1::UserQuery.new(user).publications(params)
-        render json: API::V1::PublicationSerializer.new(pubs)
+        @pubs = API::V1::UserQuery.new(user).publications(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::PublicationSerializer.new(@pubs) }
+        end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
       end
@@ -26,6 +30,10 @@ module API::V1
         key :summary, "Retrieve a user's publications"
         key :description, 'Returns a publications for a user'
         key :operationId, 'findUserPublications'
+        key :produces, [
+          'application/json',
+          'text/html'
+        ]
         key :tags, [
           'user'
         ]

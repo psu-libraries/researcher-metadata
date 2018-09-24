@@ -11,11 +11,17 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let(:user_publications_params) {
       {
         "webaccess_id" => user.webaccess_id,
+        "_headers" => {'accept' => 'application/json'},
         "_query_string": "start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc&limit=10"
       }
     }
     let(:invalid_publication_params) { { "id" => -2000 } }
-    let(:invalid_user_publications_params) { { "webaccess_id" => "aaa" } }
+    let(:invalid_user_publications_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'application/json'},
+      }
+    }
     let(:users_publications_params) {
       {
         '_json': %w(abc123 xyz321 cws161 fake123),

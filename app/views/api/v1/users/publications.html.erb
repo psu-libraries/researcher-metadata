@@ -1,0 +1,16 @@
+This user has <%= @pubs.count %> publications.
+
+<h4>Publications</h4>
+<ul>
+  <% @pubs.each do |p| %>
+    <li>
+      <%= p.title %>,
+      <%= p.journal_title %>,
+      <%= "#{p.published_on.year}," if p.published_on.present? %>
+      <%= "#{p.volume}," if p.volume.present? %>
+      <%= "#{p.edition}," if p.edition.present? %>
+      <%= "#{p.issue}," if p.issue.present? %>
+      <%= "#{p.page_range}" if p.page_range.present? %>
+    </li>
+  <% end %>
+</ul>
