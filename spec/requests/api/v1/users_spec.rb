@@ -1,6 +1,41 @@
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
+
+  describe 'GET /v1/users/:webaccess_id/contracts' do
+    let!(:user) { create(:user_with_contracts, webaccess_id: 'xyz321', contracts_count: 10) }
+    let(:webaccess_id) { user.webaccess_id }
+    let(:params) { '' }
+    let(:headers) { { "accept" => "application/json" } }
+
+    before do
+      get "/v1/users/#{webaccess_id}/contracts#{params}", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      context "when the user has contracts" do
+        it "returns all the user's contracts" do
+          expect(json_response[:data].size).to eq(10)
+        end
+      end
+      context "when the user has no contracts" do
+        let(:user_without_contracts) { create(:user, webaccess_id: "nocons123") }
+        let(:webaccess_id) { user_without_contracts.webaccess_id }
+        it "returns an empty JSON data hash" do
+          expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html" } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+      end
+    end
+  end
   describe 'GET /v1/users/:webaccess_id/publications' do
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:invisible_pub) { create :publication, visible: false }

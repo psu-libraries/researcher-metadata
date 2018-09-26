@@ -15,5 +15,15 @@ FactoryBot.define do
         create_list(:authorship, evaluator.authorships_count, user: user)
       end
     end
+
+    factory :user_with_contracts do
+      transient do
+        contracts_count 10
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:user_contract, evaluator.contracts_count, user: user)
+      end
+    end
   end
 end

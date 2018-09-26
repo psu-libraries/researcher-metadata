@@ -1,0 +1,11 @@
+<h4>Graduate Student Advising</h4>
+<ul>
+  <% @etds.each do |e| %>
+    <li>
+      <%# e.year %>
+      <%= e.title %>,
+      <%= "(#{e.committee_memberships.where(user: @user).first.role})" %>
+      <%# "#{e.author_last_name}, " + "#{e.author_first_name}" %>
+    </li>
+  <% end %>
+</ul>
