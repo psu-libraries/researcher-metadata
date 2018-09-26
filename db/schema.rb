@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_185209) do
+ActiveRecord::Schema.define(version: 2018_09_26_183431) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -90,6 +90,16 @@ ActiveRecord::Schema.define(version: 2018_09_17_185209) do
     t.datetime "updated_by_user_at"
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
+  end
+
+  create_table "news_feed_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title", null: false
+    t.text "url", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["url"], name: "index_news_feed_items_on_url", unique: true
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -183,6 +193,7 @@ ActiveRecord::Schema.define(version: 2018_09_17_185209) do
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "news_feed_items", "users"
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
