@@ -58,10 +58,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publication_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_publication_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_publications_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 404, invalid_user_contracts_params ) }
+    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 404, invalid_user_contracts_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_with_committee_memberships_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
+    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 200, user_with_committee_memberships_params ) }
     it { is_expected.to validate( :post, '/v1/users/publications', 200, users_publications_params ) }
   end
