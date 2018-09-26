@@ -19,6 +19,7 @@ Rails.application.routes.draw do
       get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
       get 'users/:webaccess_id/contracts' => 'users#contracts', as: :user_contracts
       post 'users/publications' => 'users#users_publications', as: :users_publications
+      get 'users/:webaccess_id/etds' => 'users#etds', as: :user_etds
     end
   end
 end

@@ -11,6 +11,10 @@ module API::V1
       user.contracts
     end
 
+    def etds(params)
+      user.etds
+    end
+
     def publications(params)
       if params[:start_year] && params[:end_year]
         starts_on = Date.new(params[:start_year].to_i)
