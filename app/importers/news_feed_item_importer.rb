@@ -7,7 +7,6 @@ class NewsFeedItemImporter
   def call
     selector = "//a[starts-with(@href, \"mailto:\")]/@href"
     rss_feeds = get_rss_feeds
-    puts rss_feeds.first
     rss_feeds.each do |feed|
       rss = RSS::Parser.parse(open(feed).read, false).items
       rss.each do |result|
