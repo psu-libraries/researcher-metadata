@@ -15,17 +15,18 @@ class NewsFeedItemImporter
         addresses = nodes.collect {|n| n.value[7..-1]}
         addresses.each do |a|
           if a.end_with?("psu.edu")
-            if validate_user(a) ==  true
+            if local_user(a) ==  true
               webaccess_id = a[0..-9]
-              puts webaccess_id
-              user = User.find_by(webaccess_id: webaccess_id)
+              #puts webaccess_id
+              u = User.find_by(webaccess_id: webaccess_id)
 
-              begin
-                NewsFeedItem.create!(user:        user,
+              nfi = NewsFeedItem.new(user:        u,
                                      title:       result.title,
                                      url:         result.link,
                                      description: result.description)
-              rescue ActiveRecord::RecordNotUnique => e
+
+              if nfi.valid?
+                nfi.save!
               end
             end
           end
@@ -37,7 +38,7 @@ class NewsFeedItemImporter
 
   private
 
-  def validate_user(q)
+  def local_user(q)
     users = User.pluck(:webaccess_id)
     if users.include? q[0..-9]
       true
