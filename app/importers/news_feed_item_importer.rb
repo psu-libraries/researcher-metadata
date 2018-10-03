@@ -26,8 +26,10 @@ class NewsFeedItemImporter
                                      url:         result.link,
                                      description: result.description)
 
-              if nfi.valid?
+              begin
+                nfi.validate!
                 nfi.save!
+              rescue ActiveRecord::RecordNotUnique => e
               end
             end
           end
