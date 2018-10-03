@@ -28,11 +28,11 @@ FactoryBot.define do
 
     factory :user_with_news_feed_items do
       transient do
-        contracts_count 10
+        news_feed_items_count 10
       end
 
       after(:create) do |user, evaluator|
-        create_list(:news_feed_item, evaluator.news_feed_item_count, user: user)
+        create_list(:news_feed_item, evaluator.news_feed_items_count, user: user)
       end
     end
   end

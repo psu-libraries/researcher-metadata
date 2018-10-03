@@ -7,6 +7,10 @@ module API::V1
 
     attr_reader :user
 
+    def news_feed_items(params)
+      user.news_feed_items
+    end
+
     def contracts(params)
       user.contracts
     end

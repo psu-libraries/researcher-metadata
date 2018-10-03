@@ -7,17 +7,17 @@ namespace :import do
     ActivityInsightUserImporter.new(filename: args.filename).call
   end
 
-  desc 'Import RSS news feed items'
-  task :rss_news => :environment do
-    NewsFeedItemImporter.new().call
-  end
-
   desc 'Import Activity Insight contracts'
   task :ai_contracts, [:filename] => :environment do |_task, args|
     args.with_defaults(
       filename: filename_for(:ai_contracts)
     )
     ActivityInsightContractImporter.new(filename: args.filename).call
+  end
+
+  desc 'Import PSU RSS news feed items'
+  task :rss_news => :environment do
+    NewsFeedItemImporter.new().call
   end
 
   desc 'Import Activity Insight publications'

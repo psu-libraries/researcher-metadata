@@ -3,19 +3,6 @@ module API::V1
     include Swagger::Blocks
     include ActionController::MimeResponds
 
-    def news_feed_items
-      user = User.find_by(webaccess_id: params[:webaccess_id])
-      if user
-        @news_feed_items = API::V1::UserQuery.new(user).contracts(params)
-        respond_to do |format|
-          format.html
-          format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_item) }
-        end
-      else
-        render json: { :message => "User not found", :code => 404 }, status: 404
-      end
-    end
-
     def contracts
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
@@ -23,6 +10,19 @@ module API::V1
         respond_to do |format|
           format.html
           format.json { render json: API::V1::ContractSerializer.new(@contracts) }
+        end
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
+    def news_feed_items
+      user = User.find_by(webaccess_id: params[:webaccess_id])
+      if user
+        @news_feed_items = API::V1::UserQuery.new(user).news_feed_items(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_items) }
         end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
