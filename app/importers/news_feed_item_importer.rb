@@ -24,6 +24,7 @@ class NewsFeedItemImporter
               nfi = NewsFeedItem.new(user:        u,
                                      title:       result.title,
                                      url:         result.link,
+                                     pubdate:     result.pubDate,
                                      description: result.description)
 
               begin
