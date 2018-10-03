@@ -10,6 +10,7 @@ class NewsFeedItemImporter
     rss_feeds.each do |feed|
       rss = RSS::Parser.parse(open(feed).read, false).items
       rss.each do |result|
+        puts result
         html_doc = Nokogiri::HTML(open(result.link))
         nodes = html_doc.xpath selector
         addresses = nodes.collect {|n| n.value[7..-1]}
@@ -25,8 +26,10 @@ class NewsFeedItemImporter
                                      url:         result.link,
                                      description: result.description)
 
-              if nfi.valid?
+              begin
+                nfi.validate!
                 nfi.save!
+              rescue ActiveRecord::RecordNotUnique => e
               end
             end
           end
