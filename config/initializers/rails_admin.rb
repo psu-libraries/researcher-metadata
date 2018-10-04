@@ -51,7 +51,7 @@ RailsAdmin.config do |config|
     end
     show
     edit do
-      only [:Publication, :User]
+      only [:Publication, :User, :Contract]
     end
     delete do
       only [:Publication, :User]
