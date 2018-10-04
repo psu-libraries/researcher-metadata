@@ -8,7 +8,7 @@ module API::V1
     attr_reader :user
 
     def contracts(params)
-      user.contracts
+      user.contracts.visible
     end
 
     def etds(params)

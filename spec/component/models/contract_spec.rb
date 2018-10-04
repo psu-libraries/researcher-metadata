@@ -50,4 +50,13 @@ describe Contract, type: :model do
       expect { ci.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
+
+  describe '.visible' do
+    let(:visible_contract1) { create :contract, visible: true }
+    let(:visible_contract2) { create :contract, visible: true }
+    let(:invisible_contract) { create :contract, visible: false }
+    it "returns the contracts that are marked as visible" do
+      expect(Contract.visible).to match_array [visible_contract1, visible_contract2]
+    end
+  end
 end

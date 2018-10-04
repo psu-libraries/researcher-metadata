@@ -4,11 +4,13 @@ describe 'API::V1 Users' do
 
   describe 'GET /v1/users/:webaccess_id/contracts' do
     let!(:user) { create(:user_with_contracts, webaccess_id: 'xyz321', contracts_count: 10) }
+    let!(:invisible_contract) { create :contract, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json" } }
 
     before do
+      create :user_contract, user: user, contract: invisible_contract
       get "/v1/users/#{webaccess_id}/contracts#{params}", headers: headers
     end
 
