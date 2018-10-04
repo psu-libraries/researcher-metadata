@@ -14,6 +14,7 @@ describe 'the contracts table', type: :model do
   it { is_expected.to have_db_column(:award_end_on).of_type(:date) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: false) }
 
   it { is_expected.to have_db_index(:ospkey).unique(true) }
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_09_17_185209) do
+ActiveRecord::Schema.define(version: 2018_10_04_184801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2018_09_17_185209) do
     t.date "award_end_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "visible", default: false
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
