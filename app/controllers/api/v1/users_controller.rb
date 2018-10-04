@@ -51,48 +51,48 @@ module API::V1
       render json: data
     end
 
-#   swagger_path '/v1/users/{webaccess_id}/contracts' do
-#     operation :get do
-#       key :summary, "Retrieve a user's contracts"
-#       key :description, 'Returns a contracts for a user'
-#       key :operationId, 'findUserContracts'
-#       key :produces, [
-#         'application/json',
-#         'text/html'
-#       ]
-#       key :tags, [
-#         'user'
-#       ]
-#       parameter do
-#         key :name, :webaccess_id
-#         key :in, :path
-#         key :description, 'Webaccess ID of user to retrieve contracts'
-#         key :required, true
-#         key :type, :string
-#       end
+    swagger_path '/v1/users/{webaccess_id}/contracts' do
+      operation :get do
+        key :summary, "Retrieve a user's contracts"
+        key :description, 'Returns a contracts for a user'
+        key :operationId, 'findUserContracts'
+        key :produces, [
+          'application/json',
+          'text/html'
+        ]
+        key :tags, [
+          'user'
+        ]
+        parameter do
+          key :name, :webaccess_id
+          key :in, :path
+          key :description, 'Webaccess ID of user to retrieve contracts'
+          key :required, true
+          key :type, :string
+        end
 
-#       response 200 do
-#         key :description, 'user contracts response'
-#         schema do
-#           key :'$ref', :User
-#         end
-#       end
-#       response 404 do
-#         key :description, 'not found'
-#         schema do
-#           key :'$ref', :User
-#           key :required, [:code, :message]
-#           property :code do
-#             key :type, :integer
-#             key :format, :int32
-#           end
-#           property :message do
-#             key :type, :string
-#           end
-#         end
-#       end
-#     end
-#   end
+        response 200 do
+          key :description, 'user contracts response'
+          schema do
+            key :'$ref', :User
+          end
+        end
+        response 404 do
+          key :description, 'not found'
+          schema do
+            key :'$ref', :User
+            key :required, [:code, :message]
+            property :code do
+              key :type, :integer
+              key :format, :int32
+            end
+            property :message do
+              key :type, :string
+            end
+          end
+        end
+      end
+    end
 
     swagger_path '/v1/users/{webaccess_id}/etds' do
       operation :get do
