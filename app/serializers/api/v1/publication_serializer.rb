@@ -22,5 +22,13 @@ module API::V1
          rank: t.rank}
       end
     end
+
+    attribute :pure_ids do |object|
+      object.pure_import_identifiers
+    end
+
+    attribute :activity_insight_ids do |object|
+      object.ai_import_identifiers
+    end
   end
 end
