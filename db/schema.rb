@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_04_184801) do
+ActiveRecord::Schema.define(version: 2018_10_05_194413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,6 +91,28 @@ ActiveRecord::Schema.define(version: 2018_10_04_184801) do
     t.datetime "updated_by_user_at"
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
+  end
+
+  create_table "presentations", force: :cascade do |t|
+    t.text "title", null: false
+    t.string "activity_insight_identifier"
+    t.text "name"
+    t.string "organization"
+    t.string "location"
+    t.date "started_on"
+    t.date "ended_on"
+    t.string "type"
+    t.string "classification"
+    t.string "meet_type"
+    t.integer "attendance"
+    t.string "refereed"
+    t.text "abstract"
+    t.text "comment"
+    t.string "scope"
+    t.datetime "updated_by_user_at"
+    t.boolean "visible", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "publication_imports", force: :cascade do |t|
