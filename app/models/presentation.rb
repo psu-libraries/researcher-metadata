@@ -1,6 +1,4 @@
 class Presentation < ApplicationRecord
-  validates :title, presence: true
-
   scope :visible, -> { where visible: true }
 
   def mark_as_updated_by_user

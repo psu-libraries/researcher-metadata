@@ -4,7 +4,7 @@ require 'component/models/shared_examples_for_an_application_record'
 describe 'the presentations table', type: :model do
   subject { Presentation.new }
 
-  it { is_expected.to have_db_column(:title).of_type(:text).with_options(null: false) }
+  it { is_expected.to have_db_column(:title).of_type(:text) }
   it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:name).of_type(:text) }
   it { is_expected.to have_db_column(:organization).of_type(:string) }
@@ -29,10 +29,6 @@ end
 
 describe Presentation, type: :model do
   it_behaves_like "an application record"
-
-  describe 'validations' do
-    it { is_expected.to validate_presence_of(:title) }
-  end
 
   describe '.visible' do
     let(:visible_pres1) { create :presentation, visible: true }
