@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_05_194413) do
+ActiveRecord::Schema.define(version: 2018_10_05_213438) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -113,6 +113,7 @@ ActiveRecord::Schema.define(version: 2018_10_05_194413) do
     t.boolean "visible", default: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
   end
 
   create_table "publication_imports", force: :cascade do |t|

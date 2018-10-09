@@ -39,6 +39,12 @@ namespace :import do
     ActivityInsightContributorImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight presentations'
+  task :ai_presentations, [:filename] => :environment do |_task, args|
+    args.with_defaults(filename: filename_for(:ai_presentations))
+    ActivityInsightPresentationImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Pure Users'
   task :pure_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -121,6 +127,7 @@ def filename_for(key)
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
   when :ai_contracts then Rails.root.join('db/data/ai_contracts.csv')
+  when :ai_presentations then Rails.root.join('db/data/ai_presentations.csv')
   end
 end
 
