@@ -11,7 +11,7 @@ describe 'the presentations table', type: :model do
   it { is_expected.to have_db_column(:location).of_type(:string) }
   it { is_expected.to have_db_column(:started_on).of_type(:date) }
   it { is_expected.to have_db_column(:ended_on).of_type(:date) }
-  it { is_expected.to have_db_column(:type).of_type(:string) }
+  it { is_expected.to have_db_column(:presentation_type).of_type(:string) }
   it { is_expected.to have_db_column(:classification).of_type(:string) }
   it { is_expected.to have_db_column(:meet_type).of_type(:string) }
   it { is_expected.to have_db_column(:attendance).of_type(:integer) }
