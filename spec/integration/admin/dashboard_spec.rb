@@ -13,6 +13,10 @@ feature "Admin dashboard", type: :feature do
         4.times { create :publication }
         4.times { create :user }
         3.times { create :duplicate_publication_group }
+        6.times { create :contract }
+        7.times { create :presentation }
+        8.times { create :etd }
+
         visit rails_admin.dashboard_path
       end
 
@@ -31,6 +35,18 @@ feature "Admin dashboard", type: :feature do
 
         within 'tr.duplicate_publication_group_links' do
           expect(page).to have_content '3'
+        end
+
+        within 'tr.contract_links' do
+          expect(page).to have_content '6'
+        end
+
+        within 'tr.presentation_links' do
+          expect(page).to have_content '7'
+        end
+
+        within 'tr.etd_links' do
+          expect(page).to have_content '8'
         end
       end
     end
