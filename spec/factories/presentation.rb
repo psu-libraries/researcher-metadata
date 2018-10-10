@@ -1,5 +1,5 @@
 FactoryBot.define do
   factory :presentation do
-    title { 'Test Presentation' }
+    sequence(:activity_insight_identifier) { |n| "ai_#{n}" }
   end
 end

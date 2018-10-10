@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_09_154455) do
+ActiveRecord::Schema.define(version: 2018_10_10_161558) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -95,7 +95,7 @@ ActiveRecord::Schema.define(version: 2018_10_09_154455) do
 
   create_table "presentations", force: :cascade do |t|
     t.text "title"
-    t.string "activity_insight_identifier"
+    t.string "activity_insight_identifier", null: false
     t.text "name"
     t.string "organization"
     t.string "location"

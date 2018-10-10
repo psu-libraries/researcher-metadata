@@ -1,4 +1,6 @@
 class Presentation < ApplicationRecord
+  validates :activity_insight_identifier, presence: true, uniqueness: true
+
   scope :visible, -> { where visible: true }
 
   def mark_as_updated_by_user
