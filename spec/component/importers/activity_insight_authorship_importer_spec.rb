@@ -103,7 +103,7 @@ describe ActivityInsightAuthorshipImporter do
             let!(:pi2) {  create :publication_import, source: 'Activity Insight', source_identifier: '107659765760' }
             let!(:pi3) {  create :publication_import, source: 'Activity Insight', source_identifier: '140751927296' }
 
-            context "when the existing authorship has been updated by a human" do
+            context "when the existing authorship's publication has been updated by a human" do
               before { pi1.publication.update_column(:updated_by_user_at, Time.current ) }
 
               it "creates a new record for every new Penn State authorship and does not update the existing authorship" do
@@ -121,7 +121,7 @@ describe ActivityInsightAuthorshipImporter do
               end
             end
 
-            context "when the existing authorship has not been updated by a human" do
+            context "when the existing authorship's publication has not been updated by a human" do
               it "creates a new record for every new Penn State authorship and updates the existing authorship" do
                 expect { importer.call }.to change { Authorship.count }.by 3
 
