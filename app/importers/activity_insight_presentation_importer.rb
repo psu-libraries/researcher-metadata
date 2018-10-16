@@ -111,4 +111,8 @@ class ActivityInsightPresentationImporter < ActivityInsightCSVImporter
     end
     value
   end
+
+  def encoding
+    'Windows-1252'
+  end
 end
