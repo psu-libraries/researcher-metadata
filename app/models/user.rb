@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :contracts, through: :user_contracts
   has_many :committee_memberships, inverse_of: :user
   has_many :etds, through: :committee_memberships
+  has_many :presentation_contributions
+  has_many :presentations, through: :presentation_contributions
 
   swagger_schema :User do
     property :webaccess_id do

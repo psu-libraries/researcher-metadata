@@ -32,6 +32,9 @@ describe Presentation, type: :model do
 
   it { is_expected.to validate_presence_of(:activity_insight_identifier) }
 
+  it { is_expected.to have_many(:presentation_contributions) }
+  it { is_expected.to have_many(:users).through(:presentation_contributions) }
+
   context "given an otherwise valid presentation" do
     subject { build :presentation }
 

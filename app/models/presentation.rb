@@ -1,4 +1,7 @@
 class Presentation < ApplicationRecord
+  has_many :presentation_contributions
+  has_many :users, through: :presentation_contributions
+
   validates :activity_insight_identifier, presence: true, uniqueness: true
 
   scope :visible, -> { where visible: true }

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_17_155638) do
+ActiveRecord::Schema.define(version: 2018_10_17_215146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -104,6 +104,19 @@ ActiveRecord::Schema.define(version: 2018_10_17_155638) do
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_organizations_on_parent_id"
     t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
+  end
+
+  create_table "presentation_contributions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "presentation_id", null: false
+    t.integer "position"
+    t.string "activity_insight_identifier"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_identifier"], name: "index_presentation_contributions_on_activity_insight_identifier", unique: true
+    t.index ["presentation_id"], name: "index_presentation_contributions_on_presentation_id"
+    t.index ["user_id"], name: "index_presentation_contributions_on_user_id"
   end
 
   create_table "presentations", force: :cascade do |t|
@@ -221,6 +234,8 @@ ActiveRecord::Schema.define(version: 2018_10_17_155638) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
+  add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
+  add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
