@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_17_135932) do
+ActiveRecord::Schema.define(version: 2018_10_17_155638) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -98,7 +98,7 @@ ActiveRecord::Schema.define(version: 2018_10_17_135932) do
     t.boolean "visible"
     t.string "pure_uuid"
     t.string "pure_external_identifier"
-    t.string "type"
+    t.string "organization_type"
     t.integer "parent_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false

@@ -8,7 +8,7 @@ describe 'the organizations table', type: :model do
   it { is_expected.to have_db_column(:visible).of_type(:boolean) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
   it { is_expected.to have_db_column(:pure_external_identifier).of_type(:string) }
-  it { is_expected.to have_db_column(:type).of_type(:string) }
+  it { is_expected.to have_db_column(:organization_type).of_type(:string) }
   it { is_expected.to have_db_column(:parent_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
