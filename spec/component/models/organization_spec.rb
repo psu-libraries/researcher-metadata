@@ -23,6 +23,6 @@ describe Organization, type: :model do
 
   it { is_expected.to validate_presence_of(:name) }
 
-  it { is_expected.to belong_to(:parent).class_name(:Organization) }
+  it { is_expected.to belong_to(:parent).class_name(:Organization).optional }
   it { is_expected.to have_many(:children).class_name(:Organization) }
 end
