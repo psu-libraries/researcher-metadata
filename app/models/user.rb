@@ -81,6 +81,7 @@ class User < ApplicationRecord
       field(:updated_by_user_at)
 
       field(:publications)
+      field(:presentations)
     end
 
     create do

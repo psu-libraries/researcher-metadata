@@ -18,10 +18,17 @@ feature "Admin presentation detail page", type: :feature do
                        abstract: 'Test Abstract',
                        comment: 'Test Comment',
                        scope: 'Test Scope' }
-  
+
+  let!(:user1) { create :user, first_name: 'Susan', last_name: 'Testuser' }
+  let!(:user2) { create :user, first_name: 'Bob', last_name: 'Tester' }
+
 
   context "when the current user is an admin" do
-    before { authenticate_admin_user }
+    before do
+      authenticate_admin_user
+      create :presentation_contribution, user: user1, presentation: pres
+      create :presentation_contribution, user: user2, presentation: pres
+    end
 
     describe "the page content" do
       before { visit rails_admin.show_path(model_name: :presentation, id: pres.id) }
@@ -84,6 +91,11 @@ feature "Admin presentation detail page", type: :feature do
 
       it "shows the presentation's scope" do
         expect(page).to have_content "Test Scope"
+      end
+
+      it "shows the presentation's users" do
+        expect(page).to have_link "Susan Testuser"
+        expect(page).to have_link "Bob Tester"
       end
     end
 

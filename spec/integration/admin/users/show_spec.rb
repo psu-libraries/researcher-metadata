@@ -20,6 +20,9 @@ feature "Admin user detail page", type: :feature do
                        published_on: Date.new(2018, 1, 1),
                        duplicate_group: group }
 
+  let!(:pres1) { create :presentation, title: "Bob's First Presentation" }
+  let!(:pres2) { create :presentation, name: "Bob's Second Presentation" }
+
   let(:group) { create :duplicate_publication_group }
 
   context "when the current user is an admin" do
@@ -27,6 +30,9 @@ feature "Admin user detail page", type: :feature do
       authenticate_admin_user
       create :authorship, user: user, publication: pub1
       create :authorship, user: user, publication: pub2
+
+      create :presentation_contribution, user: user, presentation: pres1
+      create :presentation_contribution, user: user, presentation: pres2
     end
 
     describe "the page content" do
@@ -63,6 +69,11 @@ feature "Admin user detail page", type: :feature do
         expect(page).to have_content "Second Publisher"
         expect(page).to have_content "2018"
         expect(page).to have_link "Duplicate group ##{group.id}"
+      end
+
+      it "shows the user's presentations" do
+        expect(page).to have_link "Bob's First Presentation"
+        expect(page).to have_link "Bob's Second Presentation"
       end
     end
 

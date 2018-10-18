@@ -59,4 +59,49 @@ describe Presentation, type: :model do
       expect(pres.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
+
+  describe '#label_name' do
+    let(:p) { create :presentation, name: name, title: title }
+
+    context "when the presentation has no title or name" do
+      let(:title) { nil }
+      let(:name) { nil }
+
+      it "returns the presentation's ID" do
+        expect(p.label_name).to eq p.id.to_s
+      end
+    end
+
+    context "when the presentation has a name" do
+      let(:name) { 'Test Name' }
+
+      context "when the presentation has a title" do
+        let(:title) { 'Test Title' }
+
+        it "returns the presentation's name" do
+          expect(p.label_name).to eq 'Test Name'
+        end
+      end
+
+      context "when the presentation has no title" do
+        let(:title) { nil }
+
+        it "returns the presentation's name" do
+          expect(p.label_name).to eq 'Test Name'
+        end
+      end
+    end
+
+    context "when the presentation has a title" do
+      let(:title) { 'Test Title' }
+
+      context "when the presentation has no name" do
+        let(:name) { nil }
+
+        it "returns the presentation's title" do
+          expect(p.label_name).to eq 'Test Title'
+        end
+      end
+    end
+  end
 end

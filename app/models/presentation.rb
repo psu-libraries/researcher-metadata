@@ -10,9 +10,15 @@ class Presentation < ApplicationRecord
     self.updated_by_user_at = Time.current
   end
 
+  def label_name
+    self.name.presence || self.title.presence || self.id.to_s
+  end
+
   rails_admin do
+    object_label_method { :label_name }
+
     edit do
-      field(:visible) { label 'Visible via API?'}
+      field(:visible) { label 'Visible via API?' }
     end
   end
 end
