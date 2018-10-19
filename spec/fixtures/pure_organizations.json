@@ -1,0 +1,213 @@
+{
+  "count" : 262,
+  "items" : [ {
+    "pureId" : 8288514,
+    "externalId" : "EXT-ID-1",
+    "externalIdSource" : "synchronisedOrganisation",
+    "externallyManaged" : true,
+    "uuid" : "pure-uuid-001",
+    "period" : {
+      "startDate" : "1855-02-22T12:00:00.000+0000"
+    },
+    "info" : {
+      "createdBy" : "bob",
+      "createdDate" : "2016-12-23T14:06:26.067+0000",
+      "modifiedBy" : "abc123@psu.edu",
+      "modifiedDate" : "2017-07-25T17:49:20.007+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/organisations/692237a4-e66a-413f-8ea9-40e0d30229c1"
+    },
+    "name" : [ {
+      "value" : "Biology"
+    } ],
+    "type" : [ {
+      "value" : "Department",
+      "pureId" : 8288457,
+      "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/institute"
+    } ],
+    "visibility" : [ {
+      "value" : "Public - No restriction",
+      "key" : "FREE"
+    } ],
+    "profileInformations" : [ {
+      "formatted" : true,
+      "value" : "Research Interests",
+      "pureId" : 8288520,
+      "externalId" : "organisation_profile",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "typeUri" : "/dk/atira/pure/organisation/customfields/organisation_profile",
+      "type" : "Organization profile"
+    } ],
+    "ids" : [ {
+      "pureId" : 8288521,
+      "externalId" : "organisationid:EXT-ID-1",
+      "externalIdSource" : "synchronisedOrganisation",
+      "typeUri" : "/dk/atira/pure/organisation/organisationsources/organisationid",
+      "type" : "Organization ID",
+      "value" : "EXT-ID-1"
+    } ],
+    "addresses" : [ {
+      "pureId" : 8288516,
+      "externalId" : "postal",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "addressType" : [ {
+        "value" : "Postal address",
+        "pureId" : 56,
+        "uri" : "/dk/atira/pure/organisation/organisationaddresstype/postal"
+      } ],
+      "country" : [ {
+        "value" : "United States",
+        "pureId" : 577,
+        "uri" : "/dk/atira/pure/core/countries/us"
+      } ]
+    } ],
+    "parents" : [ {
+      "uuid" : "pure-uuid-002",
+      "name" : [ {
+        "value" : "College of Science"
+      } ],
+      "type" : [ {
+        "value" : "College",
+        "pureId" : 8288457,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/institute"
+      } ]
+    } ]
+  }, {
+    "pureId" : 8288527,
+    "externalId" : "EXT-ID-2",
+    "externalIdSource" : "synchronisedOrganisation",
+    "externallyManaged" : true,
+    "uuid" : "pure-uuid-002",
+    "period" : {
+      "startDate" : "1855-02-22T12:00:00.000+0000"
+    },
+    "info" : {
+      "createdBy" : "bob",
+      "createdDate" : "2016-12-23T14:06:26.246+0000",
+      "modifiedBy" : "abc123@psu.edu",
+      "modifiedDate" : "2017-06-09T19:35:18.460+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/organisations/68573cdc-7eb1-4178-88f2-65095fbe4a50"
+    },
+    "name" : [ {
+      "value" : "College of Science"
+    } ],
+    "type" : [ {
+      "value" : "College",
+      "pureId" : 8288437,
+      "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/college"
+    } ],
+    "visibility" : [ {
+      "value" : "Public - No restriction",
+      "key" : "FREE"
+    } ],
+    "profileInformations" : [ {
+      "formatted" : true,
+      "value" : "Research Interests",
+      "pureId" : 8288533,
+      "externalId" : "organisation_profile",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "typeUri" : "/dk/atira/pure/organisation/customfields/organisation_profile",
+      "type" : "Organization profile"
+    } ],
+    "ids" : [ {
+      "pureId" : 8288534,
+      "externalId" : "organisationid:EXT-ID-2",
+      "externalIdSource" : "synchronisedOrganisation",
+      "typeUri" : "/dk/atira/pure/organisation/organisationsources/organisationid",
+      "type" : "Organization ID",
+      "value" : "EXT-ID-2"
+    } ],
+    "addresses" : [ {
+      "pureId" : 8288529,
+      "externalId" : "postal",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "addressType" : [ {
+        "value" : "Postal address",
+        "pureId" : 56,
+        "uri" : "/dk/atira/pure/organisation/organisationaddresstype/postal"
+      } ],
+      "country" : [ {
+        "value" : "United States",
+        "pureId" : 577,
+        "uri" : "/dk/atira/pure/core/countries/us"
+      } ]
+    } ]
+  }, {
+    "pureId" : 8288553,
+    "externalId" : "EXT-ID-3",
+    "externalIdSource" : "synchronisedOrganisation",
+    "externallyManaged" : true,
+    "uuid" : "pure-uuid-003",
+    "period" : {
+      "startDate" : "1855-02-22T12:00:00.000+0000"
+    },
+    "info" : {
+      "createdBy" : "bob",
+      "createdDate" : "2016-12-23T14:06:26.434+0000",
+      "modifiedBy" : "abc123@psu.edu",
+      "modifiedDate" : "2017-06-09T19:35:20.256+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/organisations/f09adc6a-1843-4d41-91fc-5f5538d200a9"
+    },
+    "name" : [ {
+      "value" : "College of Nursing"
+    } ],
+    "type" : [ {
+      "value" : "College",
+      "pureId" : 8288437,
+      "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/college"
+    } ],
+    "visibility" : [ {
+      "value" : "Public - No restriction",
+      "key" : "FREE"
+    } ],
+    "profileInformations" : [ {
+      "formatted" : true,
+      "value" : "Research Interests",
+      "pureId" : 8288559,
+      "externalId" : "organisation_profile",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "typeUri" : "/dk/atira/pure/organisation/customfields/organisation_profile",
+      "type" : "Organization profile"
+    } ],
+    "ids" : [ {
+      "pureId" : 8288560,
+      "externalId" : "organisationid:EXT-ID-3",
+      "externalIdSource" : "synchronisedOrganisation",
+      "typeUri" : "/dk/atira/pure/organisation/organisationsources/organisationid",
+      "type" : "Organization ID",
+      "value" : "EXT-ID-3"
+    } ],
+    "addresses" : [ {
+      "pureId" : 8288555,
+      "externalId" : "postal",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "addressType" : [ {
+        "value" : "Postal address",
+        "pureId" : 56,
+        "uri" : "/dk/atira/pure/organisation/organisationaddresstype/postal"
+      } ],
+      "country" : [ {
+        "value" : "United States",
+        "pureId" : 577,
+        "uri" : "/dk/atira/pure/core/countries/us"
+      } ]
+    } ],
+    "parents" : [ {
+      "uuid" : "pure-uuid-004",
+      "name" : [ {
+        "value" : "Penn State University Park"
+      } ],
+      "type" : [ {
+        "value" : "Campus",
+        "pureId" : 8288447,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/campus"
+      } ]
+    } ]
+  } 
+]
+}
