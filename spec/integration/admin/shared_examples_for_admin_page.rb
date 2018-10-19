@@ -17,6 +17,12 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
+  it "shows a link to the Organizations index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Organizations'
+    end
+  end
+
   it "shows a link to the presentations index" do
     within '.sidebar-nav' do
       expect(page).to have_link 'Presentations'

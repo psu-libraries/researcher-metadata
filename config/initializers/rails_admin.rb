@@ -45,7 +45,8 @@ RailsAdmin.config do |config|
             :DuplicatePublicationGroup,
             :ETD,
             :Contract,
-            :Presentation]
+            :Presentation,
+            :Organization]
     end
     new do
       only [:Publication, :User]
