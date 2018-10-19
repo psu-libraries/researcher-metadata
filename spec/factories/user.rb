@@ -26,6 +26,16 @@ FactoryBot.define do
       end
     end
 
+    factory :user_with_presentations do
+      transient do
+        presentations_count 10
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:presentation_contribution, evaluator.presentations_count, user: user)
+      end
+    end
+
     factory :user_with_committee_memberships do
       transient do
         committee_memberships_count 10

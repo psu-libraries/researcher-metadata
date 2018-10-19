@@ -7,6 +7,10 @@ module API::V1
 
     attr_reader :user
 
+    def presentations(params)
+      user.presentations.visible
+    end
+
     def contracts(params)
       user.contracts.visible
     end
