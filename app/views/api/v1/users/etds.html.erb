@@ -1,0 +1,9 @@
+<h4>Graduate Student Advising</h4>
+<ul>
+  <% @etds.each do |e| %>
+    <li>
+      <%= e.title %>,
+      <%= "(#{e.committee_memberships.where(user: @user).pluck(:role).join(", ")})" %>
+    </li>
+  <% end %>
+</ul>

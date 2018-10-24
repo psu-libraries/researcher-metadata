@@ -14,6 +14,7 @@ describe 'the contracts table', type: :model do
   it { is_expected.to have_db_column(:award_end_on).of_type(:date) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: false) }
 
   it { is_expected.to have_db_index(:ospkey).unique(true) }
 end
@@ -47,6 +48,15 @@ describe Contract, type: :model do
     it "also deletes the contract's contract_imports" do
       c.destroy
       expect { ci.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe '.visible' do
+    let(:visible_contract1) { create :contract, visible: true }
+    let(:visible_contract2) { create :contract, visible: true }
+    let(:invisible_contract) { create :contract, visible: false }
+    it "returns the contracts that are marked as visible" do
+      expect(Contract.visible).to match_array [visible_contract1, visible_contract2]
     end
   end
 end

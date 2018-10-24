@@ -11,8 +11,16 @@ module API::V1
       user.news_feed_items
     end
 
+    def presentations(params)
+      user.presentations.visible
+    end
+
     def contracts(params)
-      user.contracts
+      user.contracts.visible
+    end
+
+    def etds(params)
+      user.etds
     end
 
     def publications(params)

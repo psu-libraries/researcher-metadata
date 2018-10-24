@@ -147,8 +147,10 @@ feature "Admin duplicate publication group detail page", type: :feature do
       end
 
       it "shows the import identifiers for the publications in the group" do
-        expect(page).to have_content "pure-abc123, pure-xyz789"
-        expect(page).to have_content "ai-abc123, ai-xyz789"
+        expect(page).to have_content "pure-abc123"
+        expect(page).to have_content "pure-xyz789"
+        expect(page).to have_content "ai-abc123"
+        expect(page).to have_content "ai-xyz789"
       end
     end
 

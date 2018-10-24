@@ -35,5 +35,25 @@ FactoryBot.define do
         create_list(:news_feed_item, evaluator.news_feed_items_count, user: user)
       end
     end
+
+    factory :user_with_presentations do
+      transient do
+        presentations_count 10
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:presentation_contribution, evaluator.presentations_count, user: user)
+      end
+    end
+
+    factory :user_with_committee_memberships do
+      transient do
+        committee_memberships_count 10
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:committee_membership, evaluator.committee_memberships_count, user: user)
+      end
+    end
   end
 end

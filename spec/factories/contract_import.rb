@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :contract_import do
     contract { create :contract }
-    activity_insight_id { 123456 }
+    sequence(:activity_insight_id) { |n| n }
   end
 end

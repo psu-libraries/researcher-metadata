@@ -3,6 +3,19 @@ module API::V1
     include Swagger::Blocks
     include ActionController::MimeResponds
 
+    def presentations
+      user = User.find_by(webaccess_id: params[:webaccess_id])
+      if user
+        @presentations = API::V1::UserQuery.new(user).presentations(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::PresentationSerializer.new(@presentations) }
+        end
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
     def contracts
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
@@ -23,6 +36,19 @@ module API::V1
         respond_to do |format|
           format.html
           format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_items) }
+        end
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
+    def etds
+      @user = User.find_by(webaccess_id: params[:webaccess_id])
+      if @user
+        @etds = API::V1::UserQuery.new(@user).etds(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::ETDSerializer.new(@etds) }
         end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
@@ -93,6 +119,49 @@ module API::V1
       end
     end
 
+    swagger_path '/v1/users/{webaccess_id}/presentations' do
+      operation :get do
+        key :summary, "Retrieve a user's presentations"
+        key :description, 'Returns presentations for a user'
+        key :operationId, 'findUserPresentations'
+        key :produces, [
+          'application/json',
+          'text/html'
+        ]
+        key :tags, [
+          'user'
+        ]
+        parameter do
+          key :name, :webaccess_id
+          key :in, :path
+          key :description, 'Webaccess ID of user to retrieve contracts'
+          key :required, true
+          key :type, :string
+        end
+
+        response 200 do
+          key :description, 'user presentations response'
+          schema do
+            key :'$ref', :User
+          end
+        end
+        response 404 do
+          key :description, 'not found'
+          schema do
+            key :'$ref', :User
+            key :required, [:code, :message]
+            property :code do
+              key :type, :integer
+              key :format, :int32
+            end
+            property :message do
+              key :type, :string
+            end
+          end
+        end
+      end
+    end
+
     swagger_path '/v1/users/{webaccess_id}/contracts' do
       operation :get do
         key :summary, "Retrieve a user's contracts"
@@ -115,6 +184,49 @@ module API::V1
 
         response 200 do
           key :description, 'user contracts response'
+          schema do
+            key :'$ref', :User
+          end
+        end
+        response 404 do
+          key :description, 'not found'
+          schema do
+            key :'$ref', :User
+            key :required, [:code, :message]
+            property :code do
+              key :type, :integer
+              key :format, :int32
+            end
+            property :message do
+              key :type, :string
+            end
+          end
+        end
+      end
+    end
+
+    swagger_path '/v1/users/{webaccess_id}/etds' do
+      operation :get do
+        key :summary, "Retrieve a user's student advising history"
+        key :description, 'Returns ETDs for which the user served on the committee'
+        key :operationId, 'findUserETDs'
+        key :produces, [
+          'application/json',
+          'text/html'
+        ]
+        key :tags, [
+          'user'
+        ]
+        parameter do
+          key :name, :webaccess_id
+          key :in, :path
+          key :description, 'Webaccess ID of user to retrieve ETDs'
+          key :required, true
+          key :type, :string
+        end
+
+        response 200 do
+          key :description, 'user ETDs response'
           schema do
             key :'$ref', :User
           end

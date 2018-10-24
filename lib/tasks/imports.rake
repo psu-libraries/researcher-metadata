@@ -44,12 +44,32 @@ namespace :import do
     ActivityInsightContributorImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight presentations'
+  task :ai_presentations, [:filename] => :environment do |_task, args|
+    args.with_defaults(filename: filename_for(:ai_presentations))
+    ActivityInsightPresentationImporter.new(filename: args.filename).call
+  end
+
+  desc 'Import Activity Insight presenters'
+  task :ai_presenters, [:filename] => :environment do |_task, args|
+    args.with_defaults(filename: filename_for(:ai_presenters))
+    ActivityInsightPresenterImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Pure Users'
   task :pure_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
       filename: filename_for(:pure_users)
     )
     PureUserImporter.new(filename: args.filename).call
+  end
+
+  desc 'Import Pure Organizations'
+  task :pure_organizations, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:pure_organizations)
+    )
+    PureOrganizationsImporter.new(filename: args.filename).call
   end
 
   desc 'Import Pure publications'
@@ -85,6 +105,7 @@ namespace :import do
   end
 
   desc 'Import all data'
+  #TODO Update this task with the correct order of dependencies
   task :all => :environment do
     PureUserImporter.new(
       filename: filename_for(:pure_users)
@@ -119,6 +140,7 @@ end
 def filename_for(key)
   case key
   when :pure_users then Rails.root.join('db/data/pure_users.json')
+  when :pure_organizations then Rails.root.join('db/data/pure_organizations.json')
   when :pure_publication_tags then Rails.root.join('db/data/pure_publication_fingerprints.json')
   when :ai_users then Rails.root.join('db/data/ai_users.csv')
   when :ai_publications then Rails.root.join('db/data/ai_publications.csv')
@@ -126,6 +148,8 @@ def filename_for(key)
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
   when :ai_contracts then Rails.root.join('db/data/ai_contracts.csv')
+  when :ai_presentations then Rails.root.join('db/data/ai_presentations.csv')
+  when :ai_presenters then Rails.root.join('db/data/ai_presenters.csv')
   end
 end
 

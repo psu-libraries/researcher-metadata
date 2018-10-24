@@ -2,13 +2,56 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
 
-  describe 'GET /v1/users/:webaccess_id/contracts' do
-    let!(:user) { create(:user_with_contracts, webaccess_id: 'xyz321', contracts_count: 10) }
+  describe 'GET /v1/users/:webaccess_id/presentations' do
+    let!(:user) { create(:user_with_presentations, webaccess_id: 'xyz321', presentations_count: 10) }
+    let!(:invisible_presentation) {
+      user.presentations.create(
+        activity_insight_identifier: 'abc123',
+        visible: false
+      )
+    }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json" } }
 
     before do
+      get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      context "when the user has presentations" do
+        it "returns all the user's visible presentations" do
+          expect(json_response[:data].size).to eq(10)
+        end
+      end
+      context "when the user has no presentations" do
+        let(:user_without_visible_presentations) { create(:user, webaccess_id: "nopres123") }
+        let(:webaccess_id) { user_without_visible_presentations.webaccess_id }
+        it "returns an empty JSON data hash" do
+          expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html" } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+      end
+    end
+  end
+
+  describe 'GET /v1/users/:webaccess_id/contracts' do
+    let!(:user) { create(:user_with_contracts, webaccess_id: 'xyz321', contracts_count: 10) }
+    let!(:invisible_contract) { create :contract, visible: false }
+    let(:webaccess_id) { user.webaccess_id }
+    let(:params) { '' }
+    let(:headers) { { "accept" => "application/json" } }
+
+    before do
+      create :user_contract, user: user, contract: invisible_contract
       get "/v1/users/#{webaccess_id}/contracts#{params}", headers: headers
     end
 
@@ -148,6 +191,47 @@ describe 'API::V1 Users' do
         expect(json_response[:abc123][:data].count).to eq(5)
         expect(json_response[:xyz321][:data].count).to eq(10)
         expect(json_response[:cws161][:data].count).to eq(0)
+      end
+    end
+  end
+
+  describe 'GET /v1/users/:webaccess_id/etds' do
+    let!(:user) { create(:user_with_committee_memberships, webaccess_id: 'xyz321', committee_memberships_count: 10) }
+    let(:webaccess_id) { user.webaccess_id }
+    let(:params) { '' }
+    let(:headers) { { "accept" => "application/json" } }
+
+    before do
+      get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      context "when the user served on etd committees" do
+        it "returns all the etds the user was a committee member on" do
+          expect(json_response[:data].size).to eq(10)
+        end
+      end
+      context "when the user has not served on any committees" do
+        let(:user_without_etds) { create(:user, webaccess_id: "nocommittees123") }
+        let(:webaccess_id) { user_without_etds.webaccess_id }
+        it "returns an empty JSON data hash" do
+          expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html" } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+      end
+    end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
       end
     end
   end

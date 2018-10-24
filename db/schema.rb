@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_03_153328) do
+ActiveRecord::Schema.define(version: 2018_10_17_215146) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2018_10_03_153328) do
     t.date "award_end_on"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "visible", default: false
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
@@ -101,6 +102,55 @@ ActiveRecord::Schema.define(version: 2018_10_03_153328) do
     t.datetime "updated_at", null: false
     t.date "pubdate", null: false
     t.index ["url"], name: "index_news_feed_items_on_url", unique: true
+  end
+
+  create_table "organizations", force: :cascade do |t|
+    t.text "name", null: false
+    t.boolean "visible"
+    t.string "pure_uuid"
+    t.string "pure_external_identifier"
+    t.string "organization_type"
+    t.integer "parent_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["parent_id"], name: "index_organizations_on_parent_id"
+    t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
+  end
+
+  create_table "presentation_contributions", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "presentation_id", null: false
+    t.integer "position"
+    t.string "activity_insight_identifier"
+    t.string "role"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_identifier"], name: "index_presentation_contributions_on_activity_insight_identifier", unique: true
+    t.index ["presentation_id"], name: "index_presentation_contributions_on_presentation_id"
+    t.index ["user_id"], name: "index_presentation_contributions_on_user_id"
+  end
+
+  create_table "presentations", force: :cascade do |t|
+    t.text "title"
+    t.string "activity_insight_identifier", null: false
+    t.text "name"
+    t.string "organization"
+    t.string "location"
+    t.date "started_on"
+    t.date "ended_on"
+    t.string "presentation_type"
+    t.string "classification"
+    t.string "meet_type"
+    t.integer "attendance"
+    t.string "refereed"
+    t.text "abstract"
+    t.text "comment"
+    t.string "scope"
+    t.datetime "updated_by_user_at"
+    t.boolean "visible", default: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -195,6 +245,9 @@ ActiveRecord::Schema.define(version: 2018_10_03_153328) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "news_feed_items", "users"
+  add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
+  add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
+  add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade

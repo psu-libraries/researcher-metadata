@@ -61,6 +61,32 @@ describe API::V1::PublicationSerializer do
                                                     {first_name: 'g', middle_name: 'h', last_name: 'i'}]) }
     end
 
+    context "when the publication does not have imports from Pure" do
+      it { is_expected.to include(:pure_ids => []) }
+    end
+
+    context "when the publications has imports from Pure" do
+      before do
+        create :publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_abc123'
+        create :publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_def456'
+      end
+
+      it { is_expected.to include(:pure_ids => ['pure_abc123', 'pure_def456']) }
+    end
+
+    context "when the publication does not have imports from Activity Insight" do
+      it { is_expected.to include(:activity_insight_ids => []) }
+    end
+
+    context "when the publications has imports from Activity Insight" do
+      before do
+        create :publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_abc123'
+        create :publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_def456'
+      end
+
+      it { is_expected.to include(:activity_insight_ids => ['ai_abc123', 'ai_def456']) }
+    end
+
     context "when the publication does not have tags" do
       it { is_expected.to include(:tags => []) }
     end

@@ -1,0 +1,11 @@
+<h4>Presentations</h4>
+<ul>
+  <% @presentations.each do |p| %>
+    <li>
+      <%= p.title %>,
+      <%= p.classification %>,
+      <%= p.organization %>,
+      <%= "#{p.started_on} - #{p.ended_on}" %>
+    </li>
+  <% end %>
+</ul>

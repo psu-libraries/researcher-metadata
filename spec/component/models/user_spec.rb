@@ -31,6 +31,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:publications).through(:authorships) }
     it { is_expected.to have_many(:user_contracts) }
     it { is_expected.to have_many(:contracts).through(:user_contracts) }
+    it { is_expected.to have_many(:presentation_contributions) }
+    it { is_expected.to have_many(:presentations).through(:presentation_contributions) }
     it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:etds).through(:committee_memberships) }
     it { is_expected.to have_many(:news_feed_items) }

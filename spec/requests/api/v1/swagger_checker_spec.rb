@@ -8,6 +8,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:user_with_contracts) { create(:user_with_contracts, webaccess_id: 'con123', contracts_count: 10) }
     let!(:user_with_news_feed_items) { create(:user_with_news_feed_items, webaccess_id: 'nfi123', news_feed_items_count: 10) }
+    let!(:user_with_presentations) { create(:user_with_presentations, webaccess_id: 'pres123', presentations_count: 10) }
+    let!(:user_with_committee_memberships) { create(:user_with_committee_memberships, webaccess_id: 'etd123', committee_memberships_count: 10) }
     let(:publications_params) { { 'query_string': 'limit=1' } }
     let(:publication_params) { { "id" => publication_1.id, 'query_string': 'limit=1' } }
     let(:user_publications_params) {
@@ -41,6 +43,30 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json'},
       }
     }
+    let(:user_presentations_params) {
+      {
+        "webaccess_id" => user_with_presentations.webaccess_id,
+        "_headers" => {'accept' => 'application/json'}
+      }
+    }
+    let(:invalid_user_presentations_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'application/json'},
+      }
+    }
+    let(:user_with_committee_memberships_params) {
+      {
+        "webaccess_id" => user_with_committee_memberships.webaccess_id,
+        "_headers" => {'accept' => 'application/json'}
+      }
+    }
+    let(:invalid_user_with_committee_memberships_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'application/json'},
+      }
+    }
     let(:invalid_publication_params) { { "id" => -2000 } }
     let(:invalid_user_publications_params) {
       {
@@ -63,6 +89,12 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 200, user_news_feed_items_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 404, invalid_user_presentations_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_with_committee_memberships_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 200, user_with_committee_memberships_params ) }
     it { is_expected.to validate( :post, '/v1/users/publications', 200, users_publications_params ) }
   end
 

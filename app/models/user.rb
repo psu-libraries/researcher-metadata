@@ -27,6 +27,8 @@ class User < ApplicationRecord
   has_many :committee_memberships, inverse_of: :user
   has_many :etds, through: :committee_memberships
   has_many :news_feed_items
+  has_many :presentation_contributions
+  has_many :presentations, through: :presentation_contributions
 
   swagger_schema :User do
     property :webaccess_id do
@@ -80,6 +82,7 @@ class User < ApplicationRecord
       field(:updated_by_user_at)
 
       field(:publications)
+      field(:presentations)
     end
 
     create do

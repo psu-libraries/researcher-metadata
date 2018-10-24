@@ -1,4 +1,34 @@
 shared_examples_for "a page with the admin layout" do
+  it "shows a link to the contracts index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Contracts'
+    end
+  end
+
+  it "shows a link to the duplicate publication groups index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Duplicate publication groups'
+    end
+  end
+
+  it "shows a link to the EDTs index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'ETDs'
+    end
+  end
+
+  it "shows a link to the Organizations index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Organizations'
+    end
+  end
+
+  it "shows a link to the presentations index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Presentations'
+    end
+  end
+
   it "shows a link to the publications index" do
     within '.sidebar-nav' do
       expect(page).to have_link 'Publications'
@@ -11,11 +41,7 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
-  it "shows a link to the duplicate publication groups index" do
-    within '.sidebar-nav' do
-      expect(page).to have_link 'Duplicate publication groups'
-    end
-  end
+
 
   it "shows a link to the admin dashboard" do
     expect(page).to have_link 'Dashboard'

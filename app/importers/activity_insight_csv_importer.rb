@@ -35,6 +35,7 @@ class ActivityInsightCSVImporter < CSVImporter
     end
 
     self.filename = tf.path
+    tf.close
 
     super
 
