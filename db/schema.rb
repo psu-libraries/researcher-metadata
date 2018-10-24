@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_17_215146) do
+ActiveRecord::Schema.define(version: 2018_10_24_164002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -115,6 +115,25 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_organizations_on_parent_id"
     t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
+  end
+
+  create_table "performances", force: :cascade do |t|
+    t.text "title", null: false
+    t.bigint "activity_insight_id", null: false
+    t.string "performance_type"
+    t.text "type_other"
+    t.text "sponsor"
+    t.text "description"
+    t.text "group_name"
+    t.text "location"
+    t.string "delivery_type"
+    t.string "scope"
+    t.date "start_on"
+    t.date "end_on"
+    t.datetime "updated_by_user_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_id"], name: "index_performances_on_activity_insight_id", unique: true
   end
 
   create_table "presentation_contributions", force: :cascade do |t|
