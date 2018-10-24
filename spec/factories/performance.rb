@@ -1,7 +1,6 @@
 FactoryBot.define do
   factory :performance do
     title { 'Test' }
-    sequence(:activity_insight_id) { |n| 100000000 + n }
     performance_type { 'Other' }
     sponsor { 'Test Sponsor' }
     description { 'This is a performance' }

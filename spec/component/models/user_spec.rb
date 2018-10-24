@@ -36,6 +36,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:etds).through(:committee_memberships) }
     it { is_expected.to have_many(:news_feed_items) }
+    it { is_expected.to have_many(:user_performances) }
+    it { is_expected.to have_many(:performances).through(:user_performances) }
   end
 
   describe 'validations' do

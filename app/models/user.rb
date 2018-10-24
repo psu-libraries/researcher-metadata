@@ -29,6 +29,8 @@ class User < ApplicationRecord
   has_many :news_feed_items
   has_many :presentation_contributions
   has_many :presentations, through: :presentation_contributions
+  has_many :user_performances
+  has_many :performances, through: :user_performances
 
   swagger_schema :User do
     property :webaccess_id do

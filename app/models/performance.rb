@@ -3,5 +3,5 @@ class Performance < ApplicationRecord
   has_many :users, through: :user_performances
   has_many :imports, class_name: :PerformanceImport
 
-  validates :title, :activity_insight_id, presence: true
+  validates :title, presence: true
 end
