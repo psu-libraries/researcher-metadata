@@ -46,7 +46,8 @@ RailsAdmin.config do |config|
             :ETD,
             :Contract,
             :Presentation,
-            :Organization]
+            :Organization,
+            :NewsFeedItem]
     end
     new do
       only [:Publication, :User]

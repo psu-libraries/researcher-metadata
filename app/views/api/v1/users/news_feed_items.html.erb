@@ -1,0 +1,9 @@
+<h4>Penn State News Media Mentions</h4>
+<ul>
+  <% @news_feed_items.each do |n| %>
+    <li>
+      <%= link_to "#{n.title}", n.url %>,
+      <%= n.pubdate %>
+    </li>
+  <% end %>
+</ul>

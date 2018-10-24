@@ -28,6 +28,7 @@ class User < ApplicationRecord
   has_many :etds, through: :committee_memberships
   has_many :presentation_contributions
   has_many :presentations, through: :presentation_contributions
+  has_many :news_feed_items
 
   swagger_schema :User do
     property :webaccess_id do

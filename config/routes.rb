@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       resources :publications
       get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
       get 'users/:webaccess_id/contracts' => 'users#contracts', as: :user_contracts
+      get 'users/:webaccess_id/news_feed_items' => 'users#news_feed_items', as: :user_news_feed_items
       post 'users/publications' => 'users#users_publications', as: :users_publications
       get 'users/:webaccess_id/etds' => 'users#etds', as: :user_etds
       get 'users/:webaccess_id/presentations' => 'users#presentations', as: :user_presentations

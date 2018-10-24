@@ -142,6 +142,17 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
   end
 
+  create_table "news_feed_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title", null: false
+    t.text "url", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "pubdate", null: false
+    t.index ["url"], name: "index_news_feed_items_on_url", unique: true
+  end
+
   create_table "publication_imports", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.string "source", null: false
@@ -236,6 +247,7 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
   add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
+  add_foreign_key "news_feed_items", "users"
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
