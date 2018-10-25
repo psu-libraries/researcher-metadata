@@ -4,4 +4,12 @@ class Performance < ApplicationRecord
   has_many :imports, class_name: :PerformanceImport
 
   validates :title, presence: true
+
+  scope :visible, -> { where visible: true }
+
+  rails_admin do
+    edit do
+      field(:visible) { label 'Visible via API?'}
+    end
+  end
 end

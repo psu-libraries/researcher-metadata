@@ -49,4 +49,13 @@ describe Performance, type: :model do
       expect { pi.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
+
+  describe '.visible' do
+    let(:visible_performance1) { create :performance, visible: true }
+    let(:visible_performance2) { create :performance, visible: true }
+    let(:invisible_performance) { create :performance, visible: false }
+    it "returns the performances that are marked as visible" do
+      expect(Performance.visible).to match_array [visible_performance1, visible_performance2]
+    end
+  end
 end
