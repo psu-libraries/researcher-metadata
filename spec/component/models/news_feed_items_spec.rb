@@ -8,7 +8,7 @@ describe 'the news_feed_item table', type: :model do
   it { is_expected.to have_db_column(:title).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:url).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:description).of_type(:text).with_options(null: false) }
-  it { is_expected.to have_db_column(:pubdate).of_type(:date).with_options(null: false) }
+  it { is_expected.to have_db_column(:published_on).of_type(:date).with_options(null: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -20,7 +20,7 @@ describe NewsFeedItem, type: :model do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:url) }
     it { is_expected.to validate_presence_of(:description) }
-    it { is_expected.to validate_presence_of(:pubdate) }
+    it { is_expected.to validate_presence_of(:published_on) }
   end
 
   describe 'associations' do

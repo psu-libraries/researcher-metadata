@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_10_17_215146) do
+ActiveRecord::Schema.define(version: 2018_10_25_163933) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -93,6 +93,17 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
   end
 
+  create_table "news_feed_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "title", null: false
+    t.text "url", null: false
+    t.text "description", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "published_on", null: false
+    t.index ["url"], name: "index_news_feed_items_on_url", unique: true
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.text "name", null: false
     t.boolean "visible"
@@ -104,6 +115,33 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.datetime "updated_at", null: false
     t.index ["parent_id"], name: "index_organizations_on_parent_id"
     t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
+  end
+
+  create_table "performance_imports", force: :cascade do |t|
+    t.integer "performance_id", null: false
+    t.integer "activity_insight_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["activity_insight_id"], name: "index_performance_imports_on_activity_insight_id", unique: true
+    t.index ["performance_id"], name: "index_performance_imports_on_performance_id"
+  end
+
+  create_table "performances", force: :cascade do |t|
+    t.text "title", null: false
+    t.string "performance_type"
+    t.text "type_other"
+    t.text "sponsor"
+    t.text "description"
+    t.text "group_name"
+    t.text "location"
+    t.string "delivery_type"
+    t.string "scope"
+    t.date "start_on"
+    t.date "end_on"
+    t.datetime "updated_by_user_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.boolean "visible", default: false
   end
 
   create_table "presentation_contributions", force: :cascade do |t|
@@ -140,17 +178,6 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
-  end
-
-  create_table "news_feed_items", force: :cascade do |t|
-    t.integer "user_id", null: false
-    t.string "title", null: false
-    t.text "url", null: false
-    t.text "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.date "pubdate", null: false
-    t.index ["url"], name: "index_news_feed_items_on_url", unique: true
   end
 
   create_table "publication_imports", force: :cascade do |t|
@@ -220,6 +247,15 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
     t.index ["user_id"], name: "index_user_contracts_on_user_id"
   end
 
+  create_table "user_performances", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "performance_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["performance_id"], name: "index_user_performances_on_performance_id"
+    t.index ["user_id"], name: "index_user_performances_on_user_id"
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "activity_insight_identifier"
     t.string "first_name"
@@ -244,14 +280,17 @@ ActiveRecord::Schema.define(version: 2018_10_17_215146) do
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "news_feed_items", "users"
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
+  add_foreign_key "performance_imports", "performances", on_delete: :cascade
   add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
   add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
-  add_foreign_key "news_feed_items", "users"
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
+  add_foreign_key "user_performances", "performances", on_delete: :cascade
+  add_foreign_key "user_performances", "users", on_delete: :cascade
 end
