@@ -29,6 +29,8 @@ class User < ApplicationRecord
   has_many :presentation_contributions
   has_many :presentations, through: :presentation_contributions
   has_many :news_feed_items
+  has_many :user_organization_memberships, inverse_of: :user
+  has_many :organizations, through: :user_organization_memberships
 
   swagger_schema :User do
     property :webaccess_id do
