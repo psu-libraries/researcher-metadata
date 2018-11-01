@@ -13,6 +13,8 @@ class UserOrganizationMembership < ApplicationRecord
       field(:organization)
       field(:user)
       field(:position_title)
+      field(:started_on)
+      field(:ended_on)
 
       field(:pure_identifier) { read_only true }
       field(:imported_from_pure) { read_only true }

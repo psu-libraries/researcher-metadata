@@ -9,6 +9,8 @@ feature "Admin user organization membership detail page", type: :feature do
                              organization: org,
                              pure_identifier: 'pure-abc123',
                              position_title: 'test position',
+                             started_on: Date.new(2000, 1, 1),
+                             ended_on: Date.new(2010, 2, 2),
                              updated_by_user_at: Time.zone.local(2018, 11, 1, 11, 26, 0) }
 
   context "when the current user is an admin" do
@@ -41,6 +43,14 @@ feature "Admin user organization membership detail page", type: :feature do
 
       it "shows the timestamp when the membership was last updated by a user" do
         expect(page).to have_content 'November 01, 2018 11:26'
+      end
+
+      it "shows the membership's start date" do
+        expect(page).to have_content 'January 01, 2000'
+      end
+
+      it "shows the membership's end date" do
+        expect(page).to have_content 'February 02, 2010'
       end
     end
 
