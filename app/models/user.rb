@@ -85,6 +85,8 @@ class User < ApplicationRecord
 
       field(:publications)
       field(:presentations)
+      field(:user_organization_memberships)
+      field(:organizations)
     end
 
     create do
