@@ -54,6 +54,8 @@ describe User, type: :model do
     end
   end
 
+  it { is_expected.to accept_nested_attributes_for(:user_organization_memberships).allow_destroy(true) }
+
   describe "saving a value for webaccess_id" do
     let(:u) { create :user, webaccess_id: wa_id }
     context "when the value contains uppercase letters" do
