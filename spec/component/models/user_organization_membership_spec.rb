@@ -35,4 +35,14 @@ describe UserOrganizationMembership, type: :model do
     it { is_expected.to validate_presence_of(:user) }
     it { is_expected.to validate_presence_of(:organization) }
   end
+
+  describe 'name' do
+    let(:u) { User.new(first_name: "Sue", last_name: "Tester") }
+    let(:o) { Organization.new(name: "Science Department") }
+    let(:m) { UserOrganizationMembership.new(user: u, organization: o) }
+
+    it "returns a string with the name of the user and the name of the organization" do
+      expect(m.name).to eq "Sue Tester - Science Department"
+    end
+  end
 end
