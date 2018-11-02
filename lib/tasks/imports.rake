@@ -111,6 +111,10 @@ namespace :import do
       filename: filename_for(:pure_organizations)
     ).call
 
+    ActivityInsightUserImporter.new(
+      filename: filename_for(:ai_users)
+    ).call
+    
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call
@@ -121,10 +125,6 @@ namespace :import do
 
     PurePublicationTagImporter.new(
       filename: filename_for(:pure_publication_tags)
-    ).call
-
-    ActivityInsightUserImporter.new(
-      filename: filename_for(:ai_users)
     ).call
 
     ActivityInsightPublicationImporter.new(
