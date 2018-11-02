@@ -25,4 +25,15 @@ describe Organization, type: :model do
 
   it { is_expected.to belong_to(:parent).class_name(:Organization).optional }
   it { is_expected.to have_many(:children).class_name(:Organization) }
+  it { is_expected.to have_many(:user_organization_memberships).inverse_of(:organization) }
+  it { is_expected.to have_many(:users).through(:user_organization_memberships) }
+
+  describe "deleting an organization with user memberships" do
+    let(:o) { create :organization }
+    let!(:m) { create :user_organization_membership, organization: o}
+    it "also deletes the organization's user memberships" do
+      o.destroy
+      expect { m.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
 end

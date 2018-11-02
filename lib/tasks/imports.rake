@@ -107,6 +107,10 @@ namespace :import do
   desc 'Import all data'
   #TODO Update this task with the correct order of dependencies
   task :all => :environment do
+    PureOrganizationsImporter.new(
+      filename: filename_for(:pure_organizations)
+    ).call
+
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call

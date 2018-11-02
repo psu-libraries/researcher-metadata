@@ -36,6 +36,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:committee_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:etds).through(:committee_memberships) }
     it { is_expected.to have_many(:news_feed_items) }
+    it { is_expected.to have_many(:user_organization_memberships).inverse_of(:user) }
+    it { is_expected.to have_many(:organizations).through(:user_organization_memberships) }
   end
 
   describe 'validations' do
@@ -51,6 +53,8 @@ describe User, type: :model do
       it { is_expected.to validate_uniqueness_of(:penn_state_identifier).allow_nil }
     end
   end
+
+  it { is_expected.to accept_nested_attributes_for(:user_organization_memberships).allow_destroy(true) }
 
   describe "saving a value for webaccess_id" do
     let(:u) { create :user, webaccess_id: wa_id }
@@ -167,6 +171,15 @@ describe User, type: :model do
     it "also deletes the user's user_contracts" do
       u.destroy
       expect { uc.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a user with organization memberships" do
+    let(:u) { create :user }
+    let!(:m) { create :user_organization_membership, user: u}
+    it "also deletes the user's memberships" do
+      u.destroy
+      expect { m.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 

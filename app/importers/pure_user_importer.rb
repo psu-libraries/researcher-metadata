@@ -30,6 +30,31 @@ class PureUserImporter
           u.pure_uuid = user['uuid']
           u.save!
         end
+
+        if user['staffOrganisationAssociations']
+          user['staffOrganisationAssociations'].each do |a|
+            o_uuid = a['organisationalUnit']['uuid']
+
+            o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
+
+            if o
+              pt = a['jobDescription'] && a['jobDescription'].first['value']
+              m = UserOrganizationMembership.find_by(pure_identifier: a['pureId']) || UserOrganizationMembership.new
+
+              m.pure_identifier = a['pureId'] if m.new_record?
+              m.organization = o
+              m.user = u
+              m.imported_from_pure = true
+              m.primary = a['isPrimaryAssociation']
+              m.position_title = pt
+              m.started_on = a['period']['startDate']
+              m.ended_on = a['period']['endDate']
+              m.save!
+
+              create_parent_org_membership(o, u, m)
+            end
+          end
+        end
       end
       pbar.finish unless Rails.env.test?
     end
@@ -39,4 +64,23 @@ class PureUserImporter
   private
 
   attr_reader :filename
+
+  def create_parent_org_membership(org, user, membership)
+    parent = org.parent
+
+    if parent
+      m = UserOrganizationMembership.find_by(organization: parent,
+                                             user: user,
+                                             imported_from_pure: true) || UserOrganizationMembership.new
+
+      m.organization = parent if m.new_record?
+      m.user = user if m.new_record?
+      m.imported_from_pure = true if m.new_record?
+      m.started_on = membership.started_on
+      m.ended_on = membership.ended_on
+      m.save!
+
+      create_parent_org_membership(parent, user, m)
+    end
+  end
 end
