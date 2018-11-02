@@ -23,6 +23,7 @@ ssh_options[:port] = 1855
 set :shared, %w{
   config/database.yml
   config/secrets.yml
+  db/data
 }
 
 # The directory that we're deploying to on the remote host.
