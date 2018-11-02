@@ -76,8 +76,8 @@ class PureUserImporter
         UserOrganizationMembership.create!(organization: parent,
                                            user: user,
                                            imported_from_pure: true)
-        create_parent_org_membership(parent, user)
       end
+      create_parent_org_membership(parent, user)
     end
   end
 end

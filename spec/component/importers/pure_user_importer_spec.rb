@@ -118,12 +118,16 @@ describe PureUserImporter do
             let!(:user1) { create :user, webaccess_id: 'sat1' }
             let!(:existing_pure_parent_membership) { create :user_organization_membership,
                                                             user: user1,
-                                                            organization: org1_parent_parent,
+                                                            organization: org1_parent,
                                                             imported_from_pure: true }
             let!(:other_existing_parent_membership) { create :user_organization_membership,
                                                              user: user1,
                                                              organization: org1_parent,
                                                              imported_from_pure: false }
+            let!(:existing_parent_parent_membership) { create :user_organization_membership,
+                                                              user: user1,
+                                                              organization: org1_parent_parent,
+                                                              imported_from_pure: false }
             let(:other_user) { create :user }
             let(:other_org) { create :organization }
 
