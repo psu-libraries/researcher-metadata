@@ -65,7 +65,7 @@ describe PureUserImporter do
               expect(m1.primary).to eq false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
-              expect(m1.ended_on).to eq nil
+              expect(m1.ended_on).to eq Date.new(1990, 8, 14)
               expect(m1.updated_by_user_at).to eq nil
 
               expect(m2.user).to eq u2
@@ -90,16 +90,16 @@ describe PureUserImporter do
               expect(m4.imported_from_pure).to eq true
               expect(m4.primary).to eq nil
               expect(m4.position_title).to eq nil
-              expect(m4.started_on).to eq nil
-              expect(m4.ended_on).to eq nil
+              expect(m4.started_on).to eq Date.new(1984, 8, 14)
+              expect(m4.ended_on).to eq Date.new(1990, 8, 14)
               expect(m4.updated_by_user_at).to eq nil
 
               expect(m5.pure_identifier).to eq nil
               expect(m5.imported_from_pure).to eq true
               expect(m5.primary).to eq nil
               expect(m5.position_title).to eq nil
-              expect(m5.started_on).to eq nil
-              expect(m5.ended_on).to eq nil
+              expect(m5.started_on).to eq Date.new(1984, 8, 14)
+              expect(m5.ended_on).to eq Date.new(1990, 8, 14)
               expect(m5.updated_by_user_at).to eq nil
             end
           end
@@ -153,7 +153,7 @@ describe PureUserImporter do
               expect(m1.primary).to eq false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
-              expect(m1.ended_on).to eq nil
+              expect(m1.ended_on).to eq Date.new(1990, 8, 14)
               expect(m1.updated_by_user_at).to eq nil
 
               expect(m2.user).to eq u2

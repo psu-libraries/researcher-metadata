@@ -51,7 +51,7 @@ class PureUserImporter
               m.ended_on = a['period']['endDate']
               m.save!
 
-              create_parent_org_membership(o, u)
+              create_parent_org_membership(o, u, m)
             end
           end
         end
@@ -65,19 +65,20 @@ class PureUserImporter
 
   attr_reader :filename
 
-  def create_parent_org_membership(org, user)
+  def create_parent_org_membership(org, user, membership)
     parent = org.parent
 
     if parent
-      existing_membership = UserOrganizationMembership.find_by(organization: parent,
-                                                               user: user,
-                                                               imported_from_pure: true)
-      unless existing_membership
+      m = UserOrganizationMembership.find_by(organization: parent,
+                                                      user: user,
+                                                      imported_from_pure: true) ||
         UserOrganizationMembership.create!(organization: parent,
                                            user: user,
+                                           started_on: membership.started_on,
+                                           ended_on: membership.ended_on,
                                            imported_from_pure: true)
-      end
-      create_parent_org_membership(parent, user)
+
+      create_parent_org_membership(parent, user, m)
     end
   end
 end
