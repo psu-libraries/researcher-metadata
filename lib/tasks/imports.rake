@@ -158,7 +158,7 @@ namespace :import do
       filename: filename_for(:committees)
     ).call
 
-
+    DuplicatePublicationGroup.group_duplicates
   end
 end
 
