@@ -70,13 +70,15 @@ class PureUserImporter
 
     if parent
       m = UserOrganizationMembership.find_by(organization: parent,
-                                                      user: user,
-                                                      imported_from_pure: true) ||
-        UserOrganizationMembership.create!(organization: parent,
-                                           user: user,
-                                           started_on: membership.started_on,
-                                           ended_on: membership.ended_on,
-                                           imported_from_pure: true)
+                                             user: user,
+                                             imported_from_pure: true) || UserOrganizationMembership.new
+
+      m.organization = parent if m.new_record?
+      m.user = user if m.new_record?
+      m.imported_from_pure = true if m.new_record?
+      m.started_on = membership.started_on
+      m.ended_on = membership.ended_on
+      m.save!
 
       create_parent_org_membership(parent, user, m)
     end
