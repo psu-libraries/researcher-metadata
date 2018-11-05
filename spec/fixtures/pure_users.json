@@ -54,7 +54,8 @@
         } ]
       },
       "period" : {
-        "startDate" : "1984-08-14T12:00:00.000+0000"
+        "startDate" : "1984-08-14T12:00:00.000+0000",
+        "endDate": "1990-08-14T12:00:00.000+0000"
       },
       "isPrimaryAssociation" : false,
       "employmentType" : [ {
@@ -149,7 +150,8 @@
         } ]
       },
       "period" : {
-        "startDate" : "1997-09-01T12:00:00.000+0000"
+        "startDate" : "1997-09-01T12:00:00.000+0000",
+        "endDate" : "2000-01-01T12:00:00.000+0000"
       },
       "isPrimaryAssociation" : false,
       "employmentType" : [ {
@@ -319,79 +321,6 @@
           "filename": "jct3.jpg",
           "mimetype": "image/jpeg",
           "size": 0
-        }
-      ],
-      "staffOrganisationAssociations": [
-        {
-          "pureId": 37242500,
-          "externalId": "autoid:jct3-DEPT-CAM-HY-PEDS-Assistant Professor-academic-1900-01-31",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "person": {
-            "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
-            "link": {
-              "ref": "content",
-              "href": "https://pennstate.pure.elsevier.com/ws/api/511/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
-            },
-            "name": [
-              {
-                "value": "Jill Test"
-              }
-            ]
-          },
-          "period": {
-            "startDate": "1900-01-31T12:00:00.000+0000"
-          },
-          "isPrimaryAssociation": false,
-          "employmentType": [
-            {
-              "value": "Academic",
-              "pureId": 4754,
-              "uri": "/dk/atira/pure/person/employmenttypes/academic"
-            }
-          ],
-          "organisationalUnit": {
-            "uuid": "8d55641e-f2d7-4448-8046-ef0672dbee24",
-            "link": {
-              "ref": "content",
-              "href": "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/8d55641e-f2d7-4448-8046-ef0672dbee24"
-            },
-            "name": [
-              {
-                "value": "Department of Pediatrics"
-              }
-            ],
-            "type": [
-              {
-                "value": "Department",
-                "pureId": 855,
-                "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department"
-              }
-            ]
-          },
-          "staffType": [
-            {
-              "value": "Academic",
-              "pureId": 3434337,
-              "uri": "/dk/atira/pure/person/personstafftype/academic"
-            }
-          ],
-          "jobDescription": [
-            {
-              "value": "Assistant Professor"
-            }
-          ],
-          "emails": [
-            {
-              "pureId": 37242501,
-              "externalId": "synchronisedPerson",
-              "externalIdSource": "synchronisedPerson",
-              "externallyManaged": true,
-              "typeUri": "/dk/atira/pure/person/personemailtype/email",
-              "type": "Email",
-              "value": "jct3@psu.edu"
-            }
-          ]
         }
       ]
     }

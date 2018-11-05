@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_05_194951) do
+ActiveRecord::Schema.define(version: 2018_11_05_201412) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 2018_11_05_194951) do
     t.datetime "updated_at", null: false
     t.boolean "visible", default: false
     t.bigint "activity_insight_id", null: false
+    t.index ["activity_insight_id"], name: "index_performances_on_activity_insight_id", unique: true
   end
 
   create_table "presentation_contributions", force: :cascade do |t|
@@ -239,6 +240,23 @@ ActiveRecord::Schema.define(version: 2018_11_05_194951) do
     t.index ["user_id"], name: "index_user_contracts_on_user_id"
   end
 
+  create_table "user_organization_memberships", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.integer "organization_id", null: false
+    t.string "pure_identifier"
+    t.boolean "imported_from_pure"
+    t.string "position_title"
+    t.boolean "primary"
+    t.datetime "updated_by_user_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.date "started_on"
+    t.date "ended_on"
+    t.index ["organization_id"], name: "index_user_organization_memberships_on_organization_id"
+    t.index ["pure_identifier"], name: "index_user_organization_memberships_on_pure_identifier"
+    t.index ["user_id"], name: "index_user_organization_memberships_on_user_id"
+  end
+
   create_table "user_performances", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "performance_id", null: false
@@ -282,6 +300,8 @@ ActiveRecord::Schema.define(version: 2018_11_05_194951) do
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
+  add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade
+  add_foreign_key "user_organization_memberships", "users", name: "user_organization_memberships_user_id_fk", on_delete: :cascade
   add_foreign_key "user_performances", "performances", on_delete: :cascade
   add_foreign_key "user_performances", "users", on_delete: :cascade
 end

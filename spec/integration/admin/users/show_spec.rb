@@ -25,6 +25,15 @@ feature "Admin user detail page", type: :feature do
 
   let(:group) { create :duplicate_publication_group }
 
+  let(:org1) { create :organization, name: "Test Org One" }
+  let(:org2) { create :organization, name: "Test Org Two" }
+
+  let(:con1) { create :contract, title: "Test Contract One"}
+  let(:con2) { create :contract, title: "Test Contract Two"}
+
+  let(:etd1) { create :etd, title: "Test ETD One" }
+  let(:etd2) { create :etd, title: "Test ETD Two" }
+
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
@@ -33,6 +42,15 @@ feature "Admin user detail page", type: :feature do
 
       create :presentation_contribution, user: user, presentation: pres1
       create :presentation_contribution, user: user, presentation: pres2
+
+      create :user_organization_membership, user: user, organization: org1
+      create :user_organization_membership, user: user, organization: org2
+
+      create :user_contract, user: user, contract: con1
+      create :user_contract, user: user, contract: con2
+
+      create :committee_membership, user: user, etd: etd1
+      create :committee_membership, user: user, etd: etd2
     end
 
     describe "the page content" do
@@ -74,6 +92,24 @@ feature "Admin user detail page", type: :feature do
       it "shows the user's presentations" do
         expect(page).to have_link "Bob's First Presentation"
         expect(page).to have_link "Bob's Second Presentation"
+      end
+
+      it "shows the user's organizations and memberships" do
+        expect(page).to have_link "Bob Testuser - Test Org One"
+        expect(page).to have_link "Bob Testuser - Test Org Two"
+
+        expect(page).to have_link "Test Org One"
+        expect(page).to have_link "Test Org Two"
+      end
+
+      it "shows the user's contracts" do
+        expect(page).to have_link "Test Contract One"
+        expect(page).to have_link "Test Contract Two"
+      end
+
+      it "shows the user's ETDs" do
+        expect(page).to have_link "Test ETD One"
+        expect(page).to have_link "Test ETD Two"
       end
     end
 

@@ -3,7 +3,7 @@
   <% @news_feed_items.each do |n| %>
     <li>
       <%= link_to "#{n.title}", n.url %>,
-      <%= n.pubdate %>
+      <%= n.published_on %>
     </li>
   <% end %>
 </ul>

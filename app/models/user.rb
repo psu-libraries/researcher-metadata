@@ -26,11 +26,15 @@ class User < ApplicationRecord
   has_many :contracts, through: :user_contracts
   has_many :committee_memberships, inverse_of: :user
   has_many :etds, through: :committee_memberships
-  has_many :news_feed_items
-  has_many :presentation_contributions
-  has_many :presentations, through: :presentation_contributions
   has_many :user_performances
   has_many :performances, through: :user_performances
+  has_many :presentation_contributions
+  has_many :presentations, through: :presentation_contributions
+  has_many :news_feed_items
+  has_many :user_organization_memberships, inverse_of: :user
+  has_many :organizations, through: :user_organization_memberships
+
+  accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
   swagger_schema :User do
     property :webaccess_id do
@@ -85,6 +89,10 @@ class User < ApplicationRecord
 
       field(:publications)
       field(:presentations)
+      field(:contracts)
+      field(:etds)
+      field(:user_organization_memberships)
+      field(:organizations)
     end
 
     create do
@@ -113,6 +121,8 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
+      field(:user_organization_memberships)
+
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }

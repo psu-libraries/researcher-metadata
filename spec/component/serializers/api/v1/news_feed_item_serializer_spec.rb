@@ -6,14 +6,14 @@ describe API::V1::NewsFeedItemSerializer do
                                   user: user,
                                   title: 'news feed item 1',
                                   url: 'www.test.com/news1',
-                                  pubdate: Date.new(2018, 10, 1),
+                                  published_on: Date.new(2018, 10, 1),
                                   description: 'news feed description 1' }
 
   describe "data attributes" do
     subject { serialized_data_attributes(news_feed_item) }
     it { is_expected.to include(:title => 'news feed item 1') }
     it { is_expected.to include(:url => 'www.test.com/news1') }
-    it { is_expected.to include(:pubdate => '2018-10-01') }
+    it { is_expected.to include(:published_on => '2018-10-01') }
     it { is_expected.to include(:description => 'news feed description 1') }
   end
 end

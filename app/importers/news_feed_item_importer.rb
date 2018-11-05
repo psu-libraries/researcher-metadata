@@ -22,7 +22,7 @@ class NewsFeedItemImporter
                 item.user = u
                 item.title = result.title
                 item.url = result.link
-                item.pubdate = result.pubDate
+                item.published_on = result.pubDate
                 item.description = result.description
               end
 

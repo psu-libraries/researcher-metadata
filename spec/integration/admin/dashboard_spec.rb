@@ -10,10 +10,10 @@ feature "Admin dashboard", type: :feature do
 
     describe "the page content" do
       before do
+        4.times { create :contract }
         4.times { create :publication }
         4.times { create :user }
         3.times { create :duplicate_publication_group }
-        6.times { create :contract }
         7.times { create :presentation }
         8.times { create :etd }
         2.times { create :organization }
@@ -26,6 +26,10 @@ feature "Admin dashboard", type: :feature do
       end
 
       it "shows a count of the records in the database" do
+        within 'tr.contract_links' do
+          expect(page).to have_content '4'
+        end
+
         within 'tr.publication_links' do
           expect(page).to have_content '4'
         end
@@ -36,10 +40,6 @@ feature "Admin dashboard", type: :feature do
 
         within 'tr.duplicate_publication_group_links' do
           expect(page).to have_content '3'
-        end
-
-        within 'tr.contract_links' do
-          expect(page).to have_content '6'
         end
 
         within 'tr.presentation_links' do

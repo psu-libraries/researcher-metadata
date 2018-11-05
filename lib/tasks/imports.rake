@@ -105,8 +105,15 @@ namespace :import do
   end
 
   desc 'Import all data'
-  #TODO Update this task with the correct order of dependencies
   task :all => :environment do
+    PureOrganizationsImporter.new(
+      filename: filename_for(:pure_organizations)
+    ).call
+
+    ActivityInsightUserImporter.new(
+      filename: filename_for(:ai_users)
+    ).call
+    
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call
@@ -117,10 +124,6 @@ namespace :import do
 
     PurePublicationTagImporter.new(
       filename: filename_for(:pure_publication_tags)
-    ).call
-
-    ActivityInsightUserImporter.new(
-      filename: filename_for(:ai_users)
     ).call
 
     ActivityInsightPublicationImporter.new(
@@ -134,6 +137,28 @@ namespace :import do
     ActivityInsightContributorImporter.new(
       filename: filename_for(:ai_authorships)
     ).call
+
+    ActivityInsightContractImporter.new(
+      filename: filename_for(:ai_contracts)
+    ).call
+
+    ActivityInsightPresentationImporter.new(
+      filename: filename_for(:ai_presentations)
+    ).call
+
+    ActivityInsightPresenterImporter.new(
+      filename: filename_for(:ai_presenters)
+    ).call
+
+    ETDCSVImporter.new(
+      filename: filename_for(:etds)
+    ).call
+
+    CommitteeImporter.new(
+      filename: filename_for(:committees)
+    ).call
+
+    DuplicatePublicationGroup.group_duplicates
   end
 end
 

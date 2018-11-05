@@ -7,12 +7,12 @@ module API::V1
 
     attr_reader :user
 
-    def news_feed_items(params)
-      user.news_feed_items
-    end
-
     def presentations(params)
       user.presentations.visible
+    end
+
+    def news_feed_items(params)
+      user.news_feed_items
     end
 
     def contracts(params)
