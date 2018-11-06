@@ -235,4 +235,35 @@ describe 'API::V1 Users' do
       end
     end
   end
+
+  describe 'GET /v1/users/:webaccess_id/profile' do
+    let!(:user) { create(:user,
+                         first_name: "Bob",
+                         last_name: "Testerson",
+                         webaccess_id: 'bat123') }
+    let!(:invisible_pub) { create :publication,
+                                  visible: false,
+                                  title: "Invisible Pub" }
+    let(:headers) { { "accept" => "text/html" } }
+
+    before do
+      create :authorship, user: user, publication: invisible_pub
+      get "/v1/users/#{webaccess_id}/profile", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      let(:webaccess_id) { 'bat123' }
+
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+    end
+
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+    end
+  end
 end
