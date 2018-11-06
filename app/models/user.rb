@@ -89,6 +89,7 @@ class User < ApplicationRecord
       field(:presentations)
       field(:contracts)
       field(:etds)
+      field(:news_feed_items)
       field(:user_organization_memberships)
       field(:organizations)
     end

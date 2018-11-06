@@ -34,6 +34,9 @@ feature "Admin user detail page", type: :feature do
   let(:etd1) { create :etd, title: "Test ETD One" }
   let(:etd2) { create :etd, title: "Test ETD Two" }
 
+  let!(:nfi1) { create :news_feed_item, user: user, title:  "Test Story One"}
+  let!(:nfi2) { create :news_feed_item, user: user, title:  "Test Story Two"}
+
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
@@ -110,6 +113,11 @@ feature "Admin user detail page", type: :feature do
       it "shows the user's ETDs" do
         expect(page).to have_link "Test ETD One"
         expect(page).to have_link "Test ETD Two"
+      end
+
+      it "shows the user's news stories" do
+        expect(page).to have_link "Test Story One"
+        expect(page).to have_link "Test Story Two"
       end
     end
 
