@@ -158,6 +158,8 @@ namespace :import do
       filename: filename_for(:committees)
     ).call
 
+    NewsFeedItemImporter.new().call
+
     DuplicatePublicationGroup.group_duplicates
   end
 end
