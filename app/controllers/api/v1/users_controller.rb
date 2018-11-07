@@ -29,19 +29,6 @@ module API::V1
       end
     end
 
-    def etds
-      @user = User.find_by(webaccess_id: params[:webaccess_id])
-      if @user
-        @etds = API::V1::UserQuery.new(@user).etds(params)
-        respond_to do |format|
-          format.html
-          format.json { render json: API::V1::ETDSerializer.new(@etds) }
-        end
-      else
-        render json: { :message => "User not found", :code => 404 }, status: 404
-      end
-    end
-
     def news_feed_items
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
@@ -49,6 +36,19 @@ module API::V1
         respond_to do |format|
           format.html
           format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_items) }
+        end
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
+    def etds
+      @user = User.find_by(webaccess_id: params[:webaccess_id])
+      if @user
+        @etds = API::V1::UserQuery.new(@user).etds(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::ETDSerializer.new(@etds) }
         end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404

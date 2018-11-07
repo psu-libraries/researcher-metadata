@@ -26,6 +26,8 @@ class User < ApplicationRecord
   has_many :contracts, through: :user_contracts
   has_many :committee_memberships, inverse_of: :user
   has_many :etds, through: :committee_memberships
+  has_many :user_performances
+  has_many :performances, through: :user_performances
   has_many :presentation_contributions
   has_many :presentations, through: :presentation_contributions
   has_many :news_feed_items
