@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<rss version="2.0" xml:base="https://news.psu.edu/" xmlns:atom="http://www.w3.org/2005/Atom"> 
+  <channel> 
+    <title>Penn State News - Research</title>
+    <link>https://news.psu.edu/</link>
+    <atom:link rel="self" href="https://news.psu.edu/rss/topic/research" />
+    <language>en-us</language>
+    <copyright>Penn State University Relations</copyright>
+    <managingEditor>news@psu.edu</managingEditor>
+    <pubDate>10-10-2013</pubDate>
+    <lastBuildDate>10-10-2013</lastBuildDate>
+    <item> 
+      <title>Title</title>
+      <link>spec/fixtures/rss_html.html</link>
+      <description>Description</description>
+      <guid isPermaLink="false">www.site.org</guid>
+      <pubDate>10-10-2013</pubDate>
+      <source url="https://news.psu.edu/rss/topic/research">Penn State News - Research</source>
+    </item>
+  </channel>
+</rss>
