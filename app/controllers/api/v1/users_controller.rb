@@ -71,10 +71,11 @@ module API::V1
     def profile
       @user = User.find_by(webaccess_id: params[:webaccess_id])
       if @user
-        @pubs = API::V1::UserQuery.new(@user).publications(params)
-        @grants = @user.contracts.where(status: 'Awarded', contract_type: 'Grant')
+        @pubs = API::V1::UserQuery.new(@user).publications({order_first_by: 'publication_date_desc'})
+        @grants = @user.contracts.visible.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
         @presentations = @user.presentations
-        @news_feed_items = @user.news_feed_items
+        @news_feed_items = @user.news_feed_items.order(published_on: :desc)
+        @committee_memberships = @user.committee_memberships
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
       end
