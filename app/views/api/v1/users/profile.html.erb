@@ -1,0 +1,60 @@
+<div class="md-profile">
+  <div class="md-person-info">
+    <ul>
+      <li>Name:  <%= @user.name %></li>
+      <li>Email:  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
+    </ul>
+  </div>
+  <% if @pubs.any? %>
+    <div class="md-publications">
+      <h3>Publications</h3>
+      <ul>
+        <% @pubs.each do |p| %>
+          <li><%= p.title %><%= ", #{p.journal_title || p.publisher}" if p.journal_title.present? || p.publisher.present? %><%= ", #{p.published_on.year}" if p.published_on.present? %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @grants.any? %>
+    <div class="md-grants">
+      <h3>Grants</h3>
+      <ul>
+        <% @grants.each do |g| %>
+          <li><%= g.title %>, <%= g.sponsor %><%= ", #{g.award_start_on.strftime('%-m/%Y')} - #{g.award_end_on.try(:strftime, '%-m/%Y')}" if g.award_start_on.present? %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @presentations.any? %>
+    <div class="md-presentations">
+      <h3>Presentations</h3>
+      <ul>
+        <% @presentations.each do |p| %>
+          <% if p.title.present? || p.name.present? %>
+            <li><%= p.title || p.name %><%= ", #{p.organization}" if p.organization.present? %><%= ", #{p.location}" if p.location.present? %></li>
+          <% end %>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @committee_memberships.any? %>
+    <div class="md-advising">
+      <h3>Graduate Student Advising</h3>
+      <ul>
+        <% @committee_memberships.each do |m| %>
+          <li><a href="<%= m.etd.url %>"><%= m.etd.title.gsub('\n', ' ') %></a> (<%= m.role %>)</li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <% if @news_feed_items.any? %>
+    <div class="md-news-stories">
+      <h3>Penn State News Media Mentions</h3>
+      <ul>
+        <% @news_feed_items.each do |i| %>
+          <li><a href="<%= i.url %>" target="_blank"><%= i.title %></a> <%= i.published_on.strftime('%-m/%-d/%Y') %></li>
+        <% end %>
+      </ul>
+    </div>
+  <% end %>
+</div>

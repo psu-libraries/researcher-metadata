@@ -68,6 +68,19 @@ module API::V1
       end
     end
 
+    def profile
+      @user = User.find_by(webaccess_id: params[:webaccess_id])
+      if @user
+        @pubs = API::V1::UserQuery.new(@user).publications({order_first_by: 'publication_date_desc'})
+        @grants = @user.contracts.visible.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
+        @presentations = @user.presentations
+        @news_feed_items = @user.news_feed_items.order(published_on: :desc)
+        @committee_memberships = @user.committee_memberships
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
     def users_publications
       data = {}
       User.includes(:publications).where(webaccess_id: params[:_json]).each do |user|
@@ -323,6 +336,46 @@ module API::V1
             key :'$ref', :User
           end
         end
+        response 404 do
+          key :description, 'not found'
+          schema do
+            key :'$ref', :User
+            key :required, [:code, :message]
+            property :code do
+              key :type, :integer
+              key :format, :int32
+            end
+            property :message do
+              key :type, :string
+            end
+          end
+        end
+      end
+    end
+
+    swagger_path '/v1/users/{webaccess_id}/profile' do
+      operation :get do
+        key :summary, "Retrieve a user's profile"
+        key :description, "Returns a plain HTML representation of a user's profile information"
+        key :operationId, 'findUserProfile'
+        key :produces, ['text/html']
+        key :tags, ['user']
+
+        parameter do
+          key :name, :webaccess_id
+          key :in, :path
+          key :description, 'Webaccess ID of user to retrieve publications'
+          key :required, true
+          key :type, :string
+        end
+
+        response 200 do
+          key :description, 'user profile response'
+          schema do
+            key :'$ref', :User
+          end
+        end
+
         response 404 do
           key :description, 'not found'
           schema do

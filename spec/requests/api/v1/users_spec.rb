@@ -235,4 +235,216 @@ describe 'API::V1 Users' do
       end
     end
   end
+
+  describe 'GET /v1/users/:webaccess_id/profile' do
+    let!(:user) { create(:user,
+                         first_name: "Bob",
+                         last_name: "Testerson",
+                         webaccess_id: 'bat123') }
+    let(:headers) { { "accept" => "text/html" } }
+
+    context "for a valid webaccess_id" do
+      before do
+        get "/v1/users/#{webaccess_id}/profile", headers: headers
+      end
+
+      let(:webaccess_id) { 'bat123' }
+
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+
+      context "when the user has no associated metadata" do
+        it "returns an HTML representation of the given user's basic information" do
+          expect(response.body).to eq <<~HTML
+              <div class="md-profile">
+                <div class="md-person-info">
+                  <ul>
+                    <li>Name:  Bob Testerson</li>
+                    <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  </ul>
+                </div>
+              </div>
+            HTML
+        end
+      end
+
+      context "when the user has associated metadata" do
+        let!(:pub1) { create :publication, title: "First Publication",
+                             visible: true,
+                             journal_title: "Test Journal",
+                             published_on: Date.new(2010, 1, 1) }
+        let!(:pub2) { create :publication, title: "Second Publication",
+                             visible: true,
+                             publisher: "Test Publisher",
+                             published_on: Date.new(2015, 1, 1) }
+        let!(:pub3) { create :publication, title: "Third Publication",
+                             visible: true,
+                             published_on: Date.new(2018, 1, 1) }
+        let!(:pub4) { create :publication, title: "Undated Publication",
+                             visible: true }
+        let!(:pub5) { create :publication,
+                             title: "Invisible Publication",
+                             visible: false }
+
+        let!(:con1) { create :contract,
+                             contract_type: "Contract",
+                             status: "Awarded",
+                             title: "Awarded Contract",
+                             visible: true }
+        let!(:con2) { create :contract,
+                             contract_type: "Grant",
+                             status: "Pending",
+                             title: "Pending Grant",
+                             visible: true }
+        let!(:con3) { create :contract,
+                             contract_type: "Grant",
+                             status: "Awarded",
+                             title: "Awarded Grant One",
+                             sponsor: "Test Sponsor",
+                             award_start_on: Date.new(2010, 1, 1),
+                             award_end_on: Date.new(2010, 5, 1),
+                             visible: true }
+        let!(:con4) { create :contract,
+                             contract_type: "Grant",
+                             status: "Awarded",
+                             title: "Awarded Grant Two",
+                             sponsor: "Other Sponsor",
+                             award_start_on: Date.new(2015, 2, 1),
+                             award_end_on: Date.new(2016, 1, 1),
+                             visible: true }
+        let!(:con5) { create :contract,
+                             contract_type: "Grant",
+                             status: "Awarded",
+                             title: "Awarded Grant Three",
+                             sponsor: "Sponsor",
+                             award_start_on: nil,
+                             visible: true }
+        let!(:con6) { create :contract,
+                             contract_type: "Grant",
+                             status: "Awarded",
+                             title: "Invisible Awarded Grant",
+                             visible: false }
+
+        let!(:pres1) { create :presentation,
+                              title: "Presentation One",
+                              location: "A Place" }
+        let!(:pres2) { create :presentation,
+                              name: "Presentation Two",
+                              organization: "An Organization",
+                              location: "Earth"}
+        let!(:pres3) { create :presentation,
+                              title: "Presentation Three" }
+        let!(:pres4) { create :presentation,
+                              title: nil,
+                              name: nil }
+
+        let!(:etd1) { create :etd, title: 'ETD\n One',
+                             url: "test.edu" }
+        let!(:etd2) { create :etd, title: "ETD Two",
+                             url: "test2.edu" }
+
+        let!(:nfi1) { create :news_feed_item,
+                             user: user,
+                             title: "Story One",
+                             url: "news.edu/1",
+                             published_on: Date.new(2016, 1, 2) }
+
+        let!(:nfi2) { create :news_feed_item,
+                             user: user,
+                             title: "Story Two",
+                             url: "news.edu/2",
+                             published_on: Date.new(2018, 3, 4) }
+
+        before do
+          create :authorship, user: user, publication: pub1
+          create :authorship, user: user, publication: pub2
+          create :authorship, user: user, publication: pub3
+          create :authorship, user: user, publication: pub4
+          create :authorship, user: user, publication: pub5
+
+          create :user_contract, user: user, contract: con1
+          create :user_contract, user: user, contract: con2
+          create :user_contract, user: user, contract: con3
+          create :user_contract, user: user, contract: con4
+          create :user_contract, user: user, contract: con5
+          create :user_contract, user: user, contract: con6
+
+          create :presentation_contribution, user: user, presentation: pres1
+          create :presentation_contribution, user: user, presentation: pres2
+          create :presentation_contribution, user: user, presentation: pres3
+          create :presentation_contribution, user: user, presentation: pres4
+
+          create :committee_membership, user: user, etd: etd1, role: "Committee Member"
+          create :committee_membership, user: user, etd: etd2, role: "Advisor"
+
+          get "/v1/users/#{webaccess_id}/profile", headers: headers
+        end
+
+        it "returns an HTML representation of all of the given user's available metadata" do
+          expect(response.body).to eq <<~HTML
+              <div class="md-profile">
+                <div class="md-person-info">
+                  <ul>
+                    <li>Name:  Bob Testerson</li>
+                    <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  </ul>
+                </div>
+                  <div class="md-publications">
+                    <h3>Publications</h3>
+                    <ul>
+                        <li>Undated Publication</li>
+                        <li>Third Publication, 2018</li>
+                        <li>Second Publication, Test Publisher, 2015</li>
+                        <li>First Publication, Test Journal, 2010</li>
+                    </ul>
+                  </div>
+                  <div class="md-grants">
+                    <h3>Grants</h3>
+                    <ul>
+                        <li>Awarded Grant Three, Sponsor</li>
+                        <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
+                        <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
+                    </ul>
+                  </div>
+                  <div class="md-presentations">
+                    <h3>Presentations</h3>
+                    <ul>
+                          <li>Presentation One, A Place</li>
+                          <li>Presentation Two, An Organization, Earth</li>
+                          <li>Presentation Three</li>
+                    </ul>
+                  </div>
+                  <div class="md-advising">
+                    <h3>Graduate Student Advising</h3>
+                    <ul>
+                        <li><a href="test2.edu">ETD Two</a> (Advisor)</li>
+                        <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
+                    </ul>
+                  </div>
+                  <div class="md-news-stories">
+                    <h3>Penn State News Media Mentions</h3>
+                    <ul>
+                        <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
+                        <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
+                    </ul>
+                  </div>
+              </div>
+            HTML
+        end
+      end
+    end
+
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+
+      before do
+        get "/v1/users/#{webaccess_id}/profile", headers: headers
+      end
+
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+    end
+  end
 end
