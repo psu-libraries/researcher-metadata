@@ -67,6 +67,12 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json'},
       }
     }
+    let(:invalid_user_profile_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'text/html'},
+      }
+    }
     let(:invalid_publication_params) { { "id" => -2000 } }
     let(:invalid_user_publications_params) {
       {
@@ -88,6 +94,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 404, invalid_user_presentations_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_with_committee_memberships_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 404, invalid_user_news_feed_items_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/profile', 404, invalid_user_profile_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }
@@ -97,6 +104,11 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
   end
 
   context 'and' do
+    before do
+      # Apivore can't handle a non-JSON (HTML) response, so ignore it
+      subject.untested_mappings.delete '/v1/users/{webaccess_id}/profile'
+    end
+
     it 'tests all documented routes' do
       expect(subject).to validate_all_paths
     end
