@@ -327,22 +327,15 @@ describe 'API::V1 Users' do
                              visible: false }
 
         let!(:pres1) { create :presentation,
-                              title: "Presentation One",
-                              location: "A Place" }
-        let!(:pres2) { create :presentation,
                               name: "Presentation Two",
                               organization: "An Organization",
                               location: "Earth"}
-        let!(:pres3) { create :presentation,
-                              title: "Presentation Three" }
-        let!(:pres4) { create :presentation,
+        let!(:pres2) { create :presentation,
                               title: nil,
                               name: nil }
 
         let!(:etd1) { create :etd, title: 'ETD\n One',
                              url: "test.edu" }
-        let!(:etd2) { create :etd, title: "ETD Two",
-                             url: "test2.edu" }
 
         let!(:nfi1) { create :news_feed_item,
                              user: user,
@@ -372,11 +365,8 @@ describe 'API::V1 Users' do
 
           create :presentation_contribution, user: user, presentation: pres1
           create :presentation_contribution, user: user, presentation: pres2
-          create :presentation_contribution, user: user, presentation: pres3
-          create :presentation_contribution, user: user, presentation: pres4
 
           create :committee_membership, user: user, etd: etd1, role: "Committee Member"
-          create :committee_membership, user: user, etd: etd2, role: "Advisor"
 
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end
@@ -410,15 +400,12 @@ describe 'API::V1 Users' do
                   <div class="md-presentations">
                     <h3>Presentations</h3>
                     <ul>
-                          <li>Presentation One, A Place</li>
                           <li>Presentation Two, An Organization, Earth</li>
-                          <li>Presentation Three</li>
                     </ul>
                   </div>
                   <div class="md-advising">
                     <h3>Graduate Student Advising</h3>
                     <ul>
-                        <li><a href="test2.edu">ETD Two</a> (Advisor)</li>
                         <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
                     </ul>
                   </div>
