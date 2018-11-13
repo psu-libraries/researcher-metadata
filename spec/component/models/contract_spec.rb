@@ -31,6 +31,7 @@ describe Contract, type: :model do
     it { is_expected.to have_many(:users).through(:user_contracts) }
     it { is_expected.to have_many(:user_contracts).inverse_of(:contract) }
     it { is_expected.to have_many(:imports).class_name(:ContractImport) }
+    it { is_expected.to have_many(:organizations).through(:users) }
   end
 
   describe "deleting a contract with user_contracts" do

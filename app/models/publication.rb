@@ -18,6 +18,7 @@ class Publication < ApplicationRecord
            dependent: :destroy,
            inverse_of: :publication
   has_many :imports, class_name: :PublicationImport
+  has_many :organizations, through: :users
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
@@ -46,6 +47,9 @@ class Publication < ApplicationRecord
       field(:id)
       field(:title)
       field(:secondary_title)
+      field(:organizations, :has_many_association) do
+        searchable [:id]
+      end
       field(:publication_type)
       field(:journal_title)
       field(:publisher)
@@ -125,6 +129,7 @@ class Publication < ApplicationRecord
       field(:authorships)
       field(:contributors)
       field(:imports)
+      field(:organizations)
       field(:visible) { label 'Visible via API?'}
     end
 
