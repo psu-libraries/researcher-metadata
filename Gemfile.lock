@@ -74,6 +74,7 @@ GEM
       concurrent-ruby (~> 1.0)
     builder (3.2.3)
     byebug (10.0.2)
+    cancancan (2.3.0)
     capistrano (2.15.9)
       highline
       net-scp (>= 1.0.0)
@@ -345,6 +346,7 @@ DEPENDENCIES
   bootstrap
   bugsnag
   byebug
+  cancancan (~> 2.0)
   capistrano-ext
   capistrano-helpers
   capybara (>= 2.15, < 4.0)
