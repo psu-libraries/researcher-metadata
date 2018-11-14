@@ -257,10 +257,10 @@ describe 'API::V1 Users' do
       context "when the user has no associated metadata" do
         it "returns an HTML representation of the given user's basic information" do
           expect(response.body).to eq <<~HTML
-              <div class="md-profile">
-                <div class="md-person-info">
+              <div id="md-profile">
+                <h2 id="md-full-name">Bob Testerson</h2>
+                <div id="md-person-info">
                   <ul>
-                    <li>Name:  Bob Testerson</li>
                     <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
                   </ul>
                 </div>
@@ -373,14 +373,14 @@ describe 'API::V1 Users' do
 
         it "returns an HTML representation of all of the given user's available metadata" do
           expect(response.body).to eq <<~HTML
-              <div class="md-profile">
-                <div class="md-person-info">
+              <div id="md-profile">
+                <h2 id="md-full-name">Bob Testerson</h2>
+                <div id="md-person-info">
                   <ul>
-                    <li>Name:  Bob Testerson</li>
                     <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
                   </ul>
                 </div>
-                  <div class="md-publications">
+                  <div id="md-publications">
                     <h3>Publications</h3>
                     <ul>
                         <li>Undated Publication</li>
@@ -389,7 +389,7 @@ describe 'API::V1 Users' do
                         <li>First Publication, Test Journal, 2010</li>
                     </ul>
                   </div>
-                  <div class="md-grants">
+                  <div id="md-grants">
                     <h3>Grants</h3>
                     <ul>
                         <li>Awarded Grant Three, Sponsor</li>
@@ -397,19 +397,19 @@ describe 'API::V1 Users' do
                         <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
                     </ul>
                   </div>
-                  <div class="md-presentations">
+                  <div id="md-presentations">
                     <h3>Presentations</h3>
                     <ul>
                           <li>Presentation Two, An Organization, Earth</li>
                     </ul>
                   </div>
-                  <div class="md-advising">
+                  <div id="md-advising">
                     <h3>Graduate Student Advising</h3>
                     <ul>
                         <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
                     </ul>
                   </div>
-                  <div class="md-news-stories">
+                  <div id="md-news-stories">
                     <h3>Penn State News Media Mentions</h3>
                     <ul>
                         <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
