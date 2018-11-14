@@ -1,12 +1,12 @@
-<div class="md-profile">
-  <div class="md-person-info">
+<div id="md-profile">
+  <h2 id="md-full-name"><%= @user.name %></h2>
+  <div id="md-person-info">
     <ul>
-      <li>Name:  <%= @user.name %></li>
       <li>Email:  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
     </ul>
   </div>
   <% if @pubs.any? %>
-    <div class="md-publications">
+    <div id="md-publications">
       <h3>Publications</h3>
       <ul>
         <% @pubs.each do |p| %>
@@ -16,7 +16,7 @@
     </div>
   <% end %>
   <% if @grants.any? %>
-    <div class="md-grants">
+    <div id="md-grants">
       <h3>Grants</h3>
       <ul>
         <% @grants.each do |g| %>
@@ -26,7 +26,7 @@
     </div>
   <% end %>
   <% if @presentations.any? %>
-    <div class="md-presentations">
+    <div id="md-presentations">
       <h3>Presentations</h3>
       <ul>
         <% @presentations.each do |p| %>
@@ -38,7 +38,7 @@
     </div>
   <% end %>
   <% if @committee_memberships.any? %>
-    <div class="md-advising">
+    <div id="md-advising">
       <h3>Graduate Student Advising</h3>
       <ul>
         <% @committee_memberships.each do |m| %>
@@ -48,7 +48,7 @@
     </div>
   <% end %>
   <% if @news_feed_items.any? %>
-    <div class="md-news-stories">
+    <div id="md-news-stories">
       <h3>Penn State News Media Mentions</h3>
       <ul>
         <% @news_feed_items.each do |i| %>
