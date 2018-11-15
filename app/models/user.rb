@@ -118,15 +118,55 @@ class User < ApplicationRecord
         read_only true
         label 'Penn State WebAccess ID'
       end
-      field(:first_name)
-      field(:middle_name)
-      field(:last_name)
-      field(:pure_uuid) { label 'Pure ID' }
-      field(:activity_insight_identifier) { label 'Activity Insight ID' }
-      field(:penn_state_identifier) { label 'Penn State ID' }
-      field(:is_admin) { label 'Admin user?' }
-      field(:managed_organizations)
-      field(:user_organization_memberships)
+      field(:first_name) do
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:middle_name) do
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:last_name) do
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:pure_uuid) do
+        label 'Pure ID'
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:activity_insight_identifier) do
+        label 'Activity Insight ID'
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:penn_state_identifier) do
+        label 'Penn State ID'
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:is_admin) do
+        label 'Admin user?'
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:managed_organizations) do
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:user_organization_memberships) do
+        read_only do
+          !bindings[:view]._current_user.is_admin
+        end
+      end
 
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
