@@ -65,18 +65,55 @@ class User < ApplicationRecord
     end
 
     list do
-      field(:id)
+      field(:id) do
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
       field(:webaccess_id) { label 'Penn State WebAccess ID' }
       field(:first_name)
       field(:middle_name)
       field(:last_name)
-      field(:penn_state_identifier) { label 'Penn State ID' }
-      field(:pure_uuid) { label 'Pure ID' }
-      field(:activity_insight_identifier) { label 'Activity Insight ID' }
-      field(:is_admin) { label 'Admin user?' }
-      field(:created_at)
-      field(:updated_at)
-      field(:updated_by_user_at)
+      field(:penn_state_identifier) do
+        label 'Penn State ID'
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:pure_uuid) do
+        label 'Pure ID'
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:activity_insight_identifier) do
+        label 'Activity Insight ID'
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:is_admin) do
+        label 'Admin user?'
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:show_all_publications, :toggle)
+      field(:created_at) do
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:updated_at) do
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:updated_by_user_at) do
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
     end
 
     show do
@@ -108,6 +145,7 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
+      field(:show_all_publications)
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -138,11 +176,17 @@ class User < ApplicationRecord
         read_only do
           !bindings[:view]._current_user.is_admin
         end
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
       end
       field(:activity_insight_identifier) do
         label 'Activity Insight ID'
         read_only do
           !bindings[:view]._current_user.is_admin
+        end
+        visible do
+          bindings[:view]._current_user.is_admin
         end
       end
       field(:penn_state_identifier) do
@@ -150,16 +194,26 @@ class User < ApplicationRecord
         read_only do
           !bindings[:view]._current_user.is_admin
         end
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
       end
       field(:is_admin) do
         label 'Admin user?'
         read_only do
           !bindings[:view]._current_user.is_admin
         end
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
       end
+      field(:show_all_publications)
       field(:managed_organizations) do
         read_only do
           !bindings[:view]._current_user.is_admin
+        end
+        visible do
+          bindings[:view]._current_user.is_admin
         end
       end
       field(:user_organization_memberships) do
@@ -167,10 +221,24 @@ class User < ApplicationRecord
           !bindings[:view]._current_user.is_admin
         end
       end
-
-      field(:created_at) { read_only true }
-      field(:updated_at) { read_only true }
-      field(:updated_by_user_at) { read_only true }
+      field(:created_at) do
+        read_only true
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:updated_at) do
+        read_only true
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
+      field(:updated_by_user_at) do
+        read_only true
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
     end
   end
 

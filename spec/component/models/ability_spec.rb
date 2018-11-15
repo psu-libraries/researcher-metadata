@@ -22,7 +22,9 @@ describe Ability do
     it { is_expected.to be_able_to(:dashboard, :all) }
     it { is_expected.to be_able_to(:index, User) }
     it { is_expected.to be_able_to(:edit, managed_user) }
+    it { is_expected.to be_able_to(:toggle, managed_user) }
     it { is_expected.not_to be_able_to(:edit, other_user) }
+    it { is_expected.not_to be_able_to(:toggle, other_user) }
   end
 
   context "when given a non-admin user that does not own any organizations" do
