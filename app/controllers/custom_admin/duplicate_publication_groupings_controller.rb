@@ -1,4 +1,4 @@
-class CustomAdmin::DuplicatePublicationGroupingsController < CustomAdminController
+class CustomAdmin::DuplicatePublicationGroupingsController < RailsAdmin::ApplicationController
   def create
     if params[:bulk_ids].present? && params[:bulk_ids].many?
       publications = Publication.find(params[:bulk_ids])
