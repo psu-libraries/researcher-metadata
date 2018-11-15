@@ -25,6 +25,7 @@ feature "Creating a user", type: :feature do
         fill_in 'Activity Insight ID', with: 'ai-67890'
         fill_in 'Penn State ID', with: '9999999'
         check 'Admin user?'
+        check 'Show all publications'
         click_button 'Save'
       end
 
@@ -38,6 +39,7 @@ feature "Creating a user", type: :feature do
         expect(u.activity_insight_identifier).to eq 'ai-67890'
         expect(u.penn_state_identifier).to eq '9999999'
         expect(u.is_admin).to eq true
+        expect(u.show_all_publications).to eq true
       end
 
       it "it marks the new user as having been manually edited" do
