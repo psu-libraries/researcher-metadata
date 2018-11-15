@@ -1,7 +1,7 @@
 en:
   admin:
     authorization:
-      not_authorized: "Your account is not authorized to visit the administrative portion of this site."
+      not_authorized: "Your account is not authorized to perform this action."
     duplicate_publication_groupings:
       create:
         success: "The selected publications were successfully grouped."

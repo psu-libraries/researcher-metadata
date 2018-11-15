@@ -33,6 +33,8 @@ class User < ApplicationRecord
   has_many :news_feed_items
   has_many :user_organization_memberships, inverse_of: :user
   has_many :organizations, through: :user_organization_memberships
+  has_many :managed_organizations, class_name: :Organization, foreign_key: :owner_id
+  has_many :managed_users, through: :managed_organizations, source: :users
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 

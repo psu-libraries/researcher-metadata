@@ -40,6 +40,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:performances).through(:user_performances) }
     it { is_expected.to have_many(:user_organization_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:organizations).through(:user_organization_memberships) }
+    it { is_expected.to have_many(:managed_organizations).class_name(:Organization).with_foreign_key(:owner_id) }
+    it { is_expected.to have_many(:managed_users).through(:managed_organizations).source(:users) }
   end
 
   describe 'validations' do
