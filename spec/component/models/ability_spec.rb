@@ -30,4 +30,10 @@ describe Ability do
     it { is_expected.not_to be_able_to(:manage, :all) }
     it { is_expected.not_to be_able_to(:access, :rails_admin) }
   end
+
+  context "when not given a user" do
+    let(:user) { nil }
+    it { is_expected.not_to be_able_to(:manage, :all) }
+    it { is_expected.not_to be_able_to(:access, :rails_admin) }
+  end
 end
