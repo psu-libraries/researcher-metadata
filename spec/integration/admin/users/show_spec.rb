@@ -27,6 +27,7 @@ feature "Admin user detail page", type: :feature do
 
   let(:org1) { create :organization, name: "Test Org One" }
   let(:org2) { create :organization, name: "Test Org Two" }
+  let!(:org3) { create :organization, name: "Managed Org", owner: user }
 
   let(:con1) { create :contract, title: "Test Contract One"}
   let(:con2) { create :contract, title: "Test Contract Two"}
@@ -77,6 +78,10 @@ feature "Admin user detail page", type: :feature do
 
       it "shows the user's Penn State ID" do
         expect(page).to have_content 'psu345678'
+      end
+
+      it "shows the organizations that the user manages" do
+        expect(page).to have_link "Managed Org"
       end
 
       it "shows the user's publications" do

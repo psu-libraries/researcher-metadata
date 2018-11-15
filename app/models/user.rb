@@ -85,6 +85,7 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
+      field(:managed_organizations)
       field(:created_at)
       field(:updated_at)
       field(:updated_by_user_at)
@@ -124,6 +125,7 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
+      field(:managed_organizations)
       field(:user_organization_memberships)
 
       field(:created_at) { read_only true }
