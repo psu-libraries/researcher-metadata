@@ -1,5 +1,7 @@
 RailsAdmin.config do |config|
 
+  config.parent_controller = 'ApplicationController'
+
   ### Popular gems integration
 
   # == Devise ==
@@ -7,14 +9,6 @@ RailsAdmin.config do |config|
     warden.authenticate! scope: :user
   end
   config.current_user_method(&:current_user)
-
-  #TODO Configure CanCan to handle authorizations errors like this
-  # config.authorize_with do
-  #   unless current_user.admin?
-  #     flash[:alert] = I18n.t('admin.authorization.not_authorized')
-  #     redirect_to main_app.root_path
-  #   end
-  # end
 
   # == Cancan ==
   config.authorize_with :cancan
