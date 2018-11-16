@@ -5,11 +5,19 @@ feature "updating a publication via the admin interface", type: :feature do
   let!(:pub) { create(:publication, title: "Test Publication") }
 
   context "when the current user is an admin" do
-    before { authenticate_admin_user }
+    before do
+      authenticate_admin_user
+      visit rails_admin.edit_path(model_name: :publication, id: pub.id)
+    end
+
+    describe "viewing the form" do
+      it "does not allow the total Scopus citations to be set" do
+        expect(page).not_to have_field "Total scopus citations"
+      end
+    end
 
     describe "submitting the form with new data to update a publication record" do
       before do
-        visit rails_admin.edit_path(model_name: :publication, id: pub.id)
         fill_in 'Title', with: 'Updated Title'
         click_on 'Save'
       end

@@ -13,6 +13,10 @@ feature "Creating a publication", type: :feature do
       it "show the correct content" do
         expect(page).to have_content "New Publication"
       end
+
+      it "does not allow the total Scopus citations to be set" do
+        expect(page).not_to have_field "Total scopus citations"
+      end
     end
 
     describe "submitting the form to create a new publication" do
@@ -33,7 +37,6 @@ feature "Creating a publication", type: :feature do
         fill_in 'Abstract', with: 'Test Abstract'
         check 'Et al authors?'
         fill_in 'Published on', with: 'August 23, 2018'
-        fill_in 'Number of citations', with: 5
         check 'Visible via API?'
 
         click_button 'Save'
@@ -56,7 +59,6 @@ feature "Creating a publication", type: :feature do
         expect(p.abstract).to eq 'Test Abstract'
         expect(p.authors_et_al).to eq true
         expect(p.published_on).to eq Date.new(2018, 8, 23)
-        expect(p.total_scopus_citations).to eq 5
         expect(p.visible).to eq true
       end
 
