@@ -123,6 +123,8 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
+      field(:show_all_publications)
+      field(:show_all_contracts)
       field(:managed_organizations)
       field(:created_at)
       field(:updated_at)
