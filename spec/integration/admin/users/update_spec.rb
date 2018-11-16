@@ -11,7 +11,8 @@ feature "updating a user via the admin interface", type: :feature do
                        activity_insight_identifier: 'ai-xyz789',
                        penn_state_identifier: '987654321',
                        is_admin: false,
-                       show_all_publications: false }
+                       show_all_publications: false,
+                       show_all_contracts: false }
   let!(:user_org) { create :organization,
                            owner: user,
                            name: "User's Organization" }
@@ -58,6 +59,7 @@ feature "updating a user via the admin interface", type: :feature do
         fill_in 'Penn State ID', with: '123456789'
         check 'Admin user?'
         check 'Show all publications'
+        check 'Show all contracts'
         click_on 'Save'
       end
 
@@ -91,6 +93,10 @@ feature "updating a user via the admin interface", type: :feature do
 
       it "updates the user record's publication visibility flag" do
         expect(user.reload.show_all_publications).to eq true
+      end
+
+      it "updates the user record's contract visibility flag" do
+        expect(user.reload.show_all_contracts).to eq true
       end
 
       it "sets the timestamp on the user record to indicate that it was manually updated" do
@@ -178,11 +184,16 @@ feature "updating a user via the admin interface", type: :feature do
       describe "submitting the form with new data to update the user record" do
         before do
           check "Show all publications"
+          check "Show all contracts"
           click_on "Save"
         end
 
-        it "updates the user record's data" do
+        it "updates the user record's publication visibility flag" do
           expect(user.reload.show_all_publications).to eq true
+        end
+
+        it "updates the user record's contract visibility flag" do
+          expect(user.reload.show_all_contracts).to eq true
         end
 
         it "sets the timestamp on the user record to indicate that it was manually updated" do

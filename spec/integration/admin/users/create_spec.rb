@@ -26,6 +26,7 @@ feature "Creating a user", type: :feature do
         fill_in 'Penn State ID', with: '9999999'
         check 'Admin user?'
         check 'Show all publications'
+        check 'Show all contracts'
         click_button 'Save'
       end
 
@@ -40,6 +41,7 @@ feature "Creating a user", type: :feature do
         expect(u.penn_state_identifier).to eq '9999999'
         expect(u.is_admin).to eq true
         expect(u.show_all_publications).to eq true
+        expect(u.show_all_contracts).to eq true
       end
 
       it "it marks the new user as having been manually edited" do

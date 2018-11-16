@@ -99,6 +99,7 @@ class User < ApplicationRecord
         end
       end
       field(:show_all_publications, :toggle)
+      field(:show_all_contracts, :toggle)
       field(:created_at) do
         visible do
           bindings[:view]._current_user.is_admin
@@ -146,6 +147,7 @@ class User < ApplicationRecord
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:is_admin) { label 'Admin user?' }
       field(:show_all_publications)
+      field(:show_all_contracts)
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -208,6 +210,7 @@ class User < ApplicationRecord
         end
       end
       field(:show_all_publications)
+      field(:show_all_contracts)
       field(:managed_organizations) do
         read_only do
           !bindings[:view]._current_user.is_admin
