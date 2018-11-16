@@ -12,7 +12,8 @@ feature "updating a user via the admin interface", type: :feature do
                        penn_state_identifier: '987654321',
                        is_admin: false,
                        show_all_publications: false,
-                       show_all_contracts: false }
+                       show_all_contracts: false,
+                       scopus_h_index: 649 }
   let!(:user_org) { create :organization,
                            owner: user,
                            name: "User's Organization" }
@@ -178,6 +179,15 @@ feature "updating a user via the admin interface", type: :feature do
 
         it "does not allow the user's Penn State ID to be updated" do
           expect(page).not_to have_field "Penn State ID"
+        end
+
+        it "does not show the user's H-Index" do
+          expect(page).not_to have_content "649"
+        end
+
+        it "does not allow the user's H-Index to be updated" do
+          expect(page).not_to have_field "H-Index"
+          expect(page).not_to have_field "Scopus h index"
         end
       end
 

@@ -7,7 +7,8 @@ feature "Admin user detail page", type: :feature do
                        webaccess_id: 'bat123',
                        activity_insight_identifier: 'ai12345',
                        pure_uuid: 'pure67890',
-                       penn_state_identifier: 'psu345678') }
+                       penn_state_identifier: 'psu345678',
+                       scopus_h_index: 724) }
 
   let!(:pub1) { create :publication, title: "Bob's First Publication",
                        journal_title: "First Journal",
@@ -78,6 +79,10 @@ feature "Admin user detail page", type: :feature do
 
       it "shows the user's Penn State ID" do
         expect(page).to have_content 'psu345678'
+      end
+
+      it "shows the user's H-Index" do
+        expect(page).to have_content '724'
       end
 
       it "shows the organizations that the user manages" do

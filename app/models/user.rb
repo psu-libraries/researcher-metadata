@@ -100,6 +100,12 @@ class User < ApplicationRecord
       end
       field(:show_all_publications, :toggle)
       field(:show_all_contracts, :toggle)
+      field(:scopus_h_index) do
+        label 'H-Index'
+        visible do
+          bindings[:view]._current_user.is_admin
+        end
+      end
       field(:created_at) do
         visible do
           bindings[:view]._current_user.is_admin
@@ -122,6 +128,7 @@ class User < ApplicationRecord
       field(:pure_uuid) { label 'Pure ID' }
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
+      field(:scopus_h_index) { label 'H-Index' }
       field(:is_admin) { label 'Admin user?' }
       field(:show_all_publications)
       field(:show_all_contracts)

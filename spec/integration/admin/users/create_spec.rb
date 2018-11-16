@@ -13,6 +13,11 @@ feature "Creating a user", type: :feature do
       it "show the correct content" do
         expect(page).to have_content "New User"
       end
+
+      it "does not allow the new user's H-Index to be set" do
+        expect(page).not_to have_field 'H-Index'
+        expect(page).not_to have_field 'Scopus h index'
+      end
     end
 
     describe "submitting the form to create a new user" do
