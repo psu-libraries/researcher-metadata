@@ -2,6 +2,9 @@
 <div id="md-person-info">
   <ul>
     <li>Email:  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
+    <% if @user.scopus_h_index.present? %>
+      <li>H-Index:  <%= @user.scopus_h_index %></li>
+    <% end %>
   </ul>
 </div>
 <% if @pubs.any? %>

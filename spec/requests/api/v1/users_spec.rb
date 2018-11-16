@@ -1,9 +1,12 @@
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
+  let(:h_index) { nil }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
-    let!(:user) { create(:user_with_presentations, webaccess_id: 'xyz321', presentations_count: 10) }
+    let!(:user) { create(:user_with_presentations,
+                         webaccess_id: 'xyz321',
+                         presentations_count: 10) }
     let!(:invisible_presentation) {
       user.presentations.create(
         activity_insight_identifier: 'abc123',
@@ -240,6 +243,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user,
                          first_name: "Bob",
                          last_name: "Testerson",
+                         scopus_h_index: h_index,
                          webaccess_id: 'bat123') }
     let(:headers) { { "accept" => "text/html" } }
 
@@ -268,6 +272,7 @@ describe 'API::V1 Users' do
       end
 
       context "when the user has associated metadata" do
+        let(:h_index) { 49 }
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
                              journal_title: "Test Journal",
@@ -375,6 +380,7 @@ describe 'API::V1 Users' do
             <div id="md-person-info">
               <ul>
                 <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  <li>H-Index:  49</li>
               </ul>
             </div>
               <div id="md-publications">
