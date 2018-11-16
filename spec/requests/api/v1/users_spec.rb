@@ -99,7 +99,7 @@ describe 'API::V1 Users' do
           expect(json_response[:data].size).to eq(10)
         end
       end
-      context "when the user has no news feed itemss" do
+      context "when the user has no news feed items" do
         let(:user_without_news_feed_items) { create(:user, webaccess_id: "nocons123") }
         let(:webaccess_id) { user_without_news_feed_items.webaccess_id }
         it "returns an empty JSON data hash" do
