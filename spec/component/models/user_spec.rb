@@ -289,4 +289,46 @@ describe User, type: :model do
       expect(user.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
+
+  describe '#total_scopus_citations' do
+    let(:user) { User.new }
+
+    context "when the user has no publications" do
+      it "returns 0" do
+        expect(user.total_scopus_citations).to eq 0
+      end
+    end
+
+    context "when the user only has publications that have nil citation counts" do
+      let(:user) { create :user }
+      let(:pub1) { create :publication, total_scopus_citations: nil }
+      let(:pub2) { create :publication, total_scopus_citations: nil }
+
+      before do
+        create :authorship, user: user, publication: pub1
+        create :authorship, user: user, publication: pub2
+      end
+
+      it "returns 0" do
+        expect(user.total_scopus_citations).to eq 0
+      end
+    end
+
+    context "when the user has publications with non-nil citation counts" do
+      let(:user) { create :user }
+      let(:pub1) { create :publication, total_scopus_citations: nil }
+      let(:pub2) { create :publication, total_scopus_citations: 7 }
+      let(:pub3) { create :publication, total_scopus_citations: 5 }
+
+      before do
+        create :authorship, user: user, publication: pub1
+        create :authorship, user: user, publication: pub2
+        create :authorship, user: user, publication: pub3
+      end
+
+      it "returns the sum of all of the citations for all of the user's publications" do
+        expect(user.total_scopus_citations).to eq 12
+      end
+    end
+  end
 end

@@ -276,14 +276,16 @@ describe 'API::V1 Users' do
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
                              journal_title: "Test Journal",
-                             published_on: Date.new(2010, 1, 1) }
+                             published_on: Date.new(2010, 1, 1),
+                             total_scopus_citations: 4 }
         let!(:pub2) { create :publication, title: "Second Publication",
                              visible: true,
                              publisher: "Test Publisher",
                              published_on: Date.new(2015, 1, 1) }
         let!(:pub3) { create :publication, title: "Third Publication",
                              visible: true,
-                             published_on: Date.new(2018, 1, 1) }
+                             published_on: Date.new(2018, 1, 1),
+                             total_scopus_citations: 5 }
         let!(:pub4) { create :publication, title: "Undated Publication",
                              visible: true }
         let!(:pub5) { create :publication,
@@ -380,6 +382,7 @@ describe 'API::V1 Users' do
             <div id="md-person-info">
               <ul>
                 <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  <li>Citations:  9</li>
                   <li>H-Index:  49</li>
               </ul>
             </div>

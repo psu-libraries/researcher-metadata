@@ -57,6 +57,10 @@ class User < ApplicationRecord
     full_name
   end
 
+  def total_scopus_citations
+    publications.sum(:total_scopus_citations)
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do
