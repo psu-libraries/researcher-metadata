@@ -98,7 +98,7 @@ class PurePublicationImporter
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
                              published_day(publication)),
-      citation_count: publication['totalScopusCitations'],
+      total_scopus_citations: publication['totalScopusCitations'],
       abstract: abstract(publication),
       visible: true
     }

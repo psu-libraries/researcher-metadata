@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_16_193029) do
+ActiveRecord::Schema.define(version: 2018_11_16_213428) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -216,7 +216,7 @@ ActiveRecord::Schema.define(version: 2018_11_16_193029) do
     t.text "abstract"
     t.boolean "authors_et_al"
     t.date "published_on"
-    t.integer "citation_count"
+    t.integer "total_scopus_citations"
     t.integer "duplicate_publication_group_id"
     t.datetime "updated_by_user_at"
     t.boolean "visible", default: false

@@ -15,7 +15,7 @@ describe API::V1::PublicationSerializer do
                              authors_et_al: true,
                              published_on: date,
                              abstract: 'an abstract',
-                             citation_count: 1000 }
+                             total_scopus_citations: 1000 }
   let(:date) { nil }
 
   describe "data attributes" do

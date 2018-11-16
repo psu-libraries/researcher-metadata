@@ -73,8 +73,8 @@ describe PurePublicationImporter do
           expect(p1.published_on).to eq Date.new(1997, 1, 1)
           expect(p2.published_on).to eq Date.new(2010, 5, 1)
 
-          expect(p1.citation_count).to eq 2
-          expect(p2.citation_count).to eq 32
+          expect(p1.total_scopus_citations).to eq 2
+          expect(p2.total_scopus_citations).to eq 32
 
           expect(p1.abstract).to be_nil
           expect(p2.abstract).to eq '<p>This is the third abstract.</p>'
@@ -154,7 +154,7 @@ describe PurePublicationImporter do
                                     issn: 'existing issn',
                                     status: 'existing status',
                                     published_on: Date.new(2018, 8, 22),
-                                    citation_count: 1,
+                                    total_scopus_citations: 1,
                                     abstract: 'existing abstract',
                                     visible: false }
         
@@ -257,7 +257,7 @@ describe PurePublicationImporter do
             expect(updated_pub.issn).to eq '0962-1849'
             expect(updated_pub.status).to eq 'Published'
             expect(updated_pub.published_on).to eq Date.new(1997, 1, 1)
-            expect(updated_pub.citation_count).to eq 2
+            expect(updated_pub.total_scopus_citations).to eq 2
             expect(updated_pub.abstract).to be_nil
             expect(updated_pub.visible).to eq true
           end
@@ -277,7 +277,7 @@ describe PurePublicationImporter do
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'Published'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
-            expect(new_pub.citation_count).to eq 32
+            expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
           end
@@ -369,7 +369,7 @@ describe PurePublicationImporter do
             expect(existing_pub_reloaded.issn).to eq 'existing issn'
             expect(existing_pub_reloaded.status).to eq 'existing status'
             expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
-            expect(existing_pub_reloaded.citation_count).to eq 1
+            expect(existing_pub_reloaded.total_scopus_citations).to eq 1
             expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
             expect(existing_pub_reloaded.visible).to eq false
           end
@@ -389,7 +389,7 @@ describe PurePublicationImporter do
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'Published'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
-            expect(new_pub.citation_count).to eq 32
+            expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
           end

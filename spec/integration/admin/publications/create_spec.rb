@@ -56,7 +56,7 @@ feature "Creating a publication", type: :feature do
         expect(p.abstract).to eq 'Test Abstract'
         expect(p.authors_et_al).to eq true
         expect(p.published_on).to eq Date.new(2018, 8, 23)
-        expect(p.citation_count).to eq 5
+        expect(p.total_scopus_citations).to eq 5
         expect(p.visible).to eq true
       end
 
