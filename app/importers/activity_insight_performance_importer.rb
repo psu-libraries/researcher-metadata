@@ -32,8 +32,8 @@ class ActivityInsightPerformanceImporter < ActivityInsightCSVImporter
       location: row[:location],
       delivery_type: row[:delivery_type],
       scope: row[:scope],
-      start_on: start_date(row),
-      end_on: end_date(row),
+      start_on: row[:start_start],
+      end_on: row[:end_start],
       activity_insight_id: row[:id]
     }
   end
@@ -48,14 +48,6 @@ class ActivityInsightPerformanceImporter < ActivityInsightCSVImporter
 
   def sponsor(row)
     extract_value(row: row, header_key: :sponsor, header_count: 2)
-  end
-
-  def start_date(row)
-    Date.parse("#{row[:dtm_start]} #{row[:dtd_start]} #{row[:dty_start]}")
-  end
-
-  def end_date(row)
-    Date.parse("#{row[:dtm_end]} #{row[:dtd_end]} #{row[:dty_end]}")
   end
 
   def extract_value(row:, header_key:, header_count:)

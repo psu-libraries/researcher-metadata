@@ -45,7 +45,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p2.delivery_type).to eq 'Competition'
         expect(p2.scope).to eq 'Local'
         expect(p2.start_on).to eq Date.new(2016, 4, 01)
-        expect(p2.end_on).to eq Date.new(2016, 4, 01)
+        expect(p2.end_on).to eq Date.new(2016, 4, 30)
 
         expect(p3.title).to eq 'Test Performance 3'
         expect(p3.performance_type).to eq 'Film - Documentary'
@@ -56,7 +56,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p3.delivery_type).to eq 'Invitation'
         expect(p3.scope).to eq 'Regional'
         expect(p3.start_on).to eq Date.new(2009, 2, 01)
-        expect(p3.end_on).to eq Date.new(2009, 8, 01)
+        expect(p3.end_on).to eq Date.new(2009, 8, 31)
 
         expect(p4.title).to eq 'Test Performance 4'
         expect(p4.performance_type).to eq 'Print Edition for Something'
