@@ -55,5 +55,11 @@ FactoryBot.define do
         create_list(:news_feed_item, evaluator.news_feed_items_count, user: user)
       end
     end
+
+    factory :user_with_organization_memberships do
+      after(:create) do |user, evaluator|
+        create_list(:user_organization_membership, 3, user: user)
+      end
+    end
   end
 end
