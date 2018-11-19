@@ -24,7 +24,6 @@ class ActivityInsightPerformanceImporter < ActivityInsightCSVImporter
     {
       title: row[:title],
       performance_type: performance_type(row),
-      type_other: row[:type_other],
       sponsor: sponsor(row),
       description: description(row),
       group_name: row[:name],
