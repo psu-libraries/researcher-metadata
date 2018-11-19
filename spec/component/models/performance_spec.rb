@@ -7,7 +7,6 @@ describe 'the performance table', type: :model do
   it { is_expected.to have_db_column(:title).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:activity_insight_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:performance_type).of_type(:string) }
-  it { is_expected.to have_db_column(:type_other).of_type(:text) }
   it { is_expected.to have_db_column(:sponsor).of_type(:text) }
   it { is_expected.to have_db_column(:description).of_type(:text) }
   it { is_expected.to have_db_column(:group_name).of_type(:text) }
