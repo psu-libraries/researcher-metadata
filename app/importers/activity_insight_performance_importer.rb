@@ -5,7 +5,6 @@ class ActivityInsightPerformanceImporter < ActivityInsightCSVImporter
 
     p = Performance.find_by(activity_insight_id: row[:id]) ||
         Performance.new(performance_attrs(row))
-
     if p.persisted?
       p.update_attributes!(performance_attrs(row))
       return nil
