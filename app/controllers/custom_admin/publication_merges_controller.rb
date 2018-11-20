@@ -1,4 +1,4 @@
-class CustomAdmin::PublicationMergesController < CustomAdminController
+class CustomAdmin::PublicationMergesController < RailsAdmin::ApplicationController
   def create
     group = DuplicatePublicationGroup.find(params[:duplicate_publication_group_id])
     selected_pub = Publication.find(params[:publication_id])

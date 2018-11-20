@@ -2,10 +2,14 @@ module API::V1
   class PublicationSerializer
     include FastJsonapi::ObjectSerializer
     attributes :title, :secondary_title, :journal_title, :publication_type, :publisher,
-               :status, :volume, :issue, :edition, :page_range, :authors_et_al, :abstract, :citation_count
+               :status, :volume, :issue, :edition, :page_range, :authors_et_al, :abstract
 
     attribute :published_on do |object|
       object.published_on.try(:iso8601)
+    end
+
+    attribute :citation_count do |object|
+      object.total_scopus_citations
     end
 
     attribute :contributors do |object|

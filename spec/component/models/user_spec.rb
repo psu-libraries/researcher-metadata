@@ -11,6 +11,9 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:penn_state_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
+  it { is_expected.to have_db_column(:scopus_h_index).of_type(:integer) }
+  it { is_expected.to have_db_column(:show_all_publications).of_type(:boolean).with_options(default: false) }
+  it { is_expected.to have_db_column(:show_all_contracts).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
@@ -40,6 +43,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:performances).through(:user_performances) }
     it { is_expected.to have_many(:user_organization_memberships).inverse_of(:user) }
     it { is_expected.to have_many(:organizations).through(:user_organization_memberships) }
+    it { is_expected.to have_many(:managed_organizations).class_name(:Organization).with_foreign_key(:owner_id) }
+    it { is_expected.to have_many(:managed_users).through(:managed_organizations).source(:users) }
   end
 
   describe 'validations' do
@@ -282,6 +287,48 @@ describe User, type: :model do
     it "sets the user's updated_by_user_at field to the current time" do
       user.mark_as_updated_by_user
       expect(user.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
+    end
+  end
+
+  describe '#total_scopus_citations' do
+    let(:user) { User.new }
+
+    context "when the user has no publications" do
+      it "returns 0" do
+        expect(user.total_scopus_citations).to eq 0
+      end
+    end
+
+    context "when the user only has publications that have nil citation counts" do
+      let(:user) { create :user }
+      let(:pub1) { create :publication, total_scopus_citations: nil }
+      let(:pub2) { create :publication, total_scopus_citations: nil }
+
+      before do
+        create :authorship, user: user, publication: pub1
+        create :authorship, user: user, publication: pub2
+      end
+
+      it "returns 0" do
+        expect(user.total_scopus_citations).to eq 0
+      end
+    end
+
+    context "when the user has publications with non-nil citation counts" do
+      let(:user) { create :user }
+      let(:pub1) { create :publication, total_scopus_citations: nil }
+      let(:pub2) { create :publication, total_scopus_citations: 7 }
+      let(:pub3) { create :publication, total_scopus_citations: 5 }
+
+      before do
+        create :authorship, user: user, publication: pub1
+        create :authorship, user: user, publication: pub2
+        create :authorship, user: user, publication: pub3
+      end
+
+      it "returns the sum of all of the citations for all of the user's publications" do
+        expect(user.total_scopus_citations).to eq 12
+      end
     end
   end
 end

@@ -64,7 +64,7 @@ class Publication < ApplicationRecord
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
-      field(:citation_count) { label 'Number of citations' }
+      field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
@@ -92,7 +92,6 @@ class Publication < ApplicationRecord
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
-      field(:citation_count) { label 'Number of citations' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -120,7 +119,7 @@ class Publication < ApplicationRecord
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
-      field(:citation_count) { label 'Number of citations' }
+      field(:total_scopus_citations) { label 'Number of Scopus citations' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -154,7 +153,6 @@ class Publication < ApplicationRecord
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
-      field(:citation_count) { label 'Number of citations' }
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }

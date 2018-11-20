@@ -50,6 +50,9 @@ gem 'rails_admin_toggleable'
 # Authentication framework
 gem 'devise'
 
+# Authorization framework
+gem 'cancancan', '~> 2.0'
+
 # A lightning fast JSON:API serializer for Ruby Objects
 gem 'fast_jsonapi'
 

@@ -34,7 +34,7 @@ module API::V1
 
       if params[:order_first_by].present?
         case params[:order_first_by]
-        when 'citation_count_desc' then data = data.order('citation_count DESC NULLS LAST')
+        when 'citation_count_desc' then data = data.order('total_scopus_citations DESC NULLS LAST')
         when 'publication_date_desc' then data = data.order(published_on: :desc)
         when 'publication_date_asc' then data = data.order(published_on: :asc)
         when 'title_asc' then data = data.order(title: :asc)
@@ -43,7 +43,7 @@ module API::V1
 
       if params[:order_second_by].present?
         case params[:order_second_by]
-        when 'citation_count_desc' then data = data.order('citation_count DESC NULLS LAST')
+        when 'citation_count_desc' then data = data.order('total_scopus_citations DESC NULLS LAST')
         when 'publication_date_desc' then data = data.order(published_on: :desc)
         when 'publication_date_asc' then data = data.order(published_on: :asc)
         when 'title_asc' then data = data.order(title: :asc)

@@ -19,16 +19,19 @@ describe PureUserImporter do
           expect(u1.middle_name).to eq 'A'
           expect(u1.last_name).to eq 'Tester'
           expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
+          expect(u1.scopus_h_index).to eq 15
 
           expect(u2.first_name).to eq 'Bob'
           expect(u2.middle_name).to eq 'B'
           expect(u2.last_name).to eq 'Testuser'
           expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
+          expect(u2.scopus_h_index).to eq 21
 
           expect(u3.first_name).to eq 'Jill'
           expect(u3.middle_name).to be_nil
           expect(u3.last_name).to eq 'Test'
           expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
+          expect(u3.scopus_h_index).to eq 2
         end
 
         context "when no organizations exist in the database" do
@@ -202,6 +205,7 @@ describe PureUserImporter do
                                       last_name: 'Testuser',
                                       penn_state_identifier: '987654321',
                                       pure_uuid: '12345678',
+                                      scopus_h_index: 79,
                                       updated_by_user_at: timestamp,
                                       activity_insight_identifier: ai_id }
         let(:ai_id) { nil }
@@ -209,7 +213,7 @@ describe PureUserImporter do
 
         context "when the existing user has been updated by a human" do
           let(:timestamp) { Time.zone.now }
-          it "creates new records for the new users and does not update the existing user" do
+          it "creates new records for the new users and only updates some existing user data" do
             expect { importer.call }.to change { User.count }.by 2
 
             u1 = User.find_by(webaccess_id: 'sat1')
@@ -220,22 +224,25 @@ describe PureUserImporter do
             expect(u1.middle_name).to eq 'A'
             expect(u1.last_name).to eq 'Tester'
             expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
+            expect(u1.scopus_h_index).to eq 15
 
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
             expect(u2.pure_uuid).to eq '12345678'
+            expect(u2.scopus_h_index).to eq 21
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to be_nil
             expect(u3.last_name).to eq 'Test'
             expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
+            expect(u3.scopus_h_index).to eq 2
           end
         end
 
         context "when the existing user has been imported from Activity Insight" do
           let(:ai_id) { '12345678' }
-          it "creates new records for the new users and does not update the existing user" do
+          it "creates new records for the new users and only updates some existing user data" do
             expect { importer.call }.to change { User.count }.by 2
 
             u1 = User.find_by(webaccess_id: 'sat1')
@@ -246,16 +253,19 @@ describe PureUserImporter do
             expect(u1.middle_name).to eq 'A'
             expect(u1.last_name).to eq 'Tester'
             expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
+            expect(u1.scopus_h_index).to eq 15
 
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
             expect(u2.pure_uuid).to eq '12345678'
+            expect(u2.scopus_h_index).to eq 21
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to be_nil
             expect(u3.last_name).to eq 'Test'
             expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
+            expect(u3.scopus_h_index).to eq 2
           end
         end
 
@@ -271,16 +281,19 @@ describe PureUserImporter do
             expect(u1.middle_name).to eq 'A'
             expect(u1.last_name).to eq 'Tester'
             expect(u1.pure_uuid).to eq '9530a014-c29f-4081-88ae-b923dc919001'
+            expect(u1.scopus_h_index).to eq 15
 
             expect(u2.first_name).to eq 'Bob'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
             expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
+            expect(u2.scopus_h_index).to eq 21
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to be_nil
             expect(u3.last_name).to eq 'Test'
             expect(u3.pure_uuid).to eq '0177f1b1-bf3c-4f8d-af2a-10fe0034754c'
+            expect(u3.scopus_h_index).to eq 2
           end
         end
       end

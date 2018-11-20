@@ -1,9 +1,12 @@
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
+  let(:h_index) { nil }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
-    let!(:user) { create(:user_with_presentations, webaccess_id: 'xyz321', presentations_count: 10) }
+    let!(:user) { create(:user_with_presentations,
+                         webaccess_id: 'xyz321',
+                         presentations_count: 10) }
     let!(:invisible_presentation) {
       user.presentations.create(
         activity_insight_identifier: 'abc123',
@@ -99,7 +102,7 @@ describe 'API::V1 Users' do
           expect(json_response[:data].size).to eq(10)
         end
       end
-      context "when the user has no news feed itemss" do
+      context "when the user has no news feed items" do
         let(:user_without_news_feed_items) { create(:user, webaccess_id: "nocons123") }
         let(:webaccess_id) { user_without_news_feed_items.webaccess_id }
         it "returns an empty JSON data hash" do
@@ -240,6 +243,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user,
                          first_name: "Bob",
                          last_name: "Testerson",
+                         scopus_h_index: h_index,
                          webaccess_id: 'bat123') }
     let(:headers) { { "accept" => "text/html" } }
 
@@ -257,30 +261,31 @@ describe 'API::V1 Users' do
       context "when the user has no associated metadata" do
         it "returns an HTML representation of the given user's basic information" do
           expect(response.body).to eq <<~HTML
-              <div class="md-profile">
-                <div class="md-person-info">
-                  <ul>
-                    <li>Name:  Bob Testerson</li>
-                    <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                  </ul>
-                </div>
+              <h2 id="md-full-name">Bob Testerson</h2>
+              <div id="md-person-info">
+                <ul>
+                  <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                </ul>
               </div>
             HTML
         end
       end
 
       context "when the user has associated metadata" do
+        let(:h_index) { 49 }
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
                              journal_title: "Test Journal",
-                             published_on: Date.new(2010, 1, 1) }
+                             published_on: Date.new(2010, 1, 1),
+                             total_scopus_citations: 4 }
         let!(:pub2) { create :publication, title: "Second Publication",
                              visible: true,
                              publisher: "Test Publisher",
                              published_on: Date.new(2015, 1, 1) }
         let!(:pub3) { create :publication, title: "Third Publication",
                              visible: true,
-                             published_on: Date.new(2018, 1, 1) }
+                             published_on: Date.new(2018, 1, 1),
+                             total_scopus_citations: 5 }
         let!(:pub4) { create :publication, title: "Undated Publication",
                              visible: true }
         let!(:pub5) { create :publication,
@@ -373,49 +378,49 @@ describe 'API::V1 Users' do
 
         it "returns an HTML representation of all of the given user's available metadata" do
           expect(response.body).to eq <<~HTML
-              <div class="md-profile">
-                <div class="md-person-info">
-                  <ul>
-                    <li>Name:  Bob Testerson</li>
-                    <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                  </ul>
-                </div>
-                  <div class="md-publications">
-                    <h3>Publications</h3>
-                    <ul>
-                        <li>Undated Publication</li>
-                        <li>Third Publication, 2018</li>
-                        <li>Second Publication, Test Publisher, 2015</li>
-                        <li>First Publication, Test Journal, 2010</li>
-                    </ul>
-                  </div>
-                  <div class="md-grants">
-                    <h3>Grants</h3>
-                    <ul>
-                        <li>Awarded Grant Three, Sponsor</li>
-                        <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
-                        <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
-                    </ul>
-                  </div>
-                  <div class="md-presentations">
-                    <h3>Presentations</h3>
-                    <ul>
-                          <li>Presentation Two, An Organization, Earth</li>
-                    </ul>
-                  </div>
-                  <div class="md-advising">
-                    <h3>Graduate Student Advising</h3>
-                    <ul>
-                        <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
-                    </ul>
-                  </div>
-                  <div class="md-news-stories">
-                    <h3>Penn State News Media Mentions</h3>
-                    <ul>
-                        <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
-                        <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
-                    </ul>
-                  </div>
+            <h2 id="md-full-name">Bob Testerson</h2>
+            <div id="md-person-info">
+              <ul>
+                <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  <li>Citations:  9</li>
+                  <li>H-Index:  49</li>
+              </ul>
+            </div>
+              <div id="md-publications">
+                <h3>Publications</h3>
+                <ul>
+                    <li>Undated Publication</li>
+                    <li>Third Publication, 2018</li>
+                    <li>Second Publication, Test Publisher, 2015</li>
+                    <li>First Publication, Test Journal, 2010</li>
+                </ul>
+              </div>
+              <div id="md-grants">
+                <h3>Grants</h3>
+                <ul>
+                    <li>Awarded Grant Three, Sponsor</li>
+                    <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
+                    <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
+                </ul>
+              </div>
+              <div id="md-presentations">
+                <h3>Presentations</h3>
+                <ul>
+                      <li>Presentation Two, An Organization, Earth</li>
+                </ul>
+              </div>
+              <div id="md-advising">
+                <h3>Graduate Student Advising</h3>
+                <ul>
+                    <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
+                </ul>
+              </div>
+              <div id="md-news-stories">
+                <h3>Penn State News Media Mentions</h3>
+                <ul>
+                    <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
+                    <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
+                </ul>
               </div>
             HTML
         end
