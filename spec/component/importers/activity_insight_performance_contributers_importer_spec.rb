@@ -32,6 +32,21 @@ describe ActivityInsightPerformanceContributorsImporter do
 
       it "creates a new UserPerformance record for every valid row in the .csv file" do
         expect { importer.call }.to change { UserPerformance.count }.by 2
+
+        expect(User.find_by(webaccess_id: "ghi678").user_performances.last.role_other).to eq('MC')
+        expect(User.find_by(webaccess_id: "ghi678").user_performances.last.contribution).to eq('Producer')
+        expect(User.find_by(webaccess_id: "ghi678").user_performances.last.student_level).to eq(nil)
+        expect(User.find_by(webaccess_id: "ghi678").user_performances.last.performance).to be_truthy
+
+        expect(User.find_by(webaccess_id: "abc123").user_performances.last.role_other).to eq(nil)
+        expect(User.find_by(webaccess_id: "abc123").user_performances.last.contribution).to eq('Director')
+        expect(User.find_by(webaccess_id: "abc123").user_performances.last.student_level).to eq(nil)
+        expect(User.find_by(webaccess_id: "abc123").user_performances.last.performance).to be_truthy
+
+        expect(User.find_by(webaccess_id: "def345").user_performances.last.role_other).to eq(nil)
+        expect(User.find_by(webaccess_id: "def345").user_performances.last.contribution).to eq('Producer')
+        expect(User.find_by(webaccess_id: "def345").user_performances.last.student_level).to eq('Graduate')
+        expect(User.find_by(webaccess_id: "def345").user_performances.last.performance).to be_truthy
       end
     end
   end
