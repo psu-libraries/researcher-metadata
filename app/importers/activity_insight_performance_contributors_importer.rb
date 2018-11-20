@@ -5,13 +5,25 @@ class ActivityInsightPerformanceContributorsImporter < ActivityInsightCSVImporte
 
     p = Performance.find_by(activity_insight_id: row[:parent_id])
 
-    return UserPerformance.new(user: u, performance: p)
+    up =  UserPerformance.where(user: u, performance: p).first ||
+             UserPerformance.new(user: u, performance: p)
+
+    if up.persisted?
+      up.update_attributes(user_performance_attrs(row))
+      return nil
+    else
+      return up
+    end
   end
 
   private
 
   def bulk_import(objects)
     UserPerformance.import(objects)
+  end
+
+  def user_performance_attrs(row)
+    {}
   end
 
 end

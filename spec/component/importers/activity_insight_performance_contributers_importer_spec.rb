@@ -19,9 +19,11 @@ describe ActivityInsightPerformanceContributorsImporter do
 
     p1 = create(:performance, activity_insight_id: 166232324096)
     p2 = create(:performance, activity_insight_id: 166232252416)
+    p3 = create(:performance, activity_insight_id: 166232252419)
 
     UserPerformance.create(user: u3, performance: p1)
     UserPerformance.create(user: u3, performance: p2)
+    UserPerformance.create(user: u3, performance: p3)
   end
 
   describe '#call' do
