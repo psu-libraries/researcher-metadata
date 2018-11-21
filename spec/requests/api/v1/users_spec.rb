@@ -334,10 +334,17 @@ describe 'API::V1 Users' do
         let!(:pres1) { create :presentation,
                               name: "Presentation Two",
                               organization: "An Organization",
-                              location: "Earth"}
+                              location: "Earth",
+                              visible: true}
         let!(:pres2) { create :presentation,
                               title: nil,
-                              name: nil }
+                              name: nil,
+                              visible: true }
+        let!(:pres3) { create :presentation,
+                              name: "Presentation Three",
+                              organization: "Org",
+                              location: "Here",
+                              visible: false}
 
         let!(:etd1) { create :etd, title: 'ETD\n One',
                              url: "test.edu" }
@@ -370,6 +377,7 @@ describe 'API::V1 Users' do
 
           create :presentation_contribution, user: user, presentation: pres1
           create :presentation_contribution, user: user, presentation: pres2
+          create :presentation_contribution, user: user, presentation: pres3
 
           create :committee_membership, user: user, etd: etd1, role: "Committee Member"
 
