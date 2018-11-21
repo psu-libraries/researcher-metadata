@@ -119,15 +119,11 @@ describe 'API::V1 Users' do
   end
 
   describe 'GET /v1/users/:webaccess_id/publications' do
-    let!(:user) { create(:user_with_authorships,
-                         webaccess_id: 'xyz321',
-                         authorships_count: 10,
-                         show_all_publications: show_pubs) }
+    let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:invisible_pub) { create :publication, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json" } }
-    let(:show_pubs) { false }
 
     before do
       create :authorship, user: user, publication: invisible_pub
@@ -139,30 +135,14 @@ describe 'API::V1 Users' do
         expect(response).to have_http_status 200
       end
       context "when the user has publications" do
-        context "when the user can show all publications" do
-          let(:show_pubs) { true }
-          it "returns all the user's visible publications" do
-            expect(json_response[:data].size).to eq(10)
-          end
-          describe 'params:' do
-            describe 'limit' do
-              let(:params) { "?limit=5"}
-              it "returns the specified number of publications" do
-                expect(json_response[:data].size).to eq(5)
-              end
-            end
-          end
+        it "returns all the user's visible publications" do
+          expect(json_response[:data].size).to eq(10)
         end
-        context "when the user cannot show all publications" do
-          it "returns no publications" do
-            expect(json_response[:data].size).to eq(0)
-          end
-          describe 'params:' do
-            describe 'limit' do
-              let(:params) { "?limit=5"}
-              it "returns no publications" do
-                expect(json_response[:data].size).to eq(0)
-              end
+        describe 'params:' do
+          describe 'limit' do
+            let(:params) { "?limit=5"}
+            it "returns the specified number of publications" do
+              expect(json_response[:data].size).to eq(5)
             end
           end
         end
@@ -190,18 +170,8 @@ describe 'API::V1 Users' do
   end
 
   describe 'POST /v1/users/publications' do
-    let!(:user_xyz123) { create(:user_with_authorships,
-                                webaccess_id: 'xyz321',
-                                authorships_count: 10,
-                                show_all_publications: true) }
-    let!(:user_abc123) { create(:user_with_authorships,
-                                webaccess_id: 'abc123',
-                                authorships_count: 5,
-                                show_all_publications: true) }
-    let!(:user_def123) { create(:user_with_authorships,
-                                webaccess_id: 'def123',
-                                authorships_count: 5,
-                                show_all_publications: false) }
+    let!(:user_xyz123) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
+    let!(:user_abc123) { create(:user_with_authorships, webaccess_id: 'abc123', authorships_count: 5) }
 
     let!(:user_cws161) { create(:user, webaccess_id: 'cws161') }
 
@@ -215,15 +185,14 @@ describe 'API::V1 Users' do
       post "/v1/users/publications", params: params
     end
     context "for a valid set of webaccess_id params" do
-      let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123) } }
+      let(:params) { { '_json': %w(abc123 xyz321 cws161 fake123) } }
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
       it "returns visible publications for each webaccess_id" do
-        expect(json_response.count).to eq(4)
+        expect(json_response.count).to eq(3)
         expect(json_response[:abc123][:data].count).to eq(5)
         expect(json_response[:xyz321][:data].count).to eq(10)
-        expect(json_response[:def123][:data].count).to eq(0)
         expect(json_response[:cws161][:data].count).to eq(0)
       end
     end
@@ -275,9 +244,7 @@ describe 'API::V1 Users' do
                          first_name: "Bob",
                          last_name: "Testerson",
                          scopus_h_index: h_index,
-                         webaccess_id: 'bat123',
-                         show_all_publications: show_pubs) }
-    let(:show_pubs) { true }
+                         webaccess_id: 'bat123') }
     let(:headers) { { "accept" => "text/html" } }
 
     context "for a valid webaccess_id" do
@@ -301,29 +268,6 @@ describe 'API::V1 Users' do
                 </ul>
               </div>
             HTML
-        end
-      end
-
-      context "when the user has publications that cannot be shown" do
-        let(:pub1) { create :publication, title: "First Publication",
-                             visible: true,
-                             journal_title: "Test Journal",
-                             published_on: Date.new(2010, 1, 1) }
-        let(:show_pubs) { false }
-        before do
-          create :authorship, user: user, publication: pub1
-          get "/v1/users/#{webaccess_id}/profile", headers: headers
-        end
-
-        it "returns an HTML representation of the user's profile with no publications" do
-          expect(response.body).to eq <<~HTML
-              <h2 id="md-full-name">Bob Testerson</h2>
-              <div id="md-person-info">
-                <ul>
-                  <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                </ul>
-              </div>
-          HTML
         end
       end
 
