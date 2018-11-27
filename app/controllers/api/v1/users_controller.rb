@@ -73,7 +73,7 @@ module API::V1
       uq = API::V1::UserQuery.new(@user)
       if @user
         @pubs = uq.publications({order_first_by: 'publication_date_desc'})
-        @grants = uq.contracts({}).where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
+        @grants = uq.contracts.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
         @presentations = uq.presentations({})
         @news_feed_items = uq.news_feed_items({}).order(published_on: :desc)
         @committee_memberships = @user.committee_memberships

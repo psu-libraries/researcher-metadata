@@ -47,7 +47,12 @@ describe 'API::V1 Users' do
   end
 
   describe 'GET /v1/users/:webaccess_id/contracts' do
-    let!(:user) { create(:user_with_contracts, webaccess_id: 'xyz321', contracts_count: 10) }
+    let!(:user) { create(:user_with_contracts,
+                         webaccess_id: 'xyz321',
+                         contracts_count: 10,
+                         show_all_contracts: true) }
+    let!(:other_user) { create :user, show_all_contracts: false }
+    let!(:hidden_contract) { create :contract, visible: true }
     let!(:invisible_contract) { create :contract, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
@@ -55,6 +60,8 @@ describe 'API::V1 Users' do
 
     before do
       create :user_contract, user: user, contract: invisible_contract
+      create :user_contract, user: user, contract: hidden_contract
+      create :user_contract, user: other_user, contract: hidden_contract
       get "/v1/users/#{webaccess_id}/contracts#{params}", headers: headers
     end
 
@@ -244,7 +251,8 @@ describe 'API::V1 Users' do
                          first_name: "Bob",
                          last_name: "Testerson",
                          scopus_h_index: h_index,
-                         webaccess_id: 'bat123') }
+                         webaccess_id: 'bat123',
+                         show_all_contracts: true) }
     let(:headers) { { "accept" => "text/html" } }
 
     context "for a valid webaccess_id" do
@@ -272,6 +280,7 @@ describe 'API::V1 Users' do
       end
 
       context "when the user has associated metadata" do
+        let(:other_user) { create :user, show_all_contracts: false }
         let(:h_index) { 49 }
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
@@ -330,6 +339,11 @@ describe 'API::V1 Users' do
                              status: "Awarded",
                              title: "Invisible Awarded Grant",
                              visible: false }
+        let!(:con7) { create :contract,
+                             contract_type: "Grant",
+                             status: "Awarded",
+                             title: "Hidden by other",
+                             visible: true }
 
         let!(:pres1) { create :presentation,
                               name: "Presentation Two",
@@ -374,6 +388,8 @@ describe 'API::V1 Users' do
           create :user_contract, user: user, contract: con4
           create :user_contract, user: user, contract: con5
           create :user_contract, user: user, contract: con6
+          create :user_contract, user: user, contract: con7
+          create :user_contract, user: other_user, contract: con7
 
           create :presentation_contribution, user: user, presentation: pres1
           create :presentation_contribution, user: user, presentation: pres2
