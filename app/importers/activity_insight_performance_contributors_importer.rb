@@ -30,4 +30,8 @@ class ActivityInsightPerformanceContributorsImporter < ActivityInsightCSVImporte
     }
   end
 
+  def encoding
+    'bom|utf-8'
+  end
+
 end

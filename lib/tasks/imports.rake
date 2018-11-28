@@ -64,14 +64,20 @@ namespace :import do
     ActivityInsightPerformanceImporter.new(filename: args.filename).call
   end
 
-  desc 'Import Activity Insight performance contributors'
-  task :ai_performance_contributors, [:filename1, :filename2] => :environment do |_task, args|
+  desc 'Import Activity Insight performance contributors from file 1'
+  task :ai_performance_contributors1, [:filename] => :environment do |_task, args|
     args.with_defaults(
-      filename1: filename_for(:ai_performance_contributors1),
-      filename2: filename_for(:ai_performance_contributors2)
+      filename: filename_for(:ai_performance_contributors1),
     )
-    ActivityInsightPerformanceContributorsImporter.new(filename: args.filename1).call
-    ActivityInsightPerformanceContributorsImporter.new(filename: args.filename2).call
+    ActivityInsightPerformanceContributorsImporter.new(filename: args.filename).call
+  end
+
+  desc 'Import Activity Insight performance contributors from file 2'
+  task :ai_performance_contributors2, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:ai_performance_contributors2)
+    )
+    ActivityInsightPerformanceContributorsImporter.new(filename: args.filename).call
   end
 
   desc 'Import Pure Users'
