@@ -125,26 +125,26 @@ describe 'API::V1 Users' do
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/organizations' do
+  describe 'GET /v1/users/:webaccess_id/organization_memberships' do
     let!(:user) { create(:user_with_organization_memberships, webaccess_id: 'xyz321') }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json" } }
 
     before do
-      get "/v1/users/#{webaccess_id}/organizations#{params}", headers: headers
+      get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
     end
 
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      context "when the user has organizations" do
-        it "returns all the user's organizations" do
+      context "when the user has organization memberships" do
+        it "returns all the user's organization memberships" do
           expect(json_response[:data].size).to eq(3)
         end
       end
-      context "when the user has no organizations" do
+      context "when the user has no organization memberships" do
         let(:user_without_organization_memberships) { create(:user, webaccess_id: "abc123") }
         let(:webaccess_id) { user_without_organization_memberships.webaccess_id }
         it "returns an empty JSON data hash" do

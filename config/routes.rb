@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       post 'users/publications' => 'users#users_publications', as: :users_publications
       get 'users/:webaccess_id/etds' => 'users#etds', as: :user_etds
       get 'users/:webaccess_id/presentations' => 'users#presentations', as: :user_presentations
-      get 'users/:webaccess_id/organizations' => 'users#organizations', as: :user_organizations
+      get 'users/:webaccess_id/organization_memberships' => 'users#organization_memberships', as: :user_organization_memberships
       get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
     end
   end

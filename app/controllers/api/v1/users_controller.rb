@@ -68,13 +68,13 @@ module API::V1
       end
     end
 
-    def organizations
+    def organization_memberships
       user = User.find_by(webaccess_id: params[:webaccess_id])
       if user
-        @orgs = user.organizations.distinct
+        @memberships = user.user_organization_memberships
         respond_to do |format|
           format.html
-          format.json { render json: API::V1::OrganizationSerializer.new(@orgs) }
+          format.json { render json: API::V1::OrganizationMembershipSerializer.new(@memberships) }
         end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
@@ -104,11 +104,11 @@ module API::V1
       render json: data
     end
 
-    swagger_path '/v1/users/{webaccess_id}/organizations' do
+    swagger_path '/v1/users/{webaccess_id}/organization_memberships' do
       operation :get do
-        key :summary, "Retrieve the organizations to which a user belongs"
-        key :description, 'Returns organizations for a user'
-        key :operationId, 'findUserOrganizations'
+        key :summary, "Retrieve the user's organization memberships"
+        key :description, 'Returns organization memberships for a user'
+        key :operationId, 'findUserOrganizationMemberships'
         key :produces, [
           'application/json',
           'text/html'
@@ -119,12 +119,12 @@ module API::V1
         parameter do
           key :name, :webaccess_id
           key :in, :path
-          key :description, 'Webaccess ID of user to retrieve organizations'
+          key :description, 'Webaccess ID of user to retrieve organization memberships'
           key :required, true
           key :type, :string
         end
         response 200 do
-          key :description, 'user organizations response'
+          key :description, 'user organization memberships response'
           schema do
             key :'$ref', :User
           end
