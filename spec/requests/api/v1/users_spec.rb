@@ -145,8 +145,8 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no organizations" do
-        let(:user_without_news_feed_items) { create(:user, webaccess_id: "abc123") }
-        let(:webaccess_id) { user_without_news_feed_items.webaccess_id }
+        let(:user_without_organization_memberships) { create(:user, webaccess_id: "abc123") }
+        let(:webaccess_id) { user_without_organization_memberships.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
         end
