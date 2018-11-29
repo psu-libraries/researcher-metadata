@@ -110,8 +110,7 @@ module API::V1
         key :description, 'Returns organization memberships for a user'
         key :operationId, 'findUserOrganizationMemberships'
         key :produces, [
-          'application/json',
-          'text/html'
+          'application/json'
         ]
         key :tags, [
           'user'
