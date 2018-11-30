@@ -30,7 +30,7 @@ describe ActivityInsightPerformanceContributorsImporter do
 
   describe '#call' do
     context "when given a .csv file of performance contributors data that contains a 'role_other' column" do
-      let(:filename) { Rails.root.join('spec', 'fixtures', 'ai_performance_contributors.csv') }
+      let(:filename) { Rails.root.join('spec', 'fixtures', 'ai_performance_contributors1.csv') }
 
       it "creates a new UserPerformance record for every valid row in the .csv file" do
         expect { importer.call }.to change { UserPerformance.count }.by 2
