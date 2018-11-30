@@ -32,6 +32,7 @@ describe Performance, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:users).through(:user_performances) }
     it { is_expected.to have_many(:user_performances).inverse_of(:performance) }
+    it { is_expected.to have_many(:performance_screenings) }
   end
 
   describe "deleting a performance with user_performances" do
