@@ -11,73 +11,74 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user_with_committee_memberships) { create(:user_with_committee_memberships, webaccess_id: 'etd123', committee_memberships_count: 10) }
     let!(:user_with_news_feed_items) { create(:user_with_news_feed_items, webaccess_id: 'nfi123', news_feed_items_count: 10) }
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
-    let(:publications_params) { { 'query_string': 'limit=1' } }
-    let(:publication_params) { { "id" => publication_1.id, 'query_string': 'limit=1' } }
+    let!(:api_token) { create :api_token, token: 'token123' }
+    let(:publications_params) { {'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
+    let(:publication_params) { {"id" => publication_1.id, 'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
     let(:user_publications_params) {
       {
         "webaccess_id" => user.webaccess_id,
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
         "_query_string": "start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc&limit=10"
       }
     }
     let(:user_contracts_params) {
       {
         "webaccess_id" => user_with_contracts.webaccess_id,
-        "_headers" => {'accept' => 'application/json'}
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
     let(:invalid_user_contracts_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_presentations_params) {
       {
         "webaccess_id" => user_with_presentations.webaccess_id,
-        "_headers" => {'accept' => 'application/json'}
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
     let(:invalid_user_presentations_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_with_committee_memberships_params) {
       {
         "webaccess_id" => user_with_committee_memberships.webaccess_id,
-        "_headers" => {'accept' => 'application/json'}
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
     let(:invalid_user_with_committee_memberships_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_news_feed_items_params) {
       {
         "webaccess_id" => user_with_news_feed_items.webaccess_id,
-        "_headers" => {'accept' => 'application/json'}
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
     let(:invalid_user_news_feed_items_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_organization_memberships_params) {
       {
         "webaccess_id" => user_with_organization_memberships.webaccess_id,
-        "_headers" => {'accept' => 'application/json'}
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
     let(:invalid_user_organization_memberships_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:invalid_user_profile_params) {
@@ -86,17 +87,18 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'text/html'},
       }
     }
-    let(:invalid_publication_params) { { "id" => -2000 } }
+    let(:invalid_publication_params) { {"id" => -2000, '_headers' => {'X-API-Key' => 'token123'}} }
     let(:invalid_user_publications_params) {
       {
         "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json'},
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:users_publications_params) {
       {
         '_json': %w(abc123 xyz321 cws161 fake123),
-        '_query_string': 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc'
+        '_query_string': 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc',
+        '_headers' => {'X-API-Key' => 'token123'}
       }
     }
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }

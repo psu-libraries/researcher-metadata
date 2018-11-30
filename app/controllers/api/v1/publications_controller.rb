@@ -48,6 +48,9 @@ module API::V1
             end
           end
         end
+        security do
+          key :api_key, []
+        end
       end
     end
 
@@ -79,6 +82,9 @@ module API::V1
               key :'$ref', :Publication
             end
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end

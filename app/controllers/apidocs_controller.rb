@@ -13,6 +13,11 @@ class ApidocsController < ActionController::Base
     key :basePath, '/'
     key :consumes, ['application/json']
     key :produces, ['application/json']
+    security_definition :api_key do
+      key :type, :apiKey
+      key :name, :'X-API-Key'
+      key :in, :header
+    end
   end
 
   def index

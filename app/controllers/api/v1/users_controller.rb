@@ -142,6 +142,9 @@ module API::V1
             end
           end
         end
+        security do
+          key :api_key, []
+        end
       end
     end
 
@@ -183,6 +186,9 @@ module API::V1
               key :type, :string
             end
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -227,6 +233,9 @@ module API::V1
             end
           end
         end
+        security do
+          key :api_key, []
+        end
       end
     end
 
@@ -270,6 +279,9 @@ module API::V1
             end
           end
         end
+        security do
+          key :api_key, []
+        end
       end
     end
 
@@ -312,6 +324,9 @@ module API::V1
               key :type, :string
             end
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -404,6 +419,9 @@ module API::V1
               key :type, :string
             end
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -520,6 +538,9 @@ module API::V1
         end
         response 200 do
           key :description, 'OK'
+        end
+        security do
+          key :api_key, []
         end
       end
     end

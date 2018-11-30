@@ -2,6 +2,7 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
   let(:h_index) { nil }
+  let!(:token) { create :api_token, token: 'token123' }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
     let!(:user) { create(:user_with_presentations,
@@ -15,7 +16,7 @@ describe 'API::V1 Users' do
     }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
@@ -38,7 +39,7 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
@@ -56,7 +57,7 @@ describe 'API::V1 Users' do
     let!(:invisible_contract) { create :contract, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       create :user_contract, user: user, contract: invisible_contract
@@ -82,7 +83,7 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
@@ -94,7 +95,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_news_feed_items, webaccess_id: 'xyz321', news_feed_items_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/news_feed_items#{params}", headers: headers
@@ -117,7 +118,7 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
@@ -129,7 +130,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_organization_memberships, webaccess_id: 'xyz321') }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
@@ -162,7 +163,7 @@ describe 'API::V1 Users' do
     let!(:invisible_pub) { create :publication, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
     let(:show_pubs) { false }
 
     before do
@@ -211,7 +212,7 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
@@ -248,10 +249,11 @@ describe 'API::V1 Users' do
       create :authorship, user: user_abc123, publication: invisible_pub1
       create :authorship, user: user_cws161, publication: invisible_pub2
 
-      post "/v1/users/publications", params: params
+      post "/v1/users/publications", params: params, headers: headers
     end
     context "for a valid set of webaccess_id params" do
       let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123) } }
+      let(:headers) { {'X-API-Key' => 'token123'} }
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
@@ -269,7 +271,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_committee_memberships, webaccess_id: 'xyz321', committee_memberships_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
@@ -292,7 +294,7 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
