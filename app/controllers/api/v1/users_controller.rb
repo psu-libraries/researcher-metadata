@@ -131,15 +131,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -176,15 +168,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -222,15 +206,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -268,15 +244,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -314,15 +282,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -409,15 +369,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
         security do
@@ -452,15 +404,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
       end

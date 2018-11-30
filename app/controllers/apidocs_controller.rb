@@ -20,6 +20,17 @@ class ApidocsController < ActionController::Base
     end
   end
 
+  swagger_schema :ErrorModelV1 do
+    key :required, [:code, :message]
+    property :code do
+      key :type, :integer
+      key :format, :int32
+    end
+    property :message do
+      key :type, :string
+    end
+  end
+
   def index
     render json: Swagger::Blocks.build_root_json(SwaggeredClasses.all)
   end
