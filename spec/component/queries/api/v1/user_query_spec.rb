@@ -59,4 +59,49 @@ describe API::V1::UserQuery do
       end
     end
   end
+
+  describe '#publications' do
+    let(:user) { create :user, show_all_publications: true }
+
+    context "when the user can show all publications" do
+      context "when the user has no publications" do
+        it "returns an empty array" do
+          expect(uq.publications({})).to eq []
+        end
+      end
+      context "when the user has publications" do
+        let(:invis_pub) { create :publication, visible: false }
+        let(:vis_pub) { create :publication, visible: true }
+        before do
+          create :authorship, user: user, publication: invis_pub, author_number: 1
+          create :authorship, user: user, publication: vis_pub, author_number: 1
+        end
+
+        it "returns the user's visible publications" do
+          expect(uq.publications({})).to eq [vis_pub]
+        end
+      end
+    end
+    context "when the user cannot show any publications" do
+      let(:user) { create :user, show_all_publications: false }
+
+      context "when the user has no publications" do
+        it "returns an empty array" do
+          expect(uq.publications({})).to eq []
+        end
+      end
+      context "when the user has publications" do
+        let(:invis_pub) { create :publication, visible: false }
+        let(:vis_pub) { create :publication, visible: true }
+        before do
+          create :authorship, user: user, publication: invis_pub, author_number: 1
+          create :authorship, user: user, publication: vis_pub, author_number: 1
+        end
+
+        it "returns an empty array" do
+          expect(uq.publications({})).to eq []
+        end
+      end
+    end
+  end
 end
