@@ -18,6 +18,8 @@ describe ActivityInsightPerformanceScreeningImporter do
       it "creates a new performance_screening record for every valid row in the .csv file" do
         expect { importer.call }.to change { PerformanceScreening.count }.by 5
 
+        performance1 = Performance.find_by( activity_insight_id: 161819957248 )
+
         p1 = PerformanceScreening.first
         p2 = PerformanceScreening.second
         p3 = PerformanceScreening.third
@@ -43,6 +45,9 @@ describe ActivityInsightPerformanceScreeningImporter do
         expect(p5.screening_type).to eq 'Juried'
         expect(p5.name).to eq 'Collegetown Film Festival'
         expect(p5.location).to eq 'Athen, OH'
+
+        expect(performance1.performance_screenings.count).to eq 2
+        expect(performance1.performance_screenings.first.name).to eq 'Center For Media Innovation / Point Park University'
       end
     end
   end
