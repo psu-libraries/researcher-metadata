@@ -34,6 +34,12 @@ module API::V1
             key :'$ref', :Publication
           end
         end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         response 404 do
           key :description, 'not found'
           schema do
@@ -73,6 +79,12 @@ module API::V1
             items do
               key :'$ref', :Publication
             end
+          end
+        end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
           end
         end
         security do

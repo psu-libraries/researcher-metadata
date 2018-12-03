@@ -128,6 +128,12 @@ module API::V1
             key :'$ref', :User
           end
         end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         response 404 do
           key :description, 'not found'
           schema do
@@ -163,6 +169,12 @@ module API::V1
           key :description, 'user news_feed_items response'
           schema do
             key :'$ref', :User
+          end
+         end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
           end
         end
         response 404 do
@@ -203,6 +215,12 @@ module API::V1
             key :'$ref', :User
           end
         end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         response 404 do
           key :description, 'not found'
           schema do
@@ -241,6 +259,12 @@ module API::V1
             key :'$ref', :User
           end
         end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         response 404 do
           key :description, 'not found'
           schema do
@@ -277,6 +301,12 @@ module API::V1
           key :description, 'user ETDs response'
           schema do
             key :'$ref', :User
+          end
+        end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
           end
         end
         response 404 do
@@ -364,6 +394,12 @@ module API::V1
           key :description, 'user publications response'
           schema do
             key :'$ref', :User
+          end
+        end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
           end
         end
         response 404 do
@@ -482,6 +518,12 @@ module API::V1
         end
         response 200 do
           key :description, 'OK'
+        end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
         end
         security do
           key :api_key, []
