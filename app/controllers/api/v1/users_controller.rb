@@ -125,7 +125,32 @@ module API::V1
         response 200 do
           key :description, 'user organization memberships response'
           schema do
-            key :'$ref', :User
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the organization membership'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'organization_membership'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:organization_name]
+                  property :organization_name do
+                    key :type, :string
+                    key :example, 'The Pennsylvania State University'
+                    key :description, 'The name of the organization to which the user belongs'
+                  end
+                end
+              end
+            end
           end
         end
         response 401 do
