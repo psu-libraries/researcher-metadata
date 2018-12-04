@@ -125,6 +125,47 @@ describe 'API::V1 Users' do
     end
   end
 
+  describe 'GET /v1/users/:webaccess_id/performances' do
+    let!(:user) { create(:user_with_performances,
+                         webaccess_id: 'xyz321',
+                         performances_count: 10) }
+    let!(:hidden_performance) { create :performance, visible: true }
+    let!(:invisible_performance) { create :performance, visible: false }
+    let(:webaccess_id) { user.webaccess_id }
+    let(:params) { '' }
+    let(:headers) { { "accept" => "application/json" } }
+
+    before do
+      create :user_performance, user: user, performance: invisible_performance
+      create :user_performance, user: user, performance: hidden_performance
+      get "/v1/users/#{webaccess_id}/performances#{params}", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      context "when the user has performances" do
+        it "returns all the user's performances" do
+          expect(json_response[:data].size).to eq(10)
+        end
+      end
+      context "when the user has no performances" do
+        let(:user_without_performances) { create(:user, webaccess_id: "nopers123") }
+        let(:webaccess_id) { user_without_performances.webaccess_id }
+        it "returns an empty JSON data hash" do
+          expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html" } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+      end
+    end
+  end
+
   describe 'GET /v1/users/:webaccess_id/organization_memberships' do
     let!(:user) { create(:user_with_organization_memberships, webaccess_id: 'xyz321') }
     let(:webaccess_id) { user.webaccess_id }
