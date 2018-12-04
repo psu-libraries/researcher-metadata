@@ -18,9 +18,9 @@ describe 'API::V1 Publications' do
       let!(:publications) { create_list(:publication, 10, visible: true) }
       let!(:invisible_pub) { create(:publication, visible: false) }
       let(:params) { '' }
+      let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
       before do
-        create :api_token, token: 'token123'
         get "/v1/publications#{params}", headers: {"X-API-Key": 'token123'}
       end
 
@@ -29,6 +29,11 @@ describe 'API::V1 Publications' do
       end
       it 'returns all visible publications' do
         expect(json_response[:data].size).to eq(10)
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
 
       describe 'params:' do
@@ -63,7 +68,7 @@ describe 'API::V1 Publications' do
       end
     end
     context "when a valid authorization header value is included in the request" do
-      before { create :api_token, token: 'token123' }
+      let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
       context "when requesting a visible publication" do
         let(:visible) { true }
@@ -79,6 +84,11 @@ describe 'API::V1 Publications' do
           expect(
             json_response[:data][:attributes][:title]
           ).to eq 'requested publication'
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
 

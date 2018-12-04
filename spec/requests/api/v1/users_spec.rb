@@ -2,7 +2,7 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
   let(:h_index) { nil }
-  let!(:token) { create :api_token, token: 'token123' }
+  let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
     let!(:user) { create(:user_with_presentations,
@@ -26,6 +26,11 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
       context "when the user has presentations" do
         it "returns all the user's visible presentations" do
           expect(json_response[:data].size).to eq(10)
@@ -42,6 +47,11 @@ describe 'API::V1 Users' do
         let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -70,6 +80,11 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
       context "when the user has contracts" do
         it "returns all the user's contracts" do
           expect(json_response[:data].size).to eq(10)
@@ -86,6 +101,11 @@ describe 'API::V1 Users' do
         let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -105,6 +125,11 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
       context "when the user has news feed items" do
         it "returns all the user's news feed items" do
           expect(json_response[:data].size).to eq(10)
@@ -121,6 +146,11 @@ describe 'API::V1 Users' do
         let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -139,6 +169,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has organization memberships" do
         it "returns all the user's organization memberships" do
@@ -174,6 +209,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has publications" do
         context "when the user can show all publications" do
@@ -216,12 +256,22 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
       end
     end
     context "for an invalid webaccess_id" do
       let(:webaccess_id) { "aaa" }
       it "returns 404 not found" do
         expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
     end
   end
@@ -257,6 +307,11 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
       it "returns visible publications for each webaccess_id" do
         expect(json_response.count).to eq(4)
         expect(json_response[:abc123][:data].count).to eq(5)
@@ -281,6 +336,11 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
       context "when the user served on etd committees" do
         it "returns all the etds the user was a committee member on" do
           expect(json_response[:data].size).to eq(10)
@@ -298,12 +358,22 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
       end
     end
     context "for an invalid webaccess_id" do
       let(:webaccess_id) { "aaa" }
       it "returns 404 not found" do
         expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
     end
   end
