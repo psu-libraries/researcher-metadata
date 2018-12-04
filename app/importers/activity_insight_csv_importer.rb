@@ -3,7 +3,7 @@ class ActivityInsightCSVImporter < CSVImporter
   def call
     tf = Tempfile.new("temp_#{self.class.to_s.underscore}")
 
-    File.foreach(filename).with_index do |line, i|
+    File.foreach(filename, encoding: encoding).with_index do |line, i|
       if i == 0
         headers = line.strip.gsub('"', '').split(',')
         header_counts = {}
