@@ -145,8 +145,28 @@ module API::V1
                   key :required, [:organization_name]
                   property :organization_name do
                     key :type, :string
-                    key :example, 'The Pennsylvania State University'
+                    key :example, 'Biology'
                     key :description, 'The name of the organization to which the user belongs'
+                  end
+                  property :organization_type do
+                    key :type, :string
+                    key :example, 'Department'
+                    key :description, 'The type of the organization'
+                  end
+                  property :position_title do
+                    key :type, :string
+                    key :example, 'Associate Professor of Biology'
+                    key :description, "The user's role or title within the organization"
+                  end
+                  property :position_started_on do
+                    key :type, :string
+                    key :example, '2010-09-01'
+                    key :description, 'The date on which the user joined the organization in this role'
+                  end
+                  property :position_ended_on do
+                    key :type, :string
+                    key :example, '2012-05-30'
+                    key :description, 'The date on which the user left the organization in this role'
                   end
                 end
               end
