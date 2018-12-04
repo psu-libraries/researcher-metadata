@@ -80,6 +80,14 @@ namespace :import do
     ActivityInsightPerformanceContributorsImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight performance screenings'
+  task :ai_performance_screenings, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:ai_performance_screenings)
+    )
+    ActivityInsightPerformanceScreeningImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Pure Users'
   task :pure_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -178,12 +186,17 @@ namespace :import do
       filename: filename_for(:ai_performances)
     ).call
 
+<<<<<<< HEAD
     ActivityInsightPerformanceContributorsImporter.new(
       filename: filename_for(:ai_performance_contributors1)
     ).call
 
     ActivityInsightPerformanceContributorsImporter.new(
       filename: filename_for(:ai_performance_contributors2)
+=======
+    ActivityInsightPerformanceScreeningImporter.new(
+      filename: filename_for(:ai_performance_screenings)
+>>>>>>> performance-screenings-importer
     ).call
 
     ETDCSVImporter.new(
@@ -214,8 +227,12 @@ def filename_for(key)
   when :ai_presentations then Rails.root.join('db/data/ai_presentations.csv')
   when :ai_presenters then Rails.root.join('db/data/ai_presenters.csv')
   when :ai_performances then Rails.root.join('db/data/ai_performances.csv')
+<<<<<<< HEAD
   when :ai_performance_contributors1 then Rails.root.join('db/data/ai_performance_contributors1.csv')
   when :ai_performance_contributors2 then Rails.root.join('db/data/ai_performance_contributors2.csv')
+=======
+  when :ai_performance_screenings then Rails.root.join('db/data/ai_performance_screenings.csv')
+>>>>>>> performance-screenings-importer
   end
 end
 

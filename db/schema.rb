@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_20_152538) do
+ActiveRecord::Schema.define(version: 2018_11_30_164944) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -117,6 +117,16 @@ ActiveRecord::Schema.define(version: 2018_11_20_152538) do
     t.index ["owner_id"], name: "index_organizations_on_owner_id"
     t.index ["parent_id"], name: "index_organizations_on_parent_id"
     t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
+  end
+
+  create_table "performance_screenings", force: :cascade do |t|
+    t.integer "performance_id", null: false
+    t.string "screening_type"
+    t.string "name"
+    t.string "location"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["performance_id"], name: "index_performance_screenings_on_performance_id"
   end
 
   create_table "performances", force: :cascade do |t|
@@ -300,6 +310,7 @@ ActiveRecord::Schema.define(version: 2018_11_20_152538) do
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "organizations", "users", column: "owner_id", name: "organizations_owner_id_fk"
+  add_foreign_key "performance_screenings", "performances", on_delete: :cascade
   add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
   add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
