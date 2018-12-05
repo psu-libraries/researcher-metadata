@@ -14,6 +14,7 @@ describe ActivityInsightPerformanceScreeningImporter do
   describe '#call' do
     context "when given a well-formed .csv file of valid performance screening data from Activity Insight" do
       let(:filename) { Rails.root.join('spec', 'fixtures', 'ai_performance_screenings.csv') }
+      let(:p) { create :performance }
 
       it "creates a new performance_screening record for every valid row in the .csv file" do
         expect { importer.call }.to change { PerformanceScreening.count }.by 5
@@ -29,25 +30,37 @@ describe ActivityInsightPerformanceScreeningImporter do
         expect(p1.screening_type).to eq 'Open Exhibit'
         expect(p1.name).to eq 'Center For Media Innovation / Point Park University'
         expect(p1.location).to eq nil
+        expect(p1.activity_insight_id).to eq 161819957250
 
         expect(p2.screening_type).to eq 'Open Exhibit'
         expect(p2.name).to eq 'Palmer Museum of Art'
         expect(p2.location).to eq nil
+        expect(p2.activity_insight_id).to eq 161820006402
 
         expect(p3.screening_type).to eq nil
         expect(p3.name).to eq nil
         expect(p3.location).to eq nil
+        expect(p3.activity_insight_id).to eq 161395374082
 
         expect(p4.screening_type).to eq 'Invited'
         expect(p4.name).to eq 'International Communcation Association'
         expect(p4.location).to eq 'Prague, Czech Republic'
+        expect(p4.activity_insight_id).to eq 160440864770
 
         expect(p5.screening_type).to eq 'Juried'
         expect(p5.name).to eq 'Collegetown Film Festival'
         expect(p5.location).to eq 'Athen, OH'
+        expect(p5.activity_insight_id).to eq 151334516739
 
         expect(performance1.performance_screenings.count).to eq 2
         expect(performance1.performance_screenings.first.name).to eq 'Center For Media Innovation / Point Park University'
+      end
+
+      it "updates performance_screening records that are already present in the database" do
+        PerformanceScreening.create!(name: 'Old Screening', activity_insight_id: 161819957250, performance: p)
+
+        expect { importer.call }.to change { PerformanceScreening.count }.by 4
+        expect(PerformanceScreening.find_by(activity_insight_id: 161819957250).name).to eq('Center For Media Innovation / Point Park University')
       end
     end
   end
