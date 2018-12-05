@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_04_145338) do
+ActiveRecord::Schema.define(version: 2018_12_05_173137) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -277,6 +277,8 @@ ActiveRecord::Schema.define(version: 2018_12_04_145338) do
     t.string "contribution"
     t.string "student_level"
     t.string "role_other"
+    t.integer "activity_insight_id"
+    t.index ["activity_insight_id"], name: "index_user_performances_on_activity_insight_id", unique: true
     t.index ["performance_id"], name: "index_user_performances_on_performance_id"
     t.index ["user_id"], name: "index_user_performances_on_user_id"
   end

@@ -5,11 +5,13 @@ describe 'the user_performances table', type: :model do
 
   it { is_expected.to have_db_column(:user_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:performance_id).of_type(:integer).with_options(null: false) }
+  it { is_expected.to have_db_column(:activity_insight_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :performance_id }
+  it { is_expected.to have_db_index(:activity_insight_id).unique(true) }
 
   it { is_expected.to have_db_foreign_key(:user_id) }
   it { is_expected.to have_db_foreign_key(:performance_id) }
@@ -33,10 +35,6 @@ describe UserPerformance, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:user_id) }
     it { is_expected.to validate_presence_of(:performance_id) }
-
-    context "given otherwise valid data" do
-      subject { UserPerformance.new(user: create(:user), performance: create(:performance)) }
-      it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:performance_id) }
-    end
+    it { is_expected.to validate_presence_of(:activity_insight_id) }
   end
 end
