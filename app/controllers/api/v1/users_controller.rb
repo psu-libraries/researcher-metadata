@@ -48,7 +48,7 @@ module API::V1
         @performances = API::V1::UserQuery.new(user).performances(params)
         respond_to do |format|
           format.html
-          format.json { render json: API::V1::PerformanceSerializer.new(@performance) }
+          format.json { render json: API::V1::PerformanceSerializer.new(@performances) }
         end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404

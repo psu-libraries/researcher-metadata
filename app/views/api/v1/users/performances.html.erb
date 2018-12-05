@@ -1,0 +1,11 @@
+<h4>Performances</h4>
+<ul>
+  <% @performances.each do |p| %>
+    <li>
+      <%= p.title %>,
+      <%= p.group_name %>,
+      <%= p.description %>,
+      <%= p.location %>
+    </li>
+  <% end %>
+</ul>

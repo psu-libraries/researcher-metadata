@@ -147,7 +147,7 @@ describe 'API::V1 Users' do
       end
       context "when the user has performances" do
         it "returns all the user's performances" do
-          expect(json_response[:data].size).to eq(10)
+          expect(json_response[:data].size).to eq(12)
         end
       end
       context "when the user has no performances" do
