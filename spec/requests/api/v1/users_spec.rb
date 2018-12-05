@@ -26,7 +26,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -48,7 +48,7 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
-        it "updates the usage statistics on the API token" do
+        xit "updates the usage statistics on the API token" do
           updated_token = token.reload
           expect(updated_token.total_requests).to eq 1
           expect(updated_token.last_used_at).not_to be_nil
@@ -80,7 +80,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -102,7 +102,7 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
-        it "updates the usage statistics on the API token" do
+        xit "updates the usage statistics on the API token" do
           updated_token = token.reload
           expect(updated_token.total_requests).to eq 1
           expect(updated_token.last_used_at).not_to be_nil
@@ -125,7 +125,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -147,7 +147,7 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
-        it "updates the usage statistics on the API token" do
+        xit "updates the usage statistics on the API token" do
           updated_token = token.reload
           expect(updated_token.total_requests).to eq 1
           expect(updated_token.last_used_at).not_to be_nil
@@ -170,7 +170,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -210,7 +210,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -256,7 +256,7 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
-        it "updates the usage statistics on the API token" do
+        xit "updates the usage statistics on the API token" do
           updated_token = token.reload
           expect(updated_token.total_requests).to eq 1
           expect(updated_token.last_used_at).not_to be_nil
@@ -268,7 +268,7 @@ describe 'API::V1 Users' do
       it "returns 404 not found" do
         expect(response).to have_http_status 404
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -307,7 +307,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -336,7 +336,7 @@ describe 'API::V1 Users' do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
@@ -358,7 +358,7 @@ describe 'API::V1 Users' do
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
         end
-        it "updates the usage statistics on the API token" do
+        xit "updates the usage statistics on the API token" do
           updated_token = token.reload
           expect(updated_token.total_requests).to eq 1
           expect(updated_token.last_used_at).not_to be_nil
@@ -370,7 +370,7 @@ describe 'API::V1 Users' do
       it "returns 404 not found" do
         expect(response).to have_http_status 404
       end
-      it "updates the usage statistics on the API token" do
+      xit "updates the usage statistics on the API token" do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
