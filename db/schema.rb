@@ -287,7 +287,7 @@ ActiveRecord::Schema.define(version: 2018_12_05_175509) do
     t.string "contribution"
     t.string "student_level"
     t.string "role_other"
-    t.integer "activity_insight_id", null: false
+    t.bigint "activity_insight_id", null: false
     t.index ["activity_insight_id"], name: "index_user_performances_on_activity_insight_id", unique: true
     t.index ["performance_id"], name: "index_user_performances_on_performance_id"
     t.index ["user_id"], name: "index_user_performances_on_user_id"

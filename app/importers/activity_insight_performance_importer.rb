@@ -1,23 +1,21 @@
 class ActivityInsightPerformanceImporter < ActivityInsightCSVImporter
 
   def row_to_object(row)
-    u = User.find_by(webaccess_id: row[:username].downcase)
-
     p = Performance.find_by(activity_insight_id: row[:id]) ||
         Performance.new(performance_attrs(row))
+
     if p.persisted?
       p.update_attributes!(performance_attrs(row))
       return nil
     else
-      p.save!
-      return UserPerformance.new(user: u, performance: p)
+      return p
     end
   end
 
   private
 
   def bulk_import(objects)
-    UserPerformance.import(objects)
+    Performance.import(objects)
   end
 
   def performance_attrs(row)
