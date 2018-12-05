@@ -3,9 +3,8 @@
   <% @performances.each do |p| %>
     <li>
       <%= p.title %>,
-      <%= p.group_name %>,
-      <%= p.description %>,
-      <%= p.location %>
+      <%= p.location %>,
+      <%= p.start_on %>
     </li>
   <% end %>
 </ul>
