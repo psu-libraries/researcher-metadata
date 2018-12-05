@@ -125,15 +125,16 @@ module API::V1
         response 200 do
           key :description, 'user organization memberships response'
           schema do
+            key :required, [:data]
             property :data do
               key :type, :array
               items do
                 key :type, :object
-                key :required, [:id, :type]
+                key :required, [:id, :type, :attributes]
                 property :id do
                   key :type, :string
                   key :example, '123'
-                  key :description, 'The ID of the organization membership'
+                  key :description, 'The ID of the object'
                 end
                 property :type do
                   key :type, :string
@@ -213,7 +214,48 @@ module API::V1
          response 200 do
           key :description, 'user news_feed_items response'
           schema do
-            key :'$ref', :User
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'news_feed_item'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:title, :url, :description, :published_on]
+                  property :title do
+                    key :type, :string
+                    key :example, 'News Story'
+                    key :description, 'The title of the news feed item'
+                  end
+                  property :url do
+                    key :type, :string
+                    key :example, 'https://news.psu.edu/example'
+                    key :description, 'The URL where the full news story content can be found'
+                  end
+                  property :description do
+                    key :type, :string
+                    key :example, 'A news story about a Penn State researcher'
+                    key :description, 'A brief description of the news story content'
+                  end
+                  property :published_on do
+                    key :type, :string
+                    key :example, '2018-12-05'
+                    key :description, 'The date on which the news story was published'
+                  end
+                end
+              end
+            end
           end
          end
         # response 401 do
@@ -249,7 +291,7 @@ module API::V1
         parameter do
           key :name, :webaccess_id
           key :in, :path
-          key :description, 'Webaccess ID of user to retrieve contracts'
+          key :description, 'Webaccess ID of user to retrieve presentations'
           key :required, true
           key :type, :string
         end
@@ -257,7 +299,103 @@ module API::V1
         response 200 do
           key :description, 'user presentations response'
           schema do
-            key :'$ref', :User
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'presentation'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:activity_insight_identifier]
+                  property :title do
+                    key :type, [:string, :null]
+                    key :example, 'A Public Presentation'
+                    key :description, 'The title of the presentation'
+                  end
+                  property :activity_insight_identifier do
+                    key :type, :string
+                    key :example, '1234567890'
+                    key :description, "The unique identifier for the presentation's corresponding record in the Activity Insight database"
+                  end
+                  property :name do
+                    key :type, [:string, :null]
+                    key :example, 'A Public Presentation'
+                    key :description, 'The name of the presentation'
+                  end
+                  property :organization do
+                    key :type, [:string, :null]
+                    key :example, 'The Pennsylvania State University'
+                    key :description, 'The name of the organization associated with the presentation'
+                  end
+                  property :location do
+                    key :type, [:string, :null]
+                    key :example, 'University Park, PA'
+                    key :description, 'The name of the location where the presentation took place'
+                  end
+                  property :started_on do
+                    key :type, [:string, :null]
+                    key :example, '2018-12-04'
+                    key :description, 'The date on which the presentation started'
+                  end
+                  property :ended_on do
+                    key :type, [:string, :null]
+                    key :example, '2018-12-05'
+                    key :description, 'The date on which the presentation ended'
+                  end
+                  property :presentation_type do
+                    key :type, [:string, :null]
+                    key :example, 'Presentations'
+                    key :description, 'The type of the presentation'
+                  end
+                  property :classification do
+                    key :type, [:string, :null]
+                    key :example, 'Basic or Discovery Scholarship'
+                    key :description, 'The classification of the presentation'
+                  end
+                  property :meet_type do
+                    key :type, [:string, :null]
+                    key :example, 'Academic'
+                    key :description, 'The meet type of the presentation'
+                  end
+                  property :attendance do
+                    key :type, [:integer, :null]
+                    key :example, 200
+                    key :description, 'The number of people who attended the presentation'
+                  end
+                  property :refereed do
+                    key :type, [:string, :null]
+                    key :example, 'Yes'
+                    key :description, 'Whether or not the presentation was refereed'
+                  end
+                  property :abstract do
+                    key :type, [:string, :null]
+                    key :example, 'A presentation about Penn State academic research'
+                    key :description, 'A summary of the presentation content'
+                  end
+                  property :comment do
+                    key :type, [:string, :null]
+                    key :example, 'The goal of this presentation was to broaden public awareness of a research topic.'
+                    key :description, 'Miscellaneous comments and notes about the presentation'
+                  end
+                  property :scope do
+                    key :type, [:string, :null]
+                    key :example, 'International'
+                    key :description, 'The scope of the audience for the presentation'
+                  end
+                end
+              end
+            end
           end
         end
         # response 401 do
@@ -301,7 +439,68 @@ module API::V1
         response 200 do
           key :description, 'user contracts response'
           schema do
-            key :'$ref', :User
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'contract'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:title, :sponsor, :status, :amount, :ospkey]
+                  property :title do
+                    key :type, :string
+                    key :example, 'A Research Project Proposal'
+                    key :description, 'The title of the contract'
+                  end
+                  property :contract_type do
+                    key :type, [:string, :null]
+                    key :example, 'Grant'
+                    key :description, 'The type of the contract'
+                  end
+                  property :sponsor do
+                    key :type, :string
+                    key :example, 'National Science Foundation'
+                    key :description, 'The name of the organization sponsoring the contract'
+                  end
+                  property :status do
+                    key :type, :string
+                    key :example, 'Awarded'
+                    key :description, 'The status of the contract'
+                  end
+                  property :amount do
+                    key :type, :integer
+                    key :example, 50000
+                    key :description, 'The monetary amount of the contract in U.S. dollars'
+                  end
+                  property :ospkey do
+                    key :type, :string
+                    key :example, 123456
+                    key :description, 'The OSP key of the contract'
+                  end
+                  property :award_start_on do
+                    key :type, [:string, :null]
+                    key :example, '2017-12-05'
+                    key :description, 'The date on which the contract award starts'
+                  end
+                  property :award_end_on do
+                    key :type, [:string, :null]
+                    key :example, '2019-12-05'
+                    key :description, 'The date on which the contract award ends'
+                  end
+                end
+              end
+            end
           end
         end
         # response 401 do
@@ -345,7 +544,53 @@ module API::V1
         response 200 do
           key :description, 'user ETDs response'
           schema do
-            key :'$ref', :User
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'etd'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:title, :year, :author_last_name, :author_first_name]
+                  property :title do
+                    key :type, :string
+                    key :example, 'A PhD Thesis'
+                    key :description, 'The title of the ETD'
+                  end
+                  property :year do
+                    key :type, :integer
+                    key :example, '2010'
+                    key :description, 'The year in which the ETD was completed'
+                  end
+                  property :author_last_name do
+                    key :type, :string
+                    key :example, 'Author'
+                    key :description, "The last name of the ETD's author"
+                  end
+                  property :author_first_name do
+                    key :type, :string
+                    key :example, 'Susan'
+                    key :description, "The first name of the ETD's author"
+                  end
+                  property :author_middle_name do
+                    key :type, [:string, :null]
+                    key :example, 'Example'
+                    key :description, "The first name of the ETD's author"
+                  end
+                end
+              end
+            end
           end
         end
         # response 401 do
@@ -438,7 +683,152 @@ module API::V1
         response 200 do
           key :description, 'user publications response'
           schema do
-            key :'$ref', :User
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'publication'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:title, :publication_type, :contributors, :tags, :pure_ids, :activity_insight_ids]
+                  property :title do
+                    key :type, :string
+                    key :example, 'A Scholarly Research Article'
+                    key :description, 'The title of the publication'
+                  end
+                  property :secondary_title do
+                    key :type, [:string, :null]
+                    key :example, 'A Comparative Analysis'
+                    key :description, 'The sub-title of the publication'
+                  end
+                  property :journal_title do
+                    key :type, [:string, :null]
+                    key :example, 'An Academic Journal'
+                    key :description, 'The title of the journal in which the publication was published'
+                  end
+                  property :publication_type do
+                    key :type, :string
+                    key :example, 'Academic Journal Article'
+                    key :description, 'The type of the publication'
+                  end
+                  property :publisher do
+                    key :type, [:string, :null]
+                    key :example, 'A Publishing Company'
+                    key :description, 'The publisher of the publication'
+                  end
+                  property :status do
+                    key :type, [:string, :null]
+                    key :example, 'Published'
+                    key :description, 'The status of the publication'
+                  end
+                  property :volume do
+                    key :type, [:string, :null]
+                    key :example, '30'
+                    key :description, 'The volume of the journal in which the publication was published'
+                  end
+                  property :issue do
+                    key :type, [:string, :null]
+                    key :example, '12'
+                    key :description, 'The issue of the journal in which the publication was published'
+                  end
+                  property :edition do
+                    key :type, [:string, :null]
+                    key :example, '6'
+                    key :description, 'the edition of the journal in which the publication was published'
+                  end
+                  property :page_range do
+                    key :type, [:string, :null]
+                    key :example, '110-123'
+                    key :description, 'The range of page numbers on which the publication content appears in the journal'
+                  end
+                  property :authors_et_al do
+                    key :type, [:boolean, :null]
+                    key :example, true
+                    key :description, 'Whether or not the publication has additional, unlisted authors'
+                  end
+                  property :abstract do
+                    key :type, [:string, :null]
+                    key :example, 'A summary of the research'
+                    key :description, 'A brief summary of the content of the publication'
+                  end
+                  property :published_on do
+                    key :type, [:string, :null]
+                    key :example, '2010-12-05'
+                    key :description, 'The date on which the publication was published'
+                  end
+                  property :citation_count do
+                    key :type, [:integer, :null]
+                    key :example, 50
+                    key :description, 'The number of times that the publication has been cited in other works'
+                  end
+                  property :contributors do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      property :first_name do
+                        key :type, [:string, :null]
+                        key :example, 'Anne'
+                        key :description, 'The first name of a person who contributed to the publication'
+                      end
+                      property :middle_name do
+                        key :type, [:string, :null]
+                        key :example, 'Example'
+                        key :description, 'The middle name of a person who contributed to the publication'
+                      end
+                      property :last_name do
+                        key :type, [:string, :null]
+                        key :example, 'Contributor'
+                        key :description, 'The last name of a person who contributed to the publication'
+                      end
+                    end
+                  end
+                  property :tags do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      key :required, [:name]
+                      property :name do
+                        key :type, :string
+                        key :example, 'A Topic'
+                        key :description, 'The name of a tag'
+                      end
+                      property :rank do
+                        key :type, [:number, :null]
+                        key :example, 1.25
+                        key :description, 'The ranking of the tag'
+                      end
+                    end
+                  end
+                  property :pure_ids do
+                    key :type, :array
+                    key :description, 'Unique identifiers for corresponding records in the Pure database that represent the publication'
+                    items do
+                      key :type, :string
+                      key :example, 'abc-def-123-456'
+                    end
+                  end
+                  property :activity_insight_ids do
+                    key :type, :array
+                    key :description, 'Unique identifiers for corresponding records in the Activity Insight database that represent the publication'
+                    items do
+                      key :type, :string
+                      key :example, '1234567890'
+                    end
+                  end
+                end
+              end
+            end
           end
         end
         # response 401 do
@@ -470,16 +860,13 @@ module API::V1
         parameter do
           key :name, :webaccess_id
           key :in, :path
-          key :description, 'Webaccess ID of user to retrieve publications'
+          key :description, 'Webaccess ID of user to retrieve HTML profile'
           key :required, true
           key :type, :string
         end
 
         response 200 do
           key :description, 'user profile response'
-          schema do
-            key :'$ref', :User
-          end
         end
 
         response 404 do
