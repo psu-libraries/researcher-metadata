@@ -42,7 +42,8 @@ RailsAdmin.config do |config|
             :Contract,
             :Presentation,
             :Organization,
-            :NewsFeedItem]
+            :NewsFeedItem,
+            :APIToken]
     end
     new do
       only [:Publication, :User]

@@ -34,19 +34,20 @@ module API::V1
             key :'$ref', :Publication
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :Publication
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -79,6 +80,15 @@ module API::V1
               key :'$ref', :Publication
             end
           end
+        end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
+        security do
+          key :api_key, []
         end
       end
     end

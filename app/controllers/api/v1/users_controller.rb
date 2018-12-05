@@ -125,22 +125,68 @@ module API::V1
         response 200 do
           key :description, 'user organization memberships response'
           schema do
-            key :'$ref', :User
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the organization membership'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'organization_membership'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:organization_name]
+                  property :organization_name do
+                    key :type, :string
+                    key :example, 'Biology'
+                    key :description, 'The name of the organization to which the user belongs'
+                  end
+                  property :organization_type do
+                    key :type, [:string, :null]
+                    key :example, 'Department'
+                    key :description, 'The type of the organization'
+                  end
+                  property :position_title do
+                    key :type, [:string, :null]
+                    key :example, 'Associate Professor of Biology'
+                    key :description, "The user's role or title within the organization"
+                  end
+                  property :position_started_on do
+                    key :type, [:string, :null]
+                    key :example, '2010-09-01'
+                    key :description, 'The date on which the user joined the organization in this role'
+                  end
+                  property :position_ended_on do
+                    key :type, [:string, :null]
+                    key :example, '2012-05-30'
+                    key :description, 'The date on which the user left the organization in this role'
+                  end
+                end
+              end
+            end
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -169,20 +215,21 @@ module API::V1
           schema do
             key :'$ref', :User
           end
-        end
+         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -213,19 +260,20 @@ module API::V1
             key :'$ref', :User
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -256,19 +304,20 @@ module API::V1
             key :'$ref', :User
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -299,19 +348,20 @@ module API::V1
             key :'$ref', :User
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -391,19 +441,20 @@ module API::V1
             key :'$ref', :User
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
+        end
+        security do
+          key :api_key, []
         end
       end
     end
@@ -434,15 +485,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :User
-            key :required, [:code, :message]
-            property :code do
-              key :type, :integer
-              key :format, :int32
-            end
-            property :message do
-              key :type, :string
-            end
+            key :'$ref', :ErrorModelV1
           end
         end
       end
@@ -520,6 +563,15 @@ module API::V1
         end
         response 200 do
           key :description, 'OK'
+        end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
+        security do
+          key :api_key, []
         end
       end
     end

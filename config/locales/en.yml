@@ -9,3 +9,6 @@ en:
     publication_merges:
       create:
         success: "The publications were successfully merged."
+  api:
+    errors:
+      not_authorized: "401: Request not authorized. Please provide a valid API key for access."
