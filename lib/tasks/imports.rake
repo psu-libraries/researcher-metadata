@@ -192,6 +192,7 @@ namespace :import do
 
     ActivityInsightPerformanceContributorsImporter.new(
       filename: filename_for(:ai_performance_contributors2)
+    ).call
 
     ActivityInsightPerformanceScreeningImporter.new(
       filename: filename_for(:ai_performance_screenings)
