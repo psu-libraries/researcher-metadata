@@ -8,6 +8,9 @@
     <% if @user.scopus_h_index.present? %>
       <li>H-Index:  <%= @user.scopus_h_index %></li>
     <% end %>
+    <% if @user.pure_profile_url %>
+      <li><a href="<%= @user.pure_profile_url %>" target="_blank">Pure Profile</a></li>
+  <% end %>
   </ul>
 </div>
 <% if @pubs.any? %>

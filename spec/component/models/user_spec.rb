@@ -331,4 +331,28 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#pure_profile_url' do
+    let(:user) { User.new(pure_uuid: pure_uuid) }
+    let(:pure_uuid) { nil }
+    context "when the user does not have a Pure UUID" do
+      it "returns nil" do
+        expect(user.pure_profile_url).to be_nil
+      end
+    end
+    context "when the user's Pure UUID is blank" do
+      let(:pure_uuid) { '' }
+
+      it "returns nil" do
+        expect(user.pure_profile_url).to be_nil
+      end
+    end
+    context "when the user has a Pure UUID" do
+      let(:pure_uuid) { 'pure-abc-123' }
+
+      it "returns the URL to the user's page on the Penn State Pure website" do
+        expect(user.pure_profile_url).to eq 'https://pennstate.pure.elsevier.com/en/persons/pure-abc-123'
+      end
+    end
+  end
 end

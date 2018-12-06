@@ -55,6 +55,10 @@ class User < ApplicationRecord
     publications.sum(:total_scopus_citations)
   end
 
+  def pure_profile_url
+    "https://pennstate.pure.elsevier.com/en/persons/#{pure_uuid}" if pure_uuid.present?
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

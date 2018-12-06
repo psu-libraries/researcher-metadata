@@ -384,10 +384,12 @@ describe 'API::V1 Users' do
                          last_name: "Testerson",
                          scopus_h_index: h_index,
                          webaccess_id: 'bat123',
+                         pure_uuid: pure_uuid,
                          show_all_contracts: true,
                          show_all_publications: show_pubs) }
     let(:show_pubs) { true }
     let(:headers) { { "accept" => "text/html" } }
+    let(:pure_uuid) { nil }
 
     context "for a valid webaccess_id" do
       before do
@@ -439,6 +441,7 @@ describe 'API::V1 Users' do
       context "when the user has associated metadata" do
         let(:other_user) { create :user, show_all_contracts: false }
         let(:h_index) { 49 }
+        let(:pure_uuid) { 'pure-abc-123' }
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
                              journal_title: "Test Journal",
@@ -565,6 +568,7 @@ describe 'API::V1 Users' do
                 <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
                   <li>Citations:  9</li>
                   <li>H-Index:  49</li>
+                  <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
               </ul>
             </div>
               <div id="md-publications">
