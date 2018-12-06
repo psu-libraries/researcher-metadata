@@ -130,16 +130,6 @@ ActiveRecord::Schema.define(version: 2018_12_05_175509) do
     t.index ["pure_uuid"], name: "index_organizations_on_pure_uuid", unique: true
   end
 
-  create_table "performance_screenings", force: :cascade do |t|
-    t.integer "performance_id", null: false
-    t.string "screening_type"
-    t.string "name"
-    t.string "location"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["performance_id"], name: "index_performance_screenings_on_performance_id"
-  end
-
   create_table "performances", force: :cascade do |t|
     t.text "title", null: false
     t.string "performance_type"
@@ -323,7 +313,6 @@ ActiveRecord::Schema.define(version: 2018_12_05_175509) do
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "organizations", "users", column: "owner_id", name: "organizations_owner_id_fk"
-  add_foreign_key "performance_screenings", "performances", on_delete: :cascade
   add_foreign_key "presentation_contributions", "presentations", name: "presentation_contributions_presentation_id_fk", on_delete: :cascade
   add_foreign_key "presentation_contributions", "users", name: "presentation_contributions_user_id_fk", on_delete: :cascade
   add_foreign_key "publication_imports", "publications", name: "publication_imports_publication_id_fk"
