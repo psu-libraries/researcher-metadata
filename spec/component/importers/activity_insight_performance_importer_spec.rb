@@ -3,15 +3,6 @@ require 'component/component_spec_helper'
 describe ActivityInsightPerformanceImporter do
   let(:importer) { ActivityInsightPerformanceImporter.new(filename: filename) }
 
-  before(:each) do
-    User.create( webaccess_id: "abc123",
-                 first_name: "Test",
-                 last_name: "User" )
-    User.create( webaccess_id: "def345",
-                 first_name: "Test",
-                 last_name: "User" )
-  end
-
   describe '#call' do
     context "when given a well-formed .csv file of valid performance data from Activity Insight" do
       let(:filename) { Rails.root.join('spec', 'fixtures', 'ai_performances.csv') }
@@ -80,11 +71,6 @@ describe ActivityInsightPerformanceImporter do
         expect(p5.start_on).to eq Date.new(2016, 5, 06)
         expect(p5.end_on).to eq Date.new(2016, 12, 01)
 
-      end
-
-      it "creates a new user_performance record for every valid row in the .csv file" do
-        expect { importer.call }.to change { UserPerformance.count }.by 5
-        expect(User.find_by(webaccess_id: 'abc123').performances.count).to eq 3
       end
 
       context "when a performance record already exists for one of the rows in the .csv" do
