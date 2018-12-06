@@ -31,7 +31,11 @@ module API::V1
         response 200 do
           key :description, 'publication response'
           schema do
-            key :'$ref', :Publication
+            key :required, [:data]
+            property :data do
+              key :type, :object
+              key :'$ref', :PublicationV1
+            end
           end
         end
         # response 401 do
@@ -75,9 +79,12 @@ module API::V1
         response 200 do
           key :description, 'publication response'
           schema do
-            key :type, :object
-            items do
-              key :'$ref', :Publication
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :'$ref', :PublicationV1
+              end
             end
           end
         end
