@@ -10,10 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_11_30_164944) do
+ActiveRecord::Schema.define(version: 2018_12_05_191546) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "api_tokens", force: :cascade do |t|
+    t.string "token", null: false
+    t.string "app_name"
+    t.string "admin_email"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "total_requests", default: 0
+    t.datetime "last_used_at"
+    t.index ["token"], name: "index_api_tokens_on_token", unique: true
+  end
 
   create_table "authorships", force: :cascade do |t|
     t.integer "user_id", null: false
@@ -126,6 +137,8 @@ ActiveRecord::Schema.define(version: 2018_11_30_164944) do
     t.string "location"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "activity_insight_id", null: false
+    t.index ["activity_insight_id"], name: "index_performance_screenings_on_activity_insight_id", unique: true
     t.index ["performance_id"], name: "index_performance_screenings_on_performance_id"
   end
 
@@ -276,6 +289,8 @@ ActiveRecord::Schema.define(version: 2018_11_30_164944) do
     t.string "contribution"
     t.string "student_level"
     t.string "role_other"
+    t.bigint "activity_insight_id", null: false
+    t.index ["activity_insight_id"], name: "index_user_performances_on_activity_insight_id", unique: true
     t.index ["performance_id"], name: "index_user_performances_on_performance_id"
     t.index ["user_id"], name: "index_user_performances_on_user_id"
   end

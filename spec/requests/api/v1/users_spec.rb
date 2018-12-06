@@ -2,6 +2,7 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
   let(:h_index) { nil }
+  let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
     let!(:user) { create(:user_with_presentations,
@@ -15,7 +16,7 @@ describe 'API::V1 Users' do
     }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
@@ -24,6 +25,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has presentations" do
         it "returns all the user's visible presentations" do
@@ -38,9 +44,14 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        xit "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -56,7 +67,7 @@ describe 'API::V1 Users' do
     let!(:invisible_contract) { create :contract, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       create :user_contract, user: user, contract: invisible_contract
@@ -68,6 +79,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has contracts" do
         it "returns all the user's contracts" do
@@ -82,9 +98,14 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        xit "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -94,7 +115,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_news_feed_items, webaccess_id: 'xyz321', news_feed_items_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/news_feed_items#{params}", headers: headers
@@ -103,6 +124,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has news feed items" do
         it "returns all the user's news feed items" do
@@ -117,9 +143,14 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        xit "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -147,7 +178,7 @@ describe 'API::V1 Users' do
       end
       context "when the user has performances" do
         it "returns all the user's performances" do
-          expect(json_response[:data].size).to eq(12)
+          expect(json_response[:data].size).to eq(11)
         end
       end
       context "when the user has no performances" do
@@ -170,7 +201,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_organization_memberships, webaccess_id: 'xyz321') }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
@@ -179,6 +210,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has organization memberships" do
         it "returns all the user's organization memberships" do
@@ -203,7 +239,7 @@ describe 'API::V1 Users' do
     let!(:invisible_pub) { create :publication, visible: false }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
     let(:show_pubs) { false }
 
     before do
@@ -214,6 +250,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user has publications" do
         context "when the user can show all publications" do
@@ -252,9 +293,14 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        xit "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -262,6 +308,11 @@ describe 'API::V1 Users' do
       let(:webaccess_id) { "aaa" }
       it "returns 404 not found" do
         expect(response).to have_http_status 404
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
     end
   end
@@ -289,12 +340,18 @@ describe 'API::V1 Users' do
       create :authorship, user: user_abc123, publication: invisible_pub1
       create :authorship, user: user_cws161, publication: invisible_pub2
 
-      post "/v1/users/publications", params: params
+      post "/v1/users/publications", params: params, headers: headers
     end
     context "for a valid set of webaccess_id params" do
       let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123) } }
+      let(:headers) { {'X-API-Key' => 'token123'} }
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       it "returns visible publications for each webaccess_id" do
         expect(json_response.count).to eq(4)
@@ -310,7 +367,7 @@ describe 'API::V1 Users' do
     let!(:user) { create(:user_with_committee_memberships, webaccess_id: 'xyz321', committee_memberships_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
-    let(:headers) { { "accept" => "application/json" } }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
       get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
@@ -319,6 +376,11 @@ describe 'API::V1 Users' do
     context "for a valid webaccess_id" do
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
       context "when the user served on etd committees" do
         it "returns all the etds the user was a committee member on" do
@@ -333,9 +395,14 @@ describe 'API::V1 Users' do
         end
       end
       context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html" } }
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
         it 'returns HTTP status 200' do
           expect(response).to have_http_status 200
+        end
+        xit "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
         end
       end
     end
@@ -343,6 +410,11 @@ describe 'API::V1 Users' do
       let(:webaccess_id) { "aaa" }
       it "returns 404 not found" do
         expect(response).to have_http_status 404
+      end
+      xit "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
     end
   end

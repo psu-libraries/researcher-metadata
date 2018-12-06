@@ -38,12 +38,6 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
-  swagger_schema :User do
-    property :webaccess_id do
-      key :type, :string
-    end
-  end
-
   def admin?
     is_admin
   end

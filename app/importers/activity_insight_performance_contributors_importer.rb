@@ -5,7 +5,7 @@ class ActivityInsightPerformanceContributorsImporter < ActivityInsightCSVImporte
 
     p = Performance.find_by(activity_insight_id: row[:parent_id])
 
-    up =  UserPerformance.where(user: u, performance: p).first ||
+    up =  UserPerformance.find_by(activity_insight_id: row[:id]) ||
       UserPerformance.new(user_performance_attrs(row).merge!(user: u, performance: p))
 
     if up.persisted?
@@ -26,7 +26,8 @@ class ActivityInsightPerformanceContributorsImporter < ActivityInsightCSVImporte
     {
       contribution: row[:contribution],
       student_level: row[:student_level],
-      role_other: row[:role_other]
+      role_other: row[:role_other],
+      activity_insight_id: row[:id]
     }
   end
 

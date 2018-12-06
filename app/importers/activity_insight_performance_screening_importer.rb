@@ -3,7 +3,15 @@ class ActivityInsightPerformanceScreeningImporter < ActivityInsightCSVImporter
   def row_to_object(row)
     p = Performance.find_by(activity_insight_id: row[:parent_id])
 
-    return PerformanceScreening.new(performance_screening_attrs(row).merge!(performance: p))
+    ps = PerformanceScreening.find_by(activity_insight_id: row[:id]) ||
+      PerformanceScreening.new(performance_screening_attrs(row).merge!(performance: p))
+
+    if ps.persisted?
+      ps.update_attributes!(performance_screening_attrs(row))
+      return nil
+    else
+      return ps
+    end
   end
 
   private
@@ -16,7 +24,8 @@ class ActivityInsightPerformanceScreeningImporter < ActivityInsightCSVImporter
     {
       screening_type: row[:type],
       name: row[:name],
-      location: row[:location]
+      location: row[:location],
+      activity_insight_id: row[:id]
     }
   end
 
