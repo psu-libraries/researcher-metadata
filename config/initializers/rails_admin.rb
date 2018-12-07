@@ -43,6 +43,7 @@ RailsAdmin.config do |config|
             :Presentation,
             :Organization,
             :NewsFeedItem,
+            :Performance,
             :APIToken]
     end
     new do
@@ -54,7 +55,7 @@ RailsAdmin.config do |config|
     end
     show
     edit do
-      only [:Publication, :User, :Contract, :Presentation]
+      only [:Publication, :User, :Contract, :Presentation, :Performance]
     end
     delete do
       only [:Publication, :User]
