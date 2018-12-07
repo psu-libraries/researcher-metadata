@@ -20,18 +20,48 @@ describe ActivityInsightUserImporter do
           expect(u1.last_name).to eq 'Tester'
           expect(u1.penn_state_identifier).to eq '989465792'
           expect(u1.activity_insight_identifier).to eq '1649499'
+          expect(u1.ai_title).to eq 'Associate Professor of Business'
+          expect(u1.ai_rank).to eq 'Associate Professor'
+          expect(u1.ai_endowed_title).to be_nil
+          expect(u1.orcid_identifier).to eq 'orcid-1'
+          expect(u1.ai_alt_name).to be_nil
+          expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
+          expect(u1.ai_room_number).to eq '33'
+          expect(u1.ai_office_area_code).to eq 814
+          expect(u1.ai_office_phone_1).to eq 123
+          expect(u1.ai_office_phone_2).to eq 4567
 
           expect(u2.first_name).to eq 'Bob'
           expect(u2.middle_name).to eq 'B'
           expect(u2.last_name).to eq 'Testuser'
           expect(u2.penn_state_identifier).to eq '908332714'
           expect(u2.activity_insight_identifier).to eq '1949490'
+          expect(u2.ai_title).to be_nil
+          expect(u2.ai_rank).to eq 'Professor'
+          expect(u2.ai_endowed_title).to eq 'Distinguished Professor'
+          expect(u2.orcid_identifier).to be_nil
+          expect(u2.ai_alt_name).to be_nil
+          expect(u2.ai_building).to eq 'FREAR SO BL'
+          expect(u2.ai_room_number).to eq '431S'
+          expect(u2.ai_office_area_code).to eq 814
+          expect(u2.ai_office_phone_1).to eq 789
+          expect(u2.ai_office_phone_2).to eq 152
 
           expect(u3.first_name).to eq 'Jill'
           expect(u3.middle_name).to eq 'C'
           expect(u3.last_name).to eq 'Test'
           expect(u3.penn_state_identifier).to eq '978001402'
           expect(u3.activity_insight_identifier).to eq '2081288'
+          expect(u3.ai_title).to be_nil
+          expect(u3.ai_rank).to eq 'Research Associate'
+          expect(u3.ai_endowed_title).to eq 'Special Title'
+          expect(u3.orcid_identifier).to be_nil
+          expect(u3.ai_alt_name).to eq 'J. C. Test'
+          expect(u3.ai_building).to be_nil
+          expect(u3.ai_room_number).to be_nil
+          expect(u3.ai_office_area_code).to be_nil
+          expect(u3.ai_office_phone_1).to be_nil
+          expect(u3.ai_office_phone_2).to be_nil
         end
       end
 
@@ -43,6 +73,16 @@ describe ActivityInsightUserImporter do
                                       last_name: 'Testuser',
                                       penn_state_identifier: '987654321',
                                       activity_insight_identifier: '12345678',
+                                      ai_title: 'existing title',
+                                      ai_rank: 'existing rank',
+                                      ai_endowed_title: 'existing endowed',
+                                      orcid_identifier: 'existing orcid',
+                                      ai_alt_name: 'existing alt name',
+                                      ai_building: 'existing building',
+                                      ai_room_number: 'existing room',
+                                      ai_office_area_code: 111,
+                                      ai_office_phone_1: 222,
+                                      ai_office_phone_2: 3333,
                                       updated_by_user_at: timestamp }
 
         context "when the existing user has been updated by a human" do
@@ -59,18 +99,48 @@ describe ActivityInsightUserImporter do
             expect(u1.last_name).to eq 'Tester'
             expect(u1.penn_state_identifier).to eq '989465792'
             expect(u1.activity_insight_identifier).to eq '1649499'
+            expect(u1.ai_title).to eq 'Associate Professor of Business'
+            expect(u1.ai_rank).to eq 'Associate Professor'
+            expect(u1.ai_endowed_title).to be_nil
+            expect(u1.orcid_identifier).to eq 'orcid-1'
+            expect(u1.ai_alt_name).to be_nil
+            expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
+            expect(u1.ai_room_number).to eq '33'
+            expect(u1.ai_office_area_code).to eq 814
+            expect(u1.ai_office_phone_1).to eq 123
+            expect(u1.ai_office_phone_2).to eq 4567
 
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
             expect(u2.penn_state_identifier).to eq '987654321'
             expect(u2.activity_insight_identifier).to eq '12345678'
+            expect(u2.ai_title).to eq 'existing title'
+            expect(u2.ai_rank).to eq 'existing rank'
+            expect(u2.ai_endowed_title).to eq 'existing endowed'
+            expect(u2.orcid_identifier).to eq 'existing orcid'
+            expect(u2.ai_alt_name).to eq 'existing alt name'
+            expect(u2.ai_building).to eq 'existing building'
+            expect(u2.ai_room_number).to eq 'existing room'
+            expect(u2.ai_office_area_code).to eq 111
+            expect(u2.ai_office_phone_1).to eq 222
+            expect(u2.ai_office_phone_2).to eq 3333
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to eq 'C'
             expect(u3.last_name).to eq 'Test'
             expect(u3.penn_state_identifier).to eq '978001402'
             expect(u3.activity_insight_identifier).to eq '2081288'
+            expect(u3.ai_title).to be_nil
+            expect(u3.ai_rank).to eq 'Research Associate'
+            expect(u3.ai_endowed_title).to eq 'Special Title'
+            expect(u3.orcid_identifier).to be_nil
+            expect(u3.ai_alt_name).to eq 'J. C. Test'
+            expect(u3.ai_building).to be_nil
+            expect(u3.ai_room_number).to be_nil
+            expect(u3.ai_office_area_code).to be_nil
+            expect(u3.ai_office_phone_1).to be_nil
+            expect(u3.ai_office_phone_2).to be_nil
           end
         end
         context "when the existing user has not been updated by a human" do
@@ -87,18 +157,48 @@ describe ActivityInsightUserImporter do
             expect(u1.last_name).to eq 'Tester'
             expect(u1.penn_state_identifier).to eq '989465792'
             expect(u1.activity_insight_identifier).to eq '1649499'
+            expect(u1.ai_title).to eq 'Associate Professor of Business'
+            expect(u1.ai_rank).to eq 'Associate Professor'
+            expect(u1.ai_endowed_title).to be_nil
+            expect(u1.orcid_identifier).to eq 'orcid-1'
+            expect(u1.ai_alt_name).to be_nil
+            expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
+            expect(u1.ai_room_number).to eq '33'
+            expect(u1.ai_office_area_code).to eq 814
+            expect(u1.ai_office_phone_1).to eq 123
+            expect(u1.ai_office_phone_2).to eq 4567
 
             expect(u2.first_name).to eq 'Bob'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
             expect(u2.penn_state_identifier).to eq '908332714'
             expect(u2.activity_insight_identifier).to eq '1949490'
+            expect(u2.ai_title).to be_nil
+            expect(u2.ai_rank).to eq 'Professor'
+            expect(u2.ai_endowed_title).to eq 'Distinguished Professor'
+            expect(u2.orcid_identifier).to be_nil
+            expect(u2.ai_alt_name).to be_nil
+            expect(u2.ai_building).to eq 'FREAR SO BL'
+            expect(u2.ai_room_number).to eq '431S'
+            expect(u2.ai_office_area_code).to eq 814
+            expect(u2.ai_office_phone_1).to eq 789
+            expect(u2.ai_office_phone_2).to eq 152
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to eq 'C'
             expect(u3.last_name).to eq 'Test'
             expect(u3.penn_state_identifier).to eq '978001402'
             expect(u3.activity_insight_identifier).to eq '2081288'
+            expect(u3.ai_title).to be_nil
+            expect(u3.ai_rank).to eq 'Research Associate'
+            expect(u3.ai_endowed_title).to eq 'Special Title'
+            expect(u3.orcid_identifier).to be_nil
+            expect(u3.ai_alt_name).to eq 'J. C. Test'
+            expect(u3.ai_building).to be_nil
+            expect(u3.ai_room_number).to be_nil
+            expect(u3.ai_office_area_code).to be_nil
+            expect(u3.ai_office_phone_1).to be_nil
+            expect(u3.ai_office_phone_2).to be_nil
           end
         end
       end

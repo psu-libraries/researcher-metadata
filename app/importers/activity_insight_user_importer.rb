@@ -18,6 +18,16 @@ class ActivityInsightUserImporter < CSVImporter
         existing_user.last_name = row[:last_name]
         existing_user.penn_state_identifier = row[:'psu_id_#']
         existing_user.activity_insight_identifier = row[:user_id]
+        existing_user.ai_title = row[:title]
+        existing_user.ai_rank = row[:rank]
+        existing_user.ai_endowed_title = row[:endowed_title]
+        existing_user.orcid_identifier = row[:orcid_id]
+        existing_user.ai_alt_name = row[:alt_name]
+        existing_user.ai_building = row[:building]
+        existing_user.ai_room_number = row[:roomnum]
+        existing_user.ai_office_area_code = row[:office_area_code]
+        existing_user.ai_office_phone_1 = row[:ophone2]
+        existing_user.ai_office_phone_2 = row[:ophone3]
         existing_user
       else
         nil
@@ -30,6 +40,16 @@ class ActivityInsightUserImporter < CSVImporter
       u.webaccess_id = webaccess_id
       u.penn_state_identifier = row[:'psu_id_#']
       u.activity_insight_identifier = row[:user_id]
+      u.ai_title = row[:title]
+      u.ai_rank = row[:rank]
+      u.ai_endowed_title = row[:endowed_title]
+      u.orcid_identifier = row[:orcid_id]
+      u.ai_alt_name = row[:alt_name]
+      u.ai_building = row[:building]
+      u.ai_room_number = row[:roomnum]
+      u.ai_office_area_code = row[:office_area_code]
+      u.ai_office_phone_1 = row[:ophone2]
+      u.ai_office_phone_2 = row[:ophone3]
       u
     end
   end
@@ -45,6 +65,16 @@ class ActivityInsightUserImporter < CSVImporter
                                                     :middle_name,
                                                     :last_name,
                                                     :penn_state_identifier,
-                                                    :activity_insight_identifier]}
+                                                    :activity_insight_identifier,
+                                                    :ai_title,
+                                                    :ai_rank,
+                                                    :ai_endowed_title,
+                                                    :orcid_identifier,
+                                                    :ai_alt_name,
+                                                    :ai_building,
+                                                    :ai_room_number,
+                                                    :ai_office_area_code,
+                                                    :ai_office_phone_1,
+                                                    :ai_office_phone_2]}
   end
 end
