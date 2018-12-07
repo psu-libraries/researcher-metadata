@@ -138,6 +138,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 404, invalid_user_contracts_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 200, user_performances_params ) }
+    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 404, invalid_user_performances_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }

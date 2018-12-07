@@ -581,54 +581,106 @@ module API::V1
                     key :description, 'The title of the performance'
                   end
                   property :activity_insight_id do
-                    key :type, :string
+                    key :type, :integer
                     key :example, '1234567890'
                     key :description, "The unique identifier for the performances's corresponding record in the Activity Insight database"
                   end
                   property :performance_type do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'Film - Documentary'
                     key :description, 'The type of performance'
                   end
                   property :sponsor do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'Penn State'
                     key :description, 'The the organization that is sponsoring this performance'
                   end
                   property :description do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'This is a unique performance, performed for specific reasons'
                     key :description, 'Any further detail describing the performance'
                   end
                   property :group_name do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'Penn State Performers'
                     key :description, 'The name of the performing group'
                   end
                   property :location do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'State College, PA'
                     key :description, 'Country, State, City, theatre, etc. that the performance took place'
                   end
                   property :delivery_type do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'Competition'
                     key :description, 'Audition, commission, competition, or invitation'
                   end
                   property :scope do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, 'Local'
                     key :description, 'International, national, regional, state, local'
                   end
                   property :start_on do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, '12-01-2015'
                     key :description, 'The date that the performance started on'
                   end
                   property :end_on do
-                    key :type, :string
+                    key :type, [:string, :null]
                     key :example, '12-31-2015'
                     key :description, 'The date that the performance ended on'
+                  end
+                  property :user_performances do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      property :first_name do
+                        key :type, [:string, :null]
+                        key :example, 'Billy'
+                        key :description, 'The first name of a contributor'
+                      end
+                      property :last_name do
+                        key :type, [:string, :null]
+                        key :example, 'Bob'
+                        key :description, 'The last name of a contributor'
+                      end
+                      property :contribution do
+                        key :type, [:string, :null]
+                        key :example, 'Performer'
+                        key :description, 'The contributors role/contribution to the performance'
+                      end
+                      property :student_level do
+                        key :type, [:string, :null]
+                        key :example, 'Graduate'
+                        key :description, 'Undergraduate or graduate'
+                      end
+                      property :role_other do
+                        key :type, [:string, :null]
+                        key :example, 'Director'
+                        key :description, 'Role not listed in "contribution" drop-down'
+                      end
+                    end
+                  end
+                  property :performance_screenings do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      property :name do
+                        key :type, [:string, :null]
+                        key :example, 'Film Festival'
+                        key :description, 'Name of the venue for the screening'
+                      end
+                      property :location do
+                        key :type, [:string, :null]
+                        key :example, 'State College, PA'
+                        key :description, 'Country, State, City, that the screening took place'
+                      end
+                      property :screening_type do
+                        key :type, [:string, :null]
+                        key :example, 'DVD Distribution'
+                        key :description, 'Type of screening/exhibition'
+                      end
+                    end
                   end
                 end
               end
