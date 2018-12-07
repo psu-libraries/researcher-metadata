@@ -17,6 +17,23 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:ai_title).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_rank).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_endowed_title).of_type(:string) }
+  it { is_expected.to have_db_column(:orcid_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_alt_name).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_building).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_room_number).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_office_area_code).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_office_phone_1).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_office_phone_2).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_fax_area_code).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_fax_1).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_fax_2).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_website).of_type(:text) }
+  it { is_expected.to have_db_column(:ai_bio).of_type(:text) }
+  it { is_expected.to have_db_column(:ai_teaching_interests).of_type(:text) }
+  it { is_expected.to have_db_column(:ai_research_interests).of_type(:text) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
