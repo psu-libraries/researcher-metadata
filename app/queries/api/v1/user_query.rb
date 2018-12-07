@@ -24,6 +24,10 @@ module API::V1
       end
     end
 
+    def performances(params)
+      user.performances.visible
+    end
+
     def etds(params)
       user.etds
     end

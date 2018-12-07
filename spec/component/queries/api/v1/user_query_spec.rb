@@ -60,6 +60,27 @@ describe API::V1::UserQuery do
     end
   end
 
+  describe '#performances' do
+    context "when the given user has no performances" do
+      it "returns an empty array" do
+        expect(uq.performances({})).to eq []
+      end
+    end
+
+    context "when the given user has performances" do
+      let(:invis_perf) { create :performance, visible: false }
+      let(:vis_perf) { create :performance, visible: true }
+      before do
+        create :user_performance, user: user, performance: invis_perf
+        create :user_performance, user: user, performance: vis_perf
+      end
+
+      it "returns the user's visible performances" do
+        expect(uq.performances({})).to eq [vis_perf]
+      end
+    end
+  end
+
   describe '#publications' do
     let(:user) { create :user, show_all_publications: true }
 

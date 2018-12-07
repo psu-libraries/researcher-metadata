@@ -61,5 +61,15 @@ FactoryBot.define do
         create_list(:user_organization_membership, 3, user: user)
       end
     end
+
+    factory :user_with_performances do
+      transient do
+        performances_count 10
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:user_performance, evaluator.performances_count, user: user)
+      end
+    end
   end
 end
