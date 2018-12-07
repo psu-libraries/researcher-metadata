@@ -142,6 +142,7 @@ class User < ApplicationRecord
       field(:news_feed_items)
       field(:user_organization_memberships)
       field(:organizations)
+      field(:performances)
     end
 
     create do
