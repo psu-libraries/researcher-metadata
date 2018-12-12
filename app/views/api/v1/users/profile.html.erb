@@ -50,7 +50,7 @@
     <h3>Graduate Student Advising</h3>
     <ul>
       <% @committee_memberships.each do |m| %>
-        <li><a href="<%= m.etd.url %>"><%= m.etd.title.gsub('\n', ' ') %></a> (<%= m.role %>)</li>
+        <li><a href="<%= m.etd.url %>" target="_blank"><%= m.etd.title.gsub('\n', ' ') %></a> (<%= m.role %>)</li>
       <% end %>
     </ul>
   </div>

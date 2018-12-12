@@ -638,7 +638,7 @@ describe 'API::V1 Users' do
               <div id="md-advising">
                 <h3>Graduate Student Advising</h3>
                 <ul>
-                    <li><a href="test.edu">ETD  One</a> (Committee Member)</li>
+                    <li><a href="test.edu" target="_blank">ETD  One</a> (Committee Member)</li>
                 </ul>
               </div>
               <div id="md-news-stories">
