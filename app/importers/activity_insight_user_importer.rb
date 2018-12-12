@@ -28,6 +28,14 @@ class ActivityInsightUserImporter < CSVImporter
         existing_user.ai_office_area_code = row[:office_area_code]
         existing_user.ai_office_phone_1 = row[:ophone2]
         existing_user.ai_office_phone_2 = row[:ophone3]
+        existing_user.ai_fax_area_code = row[:fax1]
+        existing_user.ai_fax_1 = row[:fax2]
+        existing_user.ai_fax_2 = row[:fax3]
+        existing_user.ai_google_scholar = row[:google_scholar]
+        existing_user.ai_website = row[:website]
+        existing_user.ai_bio = bio(row)
+        existing_user.ai_teaching_interests = row[:teaching_interests]
+        existing_user.ai_research_interests = row[:research_interests]
         existing_user
       else
         nil
@@ -50,6 +58,14 @@ class ActivityInsightUserImporter < CSVImporter
       u.ai_office_area_code = row[:office_area_code]
       u.ai_office_phone_1 = row[:ophone2]
       u.ai_office_phone_2 = row[:ophone3]
+      u.ai_fax_area_code = row[:fax1]
+      u.ai_fax_1 = row[:fax2]
+      u.ai_fax_2 = row[:fax3]
+      u.ai_google_scholar = row[:google_scholar]
+      u.ai_website = row[:website]
+      u.ai_bio = bio(row)
+      u.ai_teaching_interests = row[:teaching_interests]
+      u.ai_research_interests = row[:research_interests]
       u
     end
   end
@@ -75,6 +91,20 @@ class ActivityInsightUserImporter < CSVImporter
                                                     :ai_room_number,
                                                     :ai_office_area_code,
                                                     :ai_office_phone_1,
-                                                    :ai_office_phone_2]}
+                                                    :ai_office_phone_2,
+                                                    :ai_fax_area_code,
+                                                    :ai_fax_1,
+                                                    :ai_fax_2,
+                                                    :ai_google_scholar,
+                                                    :ai_website,
+                                                    :ai_bio,
+                                                    :ai_teaching_interests,
+                                                    :ai_research_interests]}
+  end
+
+  private
+
+  def bio(row)
+    row[:bio] || row[:field28]
   end
 end

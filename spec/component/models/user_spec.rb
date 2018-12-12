@@ -30,6 +30,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:ai_fax_area_code).of_type(:integer) }
   it { is_expected.to have_db_column(:ai_fax_1).of_type(:integer) }
   it { is_expected.to have_db_column(:ai_fax_2).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_google_scholar).of_type(:text) }
   it { is_expected.to have_db_column(:ai_website).of_type(:text) }
   it { is_expected.to have_db_column(:ai_bio).of_type(:text) }
   it { is_expected.to have_db_column(:ai_teaching_interests).of_type(:text) }

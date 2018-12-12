@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_07_154400) do
+ActiveRecord::Schema.define(version: 2018_12_12_152125) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -327,6 +327,7 @@ ActiveRecord::Schema.define(version: 2018_12_07_154400) do
     t.text "ai_bio"
     t.text "ai_teaching_interests"
     t.text "ai_research_interests"
+    t.text "ai_google_scholar"
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["penn_state_identifier"], name: "index_users_on_penn_state_identifier", unique: true
     t.index ["pure_uuid"], name: "index_users_on_pure_uuid", unique: true
