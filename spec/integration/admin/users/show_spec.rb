@@ -39,6 +39,9 @@ feature "Admin user detail page", type: :feature do
   let!(:nfi1) { create :news_feed_item, user: user, title:  "Test Story One"}
   let!(:nfi2) { create :news_feed_item, user: user, title:  "Test Story Two"}
 
+  let!(:perf1) { create :performance, title: "Test Performance One" }
+  let!(:perf2) { create :performance, title: "Test Performance Two" }
+
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
@@ -56,6 +59,9 @@ feature "Admin user detail page", type: :feature do
 
       create :committee_membership, user: user, etd: etd1
       create :committee_membership, user: user, etd: etd2
+
+      create :user_performance, user: user, performance: perf1
+      create :user_performance, user: user, performance: perf2
     end
 
     describe "the page content" do
@@ -128,6 +134,11 @@ feature "Admin user detail page", type: :feature do
       it "shows the user's news stories" do
         expect(page).to have_link "Test Story One"
         expect(page).to have_link "Test Story Two"
+      end
+
+      it "shows the user's performances" do
+        expect(page).to have_link "Test Performance One"
+        expect(page).to have_link "Test Performance Two"
       end
     end
 
