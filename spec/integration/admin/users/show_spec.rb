@@ -8,7 +8,24 @@ feature "Admin user detail page", type: :feature do
                        activity_insight_identifier: 'ai12345',
                        pure_uuid: 'pure67890',
                        penn_state_identifier: 'psu345678',
-                       scopus_h_index: 724) }
+                       scopus_h_index: 724,
+                       ai_title: 'Test Title',
+                       ai_rank: 'Test Rank', ai_endowed_title: 'Test Endowed Title',
+                       orcid_identifier: 'Test Orcid ID',
+                       ai_alt_name: 'Test Alt Name',
+                       ai_building: 'Test Building',
+                       ai_room_number: 'Test Room Number',
+                       ai_office_area_code: 385,
+                       ai_office_phone_1: 503,
+                       ai_office_phone_2: 2953,
+                       ai_fax_area_code: 743,
+                       ai_fax_1: 298,
+                       ai_fax_2: 1094,
+                       ai_google_scholar: 'Test Google Scholar',
+                       ai_website: 'http://test-example.com',
+                       ai_bio: 'Test Bio',
+                       ai_teaching_interests: 'Test Teaching Interests',
+                       ai_research_interests: 'Test Research Interests') }
 
   let!(:pub1) { create :publication, title: "Bob's First Publication",
                        journal_title: "First Journal",
@@ -89,6 +106,62 @@ feature "Admin user detail page", type: :feature do
 
       it "shows the user's H-Index" do
         expect(page).to have_content '724'
+      end
+
+      it "shows the user's title" do
+        expect(page).to have_content 'Test Title'
+      end
+
+      it "shows the user's rank" do
+        expect(page).to have_content 'Test Rank'
+      end
+
+      it "shows the user's endowed title" do
+        expect(page).to have_content 'Test Endowed Title'
+      end
+
+      it "shows the user's Orcid ID" do
+        expect(page).to have_content 'Test Orcid ID'
+      end
+
+      it "shows the user's alt name" do
+        expect(page).to have_content 'Test Alt Name'
+      end
+
+      it "shows the user's building" do
+        expect(page).to have_content 'Test Building'
+      end
+
+      it "shows the user's room number" do
+        expect(page).to have_content 'Test Room Number'
+      end
+
+      it "shows the user's office phone number" do
+        expect(page).to have_content '(385) 503-2953'
+      end
+
+      it "shows the user's fax number" do
+        expect(page).to have_content '(743) 298-1094'
+      end
+
+      it "shows the user's website address" do
+        expect(page).to have_content 'http://test-example.com'
+      end
+
+      it "shows the user's Google Scholar information" do
+        expect(page).to have_content 'Test Google Scholar'
+      end
+
+      it "shows the user's bio" do
+        expect(page).to have_content 'Test Bio'
+      end
+
+      it "shows the user's teaching interests" do
+        expect(page).to have_content 'Test Teaching Interests'
+      end
+
+      it "shows the user's research interests" do
+        expect(page).to have_content 'Test Research Interests'
       end
 
       it "shows the organizations that the user manages" do

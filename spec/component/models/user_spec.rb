@@ -373,4 +373,170 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#office_phone_number' do
+    let(:user) { User.new({ai_office_area_code: p1,
+                           ai_office_phone_1: p2,
+                           ai_office_phone_2: p3}) }
+    let(:p1) { nil }
+    let(:p2) { nil }
+    let(:p3) { nil }
+
+    context "when all of the user's office phone fields are nil" do
+      it "returns nil" do
+        expect(user.office_phone_number).to be_nil
+      end
+    end
+
+    context "when the user's first phone field is present" do
+      let(:p1) { 111 }
+
+      context "when the user's second phone field is present" do
+        let(:p2) { 222 }
+
+        context "when the user's third phone field is present" do
+          let(:p3) { 3333 }
+
+          it "returns the full office phone number" do
+            expect(user.office_phone_number).to eq '(111) 222-3333'
+          end
+        end
+        context "when the user's third phone field is not present" do
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+      end
+      context "when the user's second phone field is not present" do
+        context "when the user's third phone field is present" do
+          let(:p3) { 3333 }
+
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+        context "when the user's third phone field is not present" do
+
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+      end
+    end
+    context "when the user's first phone field is not present" do
+      context "when the user's second phone field is present" do
+        let(:p2) { 222 }
+
+        context "when the user's third phone field is present" do
+          let(:p3) { 3333 }
+
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+        context "when the user's third phone field is not present" do
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+      end
+      context "when the user's second phone field is not present" do
+        context "when the user's third phone field is present" do
+          let(:p3) { 3333 }
+
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+        context "when the user's third phone field is not present" do
+          it "returns nil" do
+            expect(user.office_phone_number).to be_nil
+          end
+        end
+      end
+    end
+  end
+
+  describe '#fax_number' do
+    let(:user) { User.new({ai_fax_area_code: f1,
+                           ai_fax_1: f2,
+                           ai_fax_2: f3}) }
+    let(:f1) { nil }
+    let(:f2) { nil }
+    let(:f3) { nil }
+
+    context "when all of the user's office fax fields are nil" do
+      it "returns nil" do
+        expect(user.fax_number).to be_nil
+      end
+    end
+
+    context "when the user's first fax field is present" do
+      let(:f1) { 111 }
+
+      context "when the user's second fax field is present" do
+        let(:f2) { 222 }
+
+        context "when the user's third fax field is present" do
+          let(:f3) { 3333 }
+
+          it "returns the full office fax number" do
+            expect(user.fax_number).to eq '(111) 222-3333'
+          end
+        end
+        context "when the user's third fax field is not present" do
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+      end
+      context "when the user's second fax field is not present" do
+        context "when the user's third fax field is present" do
+          let(:f3) { 3333 }
+
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+        context "when the user's third fax field is not present" do
+
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+      end
+    end
+    context "when the user's first fax field is not present" do
+      context "when the user's second fax field is present" do
+        let(:f2) { 222 }
+
+        context "when the user's third fax field is present" do
+          let(:f3) { 3333 }
+
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+        context "when the user's third fax field is not present" do
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+      end
+      context "when the user's second fax field is not present" do
+        context "when the user's third fax field is present" do
+          let(:f3) { 3333 }
+
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+        context "when the user's third fax field is not present" do
+          it "returns nil" do
+            expect(user.fax_number).to be_nil
+          end
+        end
+      end
+    end
+  end
 end

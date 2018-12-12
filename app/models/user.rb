@@ -59,6 +59,18 @@ class User < ApplicationRecord
     "https://pennstate.pure.elsevier.com/en/persons/#{pure_uuid}" if pure_uuid.present?
   end
 
+  def office_phone_number
+    if ai_office_area_code.present? && ai_office_phone_1.present? && ai_office_phone_2.present?
+      "(#{ai_office_area_code}) #{ai_office_phone_1}-#{ai_office_phone_2}"
+    end
+  end
+
+  def fax_number
+    if ai_fax_area_code.present? && ai_fax_1.present? && ai_fax_2.present?
+      "(#{ai_fax_area_code}) #{ai_fax_1}-#{ai_fax_2}"
+    end
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do
@@ -131,6 +143,20 @@ class User < ApplicationRecord
       field(:activity_insight_identifier) { label 'Activity Insight ID' }
       field(:penn_state_identifier) { label 'Penn State ID' }
       field(:scopus_h_index) { label 'H-Index' }
+      field(:ai_title) { label 'Title' }
+      field(:ai_rank) { label 'Rank' }
+      field(:ai_endowed_title) { label 'Endowed Title' }
+      field(:orcid_identifier) { label 'ORCID ID' }
+      field(:ai_alt_name) { label 'Alternate Name' }
+      field(:ai_building) { label 'Building' }
+      field(:ai_room_number) { label 'Room Number' }
+      field(:office_phone_number) { label 'Office Phone Number' }
+      field(:fax_number) { label 'Fax Number' }
+      field(:ai_website) { label 'Personal Website' }
+      field(:ai_google_scholar) { label 'Google Scholar URL' }
+      field(:ai_bio) { label 'Bio' }
+      field(:ai_teaching_interests) { label 'Teaching Interests' }
+      field(:ai_research_interests) { label 'Research Interests' }
       field(:is_admin) { label 'Admin user?' }
       field(:show_all_publications)
       field(:show_all_contracts)
