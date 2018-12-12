@@ -71,6 +71,12 @@ class User < ApplicationRecord
     end
   end
 
+  def office_location
+    if ai_room_number.present? && ai_building.present?
+      "#{ai_room_number} #{ai_building.titleize}"
+    end
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

@@ -539,4 +539,74 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#office_location' do
+    let(:user) { User.new({ai_room_number: rn,
+                           ai_building: b}) }
+    let(:rn) { nil }
+    let(:b) { nil }
+
+    context "when the user's room number and building are nil" do
+      it "returns nil" do
+        expect(user.office_location).to be_nil
+      end
+    end
+
+    context "when the user's room number and building are blank" do
+      let(:rn) { '' }
+      let(:b) { '' }
+
+      it "returns nil" do
+        expect(user.office_location).to be_nil
+      end
+    end
+
+    context "when the user's room number is present" do
+      let(:rn) { '123A' }
+
+      context "when the user's building is present" do
+        let(:b) { 'Test Building' }
+
+        it "returns the full office location" do
+          expect(user.office_location).to eq '123A Test Building'
+        end
+
+        context "when the building name is not title case" do
+          let(:b) { 'TEST building' }
+
+          it "returns the full office location with the building name in title case" do
+            expect(user.office_location).to eq '123A Test Building'
+          end
+        end
+      end
+
+      context "when the user's building is blank" do
+        let(:b) { '' }
+
+        it "returns nil" do
+          expect(user.office_location).to be_nil
+        end
+      end
+    end
+
+    context "when the user's room number is blank" do
+      let(:rn) { '' }
+
+      context "when the user's building is present" do
+        let(:b) { 'Test Building' }
+
+        it "returns nil" do
+          expect(user.office_location).to be_nil
+        end
+      end
+
+      context "when the user's building is blank" do
+        let(:b) { '' }
+
+        it "returns nil" do
+          expect(user.office_location).to be_nil
+        end
+      end
+    end
+  end
 end

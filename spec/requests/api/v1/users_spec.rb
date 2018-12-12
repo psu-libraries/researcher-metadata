@@ -2,6 +2,11 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Users' do
   let(:h_index) { nil }
+  let(:title) { nil }
+  let(:website) { nil }
+  let(:bio) { nil }
+  let(:room) { nil }
+  let(:building) { nil }
   let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
@@ -427,7 +432,12 @@ describe 'API::V1 Users' do
                          webaccess_id: 'bat123',
                          pure_uuid: pure_uuid,
                          show_all_contracts: true,
-                         show_all_publications: show_pubs) }
+                         show_all_publications: show_pubs,
+                         ai_title: title,
+                         ai_website: website,
+                         ai_bio: bio,
+                         ai_room_number: room,
+                         ai_building: building) }
     let(:show_pubs) { true }
     let(:headers) { { "accept" => "text/html" } }
     let(:pure_uuid) { nil }
@@ -448,8 +458,8 @@ describe 'API::V1 Users' do
           expect(response.body).to eq <<~HTML
               <h2 id="md-full-name">Bob Testerson</h2>
               <div id="md-person-info">
-                <ul>
-                  <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                <ul id="md-contact-info">
+                  <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
                 </ul>
               </div>
             HTML
@@ -471,8 +481,8 @@ describe 'API::V1 Users' do
           expect(response.body).to eq <<~HTML
               <h2 id="md-full-name">Bob Testerson</h2>
               <div id="md-person-info">
-                <ul>
-                  <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                <ul id="md-contact-info">
+                  <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
                 </ul>
               </div>
           HTML
@@ -482,7 +492,12 @@ describe 'API::V1 Users' do
       context "when the user has associated metadata" do
         let(:other_user) { create :user, show_all_contracts: false }
         let(:h_index) { 49 }
+        let(:title) { 'Professor' }
+        let(:website) { 'http://example.com/mysite' }
+        let(:bio) { 'Some bio content' }
         let(:pure_uuid) { 'pure-abc-123' }
+        let(:room) { '123' }
+        let(:building) { 'Test Building' }
         let!(:pub1) { create :publication, title: "First Publication",
                              visible: true,
                              journal_title: "Test Journal",
@@ -604,14 +619,22 @@ describe 'API::V1 Users' do
         it "returns an HTML representation of all of the given user's available metadata" do
           expect(response.body).to eq <<~HTML
             <h2 id="md-full-name">Bob Testerson</h2>
+              <span id="md-title">Professor</span>
             <div id="md-person-info">
-              <ul>
-                <li>Email:  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                  <li>Citations:  9</li>
-                  <li>H-Index:  49</li>
-                  <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+              <ul id="md-contact-info">
+                <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                  <li><strong>Office:</strong>  123 Test Building</li>
+                  <li><strong>Personal website:</strong>  http://example.com/mysite</li>
               </ul>
+                <ul>
+                    <li><strong>Citations:</strong>  9</li>
+                    <li><strong>H-Index:</strong>  49</li>
+                    <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+                </ul>
             </div>
+              <div id="md-bio">
+                <p>Some bio content</p>
+              </div>
               <div id="md-publications">
                 <h3>Publications</h3>
                 <ul>

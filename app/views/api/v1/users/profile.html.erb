@@ -1,18 +1,36 @@
 <h2 id="md-full-name"><%= @user.name %></h2>
+<% if @user.ai_title.present? %>
+  <span id="md-title"><%= @user.ai_title %></span>
+<% end %>
 <div id="md-person-info">
-  <ul>
-    <li>Email:  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
-    <% if @user.total_scopus_citations > 0 %>
-      <li>Citations:  <%= @user.total_scopus_citations %></li>
+  <ul id="md-contact-info">
+    <li><strong>Email:</strong>  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
+    <% if @user.office_location %>
+      <li><strong>Office:</strong>  <%= @user.office_location %></li>
     <% end %>
-    <% if @user.scopus_h_index.present? %>
-      <li>H-Index:  <%= @user.scopus_h_index %></li>
+    <% if @user.ai_website.present? %>
+      <li><strong>Personal website:</strong>  <%= @user.ai_website %></li>
     <% end %>
-    <% if @user.pure_profile_url %>
-      <li><a href="<%= @user.pure_profile_url %>" target="_blank">Pure Profile</a></li>
-  <% end %>
   </ul>
+  <% if @user.total_scopus_citations > 0 || @user.scopus_h_index.present? || @user.pure_profile_url %>
+    <ul>
+      <% if @user.total_scopus_citations > 0 %>
+        <li><strong>Citations:</strong>  <%= @user.total_scopus_citations %></li>
+      <% end %>
+      <% if @user.scopus_h_index.present? %>
+        <li><strong>H-Index:</strong>  <%= @user.scopus_h_index %></li>
+      <% end %>
+      <% if @user.pure_profile_url %>
+        <li><a href="<%= @user.pure_profile_url %>" target="_blank">Pure Profile</a></li>
+      <% end %>
+    </ul>
+  <% end %>
 </div>
+<% if @user.ai_bio.present? %>
+  <div id="md-bio">
+    <p><%= @user.ai_bio %></p>
+  </div>
+<% end %>
 <% if @pubs.any? %>
   <div id="md-publications">
     <h3>Publications</h3>
