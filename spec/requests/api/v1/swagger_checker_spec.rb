@@ -10,6 +10,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user_with_presentations) { create(:user_with_presentations, webaccess_id: 'pres123', presentations_count: 10) }
     let!(:user_with_committee_memberships) { create(:user_with_committee_memberships, webaccess_id: 'etd123', committee_memberships_count: 10) }
     let!(:user_with_news_feed_items) { create(:user_with_news_feed_items, webaccess_id: 'nfi123', news_feed_items_count: 10) }
+    let!(:user_with_performances) { create(:user_with_performances, webaccess_id: 'per123', performances_count: 10) }
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
     let!(:api_token) { create :api_token, token: 'token123' }
     let(:publications_params) { {'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
@@ -69,6 +70,18 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
+    let(:user_performances_params) {
+      {
+        "webaccess_id" => user_with_performances.webaccess_id,
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
+      }
+    }
+    let(:invalid_user_performances_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
+      }
+    }
     let(:user_organization_memberships_params) {
       {
         "webaccess_id" => user_with_organization_memberships.webaccess_id,
@@ -123,6 +136,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
     xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 404, invalid_user_contracts_params ) }
+
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 200, user_performances_params ) }
+    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 404, invalid_user_performances_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }
     xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 401, unauthorized_params ) }

@@ -42,6 +42,19 @@ module API::V1
       end
     end
 
+    def performances
+      user = User.find_by(webaccess_id: params[:webaccess_id])
+      if user
+        @performances = API::V1::UserQuery.new(user).performances(params)
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::PerformanceSerializer.new(@performances) }
+        end
+      else
+        render json: { :message => "User not found", :code => 404 }, status: 404
+      end
+    end
+
     def etds
       @user = User.find_by(webaccess_id: params[:webaccess_id])
       if @user
@@ -503,6 +516,177 @@ module API::V1
             end
           end
         end
+        # response 401 do
+        #   key :description, 'unauthorized'
+        #   schema do
+        #     key :'$ref', :ErrorModelV1
+        #   end
+        # end
+        response 404 do
+          key :description, 'not found'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        security do
+          key :api_key, []
+        end
+      end
+    end
+
+    swagger_path '/v1/users/{webaccess_id}/performances' do
+      operation :get do
+        key :summary, "Retrieve a user's performances"
+        key :description, 'Returns performances for a user'
+        key :operationId, 'findPerformances'
+        key :produces, [
+          'application/json',
+          'text/html'
+        ]
+        key :tags, [
+          'user'
+        ]
+        parameter do
+          key :name, :webaccess_id
+          key :in, :path
+          key :description, 'Webaccess ID of user to retrieve performancess'
+          key :required, true
+          key :type, :string
+        end
+         response 200 do
+          key :description, 'user performances response'
+          schema do
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :type, :object
+                key :required, [:id, :type, :attributes]
+                property :id do
+                  key :type, :string
+                  key :example, '123'
+                  key :description, 'The ID of the object'
+                end
+                property :type do
+                  key :type, :string
+                  key :example, 'performance'
+                  key :description, 'The type of the object'
+                end
+                property :attributes do
+                  key :type, :object
+                  key :required, [:title, :activity_insight_id]
+                  property :title do
+                    key :type, :string
+                    key :example, 'Example Performance'
+                    key :description, 'The title of the performance'
+                  end
+                  property :activity_insight_id do
+                    key :type, :integer
+                    key :example, '1234567890'
+                    key :description, "The unique identifier for the performances's corresponding record in the Activity Insight database"
+                  end
+                  property :performance_type do
+                    key :type, [:string, :null]
+                    key :example, 'Film - Documentary'
+                    key :description, 'The type of performance'
+                  end
+                  property :sponsor do
+                    key :type, [:string, :null]
+                    key :example, 'Penn State'
+                    key :description, 'The the organization that is sponsoring this performance'
+                  end
+                  property :description do
+                    key :type, [:string, :null]
+                    key :example, 'This is a unique performance, performed for specific reasons'
+                    key :description, 'Any further detail describing the performance'
+                  end
+                  property :group_name do
+                    key :type, [:string, :null]
+                    key :example, 'Penn State Performers'
+                    key :description, 'The name of the performing group'
+                  end
+                  property :location do
+                    key :type, [:string, :null]
+                    key :example, 'State College, PA'
+                    key :description, 'Country, State, City, theatre, etc. that the performance took place'
+                  end
+                  property :delivery_type do
+                    key :type, [:string, :null]
+                    key :example, 'Competition'
+                    key :description, 'Audition, commission, competition, or invitation'
+                  end
+                  property :scope do
+                    key :type, [:string, :null]
+                    key :example, 'Local'
+                    key :description, 'International, national, regional, state, local'
+                  end
+                  property :start_on do
+                    key :type, [:string, :null]
+                    key :example, '12-01-2015'
+                    key :description, 'The date that the performance started on'
+                  end
+                  property :end_on do
+                    key :type, [:string, :null]
+                    key :example, '12-31-2015'
+                    key :description, 'The date that the performance ended on'
+                  end
+                  property :user_performances do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      property :first_name do
+                        key :type, [:string, :null]
+                        key :example, 'Billy'
+                        key :description, 'The first name of a contributor'
+                      end
+                      property :last_name do
+                        key :type, [:string, :null]
+                        key :example, 'Bob'
+                        key :description, 'The last name of a contributor'
+                      end
+                      property :contribution do
+                        key :type, [:string, :null]
+                        key :example, 'Performer'
+                        key :description, 'The contributors role/contribution to the performance'
+                      end
+                      property :student_level do
+                        key :type, [:string, :null]
+                        key :example, 'Graduate'
+                        key :description, 'Undergraduate or graduate'
+                      end
+                      property :role_other do
+                        key :type, [:string, :null]
+                        key :example, 'Director'
+                        key :description, 'Role not listed in "contribution" drop-down'
+                      end
+                    end
+                  end
+                  property :performance_screenings do
+                    key :type, :array
+                    items do
+                      key :type, :object
+                      property :name do
+                        key :type, [:string, :null]
+                        key :example, 'Film Festival'
+                        key :description, 'Name of the venue for the screening'
+                      end
+                      property :location do
+                        key :type, [:string, :null]
+                        key :example, 'State College, PA'
+                        key :description, 'Country, State, City, that the screening took place'
+                      end
+                      property :screening_type do
+                        key :type, [:string, :null]
+                        key :example, 'DVD Distribution'
+                        key :description, 'Type of screening/exhibition'
+                      end
+                    end
+                  end
+                end
+              end
+            end
+          end
+         end
         # response 401 do
         #   key :description, 'unauthorized'
         #   schema do

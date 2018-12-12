@@ -41,6 +41,12 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
+  it "shows a link to the performances index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Performances'
+    end
+  end
+
   it "shows a link to the users index" do
     within '.sidebar-nav' do
       expect(page).to have_link 'Users'
