@@ -26,7 +26,7 @@ describe ActivityInsightPublicationImporter do
           expect(p1.publication_type).to eq 'Journal Article'
           expect(p1.publisher).to eq 'Test Publisher One'
           expect(p1.secondary_title).to eq '2015'
-          expect(p1.status).to eq 'Accepted'
+          expect(p1.status).to eq 'Published'
           expect(p1.volume).to eq '41'
           expect(p1.issue).to eq '6'
           expect(p1.edition).to eq '3'
@@ -43,7 +43,7 @@ describe ActivityInsightPublicationImporter do
           expect(p2.publication_type).to eq 'Professional Journal Article'
           expect(p2.publisher).to eq 'Test Publisher Two'
           expect(p2.secondary_title).to eq nil
-          expect(p2.status).to eq 'Accepted'
+          expect(p2.status).to eq 'Published'
           expect(p2.volume).to eq '12'
           expect(p2.issue).to eq '4'
           expect(p2.edition).to eq '1'
@@ -60,7 +60,7 @@ describe ActivityInsightPublicationImporter do
           expect(p3.publication_type).to eq 'Academic Journal Article'
           expect(p3.publisher).to eq 'Test Publisher Three'
           expect(p3.secondary_title).to eq nil
-          expect(p3.status).to eq 'Accepted'
+          expect(p3.status).to eq 'Published'
           expect(p3.volume).to eq nil
           expect(p3.issue).to eq nil
           expect(p3.edition).to eq nil
@@ -119,7 +119,7 @@ describe ActivityInsightPublicationImporter do
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.publisher).to eq 'Test Publisher One'
             expect(p1.secondary_title).to eq '2015'
-            expect(p1.status).to eq 'Accepted'
+            expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '41'
             expect(p1.issue).to eq '6'
             expect(p1.edition).to eq '3'
@@ -153,7 +153,7 @@ describe ActivityInsightPublicationImporter do
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.publisher).to eq 'Test Publisher Three'
             expect(p3.secondary_title).to eq nil
-            expect(p3.status).to eq 'Accepted'
+            expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq nil
             expect(p3.issue).to eq nil
             expect(p3.edition).to eq nil
@@ -189,7 +189,7 @@ describe ActivityInsightPublicationImporter do
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.publisher).to eq 'Test Publisher One'
             expect(p1.secondary_title).to eq '2015'
-            expect(p1.status).to eq 'Accepted'
+            expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '41'
             expect(p1.issue).to eq '6'
             expect(p1.edition).to eq '3'
@@ -206,7 +206,7 @@ describe ActivityInsightPublicationImporter do
             expect(p2.publication_type).to eq 'Professional Journal Article'
             expect(p2.publisher).to eq 'Test Publisher Two'
             expect(p2.secondary_title).to eq nil
-            expect(p2.status).to eq 'Accepted'
+            expect(p2.status).to eq 'Published'
             expect(p2.volume).to eq '12'
             expect(p2.issue).to eq '4'
             expect(p2.edition).to eq '1'
@@ -223,7 +223,7 @@ describe ActivityInsightPublicationImporter do
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.publisher).to eq 'Test Publisher Three'
             expect(p3.secondary_title).to eq nil
-            expect(p3.status).to eq 'Accepted'
+            expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq nil
             expect(p3.issue).to eq nil
             expect(p3.edition).to eq nil

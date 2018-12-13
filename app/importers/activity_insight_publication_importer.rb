@@ -1,6 +1,6 @@
 class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
   def row_to_object(row)
-    if publication_type(row) =~ /journal article/i
+    if publication_type(row) =~ /journal article/i && status(row) == 'Published'
       pi = PublicationImport.find_by(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
                                      source_identifier: row[:id]) ||
         PublicationImport.new(source: ActivityInsightCSVImporter::IMPORT_SOURCE,
