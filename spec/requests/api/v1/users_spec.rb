@@ -584,12 +584,28 @@ describe 'API::V1 Users' do
                              title: "Story One",
                              url: "news.edu/1",
                              published_on: Date.new(2016, 1, 2) }
-
         let!(:nfi2) { create :news_feed_item,
                              user: user,
                              title: "Story Two",
                              url: "news.edu/2",
                              published_on: Date.new(2018, 3, 4) }
+
+        let!(:perf1) { create :performance,
+                              title: "Performance One",
+                              location: "Location One",
+                              start_on: Date.new(2017, 1, 1) }
+        let!(:perf2) { create :performance,
+                              title: "Performance Two",
+                              location: nil,
+                              start_on: nil }
+        let!(:perf3) { create :performance,
+                              title: "Performance Three",
+                              location: "Location Three",
+                              start_on: nil }
+        let!(:perf4) { create :performance,
+                              title: "Performance Four",
+                              location: nil,
+                              start_on: Date.new(2018, 12, 1) }
 
         before do
           create :authorship, user: user, publication: pub1
@@ -612,6 +628,11 @@ describe 'API::V1 Users' do
           create :presentation_contribution, user: user, presentation: pres3
 
           create :committee_membership, user: user, etd: etd1, role: "Committee Member"
+
+          create :user_performance, user: user, performance: perf1
+          create :user_performance, user: user, performance: perf2
+          create :user_performance, user: user, performance: perf3
+          create :user_performance, user: user, performance: perf4
 
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end
@@ -656,6 +677,15 @@ describe 'API::V1 Users' do
                 <h3>Presentations</h3>
                 <ul>
                       <li>Presentation Two, An Organization, Earth</li>
+                </ul>
+              </div>
+              <div id="md-performances">
+                <h3>Performances</h3>
+                <ul>
+                    <li>Performance Four, 12/1/2018</li>
+                    <li>Performance One, Location One, 1/1/2017</li>
+                    <li>Performance Two</li>
+                    <li>Performance Three, Location Three</li>
                 </ul>
               </div>
               <div id="md-advising">

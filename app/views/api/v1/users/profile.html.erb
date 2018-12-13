@@ -63,6 +63,16 @@
     </ul>
   </div>
 <% end %>
+<% if @performances.any? %>
+  <div id="md-performances">
+    <h3>Performances</h3>
+    <ul>
+      <% @performances.each do |p| %>
+        <li><%= p.title %><%= ", #{p.location}" if p.location.present? %><%= ", #{p.start_on.strftime('%-m/%-d/%Y')}" if p.start_on.present? %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <% if @committee_memberships.any? %>
   <div id="md-advising">
     <h3>Graduate Student Advising</h3>

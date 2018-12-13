@@ -103,6 +103,7 @@ module API::V1
         @presentations = uq.presentations({})
         @news_feed_items = uq.news_feed_items({}).order(published_on: :desc)
         @committee_memberships = @user.committee_memberships
+        @performances = @user.performances.order('case when start_on is null then 1 else 0 end, start_on desc')
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
       end
