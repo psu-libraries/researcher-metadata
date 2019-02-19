@@ -38,12 +38,12 @@ module API::V1
             end
           end
         end
-        # response 401 do
-        #   key :description, 'unauthorized'
-        #   schema do
-        #     key :'$ref', :ErrorModelV1
-        #   end
-        # end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         response 404 do
           key :description, 'not found'
           schema do
@@ -88,12 +88,12 @@ module API::V1
             end
           end
         end
-        # response 401 do
-        #   key :description, 'unauthorized'
-        #   schema do
-        #     key :'$ref', :ErrorModelV1
-        #   end
-        # end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
         security do
           key :api_key, []
         end

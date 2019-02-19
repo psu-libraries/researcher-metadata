@@ -123,42 +123,42 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     }
 
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }
-    xit { is_expected.to validate( :get, '/v1/publications', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/publications', 401, unauthorized_params ) }
 
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publication_params ) }
-    xit { is_expected.to validate( :get, '/v1/publications/{id}', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/publications/{id}', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_publication_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_publications_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 200, user_contracts_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/contracts', 404, invalid_user_contracts_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 200, user_performances_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 404, invalid_user_performances_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 404, invalid_user_presentations_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 200, user_with_committee_memberships_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_with_committee_memberships_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 200, user_news_feed_items_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 404, invalid_user_news_feed_items_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 200, user_organization_memberships_params ) }
-    xit { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 404, invalid_user_organization_memberships_params ) }
 
     it { is_expected.to validate( :post, '/v1/users/publications', 200, users_publications_params ) }
-    xit { is_expected.to validate( :post, '/v1/users/publications', 401, unauthorized_params ) }
+    it { is_expected.to validate( :post, '/v1/users/publications', 401, unauthorized_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/profile', 404, invalid_user_profile_params ) }
   end
