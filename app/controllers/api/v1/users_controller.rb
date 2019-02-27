@@ -97,6 +97,7 @@ module API::V1
     def profile
       @user = User.find_by(webaccess_id: params[:webaccess_id])
       uq = API::V1::UserQuery.new(@user)
+      @profile = UserProfile.new(@user)
       if @user
         @pubs = uq.publications({order_first_by: 'publication_date_desc'})
         @grants = uq.contracts.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
@@ -104,6 +105,10 @@ module API::V1
         @news_feed_items = uq.news_feed_items({}).order(published_on: :desc)
         @committee_memberships = @user.committee_memberships
         @performances = @user.performances.order('case when start_on is null then 1 else 0 end, start_on desc')
+        respond_to do |format|
+          format.html
+          format.json { render json: API::V1::UserProfileSerializer.new(@profile) }
+        end
       else
         render json: { :message => "User not found", :code => 404 }, status: 404
       end
@@ -898,9 +903,9 @@ module API::V1
     swagger_path '/v1/users/{webaccess_id}/profile' do
       operation :get do
         key :summary, "Retrieve a user's profile"
-        key :description, "Returns a plain HTML representation of a user's profile information"
+        key :description, "Returns a representation of a user's profile information"
         key :operationId, 'findUserProfile'
-        key :produces, ['text/html']
+        key :produces, ['application/json', 'text/html']
         key :tags, ['user']
 
         parameter do
@@ -913,6 +918,74 @@ module API::V1
 
         response 200 do
           key :description, 'user profile response'
+          schema do
+            key :required, [:data]
+            property :data do
+              key :type, :object
+              key :required, [:id, :type, :attributes]
+              property :id do
+                key :type, :string
+                key :example, '123'
+                key :description, 'The ID of the user'
+              end
+              property :type do
+                key :type, :string
+                key :example, 'user_profile'
+                key :description, 'The type of the object'
+              end
+              property :attributes do
+                key :type, :object
+                key :required, [:name, :title, :email, :office_location, :personal_website,
+                                :total_scopus_citations, :scopus_h_index, :pure_profile_url,
+                                :bio]
+                property :name do
+                  key :type, :string
+                  key :example, 'Example User'
+                  key :description, 'The full name of the user'
+                end
+                property :title do
+                  key :type, :string
+                  key :example, 'Professor'
+                  key :description, "The title of the user's position"
+                end
+                property :email do
+                  key :type, :string
+                  key :example, 'abc123@psu.edu'
+                  key :description, "The user's email address"
+                end
+                property :office_location do
+                  key :type, :string
+                  key :example, '101 Chemistry Building'
+                  key :description, "The room number and building where the user's office is located"
+                end
+                property :personal_website do
+                  key :type, :string
+                  key :example, 'mysite.org'
+                  key :description, "The domain or URL for the user's personal website"
+                end
+                property :total_scopus_citations do
+                  key :type, :integer
+                  key :example, 76
+                  key :description, "The total number of times that all of the user's publications have been cited as recorded in Scopus (Pure)"
+                end
+                property :scopus_h_index do
+                  key :type, :integer
+                  key :example, 24
+                  key :description, "The user's H-Index value in Scopus (Pure)"
+                end
+                property :pure_profile_url do
+                  key :type, :string
+                  key :example, 'https://pennstate.pure.elsevier.com/en/persons/abc123-def456'
+                  key :description, "The URL for the user's profile page on the Penn State Pure website"
+                end
+                property :bio do
+                  key :type, :string
+                  key :example, 'Some biographical information about this user'
+                  key :description, 'A brief biography of the user'
+                end
+              end
+            end
+          end
         end
 
         response 404 do

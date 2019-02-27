@@ -637,71 +637,81 @@ describe 'API::V1 Users' do
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end
 
-        it "returns an HTML representation of all of the given user's available metadata" do
-          expect(response.body).to eq <<~HTML
-            <h2 id="md-full-name">Bob Testerson</h2>
-              <span id="md-title">Professor</span>
-            <div id="md-person-info">
-              <ul id="md-contact-info">
-                <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                  <li><strong>Office:</strong>  123 Test Building</li>
-                  <li><strong>Personal website:</strong>  http://example.com/mysite</li>
-              </ul>
-                <ul>
-                    <li><strong>Citations:</strong>  9</li>
-                    <li><strong>H-Index:</strong>  49</li>
-                    <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+        context "when requesting HTML" do
+          it "returns an HTML representation of all of the given user's available metadata" do
+            expect(response.body).to eq <<~HTML
+              <h2 id="md-full-name">Bob Testerson</h2>
+                <span id="md-title">Professor</span>
+              <div id="md-person-info">
+                <ul id="md-contact-info">
+                  <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
+                    <li><strong>Office:</strong>  123 Test Building</li>
+                    <li><strong>Personal website:</strong>  http://example.com/mysite</li>
                 </ul>
-            </div>
-              <div id="md-bio">
-                <p>Some bio content</p>
+                  <ul>
+                      <li><strong>Citations:</strong>  9</li>
+                      <li><strong>H-Index:</strong>  49</li>
+                      <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+                  </ul>
               </div>
-              <div id="md-publications">
-                <h3>Publications</h3>
-                <ul>
-                    <li>Undated Publication</li>
-                    <li>Third Publication, 2018</li>
-                    <li>Second Publication, Test Publisher, 2015</li>
-                    <li>First Publication, Test Journal, 2010</li>
-                </ul>
-              </div>
-              <div id="md-grants">
-                <h3>Grants</h3>
-                <ul>
-                    <li>Awarded Grant Three, Sponsor</li>
-                    <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
-                    <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
-                </ul>
-              </div>
-              <div id="md-presentations">
-                <h3>Presentations</h3>
-                <ul>
-                      <li>Presentation Two, An Organization, Earth</li>
-                </ul>
-              </div>
-              <div id="md-performances">
-                <h3>Performances</h3>
-                <ul>
-                    <li>Performance Four, 12/1/2018</li>
-                    <li>Performance One, Location One, 1/1/2017</li>
-                    <li>Performance Two</li>
-                    <li>Performance Three, Location Three</li>
-                </ul>
-              </div>
-              <div id="md-advising">
-                <h3>Graduate Student Advising</h3>
-                <ul>
-                    <li><a href="test.edu" target="_blank">ETD  One</a> (Committee Member)</li>
-                </ul>
-              </div>
-              <div id="md-news-stories">
-                <h3>Penn State News Media Mentions</h3>
-                <ul>
-                    <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
-                    <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
-                </ul>
-              </div>
-            HTML
+                <div id="md-bio">
+                  <p>Some bio content</p>
+                </div>
+                <div id="md-publications">
+                  <h3>Publications</h3>
+                  <ul>
+                      <li>Undated Publication</li>
+                      <li>Third Publication, 2018</li>
+                      <li>Second Publication, Test Publisher, 2015</li>
+                      <li>First Publication, Test Journal, 2010</li>
+                  </ul>
+                </div>
+                <div id="md-grants">
+                  <h3>Grants</h3>
+                  <ul>
+                      <li>Awarded Grant Three, Sponsor</li>
+                      <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
+                      <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
+                  </ul>
+                </div>
+                <div id="md-presentations">
+                  <h3>Presentations</h3>
+                  <ul>
+                        <li>Presentation Two, An Organization, Earth</li>
+                  </ul>
+                </div>
+                <div id="md-performances">
+                  <h3>Performances</h3>
+                  <ul>
+                      <li>Performance Four, 12/1/2018</li>
+                      <li>Performance One, Location One, 1/1/2017</li>
+                      <li>Performance Two</li>
+                      <li>Performance Three, Location Three</li>
+                  </ul>
+                </div>
+                <div id="md-advising">
+                  <h3>Graduate Student Advising</h3>
+                  <ul>
+                      <li><a href="test.edu" target="_blank">ETD  One</a> (Committee Member)</li>
+                  </ul>
+                </div>
+                <div id="md-news-stories">
+                  <h3>Penn State News Media Mentions</h3>
+                  <ul>
+                      <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
+                      <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
+                  </ul>
+                </div>
+              HTML
+          end
+        end
+
+        context "when requesting JSON" do
+          let(:headers) { { "accept" => "application/json" } }
+
+          it "returns a JSON representation of the given user's profile" do
+            expect(json_response[:data][:attributes][:name]).to eq 'Bob Testerson'
+          end
         end
       end
     end
