@@ -95,6 +95,8 @@ module API::V1
     end
 
     def profile
+      headers['Access-Control-Allow-Origin'] = '*' if Rails.env.development?
+
       @user = User.find_by(webaccess_id: params[:webaccess_id])
       uq = API::V1::UserQuery.new(@user)
       @profile = UserProfile.new(@user)
