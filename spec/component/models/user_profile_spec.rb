@@ -5,7 +5,8 @@ describe UserProfile do
                        webaccess_id: 'abc123',
                        ai_title: 'test title',
                        ai_website: 'www.test.com',
-                       ai_bio: 'test bio' }
+                       ai_bio: 'test bio',
+                       show_all_publications: true }
 
   subject(:profile) { UserProfile.new(user) }
 
@@ -36,6 +37,43 @@ describe UserProfile do
   describe '#bio' do
     it "returns the given user's biographical text from Activity Insight" do
       expect(profile.bio).to eq 'test bio'
+    end
+  end
+
+  describe '#publications' do
+    let!(:pub1) { create :publication, title: "First Publication",
+                         visible: true,
+                         journal_title: "Test Journal",
+                         published_on: Date.new(2010, 1, 1),
+                         total_scopus_citations: 4 }
+    let!(:pub2) { create :publication, title: "Second Publication",
+                         visible: true,
+                         publisher: "Test Publisher",
+                         published_on: Date.new(2015, 1, 1) }
+    let!(:pub3) { create :publication, title: "Third Publication",
+                         visible: true,
+                         published_on: Date.new(2018, 1, 1),
+                         total_scopus_citations: 5 }
+    let!(:pub4) { create :publication, title: "Undated Publication",
+                         visible: true }
+    let!(:pub5) { create :publication,
+                         title: "Invisible Publication",
+                         visible: false }
+    before do
+      create :authorship, user: user, publication: pub1
+      create :authorship, user: user, publication: pub2
+      create :authorship, user: user, publication: pub3
+      create :authorship, user: user, publication: pub4
+      create :authorship, user: user, publication: pub5
+    end
+
+    it "returns an array of strings describing the given user's publications in order by date" do
+      expect(profile.publications).to eq [
+        "Undated Publication",
+        "Third Publication, 2018",
+        "Second Publication, Test Publisher, 2015",
+        "First Publication, Test Journal, 2010"
+      ]
     end
   end
 end

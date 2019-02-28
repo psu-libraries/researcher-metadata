@@ -11,7 +11,8 @@ describe API::V1::UserProfileSerializer do
                          total_scopus_citations: 100,
                          scopus_h_index: 25,
                          pure_profile_url: 'pure_profile',
-                         bio: 'test bio' }
+                         bio: 'test bio',
+                         publications: ['pub1', 'pub2'] }
 
   describe "data attributes" do
     subject { serialized_data_attributes(profile) }
@@ -24,5 +25,6 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(scopus_h_index: 25) }
     it { is_expected.to include(pure_profile_url: 'pure_profile') }
     it { is_expected.to include(bio: 'test bio') }
+    it { is_expected.to include(publications: ['pub1', 'pub2']) }
   end
 end

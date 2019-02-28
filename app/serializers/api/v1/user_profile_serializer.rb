@@ -3,6 +3,6 @@ module API::V1
     include FastJsonapi::ObjectSerializer
     attributes :name, :title, :email, :office_location, :personal_website,
                :total_scopus_citations, :scopus_h_index, :pure_profile_url,
-               :bio
+               :bio, :publications
   end
 end

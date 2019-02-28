@@ -27,6 +27,15 @@ class UserProfile
     user.ai_bio
   end
 
+  def publications
+    user_query.publications({order_first_by: 'publication_date_desc'}).map do |pub|
+      p = pub.title
+      p += ", #{pub.journal_title || pub.publisher}" if pub.journal_title.present? || pub.publisher.present?
+      p += ", #{pub.published_on.year}" if pub.published_on.present?
+      p
+    end
+  end
+
   private
 
   attr_reader :user

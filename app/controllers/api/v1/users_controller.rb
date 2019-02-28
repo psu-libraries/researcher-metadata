@@ -939,7 +939,7 @@ module API::V1
                 key :type, :object
                 key :required, [:name, :title, :email, :office_location, :personal_website,
                                 :total_scopus_citations, :scopus_h_index, :pure_profile_url,
-                                :bio]
+                                :bio, :publications]
                 property :name do
                   key :type, :string
                   key :example, 'Example User'
@@ -984,6 +984,14 @@ module API::V1
                   key :type, :string
                   key :example, 'Some biographical information about this user'
                   key :description, 'A brief biography of the user'
+                end
+                property :publications do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, 'My Publication, Journal of Medicine, 2010'
+                    key :description, 'A description of a journal article'
+                  end
                 end
               end
             end
