@@ -76,4 +76,24 @@ describe UserProfile do
       ]
     end
   end
+
+  describe '#grants' do
+    xit
+  end
+
+  describe '#presentations' do
+    xit
+  end
+
+  describe '#performances' do
+    xit
+  end
+
+  describe '#advising_roles' do
+    xit
+  end
+
+  describe '#news_stories' do
+    xit
+  end
 end

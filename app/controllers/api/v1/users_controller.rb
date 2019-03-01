@@ -939,7 +939,8 @@ module API::V1
                 key :type, :object
                 key :required, [:name, :title, :email, :office_location, :personal_website,
                                 :total_scopus_citations, :scopus_h_index, :pure_profile_url,
-                                :bio, :publications]
+                                :bio, :publications, :grants, :presentations, :performances,
+                                :advising_roles, :news_stories]
                 property :name do
                   key :type, :string
                   key :example, 'Example User'
@@ -991,6 +992,46 @@ module API::V1
                     key :type, :string
                     key :example, 'My Publication, Journal of Medicine, 2010'
                     key :description, 'A description of a journal article'
+                  end
+                end
+                property :grants do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, 'My Grant, NSF, 5/2007'
+                    key :description, 'A description of an awarded grant'
+                  end
+                end
+                property :presentations do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, 'My Presentation, Penn State University, University Park'
+                    key :description, 'A description of a presentation'
+                  end
+                end
+                property :performances do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, 'My Performance, Eisenhower Auditorium - Penn State University, 3/1/2016'
+                    key :description, 'A description of a performance'
+                  end
+                end
+                property :advising_roles do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student Thesis Example</a> (Committee Member)'
+                    key :description, 'A description a graduate student advising role with an HTML link to the thesis'
+                  end
+                end
+                property :news_stories do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, '<a href="https://news.psu.edu/my_story" target="_blank">My News Story</a> 9/17/2014'
+                    key :description, 'A description of a news story with an HTML link to the story content'
                   end
                 end
               end

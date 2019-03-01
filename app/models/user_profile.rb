@@ -36,6 +36,26 @@ class UserProfile
     end
   end
 
+  def grants
+    []
+  end
+
+  def presentations
+    []
+  end
+
+  def performances
+    []
+  end
+
+  def advising_roles
+    []
+  end
+
+  def news_stories
+    []
+  end
+
   private
 
   attr_reader :user
