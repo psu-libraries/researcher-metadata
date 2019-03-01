@@ -37,23 +37,41 @@ class UserProfile
   end
 
   def grants
-    []
+    user_query.contracts.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc).map do |grant|
+      g = "#{grant.title}, #{grant.sponsor}"
+      g += ", #{grant.award_start_on.strftime('%-m/%Y')} - #{grant.award_end_on.try(:strftime, '%-m/%Y')}" if grant.award_start_on.present?
+      g
+    end
   end
 
   def presentations
-    []
+    user_query.presentations({}).map do |pres|
+      p = pres.title || pres.name || ""
+      p += ", #{pres.organization}" if pres.organization.present?
+      p += ", #{pres.location}" if pres.location.present?
+      p
+    end
   end
 
   def performances
-    []
+    user.performances.order('case when start_on is null then 1 else 0 end, start_on desc').map do |perf|
+      p = perf.title
+      p += ", #{perf.location}" if perf.location.present?
+      p += ", #{perf.start_on.strftime('%-m/%-d/%Y')}" if perf.start_on.present?
+      p
+    end
   end
 
   def advising_roles
-    []
+    user.committee_memberships.map do |mem|
+      %{<a href="#{mem.etd.url}" target="_blank">#{mem.etd.title.gsub('\n', ' ')}</a> (#{mem.role})}
+    end
   end
 
   def news_stories
-    []
+    user_query.news_feed_items({}).order(published_on: :desc).map do |item|
+      %{<a href="#{item.url}" target="_blank">#{item.title}</a> #{item.published_on.strftime('%-m/%-d/%Y')}}
+    end
   end
 
   private
