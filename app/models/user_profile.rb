@@ -46,11 +46,13 @@ class UserProfile
 
   def presentations
     user_query.presentations({}).map do |pres|
-      p = pres.title || pres.name || ""
-      p += ", #{pres.organization}" if pres.organization.present?
-      p += ", #{pres.location}" if pres.location.present?
-      p
-    end
+      if pres.title.present? || pres.name.present?
+        p = pres.title || pres.name
+        p += ", #{pres.organization}" if pres.organization.present?
+        p += ", #{pres.location}" if pres.location.present?
+        p
+      end
+    end.compact
   end
 
   def performances
