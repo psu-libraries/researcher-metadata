@@ -97,16 +97,9 @@ module API::V1
     def profile
       headers['Access-Control-Allow-Origin'] = '*' if Rails.env.development?
 
-      @user = User.find_by(webaccess_id: params[:webaccess_id])
-      uq = API::V1::UserQuery.new(@user)
-      @profile = UserProfile.new(@user)
-      if @user
-        @pubs = uq.publications({order_first_by: 'publication_date_desc'})
-        @grants = uq.contracts.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc)
-        @presentations = uq.presentations({})
-        @news_feed_items = uq.news_feed_items({}).order(published_on: :desc)
-        @committee_memberships = @user.committee_memberships
-        @performances = @user.performances.order('case when start_on is null then 1 else 0 end, start_on desc')
+      user = User.find_by(webaccess_id: params[:webaccess_id])
+      if user
+        @profile = UserProfile.new(user)
         respond_to do |format|
           format.html
           format.json { render json: API::V1::UserProfileSerializer.new(@profile) }

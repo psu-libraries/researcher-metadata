@@ -677,7 +677,7 @@ describe 'API::V1 Users' do
                 <div id="md-presentations">
                   <h3>Presentations</h3>
                   <ul>
-                        <li>Presentation Two, An Organization, Earth</li>
+                      <li>Presentation Two, An Organization, Earth</li>
                   </ul>
                 </div>
                 <div id="md-performances">

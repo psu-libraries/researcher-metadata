@@ -1,94 +1,92 @@
-<h2 id="md-full-name"><%= @user.name %></h2>
-<% if @user.ai_title.present? %>
-  <span id="md-title"><%= @user.ai_title %></span>
+<h2 id="md-full-name"><%= @profile.name %></h2>
+<% if @profile.title.present? %>
+  <span id="md-title"><%= @profile.title %></span>
 <% end %>
 <div id="md-person-info">
   <ul id="md-contact-info">
-    <li><strong>Email:</strong>  <a href="mailto:<%= @user.webaccess_id %>@psu.edu"><%= @user.webaccess_id %>@psu.edu</a></li>
-    <% if @user.office_location %>
-      <li><strong>Office:</strong>  <%= @user.office_location %></li>
+    <li><strong>Email:</strong>  <a href="mailto:<%= @profile.email %>"><%= @profile.email %></a></li>
+    <% if @profile.office_location %>
+      <li><strong>Office:</strong>  <%= @profile.office_location %></li>
     <% end %>
-    <% if @user.ai_website.present? %>
-      <li><strong>Personal website:</strong>  <%= @user.ai_website %></li>
+    <% if @profile.personal_website.present? %>
+      <li><strong>Personal website:</strong>  <%= @profile.personal_website %></li>
     <% end %>
   </ul>
-  <% if @user.total_scopus_citations > 0 || @user.scopus_h_index.present? || @user.pure_profile_url %>
+  <% if @profile.total_scopus_citations > 0 || @profile.scopus_h_index.present? || @profile.pure_profile_url %>
     <ul>
-      <% if @user.total_scopus_citations > 0 %>
-        <li><strong>Citations:</strong>  <%= @user.total_scopus_citations %></li>
+      <% if @profile.total_scopus_citations > 0 %>
+        <li><strong>Citations:</strong>  <%= @profile.total_scopus_citations %></li>
       <% end %>
-      <% if @user.scopus_h_index.present? %>
-        <li><strong>H-Index:</strong>  <%= @user.scopus_h_index %></li>
+      <% if @profile.scopus_h_index.present? %>
+        <li><strong>H-Index:</strong>  <%= @profile.scopus_h_index %></li>
       <% end %>
-      <% if @user.pure_profile_url %>
-        <li><a href="<%= @user.pure_profile_url %>" target="_blank">Pure Profile</a></li>
+      <% if @profile.pure_profile_url %>
+        <li><a href="<%= @profile.pure_profile_url %>" target="_blank">Pure Profile</a></li>
       <% end %>
     </ul>
   <% end %>
 </div>
-<% if @user.ai_bio.present? %>
+<% if @profile.bio.present? %>
   <div id="md-bio">
-    <p><%= @user.ai_bio %></p>
+    <p><%= @profile.bio %></p>
   </div>
 <% end %>
-<% if @pubs.any? %>
+<% if @profile.publications.any? %>
   <div id="md-publications">
     <h3>Publications</h3>
     <ul>
-      <% @pubs.each do |p| %>
-        <li><%= p.title %><%= ", #{p.journal_title || p.publisher}" if p.journal_title.present? || p.publisher.present? %><%= ", #{p.published_on.year}" if p.published_on.present? %></li>
+      <% @profile.publications.each do |p| %>
+        <li><%= p %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @grants.any? %>
+<% if @profile.grants.any? %>
   <div id="md-grants">
     <h3>Grants</h3>
     <ul>
-      <% @grants.each do |g| %>
-        <li><%= g.title %>, <%= g.sponsor %><%= ", #{g.award_start_on.strftime('%-m/%Y')} - #{g.award_end_on.try(:strftime, '%-m/%Y')}" if g.award_start_on.present? %></li>
+      <% @profile.grants.each do |g| %>
+        <li><%= g %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @presentations.any? %>
+<% if @profile.presentations.any? %>
   <div id="md-presentations">
     <h3>Presentations</h3>
     <ul>
-      <% @presentations.each do |p| %>
-        <% if p.title.present? || p.name.present? %>
-          <li><%= p.title || p.name %><%= ", #{p.organization}" if p.organization.present? %><%= ", #{p.location}" if p.location.present? %></li>
-        <% end %>
+      <% @profile.presentations.each do |p| %>
+        <li><%= p %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @performances.any? %>
+<% if @profile.performances.any? %>
   <div id="md-performances">
     <h3>Performances</h3>
     <ul>
-      <% @performances.each do |p| %>
-        <li><%= p.title %><%= ", #{p.location}" if p.location.present? %><%= ", #{p.start_on.strftime('%-m/%-d/%Y')}" if p.start_on.present? %></li>
+      <% @profile.performances.each do |p| %>
+        <li><%= p %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @committee_memberships.any? %>
+<% if @profile.advising_roles.any? %>
   <div id="md-advising">
     <h3>Graduate Student Advising</h3>
     <ul>
-      <% @committee_memberships.each do |m| %>
-        <li><a href="<%= m.etd.url %>" target="_blank"><%= m.etd.title.gsub('\n', ' ') %></a> (<%= m.role %>)</li>
+      <% @profile.advising_roles.each do |r| %>
+        <li><%= r.html_safe %></li>
       <% end %>
     </ul>
   </div>
 <% end %>
-<% if @news_feed_items.any? %>
+<% if @profile.news_stories.any? %>
   <div id="md-news-stories">
     <h3>Penn State News Media Mentions</h3>
     <ul>
-      <% @news_feed_items.each do |i| %>
-        <li><a href="<%= i.url %>" target="_blank"><%= i.title %></a> <%= i.published_on.strftime('%-m/%-d/%Y') %></li>
+      <% @profile.news_stories.each do |s| %>
+        <li><%= s.html_safe %></li>
       <% end %>
     </ul>
   </div>
