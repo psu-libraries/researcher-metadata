@@ -209,9 +209,12 @@ describe UserProfile do
                          title: 'ETD\n One',
                          url: "test.edu" }
 
-    before { create :committee_membership, user: user, etd: etd1, role: "Committee Member" }
+    before do
+      create :committee_membership, user: user, etd: etd1, role: "Committee Member"
+      create :committee_membership, user: user, etd: etd1, role: "Outside Member"
+    end
 
-    it "returns an array of strings describing the given user's thesis advising roles" do
+    it "returns an array of strings describing the given user's most significant advising role for each of their ETDs" do
       expect(profile.advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
     end
   end

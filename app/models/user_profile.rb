@@ -65,8 +65,14 @@ class UserProfile
   end
 
   def advising_roles
-    user.committee_memberships.map do |mem|
-      %{<a href="#{mem.etd.url}" target="_blank">#{mem.etd.title.gsub('\n', ' ')}</a> (#{mem.role})}
+    memberships = []
+    user.committee_memberships.group_by { |m| m.etd }.each_value do |memberships_by_etd|
+      most_significant_membership = memberships_by_etd.sort { |x, y| x <=> y }.last
+      memberships.push most_significant_membership
+    end
+
+    memberships.map do |m|
+      %{<a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> (#{m.role})}
     end
   end
 
