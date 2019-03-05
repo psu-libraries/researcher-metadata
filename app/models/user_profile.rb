@@ -61,7 +61,7 @@ class UserProfile
       p += ", #{perf.location}" if perf.location.present?
       p += ", #{perf.start_on.strftime('%-m/%-d/%Y')}" if perf.start_on.present?
       p
-    end
+    end.uniq
   end
 
   def advising_roles

@@ -187,13 +187,19 @@ describe UserProfile do
                           title: "Performance Four",
                           location: nil,
                           start_on: Date.new(2018, 12, 1) }
+    let!(:perf4_dup) { create :performance,
+                              title: "Performance Four",
+                              location: nil,
+                              start_on: Date.new(2018, 12, 1) }
     
     before do
       create :user_performance, user: user, performance: perf1
       create :user_performance, user: user, performance: perf2
       create :user_performance, user: user, performance: perf3
       create :user_performance, user: user, performance: perf4
+      create :user_performance, user: user, performance: perf4_dup
     end
+    
     it "returns an array of strings describing the given user's visible performances in order by date" do
       expect(profile.performances).to eq [
                                             "Performance Four, 12/1/2018",
