@@ -983,8 +983,8 @@ module API::V1
                   key :type, :array
                   items do
                     key :type, :string
-                    key :example, 'My Publication, Journal of Medicine, 2010'
-                    key :description, 'A description of a journal article'
+                    key :example, '<span class="publication-title">My Publication</span>, <span class="journal-name">Journal of Medicine</span>, 2010'
+                    key :description, 'A string of HTML describing a journal article'
                   end
                 end
                 property :grants do
