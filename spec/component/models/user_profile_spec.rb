@@ -70,10 +70,10 @@ describe UserProfile do
 
     it "returns an array of strings describing the given user's publications in order by date" do
       expect(profile.publications).to eq [
-        "Undated Publication",
-        "Third Publication, 2018",
-        "Second Publication, Test Publisher, 2015",
-        "First Publication, Test Journal, 2010"
+        '<span class="publication-title">Undated Publication</span>',
+        '<span class="publication-title">Third Publication</span>, 2018',
+        '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
+        '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010'
       ]
     end
   end
@@ -199,7 +199,7 @@ describe UserProfile do
       create :user_performance, user: user, performance: perf4
       create :user_performance, user: user, performance: perf4_dup
     end
-    
+
     it "returns an array of strings describing the given user's visible performances in order by date" do
       expect(profile.performances).to eq [
                                             "Performance Four, 12/1/2018",

@@ -660,10 +660,10 @@ describe 'API::V1 Users' do
                 <div id="md-publications">
                   <h3>Publications</h3>
                   <ul>
-                      <li>Undated Publication</li>
-                      <li>Third Publication, 2018</li>
-                      <li>Second Publication, Test Publisher, 2015</li>
-                      <li>First Publication, Test Journal, 2010</li>
+                      <li><span class="publication-title">Undated Publication</span></li>
+                      <li><span class="publication-title">Third Publication</span>, 2018</li>
+                      <li><span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015</li>
+                      <li><span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010</li>
                   </ul>
                 </div>
                 <div id="md-grants">

@@ -36,7 +36,7 @@
     <h3>Publications</h3>
     <ul>
       <% @profile.publications.each do |p| %>
-        <li><%= p %></li>
+        <li><%= p.html_safe %></li>
       <% end %>
     </ul>
   </div>
