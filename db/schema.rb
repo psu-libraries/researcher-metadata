@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_12_12_152125) do
+ActiveRecord::Schema.define(version: 2019_03_12_202708) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,6 +84,29 @@ ActiveRecord::Schema.define(version: 2018_12_12_152125) do
   create_table "duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "education_history_items", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "activity_insight_identifier"
+    t.string "degree"
+    t.text "explanation_of_other_degree"
+    t.string "is_honorary_degree"
+    t.string "is_highest_degree_earned"
+    t.text "institution"
+    t.text "school"
+    t.text "location_of_institution"
+    t.text "emphasis_or_major"
+    t.text "supporting_areas_of_emphasis"
+    t.text "dissertation_or_thesis_title"
+    t.text "honor_or_distinction"
+    t.text "description"
+    t.text "comments"
+    t.integer "start_year"
+    t.integer "end_year"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_education_history_items_on_user_id"
   end
 
   create_table "etds", force: :cascade do |t|
@@ -340,6 +363,7 @@ ActiveRecord::Schema.define(version: 2018_12_12_152125) do
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "organizations", "users", column: "owner_id", name: "organizations_owner_id_fk"
