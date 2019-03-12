@@ -27,6 +27,14 @@ class UserProfile
     user.ai_bio
   end
 
+  def teaching_interests
+    user.ai_teaching_interests
+  end
+
+  def research_interests
+    user.ai_research_interests
+  end
+  
   def publications
     user_query.publications({order_first_by: 'publication_date_desc'}).map do |pub|
       p = %{<span class="publication-title">#{pub.title}</span>}

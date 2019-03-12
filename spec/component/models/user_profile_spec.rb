@@ -7,7 +7,9 @@ describe UserProfile do
                        ai_website: 'www.test.com',
                        ai_bio: 'test bio',
                        show_all_publications: true,
-                       show_all_contracts: true }
+                       show_all_contracts: true,
+                       ai_teaching_interests: 'test teaching interests',
+                       ai_research_interests: 'test research interests' }
 
   subject(:profile) { UserProfile.new(user) }
 
@@ -40,7 +42,19 @@ describe UserProfile do
       expect(profile.bio).to eq 'test bio'
     end
   end
+  
+  describe '#teaching_interests' do
+    it "returns the given user's teaching interests from Activity Insight" do
+      expect(profile.teaching_interests).to eq 'test teaching interests'
+    end
+  end
 
+  describe '#research_interests' do
+    it "returns the given user's research interests from Activity Insight" do
+      expect(profile.research_interests).to eq 'test research interests'
+    end
+  end
+  
   describe '#publications' do
     let!(:pub1) { create :publication, title: "First Publication",
                          visible: true,

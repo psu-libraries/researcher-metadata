@@ -979,6 +979,16 @@ module API::V1
                   key :example, 'Some biographical information about this user'
                   key :description, 'A brief biography of the user'
                 end
+                property :teaching_interests do
+                  key :type, :string
+                  key :example, 'Computer Science, Information Technology'
+                  key :description, "A description of the user's teaching interests"
+                end
+                property :research_interests do
+                  key :type, :string
+                  key :example, 'Quantum Computing, Encryption'
+                  key :description, "A description of the user's research interests"
+                end
                 property :publications do
                   key :type, :array
                   items do

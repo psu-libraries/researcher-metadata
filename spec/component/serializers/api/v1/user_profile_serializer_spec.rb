@@ -12,6 +12,8 @@ describe API::V1::UserProfileSerializer do
                          scopus_h_index: 25,
                          pure_profile_url: 'pure_profile',
                          bio: 'test bio',
+                         teaching_interests: 'test teaching interests',
+                         research_interests: 'test research interests',
                          publications: ['pub1', 'pub2'],
                          grants: ['grant1', 'grant2'],
                          presentations: ['presentation1', 'presentation2'],
@@ -29,6 +31,9 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(total_scopus_citations: 100) }
     it { is_expected.to include(scopus_h_index: 25) }
     it { is_expected.to include(pure_profile_url: 'pure_profile') }
+    it { is_expected.to include(bio: 'test bio') }
+    it { is_expected.to include(teaching_interests: 'test teaching interests') }
+    it { is_expected.to include(research_interests: 'test research interests') }
     it { is_expected.to include(bio: 'test bio') }
     it { is_expected.to include(publications: ['pub1', 'pub2']) }
     it { is_expected.to include(grants: ['grant1', 'grant2']) }
