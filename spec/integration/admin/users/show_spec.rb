@@ -59,6 +59,9 @@ feature "Admin user detail page", type: :feature do
   let!(:perf1) { create :performance, title: "Test Performance One" }
   let!(:perf2) { create :performance, title: "Test Performance Two" }
 
+  let!(:item1) { create :education_history_item, user: user }
+  let!(:item2) { create :education_history_item, user: user }
+
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
@@ -162,6 +165,11 @@ feature "Admin user detail page", type: :feature do
 
       it "shows the user's research interests" do
         expect(page).to have_content 'Test Research Interests'
+      end
+
+      it "shows the user's education history" do
+        expect(page).to have_link "EducationHistoryItem ##{item1.id}"
+        expect(page).to have_link "EducationHistoryItem ##{item2.id}"
       end
 
       it "shows the organizations that the user manages" do

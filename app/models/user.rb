@@ -164,6 +164,7 @@ class User < ApplicationRecord
       field(:ai_bio) { label 'Bio' }
       field(:ai_teaching_interests) { label 'Teaching Interests' }
       field(:ai_research_interests) { label 'Research Interests' }
+      field(:education_history_items)
       field(:is_admin) { label 'Admin user?' }
       field(:show_all_publications)
       field(:show_all_contracts)
