@@ -1037,6 +1037,14 @@ module API::V1
                     key :description, 'A description of a news story with an HTML link to the story content'
                   end
                 end
+                property :education_history do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, 'BS, Biology - The Pennsylvania State University - 2010'
+                    key :description, 'A description of a degree earned by the user'
+                  end
+                end
               end
             end
           end

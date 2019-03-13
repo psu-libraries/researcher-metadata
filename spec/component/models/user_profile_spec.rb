@@ -258,4 +258,63 @@ describe UserProfile do
                                          ]
     end
   end
+
+  describe '#education_history' do
+    context "when the user has education history items" do
+      let!(:item1) { create :education_history_item,
+                            user: user,
+                            degree: 'MS',
+                            emphasis_or_major: 'Ecology',
+                            institution: 'The Pennsylvania State University',
+                            end_year: 2003 }
+      let!(:item2) { create :education_history_item,
+                            user: user,
+                            degree: 'BS',
+                            emphasis_or_major: 'Biology',
+                            institution: 'University of Pittsburgh',
+                            end_year: 2000 }
+      let!(:item3) { create :education_history_item,
+                            user: user,
+                            degree: nil,
+                            emphasis_or_major: 'Biology',
+                            institution: 'University of Pittsburgh',
+                            end_year: 2000 }
+      let!(:item4) { create :education_history_item,
+                            user: user,
+                            degree: 'BS',
+                            emphasis_or_major: nil,
+                            institution: 'University of Pittsburgh',
+                            end_year: 2000 }
+      let!(:item5) { create :education_history_item,
+                            user: user,
+                            degree: 'BS',
+                            emphasis_or_major: 'Biology',
+                            institution: nil,
+                            end_year: 2000 }
+      let!(:item6) { create :education_history_item,
+                            user: user,
+                            degree: 'BS',
+                            emphasis_or_major: 'Biology',
+                            institution: 'University of Pittsburgh',
+                            end_year: nil }
+      let!(:item7) { create :education_history_item,
+                            user: user,
+                            degree: 'Other',
+                            emphasis_or_major: 'Biology',
+                            institution: 'University of Pittsburgh',
+                            end_year: 2000 }
+
+      it "returns an array of strings describing the user's education history in order by year" do
+        expect(profile.education_history).to eq [
+                                                  'MS, Ecology - The Pennsylvania State University - 2003',
+                                                  'BS, Biology - University of Pittsburgh - 2000'
+                                                ]
+      end
+    end
+    context "when the user has no education history items" do
+      it "returns an empty array" do
+        expect(profile.education_history).to eq []
+      end
+    end
+  end
 end

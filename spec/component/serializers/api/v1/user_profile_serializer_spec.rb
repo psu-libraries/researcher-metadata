@@ -19,7 +19,8 @@ describe API::V1::UserProfileSerializer do
                          presentations: ['presentation1', 'presentation2'],
                          performances: ['performance1', 'performance2'],
                          advising_roles: ['role1', 'role2'],
-                         news_stories: ['story1', 'story2'] }
+                         news_stories: ['story1', 'story2'],
+                         education_history: ['history1', 'history2'] }
 
   describe "data attributes" do
     subject { serialized_data_attributes(profile) }
@@ -41,5 +42,6 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(performances: ['performance1', 'performance2']) }
     it { is_expected.to include(advising_roles: ['role1', 'role2']) }
     it { is_expected.to include(news_stories: ['story1', 'story2']) }
+    it { is_expected.to include(education_history: ['history1', 'history2']) }
   end
 end
