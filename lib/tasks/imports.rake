@@ -7,6 +7,14 @@ namespace :import do
     ActivityInsightUserImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight education history'
+  task :ai_education_history, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:ai_education_history)
+    )
+    ActivityInsightEducationHistoryImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Activity Insight contracts'
   task :ai_contracts, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -158,6 +166,10 @@ namespace :import do
       filename: filename_for(:pure_publication_tags)
     ).call
 
+    ActivityInsightEducationHistoryImporter.new(
+      filename: filename_for(:ai_education_history)
+    ).call
+    
     ActivityInsightPublicationImporter.new(
       filename: filename_for(:ai_publications)
     ).call
@@ -229,6 +241,7 @@ def filename_for(key)
   when :ai_performance_contributors1 then Rails.root.join('db/data/ai_performance_contributors1.csv')
   when :ai_performance_contributors2 then Rails.root.join('db/data/ai_performance_contributors2.csv')
   when :ai_performance_screenings then Rails.root.join('db/data/ai_performance_screenings.csv')
+  when :ai_education_history then Rails.root.join('db/data/ai_education_history.csv')
   end
 end
 
