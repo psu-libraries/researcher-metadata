@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+# Bump the version of the current git project
+
+require 'bundler'
+require 'colored'
+require 'versionomy'
+
+begin
+  ARGV.length == 1 or raise ArgumentError
+  level = ARGV.first.to_sym
+  [:major, :minor, :tiny].include?(level) or raise ArgumentError
+rescue ArgumentError => e
+  puts "Usage: bin/release {major|minor|tiny}"
+  exit 1
+end
+ 
+unless `git branch` =~ /^\* master$/
+  puts "You must be on the master branch to bump versions"
+  exit 1
+end
+
+def run(cmd)
+  puts cmd.red
+  system cmd or exit $?.exitstatus
+  puts
+end
+
+run "git fetch"
+
+version_strings = `git tag`.split.select { |s| s =~ /\d\.\d/ }
+current_version = version_strings.map { |s| Versionomy.parse(s) }.sort.last
+new_version = current_version.bump(level)
+
+current_revision = `git show`.split(/\n/).first.chomp.split(/ /).last
+last_tagged_revision = `git show #{current_version}`.split(/\n/).first.chomp.split(/ /).last
+if current_revision == last_tagged_revision
+  puts "No action taken -- the current revision is already tagged (as #{current_version})"
+  exit 1
+end
+
+puts "Bumping #{current_version} -> #{new_version}\n\n"
+
+run "git tag #{new_version}"
+run "git push"
+run "git push --tags"
+
