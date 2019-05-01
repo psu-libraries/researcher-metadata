@@ -5,7 +5,7 @@ class ActivityInsightCSVImporter < CSVImporter
 
     File.foreach(filename, encoding: encoding).with_index do |line, i|
       if i == 0
-        headers = line.strip.gsub('"', '').split(',')
+        headers = line.strip.gsub('"', '').downcase.split(',')
         header_counts = {}
 
         headers.each do |header|
