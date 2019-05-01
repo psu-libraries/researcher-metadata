@@ -77,4 +77,11 @@ describe ETD, type: :model do
       expect(ETD.submission_types).to eq ["Dissertation", "Master Thesis"]
     end
   end
+
+  describe '#author_full_name' do
+    let(:etd) { ETD.new(author_first_name: "Sally", author_last_name: "Testauthor")}
+    it "returns the first and last name of the author of the ETD" do
+      expect(etd.author_full_name).to eq "Sally Testauthor"
+    end
+  end
 end

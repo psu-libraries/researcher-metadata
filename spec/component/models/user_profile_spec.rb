@@ -229,17 +229,23 @@ describe UserProfile do
                            title: 'Master ETD\n One',
                            url: "test.edu/etd1",
                            submission_type: 'Master Thesis',
-                           year: 2010 }
+                           year: 2010,
+                           author_first_name: 'First',
+                           author_last_name: 'Author' }
     let!(:m_etd2) { create :etd,
                            title: 'Master ETD\n Two',
                            url: "test.edu/etd2",
                            submission_type: 'Master Thesis',
-                           year: 2005 }
+                           year: 2005,
+                           author_first_name: 'Second',
+                           author_last_name: 'Author' }
     let!(:m_etd3) { create :etd,
                            title: 'Master ETD\n Three',
                            url: "test.edu/etd3",
                            submission_type: 'Master Thesis',
-                           year: 2015 }
+                           year: 2015,
+                           author_first_name: 'Third',
+                           author_last_name: 'Author' }
     let!(:p_etd1) { create :etd,
                            title: 'PhD ETD One',
                            url: "test2.edu",
@@ -255,9 +261,9 @@ describe UserProfile do
 
     it "returns an array of strings describing the given user's most significant advising role for each of their master thesis ETDs in order by year" do
       expect(profile.master_advising_roles).to eq [
-                                                    '<a href="test.edu/etd3" target="_blank">Master ETD  Three</a> (Committee Member)',
-                                                    '<a href="test.edu/etd1" target="_blank">Master ETD  One</a> (Committee Member)',
-                                                    '<a href="test.edu/etd2" target="_blank">Master ETD  Two</a> (Committee Member)'
+                                                    'Committee Member for Third Author - <a href="test.edu/etd3" target="_blank">Master ETD  Three</a> 2015',
+                                                    'Committee Member for First Author - <a href="test.edu/etd1" target="_blank">Master ETD  One</a> 2010',
+                                                    'Committee Member for Second Author - <a href="test.edu/etd2" target="_blank">Master ETD  Two</a> 2005'
                                                   ]
     end
   end
@@ -267,17 +273,23 @@ describe UserProfile do
                            title: 'PhD ETD\n One',
                            url: "test.edu/etd1",
                            submission_type: 'Dissertation',
-                           year: 2010 }
+                           year: 2010,
+                           author_first_name: 'First',
+                           author_last_name: 'Author' }
     let!(:p_etd2) { create :etd,
                            title: 'PhD ETD\n Two',
                            url: "test.edu/etd2",
                            submission_type: 'Dissertation',
-                           year: 2005 }
+                           year: 2005,
+                           author_first_name: 'Second',
+                           author_last_name: 'Author' }
     let!(:p_etd3) { create :etd,
                            title: 'PhD ETD\n Three',
                            url: "test.edu/etd3",
                            submission_type: 'Dissertation',
-                           year: 2015 }
+                           year: 2015,
+                           author_first_name: 'Third',
+                           author_last_name: 'Author' }
     let!(:m_etd1) { create :etd,
                            title: 'Master ETD One',
                            url: "test2.edu",
@@ -293,9 +305,9 @@ describe UserProfile do
 
     it "returns an array of strings describing the given user's most significant advising role for each of their PhD dissertation ETDs" do
       expect(profile.phd_advising_roles).to eq [
-                                                 '<a href="test.edu/etd3" target="_blank">PhD ETD  Three</a> (Committee Member)',
-                                                 '<a href="test.edu/etd1" target="_blank">PhD ETD  One</a> (Committee Member)',
-                                                 '<a href="test.edu/etd2" target="_blank">PhD ETD  Two</a> (Committee Member)'
+                                                 'Committee Member for Third Author - <a href="test.edu/etd3" target="_blank">PhD ETD  Three</a> 2015',
+                                                 'Committee Member for First Author - <a href="test.edu/etd1" target="_blank">PhD ETD  One</a> 2010',
+                                                 'Committee Member for Second Author - <a href="test.edu/etd2" target="_blank">PhD ETD  Two</a> 2005'
                                                ]
     end
   end

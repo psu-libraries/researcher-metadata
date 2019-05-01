@@ -127,7 +127,7 @@ class UserProfile
 
   def format_advising_roles(committee_memberships)
     most_significant_memberships(committee_memberships).map do |m|
-      %{<a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> (#{m.role})}
+      %{#{m.role} for #{m.etd.author_full_name} - <a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> #{m.etd.year}}
     end
   end
 end

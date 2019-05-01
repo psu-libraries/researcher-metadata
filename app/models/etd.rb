@@ -26,4 +26,8 @@ class ETD < ApplicationRecord
   has_many :users, through: :committee_memberships
 
   accepts_nested_attributes_for :committee_memberships, allow_destroy: true
+
+  def author_full_name
+    "#{author_first_name} #{author_last_name}"
+  end
 end

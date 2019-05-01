@@ -578,10 +578,16 @@ describe 'API::V1 Users' do
 
         let!(:etd1) { create :etd, title: 'Master\n ETD',
                              url: "test1.edu",
-                             submission_type: 'Master Thesis' }
+                             submission_type: 'Master Thesis',
+                             year: 2000,
+                             author_first_name: 'Thesis',
+                             author_last_name: 'Author' }
         let!(:etd2) { create :etd, title: 'PhD\n ETD',
                              url: "test2.edu",
-                             submission_type: 'Dissertation' }
+                             submission_type: 'Dissertation',
+                             year: 2010,
+                             author_first_name: 'Dissertation',
+                             author_last_name: 'Author' }
 
         let!(:nfi1) { create :news_feed_item,
                              user: user,
@@ -697,13 +703,13 @@ describe 'API::V1 Users' do
                 <div id="md-phd-advising">
                   <h3>PhD Graduate Advising</h3>
                   <ul>
-                      <li><a href="test2.edu" target="_blank">PhD  ETD</a> (Committee Member)</li>
+                      <li>Committee Member for Dissertation Author - <a href="test2.edu" target="_blank">PhD  ETD</a> 2010</li>
                   </ul>
                 </div>
                 <div id="md-master-advising">
                   <h3>Master Graduate Advising</h3>
                   <ul>
-                      <li><a href="test1.edu" target="_blank">Master  ETD</a> (Committee Member)</li>
+                      <li>Committee Member for Thesis Author - <a href="test1.edu" target="_blank">Master  ETD</a> 2000</li>
                   </ul>
                 </div>
                 <div id="md-news-stories">
