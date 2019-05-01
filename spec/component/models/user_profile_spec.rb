@@ -225,44 +225,78 @@ describe UserProfile do
   end
 
   describe '#master_advising_roles' do
-    let!(:etd1) { create :etd,
-                         title: 'ETD\n One',
-                         url: "test.edu",
-                         submission_type: 'Master Thesis' }
-    let!(:etd2) { create :etd,
-                         title: 'ETD Two',
-                         url: "test2.edu",
-                         submission_type: 'Dissertation' }
+    let!(:m_etd1) { create :etd,
+                           title: 'Master ETD\n One',
+                           url: "test.edu/etd1",
+                           submission_type: 'Master Thesis',
+                           year: 2010 }
+    let!(:m_etd2) { create :etd,
+                           title: 'Master ETD\n Two',
+                           url: "test.edu/etd2",
+                           submission_type: 'Master Thesis',
+                           year: 2005 }
+    let!(:m_etd3) { create :etd,
+                           title: 'Master ETD\n Three',
+                           url: "test.edu/etd3",
+                           submission_type: 'Master Thesis',
+                           year: 2015 }
+    let!(:p_etd1) { create :etd,
+                           title: 'PhD ETD One',
+                           url: "test2.edu",
+                           submission_type: 'Dissertation' }
 
     before do
-      create :committee_membership, user: user, etd: etd1, role: "Committee Member"
-      create :committee_membership, user: user, etd: etd1, role: "Outside Member"
-      create :committee_membership, user: user, etd: etd2, role: "Committee Member"
+      create :committee_membership, user: user, etd: m_etd1, role: "Committee Member"
+      create :committee_membership, user: user, etd: m_etd1, role: "Outside Member"
+      create :committee_membership, user: user, etd: m_etd2, role: "Committee Member"
+      create :committee_membership, user: user, etd: m_etd3, role: "Committee Member"
+      create :committee_membership, user: user, etd: p_etd1, role: "Committee Member"
     end
 
-    it "returns an array of strings describing the given user's most significant advising role for each of their master thesis ETDs" do
-      expect(profile.master_advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
+    it "returns an array of strings describing the given user's most significant advising role for each of their master thesis ETDs in order by year" do
+      expect(profile.master_advising_roles).to eq [
+                                                    '<a href="test.edu/etd3" target="_blank">Master ETD  Three</a> (Committee Member)',
+                                                    '<a href="test.edu/etd1" target="_blank">Master ETD  One</a> (Committee Member)',
+                                                    '<a href="test.edu/etd2" target="_blank">Master ETD  Two</a> (Committee Member)'
+                                                  ]
     end
   end
 
   describe '#phd_advising_roles' do
-    let!(:etd1) { create :etd,
-                         title: 'ETD\n One',
-                         url: "test.edu",
-                         submission_type: 'Dissertation' }
-    let!(:etd2) { create :etd,
-                         title: 'ETD Two',
-                         url: "test2.edu",
-                         submission_type: 'Master Thesis' }
+    let!(:p_etd1) { create :etd,
+                           title: 'PhD ETD\n One',
+                           url: "test.edu/etd1",
+                           submission_type: 'Dissertation',
+                           year: 2010 }
+    let!(:p_etd2) { create :etd,
+                           title: 'PhD ETD\n Two',
+                           url: "test.edu/etd2",
+                           submission_type: 'Dissertation',
+                           year: 2005 }
+    let!(:p_etd3) { create :etd,
+                           title: 'PhD ETD\n Three',
+                           url: "test.edu/etd3",
+                           submission_type: 'Dissertation',
+                           year: 2015 }
+    let!(:m_etd1) { create :etd,
+                           title: 'Master ETD One',
+                           url: "test2.edu",
+                           submission_type: 'Master Thesis' }
 
     before do
-      create :committee_membership, user: user, etd: etd1, role: "Committee Member"
-      create :committee_membership, user: user, etd: etd1, role: "Outside Member"
-      create :committee_membership, user: user, etd: etd2, role: "Committee Member"
+      create :committee_membership, user: user, etd: p_etd1, role: "Committee Member"
+      create :committee_membership, user: user, etd: p_etd1, role: "Outside Member"
+      create :committee_membership, user: user, etd: p_etd2, role: "Committee Member"
+      create :committee_membership, user: user, etd: p_etd3, role: "Committee Member"
+      create :committee_membership, user: user, etd: m_etd1, role: "Committee Member"
     end
 
     it "returns an array of strings describing the given user's most significant advising role for each of their PhD dissertation ETDs" do
-      expect(profile.phd_advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
+      expect(profile.phd_advising_roles).to eq [
+                                                 '<a href="test.edu/etd3" target="_blank">PhD ETD  Three</a> (Committee Member)',
+                                                 '<a href="test.edu/etd1" target="_blank">PhD ETD  One</a> (Committee Member)',
+                                                 '<a href="test.edu/etd2" target="_blank">PhD ETD  Two</a> (Committee Member)'
+                                               ]
     end
   end
 
