@@ -34,8 +34,6 @@ class ActivityInsightUserImporter < CSVImporter
         existing_user.ai_google_scholar = row[:google_scholar]
         existing_user.ai_website = row[:website]
         existing_user.ai_bio = bio(row)
-        existing_user.ai_teaching_interests = row[:teaching_interests]
-        existing_user.ai_research_interests = row[:research_interests]
         existing_user
       else
         nil
@@ -64,8 +62,6 @@ class ActivityInsightUserImporter < CSVImporter
       u.ai_google_scholar = row[:google_scholar]
       u.ai_website = row[:website]
       u.ai_bio = bio(row)
-      u.ai_teaching_interests = row[:teaching_interests]
-      u.ai_research_interests = row[:research_interests]
       u
     end
   end
@@ -97,9 +93,7 @@ class ActivityInsightUserImporter < CSVImporter
                                                     :ai_fax_2,
                                                     :ai_google_scholar,
                                                     :ai_website,
-                                                    :ai_bio,
-                                                    :ai_teaching_interests,
-                                                    :ai_research_interests]}
+                                                    :ai_bio]}
   end
 
   private

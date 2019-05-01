@@ -36,8 +36,6 @@ describe ActivityInsightUserImporter do
           expect(u1.ai_google_scholar).to eq 'gs1'
           expect(u1.ai_website).to eq 'http://example.com/mysite'
           expect(u1.ai_bio).to eq 'bio1'
-          expect(u1.ai_teaching_interests).to eq 'TI1'
-          expect(u1.ai_research_interests).to be_nil
 
           expect(u2.first_name).to eq 'Bob'
           expect(u2.middle_name).to eq 'B'
@@ -60,8 +58,6 @@ describe ActivityInsightUserImporter do
           expect(u2.ai_google_scholar).to eq 'gs2'
           expect(u2.ai_website).to eq 'myresearch.net'
           expect(u2.ai_bio).to eq 'bio2'
-          expect(u2.ai_teaching_interests).to be_nil
-          expect(u2.ai_research_interests).to be_nil
 
           expect(u3.first_name).to eq 'Jill'
           expect(u3.middle_name).to eq 'C'
@@ -84,8 +80,6 @@ describe ActivityInsightUserImporter do
           expect(u3.ai_google_scholar).to eq 'gs3'
           expect(u3.ai_website).to be_nil
           expect(u3.ai_bio).to eq 'bio3'
-          expect(u3.ai_teaching_interests).to be_nil
-          expect(u3.ai_research_interests).to eq 'RI3'
         end
       end
 
@@ -113,8 +107,6 @@ describe ActivityInsightUserImporter do
                                       ai_google_scholar: 'existing google scholar',
                                       ai_website: 'http://existing-website.net',
                                       ai_bio: 'existing bio',
-                                      ai_teaching_interests: 'existing teaching interests',
-                                      ai_research_interests: 'existing research interests',
                                       updated_by_user_at: timestamp }
 
         context "when the existing user has been updated by a human" do
@@ -147,8 +139,6 @@ describe ActivityInsightUserImporter do
             expect(u1.ai_google_scholar).to eq 'gs1'
             expect(u1.ai_website).to eq 'http://example.com/mysite'
             expect(u1.ai_bio).to eq 'bio1'
-            expect(u1.ai_teaching_interests).to eq 'TI1'
-            expect(u1.ai_research_interests).to be_nil
 
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
@@ -171,8 +161,6 @@ describe ActivityInsightUserImporter do
             expect(u2.ai_google_scholar).to eq 'existing google scholar'
             expect(u2.ai_website).to eq 'http://existing-website.net'
             expect(u2.ai_bio).to eq 'existing bio'
-            expect(u2.ai_teaching_interests).to eq 'existing teaching interests'
-            expect(u2.ai_research_interests).to eq 'existing research interests'
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to eq 'C'
@@ -195,8 +183,6 @@ describe ActivityInsightUserImporter do
             expect(u3.ai_google_scholar).to eq 'gs3'
             expect(u3.ai_website).to be_nil
             expect(u3.ai_bio).to eq 'bio3'
-            expect(u3.ai_teaching_interests).to be_nil
-            expect(u3.ai_research_interests).to eq 'RI3'
           end
         end
         context "when the existing user has not been updated by a human" do
@@ -229,8 +215,6 @@ describe ActivityInsightUserImporter do
             expect(u1.ai_google_scholar).to eq 'gs1'
             expect(u1.ai_website).to eq 'http://example.com/mysite'
             expect(u1.ai_bio).to eq 'bio1'
-            expect(u1.ai_teaching_interests).to eq 'TI1'
-            expect(u1.ai_research_interests).to be_nil
 
             expect(u2.first_name).to eq 'Bob'
             expect(u2.middle_name).to eq 'B'
@@ -253,8 +237,6 @@ describe ActivityInsightUserImporter do
             expect(u2.ai_google_scholar).to eq 'gs2'
             expect(u2.ai_website).to eq 'myresearch.net'
             expect(u2.ai_bio).to eq 'bio2'
-            expect(u2.ai_teaching_interests).to be_nil
-            expect(u2.ai_research_interests).to be_nil
 
             expect(u3.first_name).to eq 'Jill'
             expect(u3.middle_name).to eq 'C'
@@ -277,8 +259,6 @@ describe ActivityInsightUserImporter do
             expect(u3.ai_google_scholar).to eq 'gs3'
             expect(u3.ai_website).to be_nil
             expect(u3.ai_bio).to eq 'bio3'
-            expect(u3.ai_teaching_interests).to be_nil
-            expect(u3.ai_research_interests).to eq 'RI3'
           end
         end
       end
