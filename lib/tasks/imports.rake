@@ -7,6 +7,14 @@ namespace :import do
     ActivityInsightUserImporter.new(filename: args.filename).call
   end
 
+  desc 'Import Activity Insight user profiles'
+  task :ai_user_profiles, [:filename] => :environment do |_task, args|
+    args.with_defaults(
+      filename: filename_for(:ai_user_profiles)
+    )
+    ActivityInsightUserProfileImporter.new(filename: args.filename).call
+  end
+
   desc 'Import Activity Insight education history'
   task :ai_education_history, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -153,6 +161,10 @@ namespace :import do
     ActivityInsightUserImporter.new(
       filename: filename_for(:ai_users)
     ).call
+
+    ActivityInsightUserProfileImporter.new(
+      filename: filename_for(:ai_users)
+    ).call
     
     PureUserImporter.new(
       filename: filename_for(:pure_users)
@@ -230,6 +242,7 @@ def filename_for(key)
   when :pure_organizations then Rails.root.join('db/data/pure_organizations.json')
   when :pure_publication_tags then Rails.root.join('db/data/pure_publication_fingerprints.json')
   when :ai_users then Rails.root.join('db/data/ai_users.csv')
+  when :ai_user_profiles then Rails.root.join('db/data/ai_user_profiles.csv')
   when :ai_publications then Rails.root.join('db/data/ai_publications.csv')
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
   when :etds then Rails.root.join('db/data/etds.csv')
