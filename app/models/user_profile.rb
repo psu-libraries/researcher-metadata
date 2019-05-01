@@ -72,16 +72,12 @@ class UserProfile
     end.uniq
   end
 
-  def advising_roles
-    memberships = []
-    user.committee_memberships.group_by { |m| m.etd }.each_value do |memberships_by_etd|
-      most_significant_membership = memberships_by_etd.sort { |x, y| x <=> y }.last
-      memberships.push most_significant_membership
-    end
+  def master_advising_roles
+    format_advising_roles(master_committee_memberships)
+  end
 
-    memberships.map do |m|
-      %{<a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> (#{m.role})}
-    end
+  def phd_advising_roles
+    format_advising_roles(phd_committee_memberships)
   end
 
   def news_stories
@@ -108,5 +104,30 @@ class UserProfile
 
   def user_query
     API::V1::UserQuery.new(user)
+  end
+
+  def master_committee_memberships
+    user.committee_memberships.select { |m| m.etd.submission_type == 'Master Thesis' }
+  end
+
+  def phd_committee_memberships
+    user.committee_memberships.select { |m| m.etd.submission_type == 'Dissertation' }
+  end
+
+  def most_significant_memberships(committee_memberships)
+    memberships = []
+
+    committee_memberships.group_by { |m| m.etd }.each_value do |memberships_by_etd|
+      most_significant_membership = memberships_by_etd.sort { |x, y| x <=> y }.last
+      memberships.push most_significant_membership
+    end
+
+    memberships
+  end
+
+  def format_advising_roles(committee_memberships)
+    most_significant_memberships(committee_memberships).map do |m|
+      %{<a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> (#{m.role})}
+    end
   end
 end

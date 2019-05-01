@@ -71,11 +71,21 @@
     </ul>
   </div>
 <% end %>
-<% if @profile.advising_roles.any? %>
-  <div id="md-advising">
-    <h3>Graduate Student Advising</h3>
+<% if @profile.phd_advising_roles.any? %>
+  <div id="md-phd-advising">
+    <h3>PhD Graduate Advising</h3>
     <ul>
-      <% @profile.advising_roles.each do |r| %>
+      <% @profile.phd_advising_roles.each do |r| %>
+        <li><%= r.html_safe %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
+<% if @profile.master_advising_roles.any? %>
+  <div id="md-master-advising">
+    <h3>Master Graduate Advising</h3>
+    <ul>
+      <% @profile.master_advising_roles.each do |r| %>
         <li><%= r.html_safe %></li>
       <% end %>
     </ul>

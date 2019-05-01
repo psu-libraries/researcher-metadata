@@ -576,8 +576,12 @@ describe 'API::V1 Users' do
                               location: "Here",
                               visible: false}
 
-        let!(:etd1) { create :etd, title: 'ETD\n One',
-                             url: "test.edu" }
+        let!(:etd1) { create :etd, title: 'Master\n ETD',
+                             url: "test1.edu",
+                             submission_type: 'Master Thesis' }
+        let!(:etd2) { create :etd, title: 'PhD\n ETD',
+                             url: "test2.edu",
+                             submission_type: 'Dissertation' }
 
         let!(:nfi1) { create :news_feed_item,
                              user: user,
@@ -628,6 +632,7 @@ describe 'API::V1 Users' do
           create :presentation_contribution, user: user, presentation: pres3
 
           create :committee_membership, user: user, etd: etd1, role: "Committee Member"
+          create :committee_membership, user: user, etd: etd2, role: "Committee Member"
 
           create :user_performance, user: user, performance: perf1
           create :user_performance, user: user, performance: perf2
@@ -689,10 +694,16 @@ describe 'API::V1 Users' do
                       <li>Performance Three, Location Three</li>
                   </ul>
                 </div>
-                <div id="md-advising">
-                  <h3>Graduate Student Advising</h3>
+                <div id="md-phd-advising">
+                  <h3>PhD Graduate Advising</h3>
                   <ul>
-                      <li><a href="test.edu" target="_blank">ETD  One</a> (Committee Member)</li>
+                      <li><a href="test2.edu" target="_blank">PhD  ETD</a> (Committee Member)</li>
+                  </ul>
+                </div>
+                <div id="md-master-advising">
+                  <h3>Master Graduate Advising</h3>
+                  <ul>
+                      <li><a href="test1.edu" target="_blank">Master  ETD</a> (Committee Member)</li>
                   </ul>
                 </div>
                 <div id="md-news-stories">

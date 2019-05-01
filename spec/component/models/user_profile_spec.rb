@@ -224,18 +224,45 @@ describe UserProfile do
     end
   end
 
-  describe '#advising_roles' do
+  describe '#master_advising_roles' do
     let!(:etd1) { create :etd,
                          title: 'ETD\n One',
-                         url: "test.edu" }
+                         url: "test.edu",
+                         submission_type: 'Master Thesis' }
+    let!(:etd2) { create :etd,
+                         title: 'ETD Two',
+                         url: "test2.edu",
+                         submission_type: 'Dissertation' }
 
     before do
       create :committee_membership, user: user, etd: etd1, role: "Committee Member"
       create :committee_membership, user: user, etd: etd1, role: "Outside Member"
+      create :committee_membership, user: user, etd: etd2, role: "Committee Member"
     end
 
-    it "returns an array of strings describing the given user's most significant advising role for each of their ETDs" do
-      expect(profile.advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
+    it "returns an array of strings describing the given user's most significant advising role for each of their master thesis ETDs" do
+      expect(profile.master_advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
+    end
+  end
+
+  describe '#phd_advising_roles' do
+    let!(:etd1) { create :etd,
+                         title: 'ETD\n One',
+                         url: "test.edu",
+                         submission_type: 'Dissertation' }
+    let!(:etd2) { create :etd,
+                         title: 'ETD Two',
+                         url: "test2.edu",
+                         submission_type: 'Master Thesis' }
+
+    before do
+      create :committee_membership, user: user, etd: etd1, role: "Committee Member"
+      create :committee_membership, user: user, etd: etd1, role: "Outside Member"
+      create :committee_membership, user: user, etd: etd2, role: "Committee Member"
+    end
+
+    it "returns an array of strings describing the given user's most significant advising role for each of their PhD dissertation ETDs" do
+      expect(profile.phd_advising_roles).to eq ['<a href="test.edu" target="_blank">ETD  One</a> (Committee Member)']
     end
   end
 

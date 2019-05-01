@@ -18,7 +18,8 @@ describe API::V1::UserProfileSerializer do
                          grants: ['grant1', 'grant2'],
                          presentations: ['presentation1', 'presentation2'],
                          performances: ['performance1', 'performance2'],
-                         advising_roles: ['role1', 'role2'],
+                         master_advising_roles: ['m_role1', 'm_role2'],
+                         phd_advising_roles: ['p_role1', 'p_role2'],
                          news_stories: ['story1', 'story2'],
                          education_history: ['history1', 'history2'] }
 
@@ -40,7 +41,8 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(grants: ['grant1', 'grant2']) }
     it { is_expected.to include(presentations: ['presentation1', 'presentation2']) }
     it { is_expected.to include(performances: ['performance1', 'performance2']) }
-    it { is_expected.to include(advising_roles: ['role1', 'role2']) }
+    it { is_expected.to include(master_advising_roles: ['m_role1', 'm_role2']) }
+    it { is_expected.to include(phd_advising_roles: ['p_role1', 'p_role2']) }
     it { is_expected.to include(news_stories: ['story1', 'story2']) }
     it { is_expected.to include(education_history: ['history1', 'history2']) }
   end

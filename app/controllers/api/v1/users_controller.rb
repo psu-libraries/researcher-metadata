@@ -1021,12 +1021,20 @@ module API::V1
                     key :description, 'A description of a performance'
                   end
                 end
-                property :advising_roles do
+                property :master_advising_roles do
                   key :type, :array
                   items do
                     key :type, :string
-                    key :example, '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student Thesis Example</a> (Committee Member)'
-                    key :description, 'A description a graduate student advising role with an HTML link to the thesis'
+                    key :example, '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student Master Thesis Example</a> (Committee Member)'
+                    key :description, 'A description of a graduate student master thesis advising role with an HTML link to the thesis'
+                  end
+                end
+                property :phd_advising_roles do
+                  key :type, :array
+                  items do
+                    key :type, :string
+                    key :example, '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student PhD Dissertation Example</a> (Committee Member)'
+                    key :description, 'A description of a graduate student PhD dissertation advising role with an HTML link to the dissertation'
                   end
                 end
                 property :news_stories do
