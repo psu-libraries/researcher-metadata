@@ -1,38 +1,35 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <title>PsuResearchMetadata</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  <body id="lp">
+    <% if flash[:alert].present? %>
+      <section>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      </section>
+    <% end %>
+    <% if flash[:notice].present? %>
+      <section>
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <%= flash[:notice] %>
+        </div>
+      </section>
+    <% end %>
 
-  <%= render 'shared/header' %>
+    <%= yield %>
 
-  <div class="container">
-    <body>
-
-      <% if flash[:alert].present? %>
-        <section>
-          <div class="alert alert-danger">
-            <%= flash[:alert] %>
-          </div>
-        </section>
-      <% end %>
-      <% if flash[:notice].present? %>
-        <section>
-          <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <%= flash[:notice] %>
-          </div>
-        </section>
-      <% end %>
-      <%= yield %>
-    </body>
-  </div>
+  </body>
 </html>

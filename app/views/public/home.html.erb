@@ -1,14 +1,98 @@
-  <div class="jumbotron jumbotron-fluid" id="homepage_jumbotron" >
-    <div class="container">
-      <h1>PSU Libraries Research Metadata</h1>
-      <p>
-         The authority for information about profiles, publications, and teaching
-         history of Penn State’s research faculty, research staff, and graduate students.
-         The data is drawn from several sources including Pure and Activity Insight.
-      </p>
-      <p>
-        <%= link_to "Admin", rails_admin_path, class: "btn btn-lg btn-primary" %>
-        <%= link_to "API Docs", "/api_docs", class: "btn btn-lg btn-secondary" %>
-      </p>
+<nav class="navbar navbar-expand-md navbar-dark mb-4">
+  <a class="navbar-brand" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarCollapse">
+    <ul class="navbar-nav ml-auto">
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link 1</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link 2</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Link 3</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="#">Admin</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Research Metadata Database</h1>
+      </div>
+      <div class="col-lg-4">
+        <h2>How It Works</h2>
+        <p>
+          Cras mattis consectetur purus sit amet fermentum. Praesent commodo cursus magna, vel scelerisque nisl consectetur et.
+        </p>
+      </div>
     </div>
   </div>
+</header>
+
+<main role="main" class="container">
+  <div class="row text-center">
+    <div class="col-lg-4">
+      <%= image_tag('metadata.png', alt: 'Research Metadata') %>
+      <h3>Research Metadata</h3>
+      <p>
+        Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit. Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus.
+      </p>
+      <a class="btn btn-primary" href="#">Learn More</a>
+    </div>
+    <div class="col-lg-4">
+      <%= image_tag('api.png', alt: 'Comprehensive API') %>
+      <h3>Comprehensive API</h3>
+      <p>
+        Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit. Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus.
+      </p>
+      <a class="btn btn-primary" href="#">Learn More</a>
+    </div>
+    <div class="col-lg-4">
+      <%= image_tag('profile.png', alt: 'Build Faculty Profiles') %>
+      <h3>Build Faculty Profiles</h3>
+      <p>
+        Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Nullam id dolor id nibh ultricies vehicula ut id elit. Etiam porta sem malesuada magna mollis euismod. Donec id elit non mi porta gravida at eget metus.
+      </p>
+      <a class="btn btn-primary" href="#">Learn More</a>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-3">
+        <p>
+          <strong>Text block with heading</strong><br />
+          placeholder
+        </p>
+      </div>
+      <div class="col-lg-6 logos">
+        <div>
+          <%= image_tag('logo.png', alt: 'Logo') %>
+          <%= image_tag('logo.png', alt: 'Logo') %>
+          <%= image_tag('logo.png', alt: 'Logo') %>
+        </div>
+        <p>RMD is a collaboration between PSU libraries, OVPR and West Arête</p>
+      </div>
+      <div class="col-lg-3">
+        <ul class="list-unstyled">
+          <li><strong>Dan Coughlin</strong></li>
+          <li>IT Manager, DSRD</li>
+          <li><%= image_tag('email.png', alt: 'Email') %><a href="mailto:dmc186@psu.edu">dmc186@psu.edu</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</footer>
