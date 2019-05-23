@@ -1,5 +1,56 @@
 # psu-research-metadata
 
+This is the repository for a Ruby on Rails application built for Penn State University Libraries to
+gather metadata about Penn State faculty and the research that they conduct and publish. The application
+provides a means of semi-automated data importing from several different sources, an administrative
+interface for Penn State Libraries admins to manage and curate the data, and an API for end-users and
+other applications to access the data. One specific use case for the API is to provide all of the data
+needed to produce the kind of profile web page for each faculty member that might be found in the faculty
+directory on a department website.
+
+## Data importing and updating
+
+For this application to be relevant and useful, it is important for the data in the production database
+to be kept relatively "clean" and current. New data will need to be imported several times per year (likely
+after the end of each semester) at a minimum. Our methods for importing new data and updating existing data
+are evolving, but we'll attempt to document the process for importing new data here until it is more
+completely automated.
+
+Broadly, the process currently consists of three steps for most of the data sources:
+1. Gather new data in the form of correctly-formatted files from each source
+1. Place the new data files in the conventional location on the production server
+1. Run the Rake task to automatically import all of the data from the new files
+
+### Data sources
+
+We import data from a number of other web applications and databases that contain data about Penn State
+faculty and research, and we're continuing to add new data sources as we find or gain access to them. Some
+of the types of records in our database are currently imported from a single source, and others may be
+imported from multiple sources.
+
+Below is a list of the data sources along with the types of records that are imported from each:
+
+1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
+wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
+etc. This application has a REST API to which we have access, but currently we rely on files that are
+manually exported by a Penn State Libraries administrator in CSV/spreadsheet format for our data imports.
+We import the following types of records from Activity Insight:
+    - authorships
+    - contracts
+    - contributors
+    - education_history_items
+    - performances
+    - performance_screenings
+    - presentations
+    - presentation_contributions
+    - publications
+    - users
+    - user_contracts
+    - user_performances
+
+1. **Pure** - This is a web application/database made by Elsevier.
+
+
 ## API
 ### Gems
 This API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:
