@@ -20,6 +20,8 @@ def download_pure_users
   print "Enter Pure API key:  "
   api_key = STDIN.noecho(&:gets).chomp
 
+  puts "\n"
+
   first_person_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?size=1&offset=0'`
 
   total_persons = JSON.parse(first_person_result)['count']
