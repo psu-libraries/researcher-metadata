@@ -4,28 +4,54 @@ require 'json'
 require 'pathname'
 require 'io/console'
 
-print "Enter Pure API key:  "
-api_key = STDIN.noecho(&:gets).chomp
+def root_dir
+  Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
+end
 
-root_dir = Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
+def data_dir
+  root_dir.join('db', 'data')
+end
 
-Dir.mkdir root_dir.join('db', 'data') unless Dir.exists? root_dir.join('db', 'data')
-Dir.mkdir root_dir.join('db', 'data', 'pure_publications') unless Dir.exists? root_dir.join('db', 'data', 'pure_publications')
+def pure_pub_dir
+  data_dir.join('pure_publications')
+end
 
-first_pub_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=1&offset=0'`
+def download_pure_pubs
+  print "Enter Pure API key:  "
+  api_key = STDIN.noecho(&:gets).chomp
 
-page_size = 1000
-total_pubs = JSON.parse(first_pub_result)['count']
+  puts "\n"
 
-download_dir = root_dir.join('db', 'data', 'pure_publications')
+  first_pub_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=1&offset=0'`
 
-total_pages = (total_pubs / page_size.to_f).ceil
+  page_size = 1000
+  total_pubs = JSON.parse(first_pub_result)['count']
 
-1.upto(total_pages) do |i|
-  offset = (i-1) * page_size
-  pubs = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=#{page_size}&offset=#{offset}'`
-  download_file = download_dir.join("pure_publications_#{i}.json")
-  File.open(download_file, 'w') do |f|
-    f.puts pubs
+  download_dir = root_dir.join('db', 'data', 'pure_publications')
+
+  total_pages = (total_pubs / page_size.to_f).ceil
+
+  1.upto(total_pages) do |i|
+    offset = (i-1) * page_size
+    pubs = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs?navigationLink=false&size=#{page_size}&offset=#{offset}'`
+    download_file = download_dir.join("pure_publications_#{i}.json")
+    File.open(download_file, 'w') do |f|
+      f.puts pubs
+    end
   end
+end
+
+if Dir.exists?(pure_pub_dir) && ! Dir.empty?(pure_pub_dir)
+  print "Pure publication data is already present. Overwrite (Yn)?  "
+  overwrite = gets.chomp
+
+  if overwrite == 'Y'
+    download_pure_pubs
+  end
+
+else
+  Dir.mkdir data_dir unless Dir.exists? data_dir
+  Dir.mkdir pure_pub_dir unless Dir.exists? pure_pub_dir
+
+  download_pure_pubs
 end
