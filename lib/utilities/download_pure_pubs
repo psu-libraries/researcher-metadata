@@ -2,9 +2,10 @@
 
 require 'json'
 require 'pathname'
+require 'io/console'
 
 print "Enter Pure API key:  "
-api_key = gets.chomp
+api_key = STDIN.noecho(&:gets).chomp
 
 root_dir = Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
 
