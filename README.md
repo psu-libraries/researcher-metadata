@@ -8,7 +8,7 @@ other applications to access the data. One specific use case for the API is to p
 needed to produce the kind of profile web page for each faculty member that might be found in the faculty
 directory on a department website.
 
-## Data importing and updating
+## Data Importing and Updating
 
 For this application to be relevant and useful, it is important for the data in the production database
 to be kept relatively "clean" and current. New data will need to be imported several times per year (likely
@@ -21,7 +21,7 @@ Broadly, the process currently consists of three steps for most of the data sour
 1. Place the new data files in the conventional location on the production server
 1. Run the Rake task to automatically import all of the data from the new files
 
-### Data sources
+### Data Sources
 
 We import data from a number of other web applications and databases that contain data about Penn State
 faculty and research, and we're continuing to add new data sources as we find or gain access to them. Some
@@ -83,6 +83,61 @@ them whenever a story involves a specific Penn State Faculty member. We import t
 from news.psu.edu:
     - news_feed_items
 
+### Obtaining New Data
+Some of our data importing involves parsing files that were exported from the data sources. By convention,
+we place those files in the `db/data/` directory within the application and give them the names that are 
+defined in `lib/tasks/imports.rake`. This directory in the repository is ignored by revision control, and
+on the application servers it is shared between application releases. Below is a description of how we obtain
+new data from each source.
+ 
+#### Activity Insight
+Obtaining new data files for import from Activity Insight is tricky and the process is too nuanced to
+reasonably document. The files are manually exported from an Activity Insight web admin interface, and
+then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
+all have the expected file type and encoding as well as the expected columns, column header names, and
+complete data in each column. There is danger that if expected columns are missing from these files, then
+importing them **may delete existing data** from our database. Because this process is so unsustainable, we'll
+be attempting to automate it using the Activity Insight API as soon as possible.
+
+#### Pure
+In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
+data that we import from pure. The script automatically places the downloaded files in the correct locations
+to be read by our importing scripts. All that you need to do run the script and provide our Pure API key when
+prompted. It's important to note that these scripts don't automatically recover or clean up after a
+failed/incomplete download, so if a script fails for any reason, then it must be rerun until it succeeds.
+This is particularly applicable to the `download_pure_pubs` script which is very long-running and has the
+potential to be interrupted. These scripts can be run in development or directly on the application servers
+depending on where you want to import the data.
+
+#### eTD
+TODO:  Describe the process for acquiring an eTD database dump, converting it to .csv files, and putting the
+files in the correct locations for import in each environment.
+
+#### Penn State News RSS feed
+We import data directly from the feeds that are published on the web. There is no need to obtain any data
+prior to running the import.
+
+### Importing New Data
+Once updated data files have been obtained (if applicable), importing new data is just a matter of running
+the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
+for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
+correspondence between the rake tasks and the data files). We also define a single task that imports all types of
+data from all sources - `rake import:all`. All of these tasks are designed to be idempotent given the same source
+data. If you are using the individual tasks to import only a subset of the data and you're going to be running more
+than one, the order in which the tasks are run is important. Some tasks create records that other tasks will
+find and use if they are present. Running that tasks in the correct order ensures that your data import will be
+complete. The correct order for running the tasks is given by the order in which their associated classes are
+called in the definition of the `import:all` task.
+
+### Identifying Dupicate Publication Data
+TODO:  Describe the process for automatically identifying duplicate publication records.
+
+### Import rules
+TODO:  Describe the business rules involved in importing data in terms of what new data is added from each source
+and if/how new data overwrites older data.
+
+Imports never delete whole records from our database - even if formerly present records have been removed
+from the data source. Importing only creates new records and updates existing records.
 
 ## API
 ### Gems
