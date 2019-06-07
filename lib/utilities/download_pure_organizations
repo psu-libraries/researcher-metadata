@@ -1,47 +1,18 @@
 #!/usr/bin/env ruby
 
-require 'json'
-require 'pathname'
-require 'io/console'
+require_relative './pure_downloader.rb'
 
-def root_dir
-  Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
-end
+downloader = PureDownloader.new
 
-def data_dir
-  root_dir.join('db', 'data')
-end
-
-def org_data_file
-  data_dir.join('pure_organizations.json')
-end
-
-def download_pure_orgs
-  print "Enter Pure API key:  "
-  api_key = STDIN.noecho(&:gets).chomp
-
-  puts "\n"
-
-  first_org_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/organisational-units?navigationLink=false&size=1&offset=0'`
-
-  total_orgs = JSON.parse(first_org_result)['count']
-
-  all_orgs_results = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/organisational-units?navigationLink=false&size=#{total_orgs}&offset=0'`
-
-  File.open(org_data_file, 'w') do |f|
-    f.puts all_orgs_results
-  end
-end
-
-if File.exists? org_data_file
+if File.exists? downloader.org_data_file
   print "Organization data file already exists. Overwrite (Yn)?  "
   overwrite = gets.chomp
 
   if overwrite == 'Y'
-    download_pure_orgs
+    downloader.download_pure_orgs
   end
 else
-  Dir.mkdir data_dir unless Dir.exists? root_dir.join('db', 'data')
+  Dir.mkdir downloader.data_dir unless Dir.exists? downloader.data_dir
 
-  download_pure_orgs
+  downloader.download_pure_orgs
 end

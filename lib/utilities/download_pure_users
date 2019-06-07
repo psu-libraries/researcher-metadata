@@ -1,47 +1,18 @@
 #!/usr/bin/env ruby
 
-require 'json'
-require 'pathname'
-require 'io/console'
+require_relative './pure_downloader.rb'
 
-def root_dir
-  Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
-end
+downloader = PureDownloader.new
 
-def data_dir
-  root_dir.join('db', 'data')
-end
-
-def user_data_file
-  data_dir.join('pure_users.json')
-end
-
-def download_pure_users
-  print "Enter Pure API key:  "
-  api_key = STDIN.noecho(&:gets).chomp
-
-  puts "\n"
-
-  first_person_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?navigationLink=false&size=1&offset=0'`
-
-  total_persons = JSON.parse(first_person_result)['count']
-
-  all_persons_results = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?navigationLink=false&size=#{total_persons}&offset=0'`
-
-  File.open(user_data_file, 'w') do |f|
-    f.puts all_persons_results
-  end
-end
-
-if File.exists? user_data_file
+if File.exists? downloader.user_data_file
   print "User data file already exists. Overwrite (Yn)?  "
   overwrite = gets.chomp
 
   if overwrite == 'Y'
-    download_pure_users
+    downloader.download_pure_users
   end
 else
-  Dir.mkdir data_dir unless Dir.exists? root_dir.join('db', 'data')
+  Dir.mkdir downloader.data_dir unless Dir.exists? downloader.data_dir
 
-  download_pure_users
+  downloader.download_pure_users
 end
