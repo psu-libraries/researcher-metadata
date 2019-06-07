@@ -323,6 +323,78 @@
           "size": 0
         }
       ]
+    },
+    {
+      "pureId": 2345235,
+      "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+      "name": {
+        "firstName": "NoExternalID",
+        "lastName": "Person"
+      },
+      "profiled": true,
+      "scopusHIndex": 2,
+      "fte": 0.0,
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-12-23T14:06:33.697+0000",
+        "modifiedBy": "sync_user",
+        "modifiedDate": "2018-06-28T06:52:54.527+0000",
+        "portalUrl": "https://pennstate.pure.elsevier.com/en/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
+      },
+      "visibility": [
+        {
+          "value": "Public - No restriction",
+          "key": "FREE"
+        }
+      ],
+      "titles": [
+        {
+          "value": "MD",
+          "pureId": 22189043,
+          "externalId": "synchronisedPerson",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/titles/postnominal",
+          "type": "Post-nominal title"
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 8289308,
+          "externalId": "autoid:jct3-scopus-35573635700",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/personsources/scopus",
+          "type": "Scopus ID",
+          "value": "35573635700"
+        },
+        {
+          "pureId": 21183541,
+          "externalId": "autoid:jct3-employee-jct3",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "typeUri": "/dk/atira/pure/person/personsources/employee",
+          "type": "Employee ID",
+          "value": "jct3"
+        },
+        {
+          "pureId": 23580879,
+          "typeUri": "/dk/atira/pure/person/personsources/scopusauthor",
+          "type": "Scopus Author ID",
+          "value": "35573635700"
+        }
+      ],
+      "profilePhotos": [
+        {
+          "pureId": 24891913,
+          "typeUri": "/dk/atira/pure/person/personfiles/portrait",
+          "type": "Portrait",
+          "url": "https://pennstate.pure.elsevier.com/ws/files/24891913/jct3.jpg",
+          "filename": "jct3.jpg",
+          "mimetype": "image/jpeg",
+          "size": 0
+        }
+      ]
     }
   ]
 }
