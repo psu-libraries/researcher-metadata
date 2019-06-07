@@ -48,7 +48,40 @@ We import the following types of records from Activity Insight:
     - user_contracts
     - user_performances
 
-1. **Pure** - This is a web application/database made by Elsevier.
+1. **Pure** - This is a web application/database made by Elsevier. It contains data about Penn State
+researchers, their published research, and the organizations within Penn State to which they belong.
+This data mostly has to do with scientific research that is published in peer-reviewed journals, so
+we don't get much data about faculty in the arts and humanities from this source as opposed to Activity
+Insight which provides data about faculty across the whole university. This application also has a
+well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) to which
+we have access. At present, we query this API to download data to files in JSON format which we then
+import into our database. This repository contains utility scripts for automatically downloading each
+type of data to the correct location for import, so the process for importing data from Pure is largely
+(but not completely) automated. We import the following types of records from Pure:
+    - authorships
+    - contributors
+    - organizations
+    - publications
+    - publication_taggings
+    - tags
+    - user_organization_memberships
+    - users
+
+1. **eTD** - This is a web application/database developed by the Penn State Libraries that facilitates
+the submission and archival of PhD dissertations and Masters theses in digital format by graduate students.
+Our main reason for importing metadata from this source is to be able to show the graduate student advising
+that each faculty member has done. Because the application currently has no API, we don't have a way to
+automate the importing of data. Currently, we obtain an SQL dump of the eTD database from a Penn State
+Libraries administrator. We load this dump into a local MySQL database and export several .csv files
+which we then import into our database. We import the following types of records from eTD:
+    - committee_memberships
+    - etds
+    
+1. **Penn State News RSS feeds** - The Penn State News website publishes many
+[RSS feeds](https://news.psu.edu/rss-feeds), and we import news story metadata directly from several of
+them whenever a story involves a specific Penn State Faculty member. We import the following types of records
+from news.psu.edu:
+    - news_feed_items
 
 
 ## API
