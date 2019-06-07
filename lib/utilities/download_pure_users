@@ -22,11 +22,11 @@ def download_pure_users
 
   puts "\n"
 
-  first_person_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?size=1&offset=0'`
+  first_person_result = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?navigationLink=false&size=1&offset=0'`
 
   total_persons = JSON.parse(first_person_result)['count']
 
-  all_persons_results = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?size=#{total_persons}&offset=0'`
+  all_persons_results = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/511/persons?navigationLink=false&size=#{total_persons}&offset=0'`
 
   File.open(user_data_file, 'w') do |f|
     f.puts all_persons_results
