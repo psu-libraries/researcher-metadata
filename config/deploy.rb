@@ -23,6 +23,7 @@ ssh_options[:port] = 1855
 set :shared, %w{
   config/database.yml
   config/secrets.yml
+  config/activity_insight.yml
   db/data
 }
 
