@@ -209,10 +209,58 @@ class ActivityInsightEducationHistoryItem
   end
 
   def degree
-    parsed_item.css('DEG').text.strip.presence
+    text_for('DEG')
+  end
+
+  def explanation_of_other_degree
+    text_for('DEGOTHER')
+  end
+
+  def is_highest_degree_earned
+    text_for('HIGHEST')
+  end
+
+  def institution
+    text_for('SCHOOL')
+  end
+
+  def school
+    text_for('COLLEGE')
+  end
+
+  def location_of_institution
+    text_for('LOCATION')
+  end
+
+  def emphasis_or_major
+    text_for('MAJOR')
+  end
+
+  def supporting_areas_of_emphasis
+    text_for('SUPPAREA')
+  end
+
+  def dissertation_or_thesis_title
+    text_for('DISSTITLE')
+  end
+
+  def honor_or_distinction
+    text_for('DISTINCTION')
+  end
+
+  def description
+    text_for('DESC')
+  end
+
+  def comments
+    text_for('COMMENT')
   end
 
   private
 
   attr_reader :parsed_item
+
+  def text_for(element)
+    parsed_item.css(element).text.strip.presence
+  end
 end
