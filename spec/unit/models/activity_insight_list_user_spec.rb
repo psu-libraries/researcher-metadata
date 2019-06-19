@@ -68,17 +68,17 @@ describe ActivityInsightListUser do
   end
 
   describe '#middle_name' do
-    before { allow(parsed_user).to receive(:css).with('MiddleName').and_return(fn_element) }
+    before { allow(parsed_user).to receive(:css).with('MiddleName').and_return(mn_element) }
 
     context "when the Middle Name element in the given data is empty" do
-      let(:fn_element) { double 'middle name element', text: '' }
+      let(:mn_element) { double 'middle name element', text: '' }
       it "returns nil" do
         expect(user.middle_name).to be_nil
       end
     end
 
     context "when the Middle Name element in the given data contains text" do
-      let(:fn_element) { double 'middle name element', text: "\n     Middle  \n   " }
+      let(:mn_element) { double 'middle name element', text: "\n     Middle  \n   " }
 
       it "returns the text with surrounding whitespace removed" do
         expect(user.middle_name).to eq 'Middle'
@@ -87,17 +87,17 @@ describe ActivityInsightListUser do
   end
 
   describe '#last_name' do
-    before { allow(parsed_user).to receive(:css).with('LastName').and_return(fn_element) }
+    before { allow(parsed_user).to receive(:css).with('LastName').and_return(ln_element) }
 
     context "when the Last Name element in the given data is empty" do
-      let(:fn_element) { double 'last name element', text: '' }
+      let(:ln_element) { double 'last name element', text: '' }
       it "returns nil" do
         expect(user.last_name).to be_nil
       end
     end
 
     context "when the Last Name element in the given data contains text" do
-      let(:fn_element) { double 'last name element', text: "\n     Last  \n   " }
+      let(:ln_element) { double 'last name element', text: "\n     Last  \n   " }
 
       it "returns the text with surrounding whitespace removed" do
         expect(user.last_name).to eq 'Last'
