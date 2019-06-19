@@ -1,0 +1,44 @@
+<Data xmlns="http://www.digitalmeasures.com/schema/data" xmlns:dmd="http://www.digitalmeasures.com/schema/data-metadata" dmd:date="2019-06-18">
+  <Record userId="1649499" username="ABC123" termId="475" dmd:surveyId="8587704">
+    <dmd:IndexEntry indexKey="CAMPUS" entryKey="UP" text="UP"/>
+    <dmd:IndexEntry indexKey="CAMPUS_NAME" entryKey="University Park" text="University Park"/>
+    <dmd:IndexEntry indexKey="COLLEGE" entryKey="LA" text="LA"/>
+    <dmd:IndexEntry indexKey="COLLEGE_NAME" entryKey="College of the Liberal Arts" text="College of the Liberal Arts"/>
+    <dmd:IndexEntry indexKey="DEPARTMENT" entryKey="LA - Sociology and Criminology" text="LA - Sociology and Criminology"/>
+    <PCI id="58226528256" dmd:originalSource="IMPORT" dmd:created="2012-08-15T14:03:57" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2016-05-16T19:48:15">
+      <PREFIX/>
+      <FNAME>Sally</FNAME>
+      <PFNAME/>
+      <MNAME/>
+      <LNAME>Testuser</LNAME>
+      <SUFFIX/>
+      <ALT_NAME/>
+      <EMAIL>abc123@psu.edu</EMAIL>
+      <BUILDING>
+        Sally's Building
+      </BUILDING>
+      <ROOMNUM>123</ROOMNUM>
+      <OPHONE1>444</OPHONE1>
+      <OPHONE2>555</OPHONE2>
+      <OPHONE3>6666</OPHONE3>
+      <DPHONE1>111</DPHONE1>
+      <DPHONE2>222</DPHONE2>
+      <DPHONE3>3333</DPHONE3>
+      <FAX1>666</FAX1>
+      <FAX2>777</FAX2>
+      <FAX3>8888</FAX3>
+      <WEBSITE>sociology.la.psu.edu/people/abc123</WEBSITE>
+      <BIO>
+        Sally's bio
+      </BIO>
+      <TEACHING_INTERESTS>
+        Sally's teaching interests
+      </TEACHING_INTERESTS>
+      <RESEARCH_INTERESTS>
+        Sally's research interests
+      </RESEARCH_INTERESTS>
+      <UPLOAD_PHOTO/>
+      <UPLOAD_CV>abc123/pci/test-cv-5.pdf</UPLOAD_CV>
+    </PCI>
+  </Record>
+</Data>

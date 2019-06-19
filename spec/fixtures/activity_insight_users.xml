@@ -1,0 +1,17 @@
+<Users xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:dmu="http://www.digitalmeasures.com/schema/user-metadata">
+  <User username="ABC123" dmu:userId="1649499" PSUIDFacultyOnly="976567444" enabled="false">
+    <FirstName>Sally</FirstName>
+    <LastName>Testuser</LastName>
+    <Email>abc123@psu.edu</Email>
+    <ShibbolethAuthentication/>
+    <Item xlink:type="simple" xlink:href="/login/service/v4/User/USERNAME:ABC123"/>
+  </User>
+  <User username="def45" dmu:userId="1949490" PSUIDFacultyOnly="9293659323">
+    <FirstName>Bob</FirstName>
+    <MiddleName>A.</MiddleName>
+    <LastName>Tester</LastName>
+    <Email>def45@psu.edu</Email>
+    <ShibbolethAuthentication/>
+    <Item xlink:type="simple" xlink:href="/login/service/v4/User/USERNAME:def45"/>
+  </User>
+</Users>
