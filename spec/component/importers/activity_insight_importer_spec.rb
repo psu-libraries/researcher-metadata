@@ -52,7 +52,45 @@ describe ActivityInsightImporter do
         expect(u2.last_name).to eq 'Tester'
         expect(u2.activity_insight_identifier).to eq '1949490'
         expect(u2.penn_state_identifier).to eq '9293659323'
+      end
 
+      context "when no included education history items exist in the database" do
+        it "creates new education history items from the imported data" do
+          expect { importer.call }.to change { EducationHistoryItem.count }.by 2
+
+          i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
+          i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
+          user = User.find_by(webaccess_id: 'abc123')
+
+          expect(i1.user).to eq user
+          expect(i1.degree).to eq 'Ph D'
+
+          expect(i2.user).to eq user
+          expect(i2.degree).to eq 'BA'
+        end
+      end
+      context "when an included education history item exists in the database" do
+        let(:other_user) { create :user }
+        before do
+          create :education_history_item,
+                 activity_insight_identifier: '70766815232',
+                 user: other_user,
+                 degree: 'Existing Degree'
+        end
+
+        it "creates any new items and updates the existing item" do
+          expect { importer.call }.to change { EducationHistoryItem.count }.by 1
+
+          i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
+          i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
+          user = User.find_by(webaccess_id: 'abc123')
+
+          expect(i1.user).to eq user
+          expect(i1.degree).to eq 'Ph D'
+
+          expect(i2.user).to eq user
+          expect(i2.degree).to eq 'BA'
+        end
       end
     end
     context "when a user that is being imported already exists in the database" do

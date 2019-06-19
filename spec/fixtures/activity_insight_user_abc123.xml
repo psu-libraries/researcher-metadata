@@ -40,5 +40,67 @@
       <UPLOAD_PHOTO/>
       <UPLOAD_CV>abc123/pci/test-cv-5.pdf</UPLOAD_CV>
     </PCI>
+    <EDUCATION id="70766815232" dmd:originalSource="MANUAL" dmd:created="2013-04-12T10:00:41" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2013-04-12T10:00:41" dmd:startDate="2006-09-27" dmd:endDate="2009-12-18">
+      <DEG>Ph D</DEG>
+      <DEGOTHER/>
+      <STATUS/>
+      <SCHOOL>The Pennsylvania State University</SCHOOL>
+      <COLLEGE>Graduate School</COLLEGE>
+      <LOCATION>University Park, PA</LOCATION>
+      <MAJOR>Sociology</MAJOR>
+      <SUPPAREA>Demography</SUPPAREA>
+      <DISSTITLE>
+        Sally's Dissertation
+      </DISSTITLE>
+      <DISTINCTION/>
+      <HIGHEST>Yes</HIGHEST>
+      <DESC/>
+      <COMMENT/>
+      <DTM_START>September</DTM_START>
+      <DTD_START>27</DTD_START>
+      <DTY_START>2006</DTY_START>
+      <START_START>2006-09-27</START_START>
+      <START_END>2006-09-27</START_END>
+      <DTM_END>December</DTM_END>
+      <DTD_END>18</DTD_END>
+      <DTY_END>2009</DTY_END>
+      <END_START>2009-12-18</END_START>
+      <END_END>2009-12-18</END_END>
+      <EDUCATION_ADVISOR id="45856732454">
+        <FNAME>William</FNAME>
+        <MNAME>J</MNAME>
+        <LNAME>Advisor</LNAME>
+      </EDUCATION_ADVISOR>
+    </EDUCATION>
+    <EDUCATION id="72346234523" dmd:originalSource="MANUAL" dmd:created="2013-04-12T10:00:41" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2013-04-12T10:00:41" dmd:startDate="2006-09-27" dmd:endDate="2009-12-18">
+      <DEG>BA</DEG>
+      <DEGOTHER/>
+      <STATUS/>
+      <SCHOOL>The Pennsylvania State University</SCHOOL>
+      <COLLEGE>Liberal Arts</COLLEGE>
+      <LOCATION>University Park, PA</LOCATION>
+      <MAJOR>Sociology</MAJOR>
+      <SUPPAREA/>
+      <DISSTITLE/>
+      <DISTINCTION/>
+      <HIGHEST>No</HIGHEST>
+      <DESC/>
+      <COMMENT/>
+      <DTM_START>September</DTM_START>
+      <DTD_START>27</DTD_START>
+      <DTY_START>2000</DTY_START>
+      <START_START>2000-09-27</START_START>
+      <START_END>2000-09-27</START_END>
+      <DTM_END>December</DTM_END>
+      <DTD_END>18</DTD_END>
+      <DTY_END>2004</DTY_END>
+      <END_START>2004-12-18</END_START>
+      <END_END>2004-12-18</END_END>
+      <EDUCATION_ADVISOR id="2456457372">
+        <FNAME/>
+        <MNAME/>
+        <LNAME/>
+      </EDUCATION_ADVISOR>
+    </EDUCATION>
   </Record>
 </Data>

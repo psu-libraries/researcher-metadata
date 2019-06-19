@@ -38,6 +38,16 @@ class ActivityInsightImporter
           u.ai_research_interests = details.research_interests
 
           u.save!
+
+          details.education_history_items.each do |item|
+            i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
+              EducationHistoryItem.new
+
+            i.activity_insight_identifier = item.activity_insight_id if i.new_record?
+            i.user = u
+            i.degree = item.degree
+            i.save!
+          end
         rescue Exception => e
           errors << e
         end
@@ -171,8 +181,8 @@ class ActivityInsightDetailUser
     user.css('RESEARCH_INTERESTS').text.strip.presence
   end
 
-  def publications
-    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p) }
+  def education_history_items
+    user.css('EDUCATION').map { |p| ActivityInsightEducationHistoryItem.new(p) }
   end
 
   private
@@ -189,24 +199,20 @@ class ActivityInsightDetailUser
 end
 
 
-class ActivityInsightPublication
-  def initialize(parsed_publication)
-    @parsed_publication = parsed_publication
+class ActivityInsightEducationHistoryItem
+  def initialize(parsed_item)
+    @parsed_item = parsed_item
   end
 
-  def title
-    parsed_publication.css('TITLE').text.strip.presence
+  def activity_insight_id
+    parsed_item.attribute('id').value
   end
 
-  def type
-    if parsed_publication.css('CONTYPE').text.empty?
-      parsed_publication.css('CONTYPEOTHER').text.strip.presence
-    else
-      parsed_publication.css('CONTYPE').text.strip.presence
-    end
+  def degree
+    parsed_item.css('DEG').text.strip.presence
   end
 
   private
 
-  attr_reader :parsed_publication
+  attr_reader :parsed_item
 end
