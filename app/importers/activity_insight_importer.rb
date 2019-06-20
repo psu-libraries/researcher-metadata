@@ -38,7 +38,7 @@ class ActivityInsightImporter
 
           u.save!
         end
-          
+
         details.education_history_items.each do |item|
           i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
             EducationHistoryItem.new
@@ -60,6 +60,18 @@ class ActivityInsightImporter
           i.start_year = item.start_year
           i.end_year = item.end_year
           i.save!
+        end
+
+        details.presentations.each do |pres|
+          p = Presentation.find_by(activity_insight_identifier: pres.activity_insight_id) ||
+            Presentation.new
+
+          if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
+            p.activity_insight_identifier = pres.activity_insight_id if p.new_record?
+            p.title = pres.title
+
+            p.save!
+          end
         end
 
       rescue Exception => e
@@ -206,6 +218,10 @@ class ActivityInsightDetailUser
     user.css('EDUCATION').map { |i| ActivityInsightEducationHistoryItem.new(i) }
   end
 
+  def presentations
+    user.css('PRESENT').map { |p| ActivityInsightPresentation.new(p) }
+  end
+
   private
 
   attr_reader :parsed_user
@@ -299,5 +315,27 @@ class ActivityInsightEducationHistoryItem
 
   def text_for(element)
     parsed_item.css(element).text.strip.presence
+  end
+end
+
+class ActivityInsightPresentation
+  def initialize(parsed_presentation)
+    @parsed_presentation = parsed_presentation
+  end
+
+  def activity_insight_id
+    parsed_presentation.attribute('id').value
+  end
+
+  def title
+    text_for('TITLE')
+  end
+
+  private
+
+  attr_reader :parsed_presentation
+
+  def text_for(element)
+    parsed_presentation.css(element).text.strip.presence
   end
 end

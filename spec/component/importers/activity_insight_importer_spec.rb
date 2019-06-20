@@ -157,7 +157,60 @@ describe ActivityInsightImporter do
           expect(i2.end_year).to eq 2004
         end
       end
+
+      context "when no included presentations exist in the database" do
+        it "creates new presentations from the imported data" do
+          expect { importer.call }.to change { Presentation.count }.by 2
+
+          p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+          p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+          expect(p1.title).to eq "Sally's ASA Presentation"
+
+          expect(p2.title).to eq "Sally's PAA Presentation"
+        end
+      end
+      context "when an included presentation exists in the database" do
+        before do
+          create :presentation,
+                 activity_insight_identifier: '83890556928',
+                 updated_by_user_at: updated,
+                 title: 'Existing Title'
+        end
+
+        context "when the existing presentation has been updated by an admin" do
+          let(:updated) { Time.zone.now }
+          it "creates any new presentations and does not update the existing presentation" do
+            expect { importer.call }.to change { Presentation.count }.by 1
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            expect(p1.title).to eq "Existing Title"
+
+            expect(p2.title).to eq "Sally's PAA Presentation"
+          end
+        end
+
+        context "when the existing presentation has not been updated by an admin" do
+          let(:updated) { nil }
+          it "creates any new presentations and updates the existing presentation" do
+            expect { importer.call }.to change { Presentation.count }.by 1
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            expect(p1.title).to eq "Sally's ASA Presentation"
+
+            expect(p2.title).to eq "Sally's PAA Presentation"
+          end
+        end
+      end
     end
+
+
+
+
     context "when a user that is being imported already exists in the database" do
       before do
         create :user,
@@ -306,7 +359,59 @@ describe ActivityInsightImporter do
             expect(i2.end_year).to eq 2004
           end
         end
+
+        context "when no included presentations exist in the database" do
+          it "creates new presentations from the imported data" do
+            expect { importer.call }.to change { Presentation.count }.by 2
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            expect(p1.title).to eq "Sally's ASA Presentation"
+
+            expect(p2.title).to eq "Sally's PAA Presentation"
+          end
+        end
+        context "when an included presentation exists in the database" do
+          before do
+            create :presentation,
+                   activity_insight_identifier: '83890556928',
+                   updated_by_user_at: updated,
+                   title: 'Existing Title'
+          end
+
+          context "when the existing presentation has been updated by an admin" do
+            let(:updated) { Time.zone.now }
+            it "creates any new presentations and does not update the existing presentation" do
+              expect { importer.call }.to change { Presentation.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              expect(p1.title).to eq "Existing Title"
+
+              expect(p2.title).to eq "Sally's PAA Presentation"
+            end
+          end
+
+          context "when the existing presentation has not been updated by an admin" do
+            let(:updated) { nil }
+            it "creates any new presentations and updates the existing presentation" do
+              expect { importer.call }.to change { Presentation.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              expect(p1.title).to eq "Sally's ASA Presentation"
+
+              expect(p2.title).to eq "Sally's PAA Presentation"
+            end
+          end
+        end
       end
+
+
+
       context "when the existing user has not been updated by an admin" do
         let(:updated) { nil }
 
@@ -442,6 +547,55 @@ describe ActivityInsightImporter do
             expect(i2.comments).to eq 'Some comments'
             expect(i2.start_year).to eq 2000
             expect(i2.end_year).to eq 2004
+          end
+        end
+
+        context "when no included presentations exist in the database" do
+          it "creates new presentations from the imported data" do
+            expect { importer.call }.to change { Presentation.count }.by 2
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            expect(p1.title).to eq "Sally's ASA Presentation"
+
+            expect(p2.title).to eq "Sally's PAA Presentation"
+          end
+        end
+        context "when an included presentation exists in the database" do
+          before do
+            create :presentation,
+                   activity_insight_identifier: '83890556928',
+                   updated_by_user_at: updated,
+                   title: 'Existing Title'
+          end
+
+          context "when the existing presentation has been updated by an admin" do
+            let(:updated) { Time.zone.now }
+            it "creates any new presentations and does not update the existing presentation" do
+              expect { importer.call }.to change { Presentation.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              expect(p1.title).to eq "Existing Title"
+
+              expect(p2.title).to eq "Sally's PAA Presentation"
+            end
+          end
+
+          context "when the existing presentation has not been updated by an admin" do
+            let(:updated) { nil }
+            it "creates any new presentations and updates the existing presentation" do
+              expect { importer.call }.to change { Presentation.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              expect(p1.title).to eq "Sally's ASA Presentation"
+
+              expect(p2.title).to eq "Sally's PAA Presentation"
+            end
           end
         end
       end

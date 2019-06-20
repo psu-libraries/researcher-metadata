@@ -102,5 +102,88 @@
         <LNAME/>
       </EDUCATION_ADVISOR>
     </EDUCATION>
+    <PRESENT id="83890556928" dmd:originalSource="MANUAL" dmd:created="2014-01-06T21:35:23" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T23:57:07">
+      <NAME>
+        Annual Meeting of the American Sociological Association
+      </NAME>
+      <ORG/>
+      <LOCATION>Las Vegas, NV</LOCATION>
+      <TITLE>
+        Sally's ASA Presentation
+      </TITLE>
+      <TYPE>Other</TYPE>
+      <TYPE_OTHER>Roundtable Discussion</TYPE_OTHER>
+      <PRESENT_AUTH id="83890556929">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <SUFFIX/>
+        <ORG>University of Wisconsin</ORG>
+        <ROLE>Presenter and Author</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL/>
+      </PRESENT_AUTH>
+      <MEETTYPE>Academic</MEETTYPE>
+      <SCOPE>International</SCOPE>
+      <ATTENDANCE>500</ATTENDANCE>
+      <REFEREED>Yes</REFEREED>
+      <INVACC>No</INVACC>
+      <RESEARCH_NUM/>
+      <ABSTRACT>An abstract</ABSTRACT>
+      <COMMENT>Some comments</COMMENT>
+      <PRESENT_FILE id="83890556930">
+        <UPLOAD_PRESENTATION/>
+      </PRESENT_FILE>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PRESENT>
+    <PRESENT id="113825011712" dmd:originalSource="MANUAL" dmd:created="2015-09-01T13:42:47" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T23:57:07">
+      <NAME>
+        Annual Meeting of the Population Association of America
+      </NAME>
+      <ORG/>
+      <LOCATION>San Diego</LOCATION>
+      <TITLE>
+        Sally's PAA Presentation
+      </TITLE>
+      <TYPE>Papers and Presentations</TYPE>
+      <TYPE_OTHER/>
+      <PRESENT_AUTH id="113825011716">
+        <FACULTY_NAME/>
+        <FNAME>Margaret</FNAME>
+        <MNAME/>
+        <LNAME>Testauthor</LNAME>
+        <SUFFIX/>
+        <ORG>Penn State</ORG>
+        <ROLE>Presenter and Author</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL>Graduate</STUDENT_LEVEL>
+      </PRESENT_AUTH>
+      <PRESENT_AUTH id="113825011713">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <SUFFIX/>
+        <ORG/>
+        <ROLE>Author Only</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL/>
+      </PRESENT_AUTH>
+      <MEETTYPE>Academic</MEETTYPE>
+      <SCOPE>International</SCOPE>
+      <ATTENDANCE/>
+      <REFEREED>Yes</REFEREED>
+      <INVACC/>
+      <RESEARCH_NUM/>
+      <ABSTRACT>
+        Another abstract
+      </ABSTRACT>
+      <COMMENT/>
+      <PRESENT_FILE id="113825011714">
+        <UPLOAD_PRESENTATION/>
+      </PRESENT_FILE>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PRESENT>
   </Record>
 </Data>

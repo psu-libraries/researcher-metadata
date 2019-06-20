@@ -285,4 +285,21 @@ describe ActivityInsightDetailUser do
       expect(user.education_history_items).to eq [item1, item2]
     end
   end
+
+  describe '#presentations' do
+    let(:element1) { double 'XML element 1' }
+    let(:element2) { double 'XML element 2' }
+    let(:pres1) { double 'presentation 1' }
+    let(:pres2) { double 'presentation 2' }
+
+    before do
+      allow(user_data).to receive(:css).with('PRESENT').and_return([element1, element2])
+      allow(ActivityInsightPresentation).to receive(:new).with(element1).and_return(pres1)
+      allow(ActivityInsightPresentation).to receive(:new).with(element2).and_return(pres2)
+    end
+
+    it "returns an array of presentations from the given data" do
+      expect(user.presentations).to eq [pres1, pres2]
+    end
+  end
 end
