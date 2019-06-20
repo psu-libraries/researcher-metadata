@@ -22,7 +22,7 @@ describe ActivityInsightImporter do
     )
   end
   describe '#call' do
-    context "when the users being imported don not exist in the database" do
+    context "when the users being imported do not exist in the database" do
       it "creates new user records for each imported user" do
         expect { importer.call }.to change { User.count }.by 2
 
