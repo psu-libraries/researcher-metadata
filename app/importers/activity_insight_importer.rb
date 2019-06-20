@@ -11,11 +11,10 @@ class ActivityInsightImporter
     ai_users.each do |aiu|
       pbar.increment unless Rails.env.test?
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
+      details = ai_user_detail(aiu.raw_webaccess_id)
 
-      if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
-        begin
-          details = ai_user_detail(aiu.raw_webaccess_id)
-
+      begin
+        if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
           u.first_name = aiu.first_name
           u.middle_name = aiu.middle_name
           u.last_name = aiu.last_name
@@ -38,32 +37,33 @@ class ActivityInsightImporter
           u.ai_research_interests = details.research_interests
 
           u.save!
-
-          details.education_history_items.each do |item|
-            i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
-              EducationHistoryItem.new
-
-            i.activity_insight_identifier = item.activity_insight_id if i.new_record?
-            i.user = u
-            i.degree = item.degree
-            i.explanation_of_other_degree = item.explanation_of_other_degree
-            i.institution = item.institution
-            i.school = item.school
-            i.location_of_institution = item.location_of_institution
-            i.emphasis_or_major = item.emphasis_or_major
-            i.supporting_areas_of_emphasis = item.supporting_areas_of_emphasis
-            i.dissertation_or_thesis_title = item.dissertation_or_thesis_title
-            i.is_highest_degree_earned = item.is_highest_degree_earned
-            i.honor_or_distinction = item.honor_or_distinction
-            i.description = item.description
-            i.comments = item.comments
-            i.start_year = item.start_year
-            i.end_year = item.end_year
-            i.save!
-          end
-        rescue Exception => e
-          errors << e
         end
+          
+        details.education_history_items.each do |item|
+          i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
+            EducationHistoryItem.new
+
+          i.activity_insight_identifier = item.activity_insight_id if i.new_record?
+          i.user = u
+          i.degree = item.degree
+          i.explanation_of_other_degree = item.explanation_of_other_degree
+          i.institution = item.institution
+          i.school = item.school
+          i.location_of_institution = item.location_of_institution
+          i.emphasis_or_major = item.emphasis_or_major
+          i.supporting_areas_of_emphasis = item.supporting_areas_of_emphasis
+          i.dissertation_or_thesis_title = item.dissertation_or_thesis_title
+          i.is_highest_degree_earned = item.is_highest_degree_earned
+          i.honor_or_distinction = item.honor_or_distinction
+          i.description = item.description
+          i.comments = item.comments
+          i.start_year = item.start_year
+          i.end_year = item.end_year
+          i.save!
+        end
+
+      rescue Exception => e
+        errors << e
       end
     end
 
