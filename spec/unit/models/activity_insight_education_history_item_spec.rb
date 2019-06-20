@@ -262,4 +262,42 @@ describe ActivityInsightEducationHistoryItem do
       end
     end
   end
+
+  describe '#start_year' do
+    before { allow(parsed_item).to receive(:css).with('DTY_START').and_return(start_year_element) }
+
+    context "when the Start Year element in the given data is empty" do
+      let(:start_year_element) { double 'start year element', text: '' }
+      it "returns nil" do
+        expect(item.start_year).to be_nil
+      end
+    end
+
+    context "when the Start Year element in the given data contains text" do
+      let(:start_year_element) { double 'start year element', text: "\n     1999  \n   " }
+
+      it "returns the text with surrounding whitespace removed" do
+        expect(item.start_year).to eq '1999'
+      end
+    end
+  end
+
+  describe '#end_year' do
+    before { allow(parsed_item).to receive(:css).with('DTY_END').and_return(end_year_element) }
+
+    context "when the End Year element in the given data is empty" do
+      let(:end_year_element) { double 'end year element', text: '' }
+      it "returns nil" do
+        expect(item.end_year).to be_nil
+      end
+    end
+
+    context "when the End Year element in the given data contains text" do
+      let(:end_year_element) { double 'end year element', text: "\n     2000  \n   " }
+
+      it "returns the text with surrounding whitespace removed" do
+        expect(item.end_year).to eq '2000'
+      end
+    end
+  end
 end
