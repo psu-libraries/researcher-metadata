@@ -203,7 +203,7 @@ class ActivityInsightDetailUser
   end
 
   def education_history_items
-    user.css('EDUCATION').map { |p| ActivityInsightEducationHistoryItem.new(p) }
+    user.css('EDUCATION').map { |i| ActivityInsightEducationHistoryItem.new(i) }
   end
 
   private
