@@ -106,7 +106,7 @@
       <NAME>
         Annual Meeting of the American Sociological Association
       </NAME>
-      <ORG/>
+      <ORG>Test Organization</ORG>
       <LOCATION>Las Vegas, NV</LOCATION>
       <TITLE>
         Sally's ASA Presentation
@@ -173,7 +173,7 @@
       <MEETTYPE>Academic</MEETTYPE>
       <SCOPE>International</SCOPE>
       <ATTENDANCE/>
-      <REFEREED>Yes</REFEREED>
+      <REFEREED>No</REFEREED>
       <INVACC/>
       <RESEARCH_NUM/>
       <ABSTRACT>

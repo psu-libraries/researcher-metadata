@@ -69,6 +69,16 @@ class ActivityInsightImporter
           if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
             p.activity_insight_identifier = pres.activity_insight_id if p.new_record?
             p.title = pres.title
+            p.name = pres.name
+            p.organization = pres.organization
+            p.location = pres.location
+            p.presentation_type = pres.type
+            p.meet_type = pres.meet_type
+            p.scope = pres.scope
+            p.attendance = pres.attendance
+            p.refereed = pres.refereed
+            p.abstract = pres.abstract
+            p.comment = pres.comment
 
             p.save!
           end
@@ -329,6 +339,50 @@ class ActivityInsightPresentation
 
   def title
     text_for('TITLE')
+  end
+
+  def name
+    text_for('NAME')
+  end
+
+  def organization
+    parsed_presentation.>('ORG').text.strip.presence
+  end
+
+  def location
+    text_for('LOCATION')
+  end
+
+  def type
+    if text_for('TYPE') && text_for('TYPE') != 'Other'
+      text_for('TYPE')
+    else
+      text_for('TYPE_OTHER')
+    end
+  end
+
+  def meet_type
+    text_for('MEETTYPE')
+  end
+
+  def attendance
+    text_for('ATTENDANCE')
+  end
+
+  def refereed
+    text_for('REFEREED')
+  end
+
+  def abstract
+    text_for('ABSTRACT')
+  end
+
+  def comment
+    text_for('COMMENT')
+  end
+
+  def scope
+    text_for('SCOPE')
   end
 
   private

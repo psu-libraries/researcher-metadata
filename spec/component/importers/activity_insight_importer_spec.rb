@@ -166,8 +166,28 @@ describe ActivityInsightImporter do
           p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
           expect(p1.title).to eq "Sally's ASA Presentation"
+          expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+          expect(p1.organization).to eq 'Test Organization'
+          expect(p1.location).to eq 'Las Vegas, NV'
+          expect(p1.presentation_type).to eq 'Roundtable Discussion'
+          expect(p1.meet_type).to eq 'Academic'
+          expect(p1.scope).to eq 'International'
+          expect(p1.attendance).to eq 500
+          expect(p1.refereed).to eq 'Yes'
+          expect(p1.abstract).to eq 'An abstract'
+          expect(p1.comment).to eq 'Some comments'
 
           expect(p2.title).to eq "Sally's PAA Presentation"
+          expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+          expect(p2.organization).to be_nil
+          expect(p2.location).to eq 'San Diego'
+          expect(p2.presentation_type).to eq 'Papers and Presentations'
+          expect(p2.meet_type).to eq 'Academic'
+          expect(p2.scope).to eq 'International'
+          expect(p2.attendance).to be_nil
+          expect(p2.refereed).to eq 'No'
+          expect(p2.abstract).to eq 'Another abstract'
+          expect(p2.comment).to be_nil
         end
       end
       context "when an included presentation exists in the database" do
@@ -187,8 +207,28 @@ describe ActivityInsightImporter do
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
             expect(p1.title).to eq "Existing Title"
+            expect(p1.name).to be_nil
+            expect(p1.organization).to be_nil
+            expect(p1.location).to be_nil
+            expect(p1.presentation_type).to be_nil
+            expect(p1.meet_type).to be_nil
+            expect(p1.scope).to be_nil
+            expect(p1.attendance).to be_nil
+            expect(p1.refereed).to be_nil
+            expect(p1.abstract).to be_nil
+            expect(p1.comment).to be_nil
 
             expect(p2.title).to eq "Sally's PAA Presentation"
+            expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+            expect(p2.organization).to be_nil
+            expect(p2.location).to eq 'San Diego'
+            expect(p2.presentation_type).to eq 'Papers and Presentations'
+            expect(p2.meet_type).to eq 'Academic'
+            expect(p2.scope).to eq 'International'
+            expect(p2.attendance).to be_nil
+            expect(p2.refereed).to eq 'No'
+            expect(p2.abstract).to eq 'Another abstract'
+            expect(p2.comment).to be_nil
           end
         end
 
@@ -201,8 +241,28 @@ describe ActivityInsightImporter do
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
             expect(p1.title).to eq "Sally's ASA Presentation"
+            expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+            expect(p1.organization).to eq 'Test Organization'
+            expect(p1.location).to eq 'Las Vegas, NV'
+            expect(p1.presentation_type).to eq 'Roundtable Discussion'
+            expect(p1.meet_type).to eq 'Academic'
+            expect(p1.scope).to eq 'International'
+            expect(p1.attendance).to eq 500
+            expect(p1.refereed).to eq 'Yes'
+            expect(p1.abstract).to eq 'An abstract'
+            expect(p1.comment).to eq 'Some comments'
 
             expect(p2.title).to eq "Sally's PAA Presentation"
+            expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+            expect(p2.organization).to be_nil
+            expect(p2.location).to eq 'San Diego'
+            expect(p2.presentation_type).to eq 'Papers and Presentations'
+            expect(p2.meet_type).to eq 'Academic'
+            expect(p2.scope).to eq 'International'
+            expect(p2.attendance).to be_nil
+            expect(p2.refereed).to eq 'No'
+            expect(p2.abstract).to eq 'Another abstract'
+            expect(p2.comment).to be_nil
           end
         end
       end
@@ -368,8 +428,28 @@ describe ActivityInsightImporter do
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
             expect(p1.title).to eq "Sally's ASA Presentation"
+            expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+            expect(p1.organization).to eq 'Test Organization'
+            expect(p1.location).to eq 'Las Vegas, NV'
+            expect(p1.presentation_type).to eq 'Roundtable Discussion'
+            expect(p1.meet_type).to eq 'Academic'
+            expect(p1.scope).to eq 'International'
+            expect(p1.attendance).to eq 500
+            expect(p1.refereed).to eq 'Yes'
+            expect(p1.abstract).to eq 'An abstract'
+            expect(p1.comment).to eq 'Some comments'
 
             expect(p2.title).to eq "Sally's PAA Presentation"
+            expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+            expect(p2.organization).to be_nil
+            expect(p2.location).to eq 'San Diego'
+            expect(p2.presentation_type).to eq 'Papers and Presentations'
+            expect(p2.meet_type).to eq 'Academic'
+            expect(p2.scope).to eq 'International'
+            expect(p2.attendance).to be_nil
+            expect(p2.refereed).to eq 'No'
+            expect(p2.abstract).to eq 'Another abstract'
+            expect(p2.comment).to be_nil
           end
         end
         context "when an included presentation exists in the database" do
@@ -389,8 +469,28 @@ describe ActivityInsightImporter do
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
               expect(p1.title).to eq "Existing Title"
+              expect(p1.name).to be_nil
+              expect(p1.organization).to be_nil
+              expect(p1.location).to be_nil
+              expect(p1.presentation_type).to be_nil
+              expect(p1.meet_type).to be_nil
+              expect(p1.scope).to be_nil
+              expect(p1.attendance).to be_nil
+              expect(p1.refereed).to be_nil
+              expect(p1.abstract).to be_nil
+              expect(p1.comment).to be_nil
 
               expect(p2.title).to eq "Sally's PAA Presentation"
+              expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+              expect(p2.organization).to be_nil
+              expect(p2.location).to eq 'San Diego'
+              expect(p2.presentation_type).to eq 'Papers and Presentations'
+              expect(p2.meet_type).to eq 'Academic'
+              expect(p2.scope).to eq 'International'
+              expect(p2.attendance).to be_nil
+              expect(p2.refereed).to eq 'No'
+              expect(p2.abstract).to eq 'Another abstract'
+              expect(p2.comment).to be_nil
             end
           end
 
@@ -403,8 +503,28 @@ describe ActivityInsightImporter do
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
               expect(p1.title).to eq "Sally's ASA Presentation"
+              expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+              expect(p1.organization).to eq 'Test Organization'
+              expect(p1.location).to eq 'Las Vegas, NV'
+              expect(p1.presentation_type).to eq 'Roundtable Discussion'
+              expect(p1.meet_type).to eq 'Academic'
+              expect(p1.scope).to eq 'International'
+              expect(p1.attendance).to eq 500
+              expect(p1.refereed).to eq 'Yes'
+              expect(p1.abstract).to eq 'An abstract'
+              expect(p1.comment).to eq 'Some comments'
 
               expect(p2.title).to eq "Sally's PAA Presentation"
+              expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+              expect(p2.organization).to be_nil
+              expect(p2.location).to eq 'San Diego'
+              expect(p2.presentation_type).to eq 'Papers and Presentations'
+              expect(p2.meet_type).to eq 'Academic'
+              expect(p2.scope).to eq 'International'
+              expect(p2.attendance).to be_nil
+              expect(p2.refereed).to eq 'No'
+              expect(p2.abstract).to eq 'Another abstract'
+              expect(p2.comment).to be_nil
             end
           end
         end
@@ -558,8 +678,28 @@ describe ActivityInsightImporter do
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
             expect(p1.title).to eq "Sally's ASA Presentation"
+            expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+            expect(p1.organization).to eq 'Test Organization'
+            expect(p1.location).to eq 'Las Vegas, NV'
+            expect(p1.presentation_type).to eq 'Roundtable Discussion'
+            expect(p1.meet_type).to eq 'Academic'
+            expect(p1.scope).to eq 'International'
+            expect(p1.attendance).to eq 500
+            expect(p1.refereed).to eq 'Yes'
+            expect(p1.abstract).to eq 'An abstract'
+            expect(p1.comment).to eq 'Some comments'
 
             expect(p2.title).to eq "Sally's PAA Presentation"
+            expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+            expect(p2.organization).to be_nil
+            expect(p2.location).to eq 'San Diego'
+            expect(p2.presentation_type).to eq 'Papers and Presentations'
+            expect(p2.meet_type).to eq 'Academic'
+            expect(p2.scope).to eq 'International'
+            expect(p2.attendance).to be_nil
+            expect(p2.refereed).to eq 'No'
+            expect(p2.abstract).to eq 'Another abstract'
+            expect(p2.comment).to be_nil
           end
         end
         context "when an included presentation exists in the database" do
@@ -579,8 +719,28 @@ describe ActivityInsightImporter do
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
               expect(p1.title).to eq "Existing Title"
+              expect(p1.name).to be_nil
+              expect(p1.organization).to be_nil
+              expect(p1.location).to be_nil
+              expect(p1.presentation_type).to be_nil
+              expect(p1.meet_type).to be_nil
+              expect(p1.scope).to be_nil
+              expect(p1.attendance).to be_nil
+              expect(p1.refereed).to be_nil
+              expect(p1.abstract).to be_nil
+              expect(p1.comment).to be_nil
 
               expect(p2.title).to eq "Sally's PAA Presentation"
+              expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+              expect(p2.organization).to be_nil
+              expect(p2.location).to eq 'San Diego'
+              expect(p2.presentation_type).to eq 'Papers and Presentations'
+              expect(p2.meet_type).to eq 'Academic'
+              expect(p2.scope).to eq 'International'
+              expect(p2.attendance).to be_nil
+              expect(p2.refereed).to eq 'No'
+              expect(p2.abstract).to eq 'Another abstract'
+              expect(p2.comment).to be_nil
             end
           end
 
@@ -593,8 +753,28 @@ describe ActivityInsightImporter do
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
               expect(p1.title).to eq "Sally's ASA Presentation"
+              expect(p1.name).to eq 'Annual Meeting of the American Sociological Association'
+              expect(p1.organization).to eq 'Test Organization'
+              expect(p1.location).to eq 'Las Vegas, NV'
+              expect(p1.presentation_type).to eq 'Roundtable Discussion'
+              expect(p1.meet_type).to eq 'Academic'
+              expect(p1.scope).to eq 'International'
+              expect(p1.attendance).to eq 500
+              expect(p1.refereed).to eq 'Yes'
+              expect(p1.abstract).to eq 'An abstract'
+              expect(p1.comment).to eq 'Some comments'
 
               expect(p2.title).to eq "Sally's PAA Presentation"
+              expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
+              expect(p2.organization).to be_nil
+              expect(p2.location).to eq 'San Diego'
+              expect(p2.presentation_type).to eq 'Papers and Presentations'
+              expect(p2.meet_type).to eq 'Academic'
+              expect(p2.scope).to eq 'International'
+              expect(p2.attendance).to be_nil
+              expect(p2.refereed).to eq 'No'
+              expect(p2.abstract).to eq 'Another abstract'
+              expect(p2.comment).to be_nil
             end
           end
         end
