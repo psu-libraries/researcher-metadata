@@ -272,9 +272,4 @@ describe ActivityInsightPresentation do
       end
     end
   end
-
-  describe '#started_on' do
-    before { allow(parsed_pres).to receive(:css).with('SCOPE').and_return scope_element }
-
-  end
 end
