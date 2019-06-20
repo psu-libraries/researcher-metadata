@@ -100,7 +100,7 @@ class ActivityInsightListUser
   end
 
   def raw_webaccess_id
-    parsed_user.attribute('username').value
+    value_for('username')
   end
 
   def webaccess_id
@@ -108,28 +108,36 @@ class ActivityInsightListUser
   end
 
   def activity_insight_id
-    parsed_user.attribute('userId').value
+    value_for('userId')
   end
 
   def penn_state_id
-    parsed_user.attribute('PSUIDFacultyOnly').value if parsed_user.attribute('PSUIDFacultyOnly')
+    value_for('PSUIDFacultyOnly') if parsed_user.attribute('PSUIDFacultyOnly')
   end
 
   def first_name
-    parsed_user.css('FirstName').text.strip.presence
+    text_for('FirstName')
   end
 
   def middle_name
-    parsed_user.css('MiddleName').text.strip.presence
+    text_for('MiddleName')
   end
 
   def last_name
-    parsed_user.css('LastName').text.strip.presence
+    text_for('LastName')
   end
 
   private
 
   attr_reader :parsed_user
+
+  def text_for(element)
+    parsed_user.css(element).text.strip.presence
+  end
+
+  def value_for(attribute)
+    parsed_user.attribute(attribute).value
+  end
 end
 
 
@@ -143,55 +151,55 @@ class ActivityInsightDetailUser
   end
 
   def alt_name
-    contact_info.css('ALT_NAME').text.strip.presence
+    contact_info_text_for('ALT_NAME')
   end
 
   def building
-    contact_info.css('BUILDING').text.strip.presence
+    contact_info_text_for('BUILDING')
   end
 
   def room_number
-    contact_info.css('ROOMNUM').text.strip.presence
+    contact_info_text_for('ROOMNUM')
   end
 
   def office_phone_1
-    contact_info.css('OPHONE1').text.strip.presence
+    contact_info_text_for('OPHONE1')
   end
 
   def office_phone_2
-    contact_info.css('OPHONE2').text.strip.presence
+    contact_info_text_for('OPHONE2')
   end
 
   def office_phone_3
-    contact_info.css('OPHONE3').text.strip.presence
+    contact_info_text_for('OPHONE3')
   end
 
   def fax_1
-    contact_info.css('FAX1').text.strip.presence
+    contact_info_text_for('FAX1')
   end
 
   def fax_2
-    contact_info.css('FAX2').text.strip.presence
+    contact_info_text_for('FAX2')
   end
 
   def fax_3
-    contact_info.css('FAX3').text.strip.presence
+    contact_info_text_for('FAX3')
   end
 
   def website
-    contact_info.css('WEBSITE').text.strip.presence
+    contact_info_text_for('WEBSITE')
   end
 
   def bio
-    user.css('BIO').text.strip.presence
+    user_text_for('BIO')
   end
 
   def teaching_interests
-    user.css('TEACHING_INTERESTS').text.strip.presence
+    user_text_for('TEACHING_INTERESTS')
   end
 
   def research_interests
-    user.css('RESEARCH_INTERESTS').text.strip.presence
+    user_text_for('RESEARCH_INTERESTS')
   end
 
   def education_history_items
@@ -208,6 +216,14 @@ class ActivityInsightDetailUser
 
   def contact_info
     user.css('PCI')
+  end
+
+  def contact_info_text_for(element)
+    contact_info.css(element).text.strip.presence
+  end
+
+  def user_text_for(element)
+    user.css(element).text.strip.presence
   end
 end
 
