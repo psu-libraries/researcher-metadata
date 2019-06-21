@@ -189,6 +189,62 @@ describe ActivityInsightImporter do
           expect(p2.abstract).to eq 'Another abstract'
           expect(p2.comment).to be_nil
         end
+
+        context "when no included presentation contributions exist in the database" do
+          it "creates new presentation contributions from the imported data where user IDs are present" do
+            expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            u = User.find_by(activity_insight_identifier: '1649499')
+
+            c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+            c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+            expect(c1.user).to eq u
+            expect(c1.presentation).to eq p1
+            expect(c1.role).to eq 'Presenter and Author'
+            expect(c1.position).to eq 1
+
+            expect(c2.user).to eq u
+            expect(c2.presentation).to eq p2
+            expect(c2.role).to eq 'Author Only'
+            expect(c2.position).to eq 2
+          end
+        end
+        context "when an included presentation contribution exists in the database" do
+          let(:other_user) { create :user }
+          let(:other_presentation) { create :presentation }
+          before do
+            create :presentation_contribution,
+                   activity_insight_identifier: '83890556929',
+                   user: other_user,
+                   presentation: other_presentation,
+                   role: 'Existing Role'
+          end
+          it "creates any new contributions and updates the existing contribution" do
+            expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+            p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+            p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+            u = User.find_by(activity_insight_identifier: '1649499')
+
+            c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+            c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+            expect(c1.user).to eq u
+            expect(c1.presentation).to eq p1
+            expect(c1.role).to eq 'Presenter and Author'
+            expect(c1.position).to eq 1
+
+            expect(c2.user).to eq u
+            expect(c2.presentation).to eq p2
+            expect(c2.role).to eq 'Author Only'
+            expect(c2.position).to eq 2
+          end
+        end
       end
       context "when an included presentation exists in the database" do
         before do
@@ -230,6 +286,62 @@ describe ActivityInsightImporter do
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
           end
+
+          context "when no included presentation contributions exist in the database" do
+            it "creates new presentation contributions from the imported data where user IDs are present" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
+          end
+          context "when an included presentation contribution exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_presentation) { create :presentation }
+            before do
+              create :presentation_contribution,
+                     activity_insight_identifier: '83890556929',
+                     user: other_user,
+                     presentation: other_presentation,
+                     role: 'Existing Role'
+            end
+            it "creates any new contributions and updates the existing contribution" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
+          end
         end
 
         context "when the existing presentation has not been updated by an admin" do
@@ -263,6 +375,62 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
+          end
+
+          context "when no included presentation contributions exist in the database" do
+            it "creates new presentation contributions from the imported data where user IDs are present" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
+          end
+          context "when an included presentation contribution exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_presentation) { create :presentation }
+            before do
+              create :presentation_contribution,
+                     activity_insight_identifier: '83890556929',
+                     user: other_user,
+                     presentation: other_presentation,
+                     role: 'Existing Role'
+            end
+            it "creates any new contributions and updates the existing contribution" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
           end
         end
       end
@@ -451,6 +619,66 @@ describe ActivityInsightImporter do
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
           end
+
+          context "when no included presentation contributions exist in the database" do
+            context "when a user that matches the contribution exists" do
+              let!(:user) { create :user, activity_insight_identifier: '1649499' }
+
+              it "creates new presentation contributions from the imported data where user IDs are present" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq user
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq user
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
+            end
+          end
+          context "when an included presentation contribution exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_presentation) { create :presentation }
+            before do
+              create :presentation_contribution,
+                     activity_insight_identifier: '83890556929',
+                     user: other_user,
+                     presentation: other_presentation,
+                     role: 'Existing Role'
+            end
+
+            context "when a user that matches the contribution exists" do
+              let!(:user) { create :user, activity_insight_identifier: '1649499' }
+              it "creates any new contributions and updates the existing contribution" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq user
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq user
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
+            end
+          end
         end
         context "when an included presentation exists in the database" do
           before do
@@ -492,6 +720,68 @@ describe ActivityInsightImporter do
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
             end
+
+            context "when no included presentation contributions exist in the database" do
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+
+                it "creates new presentation contributions from the imported data where user IDs are present" do
+                  expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+                  p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                  p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                  c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                  c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                  expect(c1.user).to eq user
+                  expect(c1.presentation).to eq p1
+                  expect(c1.role).to eq 'Presenter and Author'
+                  expect(c1.position).to eq 1
+
+                  expect(c2.user).to eq user
+                  expect(c2.presentation).to eq p2
+                  expect(c2.role).to eq 'Author Only'
+                  expect(c2.position).to eq 2
+                end
+              end
+            end
+            context "when an included presentation contribution exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_presentation) { create :presentation }
+              before do
+                create :presentation_contribution,
+                       activity_insight_identifier: '83890556929',
+                       user: other_user,
+                       presentation: other_presentation,
+                       role: 'Existing Role'
+              end
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+
+                  it "creates any new contributions and updates the existing contribution" do
+                  expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+                  p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                  p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                  u = User.find_by(activity_insight_identifier: '1649499')
+
+                  c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                  c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                  expect(c1.user).to eq u
+                  expect(c1.presentation).to eq p1
+                  expect(c1.role).to eq 'Presenter and Author'
+                  expect(c1.position).to eq 1
+
+                  expect(c2.user).to eq u
+                  expect(c2.presentation).to eq p2
+                  expect(c2.role).to eq 'Author Only'
+                  expect(c2.position).to eq 2
+                end
+              end
+            end
           end
 
           context "when the existing presentation has not been updated by an admin" do
@@ -525,6 +815,62 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+            end
+
+            context "when no included presentation contributions exist in the database" do
+              it "creates new presentation contributions from the imported data where user IDs are present" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq u
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq u
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
+            end
+            context "when an included presentation contribution exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_presentation) { create :presentation }
+              before do
+                create :presentation_contribution,
+                       activity_insight_identifier: '83890556929',
+                       user: other_user,
+                       presentation: other_presentation,
+                       role: 'Existing Role'
+              end
+              it "creates any new contributions and updates the existing contribution" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq u
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq u
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
             end
           end
         end
@@ -701,6 +1047,62 @@ describe ActivityInsightImporter do
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
           end
+
+          context "when no included presentation contributions exist in the database" do
+            it "creates new presentation contributions from the imported data where user IDs are present" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
+          end
+          context "when an included presentation contribution exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_presentation) { create :presentation }
+            before do
+              create :presentation_contribution,
+                     activity_insight_identifier: '83890556929',
+                     user: other_user,
+                     presentation: other_presentation,
+                     role: 'Existing Role'
+            end
+            it "creates any new contributions and updates the existing contribution" do
+              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+              p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+              p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+              c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+              expect(c1.user).to eq u
+              expect(c1.presentation).to eq p1
+              expect(c1.role).to eq 'Presenter and Author'
+              expect(c1.position).to eq 1
+
+              expect(c2.user).to eq u
+              expect(c2.presentation).to eq p2
+              expect(c2.role).to eq 'Author Only'
+              expect(c2.position).to eq 2
+            end
+          end
         end
         context "when an included presentation exists in the database" do
           before do
@@ -742,6 +1144,67 @@ describe ActivityInsightImporter do
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
             end
+
+            context "when no included presentation contributions exist in the database" do
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+
+                it "creates new presentation contributions from the imported data where user IDs are present" do
+                  expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+                  p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                  p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                  c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                  c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                  expect(c1.user).to eq user
+                  expect(c1.presentation).to eq p1
+                  expect(c1.role).to eq 'Presenter and Author'
+                  expect(c1.position).to eq 1
+
+                  expect(c2.user).to eq user
+                  expect(c2.presentation).to eq p2
+                  expect(c2.role).to eq 'Author Only'
+                  expect(c2.position).to eq 2
+                end
+              end
+            end
+            context "when an included presentation contribution exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_presentation) { create :presentation }
+              before do
+                create :presentation_contribution,
+                       activity_insight_identifier: '83890556929',
+                       user: other_user,
+                       presentation: other_presentation,
+                       role: 'Existing Role'
+              end
+
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+
+                it "creates any new contributions and updates the existing contribution" do
+                  expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+                  p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                  p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                  c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                  c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                  expect(c1.user).to eq user
+                  expect(c1.presentation).to eq p1
+                  expect(c1.role).to eq 'Presenter and Author'
+                  expect(c1.position).to eq 1
+
+                  expect(c2.user).to eq user
+                  expect(c2.presentation).to eq p2
+                  expect(c2.role).to eq 'Author Only'
+                  expect(c2.position).to eq 2
+                end
+              end
+            end
           end
 
           context "when the existing presentation has not been updated by an admin" do
@@ -775,6 +1238,62 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+            end
+
+            context "when no included presentation contributions exist in the database" do
+              it "creates new presentation contributions from the imported data where user IDs are present" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 2
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq u
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq u
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
+            end
+            context "when an included presentation contribution exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_presentation) { create :presentation }
+              before do
+                create :presentation_contribution,
+                       activity_insight_identifier: '83890556929',
+                       user: other_user,
+                       presentation: other_presentation,
+                       role: 'Existing Role'
+              end
+              it "creates any new contributions and updates the existing contribution" do
+                expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+                p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
+                p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                c1 = PresentationContribution.find_by(activity_insight_identifier: '83890556929')
+                c2 = PresentationContribution.find_by(activity_insight_identifier: '113825011713')
+
+                expect(c1.user).to eq u
+                expect(c1.presentation).to eq p1
+                expect(c1.role).to eq 'Presenter and Author'
+                expect(c1.position).to eq 1
+
+                expect(c2.user).to eq u
+                expect(c2.presentation).to eq p2
+                expect(c2.role).to eq 'Author Only'
+                expect(c2.position).to eq 2
+              end
             end
           end
         end

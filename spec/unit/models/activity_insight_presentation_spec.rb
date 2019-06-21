@@ -272,4 +272,21 @@ describe ActivityInsightPresentation do
       end
     end
   end
+
+  describe '#contributors' do
+    let(:element1) { double 'XML element 1' }
+    let(:element2) { double 'XML element 2' }
+    let(:contributor1) { double 'contributor 1' }
+    let(:contributor2) { double 'contributor 2' }
+
+    before do
+      allow(parsed_pres).to receive(:css).with('PRESENT_AUTH').and_return([element1, element2])
+      allow(ActivityInsightPresentationContributor).to receive(:new).with(element1).and_return(contributor1)
+      allow(ActivityInsightPresentationContributor).to receive(:new).with(element2).and_return(contributor2)
+    end
+
+    it "returns an array of contributors from the given data" do
+      expect(pres.contributors).to eq [contributor1, contributor2]
+    end
+  end
 end

@@ -82,6 +82,25 @@ class ActivityInsightImporter
 
             p.save!
           end
+
+          pres.contributors.each_with_index do |cont, index|
+            if cont.activity_insight_user_id
+              contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
+
+              if contributor
+                c = PresentationContribution.find_by(activity_insight_identifier: cont.activity_insight_id) ||
+                  PresentationContribution.new
+
+                c.activity_insight_identifier = cont.activity_insight_id if c.new_record?
+                c.user = contributor
+                c.presentation = p
+                c.role = cont.role
+                c.position = index + 1
+
+                c.save!
+              end
+            end
+          end
         end
 
       rescue Exception => e
@@ -328,6 +347,7 @@ class ActivityInsightEducationHistoryItem
   end
 end
 
+
 class ActivityInsightPresentation
   def initialize(parsed_presentation)
     @parsed_presentation = parsed_presentation
@@ -385,11 +405,48 @@ class ActivityInsightPresentation
     text_for('SCOPE')
   end
 
+  def contributors
+    parsed_presentation.css('PRESENT_AUTH').map do |c|
+      ActivityInsightPresentationContributor.new(c)
+    end
+  end
+
   private
 
   attr_reader :parsed_presentation
 
   def text_for(element)
     parsed_presentation.css(element).text.strip.presence
+  end
+end
+
+
+class ActivityInsightPresentationContributor
+  def initialize(parsed_contributor)
+    @parsed_contributor = parsed_contributor
+  end
+
+  def activity_insight_id
+    parsed_contributor.attribute('id').value
+  end
+
+  def activity_insight_user_id
+    text_for('FACULTY_NAME')
+  end
+  
+  def role
+    if text_for('ROLE') && text_for('ROLE') != 'Other'
+      text_for('ROLE')
+    else
+      text_for('ROLE_OTHER')
+    end
+  end
+
+  private
+
+  attr_reader :parsed_contributor
+
+  def text_for(element)
+    parsed_contributor.css(element).text.strip.presence
   end
 end
