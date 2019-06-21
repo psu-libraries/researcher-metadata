@@ -1,4 +1,9 @@
 namespace :import do
+  desc 'Import all Activity Insight data from API'
+  task :activity_insight => :environment do
+    ActivityInsightImporter.new.call
+  end
+
   desc 'Import Activity Insight users'
   task :ai_users, [:filename] => :environment do |_task, args|
     args.with_defaults(

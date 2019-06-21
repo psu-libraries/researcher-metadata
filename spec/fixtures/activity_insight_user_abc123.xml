@@ -1,0 +1,189 @@
+<Data xmlns="http://www.digitalmeasures.com/schema/data" xmlns:dmd="http://www.digitalmeasures.com/schema/data-metadata" dmd:date="2019-06-18">
+  <Record userId="1649499" username="ABC123" termId="475" dmd:surveyId="8587704">
+    <dmd:IndexEntry indexKey="CAMPUS" entryKey="UP" text="UP"/>
+    <dmd:IndexEntry indexKey="CAMPUS_NAME" entryKey="University Park" text="University Park"/>
+    <dmd:IndexEntry indexKey="COLLEGE" entryKey="LA" text="LA"/>
+    <dmd:IndexEntry indexKey="COLLEGE_NAME" entryKey="College of the Liberal Arts" text="College of the Liberal Arts"/>
+    <dmd:IndexEntry indexKey="DEPARTMENT" entryKey="LA - Sociology and Criminology" text="LA - Sociology and Criminology"/>
+    <PCI id="58226528256" dmd:originalSource="IMPORT" dmd:created="2012-08-15T14:03:57" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2016-05-16T19:48:15">
+      <PREFIX/>
+      <FNAME>Sally</FNAME>
+      <PFNAME/>
+      <MNAME/>
+      <LNAME>Testuser</LNAME>
+      <SUFFIX/>
+      <ALT_NAME/>
+      <EMAIL>abc123@psu.edu</EMAIL>
+      <BUILDING>
+        Sally's Building
+      </BUILDING>
+      <ROOMNUM>123</ROOMNUM>
+      <OPHONE1>444</OPHONE1>
+      <OPHONE2>555</OPHONE2>
+      <OPHONE3>6666</OPHONE3>
+      <DPHONE1>111</DPHONE1>
+      <DPHONE2>222</DPHONE2>
+      <DPHONE3>3333</DPHONE3>
+      <FAX1>666</FAX1>
+      <FAX2>777</FAX2>
+      <FAX3>8888</FAX3>
+      <WEBSITE>sociology.la.psu.edu/people/abc123</WEBSITE>
+      <BIO>
+        Sally's bio
+      </BIO>
+      <TEACHING_INTERESTS>
+        Sally's teaching interests
+      </TEACHING_INTERESTS>
+      <RESEARCH_INTERESTS>
+        Sally's research interests
+      </RESEARCH_INTERESTS>
+      <UPLOAD_PHOTO/>
+      <UPLOAD_CV>abc123/pci/test-cv-5.pdf</UPLOAD_CV>
+    </PCI>
+    <EDUCATION id="70766815232" dmd:originalSource="MANUAL" dmd:created="2013-04-12T10:00:41" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2013-04-12T10:00:41" dmd:startDate="2006-09-27" dmd:endDate="2009-12-18">
+      <DEG>Ph D</DEG>
+      <DEGOTHER/>
+      <STATUS/>
+      <SCHOOL>The Pennsylvania State University</SCHOOL>
+      <COLLEGE>Graduate School</COLLEGE>
+      <LOCATION>University Park, PA</LOCATION>
+      <MAJOR>Sociology</MAJOR>
+      <SUPPAREA>Demography</SUPPAREA>
+      <DISSTITLE>
+        Sally's Dissertation
+      </DISSTITLE>
+      <DISTINCTION/>
+      <HIGHEST>Yes</HIGHEST>
+      <DESC/>
+      <COMMENT/>
+      <DTM_START>September</DTM_START>
+      <DTD_START>27</DTD_START>
+      <DTY_START>2006</DTY_START>
+      <START_START>2006-09-27</START_START>
+      <START_END>2006-09-27</START_END>
+      <DTM_END>December</DTM_END>
+      <DTD_END>18</DTD_END>
+      <DTY_END>2009</DTY_END>
+      <END_START>2009-12-18</END_START>
+      <END_END>2009-12-18</END_END>
+      <EDUCATION_ADVISOR id="45856732454">
+        <FNAME>William</FNAME>
+        <MNAME>J</MNAME>
+        <LNAME>Advisor</LNAME>
+      </EDUCATION_ADVISOR>
+    </EDUCATION>
+    <EDUCATION id="72346234523" dmd:originalSource="MANUAL" dmd:created="2013-04-12T10:00:41" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2013-04-12T10:00:41" dmd:startDate="2006-09-27" dmd:endDate="2009-12-18">
+      <DEG>Other</DEG>
+      <DEGOTHER>Other degree</DEGOTHER>
+      <STATUS/>
+      <SCHOOL>University of Pittsburgh</SCHOOL>
+      <COLLEGE>Liberal Arts</COLLEGE>
+      <LOCATION>Pittsburgh, PA</LOCATION>
+      <MAJOR>Psychology</MAJOR>
+      <SUPPAREA/>
+      <DISSTITLE/>
+      <DISTINCTION>summa cum laude</DISTINCTION>
+      <HIGHEST>No</HIGHEST>
+      <DESC>A description</DESC>
+      <COMMENT>Some comments</COMMENT>
+      <DTM_START>September</DTM_START>
+      <DTD_START>27</DTD_START>
+      <DTY_START>2000</DTY_START>
+      <START_START>2000-09-27</START_START>
+      <START_END>2000-09-27</START_END>
+      <DTM_END>December</DTM_END>
+      <DTD_END>18</DTD_END>
+      <DTY_END>2004</DTY_END>
+      <END_START>2004-12-18</END_START>
+      <END_END>2004-12-18</END_END>
+      <EDUCATION_ADVISOR id="2456457372">
+        <FNAME/>
+        <MNAME/>
+        <LNAME/>
+      </EDUCATION_ADVISOR>
+    </EDUCATION>
+    <PRESENT id="83890556928" dmd:originalSource="MANUAL" dmd:created="2014-01-06T21:35:23" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T23:57:07">
+      <NAME>
+        Annual Meeting of the American Sociological Association
+      </NAME>
+      <ORG>Test Organization</ORG>
+      <LOCATION>Las Vegas, NV</LOCATION>
+      <TITLE>
+        Sally's ASA Presentation
+      </TITLE>
+      <TYPE>Other</TYPE>
+      <TYPE_OTHER>Roundtable Discussion</TYPE_OTHER>
+      <PRESENT_AUTH id="83890556929">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <SUFFIX/>
+        <ORG>University of Wisconsin</ORG>
+        <ROLE>Presenter and Author</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL/>
+      </PRESENT_AUTH>
+      <MEETTYPE>Academic</MEETTYPE>
+      <SCOPE>International</SCOPE>
+      <ATTENDANCE>500</ATTENDANCE>
+      <REFEREED>Yes</REFEREED>
+      <INVACC>No</INVACC>
+      <RESEARCH_NUM/>
+      <ABSTRACT>An abstract</ABSTRACT>
+      <COMMENT>Some comments</COMMENT>
+      <PRESENT_FILE id="83890556930">
+        <UPLOAD_PRESENTATION/>
+      </PRESENT_FILE>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PRESENT>
+    <PRESENT id="113825011712" dmd:originalSource="MANUAL" dmd:created="2015-09-01T13:42:47" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T23:57:07">
+      <NAME>
+        Annual Meeting of the Population Association of America
+      </NAME>
+      <ORG/>
+      <LOCATION>San Diego</LOCATION>
+      <TITLE>
+        Sally's PAA Presentation
+      </TITLE>
+      <TYPE>Papers and Presentations</TYPE>
+      <TYPE_OTHER/>
+      <PRESENT_AUTH id="113825011716">
+        <FACULTY_NAME/>
+        <FNAME>Margaret</FNAME>
+        <MNAME/>
+        <LNAME>Testauthor</LNAME>
+        <SUFFIX/>
+        <ORG>Penn State</ORG>
+        <ROLE>Presenter and Author</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL>Graduate</STUDENT_LEVEL>
+      </PRESENT_AUTH>
+      <PRESENT_AUTH id="113825011713">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <SUFFIX/>
+        <ORG/>
+        <ROLE>Author Only</ROLE>
+        <ROLE_OTHER/>
+        <STUDENT_LEVEL/>
+      </PRESENT_AUTH>
+      <MEETTYPE>Academic</MEETTYPE>
+      <SCOPE>International</SCOPE>
+      <ATTENDANCE/>
+      <REFEREED>No</REFEREED>
+      <INVACC/>
+      <RESEARCH_NUM/>
+      <ABSTRACT>
+        Another abstract
+      </ABSTRACT>
+      <COMMENT/>
+      <PRESENT_FILE id="113825011714">
+        <UPLOAD_PRESENTATION/>
+      </PRESENT_FILE>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PRESENT>
+  </Record>
+</Data>

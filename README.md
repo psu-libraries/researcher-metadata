@@ -1,5 +1,144 @@
 # psu-research-metadata
 
+This is the repository for a Ruby on Rails application built for Penn State University Libraries to
+gather metadata about Penn State faculty and the research that they conduct and publish. The application
+provides a means of semi-automated data importing from several different sources, an administrative
+interface for Penn State Libraries admins to manage and curate the data, and an API for end-users and
+other applications to access the data. One specific use case for the API is to provide all of the data
+needed to produce the kind of profile web page for each faculty member that might be found in the faculty
+directory on a department website.
+
+## Data Importing and Updating
+
+For this application to be relevant and useful, it is important for the data in the production database
+to be kept relatively "clean" and current. New data will need to be imported several times per year (likely
+after the end of each semester) at a minimum. Our methods for importing new data and updating existing data
+are evolving, but we'll attempt to document the process for importing new data here until it is more
+completely automated.
+
+Broadly, the process currently consists of three steps for most of the data sources:
+1. Gather new data in the form of correctly-formatted files from each source
+1. Place the new data files in the conventional location on the production server
+1. Run the Rake task to automatically import all of the data from the new files
+
+### Data Sources
+
+We import data from a number of other web applications and databases that contain data about Penn State
+faculty and research, and we're continuing to add new data sources as we find or gain access to them. Some
+of the types of records in our database are currently imported from a single source, and others may be
+imported from multiple sources.
+
+Below is a list of the data sources along with the types of records that are imported from each:
+
+1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
+wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
+etc. This application has a REST API to which we have access, but currently we rely on files that are
+manually exported by a Penn State Libraries administrator in CSV/spreadsheet format for our data imports.
+We import the following types of records from Activity Insight:
+    - authorships
+    - contracts
+    - contributors
+    - education_history_items
+    - performances
+    - performance_screenings
+    - presentations
+    - presentation_contributions
+    - publications
+    - users
+    - user_contracts
+    - user_performances
+
+1. **Pure** - This is a web application/database made by Elsevier. It contains data about Penn State
+researchers, their published research, and the organizations within Penn State to which they belong.
+This data mostly has to do with scientific research that is published in peer-reviewed journals, so
+we don't get much data about faculty in the arts and humanities from this source as opposed to Activity
+Insight which provides data about faculty across the whole university. This application also has a
+well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) to which
+we have access. At present, we query this API to download data to files in JSON format which we then
+import into our database. This repository contains utility scripts for automatically downloading each
+type of data to the correct location for import, so the process for importing data from Pure is largely
+(but not completely) automated. We import the following types of records from Pure:
+    - authorships
+    - contributors
+    - organizations
+    - publications
+    - publication_taggings
+    - tags
+    - user_organization_memberships
+    - users
+
+1. **eTD** - This is a web application/database developed by the Penn State Libraries that facilitates
+the submission and archival of PhD dissertations and Masters theses in digital format by graduate students.
+Our main reason for importing metadata from this source is to be able to show the graduate student advising
+that each faculty member has done. Because the application currently has no API, we don't have a way to
+automate the importing of data. Currently, we obtain an SQL dump of the eTD database from a Penn State
+Libraries administrator. We load this dump into a local MySQL database and export several .csv files
+which we then import into our database. We import the following types of records from eTD:
+    - committee_memberships
+    - etds
+    
+1. **Penn State News RSS feeds** - The Penn State News website publishes many
+[RSS feeds](https://news.psu.edu/rss-feeds), and we import news story metadata directly from several of
+them whenever a story involves a specific Penn State Faculty member. We import the following types of records
+from news.psu.edu:
+    - news_feed_items
+
+### Obtaining New Data
+Some of our data importing involves parsing files that were exported from the data sources. By convention,
+we place those files in the `db/data/` directory within the application and give them the names that are 
+defined in `lib/tasks/imports.rake`. This directory in the repository is ignored by revision control, and
+on the application servers it is shared between application releases. Below is a description of how we obtain
+new data from each source.
+ 
+#### Activity Insight
+Obtaining new data files for import from Activity Insight is tricky and the process is too nuanced to
+reasonably document. The files are manually exported from an Activity Insight web admin interface, and
+then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
+all have the expected file type and encoding as well as the expected columns, column header names, and
+complete data in each column. There is danger that if expected columns are missing from these files, then
+importing them **may delete existing data** from our database. Because this process is so unsustainable, we'll
+be attempting to automate it using the Activity Insight API as soon as possible.
+
+#### Pure
+In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
+data that we import from pure. The script automatically places the downloaded files in the correct locations
+to be read by our importing scripts. All that you need to do run the script and provide our Pure API key when
+prompted. It's important to note that these scripts don't automatically recover or clean up after a
+failed/incomplete download, so if a script fails for any reason, then it must be rerun until it succeeds.
+This is particularly applicable to the `download_pure_pubs` script which is very long-running and has the
+potential to be interrupted. These scripts can be run in development or directly on the application servers
+depending on where you want to import the data.
+
+#### eTD
+TODO:  Describe the process for acquiring an eTD database dump, converting it to .csv files, and putting the
+files in the correct locations for import in each environment.
+
+#### Penn State News RSS feed
+We import data directly from the feeds that are published on the web. There is no need to obtain any data
+prior to running the import.
+
+### Importing New Data
+Once updated data files have been obtained (if applicable), importing new data is just a matter of running
+the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
+for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
+correspondence between the rake tasks and the data files). We also define a single task that imports all types of
+data from all sources - `rake import:all`. All of these tasks are designed to be idempotent given the same source
+data. If you are using the individual tasks to import only a subset of the data and you're going to be running more
+than one, the order in which the tasks are run is important. Some tasks create records that other tasks will
+find and use if they are present. Running that tasks in the correct order ensures that your data import will be
+complete. The correct order for running the tasks is given by the order in which their associated classes are
+called in the definition of the `import:all` task.
+
+### Identifying Dupicate Publication Data
+TODO:  Describe the process for automatically identifying duplicate publication records.
+
+### Import rules
+TODO:  Describe the business rules involved in importing data in terms of what new data is added from each source
+and if/how new data overwrites older data.
+
+Imports never delete whole records from our database - even if formerly present records have been removed
+from the data source. Importing only creates new records and updates existing records.
+
 ## API
 ### Gems
 This API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:

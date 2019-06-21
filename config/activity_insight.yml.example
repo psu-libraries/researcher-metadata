@@ -1,0 +1,6 @@
+development:
+  username: activity-insight-username
+  password: activity-insight-password
+test:
+  username: test
+  password: secret

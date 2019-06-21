@@ -27,3 +27,6 @@
 
 # Ignore import data
 /db/data/*
+
+# Ignore config for Activity Insight API
+/config/activity_insight.yml

@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+require_relative './pure_downloader.rb'
+
+downloader = PureDownloader.new
+
+if File.exists? downloader.org_data_file
+  print "Organization data file already exists. Overwrite (Yn)?  "
+  overwrite = gets.chomp
+
+  if overwrite == 'Y'
+    downloader.download_pure_orgs
+  end
+else
+  Dir.mkdir downloader.data_dir unless Dir.exists? downloader.data_dir
+
+  downloader.download_pure_orgs
+end
