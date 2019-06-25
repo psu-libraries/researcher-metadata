@@ -51,6 +51,20 @@ class PureDownloader
     end
   end
 
+  def download_pure_fingerprints
+    get_api_key
+
+    first_fingerprint_result = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": 1, "offset": 0, "rendering": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs'`
+
+    total_fingerprints = JSON.parse(first_fingerprint_result)['count']
+
+    all_fingerprints_results = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": #{total_fingerprints}, "offset": 0, "rendering": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs'`
+
+    File.open(finterprint_data_file, 'w') do |f|
+      f.puts all_fingerprints_results
+    end
+  end
+
   def data_dir
     root_dir.join('db', 'data')
   end
@@ -65,6 +79,10 @@ class PureDownloader
 
   def org_data_file
     data_dir.join('pure_organizations.json')
+  end
+
+  def fingerprint_data_file
+    data_dir.join('pure_publication_fingerprints.json')
   end
 
   private
