@@ -172,7 +172,7 @@ that other tasks will find and use if they are present. Running the tasks in the
 your data import will be complete. The correct order for running the tasks is given by the order in which their
 associated classes are called in the definition of the `import:all` task.
 
-### Identifying Dupicate Publication Data
+### Identifying Duplicate Publication Data
 TODO:  Describe the process for automatically identifying duplicate publication records.
 
 ### Import rules
