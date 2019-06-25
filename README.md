@@ -112,8 +112,48 @@ potential to be interrupted. These scripts can be run in development or directly
 depending on where you want to import the data.
 
 #### eTD
-TODO:  Describe the process for acquiring an eTD database dump, converting it to .csv files, and putting the
-files in the correct locations for import in each environment.
+The process for obtaining and preparing eTD data for import involves several steps.
+1. Obtain an SQL dump of the production database for the graduate school instance of the eTD app from a Penn
+State Libraries admin. Justin Patterson has been able to do this for us in the past.
+1. Create a MySQL database locally and load in the eTD production dump.
+1. The production database dump contains a view called `student_submissions` that presents most of the eTD data
+that we need to import, but it's missing one column that we need. So, in our local database we need to create
+a new view with all the same data plus the one additional column:
+
+    ```sql
+    CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `metadata_import_view`
+    AS SELECT
+       `s`.`id` AS `submission_id`,
+       `s`.`semester` AS `submission_semester`,
+       `s`.`year` AS `submission_year`,
+       `s`.`created_at` AS `submission_created_at`,
+       `s`.`status` AS `submission_status`,
+       `s`.`access_level` AS `submission_acccess_level`,
+       `s`.`title` AS `submission_title`,
+       `s`.`abstract` AS `submission_abstract`,
+       `s`.`public_id` AS `submission_public_id`,
+       `authors`.`access_id` AS `access_id`,
+       `authors`.`first_name` AS `first_name`,
+       `authors`.`middle_name` AS `middle_name`,
+       `authors`.`last_name` AS `last_name`,
+       `authors`.`alternate_email_address` AS `alternate_email_address`,
+       `authors`.`psu_email_address` AS `psu_email_address`,
+       `p`.`name` AS `program_name`,
+       `d`.`name` AS `degree_name`,
+       `d`.`description` AS `degree_description`,
+       `id`.`id_number` AS `inv_disclosure_num`,group_concat(concat(`cm`.`name`,_utf8'|',nullif(`cm`.`email`,_utf8'|'),_utf8' ',`cr`.`name`) order by `cr`.`id` ASC separator ' || ') AS `committee_members`
+    FROM ((((((`submissions` `s` left join `invention_disclosures` `id` on((`s`.`id` = `id`.`submission_id`))) left join `authors` on((`s`.`author_id` = `authors`.`id`))) left join `programs` `p` on((`s`.`program_id` = `p`.`id`))) left join `degrees` `d` on((`s`.`degree_id` = `d`.`id`))) left join `committee_members` `cm` on((`s`.`id` = `cm`.`submission_id`))) left join `committee_roles` `cr` on((`cm`.`committee_role_id` = `cr`.`id`))) group by `s`.`id`;
+    ```
+1. Next, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
+substituting your local database name if you called it something different.
+1. Open the TSV file in vim. You'll probably see that the file is littered with `^M` control characters that we
+need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in 
+that vim command, not carrot-M). Write the file.
+1. Open the TSV file in Excel or Numbers and export it as a UTF-8 encoded CSV file. Save it in the data import
+directory in this project (`db/data/`) as `etds.csv`.
+1. Dump the committee data with `echo 'SELECT submission_id, email, committee_role_id FROM committee_members' | mysql -B -u root etdgradrailprod > etd_committees.tsv`
+again substituting the name of your local database if necessary.
+1. Again, open `committees.tsv` in Excel or Numbers and export as a UTF-8 encoded CSV file, `db/data/committees.csv`.
 
 #### Penn State News RSS feed
 We import data directly from the feeds that are published on the web. There is no need to obtain any data
