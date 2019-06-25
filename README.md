@@ -173,7 +173,15 @@ your data import will be complete. The correct order for running the tasks is gi
 associated classes are called in the definition of the `import:all` task.
 
 ### Identifying Duplicate Publication Data
-TODO:  Describe the process for automatically identifying duplicate publication records.
+Because we import metadata about research publications from more than one source, and because duplicate entries
+sometime exist even within the same data source, we need a means of finding multiple records in our database that
+represent the same publication after we have finished importing data. This helps to ensure that users don't receive
+duplicate data when they query our own API. Running the rake task `rake group_duplicate_pubs` will compare the
+publication records that exist in the database using several different attributes, and it will put any publication
+records that appear to be the same into groups. This allows admin users to review the groups and pick which record
+in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times.Subsequent
+imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
+duplicate publications is also run as part of the `rake import:all` task.
 
 ### Import rules
 TODO:  Describe the business rules involved in importing data in terms of what new data is added from each source
