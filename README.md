@@ -32,9 +32,11 @@ Below is a list of the data sources along with the types of records that are imp
 
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
-etc. This application has a REST API to which we have access, but currently we rely on files that are
-manually exported by a Penn State Libraries administrator in CSV/spreadsheet format for our data imports.
-We import the following types of records from Activity Insight:
+etc. This application has a [REST API](https://webservices.digitalmeasures.com/login/service/v4) to which
+we have access, but in the past we have relied on files that are manually exported by a Penn State Libraries
+administrator in CSV/spreadsheet format for our data imports. We're currently transitioning from using the
+old CSV file imports to importing data directly via the API. We import the following types of records 
+from Activity Insight:
     - authorships
     - contracts
     - contributors
@@ -96,8 +98,8 @@ reasonably document. The files are manually exported from an Activity Insight we
 then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
 all have the expected file type and encoding as well as the expected columns, column header names, and
 complete data in each column. There is danger that if expected columns are missing from these files, then
-importing them **may delete existing data** from our database. Because this process is so unsustainable, we'll
-be attempting to automate it using the Activity Insight API as soon as possible.
+importing them **may delete existing data** from our database. Because this process is so unsustainable, we're
+in the process of transitioning to importing all of the data directly via the Activity Insight API.
 
 #### Pure
 In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
@@ -122,12 +124,13 @@ Once updated data files have been obtained (if applicable), importing new data i
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
 for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
 correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources - `rake import:all`. All of these tasks are designed to be idempotent given the same source
-data. If you are using the individual tasks to import only a subset of the data and you're going to be running more
-than one, the order in which the tasks are run is important. Some tasks create records that other tasks will
-find and use if they are present. Running that tasks in the correct order ensures that your data import will be
-complete. The correct order for running the tasks is given by the order in which their associated classes are
-called in the definition of the `import:all` task.
+data from all sources - `rake import:all`. A separate task is used to import all of the currently supported data
+directly via the Activity Insight API:  `rake import:activity_insight`. All of these tasks are designed to be idempotent 
+given the same source data. If you are using the individual tasks to import only a subset of the data and you're 
+going to be running more than one, the order in which the tasks are run is important. Some tasks create records 
+that other tasks will find and use if they are present. Running the tasks in the correct order ensures that 
+your data import will be complete. The correct order for running the tasks is given by the order in which their
+associated classes are called in the definition of the `import:all` task.
 
 ### Identifying Dupicate Publication Data
 TODO:  Describe the process for automatically identifying duplicate publication records.
