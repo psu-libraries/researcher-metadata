@@ -183,12 +183,21 @@ in the group to keep. This task is designed to be idempotent, so it can be safel
 imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
 duplicate publications is also run as part of the `rake import:all` task.
 
-### Import rules
-TODO:  Describe the business rules involved in importing data in terms of what new data is added from each source
-and if/how new data overwrites older data.
+### Import Logic
+In general, data imports create a new record if no matching record already exists. If a matching record does already
+exist, then the import may update the attributes of that record. However, for records that can be fully or partially
+updated by admin users of this app, we keep track of whether or not a record has been modified in any way by an admin.
+If a record has been modified by an admin user, then subsequent data imports no longer update that record. Data imports
+never delete whole records from our database - even if formerly present records have been removed from the data source.
 
-Imports never delete whole records from our database - even if formerly present records have been removed
-from the data source. Importing only creates new records and updates existing records.
+Importing `user` records involves some additional logic since we import user data from two sources (Pure and Activity
+Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a users data
+from Activity Insight will overwrite existing data for that user that has already been imported from Pure, but not 
+vice versa.
+
+What constitues a "match" for the sake of finding and updating existing records depends on the type of record. For
+example, we uniquely identify users by their Penn State WebAccess ID. For most other records, we record their unique
+ID within the data source.
 
 ## API
 ### Gems
