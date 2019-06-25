@@ -60,7 +60,7 @@ class PureDownloader
 
     all_fingerprints_results = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": #{total_fingerprints}, "offset": 0, "rendering": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/511/research-outputs'`
 
-    File.open(finterprint_data_file, 'w') do |f|
+    File.open(fingerprint_data_file, 'w') do |f|
       f.puts all_fingerprints_results
     end
   end
