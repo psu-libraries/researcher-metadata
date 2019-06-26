@@ -185,5 +185,71 @@
       </PRESENT_FILE>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </PRESENT>
+    <PERFORM_EXHIBIT id="126500763648" dmd:originalSource="MANUAL" dmd:created="2016-03-14T16:59:19" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T22:11:18" dmd:startDate="2009-02-01" dmd:endDate="2009-08-31">
+      <TYPE>Film - Documentary</TYPE>
+      <TYPE_OTHER/>
+      <TITLE>Sally's Documentary</TITLE>
+      <NAME>Test Group</NAME>
+      <SPONSOR>Test Sponsor</SPONSOR>
+      <LOCATION>University Park, PA</LOCATION>
+      <PERFORM_EXHIBIT_CONTRIBUTERS id="126500763649">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME></MNAME>
+        <LNAME>Testuser</LNAME>
+        <CONTRIBUTION/>
+        <STUDENT_LEVEL/>
+      </PERFORM_EXHIBIT_CONTRIBUTERS>
+      <SCOPE>Regional</SCOPE>
+      <REFEREED>No</REFEREED>
+      <DELIVERY_TYPE>Invitation</DELIVERY_TYPE>
+      <DESC>
+        A description
+      </DESC>
+      <DTM_START>February</DTM_START>
+      <DTD_START/>
+      <DTY_START>2009</DTY_START>
+      <START_START>2009-02-01</START_START>
+      <START_END>2009-02-28</START_END>
+      <DTM_END>August</DTM_END>
+      <DTD_END/>
+      <DTY_END>2009</DTY_END>
+      <END_START>2009-08-01</END_START>
+      <END_END>2009-08-31</END_END>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PERFORM_EXHIBIT>
+    <PERFORM_EXHIBIT id="13745734789" dmd:originalSource="MANUAL" dmd:created="2016-03-14T16:59:19" dmd:lastModifiedSource="SYSTEM" dmd:lastModified="2017-10-18T22:11:18" dmd:startDate="2009-02-01" dmd:endDate="2009-08-31">
+      <TYPE>Film</TYPE>
+      <TYPE_OTHER/>
+      <TITLE>Sally's Film</TITLE>
+      <NAME>Another Group</NAME>
+      <SPONSOR>Another Sponsor</SPONSOR>
+      <LOCATION>Philadelphia, PA</LOCATION>
+      <PERFORM_EXHIBIT_CONTRIBUTERS id="126500763649">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME></MNAME>
+        <LNAME>Testuser</LNAME>
+        <CONTRIBUTION/>
+        <STUDENT_LEVEL/>
+      </PERFORM_EXHIBIT_CONTRIBUTERS>
+      <SCOPE>Local</SCOPE>
+      <REFEREED>Yes</REFEREED>
+      <DELIVERY_TYPE/>
+      <DESC>
+        Another description
+      </DESC>
+      <DTM_START>February</DTM_START>
+      <DTD_START/>
+      <DTY_START>2000</DTY_START>
+      <START_START>2000-02-01</START_START>
+      <START_END>2000-02-28</START_END>
+      <DTM_END>August</DTM_END>
+      <DTD_END/>
+      <DTY_END>2000</DTY_END>
+      <END_START>2000-08-01</END_START>
+      <END_END>2000-08-31</END_END>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </PERFORM_EXHIBIT>
   </Record>
 </Data>

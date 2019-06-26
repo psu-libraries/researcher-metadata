@@ -32,9 +32,11 @@ Below is a list of the data sources along with the types of records that are imp
 
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
-etc. This application has a REST API to which we have access, but currently we rely on files that are
-manually exported by a Penn State Libraries administrator in CSV/spreadsheet format for our data imports.
-We import the following types of records from Activity Insight:
+etc. This application has a [REST API](https://webservices.digitalmeasures.com/login/service/v4) to which
+we have access, but in the past we have relied on files that are manually exported by a Penn State Libraries
+administrator in CSV/spreadsheet format for our data imports. We're currently transitioning from using the
+old CSV file imports to importing data directly via the API. We import the following types of records 
+from Activity Insight:
     - authorships
     - contracts
     - contributors
@@ -96,8 +98,8 @@ reasonably document. The files are manually exported from an Activity Insight we
 then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
 all have the expected file type and encoding as well as the expected columns, column header names, and
 complete data in each column. There is danger that if expected columns are missing from these files, then
-importing them **may delete existing data** from our database. Because this process is so unsustainable, we'll
-be attempting to automate it using the Activity Insight API as soon as possible.
+importing them **may delete existing data** from our database. Because this process is so unsustainable, we're
+in the process of transitioning to importing all of the data directly via the Activity Insight API.
 
 #### Pure
 In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
@@ -110,8 +112,48 @@ potential to be interrupted. These scripts can be run in development or directly
 depending on where you want to import the data.
 
 #### eTD
-TODO:  Describe the process for acquiring an eTD database dump, converting it to .csv files, and putting the
-files in the correct locations for import in each environment.
+The process for obtaining and preparing eTD data for import involves several steps.
+1. Obtain an SQL dump of the production database for the graduate school instance of the eTD app from a Penn
+State Libraries admin. Justin Patterson has been able to do this for us in the past.
+1. Create a MySQL database locally and load in the eTD production dump.
+1. The production database dump contains a view called `student_submissions` that presents most of the eTD data
+that we need to import, but it's missing one column that we need. So, in our local database we need to create
+a new view with all the same data plus the one additional column:
+
+    ```sql
+    CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `metadata_import_view`
+    AS SELECT
+       `s`.`id` AS `submission_id`,
+       `s`.`semester` AS `submission_semester`,
+       `s`.`year` AS `submission_year`,
+       `s`.`created_at` AS `submission_created_at`,
+       `s`.`status` AS `submission_status`,
+       `s`.`access_level` AS `submission_acccess_level`,
+       `s`.`title` AS `submission_title`,
+       `s`.`abstract` AS `submission_abstract`,
+       `s`.`public_id` AS `submission_public_id`,
+       `authors`.`access_id` AS `access_id`,
+       `authors`.`first_name` AS `first_name`,
+       `authors`.`middle_name` AS `middle_name`,
+       `authors`.`last_name` AS `last_name`,
+       `authors`.`alternate_email_address` AS `alternate_email_address`,
+       `authors`.`psu_email_address` AS `psu_email_address`,
+       `p`.`name` AS `program_name`,
+       `d`.`name` AS `degree_name`,
+       `d`.`description` AS `degree_description`,
+       `id`.`id_number` AS `inv_disclosure_num`,group_concat(concat(`cm`.`name`,_utf8'|',nullif(`cm`.`email`,_utf8'|'),_utf8' ',`cr`.`name`) order by `cr`.`id` ASC separator ' || ') AS `committee_members`
+    FROM ((((((`submissions` `s` left join `invention_disclosures` `id` on((`s`.`id` = `id`.`submission_id`))) left join `authors` on((`s`.`author_id` = `authors`.`id`))) left join `programs` `p` on((`s`.`program_id` = `p`.`id`))) left join `degrees` `d` on((`s`.`degree_id` = `d`.`id`))) left join `committee_members` `cm` on((`s`.`id` = `cm`.`submission_id`))) left join `committee_roles` `cr` on((`cm`.`committee_role_id` = `cr`.`id`))) group by `s`.`id`;
+    ```
+1. Next, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
+substituting your local database name if you called it something different.
+1. Open the TSV file in vim. You'll probably see that the file is littered with `^M` control characters that we
+need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in 
+that vim command, not carrot-M). Write the file.
+1. Open the TSV file in Excel or Numbers and export it as a UTF-8 encoded CSV file. Save it in the data import
+directory in this project (`db/data/`) as `etds.csv`.
+1. Dump the committee data with `echo 'SELECT submission_id, email, committee_role_id FROM committee_members' | mysql -B -u root etdgradrailprod > etd_committees.tsv`
+again substituting the name of your local database if necessary.
+1. Again, open `committees.tsv` in Excel or Numbers and export as a UTF-8 encoded CSV file, `db/data/committees.csv`.
 
 #### Penn State News RSS feed
 We import data directly from the feeds that are published on the web. There is no need to obtain any data
@@ -122,22 +164,40 @@ Once updated data files have been obtained (if applicable), importing new data i
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
 for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
 correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources - `rake import:all`. All of these tasks are designed to be idempotent given the same source
-data. If you are using the individual tasks to import only a subset of the data and you're going to be running more
-than one, the order in which the tasks are run is important. Some tasks create records that other tasks will
-find and use if they are present. Running that tasks in the correct order ensures that your data import will be
-complete. The correct order for running the tasks is given by the order in which their associated classes are
-called in the definition of the `import:all` task.
+data from all sources - `rake import:all`. A separate task is used to import all of the currently supported data
+directly via the Activity Insight API:  `rake import:activity_insight`. All of these tasks are designed to be idempotent 
+given the same source data. If you are using the individual tasks to import only a subset of the data and you're 
+going to be running more than one, the order in which the tasks are run is important. Some tasks create records 
+that other tasks will find and use if they are present. Running the tasks in the correct order ensures that 
+your data import will be complete. The correct order for running the tasks is given by the order in which their
+associated classes are called in the definition of the `import:all` task.
 
-### Identifying Dupicate Publication Data
-TODO:  Describe the process for automatically identifying duplicate publication records.
+### Identifying Duplicate Publication Data
+Because we import metadata about research publications from more than one source, and because duplicate entries
+sometime exist even within the same data source, we need a means of finding multiple records in our database that
+represent the same publication after we have finished importing data. This helps to ensure that users don't receive
+duplicate data when they query our own API. Running the rake task `rake group_duplicate_pubs` will compare the
+publication records that exist in the database using several different attributes, and it will put any publication
+records that appear to be the same into groups. This allows admin users to review the groups and pick which record
+in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times.Subsequent
+imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
+duplicate publications is also run as part of the `rake import:all` task.
 
-### Import rules
-TODO:  Describe the business rules involved in importing data in terms of what new data is added from each source
-and if/how new data overwrites older data.
+### Import Logic
+In general, data imports create a new record if no matching record already exists. If a matching record does already
+exist, then the import may update the attributes of that record. However, for records that can be fully or partially
+updated by admin users of this app, we keep track of whether or not a record has been modified in any way by an admin.
+If a record has been modified by an admin user, then subsequent data imports no longer update that record. Data imports
+never delete whole records from our database - even if formerly present records have been removed from the data source.
 
-Imports never delete whole records from our database - even if formerly present records have been removed
-from the data source. Importing only creates new records and updates existing records.
+Importing `user` records involves some additional logic since we import user data from two sources (Pure and Activity
+Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a users data
+from Activity Insight will overwrite existing data for that user that has already been imported from Pure, but not 
+vice versa.
+
+What constitues a "match" for the sake of finding and updating existing records depends on the type of record. For
+example, we uniquely identify users by their Penn State WebAccess ID. For most other records, we record their unique
+ID within the data source.
 
 ## API
 ### Gems
