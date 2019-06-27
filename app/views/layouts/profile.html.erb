@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Profile</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'profile', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'profile', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <% if flash[:alert].present? %>
+      <section>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      </section>
+    <% end %>
+    <% if flash[:notice].present? %>
+      <section>
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <%= flash[:notice] %>
+        </div>
+      </section>
+    <% end %>
+    <%= yield %>
+  </body>
+</html>

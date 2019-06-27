@@ -390,4 +390,172 @@ describe UserProfile do
       end
     end
   end
+
+  describe '#has_bio_info?' do
+    let!(:user) { create :user,
+                         ai_bio: bio,
+                         ai_teaching_interests: ti,
+                         ai_research_interests: ri,
+                         education_history_items: items }
+    let(:ehi) { build :education_history_item,
+                      degree: 'MS',
+                      institution: 'Institution',
+                      emphasis_or_major: 'Major',
+                      end_year: 2000 }
+
+    context "when the user has a bio" do
+      let(:bio) { "A bio" }
+      context "when the user has research interests" do
+        let(:ri) { "Research Interests" }
+        context "when the user has teaching interests" do
+          let(:ti) { "Teaching Interests" }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+        context "when the user has no teaching interests" do
+          let(:ti) { nil }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+      end
+      context "when the user has no research interests" do
+        let(:ri) { nil }
+        context "when the user has teaching interests" do
+          let(:ti) { "Teaching Interests" }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+        context "when the user has no teaching interests" do
+          let(:ti) { nil }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+      end
+    end
+    context "when the user has no bio" do
+      let(:bio) { nil }
+      context "when the user has research interests" do
+        let(:ri) { "Research Interests" }
+        context "when the user has teaching interests" do
+          let(:ti) { "Teaching Interests" }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+        context "when the user has no teaching interests" do
+          let(:ti) { nil }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+      end
+      context "when the user has no research interests" do
+        let(:ri) { nil }
+        context "when the user has teaching interests" do
+          let(:ti) { "Teaching Interests" }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+        end
+        context "when the user has no teaching interests" do
+          let(:ti) { nil }
+          context "when the user has education history" do
+            let(:items) { [ehi] }
+
+            it "returns true" do
+              expect(profile.has_bio_info?).to eq true
+            end
+          end
+          context "when the user has no education history" do
+            let(:items) { [] }
+
+            it "returns false" do
+              expect(profile.has_bio_info?).to eq false
+            end
+          end
+        end
+      end
+    end
+  end
 end

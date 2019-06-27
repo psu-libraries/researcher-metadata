@@ -102,6 +102,10 @@ class UserProfile
     end
   end
 
+  def has_bio_info?
+    !! (bio || research_interests || teaching_interests || education_history.any?)
+  end
+
   private
 
   attr_reader :user

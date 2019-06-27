@@ -71,6 +71,9 @@ gem 'bootstrap'
 # jQuery for Rails
 gem 'jquery-rails'
 
+# Foundation for Rails
+gem 'foundation-rails'
+
 # HTTP client
 gem 'httparty'
 

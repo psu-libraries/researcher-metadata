@@ -27,4 +27,6 @@ Rails.application.routes.draw do
       get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
     end
   end
+
+  get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
 end

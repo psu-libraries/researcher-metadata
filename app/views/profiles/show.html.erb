@@ -1,0 +1,232 @@
+<div class="title-bar" data-responsive-toggle="lower-nav" data-hide-for="large">
+  <a href="#"><%= image_tag('logo.png', alt: "Penn State") %></a>
+  <div class="title-bar-right">
+    <button class="menu-icon" type="button" data-toggle="lower-nav"></button>
+  </div>
+</div>
+<nav id="upper-nav-wrapper" >
+  <ul class="menu vertical large-horizontal align-right" id="upper-nav" >
+    <li><a href="#">News</a></li>
+    <li><a href="#">Events</a></li>
+    <li><a href="#">Students</a></li>
+    <li><a href="#">Alumni</a></li>
+    <li><a href="#">Companies</a></li>
+    <li><a href="#">Donors</a></li>
+    <li><a href="#">Employee Resources</a></li>
+    <li><a href="#">Directory</a></li>
+    <li><a href="#" title="Site Search"><%= image_tag('search.png', alt: "Search") %></a></li>
+  </ul>
+</nav>
+<div class="top-bar" id="lower-nav">
+  <div class="top-bar-left show-for-large">
+    <a href="#"><%= image_tag('logo.png', alt: "Penn State")%></a>
+  </div>
+  <nav class="top-bar-right">
+    <ul class="menu vertical large-horizontal">
+      <li>
+        <a href="#">Academic Programs</a>
+      </li>
+      <li>
+        <a href="#">Executive Education</a>
+      </li>
+      <li>
+        <a href="#">Academic Departments</a>
+      </li>
+      <li>
+        <a href="#">Faculty &amp; Research</a>
+      </li>
+    </ul>
+  </nav>
+</div>
+
+<div id="profile">
+  <div class="grid-container">
+    <div class="grid-x grid-margin-x">
+      <div class="large-4 cell">
+        <div class="profile text-center">
+          <div class="profile-main">
+            <%= image_tag('profile.png', alt: "Profile") %>
+            <h2><%= @profile.name %></h2>
+            <% if @profile.title %>
+              <p class="role"><%= @profile.title %></p>
+            <% end %>
+          </div>
+          <div class="profile-info">
+            <table>
+              <tbody>
+              <% if @profile.office_location %>
+                <tr>
+                  <td><%= image_tag('address.png', alt: "Address") %></td>
+                  <td><%= @profile.office_location %></td>
+                </tr>
+              <% end %>
+              <tr>
+                <td><%= image_tag('email.png', alt: "Email") %></td>
+                <td><a href="mailto:<%= @profile.email %>"><%= @profile.email %></a></td>
+              </tr>
+              <% if @profile.scopus_h_index %>
+                <tr>
+                  <td>Scopus H-index</td>
+                  <td><%= @profile.scopus_h_index %></td>
+                </tr>
+              <% end %>
+              <% if @profile.total_scopus_citations > 0 %>
+                <tr>
+                  <td>Scopus Citations</td>
+                  <td><%= @profile.total_scopus_citations %></td>
+                </tr>
+              <% end %>
+              </tbody>
+            </table>
+            <% if @profile.pure_profile_url %>
+              <a href="<%= @profile.pure_profile_url %>" target="_blank">Pure Profile</a>
+            <% end %>
+          </div>
+        </div>
+        <% if @profile.research_interests %>
+          <div class="research">
+            <h5>Research Interests</h5>
+            <div class="research-content">
+              <p><%= @profile.research_interests %></p>
+            </div>
+          </div>
+        <% end %>
+      </div>
+      <div class="large-8 cell tabs-wrapper">
+        <ul class="tabs" data-tabs id="profile-tabs">
+          <% if @profile.has_bio_info? %>
+            <li class="tabs-title"><a href="#bio" data-tabs-target="bio">Bio</a></li>
+          <% end %>
+          <% if @profile.publications.any? %>
+            <li class="tabs-title"><a href="#publications" data-tabs-target="publications">Publications</a></li>
+          <% end %>
+          <% if @profile.grants.any? %>
+            <li class="tabs-title"><a href="#grants" data-tabs-target="grants">Grants</a></li>
+          <% end %>
+          <% if @profile.presentations.any? %>
+            <li class="tabs-title"><a href="#presentations" data-tabs-target="presentations">Presentations</a></li>
+          <% end %>
+          <% if @profile.performances.any? %>
+            <li class="tabs-title"><a href="#performances" data-tabs-target="performances">Performances</a></li>
+          <% end %>
+          <% if @profile.master_advising_roles.any? || @profile.phd_advising_roles.any? %>
+            <li class="tabs-title"><a href="#advising" data-tabs-target="advising">Graduate Advising</a></li>
+          <% end %>
+          <% if @profile.news_stories.any? %>
+            <li class="tabs-title"><a href="#news" data-tabs-target="news">News</a></li>
+          <% end %>
+        </ul>
+        <div class="tabs-content" data-tabs-content="profile-tabs" id="profile-tabs-content">
+          <% if @profile.has_bio_info? %>
+            <div class="tabs-panel" id="bio">
+              <% if @profile.bio %>
+                <h4>Biography</h4>
+                <p><%= @profile.bio %></p>
+              <% end %>
+              <% if @profile.teaching_interests %>
+                <h4>Teaching Interests</h4>
+                <p><%= @profile.teaching_interests %></p>
+              <% end %>
+              <% if @profile.research_interests %>
+                <h4>Research Interests</h4>
+                <p><%= @profile.research_interests %></p>
+              <% end %>
+              <% if @profile.education_history.any? %>
+                <h4>Education</h4>
+                <ul class="unstyled">
+                  <% @profile.education_history.each do |eh| %>
+                    <li><%= eh %></li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.publications.any? %>
+            <div class="tabs-panel" id="publications">
+              <h4>Publications</h4>
+              <% @profile.publications.each do |p| %>
+                <p><%= p.html_safe %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.grants.any? %>
+            <div class="tabs-panel" id="grants">
+              <h4>Grants</h4>
+              <% @profile.grants.each do |g| %>
+                <p><%= g %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.presentations.any? %>
+            <div class="tabs-panel" id="presentations">
+              <h4>Presentations</h4>
+              <% @profile.presentations.each do |p| %>
+                <p><%= p %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.performances.any? %>
+            <div class="tabs-panel" id="performances">
+              <h4>Performances</h4>
+              <% @profile.performances.each do |p| %>
+              <p><%= p %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.master_advising_roles.any? || @profile.phd_advising_roles.any? %>
+            <div class="tabs-panel" id="advising">
+              <h4>Graduate Advising</h4>
+              <% if @profile.phd_advising_roles.any? %>
+                <h5>PhD Committees</h5>
+                <% @profile.phd_advising_roles.each do |r| %>
+                  <p><%= r.html_safe %></p>
+                <% end %>
+              <% end %>
+              <% if @profile.master_advising_roles.any? %>
+                <h5>Masters Committees</h5>
+                <% @profile.master_advising_roles.each do |r| %>
+                  <p><%= r.html_safe %></p>
+                <% end %>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.news_stories.any? %>
+            <div class="tabs-panel" id="news">
+              <h4>News</h4>
+              <% @profile.news_stories.each do |s| %>
+                <p><%= s.html_safe %></p>
+              <% end %>
+            </div>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="grid-x grid-margin-x">
+    <nav class="cell">
+      <ul class="menu social align-center">
+        <li><a href="#"><%= image_tag('facebook.png', alt: "Facebook") %></a></li>
+        <li><a href="#"><%= image_tag('twitter.png', alt: "Twitter") %></a></li>
+        <li><a href="#"><%= image_tag('instagram.png', alt: "Instagram") %></a></li>
+        <li><a href="#"><%= image_tag('vimeo.png', alt: "Vimeo") %></a></li>
+        <li><a href="#"><%= image_tag('linkedin.png', alt: "Linkedin") %></a></li>
+      </ul>
+      <ul class="menu links align-center">
+        <li><a href="#">Contact Us</a></li>
+        <li><a href="#">Hotlines</a></li>
+        <li><a href="#">Integrity Resources</a></li>
+        <li><a href="#">&copy; 2019 The Pennsylvania State University</a></li>
+        <li><a href="#">Privacy and Legal Statements</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
