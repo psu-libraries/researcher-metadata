@@ -1,9 +1,10 @@
 require 'integration/integration_spec_helper'
 
 feature "Home page", type: :feature do
-  let(:home_content) { "PSU Libraries Research Metadata" }
+  let(:home_content) { "Research Metadata" }
 
   shared_examples_for "a page with the public layout" do
+
     it "shows a link to the home page" do
       expect(page).to have_link 'Home', href: root_path
     end
