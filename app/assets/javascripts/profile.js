@@ -18,6 +18,3 @@
 //= require turbolinks
 //= require foundation
 //= require_tree ./profile
-$(document).on('turbolinks:load', function() {
-  $(function(){ $(document).foundation(); });
-});

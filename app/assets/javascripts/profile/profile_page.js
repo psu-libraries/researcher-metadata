@@ -1,3 +1,7 @@
+$(document).on('turbolinks:load', function() {
+  $(function(){ $(document).foundation(); });
+});
+
 $(document).on('ready', function() {
   if($('ul#profile-tabs').children().length > 0) {
     $('ul#profile-tabs').children().first().addClass('is-active');
