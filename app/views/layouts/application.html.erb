@@ -1,38 +1,75 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
   <head>
-    <title>PsuResearchMetadata</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <%= csrf_meta_tags %>
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
   </head>
+  <body id="lp">
+    <nav class="navbar navbar-expand-md navbar-dark mb-4">
+      <a class="navbar-brand" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarCollapse">
+        <ul class="navbar-nav ml-auto">
+          <li class="nav-item">
+            <%= link_to "Admin", rails_admin_path, class: "nav-link" %>
+          </li>
+        </ul>
+      </div>
+    </nav>
 
-  <%= render 'shared/header' %>
+    <% if flash[:alert].present? %>
+      <section>
+        <div class="alert alert-danger">
+          <%= flash[:alert] %>
+        </div>
+      </section>
+    <% end %>
+    <% if flash[:notice].present? %>
+      <section>
+        <div class="alert alert-success alert-dismissable">
+          <button type="button" class="close" data-dismiss="alert">
+            <span aria-hidden="true">&times;</span>
+            <span class="sr-only">Close</span>
+          </button>
+          <%= flash[:notice] %>
+        </div>
+      </section>
+    <% end %>
 
-  <div class="container">
-    <body>
+    <%= yield %>
 
-      <% if flash[:alert].present? %>
-        <section>
-          <div class="alert alert-danger">
-            <%= flash[:alert] %>
+    <footer>
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-3">
+            <p>
+              <strong>Research Metadata Database</strong><br />
+              Change the way you access Penn State research metadata.
+            </p>
           </div>
-        </section>
-      <% end %>
-      <% if flash[:notice].present? %>
-        <section>
-          <div class="alert alert-success alert-dismissable">
-            <button type="button" class="close" data-dismiss="alert">
-              <span aria-hidden="true">&times;</span>
-              <span class="sr-only">Close</span>
-            </button>
-            <%= flash[:notice] %>
+          <div class="col-lg-6 logos">
+            <p>RMD is a collaboration between
+              <a href="https://libraries.psu.edu">PSU libraries</a>,
+              <a href="https://research.psu.edu">OVPR</a> and
+              <a href="https://westarete.com">West Arête</a>
+            </p>
           </div>
-        </section>
-      <% end %>
-      <%= yield %>
-    </body>
-  </div>
+          <div class="col-lg-3">
+            <ul class="list-unstyled">
+              <li><strong>Dan Coughlin</strong></li>
+              <li>IT Manager, DSRD</li>
+              <li><%= image_tag('metadata-email-icon.png', alt: 'Email') %><a href="mailto:dmc186@psu.edu">dmc186@psu.edu</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </body>
 </html>

@@ -1,14 +1,44 @@
-  <div class="jumbotron jumbotron-fluid" id="homepage_jumbotron" >
-    <div class="container">
-      <h1>PSU Libraries Research Metadata</h1>
-      <p>
-         The authority for information about profiles, publications, and teaching
-         history of Penn State’s research faculty, research staff, and graduate students.
-         The data is drawn from several sources including Pure and Activity Insight.
-      </p>
-      <p>
-        <%= link_to "Admin", rails_admin_path, class: "btn btn-lg btn-primary" %>
-        <%= link_to "API Docs", "/api_docs", class: "btn btn-lg btn-secondary" %>
-      </p>
+<header>
+  <div class="container">
+    <div class="row">
+      <div class="col-lg-8">
+        <h1>Research Metadata Database</h1>
+      </div>
+      <div class="col-lg-4">
+        <h2>Purpose</h2>
+        <p>
+        Our goal is to provide centralized, consistent access to up-to-date metadata for Penn State faculty research.
+        </p>
+      </div>
     </div>
   </div>
+</header>
+
+<main role="main" class="container">
+  <div class="row text-center">
+    <div class="col-lg-4">
+      <%= image_tag('metadata.png', alt: 'Research Metadata') %>
+      <h3>Research Metadata</h3>
+      <p>
+        We maintain an aggregation of publications, presentations, performances, advising, news articles, and bios for Penn State faculty from several major sources including Pure and Activity Insight.
+      </p>
+      <a class="btn btn-primary" href="mailto:dmc186@psu.edu?Subject=RMD%20Inquiry"">Learn More</a>
+    </div>
+    <div class="col-lg-4">
+      <%= image_tag('api.png', alt: 'Comprehensive API') %>
+      <h3>Comprehensive API</h3>
+      <p>
+      We publish clean metadata through our RESTful API adhering to the Open API Standard. Explore our endpoints using our interactive documentation. <a href="mailto:dmc186@psu.edu?Subject=RMD%20API%20Key%20Request" target="_top">Request</a> a license key to query the data.
+      </p>
+      <%= link_to "API Documentation", swagger_ui_engine_path, class: 'btn btn-primary' %>
+    </div>
+    <div class="col-lg-4">
+      <%= image_tag('metadata-profile-icon.png', alt: 'Build Faculty Profiles') %>
+      <h3>Build Faculty Profiles</h3>
+      <p>
+        Building profile pages for your college's faculty directory? Allow us to do the heavy lifting for you by leveraging our freely available Faculty profile template that displays metadata content from our API.
+      </p>
+      <%= link_to "Live Demo", "https://profile-demo.libraries.psu.edu/index.html#pjh18", class: 'btn btn-primary', target: '_blank' %>
+    </div>
+  </div>
+</main>
