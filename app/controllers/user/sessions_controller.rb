@@ -5,6 +5,8 @@ class User::SessionsController < ApplicationController
   def new
     requested_url = session[:requested_url]
     session.delete(:requested_url)
+    flash[:alert] = nil
+    flash[:notice] = nil
     redirect_to sign_in_url(requested_url || root_url)
   end
 
