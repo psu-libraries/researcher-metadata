@@ -82,6 +82,9 @@
               <a href="<%= @profile.pure_profile_url %>" target="_blank">Pure Profile</a>
             <% end %>
           </div>
+          <% if profile_for_current_user? %>
+            <%= link_to "Manage my profile", edit_profile_path, class: 'button' %>
+          <% end %>
         </div>
         <% if @profile.research_interests %>
           <div class="research">

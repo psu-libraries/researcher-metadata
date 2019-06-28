@@ -29,4 +29,5 @@ Rails.application.routes.draw do
   end
 
   get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
+  get 'profile/edit' => 'profiles#edit', as: :edit_profile
 end

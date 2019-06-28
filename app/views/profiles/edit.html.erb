@@ -1,0 +1,31 @@
+<div class="title-bar" data-responsive-toggle="lower-nav" data-hide-for="large">
+  <a href="#"><%= image_tag('logo.png', alt: "Penn State") %></a>
+  <div class="title-bar-right">
+    <button class="menu-icon" type="button" data-toggle="lower-nav"></button>
+  </div>
+</div>
+<nav id="upper-nav-wrapper" >
+  <ul class="menu vertical large-horizontal align-right" id="upper-nav" >
+
+  </ul>
+</nav>
+<div class="top-bar" id="lower-nav">
+  <div class="top-bar-left show-for-large">
+    <a href="#"><%= image_tag('logo.png', alt: "Penn State")%></a>
+  </div>
+  <nav class="top-bar-right">
+    <ul class="menu vertical large-horizontal">
+
+    </ul>
+  </nav>
+</div>
+
+<div id="profile">
+  <div class="grid-container">
+    <div class="grid-x grid-margin-x">
+      <div class="large-12 cell">
+        <h3>This is where you will edit your profile, <%= @profile.name %>.</h3>
+      </div>
+    </div>
+  </div>
+</div>

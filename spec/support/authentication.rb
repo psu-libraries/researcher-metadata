@@ -44,6 +44,10 @@ RSpec.configure do |config|
   config.include StubbedAuthenticationHelper
 end
 
+def authenticate_as(user)
+  sign_in_as user
+end
+
 def authenticate_user
   sign_in_as current_user
 end
