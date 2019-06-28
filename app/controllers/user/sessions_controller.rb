@@ -14,7 +14,7 @@ class User::SessionsController < ApplicationController
 
   private
 
-  def sign_in_url(after_sign_in_url=request.url)
+  def sign_in_url(after_sign_in_url=request.referrer || root_url)
     "https://webaccess.psu.edu/?cosign-#{request.host}&#{after_sign_in_url}"
   end
 
