@@ -229,7 +229,7 @@ describe PureUserImporter do
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
-            expect(u2.pure_uuid).to eq '12345678'
+            expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
             expect(u2.scopus_h_index).to eq 21
 
             expect(u3.first_name).to eq 'Jill'
@@ -258,7 +258,7 @@ describe PureUserImporter do
             expect(u2.first_name).to eq 'Robert'
             expect(u2.middle_name).to eq 'B'
             expect(u2.last_name).to eq 'Testuser'
-            expect(u2.pure_uuid).to eq '12345678'
+            expect(u2.pure_uuid).to eq 'a9ea5e62-9b39-4281-a759-e1c58f0ec582'
             expect(u2.scopus_h_index).to eq 21
 
             expect(u3.first_name).to eq 'Jill'

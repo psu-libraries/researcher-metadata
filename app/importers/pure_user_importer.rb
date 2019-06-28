@@ -24,13 +24,13 @@ class PureUserImporter
           # and it's never been updated manually. We assume that Activity Insight
           # and manual entry are both better sources of user data than Pure.
           u.scopus_h_index = user['scopusHIndex']
+          u.pure_uuid = user['uuid']
 
           if u.new_record? || (u.activity_insight_identifier.blank? && u.updated_by_user_at.blank?)
             u.first_name = first_name
             u.middle_name = middle_name
             u.last_name = user['name']['lastName']
             u.webaccess_id = webaccess_id if u.new_record?
-            u.pure_uuid = user['uuid']
           end
 
           u.save!
