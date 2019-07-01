@@ -74,12 +74,15 @@ describe UserProfile do
     let!(:pub5) { create :publication,
                          title: "Invisible Publication",
                          visible: false }
+    let!(:pub6) { create :publication, title: "Hidden Authorship Publication",
+                         visible: true }
     before do
       create :authorship, user: user, publication: pub1
       create :authorship, user: user, publication: pub2
       create :authorship, user: user, publication: pub3
       create :authorship, user: user, publication: pub4
       create :authorship, user: user, publication: pub5
+      create :authorship, user: user, publication: pub6, visible_in_profile: false
     end
 
     it "returns an array of strings describing the given user's publications in order by date" do

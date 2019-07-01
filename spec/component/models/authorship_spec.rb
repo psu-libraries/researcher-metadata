@@ -9,7 +9,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:author_number).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
-  it { is_expected.to have_db_column(:visible_in_profile).of_type(:boolean) }
+  it { is_expected.to have_db_column(:visible_in_profile).of_type(:boolean).with_options(default: true) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
@@ -36,4 +36,6 @@ describe Authorship, type: :model do
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:publication_id) }
     end
   end
+
+  it { is_expected.to delegate_method(:publication_title).to(:publication).as(:title) }
 end

@@ -6,4 +6,6 @@ class Authorship < ApplicationRecord
     :author_number, presence: true
 
   validates :user_id, uniqueness: {scope: :publication_id}
+
+  delegate :title, to: :publication, prefix: true
 end

@@ -1,5 +1,6 @@
 class ProfilesController < ApplicationController
-  layout 'profile'
+  layout :resolve_layout
+
   before_action :authenticate!, only: [:edit]
 
   def show
@@ -7,7 +8,7 @@ class ProfilesController < ApplicationController
   end
 
   def edit
-    @profile = UserProfile.new(current_user)
+    @authorships = current_user.authorships
   end
 
   helper_method :profile_for_current_user?
@@ -21,5 +22,13 @@ class ProfilesController < ApplicationController
   def authenticate!
     session[:requested_url] = request.url
     authenticate_user!
+  end
+
+  def resolve_layout
+    if action_name == 'show'
+      'profile'
+    else
+      'manage_profile'
+    end
   end
 end

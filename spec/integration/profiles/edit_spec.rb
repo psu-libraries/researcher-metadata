@@ -6,6 +6,8 @@ describe "editing profile preferences" do
                        first_name: 'Bob',
                        last_name: 'Testuser' }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
+  let!(:pub) { create :publication, title: "Bob's Publication" }
+  let!(:auth) { create :authorship, publication: pub, user: user, visible_in_profile: false }
 
   feature "the manage profile link", type: :feature do
     describe "visiting the profile page for a given user" do
@@ -47,6 +49,10 @@ describe "editing profile preferences" do
 
     it "shows the name of the user" do
       expect(page).to have_content "Bob Testuser"
+    end
+
+    it "shows the names of the user's publications" do
+      expect(page).to have_content "Bob's Publication"
     end
   end
 end

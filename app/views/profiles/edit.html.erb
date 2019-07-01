@@ -1,31 +1,36 @@
-<div class="title-bar" data-responsive-toggle="lower-nav" data-hide-for="large">
-  <a href="#"><%= image_tag('logo.png', alt: "Penn State") %></a>
-  <div class="title-bar-right">
-    <button class="menu-icon" type="button" data-toggle="lower-nav"></button>
-  </div>
-</div>
-<nav id="upper-nav-wrapper" >
-  <ul class="menu vertical large-horizontal align-right" id="upper-nav" >
-
-  </ul>
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <span class="navbar-brand">Manage Profile</span>
 </nav>
-<div class="top-bar" id="lower-nav">
-  <div class="top-bar-left show-for-large">
-    <a href="#"><%= image_tag('logo.png', alt: "Penn State")%></a>
-  </div>
-  <nav class="top-bar-right">
-    <ul class="menu vertical large-horizontal">
+<div class="container">
+  <div class="row">
+    <div class="col">
 
-    </ul>
-  </nav>
-</div>
+      <h4>Publications for <%= current_user.name %></h4>
 
-<div id="profile">
-  <div class="grid-container">
-    <div class="grid-x grid-margin-x">
-      <div class="large-12 cell">
-        <h3>This is where you will edit your profile, <%= @profile.name %>.</h3>
-      </div>
+      <table class="table">
+        <thead>
+        <tr>
+          <th>Publication</th>
+          <th>Visible in profile</th>
+        </tr>
+        </thead>
+        <tbody>
+          <% @authorships.each do |a| %>
+            <tr>
+              <td><%= a.publication_title %></td>
+              <td>
+                <%= form_with model: a, method: :put, class: 'authorship-visibility', remote: true do |f| %>
+                  <div class="custom-control custom-switch">
+                    <%= f.check_box :visible_in_profile, class: 'custom-control-input visibility-toggle', id: dom_id(a) %>
+                    <%= f.label :visible_in_profile, class: 'custom-control-label', for: dom_id(a) do %>
+                    <% end %>
+                  </div>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>

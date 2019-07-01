@@ -30,4 +30,6 @@ Rails.application.routes.draw do
 
   get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
   get 'profile/edit' => 'profiles#edit', as: :edit_profile
+
+  put 'authorships/:id' => 'authorships#update', as: :authorship
 end
