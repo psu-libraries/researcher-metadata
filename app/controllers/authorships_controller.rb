@@ -6,6 +6,10 @@ class AuthorshipsController < ApplicationController
     authorship.update_attributes!(authorship_params)
   end
 
+  def sort
+
+  end
+
   private
 
   def authorship_params

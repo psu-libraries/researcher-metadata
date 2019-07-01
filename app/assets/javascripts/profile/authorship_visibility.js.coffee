@@ -7,5 +7,13 @@ $(document).on('ready', ->
     )
   )
 
-  $('tbody#authorships').sortable()
+  $('tbody#authorships').sortable(
+    update: (event, ui) ->
+      $.ajax(
+        method: 'PUT',
+        url: '/authorships/sort',
+        data: $(this).sortable('serialize')
+      )
+    handle: 'td.pub-title'
+  )
 )

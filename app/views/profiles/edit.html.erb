@@ -16,14 +16,12 @@
         </thead>
         <tbody id="authorships">
           <% @authorships.each do |a| %>
-            <tr>
+            <tr id="<%= dom_id(a) %>">
               <td class="pub-title"><%= a.publication_title %></td>
               <td class="visibility">
                 <%= form_with model: a, method: :put, class: 'authorship-visibility', remote: true do |f| %>
                   <div class="custom-control custom-switch">
-                    <%= f.check_box :visible_in_profile, class: 'custom-control-input visibility-toggle', id: dom_id(a) %>
-                    <%= f.label :visible_in_profile, class: 'custom-control-label', for: dom_id(a) do %>
-                    <% end %>
+                    <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
                   </div>
                 <% end %>
               </td>
