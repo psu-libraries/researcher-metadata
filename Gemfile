@@ -70,6 +70,7 @@ gem 'bootstrap'
 
 # jQuery for Rails
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Foundation for Rails
 gem 'foundation-rails'

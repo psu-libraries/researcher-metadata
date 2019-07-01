@@ -14,11 +14,11 @@
           <th>Visible in profile</th>
         </tr>
         </thead>
-        <tbody>
+        <tbody id="authorships">
           <% @authorships.each do |a| %>
             <tr>
-              <td><%= a.publication_title %></td>
-              <td>
+              <td class="pub-title"><%= a.publication_title %></td>
+              <td class="visibility">
                 <%= form_with model: a, method: :put, class: 'authorship-visibility', remote: true do |f| %>
                   <div class="custom-control custom-switch">
                     <%= f.check_box :visible_in_profile, class: 'custom-control-input visibility-toggle', id: dom_id(a) %>

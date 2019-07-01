@@ -6,4 +6,6 @@ $(document).on('ready', ->
       form.trigger('submit.rails')
     )
   )
+
+  $('tbody#authorships').sortable()
 )
