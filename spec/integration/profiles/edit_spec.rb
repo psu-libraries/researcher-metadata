@@ -4,9 +4,10 @@ describe "editing profile preferences" do
   let!(:user) { create :user,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
-                       last_name: 'Testuser' }
+                       last_name: 'Testuser',
+                       show_all_publications: true }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
-  let!(:pub) { create :publication, title: "Bob's Publication" }
+  let!(:pub) { create :publication, title: "Bob's Publication", visible: true }
   let!(:auth) { create :authorship, publication: pub, user: user, visible_in_profile: false }
 
   feature "the manage profile link", type: :feature do

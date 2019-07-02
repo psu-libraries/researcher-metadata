@@ -7,5 +7,5 @@ class Authorship < ApplicationRecord
 
   validates :user_id, uniqueness: {scope: :publication_id}
 
-  delegate :title, to: :publication, prefix: true
+  delegate :title, :published_by, :year, to: :publication, prefix: true
 end

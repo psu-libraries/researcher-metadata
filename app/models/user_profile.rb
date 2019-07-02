@@ -36,12 +36,18 @@ class UserProfile
   end
   
   def publications
-    user_query.publications({order_first_by: 'publication_date_desc'}).joins(:authorships).where('authorships.visible_in_profile is true').map do |pub|
+    publication_records.where('authorships.visible_in_profile is true').uniq.map do |pub|
       p = %{<span class="publication-title">#{pub.title}</span>}
-      p += %{, <span class="journal-name">#{pub.journal_title || pub.publisher}</span>} if pub.journal_title.present? || pub.publisher.present?
-      p += ", #{pub.published_on.year}" if pub.published_on.present?
+      p += %{, <span class="journal-name">#{pub.published_by}</span>} if pub.published_by
+      p += ", #{pub.year}" if pub.year
       p
     end
+  end
+
+  def publication_records
+    user_query.publications({}).
+      joins(:authorships).
+      order('authorships.position_in_profile ASC, published_on DESC')
   end
 
   def grants

@@ -8,7 +8,8 @@ class ProfilesController < ApplicationController
   end
 
   def edit
-    @authorships = current_user.authorships
+    @authorships = UserProfile.new(current_user).publication_records.uniq.
+      map { |p| p.authorships.find_by(user: current_user) }
   end
 
   helper_method :profile_for_current_user?

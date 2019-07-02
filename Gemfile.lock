@@ -385,6 +385,7 @@ DEPENDENCIES
   factory_bot_rails
   fast_jsonapi
   ffaker
+  font-awesome-rails
   foundation-rails
   httparty
   jbuilder (~> 2.5)

@@ -311,4 +311,12 @@ class Publication < ApplicationRecord
   def mark_as_updated_by_user
     self.updated_by_user_at = Time.current
   end
+
+  def year
+    published_on.try(:year)
+  end
+
+  def published_by
+    journal_title.presence || publisher.presence
+  end
 end
