@@ -47,7 +47,7 @@ class UserProfile
   def publication_records
     user_query.publications({}).
       joins(:authorships).
-      order('authorships.position_in_profile ASC, published_on DESC')
+      order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants

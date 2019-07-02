@@ -110,10 +110,10 @@ describe UserProfile do
 
       it "returns an array of strings describing the given user's publications in order first by position, then by date" do
         expect(profile.publications).to eq [
-                                             '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
                                              '<span class="publication-title">Undated Publication</span>',
                                              '<span class="publication-title">Third Publication</span>, 2018',
-                                             '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010'
+                                             '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010',
+                                             '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015'
                                            ]
       end
     end
@@ -178,7 +178,7 @@ describe UserProfile do
       let(:pos2) { 1 }
 
       it "returns an array of strings describing the given user's publications in order first by position, then by date" do
-        expect(profile.publication_records).to eq [pub2, pub4, pub3, pub1]
+        expect(profile.publication_records).to eq [pub4, pub3, pub1, pub2]
       end
     end
     context "when all of the user's authorships have profile positions set" do
