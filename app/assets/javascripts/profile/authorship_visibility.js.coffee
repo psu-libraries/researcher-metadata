@@ -14,6 +14,5 @@ $(document).on('ready', ->
         url: '/authorships/sort',
         data: $(this).sortable('serialize')
       )
-    handle: 'td.pub-title'
   )
 )

@@ -13,6 +13,7 @@
         <table class="table">
           <thead>
           <tr>
+            <th></th>
             <th>Publication</th>
             <th>Visible in profile</th>
           </tr>
@@ -20,7 +21,8 @@
           <tbody id="authorships">
             <% @authorships.each do |a| %>
               <tr id="<%= dom_id(a) %>">
-                <td class="pub-title"><%= fa_icon 'arrows-v', text: "#{a.publication_title} - #{a.publication_published_by} - #{a.publication_year}" %></td>
+                <td><%= fa_icon 'arrows-v' %></td>
+                <td class="pub-title"><%="#{a.publication_title} - #{a.publication_published_by} - #{a.publication_year}" %></td>
                 <td class="visibility">
                   <%= form_with model: a, method: :put, class: 'authorship-visibility', remote: true do |f| %>
                     <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
