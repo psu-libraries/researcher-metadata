@@ -56,6 +56,7 @@ describe UserProfile do
   end
   
   describe '#publications' do
+    let!(:other_user) { create :user }
     let!(:pub1) { create :publication, title: "First Publication",
                          visible: true,
                          journal_title: "Test Journal",
@@ -76,22 +77,120 @@ describe UserProfile do
                          visible: false }
     let!(:pub6) { create :publication, title: "Hidden Authorship Publication",
                          visible: true }
+    let(:pos1) { nil }
+    let(:pos2) { nil }
+    let(:pos3) { nil }
+    let(:pos4) { nil }
+    let(:pos5) { nil }
+    let(:pos6) { nil }
+
     before do
-      create :authorship, user: user, publication: pub1
-      create :authorship, user: user, publication: pub2
-      create :authorship, user: user, publication: pub3
-      create :authorship, user: user, publication: pub4
-      create :authorship, user: user, publication: pub5
-      create :authorship, user: user, publication: pub6, visible_in_profile: false
+      create :authorship, user: user, publication: pub1, position_in_profile: pos1
+      create :authorship, user: user, publication: pub2, position_in_profile: pos2
+      create :authorship, user: user, publication: pub3, position_in_profile: pos3
+      create :authorship, user: user, publication: pub4, position_in_profile: pos4
+      create :authorship, user: user, publication: pub5, position_in_profile: pos5
+      create :authorship, user: user, publication: pub6, position_in_profile: pos6, visible_in_profile: false
+
+      create :authorship, user: other_user, publication: pub1
     end
 
-    it "returns an array of strings describing the given user's publications in order by date" do
-      expect(profile.publications).to eq [
-        '<span class="publication-title">Undated Publication</span>',
-        '<span class="publication-title">Third Publication</span>, 2018',
-        '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
-        '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010'
-      ]
+    context "when none of the user's authorships have a profile position" do
+      it "returns an array of strings describing the given user's publications in order by date" do
+        expect(profile.publications).to eq [
+                                             '<span class="publication-title">Undated Publication</span>',
+                                             '<span class="publication-title">Third Publication</span>, 2018',
+                                             '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
+                                             '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010'
+                                           ]
+      end
+    end
+    context "when one of the user's authorships has a profile position set" do
+      let(:pos2) { 1 }
+
+      it "returns an array of strings describing the given user's publications in order first by position, then by date" do
+        expect(profile.publications).to eq [
+                                             '<span class="publication-title">Undated Publication</span>',
+                                             '<span class="publication-title">Third Publication</span>, 2018',
+                                             '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010',
+                                             '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015'
+                                           ]
+      end
+    end
+    context "when all of the user's authorships have profile positions set" do
+      let(:pos1) { 5 }
+      let(:pos2) { 3 }
+      let(:pos3) { 2 }
+      let(:pos4) { 6 }
+      let(:pos5) { 4 }
+      let(:pos6) { 1 }
+
+      it "returns an array of strings describing the given user's publications in order by position" do
+        expect(profile.publications).to eq [
+                                             '<span class="publication-title">Third Publication</span>, 2018',
+                                             '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
+                                             '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010',
+                                             '<span class="publication-title">Undated Publication</span>'
+                                           ]
+      end
+    end
+  end
+  
+  describe '#publication_records' do
+    let!(:pub1) { create :publication,
+                         title: "First Publication",
+                         visible: true,
+                         published_on: Date.new(2010, 1, 1) }
+    let!(:pub2) { create :publication,
+                         title: "Second Publication",
+                         visible: true,
+                         published_on: Date.new(2015, 1, 1) }
+    let!(:pub3) { create :publication,
+                         title: "Third Publication",
+                         visible: true,
+                         published_on: Date.new(2018, 1, 1) }
+    let!(:pub4) { create :publication,
+                         title: "Undated Publication",
+                         visible: true }
+    let!(:pub5) { create :publication,
+                         title: "Invisible Publication",
+                         visible: false }
+    let(:pos1) { nil }
+    let(:pos2) { nil }
+    let(:pos3) { nil }
+    let(:pos4) { nil }
+    let(:pos5) { nil }
+
+    before do
+      create :authorship, user: user, publication: pub1, position_in_profile: pos1
+      create :authorship, user: user, publication: pub2, position_in_profile: pos2
+      create :authorship, user: user, publication: pub3, position_in_profile: pos3
+      create :authorship, user: user, publication: pub4, position_in_profile: pos4
+      create :authorship, user: user, publication: pub5, position_in_profile: pos5
+    end
+
+    context "when none of the user's authorships have a profile position" do
+      it "returns an array of strings describing the given user's publications in order by date" do
+        expect(profile.publication_records).to eq [pub4, pub3, pub2, pub1]
+      end
+    end
+    context "when one of the user's authorships has a profile position set" do
+      let(:pos2) { 1 }
+
+      it "returns an array of strings describing the given user's publications in order first by position, then by date" do
+        expect(profile.publication_records).to eq [pub4, pub3, pub1, pub2]
+      end
+    end
+    context "when all of the user's authorships have profile positions set" do
+      let(:pos1) { 5 }
+      let(:pos2) { 3 }
+      let(:pos3) { 2 }
+      let(:pos4) { 6 }
+      let(:pos5) { 4 }
+
+      it "returns an array of strings describing the given user's publications in order by position" do
+        expect(profile.publication_records).to eq [pub3, pub2, pub1, pub4]
+      end
     end
   end
 

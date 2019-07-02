@@ -190,4 +190,106 @@ describe Publication, type: :model do
       expect(pub.updated_by_user_at).to eq Time.new(2018, 8, 23, 10, 7, 0)
     end
   end
+
+  describe '#year' do
+    context "when the publication does not have a published_on date" do
+      let(:pub) { Publication.new(published_on: nil) }
+
+      it "returns nil" do
+        expect(pub.year).to be_nil
+      end
+    end
+
+    context "when the publication has a published_on date" do
+      let(:pub) { Publication.new(published_on: Date.new(2001, 1, 2)) }
+
+      it "returns the year of the publication date" do
+        expect(pub.year).to eq 2001
+      end
+    end
+  end
+
+  describe '#published_by' do
+    let(:pub) { Publication.new(publisher: publisher, journal_title: jt) }
+    context "when the publication has a journal title" do
+      let(:jt) { "The Journal" }
+      context "when the publication has a publisher" do
+        let(:publisher) { "The Publisher" }
+
+        it "returns the journal title" do
+          expect(pub.published_by).to eq "The Journal"
+        end
+      end
+
+      context "when the publication does not have a publisher" do
+        let(:publisher) { nil }
+
+        it "returns the journal title" do
+          expect(pub.published_by).to eq "The Journal"
+        end
+      end
+
+      context "when the publication's publisher is blank" do
+        let(:publisher) { "" }
+
+        it "returns the journal title" do
+          expect(pub.published_by).to eq "The Journal"
+        end
+      end
+    end
+
+    context "when the publication does not have a journal title" do
+      let(:jt) { nil }
+      context "when the publication has a publisher" do
+        let(:publisher) { "The Publisher" }
+
+        it "returns the publisher" do
+          expect(pub.published_by).to eq "The Publisher"
+        end
+      end
+
+      context "when the publication does not have a publisher" do
+        let(:publisher) { nil }
+
+        it "returns nil" do
+          expect(pub.published_by).to be_nil
+        end
+      end
+
+      context "when the publication's publisher is blank" do
+        let(:publisher) { "" }
+
+        it "returns nil" do
+          expect(pub.published_by).to be_nil
+        end
+      end
+    end
+
+    context "when the publication's journal title is blank" do
+      let(:jt) { "" }
+      context "when the publication has a publisher" do
+        let(:publisher) { "The Publisher" }
+
+        it "returns the publisher" do
+          expect(pub.published_by).to eq "The Publisher"
+        end
+      end
+
+      context "when the publication does not have a publisher" do
+        let(:publisher) { nil }
+
+        it "returns nil" do
+          expect(pub.published_by).to be_nil
+        end
+      end
+
+      context "when the publication's publisher is blank" do
+        let(:publisher) { "" }
+
+        it "returns nil" do
+          expect(pub.published_by).to be_nil
+        end
+      end
+    end
+  end
 end

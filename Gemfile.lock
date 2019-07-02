@@ -385,10 +385,12 @@ DEPENDENCIES
   factory_bot_rails
   fast_jsonapi
   ffaker
+  font-awesome-rails
   foundation-rails
   httparty
   jbuilder (~> 2.5)
   jquery-rails
+  jquery-ui-rails
   launchy
   listen (>= 3.0.5, < 3.2)
   mini_racer

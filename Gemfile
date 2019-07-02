@@ -70,12 +70,16 @@ gem 'bootstrap'
 
 # jQuery for Rails
 gem 'jquery-rails'
+gem 'jquery-ui-rails'
 
 # Foundation for Rails
 gem 'foundation-rails'
 
 # HTTP client
 gem 'httparty'
+
+# UI Icons
+gem 'font-awesome-rails'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
