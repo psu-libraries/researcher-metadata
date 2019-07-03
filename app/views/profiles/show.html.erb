@@ -79,7 +79,14 @@
               </tbody>
             </table>
             <% if @profile.pure_profile_url %>
-              <a href="<%= @profile.pure_profile_url %>" target="_blank">Pure Profile</a>
+              <p><a href="<%= @profile.pure_profile_url %>" target="_blank">Pure Profile</a></p>
+            <% end %>
+            <% if @profile.orcid_identifier %>
+              <p><a href="<%= @profile.orcid_identifier %>" target="_blank">ORCID iD</a></p>
+            <% else %>
+              <% if profile_for_current_user? %>
+                <a href="https://guides.libraries.psu.edu/orcid" class="button">Link my ORCID ID</a>
+              <% end %>
             <% end %>
           </div>
           <% if profile_for_current_user? %>
