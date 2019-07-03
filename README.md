@@ -85,6 +85,8 @@ them whenever a story involves a specific Penn State Faculty member. We import t
 from news.psu.edu:
     - news_feed_items
 
+1. **Penn State LDAP** - We import some data for existing user records from Penn State's directory of people.
+
 ### Obtaining New Data
 Some of our data importing involves parsing files that were exported from the data sources. By convention,
 we place those files in the `db/data/` directory within the application and give them the names that are 
@@ -158,6 +160,9 @@ again substituting the name of your local database if necessary.
 #### Penn State News RSS feed
 We import data directly from the feeds that are published on the web. There is no need to obtain any data
 prior to running the import.
+
+#### Penn State LDAP
+We import data directly from LDAP over the internet. There is no need to obtain any data prior to running the import.
 
 ### Importing New Data
 Once updated data files have been obtained (if applicable), importing new data is just a matter of running
