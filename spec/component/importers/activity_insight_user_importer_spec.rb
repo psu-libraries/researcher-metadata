@@ -23,7 +23,7 @@ describe ActivityInsightUserImporter do
           expect(u1.ai_title).to eq 'Associate Professor of Business'
           expect(u1.ai_rank).to eq 'Associate Professor'
           expect(u1.ai_endowed_title).to be_nil
-          expect(u1.orcid_identifier).to eq 'orcid-1'
+          expect(u1.orcid_identifier).to be_nil
           expect(u1.ai_alt_name).to be_nil
           expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
           expect(u1.ai_room_number).to eq '33'
@@ -126,7 +126,7 @@ describe ActivityInsightUserImporter do
             expect(u1.ai_title).to eq 'Associate Professor of Business'
             expect(u1.ai_rank).to eq 'Associate Professor'
             expect(u1.ai_endowed_title).to be_nil
-            expect(u1.orcid_identifier).to eq 'orcid-1'
+            expect(u1.orcid_identifier).to be_nil
             expect(u1.ai_alt_name).to be_nil
             expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
             expect(u1.ai_room_number).to eq '33'
@@ -202,7 +202,7 @@ describe ActivityInsightUserImporter do
             expect(u1.ai_title).to eq 'Associate Professor of Business'
             expect(u1.ai_rank).to eq 'Associate Professor'
             expect(u1.ai_endowed_title).to be_nil
-            expect(u1.orcid_identifier).to eq 'orcid-1'
+            expect(u1.orcid_identifier).to be_nil
             expect(u1.ai_alt_name).to be_nil
             expect(u1.ai_building).to eq 'HAMMERMILL/ZURN BLDG'
             expect(u1.ai_room_number).to eq '33'
@@ -224,7 +224,7 @@ describe ActivityInsightUserImporter do
             expect(u2.ai_title).to be_nil
             expect(u2.ai_rank).to eq 'Professor'
             expect(u2.ai_endowed_title).to eq 'Distinguished Professor'
-            expect(u2.orcid_identifier).to be_nil
+            expect(u2.orcid_identifier).to eq 'existing orcid'
             expect(u2.ai_alt_name).to be_nil
             expect(u2.ai_building).to eq 'FREAR SO BL'
             expect(u2.ai_room_number).to eq '431S'

@@ -21,7 +21,6 @@ class ActivityInsightUserImporter < CSVImporter
         existing_user.ai_title = row[:title]
         existing_user.ai_rank = row[:rank]
         existing_user.ai_endowed_title = row[:endowed_title]
-        existing_user.orcid_identifier = row[:orcid_id]
         existing_user.ai_alt_name = row[:alt_name]
         existing_user.ai_building = row[:building]
         existing_user.ai_room_number = row[:roomnum]
@@ -49,7 +48,6 @@ class ActivityInsightUserImporter < CSVImporter
       u.ai_title = row[:title]
       u.ai_rank = row[:rank]
       u.ai_endowed_title = row[:endowed_title]
-      u.orcid_identifier = row[:orcid_id]
       u.ai_alt_name = row[:alt_name]
       u.ai_building = row[:building]
       u.ai_room_number = row[:roomnum]
@@ -81,7 +79,6 @@ class ActivityInsightUserImporter < CSVImporter
                                                     :ai_title,
                                                     :ai_rank,
                                                     :ai_endowed_title,
-                                                    :orcid_identifier,
                                                     :ai_alt_name,
                                                     :ai_building,
                                                     :ai_room_number,
