@@ -157,6 +157,11 @@ namespace :import do
     CommitteeImporter.new(filename: args.filename).call
   end
 
+  desc 'Import user data from LDAP'
+  task :ldap => :environment do
+    LDAPImporter.new.call
+  end
+
   desc 'Import all data'
   task :all => :environment do
     PureOrganizationsImporter.new(
@@ -174,6 +179,8 @@ namespace :import do
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call
+
+    LDAPImporter.new.call
 
     PurePublicationImporter.new(
       dirname: dirname_for(:pure_publications)
