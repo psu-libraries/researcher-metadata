@@ -21,7 +21,8 @@ describe API::V1::UserProfileSerializer do
                          master_advising_roles: ['m_role1', 'm_role2'],
                          phd_advising_roles: ['p_role1', 'p_role2'],
                          news_stories: ['story1', 'story2'],
-                         education_history: ['history1', 'history2'] }
+                         education_history: ['history1', 'history2'],
+                         orcid_identifier: 'orcid' }
 
   describe "data attributes" do
     subject { serialized_data_attributes(profile) }
@@ -45,5 +46,6 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(phd_advising_roles: ['p_role1', 'p_role2']) }
     it { is_expected.to include(news_stories: ['story1', 'story2']) }
     it { is_expected.to include(education_history: ['history1', 'history2']) }
+    it { is_expected.to include(orcid_identifier: 'orcid') }
   end
 end

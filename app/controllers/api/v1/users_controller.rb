@@ -932,9 +932,10 @@ module API::V1
                 key :type, :object
                 key :required, [:name, :title, :email, :office_location, :personal_website,
                                 :total_scopus_citations, :scopus_h_index, :pure_profile_url,
-                                :bio, :teaching_interests, :research_interests, :publications,
-                                :grants, :presentations, :performances, :master_advising_roles,
-                                :phd_advising_roles, :news_stories, :education_history]
+                                :orcid_identifier, :bio, :teaching_interests, :research_interests,
+                                :publications, :grants, :presentations, :performances,
+                                :master_advising_roles, :phd_advising_roles, :news_stories,
+                                :education_history]
                 property :name do
                   key :type, :string
                   key :example, 'Example User'
@@ -974,6 +975,11 @@ module API::V1
                   key :type, :string
                   key :example, 'https://pennstate.pure.elsevier.com/en/persons/abc123-def456'
                   key :description, "The URL for the user's profile page on the Penn State Pure website"
+                end
+                property :orcid_identifier do
+                  key :type, :string
+                  key :example, 'https://orcid.org/0000-0000-0000-0000'
+                  key :description, "The URL for the user's ORCID ID"
                 end
                 property :bio do
                   key :type, :string

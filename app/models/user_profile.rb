@@ -9,6 +9,7 @@ class UserProfile
            :total_scopus_citations,
            :scopus_h_index,
            :pure_profile_url,
+           :orcid_identifier,
            to: :user
 
   def title

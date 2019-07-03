@@ -437,7 +437,8 @@ describe 'API::V1 Users' do
                          ai_website: website,
                          ai_bio: bio,
                          ai_room_number: room,
-                         ai_building: building) }
+                         ai_building: building,
+                         orcid_identifier: 'orcid-id') }
     let(:show_pubs) { true }
     let(:headers) { { "accept" => "text/html" } }
     let(:pure_uuid) { nil }
@@ -728,6 +729,7 @@ describe 'API::V1 Users' do
 
           it "returns a JSON representation of the given user's profile" do
             expect(json_response[:data][:attributes][:name]).to eq 'Bob Testerson'
+            expect(json_response[:data][:attributes][:orcid_identifier]).to eq 'orcid-id'
           end
         end
       end

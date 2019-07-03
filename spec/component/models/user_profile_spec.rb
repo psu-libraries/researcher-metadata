@@ -19,6 +19,7 @@ describe UserProfile do
   it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
   it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
   it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
+  it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
 
   describe '#title' do
     it "returns the given user's title from Activity Insight" do
