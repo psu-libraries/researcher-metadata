@@ -15,4 +15,13 @@ $(document).on('turbolinks:load', ->
         data: $(this).sortable('serialize')
       )
   )
+
+  $('tbody#presentation-contributions').sortable(
+    update: (event, ui) ->
+      $.ajax(
+        method: 'PUT',
+        url: '/presentation_contributions/sort',
+        data: $(this).sortable('serialize')
+      )
+  )
 )

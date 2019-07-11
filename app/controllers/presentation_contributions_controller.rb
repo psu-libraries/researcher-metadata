@@ -6,6 +6,15 @@ class PresentationContributionsController < ApplicationController
     contribution.update_attributes!(contribution_params)
   end
 
+  def sort
+    contributions = current_user.presentation_contributions.find(params[:presentation_contribution])
+    ActiveRecord::Base.transaction do
+      contributions.each_with_index do |c, i|
+        c.update_column(:position_in_profile, i + 1)
+      end
+    end
+  end
+
   private
 
   def contribution_params
