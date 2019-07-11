@@ -10,7 +10,15 @@
     </tr>
     </thead>
     <tbody id="presentation-contributions">
+      <% @presentation_contributions.each do |c| %>
+        <tr id="<%= dom_id(c) %>">
+          <td><%= fa_icon 'arrows-v' %></td>
+          <td class="pres-title"><%="#{c.presentation_label} - #{c.presentation_organization} - #{c.presentation_location}" %></td>
+          <td class="visibility">
 
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>

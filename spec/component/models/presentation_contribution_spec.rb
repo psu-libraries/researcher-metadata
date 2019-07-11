@@ -34,4 +34,8 @@ describe PresentationContribution, type: :model do
     it { is_expected.to validate_presence_of(:user_id) }
     it { is_expected.to validate_presence_of(:presentation_id) }
   end
+
+  it { is_expected.to delegate_method(:presentation_label).to(:presentation).as(:label) }
+  it { is_expected.to delegate_method(:presentation_organization).to(:presentation).as(:organization) }
+  it { is_expected.to delegate_method(:presentation_location).to(:presentation).as(:location) }
 end

@@ -61,7 +61,7 @@ class UserProfile
 
   def presentations
     presentation_records.where('presentation_contributions.visible_in_profile IS TRUE').map do |pres|
-      p = pres.title || pres.name
+      p = pres.label
       p += ", #{pres.organization}" if pres.organization.present?
       p += ", #{pres.location}" if pres.location.present?
       p

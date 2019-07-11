@@ -11,7 +11,11 @@ class Presentation < ApplicationRecord
   end
 
   def label_name
-    self.name.presence || self.title.presence || self.id.to_s
+    label || self.id.to_s
+  end
+
+  def label
+    self.name.presence || self.title.presence
   end
 
   rails_admin do

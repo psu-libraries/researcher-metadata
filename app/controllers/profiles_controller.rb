@@ -13,7 +13,8 @@ class ProfilesController < ApplicationController
   end
 
   def edit_presentations
-
+    @presentation_contributions = UserProfile.new(current_user).presentation_records.uniq.
+      map { |p| p.presentation_contributions.find_by(user: current_user) }
   end
 
   helper_method :profile_for_current_user?

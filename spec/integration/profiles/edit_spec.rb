@@ -26,6 +26,14 @@ describe "editing profile preferences" do
   let!(:pres2) { create :presentation,
                         title: "Bob's Other Presentation",
                         visible: false }
+  let!(:cont_1) { create :presentation_contribution,
+                         presentation: pres1,
+                         user: user,
+                         visible_in_profile: false }
+  let!(:cont_2) { create :presentation_contribution,
+                         presentation: pres2,
+                         user: user,
+                         visible_in_profile: false }
   let(:orcid_id) { nil }
 
   feature "the manage profile link", type: :feature do
@@ -194,8 +202,8 @@ describe "editing profile preferences" do
     end
 
     it "shows descriptions of the user's visible presentations" do
-      expect(page).to have_content "Bob's Presentation, Penn State, University Park, PA"
-      expect(page).to_not have_content "Bob's Other Presentation"
+      expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
+      expect(page).to_not have_content "Bob's Other Presentation - -"
     end
   end
 end

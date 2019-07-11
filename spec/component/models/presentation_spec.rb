@@ -104,4 +104,49 @@ describe Presentation, type: :model do
       end
     end
   end
+
+  describe '#label' do
+    let(:p) { create :presentation, name: name, title: title }
+
+    context "when the presentation has no title or name" do
+      let(:title) { nil }
+      let(:name) { nil }
+
+      it "returns nil" do
+        expect(p.label).to be_nil
+      end
+    end
+
+    context "when the presentation has a name" do
+      let(:name) { 'Test Name' }
+
+      context "when the presentation has a title" do
+        let(:title) { 'Test Title' }
+
+        it "returns the presentation's name" do
+          expect(p.label).to eq 'Test Name'
+        end
+      end
+
+      context "when the presentation has no title" do
+        let(:title) { nil }
+
+        it "returns the presentation's name" do
+          expect(p.label).to eq 'Test Name'
+        end
+      end
+    end
+
+    context "when the presentation has a title" do
+      let(:title) { 'Test Title' }
+
+      context "when the presentation has no name" do
+        let(:name) { nil }
+
+        it "returns the presentation's title" do
+          expect(p.label).to eq 'Test Title'
+        end
+      end
+    end
+  end
 end
