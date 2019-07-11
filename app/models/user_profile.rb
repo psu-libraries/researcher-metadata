@@ -77,12 +77,18 @@ class UserProfile
   end
 
   def performances
-    user.performances.order('start_on DESC NULLS LAST').map do |perf|
+    performance_records.where('user_performances.visible_in_profile IS TRUE').map do |perf|
       p = perf.title
       p += ", #{perf.location}" if perf.location.present?
       p += ", #{perf.start_on.strftime('%-m/%-d/%Y')}" if perf.start_on.present?
       p
     end.uniq
+  end
+
+  def performance_records
+    user.performances.
+      joins(:user_performances).
+      order('user_performances.position_in_profile ASC NULLS FIRST, start_on DESC NULLS LAST')
   end
 
   def master_advising_roles

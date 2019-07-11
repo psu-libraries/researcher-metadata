@@ -404,7 +404,7 @@ describe UserProfile do
     let!(:perf2) { create :performance,
                           title: "Performance Two",
                           location: nil,
-                          start_on: nil }
+                          start_on: Date.new(2016, 1, 1) }
     let!(:perf3) { create :performance,
                           title: "Performance Three",
                           location: "Location Three",
@@ -417,22 +417,155 @@ describe UserProfile do
                               title: "Performance Four",
                               location: nil,
                               start_on: Date.new(2018, 12, 1) }
+    let!(:perf5) { create :performance,
+                          title: "Performance Five",
+                          location: nil,
+                          start_on: Date.new(2019, 1, 1) }
+    let!(:perf6) { create :performance,
+                          title: "Performance Six",
+                          location: nil,
+                          start_on: Date.new(2017, 12, 1) }
+    let!(:perf7) { create :performance,
+                          title: "Performance Seven",
+                          location: nil,
+                          start_on: Date.new(2018, 1, 1) }
+    let!(:perf8) { create :performance,
+                          title: "Performance Eight",
+                          location: nil,
+                          start_on: Date.new(2018, 1, 2) }
     
     before do
-      create :user_performance, user: user, performance: perf1
-      create :user_performance, user: user, performance: perf2
-      create :user_performance, user: user, performance: perf3
-      create :user_performance, user: user, performance: perf4
-      create :user_performance, user: user, performance: perf4_dup
+      create :user_performance,
+             user: user,
+             performance: perf1,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf2,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf3,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf4,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf4_dup,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf5,
+             visible_in_profile: true,
+             position_in_profile: 2
+      create :user_performance,
+             user: user,
+             performance: perf6,
+             visible_in_profile: true,
+             position_in_profile: 3
+      create :user_performance,
+             user: user,
+             performance: perf7,
+             visible_in_profile: true,
+             position_in_profile: 1
+      create :user_performance,
+             user: user,
+             performance: perf8,
+             visible_in_profile: false,
+             position_in_profile: 4
     end
 
     it "returns an array of strings describing the given user's visible performances in order by date" do
       expect(profile.performances).to eq [
                                             "Performance Four, 12/1/2018",
                                             "Performance One, Location One, 1/1/2017",
-                                            "Performance Two",
-                                            "Performance Three, Location Three"
+                                            "Performance Two, 1/1/2016",
+                                            "Performance Three, Location Three",
+                                            "Performance Seven, 1/1/2018",
+                                            "Performance Five, 1/1/2019",
+                                            "Performance Six, 12/1/2017"
                                          ]
+    end
+  end
+
+  describe '#performance_records' do
+    let!(:perf1) { create :performance,
+                          title: "Performance One",
+                          location: "Location One",
+                          start_on: Date.new(2017, 1, 1) }
+    let!(:perf2) { create :performance,
+                          title: "Performance Two",
+                          location: nil,
+                          start_on: Date.new(2016, 1, 1) }
+    let!(:perf3) { create :performance,
+                          title: "Performance Three",
+                          location: "Location Three",
+                          start_on: nil }
+    let!(:perf4) { create :performance,
+                          title: "Performance Four",
+                          location: nil,
+                          start_on: Date.new(2018, 12, 1) }
+    let!(:perf5) { create :performance,
+                          title: "Performance Five",
+                          location: nil,
+                          start_on: Date.new(2019, 1, 1) }
+    let!(:perf6) { create :performance,
+                          title: "Performance Six",
+                          location: nil,
+                          start_on: Date.new(2017, 12, 1) }
+    let!(:perf7) { create :performance,
+                          title: "Performance Seven",
+                          location: nil,
+                          start_on: Date.new(2018, 1, 1) }
+
+
+    before do
+      create :user_performance,
+             user: user,
+             performance: perf1,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf2,
+             visible_in_profile: false,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf3,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf4,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :user_performance,
+             user: user,
+             performance: perf5,
+             visible_in_profile: false,
+             position_in_profile: 2
+      create :user_performance,
+             user: user,
+             performance: perf6,
+             visible_in_profile: true,
+             position_in_profile: 3
+      create :user_performance,
+             user: user,
+             performance: perf7,
+             visible_in_profile: true,
+             position_in_profile: 1
+    end
+
+    it "returns an array of the given user's visible performances in order first by user preference, then by date" do
+      expect(profile.performance_records).to eq [perf4, perf1, perf2, perf3, perf7, perf5, perf6]
     end
   end
 
