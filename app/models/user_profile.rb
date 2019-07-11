@@ -77,11 +77,7 @@ class UserProfile
   end
 
   def performances
-    user.performances.order(
-      Arel.sql(
-        'case when start_on is null then 1 else 0 end, start_on desc'
-      )
-    ).map do |perf|
+    user.performances.order('start_on DESC NULLS LAST').map do |perf|
       p = perf.title
       p += ", #{perf.location}" if perf.location.present?
       p += ", #{perf.start_on.strftime('%-m/%-d/%Y')}" if perf.start_on.present?
