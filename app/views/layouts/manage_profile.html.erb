@@ -12,24 +12,37 @@
 </head>
 
 <body>
-<% if flash[:alert].present? %>
-  <section>
-    <div class="alert alert-danger">
-      <%= flash[:alert] %>
+  <% if flash[:alert].present? %>
+    <section>
+      <div class="alert alert-danger">
+        <%= flash[:alert] %>
+      </div>
+    </section>
+  <% end %>
+  <% if flash[:notice].present? %>
+    <section>
+      <div class="alert alert-success alert-dismissable">
+        <button type="button" class="close" data-dismiss="alert">
+          <span aria-hidden="true">&times;</span>
+          <span class="sr-only">Close</span>
+        </button>
+        <%= flash[:notice] %>
+      </div>
+    </section>
+  <% end %>
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <span class="navbar-brand">Manage Profile</span>
+    <ul class="navbar-nav mr-auto">
+      <li><%= link_to "Publications", edit_profile_publications_path %></li>
+    </ul>
+    <%= link_to "Back to Public Profile", profile_path(webaccess_id: current_user.webaccess_id) %>
+  </nav>
+  <div class="container">
+    <div class="row">
+      <div class="col">
+        <%= yield %>
+      </div>
     </div>
-  </section>
-<% end %>
-<% if flash[:notice].present? %>
-  <section>
-    <div class="alert alert-success alert-dismissable">
-      <button type="button" class="close" data-dismiss="alert">
-        <span aria-hidden="true">&times;</span>
-        <span class="sr-only">Close</span>
-      </button>
-      <%= flash[:notice] %>
-    </div>
-  </section>
-<% end %>
-<%= yield %>
+  </div>
 </body>
 </html>

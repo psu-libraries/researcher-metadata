@@ -1,13 +1,13 @@
 class ProfilesController < ApplicationController
   layout :resolve_layout
 
-  before_action :authenticate!, only: [:edit]
+  before_action :authenticate!, only: [:edit_publications]
 
   def show
     @profile = UserProfile.new(User.find_by!(webaccess_id: params[:webaccess_id]))
   end
 
-  def edit
+  def edit_publications
     @authorships = UserProfile.new(current_user).publication_records.uniq.
       map { |p| p.authorships.find_by(user: current_user) }
   end

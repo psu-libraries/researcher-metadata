@@ -29,7 +29,7 @@ Rails.application.routes.draw do
   end
 
   get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
-  get 'profile/edit' => 'profiles#edit', as: :edit_profile
+  get 'profile/publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
 
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship

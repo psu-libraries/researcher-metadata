@@ -36,7 +36,7 @@ describe "editing profile preferences" do
         end
 
         it "displays a link to manage the profile" do
-          expect(page).to have_link "Manage my profile", href: edit_profile_path
+          expect(page).to have_link "Manage my profile", href: edit_profile_publications_path
         end
       end
       context "when logged in as a different user" do
@@ -135,10 +135,10 @@ describe "editing profile preferences" do
     end
   end
 
-  feature "the profile edit page" do
+  feature "the profile publications edit page" do
     before do
       authenticate_as(user)
-      visit edit_profile_path
+      visit edit_profile_publications_path
     end
 
     it "shows a link to return to the public profile" do

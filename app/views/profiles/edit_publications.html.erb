@@ -1,0 +1,26 @@
+<div class="manage-profile-list">
+  <h4>Publications for <%= current_user.name %></h4>
+
+  <table class="table">
+    <thead>
+    <tr>
+      <th></th>
+      <th>Publication</th>
+      <th>Visible in profile</th>
+    </tr>
+    </thead>
+    <tbody id="authorships">
+      <% @authorships.each do |a| %>
+        <tr id="<%= dom_id(a) %>">
+          <td><%= fa_icon 'arrows-v' %></td>
+          <td class="pub-title"><%="#{a.publication_title} - #{a.publication_published_by} - #{a.publication_year}" %></td>
+          <td class="visibility">
+            <%= form_with model: a, method: :put, class: 'authorship-visibility', remote: true do |f| %>
+              <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
