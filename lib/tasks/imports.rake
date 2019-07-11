@@ -4,6 +4,11 @@ namespace :import do
     ActivityInsightImporter.new.call
   end
 
+  desc 'Import Web of Science data from local files'
+  task :web_of_science => :environment do
+    WebOfScienceFileImporter.new.call
+  end
+
   desc 'Import Activity Insight users'
   task :ai_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
