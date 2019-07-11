@@ -18,6 +18,14 @@ describe "editing profile preferences" do
                         visible: false }
   let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
   let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
+  let!(:pres1) { create :presentation,
+                        title: "Bob's Presentation",
+                        organization: "Penn State",
+                        location: "University Park, PA",
+                        visible: true }
+  let!(:pres2) { create :presentation,
+                        title: "Bob's Other Presentation",
+                        visible: false }
   let(:orcid_id) { nil }
 
   feature "the manage profile link", type: :feature do
@@ -144,13 +152,50 @@ describe "editing profile preferences" do
     it "shows a link to return to the public profile" do
       expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
     end
-    it "shows the name of the user" do
-      expect(page).to have_content "Bob Testuser"
+
+    it "shows a link to the edit profile publications page" do
+      expect(page).to have_link "Publications", href: edit_profile_publications_path
+    end
+
+    it "shows a link to the edit profile presentations page" do
+      expect(page).to have_link "Presentations", href: edit_profile_presentations_path
+    end
+
+    it "shows the correct heading content" do
+      expect(page).to have_content "Publications for Bob Testuser"
     end
 
     it "shows descriptions of the user's visible publications" do
       expect(page).to have_content "Bob's Publication - The Journal - 2007"
       expect(page).to_not have_content "Bob's Other Publication"
+    end
+  end
+
+  feature "the profile presentations edit page" do
+    before do
+      authenticate_as(user)
+      visit edit_profile_presentations_path
+    end
+
+    it "shows a link to return to the public profile" do
+      expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
+    end
+
+    it "shows a link to the edit profile publications page" do
+      expect(page).to have_link "Publications", href: edit_profile_publications_path
+    end
+
+    it "shows a link to the edit profile presentations page" do
+      expect(page).to have_link "Presentations", href: edit_profile_presentations_path
+    end
+
+    it "shows the correct heading content" do
+      expect(page).to have_content "Presentations for Bob Testuser"
+    end
+
+    it "shows descriptions of the user's visible presentations" do
+      expect(page).to have_content "Bob's Presentation, Penn State, University Park, PA"
+      expect(page).to_not have_content "Bob's Other Presentation"
     end
   end
 end

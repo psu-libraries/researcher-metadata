@@ -11,4 +11,14 @@ describe ProfilesController, type: :controller do
       end
     end
   end
+
+  describe '#edit_presentations' do
+    context "when not authenticated" do
+      it "redirects to the sign in page" do
+        get :edit_presentations
+
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+  end
 end
