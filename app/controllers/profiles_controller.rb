@@ -17,6 +17,10 @@ class ProfilesController < ApplicationController
       map { |p| p.presentation_contributions.find_by(user: current_user) }
   end
 
+  def edit_performances
+
+  end
+
   helper_method :profile_for_current_user?
 
   private

@@ -34,6 +34,20 @@ describe "editing profile preferences" do
                          presentation: pres2,
                          user: user,
                          visible_in_profile: false }
+  let!(:perf_1) { create :performance,
+                         title: "Bob's Performance",
+                         location: "University Park, PA",
+                         start_on: Date.new(2000, 1, 1),
+                         visible: true }
+  let!(:perf_2) { create :performance,
+                         title: "Bob's Other Performance",
+                         visible: true }
+  let!(:up_1) { create :user_performance,
+                       performance: perf_1,
+                       user: user }
+  let!(:up_2) { create :user_performance,
+                       performance: perf_2,
+                       user: user }
   let(:orcid_id) { nil }
 
   feature "the manage profile link", type: :feature do
@@ -163,6 +177,10 @@ describe "editing profile preferences" do
     it "shows a link to the edit profile presentations page" do
       expect(page).to have_link "Presentations", href: edit_profile_presentations_path
     end
+
+    it "shows a link to the edit profile performances page" do
+      expect(page).to have_link "Performances", href: edit_profile_performances_path
+    end
   end
 
   feature "the profile publications edit page" do
@@ -198,6 +216,24 @@ describe "editing profile preferences" do
     it "shows descriptions of the user's visible presentations" do
       expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
       expect(page).to_not have_content "Bob's Other Presentation - -"
+    end
+  end
+
+  feature "the profile performances edit page" do
+    before do
+      authenticate_as(user)
+      visit edit_profile_performances_path
+    end
+
+    it_behaves_like "a profile management page"
+
+    it "shows the correct heading content" do
+      expect(page).to have_content "Performances for Bob Testuser"
+    end
+
+    it "shows descriptions of the user's visible performances" do
+      expect(page).to have_content "Bob's Performance - University Park, PA - 1/1/2000"
+      expect(page).to_not have_content "Bob's Other Performance - -"
     end
   end
 end
