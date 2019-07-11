@@ -7,11 +7,11 @@ module API::V1
 
     attr_reader :user
 
-    def presentations(params)
+    def presentations(params={})
       user.presentations.visible
     end
 
-    def news_feed_items(params)
+    def news_feed_items(params={})
       user.news_feed_items
     end
 
@@ -24,15 +24,15 @@ module API::V1
       end
     end
 
-    def performances(params)
+    def performances(params={})
       user.performances.visible
     end
 
-    def etds(params)
+    def etds(params={})
       user.etds
     end
 
-    def publications(params)
+    def publications(params={})
       if user.show_all_publications
         if params[:start_year] && params[:end_year]
           starts_on = Date.new(params[:start_year].to_i)

@@ -46,7 +46,7 @@ class UserProfile
   end
 
   def publication_records
-    user_query.publications({}).
+    user_query.publications.
       joins(:authorships).
       order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
@@ -60,7 +60,7 @@ class UserProfile
   end
 
   def presentations
-    user_query.presentations({}).map do |pres|
+    user_query.presentations.map do |pres|
       if pres.title.present? || pres.name.present?
         p = pres.title || pres.name
         p += ", #{pres.organization}" if pres.organization.present?
@@ -92,7 +92,7 @@ class UserProfile
   end
 
   def news_stories
-    user_query.news_feed_items({}).order(published_on: :desc).map do |item|
+    user_query.news_feed_items.order(published_on: :desc).map do |item|
       %{<a href="#{item.url}" target="_blank">#{item.title}</a> #{item.published_on.strftime('%-m/%-d/%Y')}}
     end
   end
