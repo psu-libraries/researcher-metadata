@@ -275,6 +275,10 @@ describe UserProfile do
                           organization: "Org",
                           location: "Here",
                           visible: false }
+    let!(:pres4) { create :presentation,
+                          title: "",
+                          name: "",
+                          visible: true }
 
     before do
       create :presentation_contribution, user: user, presentation: pres1
@@ -284,6 +288,36 @@ describe UserProfile do
 
     it "returns an array of strings describing the given user's visible presentations" do
       expect(profile.presentations).to eq ["Presentation Two, An Organization, Earth"]
+    end
+  end
+
+  describe '#presentation_records' do
+    let!(:pres1) { create :presentation,
+                          name: "Presentation Two",
+                          organization: "An Organization",
+                          location: "Earth",
+                          visible: true }
+    let!(:pres2) { create :presentation,
+                          title: nil,
+                          name: nil,
+                          visible: true }
+    let!(:pres3) { create :presentation,
+                          name: "Presentation Three",
+                          organization: "Org",
+                          location: "Here",
+                          visible: false }
+    let!(:pres4) { create :presentation,
+                          title: "",
+                          name: "",
+                          visible: true }
+    before do
+      create :presentation_contribution, user: user, presentation: pres1
+      create :presentation_contribution, user: user, presentation: pres2
+      create :presentation_contribution, user: user, presentation: pres3
+    end
+
+    it "returns an array of the given user's visible presentations" do
+      expect(profile.presentation_records).to eq [pres1]
     end
   end
 

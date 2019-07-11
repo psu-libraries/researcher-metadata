@@ -60,14 +60,16 @@ class UserProfile
   end
 
   def presentations
-    user_query.presentations.map do |pres|
-      if pres.title.present? || pres.name.present?
-        p = pres.title || pres.name
-        p += ", #{pres.organization}" if pres.organization.present?
-        p += ", #{pres.location}" if pres.location.present?
-        p
-      end
-    end.compact
+    presentation_records.map do |pres|
+      p = pres.title || pres.name
+      p += ", #{pres.organization}" if pres.organization.present?
+      p += ", #{pres.location}" if pres.location.present?
+      p
+    end
+  end
+
+  def presentation_records
+    user_query.presentations.where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')")
   end
 
   def performances
