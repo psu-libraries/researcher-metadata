@@ -1,4 +1,4 @@
-$(document).on('ready', ->
+$(document).on('turbolinks:load', ->
   $('form.authorship-visibility').each(->
     form = $(this)
 
