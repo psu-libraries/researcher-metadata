@@ -279,15 +279,53 @@ describe UserProfile do
                           title: "",
                           name: "",
                           visible: true }
+    let!(:pres5) { create :presentation,
+                          title: "Presentation Four",
+                          visible: true }
+    let!(:pres6) { create :presentation,
+                          title: "Presentation Five",
+                          visible: true }
+    let!(:pres7) { create :presentation,
+                          title: "Presentation Six",
+                          visible: true }
 
     before do
-      create :presentation_contribution, user: user, presentation: pres1
-      create :presentation_contribution, user: user, presentation: pres2
-      create :presentation_contribution, user: user, presentation: pres3
+      create :presentation_contribution,
+             user: user,
+             presentation: pres1,
+             visible_in_profile: true,
+             position_in_profile: 2
+      create :presentation_contribution,
+             user: user,
+             presentation: pres2,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres3,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres5,
+             visible_in_profile: false,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres6,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres7,
+             visible_in_profile: true,
+             position_in_profile: 1
     end
 
-    it "returns an array of strings describing the given user's visible presentations" do
-      expect(profile.presentations).to eq ["Presentation Two, An Organization, Earth"]
+    it "returns an array of strings describing the given user's visible presentations in order by user preference" do
+      expect(profile.presentations).to eq ["Presentation Five",
+                                           "Presentation Six",
+                                           "Presentation Two, An Organization, Earth"]
     end
   end
 
@@ -310,14 +348,51 @@ describe UserProfile do
                           title: "",
                           name: "",
                           visible: true }
+    let!(:pres5) { create :presentation,
+                          title: "Presentation Four",
+                          visible: true }
+    let!(:pres6) { create :presentation,
+                          title: "Presentation Five",
+                          visible: true }
+    let!(:pres7) { create :presentation,
+                          title: "Presentation Six",
+                          visible: true }
+
     before do
-      create :presentation_contribution, user: user, presentation: pres1
-      create :presentation_contribution, user: user, presentation: pres2
-      create :presentation_contribution, user: user, presentation: pres3
+      create :presentation_contribution,
+             user: user,
+             presentation: pres1,
+             visible_in_profile: true,
+             position_in_profile: 2
+      create :presentation_contribution,
+             user: user,
+             presentation: pres2,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres3,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres5,
+             visible_in_profile: false,
+             position_in_profile: 3
+      create :presentation_contribution,
+             user: user,
+             presentation: pres6,
+             visible_in_profile: true,
+             position_in_profile: nil
+      create :presentation_contribution,
+             user: user,
+             presentation: pres7,
+             visible_in_profile: true,
+             position_in_profile: 1
     end
 
-    it "returns an array of the given user's visible presentations" do
-      expect(profile.presentation_records).to eq [pres1]
+    it "returns an array of the given user's visible presentations in order by user preference" do
+      expect(profile.presentation_records).to eq [pres6, pres7, pres1, pres5]
     end
   end
 

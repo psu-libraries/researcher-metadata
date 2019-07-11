@@ -60,7 +60,7 @@ class UserProfile
   end
 
   def presentations
-    presentation_records.map do |pres|
+    presentation_records.where('presentation_contributions.visible_in_profile IS TRUE').map do |pres|
       p = pres.title || pres.name
       p += ", #{pres.organization}" if pres.organization.present?
       p += ", #{pres.location}" if pres.location.present?
@@ -69,7 +69,11 @@ class UserProfile
   end
 
   def presentation_records
-    user_query.presentations.where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')")
+    user_query.
+      presentations.
+      joins(:presentation_contributions).
+      where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')").
+      order('presentation_contributions.position_in_profile ASC NULLS FIRST')
   end
 
   def performances
