@@ -232,7 +232,7 @@ describe "editing profile preferences" do
     end
 
     it "shows descriptions of the user's visible performances" do
-      expect(page).to have_content "Bob's Performance - University Park, PA - 1/1/2000"
+      expect(page).to have_content "Bob's Performance - University Park, PA - 2000-01-01"
       expect(page).to_not have_content "Bob's Other Performance - -"
     end
   end

@@ -10,7 +10,17 @@
     </tr>
     </thead>
     <tbody id="user-performances">
-
+      <% @user_performances.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td><%= fa_icon 'arrows-v' %></td>
+          <td class="performance-title"><%="#{p.performance_title} - #{p.performance_location} - #{p.performance_start_on}" %></td>
+          <td class="visibility">
+            <%= form_with model: p, method: :put, class: 'visibility-control', remote: true do |f| %>
+              <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(p) %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
     </tbody>
   </table>
 </div>

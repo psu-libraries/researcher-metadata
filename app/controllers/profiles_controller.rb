@@ -18,7 +18,8 @@ class ProfilesController < ApplicationController
   end
 
   def edit_performances
-
+    @user_performances = UserProfile.new(current_user).performance_records.uniq.
+      map { |p| p.user_performances.find_by(user: current_user) }
   end
 
   helper_method :profile_for_current_user?

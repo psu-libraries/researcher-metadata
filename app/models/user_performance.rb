@@ -4,4 +4,6 @@ class UserPerformance < ApplicationRecord
 
   validates :user_id, :performance_id, :activity_insight_id, presence: true
   validates :activity_insight_id, uniqueness: true
+
+  delegate :title, :location, :start_on, to: :performance, prefix: true
 end
