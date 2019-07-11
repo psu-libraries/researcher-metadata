@@ -151,12 +151,7 @@ describe "editing profile preferences" do
     end
   end
 
-  feature "the profile publications edit page" do
-    before do
-      authenticate_as(user)
-      visit edit_profile_publications_path
-    end
-
+  shared_examples_for "a profile management page" do
     it "shows a link to return to the public profile" do
       expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
     end
@@ -168,6 +163,15 @@ describe "editing profile preferences" do
     it "shows a link to the edit profile presentations page" do
       expect(page).to have_link "Presentations", href: edit_profile_presentations_path
     end
+  end
+
+  feature "the profile publications edit page" do
+    before do
+      authenticate_as(user)
+      visit edit_profile_publications_path
+    end
+
+    it_behaves_like "a profile management page"
 
     it "shows the correct heading content" do
       expect(page).to have_content "Publications for Bob Testuser"
@@ -185,17 +189,7 @@ describe "editing profile preferences" do
       visit edit_profile_presentations_path
     end
 
-    it "shows a link to return to the public profile" do
-      expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
-    end
-
-    it "shows a link to the edit profile publications page" do
-      expect(page).to have_link "Publications", href: edit_profile_publications_path
-    end
-
-    it "shows a link to the edit profile presentations page" do
-      expect(page).to have_link "Presentations", href: edit_profile_presentations_path
-    end
+    it_behaves_like "a profile management page"
 
     it "shows the correct heading content" do
       expect(page).to have_content "Presentations for Bob Testuser"
