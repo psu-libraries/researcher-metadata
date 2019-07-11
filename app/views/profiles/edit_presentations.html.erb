@@ -15,7 +15,9 @@
           <td><%= fa_icon 'arrows-v' %></td>
           <td class="pres-title"><%="#{c.presentation_label} - #{c.presentation_organization} - #{c.presentation_location}" %></td>
           <td class="visibility">
-
+            <%= form_with model: c, method: :put, class: 'visibility-control', remote: true do |f| %>
+              <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(c) %>
+            <% end %>
           </td>
         </tr>
       <% end %>

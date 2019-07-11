@@ -34,4 +34,6 @@ Rails.application.routes.draw do
 
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship
+
+  put 'presentation_contributions/:id' => 'presentation_contributions#update', as: :presentation_contribution
 end

@@ -1,5 +1,5 @@
 $(document).on('turbolinks:load', ->
-  $('form.authorship-visibility').each(->
+  $('form.visibility-control').each(->
     form = $(this)
 
     form.find('.visibility-toggle').on('change', ->
