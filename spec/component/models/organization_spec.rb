@@ -96,7 +96,7 @@ describe Organization, type: :model do
              organization: other_org,
              started_on: Date.new(1980, 1, 1)
     end
-    it "returns publications by users who were members of the organization when they were published" do
+    it "returns visible, unique publications by users who were members of the organization when they were published" do
       expect(org.publications).to match_array [pub_1, pub_4, pub_5, pub_7]
     end
   end
