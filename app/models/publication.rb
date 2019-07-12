@@ -11,6 +11,7 @@ class Publication < ApplicationRecord
 
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
+  has_many :user_organization_memberships, through: :users
   has_many :taggings, -> { order rank: :desc }, class_name: :PublicationTagging, inverse_of: :publication
   has_many :tags, through: :taggings
   has_many :contributors,
