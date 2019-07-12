@@ -39,5 +39,6 @@ Rails.application.routes.draw do
   put 'presentation_contributions/sort' => 'presentation_contributions#sort'
   put 'presentation_contributions/:id' => 'presentation_contributions#update', as: :presentation_contribution
 
+  put 'user_performances/sort' => 'user_performances#sort'
   put 'user_performances/:id' => 'user_performances#update', as: :user_performance
 end

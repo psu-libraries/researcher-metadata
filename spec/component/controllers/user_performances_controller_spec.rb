@@ -48,4 +48,54 @@ describe UserPerformancesController, type: :controller do
       end
     end
   end
+
+  describe '#sort' do
+    context "when not authenticated" do
+      it "redirects to the sign in page" do
+        put :sort
+
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context "when authenticated" do
+      let!(:user) { create :user }
+      let!(:other_user) { create :user }
+
+      let!(:up_1) { create :user_performance, user: user }
+      let!(:up_2) { create :user_performance, user: user }
+      let!(:up_3) { create :user_performance, user: user }
+      let!(:up_4) { create :user_performance, user: user }
+      let!(:other_up) { create :user_performance, user: other_user }
+
+      before { authenticate_as(user) }
+
+      context "when given no user performance IDs" do
+        it "returns 404" do
+          expect { put :sort }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given an ID for a user performance that does not belong to the user" do
+        it "returns 404" do
+          expect { put :sort, params: {user_performance: [up_1.id.to_s,
+                                                          up_2.id.to_s,
+                                                          other_up.id.to_s]} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given IDs for user performances that do belong to the user" do
+        it "updates each performances's profile position with the order in which the ID was given" do
+          put :sort, params: {user_performance: [up_2.id.to_s,
+                                                 up_3.id.to_s,
+                                                 up_1.id.to_s]}
+
+          expect(up_1.reload.position_in_profile).to eq 3
+          expect(up_2.reload.position_in_profile).to eq 1
+          expect(up_3.reload.position_in_profile).to eq 2
+          expect(up_4.reload.position_in_profile).to eq nil
+        end
+      end
+    end
+  end
 end

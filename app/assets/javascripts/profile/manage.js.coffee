@@ -24,4 +24,13 @@ $(document).on('turbolinks:load', ->
         data: $(this).sortable('serialize')
       )
   )
+
+  $('tbody#user-performances').sortable(
+    update: (event, ui) ->
+      $.ajax(
+        method: 'PUT',
+        url: '/user_performances/sort',
+        data: $(this).sortable('serialize')
+      )
+  )
 )
