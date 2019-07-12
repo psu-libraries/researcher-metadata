@@ -27,6 +27,7 @@ Rails.application.routes.draw do
       get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
 
       get 'organizations' => 'organizations#index', as: :organizations
+      get 'organizations/:id/publications' => 'organizations#publications', as: :organization_publications
     end
   end
 

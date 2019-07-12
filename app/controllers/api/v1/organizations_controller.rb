@@ -6,6 +6,11 @@ module API::V1
       render json: API::V1::OrganizationSerializer.new(Organization.visible)
     end
 
+    def publications
+      org = Organization.visible.find(params[:id])
+      render json: API::V1::PublicationSerializer.new(org.publications)
+    end
+
     swagger_path '/v1/organizations' do
       operation :get do
         key :summary, 'All Organizations'
@@ -47,6 +52,50 @@ module API::V1
         end
         response 401 do
           key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        security do
+          key :api_key, []
+        end
+      end
+    end
+
+    swagger_path '/v1/organizations/{id}/publications' do
+      operation :get do
+        key :summary, "Retrieve an organization's publications"
+        key :description, 'Returns publications that were authored by users while they were members of the organization'
+        key :operationId, 'findOrganizationPublications'
+        key :produces, ['application/json']
+        key :tags, ['organization']
+        parameter do
+          key :name, :id
+          key :in, :path
+          key :description, 'The ID of an organization'
+          key :required, true
+          key :type, :integer
+        end
+        response 200 do
+          key :description, 'user publications response'
+          schema do
+            key :required, [:data]
+            property :data do
+              key :type, :array
+              items do
+                key :'$ref', :PublicationV1
+              end
+            end
+          end
+        end
+        response 401 do
+          key :description, 'unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 404 do
+          key :description, 'not found'
           schema do
             key :'$ref', :ErrorModelV1
           end

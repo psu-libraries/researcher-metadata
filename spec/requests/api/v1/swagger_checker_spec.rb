@@ -4,6 +4,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
   subject { Apivore::SwaggerChecker.instance_for('/api_docs/swagger_docs/v1/swagger.json') }
 
   context 'has valid paths' do
+    let!(:org) { create :organization, visible: true }
     let!(:publication_1) { create :publication, visible: true }
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:user_with_contracts) { create(:user_with_contracts, webaccess_id: 'con123', contracts_count: 10) }
@@ -15,6 +16,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:api_token) { create :api_token, token: 'token123' }
     let(:publications_params) { {'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
     let(:organizations_params) { {'_headers' => {'X-API-Key' => 'token123'}} }
+    let(:organization_publication_params) { {'id' => org.id, '_headers' => {'X-API-Key' => 'token123'}} }
+    let(:invalid_organization_publication_params) { {'id' => -2000, '_headers' => {'X-API-Key' => 'token123'}} }
     let(:publication_params) { {"id" => publication_1.id, 'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
     let(:user_publications_params) {
       {
@@ -126,12 +129,16 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }
     it { is_expected.to validate( :get, '/v1/publications', 401, unauthorized_params ) }
 
-    it { is_expected.to validate( :get, '/v1/organizations', 200, organizations_params ) }
-    it { is_expected.to validate( :get, '/v1/organizations', 401, unauthorized_params ) }
-
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publication_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_publication_params ) }
+
+    it { is_expected.to validate( :get, '/v1/organizations', 200, organizations_params ) }
+    it { is_expected.to validate( :get, '/v1/organizations', 401, unauthorized_params ) }
+
+    it { is_expected.to validate( :get, '/v1/organizations/{id}/publications', 200, organization_publication_params ) }
+    it { is_expected.to validate( :get, '/v1/organizations/{id}/publications', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/organizations/{id}/publications', 404, invalid_organization_publication_params) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 401, unauthorized_params ) }
