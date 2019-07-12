@@ -8,4 +8,16 @@ class Organization < ApplicationRecord
   validates :name, presence: true
 
   scope :visible, -> { where(visible: true) }
+
+  def publications
+    user_organization_memberships.map do |m|
+      Publication.
+        visible.
+        joins(:authorships).
+        where('authorships.user_id = ? AND published_on >= ? AND published_on <= ?',
+              m.user_id,
+              m.started_on,
+              m.ended_on || 1.day.from_now,)
+    end.flatten.uniq
+  end
 end
