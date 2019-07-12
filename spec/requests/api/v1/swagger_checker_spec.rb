@@ -14,6 +14,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
     let!(:api_token) { create :api_token, token: 'token123' }
     let(:publications_params) { {'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
+    let(:organizations_params) { {'_headers' => {'X-API-Key' => 'token123'}} }
     let(:publication_params) { {"id" => publication_1.id, 'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
     let(:user_publications_params) {
       {
@@ -124,6 +125,9 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
 
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }
     it { is_expected.to validate( :get, '/v1/publications', 401, unauthorized_params ) }
+
+    it { is_expected.to validate( :get, '/v1/organizations', 200, organizations_params ) }
+    it { is_expected.to validate( :get, '/v1/organizations', 401, unauthorized_params ) }
 
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publication_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 401, unauthorized_params ) }
