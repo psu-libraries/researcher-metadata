@@ -6,4 +6,6 @@ class Organization < ApplicationRecord
   has_many :users, through: :user_organization_memberships
 
   validates :name, presence: true
+
+  scope :visible, -> { where(visible: true) }
 end

@@ -40,4 +40,13 @@ describe Organization, type: :model do
       expect { m.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
+
+  describe '.visible' do
+    let!(:org1) { create :organization, visible: false }
+    let!(:org2) { create :organization, visible: true }
+
+    it "returns a collection of the visible organizations" do
+      expect(Organization.visible).to eq [org2]
+    end
+  end
 end

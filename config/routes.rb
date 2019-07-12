@@ -25,6 +25,8 @@ Rails.application.routes.draw do
       get 'users/:webaccess_id/presentations' => 'users#presentations', as: :user_presentations
       get 'users/:webaccess_id/organization_memberships' => 'users#organization_memberships', as: :user_organization_memberships
       get 'users/:webaccess_id/profile' => 'users#profile', as: :user_profile
+
+      get 'organizations' => 'organizations#index', as: :organizations
     end
   end
 
