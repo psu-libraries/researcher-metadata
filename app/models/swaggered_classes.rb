@@ -3,6 +3,7 @@ class SwaggeredClasses
     [
       API::V1::PublicationsController,
       API::V1::UsersController,
+      API::V1::OrganizationsController,
       ApidocsController,
       Publication,
       User

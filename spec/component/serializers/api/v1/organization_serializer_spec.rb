@@ -5,7 +5,6 @@ describe API::V1::OrganizationSerializer do
 
   describe "data attributes" do
     subject { serialized_data_attributes(org) }
-    it { is_expected.to include(:id => org.id) }
-    it { is_expected.to include(:name => 'Test Org') }
+    it { is_expected.to include(name: 'Test Org') }
   end
 end
