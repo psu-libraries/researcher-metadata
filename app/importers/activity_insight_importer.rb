@@ -103,6 +103,44 @@ class ActivityInsightImporter
           end
         end
 
+        details.performances.each do |perf|
+          p = Performance.find_by(activity_insight_id: perf.activity_insight_id) || Performance.new
+
+          if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
+            p.activity_insight_id = perf.activity_insight_id if p.new_record?
+            p.title = perf.title
+            p.performance_type = perf.type
+            p.sponsor = perf.sponsor
+            p.description = perf.description
+            p.group_name = perf.name
+            p.location = perf.location
+            p.delivery_type = perf.delivery_type
+            p.scope = perf.scope
+            p.start_on = perf.start_on
+            p.end_on = perf.end_on
+
+            p.save!
+          end
+
+          perf.contributors.each do |cont|
+            if cont.activity_insight_user_id
+              contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
+
+              if contributor
+                up = UserPerformance.find_by(activity_insight_id: cont.activity_insight_id) ||
+                  UserPerformance.new
+
+                up.activity_insight_id = cont.activity_insight_id if up.new_record?
+                up.user = contributor
+                up.performance = p
+                up.contribution = cont.contribution
+
+                up.save!
+              end
+            end
+          end
+        end
+
       rescue Exception => e
         errors << e
       end
@@ -249,6 +287,10 @@ class ActivityInsightDetailUser
 
   def presentations
     user.css('PRESENT').map { |p| ActivityInsightPresentation.new(p) }
+  end
+
+  def performances
+    user.css('PERFORM_EXHIBIT').map { |p| ActivityInsightPerformance.new(p) }
   end
 
   private
@@ -440,6 +482,102 @@ class ActivityInsightPresentationContributor
     else
       text_for('ROLE_OTHER')
     end
+  end
+
+  private
+
+  attr_reader :parsed_contributor
+
+  def text_for(element)
+    parsed_contributor.css(element).text.strip.presence
+  end
+end
+
+
+class ActivityInsightPerformance
+  def initialize(parsed_performance)
+    @parsed_performance = parsed_performance
+  end
+
+  def activity_insight_id
+    parsed_performance.attribute('id').value
+  end
+
+  def title
+    text_for('TITLE')
+  end
+
+  def type
+    if text_for('TYPE') && text_for('TYPE') != 'Other'
+      text_for('TYPE')
+    else
+      text_for('TYPE_OTHER')
+    end
+  end
+
+  def sponsor
+    text_for('SPONSOR')
+  end
+
+  def description
+    text_for('DESC')
+  end
+
+  def name
+    text_for('NAME')
+  end
+
+  def location
+    text_for('LOCATION')
+  end
+
+  def delivery_type
+    text_for('DELIVERY_TYPE')
+  end
+
+  def scope
+    text_for('SCOPE')
+  end
+
+  def start_on
+    text_for('START_START')
+  end
+
+  def end_on
+    text_for('END_START')
+  end
+
+  def contributors
+    parsed_performance.css('PERFORM_EXHIBIT_CONTRIBUTERS').map do |c|
+      ActivityInsightPerformanceContributor.new(c)
+    end
+  end
+
+  private
+
+  attr_reader :parsed_performance
+
+  def text_for(element)
+    parsed_performance.css(element).text.strip.presence
+  end
+end
+
+
+class ActivityInsightPerformanceContributor
+  def initialize(parsed_contributor)
+    @parsed_contributor = parsed_contributor
+  end
+
+  def activity_insight_id
+    parsed_contributor.attribute('id').value
+  end
+
+  def activity_insight_user_id
+    text_for('FACULTY_NAME')
+  end
+
+  def contribution
+    text_for('CONTRIBUTION')
   end
 
   private

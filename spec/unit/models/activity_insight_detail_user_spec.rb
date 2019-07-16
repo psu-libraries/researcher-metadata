@@ -302,4 +302,21 @@ describe ActivityInsightDetailUser do
       expect(user.presentations).to eq [pres1, pres2]
     end
   end
+
+  describe '#performances' do
+    let(:element1) { double 'XML element 1' }
+    let(:element2) { double 'XML element 2' }
+    let(:perf1) { double 'performance 1' }
+    let(:perf2) { double 'performance 2' }
+
+    before do
+      allow(user_data).to receive(:css).with('PERFORM_EXHIBIT').and_return([element1, element2])
+      allow(ActivityInsightPerformance).to receive(:new).with(element1).and_return(perf1)
+      allow(ActivityInsightPerformance).to receive(:new).with(element2).and_return(perf2)
+    end
+
+    it "returns an array of performances from the given data" do
+      expect(user.performances).to eq [perf1, perf2]
+    end
+  end
 end

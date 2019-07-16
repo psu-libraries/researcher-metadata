@@ -434,6 +434,279 @@ describe ActivityInsightImporter do
           end
         end
       end
+
+      context "when no included performances exist in the database" do
+        it "creates new performances from the imported data" do
+          expect { importer.call }.to change { Performance.count }.by 2
+
+          p1 = Performance.find_by(activity_insight_id: '126500763648')
+          p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+          expect(p1.title).to eq "Sally's Documentary"
+          expect(p1.performance_type).to eq "Film - Documentary"
+          expect(p1.sponsor).to eq "Test Sponsor"
+          expect(p1.description).to eq "A description"
+          expect(p1.group_name).to eq "Test Group"
+          expect(p1.location).to eq "University Park, PA"
+          expect(p1.delivery_type).to eq "Invitation"
+          expect(p1.scope).to eq "Regional"
+          expect(p1.start_on).to eq Date.new(2009, 2, 1)
+          expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+          expect(p2.title).to eq "Sally's Film"
+          expect(p2.performance_type).to eq "Film - Other"
+          expect(p2.sponsor).to eq "Another Sponsor"
+          expect(p2.description).to eq "Another description"
+          expect(p2.group_name).to eq "Another Group"
+          expect(p2.location).to eq "Philadelphia, PA"
+          expect(p2.delivery_type).to be_nil
+          expect(p2.scope).to eq "Local"
+          expect(p2.start_on).to eq Date.new(2000, 2, 1)
+          expect(p2.end_on).to eq Date.new(2000, 8, 1)
+        end
+
+        context "when no included user performances exist in the database" do
+          it "creates new user performances from the imported data" do
+            expect { importer.call }.to change { UserPerformance.count }.by 2
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            u = User.find_by(activity_insight_identifier: '1649499')
+
+            up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+            up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+            expect(up1.user).to eq u
+            expect(up1.performance).to eq p1
+            expect(up1.contribution).to eq 'Director'
+
+            expect(up2.user).to eq u
+            expect(up2.performance).to eq p2
+            expect(up2.contribution).to eq 'Writer'
+          end
+        end
+
+        context "when an included user performance exists in the database" do
+          let(:other_user) { create :user }
+          let(:other_performance) { create :performance }
+          before do
+            create :user_performance,
+                   activity_insight_id: '126500763649',
+                   user: other_user,
+                   performance: other_performance,
+                   contribution: 'Existing Contribution'
+          end
+          it "creates any new user performances and updates the existing user performances" do
+            expect { importer.call }.to change { UserPerformance.count }.by 1
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            u = User.find_by(activity_insight_identifier: '1649499')
+
+            up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+            up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+            expect(up1.user).to eq u
+            expect(up1.performance).to eq p1
+            expect(up1.contribution).to eq 'Director'
+
+            expect(up2.user).to eq u
+            expect(up2.performance).to eq p2
+            expect(up2.contribution).to eq 'Writer'
+          end
+        end
+      end
+
+      context "when an included performance exists in the database" do
+        before do
+          create :performance,
+                 activity_insight_id: '126500763648',
+                 updated_by_user_at: updated,
+                 title: 'Existing Title',
+                 performance_type: nil,
+                 sponsor: nil,
+                 description: nil,
+                 group_name: nil,
+                 location: nil,
+                 delivery_type: nil,
+                 scope: nil,
+                 start_on: nil,
+                 end_on: nil
+        end
+        context "when the existing performance has been updated by an admin" do
+          let(:updated) { Time.zone.now }
+          it "creates any new performances and does not update the existing performance" do
+            expect { importer.call }.to change { Performance.count }.by 1
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            expect(p1.title).to eq "Existing Title"
+            expect(p1.performance_type).to be_nil
+            expect(p1.sponsor).to be_nil
+            expect(p1.description).to be_nil
+            expect(p1.group_name).to be_nil
+            expect(p1.location).to be_nil
+            expect(p1.delivery_type).to be_nil
+            expect(p1.scope).to be_nil
+            expect(p1.start_on).to be_nil
+            expect(p1.end_on).to be_nil
+
+            expect(p2.title).to eq "Sally's Film"
+            expect(p2.performance_type).to eq "Film - Other"
+            expect(p2.sponsor).to eq "Another Sponsor"
+            expect(p2.description).to eq "Another description"
+            expect(p2.group_name).to eq "Another Group"
+            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.delivery_type).to be_nil
+            expect(p2.scope).to eq "Local"
+            expect(p2.start_on).to eq Date.new(2000, 2, 1)
+            expect(p2.end_on).to eq Date.new(2000, 8, 1)
+          end
+
+
+          context "when no included user performances exist in the database" do
+            it "creates new user performances from the imported data" do
+              expect { importer.call }.to change { UserPerformance.count }.by 2
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+
+          context "when an included user performance exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_performance) { create :performance }
+            before do
+              create :user_performance,
+                     activity_insight_id: '126500763649',
+                     user: other_user,
+                     performance: other_performance,
+                     contribution: 'Existing Contribution'
+            end
+            it "creates any new user performances and updates the existing user performances" do
+              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+        end
+
+        context "when the existing performance has not been updated by an admin" do
+          let(:updated) { nil }
+          it "creates any new performances and updates the existing performance" do
+            expect { importer.call }.to change { Performance.count }.by 1
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            expect(p1.title).to eq "Sally's Documentary"
+            expect(p1.performance_type).to eq "Film - Documentary"
+            expect(p1.sponsor).to eq "Test Sponsor"
+            expect(p1.description).to eq "A description"
+            expect(p1.group_name).to eq "Test Group"
+            expect(p1.location).to eq "University Park, PA"
+            expect(p1.delivery_type).to eq "Invitation"
+            expect(p1.scope).to eq "Regional"
+            expect(p1.start_on). to eq Date.new(2009, 2, 1)
+            expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+            expect(p2.title).to eq "Sally's Film"
+            expect(p2.performance_type).to eq "Film - Other"
+            expect(p2.sponsor).to eq "Another Sponsor"
+            expect(p2.description).to eq "Another description"
+            expect(p2.group_name).to eq "Another Group"
+            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.delivery_type).to be_nil
+            expect(p2.scope).to eq "Local"
+            expect(p2.start_on).to eq Date.new(2000, 2, 1)
+            expect(p2.end_on).to eq Date.new(2000, 8, 1)
+          end
+
+
+          context "when no included user performances exist in the database" do
+            it "creates new user performances from the imported data" do
+              expect { importer.call }.to change { UserPerformance.count }.by 2
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+
+          context "when an included user performance exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_performance) { create :performance }
+            before do
+              create :user_performance,
+                     activity_insight_id: '126500763649',
+                     user: other_user,
+                     performance: other_performance,
+                     contribution: 'Existing Contribution'
+            end
+            it "creates any new user performances and updates the existing user performances" do
+              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+        end
+      end
     end
 
 
@@ -874,6 +1147,291 @@ describe ActivityInsightImporter do
             end
           end
         end
+
+        context "when no included performances exist in the database" do
+          it "creates new performances from the imported data" do
+            expect { importer.call }.to change { Performance.count }.by 2
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            expect(p1.title).to eq "Sally's Documentary"
+            expect(p1.performance_type).to eq "Film - Documentary"
+            expect(p1.sponsor).to eq "Test Sponsor"
+            expect(p1.description).to eq "A description"
+            expect(p1.group_name).to eq "Test Group"
+            expect(p1.location).to eq "University Park, PA"
+            expect(p1.delivery_type).to eq "Invitation"
+            expect(p1.scope).to eq "Regional"
+            expect(p1.start_on).to eq Date.new(2009, 2, 1)
+            expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+            expect(p2.title).to eq "Sally's Film"
+            expect(p2.performance_type).to eq "Film - Other"
+            expect(p2.sponsor).to eq "Another Sponsor"
+            expect(p2.description).to eq "Another description"
+            expect(p2.group_name).to eq "Another Group"
+            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.delivery_type).to be_nil
+            expect(p2.scope).to eq "Local"
+            expect(p2.start_on).to eq Date.new(2000, 2, 1)
+            expect(p2.end_on).to eq Date.new(2000, 8, 1)
+          end
+
+          context "when no included user performances exist in the database" do
+            context "when a user that matches the contribution exists" do
+              let!(:user) { create :user, activity_insight_identifier: '1649499' }
+              it "creates new user performances from the imported data" do
+                expect { importer.call }.to change { UserPerformance.count }.by 2
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
+              end
+            end
+          end
+
+          context "when an included user performance exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_performance) { create :performance }
+            before do
+              create :user_performance,
+                     activity_insight_id: '126500763649',
+                     user: other_user,
+                     performance: other_performance,
+                     contribution: 'Existing Contribution'
+            end
+            context "when a user that matches the contribution exists" do
+              let!(:user) { create :user, activity_insight_identifier: '1649499' }
+              it "creates any new user performances and updates the existing user performances" do
+                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
+              end
+            end
+          end
+        end
+
+        context "when an included performance exists in the database" do
+          before do
+            create :performance,
+                   activity_insight_id: '126500763648',
+                   updated_by_user_at: updated,
+                   title: 'Existing Title',
+                   performance_type: nil,
+                   sponsor: nil,
+                   description: nil,
+                   group_name: nil,
+                   location: nil,
+                   delivery_type: nil,
+                   scope: nil,
+                   start_on: nil,
+                   end_on: nil
+          end
+          context "when the existing performance has been updated by an admin" do
+            let(:updated) { Time.zone.now }
+            it "creates any new performances and does not update the existing performance" do
+              expect { importer.call }.to change { Performance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              expect(p1.title).to eq "Existing Title"
+              expect(p1.performance_type).to be_nil
+              expect(p1.sponsor).to be_nil
+              expect(p1.description).to be_nil
+              expect(p1.group_name).to be_nil
+              expect(p1.location).to be_nil
+              expect(p1.delivery_type).to be_nil
+              expect(p1.scope).to be_nil
+              expect(p1.start_on).to be_nil
+              expect(p1.end_on).to be_nil
+
+              expect(p2.title).to eq "Sally's Film"
+              expect(p2.performance_type).to eq "Film - Other"
+              expect(p2.sponsor).to eq "Another Sponsor"
+              expect(p2.description).to eq "Another description"
+              expect(p2.group_name).to eq "Another Group"
+              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.delivery_type).to be_nil
+              expect(p2.scope).to eq "Local"
+              expect(p2.start_on).to eq Date.new(2000, 2, 1)
+              expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            end
+
+
+            context "when no included user performances exist in the database" do
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+                it "creates new user performances from the imported data" do
+                  expect { importer.call }.to change { UserPerformance.count }.by 2
+
+                  p1 = Performance.find_by(activity_insight_id: '126500763648')
+                  p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                  u = User.find_by(activity_insight_identifier: '1649499')
+
+                  up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                  up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                  expect(up1.user).to eq u
+                  expect(up1.performance).to eq p1
+                  expect(up1.contribution).to eq 'Director'
+
+                  expect(up2.user).to eq u
+                  expect(up2.performance).to eq p2
+                  expect(up2.contribution).to eq 'Writer'
+                end
+              end
+            end
+
+            context "when an included user performance exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_performance) { create :performance }
+              before do
+                create :user_performance,
+                       activity_insight_id: '126500763649',
+                       user: other_user,
+                       performance: other_performance,
+                       contribution: 'Existing Contribution'
+              end
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+                it "creates any new user performances and updates the existing user performances" do
+                  expect { importer.call }.to change { UserPerformance.count }.by 1
+
+                  p1 = Performance.find_by(activity_insight_id: '126500763648')
+                  p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                  u = User.find_by(activity_insight_identifier: '1649499')
+
+                  up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                  up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                  expect(up1.user).to eq u
+                  expect(up1.performance).to eq p1
+                  expect(up1.contribution).to eq 'Director'
+
+                  expect(up2.user).to eq u
+                  expect(up2.performance).to eq p2
+                  expect(up2.contribution).to eq 'Writer'
+                end
+              end
+            end
+          end
+
+          context "when the existing performance has not been updated by an admin" do
+            let(:updated) { nil }
+            it "creates any new performances and updates the existing performance" do
+              expect { importer.call }.to change { Performance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              expect(p1.title).to eq "Sally's Documentary"
+              expect(p1.performance_type).to eq "Film - Documentary"
+              expect(p1.sponsor).to eq "Test Sponsor"
+              expect(p1.description).to eq "A description"
+              expect(p1.group_name).to eq "Test Group"
+              expect(p1.location).to eq "University Park, PA"
+              expect(p1.delivery_type).to eq "Invitation"
+              expect(p1.scope).to eq "Regional"
+              expect(p1.start_on). to eq Date.new(2009, 2, 1)
+              expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+              expect(p2.title).to eq "Sally's Film"
+              expect(p2.performance_type).to eq "Film - Other"
+              expect(p2.sponsor).to eq "Another Sponsor"
+              expect(p2.description).to eq "Another description"
+              expect(p2.group_name).to eq "Another Group"
+              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.delivery_type).to be_nil
+              expect(p2.scope).to eq "Local"
+              expect(p2.start_on).to eq Date.new(2000, 2, 1)
+              expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            end
+
+
+            context "when no included user performances exist in the database" do
+              it "creates new user performances from the imported data" do
+                expect { importer.call }.to change { UserPerformance.count }.by 2
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
+              end
+            end
+
+            context "when an included user performance exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_performance) { create :performance }
+              before do
+                create :user_performance,
+                       activity_insight_id: '126500763649',
+                       user: other_user,
+                       performance: other_performance,
+                       contribution: 'Existing Contribution'
+              end
+              it "creates any new user performances and updates the existing user performances" do
+                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
+              end
+            end
+          end
+        end
       end
 
 
@@ -1293,6 +1851,285 @@ describe ActivityInsightImporter do
                 expect(c2.presentation).to eq p2
                 expect(c2.role).to eq 'Author Only'
                 expect(c2.position).to eq 2
+              end
+            end
+          end
+        end
+
+        context "when no included performances exist in the database" do
+          it "creates new performances from the imported data" do
+            expect { importer.call }.to change { Performance.count }.by 2
+
+            p1 = Performance.find_by(activity_insight_id: '126500763648')
+            p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+            expect(p1.title).to eq "Sally's Documentary"
+            expect(p1.performance_type).to eq "Film - Documentary"
+            expect(p1.sponsor).to eq "Test Sponsor"
+            expect(p1.description).to eq "A description"
+            expect(p1.group_name).to eq "Test Group"
+            expect(p1.location).to eq "University Park, PA"
+            expect(p1.delivery_type).to eq "Invitation"
+            expect(p1.scope).to eq "Regional"
+            expect(p1.start_on).to eq Date.new(2009, 2, 1)
+            expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+            expect(p2.title).to eq "Sally's Film"
+            expect(p2.performance_type).to eq "Film - Other"
+            expect(p2.sponsor).to eq "Another Sponsor"
+            expect(p2.description).to eq "Another description"
+            expect(p2.group_name).to eq "Another Group"
+            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.delivery_type).to be_nil
+            expect(p2.scope).to eq "Local"
+            expect(p2.start_on).to eq Date.new(2000, 2, 1)
+            expect(p2.end_on).to eq Date.new(2000, 8, 1)
+          end
+
+          context "when no included user performances exist in the database" do
+            it "creates new user performances from the imported data" do
+              expect { importer.call }.to change { UserPerformance.count }.by 2
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+
+          context "when an included user performance exists in the database" do
+            let(:other_user) { create :user }
+            let(:other_performance) { create :performance }
+            before do
+              create :user_performance,
+                     activity_insight_id: '126500763649',
+                     user: other_user,
+                     performance: other_performance,
+                     contribution: 'Existing Contribution'
+            end
+            it "creates any new user performances and updates the existing user performances" do
+              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
+              up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+              up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+              expect(up1.user).to eq u
+              expect(up1.performance).to eq p1
+              expect(up1.contribution).to eq 'Director'
+
+              expect(up2.user).to eq u
+              expect(up2.performance).to eq p2
+              expect(up2.contribution).to eq 'Writer'
+            end
+          end
+        end
+
+        context "when an included performance exists in the database" do
+          before do
+            create :performance,
+                   activity_insight_id: '126500763648',
+                   updated_by_user_at: updated,
+                   title: 'Existing Title',
+                   performance_type: nil,
+                   sponsor: nil,
+                   description: nil,
+                   group_name: nil,
+                   location: nil,
+                   delivery_type: nil,
+                   scope: nil,
+                   start_on: nil,
+                   end_on: nil
+          end
+          context "when the existing performance has been updated by an admin" do
+            let(:updated) { Time.zone.now }
+            it "creates any new performances and does not update the existing performance" do
+              expect { importer.call }.to change { Performance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              expect(p1.title).to eq "Existing Title"
+              expect(p1.performance_type).to be_nil
+              expect(p1.sponsor).to be_nil
+              expect(p1.description).to be_nil
+              expect(p1.group_name).to be_nil
+              expect(p1.location).to be_nil
+              expect(p1.delivery_type).to be_nil
+              expect(p1.scope).to be_nil
+              expect(p1.start_on).to be_nil
+              expect(p1.end_on).to be_nil
+
+              expect(p2.title).to eq "Sally's Film"
+              expect(p2.performance_type).to eq "Film - Other"
+              expect(p2.sponsor).to eq "Another Sponsor"
+              expect(p2.description).to eq "Another description"
+              expect(p2.group_name).to eq "Another Group"
+              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.delivery_type).to be_nil
+              expect(p2.scope).to eq "Local"
+              expect(p2.start_on).to eq Date.new(2000, 2, 1)
+              expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            end
+
+
+            context "when no included user performances exist in the database" do
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+                it "creates new user performances from the imported data" do
+                  expect { importer.call }.to change { UserPerformance.count }.by 2
+
+                  p1 = Performance.find_by(activity_insight_id: '126500763648')
+                  p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                  u = User.find_by(activity_insight_identifier: '1649499')
+
+                  up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                  up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                  expect(up1.user).to eq u
+                  expect(up1.performance).to eq p1
+                  expect(up1.contribution).to eq 'Director'
+
+                  expect(up2.user).to eq u
+                  expect(up2.performance).to eq p2
+                  expect(up2.contribution).to eq 'Writer'
+                end
+              end
+            end
+
+            context "when an included user performance exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_performance) { create :performance }
+              before do
+                create :user_performance,
+                       activity_insight_id: '126500763649',
+                       user: other_user,
+                       performance: other_performance,
+                       contribution: 'Existing Contribution'
+              end
+              context "when a user that matches the contribution exists" do
+                let!(:user) { create :user, activity_insight_identifier: '1649499' }
+                it "creates any new user performances and updates the existing user performances" do
+                  expect { importer.call }.to change { UserPerformance.count }.by 1
+
+                  p1 = Performance.find_by(activity_insight_id: '126500763648')
+                  p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                  u = User.find_by(activity_insight_identifier: '1649499')
+
+                  up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                  up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                  expect(up1.user).to eq u
+                  expect(up1.performance).to eq p1
+                  expect(up1.contribution).to eq 'Director'
+
+                  expect(up2.user).to eq u
+                  expect(up2.performance).to eq p2
+                  expect(up2.contribution).to eq 'Writer'
+                end
+              end
+            end
+          end
+
+          context "when the existing performance has not been updated by an admin" do
+            let(:updated) { nil }
+            it "creates any new performances and updates the existing performance" do
+              expect { importer.call }.to change { Performance.count }.by 1
+
+              p1 = Performance.find_by(activity_insight_id: '126500763648')
+              p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+              expect(p1.title).to eq "Sally's Documentary"
+              expect(p1.performance_type).to eq "Film - Documentary"
+              expect(p1.sponsor).to eq "Test Sponsor"
+              expect(p1.description).to eq "A description"
+              expect(p1.group_name).to eq "Test Group"
+              expect(p1.location).to eq "University Park, PA"
+              expect(p1.delivery_type).to eq "Invitation"
+              expect(p1.scope).to eq "Regional"
+              expect(p1.start_on). to eq Date.new(2009, 2, 1)
+              expect(p1.end_on).to eq Date.new(2009, 8, 1)
+
+              expect(p2.title).to eq "Sally's Film"
+              expect(p2.performance_type).to eq "Film - Other"
+              expect(p2.sponsor).to eq "Another Sponsor"
+              expect(p2.description).to eq "Another description"
+              expect(p2.group_name).to eq "Another Group"
+              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.delivery_type).to be_nil
+              expect(p2.scope).to eq "Local"
+              expect(p2.start_on).to eq Date.new(2000, 2, 1)
+              expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            end
+
+
+            context "when no included user performances exist in the database" do
+              it "creates new user performances from the imported data" do
+                expect { importer.call }.to change { UserPerformance.count }.by 2
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
+              end
+            end
+
+            context "when an included user performance exists in the database" do
+              let(:other_user) { create :user }
+              let(:other_performance) { create :performance }
+              before do
+                create :user_performance,
+                       activity_insight_id: '126500763649',
+                       user: other_user,
+                       performance: other_performance,
+                       contribution: 'Existing Contribution'
+              end
+              it "creates any new user performances and updates the existing user performances" do
+                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+                p1 = Performance.find_by(activity_insight_id: '126500763648')
+                p2 = Performance.find_by(activity_insight_id: '13745734789')
+
+                u = User.find_by(activity_insight_identifier: '1649499')
+
+                up1 = UserPerformance.find_by(activity_insight_id: '126500763649')
+                up2 = UserPerformance.find_by(activity_insight_id: '126500734534')
+
+                expect(up1.user).to eq u
+                expect(up1.performance).to eq p1
+                expect(up1.contribution).to eq 'Director'
+
+                expect(up2.user).to eq u
+                expect(up2.performance).to eq p2
+                expect(up2.contribution).to eq 'Writer'
               end
             end
           end
