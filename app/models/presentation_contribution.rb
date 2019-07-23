@@ -7,4 +7,5 @@ class PresentationContribution < ApplicationRecord
   delegate :label, to: :presentation, prefix: true
   delegate :organization, to: :presentation, prefix: true
   delegate :location, to: :presentation, prefix: true
+  delegate :webaccess_id, to: :user, prefix: true
 end

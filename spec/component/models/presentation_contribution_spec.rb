@@ -38,4 +38,5 @@ describe PresentationContribution, type: :model do
   it { is_expected.to delegate_method(:presentation_label).to(:presentation).as(:label) }
   it { is_expected.to delegate_method(:presentation_organization).to(:presentation).as(:organization) }
   it { is_expected.to delegate_method(:presentation_location).to(:presentation).as(:location) }
+  it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 end

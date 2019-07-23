@@ -407,6 +407,34 @@ module API::V1
                     key :example, 'International'
                     key :description, 'The scope of the audience for the presentation'
                   end
+                  property :profile_preferences do
+                    key :type, :array
+                    key :description, 'An array of settings for each user who is an author of the publication indicating how they prefer to have the publication displayed in a profile'
+                    items do
+                      key :type, :object
+                      key :required, [:user_id, :webaccess_id, :visible_in_profile, :position_in_profile]
+                      property :user_id do
+                        key :type, :number
+                        key :example, 123
+                        key :description, 'The ID of the user to which this set of preferences belongs'
+                      end
+                      property :webaccess_id do
+                        key :type, :string
+                        key :example, 'abc123'
+                        key :description, 'The WebAccess ID of the user to which this set of preferences belongs'
+                      end
+                      property :visible_in_profile do
+                        key :type, :boolean
+                        key :example, true
+                        key :description, "The user's preference for whether or not this publication should be displayed in their profile"
+                      end
+                      property :position_in_profile do
+                        key :type, [:number, :null]
+                        key :example, 8
+                        key :description, "The user's preference for what position this publication should occupy in a list of their publications in their profile"
+                      end
+                    end
+                  end
                 end
               end
             end
