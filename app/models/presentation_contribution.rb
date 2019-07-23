@@ -4,8 +4,6 @@ class PresentationContribution < ApplicationRecord
 
   validates :user_id, :presentation_id, presence: true
 
-  delegate :label, to: :presentation, prefix: true
-  delegate :organization, to: :presentation, prefix: true
-  delegate :location, to: :presentation, prefix: true
+  delegate :label, :organization, :location, to: :presentation, prefix: true
   delegate :webaccess_id, to: :user, prefix: true
 end
