@@ -6,8 +6,8 @@ module API::V1
 
     attribute :user_performances do |object|
       object.user_performances.map do |c|
-        {first_name: c.user.first_name,
-         last_name: c.user.last_name,
+        {first_name: c.user_first_name,
+         last_name: c.user_last_name,
          contribution: c.contribution,
          student_level: c.student_level,
          role_other: c.role_other}
