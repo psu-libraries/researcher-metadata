@@ -21,5 +21,14 @@ module API::V1
          screening_type: c.screening_type}
       end
     end
+
+    attribute :profile_preferences do |object|
+      object.user_performances.map do |up|
+        {user_id: up.user_id,
+         webaccess_id: up.user_webaccess_id,
+         visible_in_profile: up.visible_in_profile,
+         position_in_profile: up.position_in_profile}
+      end
+    end
   end
 end

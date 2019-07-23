@@ -43,4 +43,5 @@ describe UserPerformance, type: :model do
   it { is_expected.to delegate_method(:performance_title).to(:performance).as(:title) }
   it { is_expected.to delegate_method(:performance_location).to(:performance).as(:location) }
   it { is_expected.to delegate_method(:performance_start_on).to(:performance).as(:start_on) }
+  it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 end
