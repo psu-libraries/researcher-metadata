@@ -41,4 +41,5 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:publication_title).to(:publication).as(:title) }
   it { is_expected.to delegate_method(:publication_published_by).to(:publication).as(:published_by) }
   it { is_expected.to delegate_method(:publication_year).to(:publication).as(:year) }
+  it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 end
