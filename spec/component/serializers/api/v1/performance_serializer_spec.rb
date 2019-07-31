@@ -13,19 +13,6 @@ describe API::V1::PerformanceSerializer do
                              scope: 'Local',
                              start_on: Date.new(2018, 12, 4),
                              end_on: Date.new(2018, 12, 5) }
-
-  let(:user) { create :user,
-                      first_name: 'Test',
-                      last_name: 'User' }
-
-  before do
-    create :user_performance,
-            user: user,
-            performance: performance,
-            contribution: 'Performer',
-            student_level: 'Graduate',
-            role_other: nil
-  end
   
   describe "data attributes" do
     subject { serialized_data_attributes(performance) }
@@ -42,9 +29,6 @@ describe API::V1::PerformanceSerializer do
     it { is_expected.to include(:start_on => Date.new(2018, 12, 4)) }
     it { is_expected.to include(:end_on => Date.new(2018, 12, 5)) }
 
-    it { is_expected.to include(:user_performances => [{first_name: 'Test', last_name: 'User', 
-                                                        contribution: 'Performer', student_level: 'Graduate', role_other: nil}]) }
-
     context "when the performance does not have screenings" do
       it { is_expected.to include(:performance_screenings => []) }
     end
@@ -60,6 +44,62 @@ describe API::V1::PerformanceSerializer do
 
       it { is_expected.to include(:performance_screenings => [{name: 'Screening 1', screening_type: 'Movie', location: 'Town'},
                                                               {name: 'Screening 2', screening_type: 'Invited', location: 'City'}] ) }
+    end
+
+    context "when the performance does not have user_performances" do
+      it { is_expected.to include(profile_preferences: []) }
+      it { is_expected.to include(user_performances: []) }
+    end
+
+    context "when the performance has user_performances" do
+      let(:u1) { create :user,
+                        webaccess_id: 'abc123',
+                        first_name: 'Test',
+                        last_name: 'User' }
+      let(:u2) { create :user,
+                        webaccess_id: 'def456',
+                        first_name: 'Another',
+                        last_name: 'User' }
+      before do
+        create :user_performance,
+               performance: performance,
+               user: u1,
+               visible_in_profile: true,
+               position_in_profile: 4,
+               contribution: 'Performer',
+               student_level: 'Graduate',
+               role_other: nil
+
+        create :user_performance,
+               performance: performance,
+               user: u2,
+               visible_in_profile: false,
+               position_in_profile: nil,
+               contribution: nil,
+               student_level: nil,
+               role_other: nil
+      end
+
+      it { is_expected.to include(:profile_preferences => [{user_id: u1.id,
+                                                            webaccess_id: 'abc123',
+                                                            visible_in_profile: true,
+                                                            position_in_profile: 4},
+                                                           {user_id: u2.id,
+                                                            webaccess_id: 'def456',
+                                                            visible_in_profile: false,
+                                                            position_in_profile: nil}]) }
+
+
+      it { is_expected.to include(:user_performances => [{first_name: 'Test',
+                                                          last_name: 'User',
+                                                          contribution: 'Performer',
+                                                          student_level: 'Graduate',
+                                                          role_other: nil},
+                                                         {first_name: 'Another',
+                                                          last_name: 'User',
+                                                          contribution: nil,
+                                                          student_level: nil,
+                                                          role_other: nil}]) }
     end
   end
 end

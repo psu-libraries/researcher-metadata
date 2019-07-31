@@ -104,5 +104,36 @@ describe API::V1::PublicationSerializer do
       it { is_expected.to include(:tags => [{name: 'Thing 2', rank: 100},
                                             {name: 'Thing 1', rank: 1}] ) }
     end
+
+    context "when the publication does not have authorships" do
+      it { is_expected.to include(profile_preferences: []) }
+    end
+
+    context "when the publication has authorships" do
+      let(:u1) { create :user, webaccess_id: 'abc123' }
+      let(:u2) { create :user, webaccess_id: 'def456' }
+      before do
+        create :authorship,
+               publication: publication,
+               user: u1,
+               visible_in_profile: true,
+               position_in_profile: 4
+
+        create :authorship,
+               publication: publication,
+               user: u2,
+               visible_in_profile: false,
+               position_in_profile: nil
+      end
+
+      it { is_expected.to include(:profile_preferences => [{user_id: u1.id,
+                                                            webaccess_id: 'abc123',
+                                                            visible_in_profile: true,
+                                                            position_in_profile: 4},
+                                                           {user_id: u2.id,
+                                                            webaccess_id: 'def456',
+                                                            visible_in_profile: false,
+                                                            position_in_profile: nil}]) }
+    end
   end
 end
