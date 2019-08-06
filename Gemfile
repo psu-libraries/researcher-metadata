@@ -133,7 +133,7 @@ group :test do
   gem 'shoulda-matchers', git: "https://github.com/thoughtbot/shoulda-matchers", require: false
 
   # Test object factory
-  gem 'factory_bot_rails'
+  gem 'factory_bot_rails', '4.11.1'
 
   # Integration test helpers for mailers
   gem 'capybara-email'
