@@ -17,18 +17,24 @@ describe 'API::V1 Organizations' do
     context "when a valid authorization header value is included in the request" do
       let!(:org1) { create :organization, visible: true }
       let!(:org2) { create :organization, visible: true }
+      let!(:org3) { create :organization, visible: true }
       let!(:invisible_org) { create(:organization, visible: false) }
       let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
       before do
+        create :organization_api_permission, api_token: token, organization: org1
+        create :organization_api_permission, api_token: token, organization: org2
         get "/v1/organizations", headers: {"X-API-Key": 'token123'}
       end
 
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it 'returns all visible organizations' do
+      it 'returns all visible organizations that the API token has permission to view' do
         expect(json_response[:data].size).to eq(2)
+
+        expect(json_response[:data].detect { |o| o[:id] == org1.id.to_s }).not_to be_nil
+        expect(json_response[:data].detect { |o| o[:id] == org2.id.to_s }).not_to be_nil
       end
       it "updates the usage statistics on the API token" do
         updated_token = token.reload
