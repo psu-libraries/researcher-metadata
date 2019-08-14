@@ -30,6 +30,8 @@ RailsAdmin.config do |config|
     'ActiveStorage::Attachment'
   ]
 
+  config.default_associated_collection_limit = 1000
+
   config.actions do
     dashboard do
 #     statistics false

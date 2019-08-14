@@ -10,6 +10,14 @@ class APIToken < ApplicationRecord
   end
 
   rails_admin do
+    show do
+      field(:token)
+      field(:app_name)
+      field(:admin_email)
+      field(:total_requests)
+      field(:organizations)
+    end
+
     list do
       field(:id)
       field(:token)
@@ -24,11 +32,13 @@ class APIToken < ApplicationRecord
     create do
       field(:admin_email)
       field(:app_name)
+      field(:organizations)
     end
 
     edit do
       field(:admin_email)
       field(:app_name)
+      field(:organizations)
     end
   end
 

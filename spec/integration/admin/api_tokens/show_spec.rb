@@ -7,8 +7,15 @@ feature "Admin API token detail page", type: :feature do
                         app_name: "Test Application",
                         admin_email: 'admin123@psu.edu' }
 
+  let!(:org1) { create :organization, name: 'Organization One' }
+  let!(:org2) { create :organization, name: 'Organization Two' }
+
   context "when the current user is an admin" do
-    before { authenticate_admin_user }
+    before do
+      create :organization_api_permission, api_token: token, organization: org1
+      create :organization_api_permission, api_token: token, organization: org2
+      authenticate_admin_user
+    end
 
     describe "the page content" do
       before { visit rails_admin.show_path(model_name: :api_token, id: token.id) }
@@ -23,6 +30,11 @@ feature "Admin API token detail page", type: :feature do
 
       it "shows the token's administrator email" do
         expect(page).to have_content "admin123@psu.edu"
+      end
+
+      it "shows the token's organizations" do
+        expect(page).to have_link "Organization One"
+        expect(page).to have_link "Organization Two"
       end
     end
 
