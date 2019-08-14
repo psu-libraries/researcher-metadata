@@ -19,12 +19,24 @@ end
 describe APIToken, type: :model do
   it_behaves_like "an application record"
 
+  it { is_expected.to have_many(:organization_api_permissions).inverse_of(:api_token) }
+  it { is_expected.to have_many(:organizations).through(:organization_api_permissions) }
+
   describe "creating a new token" do
     let(:new_token) { APIToken.new }
 
     it "sets a value for the token that is 64 characters long" do
       new_token.save!
       expect(new_token.token.length).to eq 96
+    end
+  end
+
+  describe "deleting a token" do
+    let(:token) { create :api_token }
+    let!(:permission) { create :organization_api_permission, api_token: token }
+    it "also deletes any associated organization API permissions" do
+      token.destroy
+      expect { permission.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 

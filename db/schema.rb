@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_183740) do
+ActiveRecord::Schema.define(version: 2019_08_14_193511) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -139,6 +139,15 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.datetime "updated_at", null: false
     t.date "published_on", null: false
     t.index ["url"], name: "index_news_feed_items_on_url", unique: true
+  end
+
+  create_table "organization_api_permissions", force: :cascade do |t|
+    t.integer "api_token_id", null: false
+    t.integer "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_token_id"], name: "index_organization_api_permissions_on_api_token_id"
+    t.index ["organization_id"], name: "index_organization_api_permissions_on_organization_id"
   end
 
   create_table "organizations", force: :cascade do |t|
@@ -372,6 +381,8 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "news_feed_items", "users"
+  add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
+  add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "organizations", "users", column: "owner_id", name: "organizations_owner_id_fk"
   add_foreign_key "performance_screenings", "performances", on_delete: :cascade

@@ -1,6 +1,9 @@
 class APIToken < ApplicationRecord
   before_create :set_token
 
+  has_many :organization_api_permissions, inverse_of: :api_token
+  has_many :organizations, through: :organization_api_permissions
+
   def increment_request_count
     update_column(:total_requests, total_requests + 1)
     update_column(:last_used_at, Time.current)
