@@ -51,8 +51,10 @@ describe 'API::V1 Organizations' do
     let!(:pub_2) { create :publication, published_on: Date.new(2010, 1, 1), visible: true }
     let!(:invisible_pub) { create :publication, published_on: Date.new(2010, 1, 1), visible: false }
     let!(:org) { create :organization, visible: true }
+    let!(:inaccessible_org) { create :organization, visible: true }
     let!(:invisible_org) { create :organization, visible: false }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
     before do
       create :user_organization_membership,
@@ -67,6 +69,8 @@ describe 'API::V1 Organizations' do
       create :authorship, user: user_1, publication: pub_1
       create :authorship, user: user_2, publication: pub_2
       create :authorship, user: user_2, publication: invisible_pub
+
+      create :organization_api_permission, api_token: token, organization: org
     end
 
     context "when no authorization header is included in the request" do
@@ -83,8 +87,6 @@ describe 'API::V1 Organizations' do
     end
 
     context "when a valid authorization header value is included in the request" do
-      let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
-
       context "when given the ID of a visible organization" do
         before do
           get "/v1/organizations/#{org.id}/publications", headers: headers
@@ -104,6 +106,22 @@ describe 'API::V1 Organizations' do
       context "when given the ID of an invisible organization" do
         before do
           get "/v1/organizations/#{invisible_org.id}/publications", headers: headers
+        end
+
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
+
+        it "returns 404" do
+          expect(response.code).to eq '404'
+        end
+      end
+
+      context "when given the ID of an organization to which the token does not have access" do
+        before do
+          get "/v1/organizations/#{inaccessible_org.id}/publications", headers: headers
         end
 
         it "updates the usage statistics on the API token" do

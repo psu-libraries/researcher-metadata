@@ -7,7 +7,7 @@ module API::V1
     end
 
     def publications
-      org = Organization.visible.find(params[:id])
+      org = api_token.organizations.visible.find(params[:id])
       render json: API::V1::PublicationSerializer.new(org.publications)
     end
 
