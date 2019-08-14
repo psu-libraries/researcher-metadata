@@ -5,7 +5,9 @@ feature "Admin API token detail page", type: :feature do
   let!(:token) { create :api_token,
                         token: 'secret_token_1',
                         app_name: "Test Application",
-                        admin_email: 'admin123@psu.edu' }
+                        admin_email: 'admin123@psu.edu',
+                        total_requests: 472,
+                        last_used_at: Time.zone.local(2019, 8, 14, 16, 44, 0) }
 
   let!(:org1) { create :organization, name: 'Organization One' }
   let!(:org2) { create :organization, name: 'Organization Two' }
@@ -30,6 +32,14 @@ feature "Admin API token detail page", type: :feature do
 
       it "shows the token's administrator email" do
         expect(page).to have_content "admin123@psu.edu"
+      end
+
+      it "shows the token's total requests" do
+        expect(page).to have_content 472
+      end
+
+      it "shows the time when the token was last used" do
+        expect(page).to have_content "August 14, 2019 16:44"
       end
 
       it "shows the token's organizations" do

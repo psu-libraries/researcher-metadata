@@ -15,6 +15,7 @@ class APIToken < ApplicationRecord
       field(:app_name)
       field(:admin_email)
       field(:total_requests)
+      field(:last_used_at)
       field(:organizations)
     end
 
