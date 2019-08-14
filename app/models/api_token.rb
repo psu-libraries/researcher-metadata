@@ -17,6 +17,16 @@ class APIToken < ApplicationRecord
       field(:created_at)
       field(:updated_at)
     end
+
+    create do
+      field(:admin_email)
+      field(:app_name)
+    end
+
+    edit do
+      field(:admin_email)
+      field(:app_name)
+    end
   end
 
   private
