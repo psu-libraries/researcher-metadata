@@ -60,6 +60,17 @@ describe 'API::V1 Users' do
         end
       end
     end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/contracts' do
@@ -114,6 +125,17 @@ describe 'API::V1 Users' do
         end
       end
     end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/news_feed_items' do
@@ -159,6 +181,17 @@ describe 'API::V1 Users' do
         end
       end
     end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/performances' do
@@ -200,6 +233,17 @@ describe 'API::V1 Users' do
         end
       end
     end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/organization_memberships' do
@@ -232,6 +276,17 @@ describe 'API::V1 Users' do
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
         end
+      end
+    end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
       end
     end
   end
