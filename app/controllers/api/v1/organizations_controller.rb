@@ -14,7 +14,7 @@ module API::V1
     swagger_path '/v1/organizations' do
       operation :get do
         key :summary, 'All Organizations'
-        key :description, 'Returns all visible organizations'
+        key :description, 'Returns all visible organizations to which the given API token has access.'
         key :operationId, 'findOrganizations'
         key :produces, ['application/json']
         key :tags, ['organization']
