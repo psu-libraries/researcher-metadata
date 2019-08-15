@@ -109,6 +109,56 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.published_during_membership' do
+    let!(:org) { create :organization }
+    let!(:other_org) { create :organization }
+    let!(:user_1) { create :user }
+    let!(:user_2) { create :user }
+    let!(:user_3) { create :user }
+
+    let!(:pub_1) { create :publication, visible: true, published_on: Date.new(2000, 1, 1) }
+    let!(:pub_2) { create :publication, visible: true, published_on: Date.new(2005, 1, 2) }
+    let!(:pub_3) { create :publication, visible: true, published_on: Date.new(1999, 12, 30) }
+    let!(:pub_4) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
+    let!(:pub_5) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
+    let!(:pub_6) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
+    let!(:pub_7) { create :publication, visible: true, published_on: Date.new(2019, 1, 1) }
+    let!(:pub_8) { create :publication, visible: false, published_on: Date.new(2019, 1, 1) }
+
+    before do
+      create :authorship, user: user_1, publication: pub_1 # authored by an org member during their first membership
+      create :authorship, user: user_2, publication: pub_1 # also authored by second org member during their membership
+      create :authorship, user: user_1, publication: pub_2 # authored by an org member after their membership
+      create :authorship, user: user_2, publication: pub_3 # authored by an org member before their membership
+      create :authorship, user: user_1, publication: pub_4 # authored by an org member during their first membership
+      create :authorship, user: user_2, publication: pub_5 # authored by an org member during their membership
+      create :authorship, user: user_3, publication: pub_6 # authored by an org member during their membership
+      create :authorship, user: user_1, publication: pub_7 # authored by an org member during their second membership
+      create :authorship, user: user_1, publication: pub_8 # authored by an org member during their second membership, but invisible
+
+      create :user_organization_membership,
+             user: user_1,
+             organization: org,
+             started_on: Date.new(1990, 1, 1),
+             ended_on: Date.new(2005, 1, 1)
+      create :user_organization_membership,
+             user: user_1,
+             organization: org,
+             started_on: Date.new(2015, 1, 1)
+      create :user_organization_membership,
+             user: user_2,
+             organization: org,
+             started_on: Date.new(1999, 12, 31)
+      create :user_organization_membership,
+             user: user_3,
+             organization: other_org,
+             started_on: Date.new(1980, 1, 1)
+    end
+    it "returns visible, unique publications by users who were members of an organization when they were published" do
+      expect(Publication.published_during_membership).to match_array [pub_1, pub_4, pub_5, pub_6, pub_7]
+    end
+  end
+
   describe '#contributors' do
     let(:pub) { create :publication }
     let!(:c1) { create :contributor, position: 2, publication: pub }

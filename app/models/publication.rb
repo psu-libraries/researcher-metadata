@@ -32,6 +32,12 @@ class Publication < ApplicationRecord
 
   scope :visible, -> { where visible: true }
 
+  scope :published_during_membership,
+        -> { visible.
+          joins(:user_organization_memberships).
+          where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
+          distinct(:id) }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true

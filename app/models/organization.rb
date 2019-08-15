@@ -4,17 +4,9 @@ class Organization < ApplicationRecord
   has_many :children, class_name: :Organization, foreign_key: :parent_id
   has_many :user_organization_memberships, inverse_of: :organization
   has_many :users, through: :user_organization_memberships
-  has_many :pubs, through: :users, source: :publications
+  has_many :publications, -> { published_during_membership }, through: :users
 
   validates :name, presence: true
 
   scope :visible, -> { where(visible: true) }
-
-  def publications
-    pubs.
-      visible.
-      joins(:user_organization_memberships).
-      where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
-      distinct(:id)
-  end
 end

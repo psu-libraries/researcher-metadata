@@ -31,7 +31,6 @@ describe Organization, type: :model do
   it { is_expected.to have_many(:children).class_name(:Organization) }
   it { is_expected.to have_many(:user_organization_memberships).inverse_of(:organization) }
   it { is_expected.to have_many(:users).through(:user_organization_memberships) }
-  it { is_expected.to have_many(:pubs).through(:users).source(:publications) }
 
   describe "deleting an organization with user memberships" do
     let(:o) { create :organization }
