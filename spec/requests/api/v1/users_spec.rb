@@ -8,6 +8,12 @@ describe 'API::V1 Users' do
   let(:room) { nil }
   let(:building) { nil }
   let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
+  let!(:inaccessible_user) { create :user, webaccess_id: 'inaccessible' }
+  let(:org) { create :organization }
+
+  before do
+    create :organization_api_permission, api_token: token, organization: org
+  end
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
     let!(:user) { create(:user_with_presentations,
@@ -22,8 +28,13 @@ describe 'API::V1 Users' do
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_visible_presentations) { create(:user, webaccess_id: "nopres123") }
 
     before do
+      create :user_organization_membership,
+             user: user_without_visible_presentations,
+             organization: org
+      create :user_organization_membership, user: user, organization: org
       get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
     end
 
@@ -42,8 +53,8 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no presentations" do
-        let(:user_without_visible_presentations) { create(:user, webaccess_id: "nopres123") }
         let(:webaccess_id) { user_without_visible_presentations.webaccess_id }
+
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
         end
@@ -71,6 +82,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/contracts' do
@@ -84,8 +108,12 @@ describe 'API::V1 Users' do
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_contracts) { create(:user, webaccess_id: "nocons123") }
 
     before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: other_user, organization: org
+      create :user_organization_membership, user: user_without_contracts, organization: org
       create :user_contract, user: user, contract: invisible_contract
       create :user_contract, user: user, contract: hidden_contract
       create :user_contract, user: other_user, contract: hidden_contract
@@ -107,7 +135,6 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no contracts" do
-        let(:user_without_contracts) { create(:user, webaccess_id: "nocons123") }
         let(:webaccess_id) { user_without_contracts.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
@@ -136,6 +163,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/news_feed_items' do
@@ -143,8 +183,11 @@ describe 'API::V1 Users' do
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_news_feed_items) { create(:user, webaccess_id: "nocons123") }
 
     before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: user_without_news_feed_items, organization: org
       get "/v1/users/#{webaccess_id}/news_feed_items#{params}", headers: headers
     end
 
@@ -163,7 +206,6 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no news feed items" do
-        let(:user_without_news_feed_items) { create(:user, webaccess_id: "nocons123") }
         let(:webaccess_id) { user_without_news_feed_items.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
@@ -192,6 +234,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/performances' do
@@ -203,8 +258,11 @@ describe 'API::V1 Users' do
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_performances) { create(:user, webaccess_id: "nopers123") }
 
     before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: user_without_performances, organization: org
       create :user_performance, user: user, performance: invisible_performance
       create :user_performance, user: user, performance: hidden_performance
       get "/v1/users/#{webaccess_id}/performances#{params}", headers: headers
@@ -220,7 +278,6 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no performances" do
-        let(:user_without_performances) { create(:user, webaccess_id: "nopers123") }
         let(:webaccess_id) { user_without_performances.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
@@ -244,6 +301,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/organization_memberships' do
@@ -253,6 +323,7 @@ describe 'API::V1 Users' do
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
 
     before do
+      create :user_organization_membership, user: user, organization: org
       get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
     end
 
@@ -267,14 +338,7 @@ describe 'API::V1 Users' do
       end
       context "when the user has organization memberships" do
         it "returns all the user's organization memberships" do
-          expect(json_response[:data].size).to eq(3)
-        end
-      end
-      context "when the user has no organization memberships" do
-        let(:user_without_organization_memberships) { create(:user, webaccess_id: "abc123") }
-        let(:webaccess_id) { user_without_organization_memberships.webaccess_id }
-        it "returns an empty JSON data hash" do
-          expect(json_response[:data].size).to eq(0)
+          expect(json_response[:data].size).to eq(4)
         end
       end
     end
@@ -289,6 +353,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'GET /v1/users/:webaccess_id/publications' do
@@ -301,8 +378,11 @@ describe 'API::V1 Users' do
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
     let(:show_pubs) { false }
+    let(:user_without_publications) { create(:user, webaccess_id: "nopubs123") }
 
     before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: user_without_publications, organization: org
       create :authorship, user: user, publication: invisible_pub
       get "/v1/users/#{webaccess_id}/publications#{params}", headers: headers
     end
@@ -346,7 +426,6 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has no publications" do
-        let(:user_without_publications) { create(:user, webaccess_id: "nopubs123") }
         let(:webaccess_id) { user_without_publications.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
@@ -375,6 +454,19 @@ describe 'API::V1 Users' do
         expect(updated_token.last_used_at).not_to be_nil
       end
     end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
   end
 
   describe 'POST /v1/users/publications' do
@@ -400,10 +492,15 @@ describe 'API::V1 Users' do
       create :authorship, user: user_abc123, publication: invisible_pub1
       create :authorship, user: user_cws161, publication: invisible_pub2
 
+      create :user_organization_membership, organization: org, user: user_xyz123
+      create :user_organization_membership, organization: org, user: user_abc123
+      create :user_organization_membership, organization: org, user: user_def123
+      create :user_organization_membership, organization: org, user: user_cws161
+
       post "/v1/users/publications", params: params, headers: headers
     end
     context "given a set webaccess_id params" do
-      let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123) } }
+      let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123 inaccessible) } }
       let(:headers) { {'X-API-Key' => 'token123'} }
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
@@ -420,6 +517,7 @@ describe 'API::V1 Users' do
         expect(json_response[:def123][:data].count).to eq(0)
         expect(json_response[:cws161][:data].count).to eq(0)
         expect(json_response[:fake123]).to be_nil
+        expect(json_response[:inaccessible]).to be_nil
       end
     end
   end
@@ -429,8 +527,11 @@ describe 'API::V1 Users' do
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_etds) { create(:user, webaccess_id: "nocommittees123") }
 
     before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: user_without_etds, organization: org
       get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
     end
 
@@ -449,7 +550,6 @@ describe 'API::V1 Users' do
         end
       end
       context "when the user has not served on any committees" do
-        let(:user_without_etds) { create(:user, webaccess_id: "nocommittees123") }
         let(:webaccess_id) { user_without_etds.webaccess_id }
         it "returns an empty JSON data hash" do
           expect(json_response[:data].size).to eq(0)
@@ -476,6 +576,19 @@ describe 'API::V1 Users' do
         updated_token = token.reload
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
       end
     end
   end

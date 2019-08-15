@@ -4,7 +4,7 @@ module API::V1
     include ActionController::MimeResponds
 
     def presentations
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @presentations = API::V1::UserQuery.new(user).presentations(params)
         respond_to do |format|
@@ -17,7 +17,7 @@ module API::V1
     end
 
     def contracts
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @contracts = API::V1::UserQuery.new(user).contracts(params)
         respond_to do |format|
@@ -30,7 +30,7 @@ module API::V1
     end
 
     def news_feed_items
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @news_feed_items = API::V1::UserQuery.new(user).news_feed_items(params)
         respond_to do |format|
@@ -43,7 +43,7 @@ module API::V1
     end
 
     def performances
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @performances = API::V1::UserQuery.new(user).performances(params)
         respond_to do |format|
@@ -56,7 +56,7 @@ module API::V1
     end
 
     def etds
-      @user = User.find_by(webaccess_id: params[:webaccess_id])
+      @user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if @user
         @etds = API::V1::UserQuery.new(@user).etds(params)
         respond_to do |format|
@@ -69,7 +69,7 @@ module API::V1
     end
 
     def publications
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @pubs = API::V1::UserQuery.new(user).publications(params)
         respond_to do |format|
@@ -82,7 +82,7 @@ module API::V1
     end
 
     def organization_memberships
-      user = User.find_by(webaccess_id: params[:webaccess_id])
+      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
         @memberships = user.user_organization_memberships
         respond_to do |format|
@@ -111,7 +111,7 @@ module API::V1
 
     def users_publications
       data = {}
-      User.includes(:publications).where(webaccess_id: params[:_json]).each do |user|
+      api_token.users.includes(:publications).where(webaccess_id: params[:_json]).each do |user|
         pubs = API::V1::UserQuery.new(user).publications(params)
         data[user.webaccess_id] = API::V1::PublicationSerializer.new(pubs).serializable_hash
       end
