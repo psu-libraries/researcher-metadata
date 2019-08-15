@@ -402,7 +402,7 @@ describe 'API::V1 Users' do
 
       post "/v1/users/publications", params: params, headers: headers
     end
-    context "for a valid set of webaccess_id params" do
+    context "given a set webaccess_id params" do
       let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123) } }
       let(:headers) { {'X-API-Key' => 'token123'} }
       it 'returns HTTP status 200' do
@@ -413,12 +413,13 @@ describe 'API::V1 Users' do
         expect(updated_token.total_requests).to eq 1
         expect(updated_token.last_used_at).not_to be_nil
       end
-      it "returns visible publications for each webaccess_id" do
+      it "returns visible publications for each valid webaccess_id" do
         expect(json_response.count).to eq(4)
         expect(json_response[:abc123][:data].count).to eq(5)
         expect(json_response[:xyz321][:data].count).to eq(10)
         expect(json_response[:def123][:data].count).to eq(0)
         expect(json_response[:cws161][:data].count).to eq(0)
+        expect(json_response[:fake123]).to be_nil
       end
     end
   end
