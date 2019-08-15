@@ -126,6 +126,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       }
     }
 
+    before { create :organization_api_permission, api_token: api_token, organization: org }
+
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }
     it { is_expected.to validate( :get, '/v1/publications', 401, unauthorized_params ) }
 
