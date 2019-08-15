@@ -68,15 +68,15 @@ describe Organization, type: :model do
     let!(:pub_8) { create :publication, visible: false, published_on: Date.new(2019, 1, 1) }
 
     before do
-      create :authorship, user: user_1, publication: pub_1
-      create :authorship, user: user_2, publication: pub_1
-      create :authorship, user: user_1, publication: pub_2
-      create :authorship, user: user_2, publication: pub_3
-      create :authorship, user: user_1, publication: pub_4
-      create :authorship, user: user_2, publication: pub_5
-      create :authorship, user: user_3, publication: pub_6
-      create :authorship, user: user_1, publication: pub_7
-      create :authorship, user: user_1, publication: pub_8
+      create :authorship, user: user_1, publication: pub_1 # authored by first member during their first membership
+      create :authorship, user: user_2, publication: pub_1 # also authored by second member during their membership
+      create :authorship, user: user_1, publication: pub_2 # authored by first member after their membership
+      create :authorship, user: user_2, publication: pub_3 # authored by second member before their membership
+      create :authorship, user: user_1, publication: pub_4 # authored by first member during their first membership
+      create :authorship, user: user_2, publication: pub_5 # authored by second member during their membership
+      create :authorship, user: user_3, publication: pub_6 # authored by a non-member during their membership in another org
+      create :authorship, user: user_1, publication: pub_7 # authored by first member during their second membership
+      create :authorship, user: user_1, publication: pub_8 # authored by first member during their second membership, but invisible
 
       create :user_organization_membership,
              user: user_1,
