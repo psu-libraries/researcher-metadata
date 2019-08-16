@@ -22,6 +22,7 @@ describe APIToken, type: :model do
   it { is_expected.to have_many(:organization_api_permissions).inverse_of(:api_token) }
   it { is_expected.to have_many(:organizations).through(:organization_api_permissions) }
   it { is_expected.to have_many(:users).through(:organizations) }
+  it { is_expected.to have_many(:publications).through(:users) }
 
   describe "creating a new token" do
     let(:new_token) { APIToken.new }

@@ -135,6 +135,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       create :user_organization_membership, organization: org, user: user_with_news_feed_items
       create :user_organization_membership, organization: org, user: user_with_performances
       create :user_organization_membership, organization: org, user: user_with_organization_memberships
+      create :authorship, user: user, publication: publication_1
     end
 
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }

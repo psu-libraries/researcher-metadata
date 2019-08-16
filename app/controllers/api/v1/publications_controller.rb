@@ -4,11 +4,11 @@ module API::V1
 
     def index
       params[:limit].present? ? limit = params[:limit] : limit = 100
-      render json: API::V1::PublicationSerializer.new(Publication.visible.limit(limit))
+      render json: API::V1::PublicationSerializer.new(api_token.publications.visible.limit(limit))
     end
 
     def show
-      @publication = Publication.visible.find(params[:id])
+      @publication = api_token.publications.visible.find(params[:id])
       render json: API::V1::PublicationSerializer.new(@publication).serializable_hash
     end
 

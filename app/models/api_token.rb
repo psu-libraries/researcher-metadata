@@ -4,6 +4,7 @@ class APIToken < ApplicationRecord
   has_many :organization_api_permissions, inverse_of: :api_token
   has_many :organizations, through: :organization_api_permissions
   has_many :users, through: :organizations
+  has_many :publications, through: :users
 
   def increment_request_count
     update_column(:total_requests, total_requests + 1)
