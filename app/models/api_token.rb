@@ -11,6 +11,10 @@ class APIToken < ApplicationRecord
     update_column(:last_used_at, Time.current)
   end
 
+  def organization_count
+    organizations.count
+  end
+
   rails_admin do
     show do
       field(:token)
@@ -25,9 +29,10 @@ class APIToken < ApplicationRecord
       field(:id)
       field(:token)
       field(:app_name)
-      field(:admin_email)
+      field(:organization_count) { label 'Orgs'}
       field(:total_requests)
       field(:last_used_at)
+      field(:admin_email)
       field(:created_at)
       field(:updated_at)
     end

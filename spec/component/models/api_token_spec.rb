@@ -60,4 +60,19 @@ describe APIToken, type: :model do
       expect(token.reload.last_used_at).to eq Time.zone.local(2017, 11, 3, 9, 45, 0)
     end
   end
+
+  describe '#organization_count' do
+    let!(:token) { create :api_token }
+    let!(:org1) { create :organization }
+    let!(:org2) { create :organization }
+
+    before do
+      create :organization_api_permission, organization: org1, api_token: token
+      create :organization_api_permission, organization: org2, api_token: token
+    end
+
+    it "returns the number of organization with which the API token is associated" do
+      expect(token.organization_count).to eq 2
+    end
+  end
 end
