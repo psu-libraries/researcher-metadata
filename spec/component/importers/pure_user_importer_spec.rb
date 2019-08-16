@@ -117,7 +117,6 @@ describe PureUserImporter do
                                                 position_title: 'Existing Title',
                                                 started_on: Date.new(1900, 1, 1),
                                                 ended_on: Date.new(2000, 1, 1) }
-
             let!(:user1) { create :user, webaccess_id: 'sat1' }
             let!(:existing_pure_parent_membership) { create :user_organization_membership,
                                                             user: user1,
@@ -153,6 +152,7 @@ describe PureUserImporter do
               m6 = other_existing_parent_membership.reload
               m7 = existing_parent_parent_membership.reload
 
+              # This membership was created from the data in the import.
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
               expect(m1.imported_from_pure).to eq true
@@ -162,6 +162,7 @@ describe PureUserImporter do
               expect(m1.ended_on).to eq Date.new(1990, 8, 14)
               expect(m1.updated_by_user_at).to eq nil
 
+              # This membership was also created from the data in the import.
               expect(m2.user).to eq u2
               expect(m2.organization).to eq org2
               expect(m2.imported_from_pure).to eq true
@@ -171,6 +172,9 @@ describe PureUserImporter do
               expect(m2.ended_on).to eq Date.new(2000, 1, 1)
               expect(m2.updated_by_user_at).to eq nil
 
+              # A membership with this Pure identifier already existed with different
+              # data than the data in the import, so it was updated with the data in
+              # the import.
               expect(m3.user).to eq u2
               expect(m3.organization).to eq org3
               expect(m3.imported_from_pure).to eq true
@@ -180,6 +184,11 @@ describe PureUserImporter do
               expect(m3.ended_on).to eq nil
               expect(m3.updated_by_user_at).to eq nil
 
+              # An implicit membership for this same user and organization already existed after
+              # being generated from a previous pure import because data in the previous
+              # import defined a membership between this user and one of this organization's
+              # children, so this membership was updated based on different data for the
+              # same implicit membership in this import.
               expect(m4.pure_identifier).to eq nil
               expect(m4.imported_from_pure).to eq true
               expect(m4.primary).to eq nil
@@ -188,6 +197,10 @@ describe PureUserImporter do
               expect(m4.ended_on).to eq Date.new(1990, 8, 14)
               expect(m4.updated_by_user_at).to eq nil
 
+              # This implicit membership was created because data in this import defined a membership
+              # between this user and one of this organization's children's children, and while
+              # a membership between the same user and organization already existed, it was not
+              # created by a previous Pure import.
               expect(m5.pure_identifier).to eq nil
               expect(m5.imported_from_pure).to eq true
               expect(m5.primary).to eq nil
@@ -196,6 +209,9 @@ describe PureUserImporter do
               expect(m5.ended_on).to eq Date.new(1990, 8, 14)
               expect(m5.updated_by_user_at).to eq nil
 
+              # These memberships already existed, and although they were between the same users
+              # and organizations as a memberships that were implicit in this import data, they
+              # were not updated because they were not created by a previous Pure import.
               expect(m6.pure_identifier).to eq nil
               expect(m6.imported_from_pure).to eq false
               expect(m6.user).to eq u1
