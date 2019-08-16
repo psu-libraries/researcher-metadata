@@ -26,6 +26,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p1.scope).to eq nil
         expect(p1.start_on).to eq Date.new(2007, 1, 15)
         expect(p1.end_on).to eq Date.new(2008, 4, 12)
+        expect(p1.visible).to eq true
 
         expect(p2.title).to eq 'Test Performance 2'
         expect(p2.performance_type).to eq 'Poetry/Fiction'
@@ -37,6 +38,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p2.scope).to eq 'Local'
         expect(p2.start_on).to eq Date.new(2016, 4, 01)
         expect(p2.end_on).to eq Date.new(2016, 4, 30)
+        expect(p2.visible).to eq true
 
         expect(p3.title).to eq 'Test Performance 3'
         expect(p3.performance_type).to eq 'Film - Documentary'
@@ -48,6 +50,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p3.scope).to eq 'Regional'
         expect(p3.start_on).to eq Date.new(2009, 2, 01)
         expect(p3.end_on).to eq Date.new(2009, 8, 31)
+        expect(p3.visible).to eq true
 
         expect(p4.title).to eq 'Test Performance 4'
         expect(p4.performance_type).to eq 'Print Edition for Something'
@@ -59,6 +62,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p4.scope).to eq nil
         expect(p4.start_on).to eq Date.new(2015, 5, 06)
         expect(p4.end_on).to eq Date.new(2015, 12, 01)
+        expect(p4.visible).to eq true
 
         expect(p5.title).to eq 'Test Performance 5'
         expect(p5.performance_type).to eq 'Print Edition for Something'
@@ -70,6 +74,7 @@ describe ActivityInsightPerformanceImporter do
         expect(p5.scope).to eq nil
         expect(p5.start_on).to eq Date.new(2016, 5, 06)
         expect(p5.end_on).to eq Date.new(2016, 12, 01)
+        expect(p5.visible).to eq true
 
       end
 

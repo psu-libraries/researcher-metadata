@@ -5,7 +5,7 @@ describe 'the organizations table', type: :model do
   subject { Organization.new }
 
   it { is_expected.to have_db_column(:name).of_type(:text).with_options(null: false) }
-  it { is_expected.to have_db_column(:visible).of_type(:boolean) }
+  it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
   it { is_expected.to have_db_column(:pure_external_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:organization_type).of_type(:string) }
