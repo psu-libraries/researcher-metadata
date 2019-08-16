@@ -76,7 +76,8 @@ class PureUserImporter
     if parent
       m = UserOrganizationMembership.find_by(organization: parent,
                                              user: user,
-                                             imported_from_pure: true) || UserOrganizationMembership.new
+                                             imported_from_pure: true,
+                                             pure_identifier: nil) || UserOrganizationMembership.new
 
       m.organization = parent if m.new_record?
       m.user = user if m.new_record?
