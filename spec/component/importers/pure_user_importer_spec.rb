@@ -107,7 +107,7 @@ describe PureUserImporter do
             end
           end
 
-          context "when organization memberships already exists for associations described in the .json file" do
+          context "when organization memberships already exist for associations described in the .json file" do
             let!(:existing_membership) { create :user_organization_membership,
                                                 pure_identifier: '24766061',
                                                 user: other_user,
@@ -149,6 +149,9 @@ describe PureUserImporter do
               m5 = UserOrganizationMembership.find_by(organization: org1_parent_parent,
                                                       user: u1,
                                                       imported_from_pure: true)
+
+              m6 = other_existing_parent_membership.reload
+              m7 = existing_parent_parent_membership.reload
 
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
@@ -192,6 +195,26 @@ describe PureUserImporter do
               expect(m5.started_on).to eq Date.new(1984, 8, 14)
               expect(m5.ended_on).to eq Date.new(1990, 8, 14)
               expect(m5.updated_by_user_at).to eq nil
+
+              expect(m6.pure_identifier).to eq nil
+              expect(m6.imported_from_pure).to eq false
+              expect(m6.user).to eq u1
+              expect(m6.organization).to eq org1_parent
+              expect(m6.primary).to eq nil
+              expect(m6.position_title).to eq nil
+              expect(m6.started_on).to eq nil
+              expect(m6.ended_on).to eq nil
+              expect(m6.updated_by_user_at).to eq nil
+
+              expect(m7.pure_identifier).to eq nil
+              expect(m7.imported_from_pure).to eq false
+              expect(m7.user).to eq u1
+              expect(m7.organization).to eq org1_parent_parent
+              expect(m7.primary).to eq nil
+              expect(m7.position_title).to eq nil
+              expect(m7.started_on).to eq nil
+              expect(m7.ended_on).to eq nil
+              expect(m7.updated_by_user_at).to eq nil
             end
           end
         end
