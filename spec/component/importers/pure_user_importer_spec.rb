@@ -136,15 +136,13 @@ describe PureUserImporter do
             it "creates a new membership for each new association and updates the existing memberships" do
               expect { importer.call }.to change { UserOrganizationMembership.count }.by 3
 
-              u1 = User.find_by(webaccess_id: 'sat1')
+              u1 = user1
               u2 = User.find_by(webaccess_id: 'bbt2')
 
               m1 = UserOrganizationMembership.find_by(pure_identifier: '21279128')
               m2 = UserOrganizationMembership.find_by(pure_identifier: '21309545')
-              m3 = UserOrganizationMembership.find_by(pure_identifier: '24766061')
-              m4 = UserOrganizationMembership.find_by(organization: org1_parent,
-                                                      user: u1,
-                                                      imported_from_pure: true)
+              m3 = existing_membership.reload
+              m4 = existing_pure_parent_membership.reload
               m5 = UserOrganizationMembership.find_by(organization: org1_parent_parent,
                                                       user: u1,
                                                       imported_from_pure: true)
