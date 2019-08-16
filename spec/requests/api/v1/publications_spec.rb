@@ -49,7 +49,6 @@ describe 'API::V1 Publications' do
 
   describe 'GET /v1/publications/:id' do
 
-    let!(:publications) { create_list(:publication, 10, visible: true) }
     let!(:requested_publication) {
       create(:publication, title: 'requested publication', visible: visible)
     }
