@@ -610,4 +610,32 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#organization_name' do
+    let!(:user) { create :user }
+    let(:org) { create :organization, name: 'My Org' }
+    context "when the user has no organizations" do
+      it "returns nil" do
+        expect(user.organization_name).to be_nil
+      end
+    end
+    context "when the user does not have an organization from Pure" do
+      before { create :user_organization_membership,
+                      user: user,
+                      organization: org,
+                      pure_identifier: nil }
+      it "returns nil" do
+        expect(user.organization_name).to be_nil
+      end
+    end
+    context "when the user does have an organization from Pure" do
+      before { create :user_organization_membership,
+                      user: user,
+                      organization: org,
+                      pure_identifier: 'pure123' }
+      it "returns the name of the organization" do
+        expect(user.organization_name).to eq 'My Org'
+      end
+    end
+  end
 end

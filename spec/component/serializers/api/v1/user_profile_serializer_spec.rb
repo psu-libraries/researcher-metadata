@@ -4,9 +4,11 @@ describe API::V1::UserProfileSerializer do
   let(:profile) { double 'user profile',
                          id: 1,
                          name: 'test name',
+                         organization_name: 'test org',
                          title: 'test title',
                          email: 'test@email.com',
                          office_location: 'test office',
+                         office_phone_number: '555-555-5555',
                          personal_website: 'website.org',
                          total_scopus_citations: 100,
                          scopus_h_index: 25,
@@ -27,9 +29,11 @@ describe API::V1::UserProfileSerializer do
   describe "data attributes" do
     subject { serialized_data_attributes(profile) }
     it { is_expected.to include(name: 'test name') }
+    it { is_expected.to include(organization_name: 'test org') }
     it { is_expected.to include(title: 'test title') }
     it { is_expected.to include(email: 'test@email.com') }
     it { is_expected.to include(office_location: 'test office') }
+    it { is_expected.to include(office_phone_number: '555-555-5555') }
     it { is_expected.to include(personal_website: 'website.org') }
     it { is_expected.to include(total_scopus_citations: 100) }
     it { is_expected.to include(scopus_h_index: 25) }

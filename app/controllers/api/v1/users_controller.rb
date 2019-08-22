@@ -986,16 +986,21 @@ module API::V1
               end
               property :attributes do
                 key :type, :object
-                key :required, [:name, :title, :email, :office_location, :personal_website,
-                                :total_scopus_citations, :scopus_h_index, :pure_profile_url,
-                                :orcid_identifier, :bio, :teaching_interests, :research_interests,
-                                :publications, :grants, :presentations, :performances,
-                                :master_advising_roles, :phd_advising_roles, :news_stories,
-                                :education_history]
+                key :required, [:name, :organization_name, :title, :email, :office_location,
+                                :office_phone_number, :personal_website, :total_scopus_citations,
+                                :scopus_h_index, :pure_profile_url, :orcid_identifier, :bio,
+                                :teaching_interests, :research_interests, :publications, :grants,
+                                :presentations, :performances, :master_advising_roles,
+                                :phd_advising_roles, :news_stories, :education_history]
                 property :name do
                   key :type, :string
                   key :example, 'Example User'
                   key :description, 'The full name of the user'
+                end
+                property :organization_name do
+                  key :type, :string
+                  key :example, 'College of Engineering'
+                  key :description, "The name of the user's primary organization"
                 end
                 property :title do
                   key :type, :string
@@ -1011,6 +1016,11 @@ module API::V1
                   key :type, :string
                   key :example, '101 Chemistry Building'
                   key :description, "The room number and building where the user's office is located"
+                end
+                property :office_phone_number do
+                  key :type, :string
+                  key :example, '(555) 555-555'
+                  key :description, "The telephone number for the user's office"
                 end
                 property :personal_website do
                   key :type, :string

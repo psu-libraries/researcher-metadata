@@ -78,6 +78,10 @@ class User < ApplicationRecord
     end
   end
 
+  def organization_name
+    user_organization_memberships.where.not(pure_identifier: nil).first.try(:organization).try(:name)
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

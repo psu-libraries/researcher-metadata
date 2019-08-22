@@ -6,10 +6,12 @@ class UserProfile
   delegate :name,
            :id,
            :office_location,
+           :office_phone_number,
            :total_scopus_citations,
            :scopus_h_index,
            :pure_profile_url,
            :orcid_identifier,
+           :organization_name,
            to: :user
 
   def title

@@ -16,10 +16,12 @@ describe UserProfile do
   it { is_expected.to delegate_method(:id).to(:user) }
   it { is_expected.to delegate_method(:name).to(:user) }
   it { is_expected.to delegate_method(:office_location).to(:user) }
+  it { is_expected.to delegate_method(:office_phone_number).to(:user) }
   it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
   it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
   it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
   it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
+  it { is_expected.to delegate_method(:organization_name).to(:user) }
 
   describe '#title' do
     it "returns the given user's title from Activity Insight" do
