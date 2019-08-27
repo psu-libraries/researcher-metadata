@@ -221,10 +221,7 @@ class Publication < ApplicationRecord
       field(:organizations, :has_many_association) do
         searchable [:id]
       end
-      field(:publication_type)
       field(:journal_title)
-      field(:publisher)
-      field(:status)
       field(:volume)
       field(:issue)
       field(:edition)
@@ -235,11 +232,12 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
-      field(:abstract)
-      field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
+      field(:publisher)
+      field(:publication_type)
+      field(:status)
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
