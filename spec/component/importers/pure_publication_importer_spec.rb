@@ -81,6 +81,9 @@ describe PurePublicationImporter do
 
           expect(p1.visible).to eq true
           expect(p2.visible).to eq true
+
+          expect(p1.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
+          expect(p2.doi).to be nil
         end
 
         it "saves the correct data for each contributor" do
@@ -156,7 +159,8 @@ describe PurePublicationImporter do
                                     published_on: Date.new(2018, 8, 22),
                                     total_scopus_citations: 1,
                                     abstract: 'existing abstract',
-                                    visible: false }
+                                    visible: false,
+                                    doi: 'existing DOI' }
         
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
@@ -260,6 +264,7 @@ describe PurePublicationImporter do
             expect(updated_pub.total_scopus_citations).to eq 2
             expect(updated_pub.abstract).to be_nil
             expect(updated_pub.visible).to eq true
+            expect(updated_pub.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
           end
           
           it "creates new publications with the correct data" do
@@ -280,6 +285,7 @@ describe PurePublicationImporter do
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
+            expect(new_pub.doi).to be_nil
           end
         end
         
@@ -372,6 +378,7 @@ describe PurePublicationImporter do
             expect(existing_pub_reloaded.total_scopus_citations).to eq 2
             expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
             expect(existing_pub_reloaded.visible).to eq false
+            expect(existing_pub_reloaded.doi).to eq 'existing DOI'
           end
 
           it "creates new publications with the correct data" do
@@ -392,6 +399,7 @@ describe PurePublicationImporter do
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
+            expect(new_pub.doi).to eq nil
           end
         end
       end
