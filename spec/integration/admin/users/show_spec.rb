@@ -124,7 +124,7 @@ feature "Admin user detail page", type: :feature do
       end
 
       it "shows the user's Orcid ID" do
-        expect(page).to have_content 'Test Orcid ID'
+        expect(page).to have_link 'Test Orcid ID', href: 'Test Orcid ID'
       end
 
       it "shows the user's alt name" do

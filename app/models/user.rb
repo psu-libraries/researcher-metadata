@@ -117,6 +117,10 @@ class User < ApplicationRecord
           bindings[:view]._current_user.is_admin
         end
       end
+      field(:orcid_identifier) do
+        label 'ORCID'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:is_admin) do
         label 'Admin user?'
         visible do
@@ -157,7 +161,10 @@ class User < ApplicationRecord
       field(:ai_title) { label 'Title' }
       field(:ai_rank) { label 'Rank' }
       field(:ai_endowed_title) { label 'Endowed Title' }
-      field(:orcid_identifier) { label 'ORCID ID' }
+      field(:orcid_identifier) do
+        label 'ORCID ID'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:ai_alt_name) { label 'Alternate Name' }
       field(:ai_building) { label 'Building' }
       field(:ai_room_number) { label 'Room Number' }
