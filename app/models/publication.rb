@@ -231,7 +231,10 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
+      field(:doi) do
+        label 'DOI'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -286,7 +289,10 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
+      field(:doi) do
+        label 'DOI'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
