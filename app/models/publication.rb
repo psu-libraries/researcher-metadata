@@ -118,6 +118,11 @@ class Publication < ApplicationRecord
         key :example, 'A summary of the research'
         key :description, 'A brief summary of the content of the publication'
       end
+      property :doi do
+        key :type, [:string, :null]
+        key :example, 'https://doi.org/example'
+        key :description, 'The Digital Object Identifier URL for the publication'
+      end
       property :published_on do
         key :type, [:string, :null]
         key :example, '2010-12-05'
