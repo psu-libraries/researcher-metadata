@@ -14,6 +14,7 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        edition: "edition1",
                        page_range: "pages1",
                        issn: "issn1",
+                       doi: "DOI1",
                        publication_type: "Trade Journal Article",
                        duplicate_group: group }
   let!(:pub2) { create :publication,
@@ -28,6 +29,7 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        edition: "edition2",
                        page_range: "pages2",
                        issn: "issn2",
+                       doi: "DOI2",
                        publication_type: "Academic Journal Article",
                        duplicate_group: group }
 
@@ -128,6 +130,11 @@ feature "Admin duplicate publication group detail page", type: :feature do
       it "shows the ISSNs of the publications in the group" do
         expect(page).to have_content "issn1"
         expect(page).to have_content "issn2"
+      end
+
+      it "shows the DOIs of the publications in the group" do
+        expect(page).to have_link "DOI1", href: "DOI1"
+        expect(page).to have_link "DOI2", href: "DOI2"
       end
 
       it "shows the types of the publications in the group" do
