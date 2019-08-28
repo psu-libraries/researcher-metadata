@@ -33,8 +33,7 @@ class PurePublicationImporter
 
               if pi.persisted?
                 if p.updated_by_user_at.present?
-                  pi.publication.update_attributes!(total_scopus_citations: publication['totalScopusCitations'],
-                                                    doi: doi(publication))
+                  pi.publication.update_attributes!(total_scopus_citations: publication['totalScopusCitations'])
                 else
                   pi.publication.update_attributes!(pub_attrs(publication))
                 end
