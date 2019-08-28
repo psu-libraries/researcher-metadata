@@ -360,7 +360,7 @@ describe PurePublicationImporter do
             expect(existing_import.reload.source_updated_at).to eq Time.parse('2018-03-14T20:47:06.357+0000')
           end
 
-          it "updates only the Scopus citation count on the existing publication" do
+          it "updates only the Scopus citation count and DOI on the existing publication" do
             importer.call
 
             existing_pub_reloaded = existing_pub.reload
@@ -378,7 +378,7 @@ describe PurePublicationImporter do
             expect(existing_pub_reloaded.total_scopus_citations).to eq 2
             expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
             expect(existing_pub_reloaded.visible).to eq false
-            expect(existing_pub_reloaded.doi).to eq 'existing DOI'
+            expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
           end
 
           it "creates new publications with the correct data" do
