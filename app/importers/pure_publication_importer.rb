@@ -104,7 +104,8 @@ class PurePublicationImporter
                              published_day(publication)),
       total_scopus_citations: publication['totalScopusCitations'],
       abstract: abstract(publication),
-      visible: true
+      visible: true,
+      doi: doi(publication)
     }
   end
 
@@ -126,5 +127,14 @@ class PurePublicationImporter
 
   def abstract(publication)
     publication['abstract'].try(:first).try(:[], 'value')
+  end
+
+  def doi(publication)
+    if publication['electronicVersions'] &&
+      publication['electronicVersions'].first['versionType'] &&
+      publication['electronicVersions'].first['versionType'].detect { |t| t['value'] == 'Final published version' }
+
+      publication['electronicVersions'].first['doi']
+    end
   end
 end

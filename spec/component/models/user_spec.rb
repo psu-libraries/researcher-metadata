@@ -12,7 +12,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:is_admin).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
   it { is_expected.to have_db_column(:scopus_h_index).of_type(:integer) }
-  it { is_expected.to have_db_column(:show_all_publications).of_type(:boolean).with_options(default: false) }
+  it { is_expected.to have_db_column(:show_all_publications).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:show_all_contracts).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -607,6 +607,34 @@ describe User, type: :model do
         it "returns nil" do
           expect(user.office_location).to be_nil
         end
+      end
+    end
+  end
+
+  describe '#organization_name' do
+    let!(:user) { create :user }
+    let(:org) { create :organization, name: 'My Org' }
+    context "when the user has no organizations" do
+      it "returns nil" do
+        expect(user.organization_name).to be_nil
+      end
+    end
+    context "when the user does not have an organization from Pure" do
+      before { create :user_organization_membership,
+                      user: user,
+                      organization: org,
+                      pure_identifier: nil }
+      it "returns nil" do
+        expect(user.organization_name).to be_nil
+      end
+    end
+    context "when the user does have an organization from Pure" do
+      before { create :user_organization_membership,
+                      user: user,
+                      organization: org,
+                      pure_identifier: 'pure123' }
+      it "returns the name of the organization" do
+        expect(user.organization_name).to eq 'My Org'
       end
     end
   end

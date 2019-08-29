@@ -30,6 +30,8 @@ RailsAdmin.config do |config|
     'ActiveStorage::Attachment'
   ]
 
+  config.default_associated_collection_limit = 1000
+
   config.actions do
     dashboard do
 #     statistics false
@@ -47,7 +49,7 @@ RailsAdmin.config do |config|
             :APIToken]
     end
     new do
-      only [:Publication, :User]
+      only [:Publication, :User, :APIToken]
     end
     export
     bulk_delete do
@@ -55,10 +57,10 @@ RailsAdmin.config do |config|
     end
     show
     edit do
-      only [:Publication, :User, :Contract, :Presentation, :Performance]
+      only [:Publication, :User, :Contract, :Presentation, :Performance, :APIToken]
     end
     delete do
-      only [:Publication, :User]
+      only [:Publication, :User, :APIToken]
     end
     show_in_app
 

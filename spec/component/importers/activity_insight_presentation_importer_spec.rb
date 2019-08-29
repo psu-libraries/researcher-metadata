@@ -29,7 +29,7 @@ describe ActivityInsightPresentationImporter do
           expect(p1.abstract).to eq 'Test Abstract One'
           expect(p1.comment).to eq 'Test Comment One'
           expect(p1.scope).to eq 'Local'
-          expect(p1.visible).to eq false
+          expect(p1.visible).to eq true
           expect(p1.updated_by_user_at).to be_nil
 
           expect(p2.title).to eq 'Test Title Two'
@@ -46,7 +46,7 @@ describe ActivityInsightPresentationImporter do
           expect(p2.abstract).to eq 'Test Abstract Two'
           expect(p2.comment).to eq 'Test Comment Two'
           expect(p2.scope).to eq nil
-          expect(p2.visible).to eq false
+          expect(p2.visible).to eq true
           expect(p2.updated_by_user_at).to eq nil
 
           expect(p3.title).to eq 'Test Title Three'
@@ -63,7 +63,7 @@ describe ActivityInsightPresentationImporter do
           expect(p3.abstract).to eq nil
           expect(p3.comment).to eq nil
           expect(p3.scope).to eq 'National'
-          expect(p3.visible).to eq false
+          expect(p3.visible).to eq true
           expect(p3.updated_by_user_at).to eq nil
         end
       end
@@ -85,7 +85,7 @@ describe ActivityInsightPresentationImporter do
                                       abstract: 'Existing Abstract',
                                       comment: 'Existing Comment',
                                       scope: 'Existing Scope',
-                                      visible: true,
+                                      visible: false,
                                       updated_by_user_at: timestamp}
 
         context "when the existing presentation has been updated by a human" do
@@ -112,7 +112,7 @@ describe ActivityInsightPresentationImporter do
             expect(p1.abstract).to eq 'Test Abstract One'
             expect(p1.comment).to eq 'Test Comment One'
             expect(p1.scope).to eq 'Local'
-            expect(p1.visible).to eq false
+            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to be_nil
 
             expect(p2.title).to eq 'Existing Title'
@@ -129,7 +129,7 @@ describe ActivityInsightPresentationImporter do
             expect(p2.abstract).to eq 'Existing Abstract'
             expect(p2.comment).to eq 'Existing Comment'
             expect(p2.scope).to eq 'Existing Scope'
-            expect(p2.visible).to eq true
+            expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
 
             expect(p3.title).to eq 'Test Title Three'
@@ -146,7 +146,7 @@ describe ActivityInsightPresentationImporter do
             expect(p3.abstract).to eq nil
             expect(p3.comment).to eq nil
             expect(p3.scope).to eq 'National'
-            expect(p3.visible).to eq false
+            expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
           end
         end
@@ -175,7 +175,7 @@ describe ActivityInsightPresentationImporter do
             expect(p1.abstract).to eq 'Test Abstract One'
             expect(p1.comment).to eq 'Test Comment One'
             expect(p1.scope).to eq 'Local'
-            expect(p1.visible).to eq false
+            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to be_nil
 
             expect(p2.title).to eq 'Test Title Two'
@@ -192,7 +192,7 @@ describe ActivityInsightPresentationImporter do
             expect(p2.abstract).to eq 'Test Abstract Two'
             expect(p2.comment).to eq 'Test Comment Two'
             expect(p2.scope).to eq nil
-            expect(p2.visible).to eq true
+            expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq nil
 
             expect(p3.title).to eq 'Test Title Three'
@@ -209,7 +209,7 @@ describe ActivityInsightPresentationImporter do
             expect(p3.abstract).to eq nil
             expect(p3.comment).to eq nil
             expect(p3.scope).to eq 'National'
-            expect(p3.visible).to eq false
+            expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
           end
         end

@@ -32,6 +32,12 @@ class Publication < ApplicationRecord
 
   scope :visible, -> { where visible: true }
 
+  scope :published_during_membership,
+        -> { visible.
+          joins(:user_organization_memberships).
+          where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
+          distinct(:id) }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
@@ -111,6 +117,11 @@ class Publication < ApplicationRecord
         key :type, [:string, :null]
         key :example, 'A summary of the research'
         key :description, 'A brief summary of the content of the publication'
+      end
+      property :doi do
+        key :type, [:string, :null]
+        key :example, 'https://doi.org/example'
+        key :description, 'The Digital Object Identifier URL for the publication'
       end
       property :published_on do
         key :type, [:string, :null]
@@ -215,22 +226,23 @@ class Publication < ApplicationRecord
       field(:organizations, :has_many_association) do
         searchable [:id]
       end
-      field(:publication_type)
       field(:journal_title)
-      field(:publisher)
-      field(:status)
       field(:volume)
       field(:issue)
       field(:edition)
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
-      field(:abstract)
-      field(:authors_et_al) { label 'Et al authors?' }
+      field(:doi) do
+        label 'DOI'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
+      field(:publisher)
+      field(:publication_type)
+      field(:status)
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -280,7 +292,10 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
+      field(:doi) do
+        label 'DOI'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)

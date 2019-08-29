@@ -176,6 +176,7 @@ describe ActivityInsightImporter do
           expect(p1.refereed).to eq 'Yes'
           expect(p1.abstract).to eq 'An abstract'
           expect(p1.comment).to eq 'Some comments'
+          expect(p1.visible).to eq true
 
           expect(p2.title).to eq "Sally's PAA Presentation"
           expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -188,6 +189,7 @@ describe ActivityInsightImporter do
           expect(p2.refereed).to eq 'No'
           expect(p2.abstract).to eq 'Another abstract'
           expect(p2.comment).to be_nil
+          expect(p2.visible).to eq true
         end
 
         context "when no included presentation contributions exist in the database" do
@@ -251,7 +253,8 @@ describe ActivityInsightImporter do
           create :presentation,
                  activity_insight_identifier: '83890556928',
                  updated_by_user_at: updated,
-                 title: 'Existing Title'
+                 title: 'Existing Title',
+                 visible: false
         end
 
         context "when the existing presentation has been updated by an admin" do
@@ -273,6 +276,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to be_nil
             expect(p1.abstract).to be_nil
             expect(p1.comment).to be_nil
+            expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -285,6 +289,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
+            expect(p2.visible).to eq true
           end
 
           context "when no included presentation contributions exist in the database" do
@@ -363,6 +368,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
+            expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -375,6 +381,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
+            expect(p2.visible).to eq true
           end
 
           context "when no included presentation contributions exist in the database" do
@@ -452,6 +459,7 @@ describe ActivityInsightImporter do
           expect(p1.scope).to eq "Regional"
           expect(p1.start_on).to eq Date.new(2009, 2, 1)
           expect(p1.end_on).to eq Date.new(2009, 8, 1)
+          expect(p1.visible).to eq true
 
           expect(p2.title).to eq "Sally's Film"
           expect(p2.performance_type).to eq "Film - Other"
@@ -463,6 +471,7 @@ describe ActivityInsightImporter do
           expect(p2.scope).to eq "Local"
           expect(p2.start_on).to eq Date.new(2000, 2, 1)
           expect(p2.end_on).to eq Date.new(2000, 8, 1)
+          expect(p2.visible).to eq true
         end
 
         context "when no included user performances exist in the database" do
@@ -533,7 +542,8 @@ describe ActivityInsightImporter do
                  delivery_type: nil,
                  scope: nil,
                  start_on: nil,
-                 end_on: nil
+                 end_on: nil,
+                 visible: false
         end
         context "when the existing performance has been updated by an admin" do
           let(:updated) { Time.zone.now }
@@ -553,6 +563,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to be_nil
             expect(p1.start_on).to be_nil
             expect(p1.end_on).to be_nil
+            expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq "Film - Other"
@@ -564,6 +575,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq "Local"
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            expect(p2.visible).to eq true
           end
 
 
@@ -639,6 +651,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq "Regional"
             expect(p1.start_on). to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
+            expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq "Film - Other"
@@ -650,6 +663,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq "Local"
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            expect(p2.visible).to eq true
           end
 
 
@@ -879,6 +893,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
+            expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -891,6 +906,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
+            expect(p2.visible).to eq true
           end
 
           context "when no included presentation contributions exist in the database" do
@@ -958,7 +974,8 @@ describe ActivityInsightImporter do
             create :presentation,
                    activity_insight_identifier: '83890556928',
                    updated_by_user_at: updated,
-                   title: 'Existing Title'
+                   title: 'Existing Title',
+                   visible: false
           end
 
           context "when the existing presentation has been updated by an admin" do
@@ -980,6 +997,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to be_nil
               expect(p1.abstract).to be_nil
               expect(p1.comment).to be_nil
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -992,6 +1010,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+              expect(p2.visible).to eq true
             end
 
             context "when no included presentation contributions exist in the database" do
@@ -1076,6 +1095,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to eq 'Yes'
               expect(p1.abstract).to eq 'An abstract'
               expect(p1.comment).to eq 'Some comments'
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1088,6 +1108,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+              expect(p2.visible).to eq true
             end
 
             context "when no included presentation contributions exist in the database" do
@@ -1165,6 +1186,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq "Regional"
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
+            expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq "Film - Other"
@@ -1176,6 +1198,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq "Local"
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            expect(p2.visible).to eq true
           end
 
           context "when no included user performances exist in the database" do
@@ -1252,7 +1275,8 @@ describe ActivityInsightImporter do
                    delivery_type: nil,
                    scope: nil,
                    start_on: nil,
-                   end_on: nil
+                   end_on: nil,
+                   visible: false
           end
           context "when the existing performance has been updated by an admin" do
             let(:updated) { Time.zone.now }
@@ -1272,6 +1296,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to be_nil
               expect(p1.start_on).to be_nil
               expect(p1.end_on).to be_nil
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq "Film - Other"
@@ -1283,6 +1308,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq "Local"
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
+              expect(p2.visible).to eq true
             end
 
 
@@ -1364,6 +1390,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to eq "Regional"
               expect(p1.start_on). to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq "Film - Other"
@@ -1375,6 +1402,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq "Local"
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
+              expect(p2.visible).to eq true
             end
 
 
@@ -1592,6 +1620,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
+            expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1604,6 +1633,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
+            expect(p2.visible).to eq true
           end
 
           context "when no included presentation contributions exist in the database" do
@@ -1667,7 +1697,8 @@ describe ActivityInsightImporter do
             create :presentation,
                    activity_insight_identifier: '83890556928',
                    updated_by_user_at: updated,
-                   title: 'Existing Title'
+                   title: 'Existing Title',
+                   visible: false
           end
 
           context "when the existing presentation has been updated by an admin" do
@@ -1689,6 +1720,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to be_nil
               expect(p1.abstract).to be_nil
               expect(p1.comment).to be_nil
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1701,6 +1733,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+              expect(p2.visible).to eq true
             end
 
             context "when no included presentation contributions exist in the database" do
@@ -1784,6 +1817,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to eq 'Yes'
               expect(p1.abstract).to eq 'An abstract'
               expect(p1.comment).to eq 'Some comments'
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1796,6 +1830,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
+              expect(p2.visible).to eq true
             end
 
             context "when no included presentation contributions exist in the database" do
@@ -1873,6 +1908,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq "Regional"
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
+            expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq "Film - Other"
@@ -1884,6 +1920,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq "Local"
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
+            expect(p2.visible).to eq true
           end
 
           context "when no included user performances exist in the database" do
@@ -1954,7 +1991,8 @@ describe ActivityInsightImporter do
                    delivery_type: nil,
                    scope: nil,
                    start_on: nil,
-                   end_on: nil
+                   end_on: nil,
+                   visible: false
           end
           context "when the existing performance has been updated by an admin" do
             let(:updated) { Time.zone.now }
@@ -1974,6 +2012,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to be_nil
               expect(p1.start_on).to be_nil
               expect(p1.end_on).to be_nil
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq "Film - Other"
@@ -1985,6 +2024,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq "Local"
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
+              expect(p2.visible).to eq true
             end
 
 
@@ -2066,6 +2106,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to eq "Regional"
               expect(p1.start_on). to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
+              expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq "Film - Other"
@@ -2077,6 +2118,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq "Local"
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
+              expect(p2.visible).to eq true
             end
 
 

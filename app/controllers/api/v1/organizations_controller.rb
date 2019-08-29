@@ -3,18 +3,18 @@ module API::V1
     include Swagger::Blocks
 
     def index
-      render json: API::V1::OrganizationSerializer.new(Organization.visible)
+      render json: API::V1::OrganizationSerializer.new(api_token.organizations.visible)
     end
 
     def publications
-      org = Organization.visible.find(params[:id])
+      org = api_token.organizations.visible.find(params[:id])
       render json: API::V1::PublicationSerializer.new(org.publications)
     end
 
     swagger_path '/v1/organizations' do
       operation :get do
         key :summary, 'All Organizations'
-        key :description, 'Returns all visible organizations'
+        key :description, 'Returns all visible organizations to which the given API token has access.'
         key :operationId, 'findOrganizations'
         key :produces, ['application/json']
         key :tags, ['organization']

@@ -36,8 +36,9 @@ describe ActivityInsightPublicationImporter do
           expect(p1.abstract).to eq 'Test Abstract 1'
           expect(p1.authors_et_al).to eq true
           expect(p1.published_on).to eq Date.new(2015, 4, 1)
-          expect(p1.visible).to eq false
+          expect(p1.visible).to eq true
           expect(p1.updated_by_user_at).to eq nil
+          expect(p1.doi).to eq nil
 
           expect(p2.title).to eq 'Test Title Two'
           expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -48,13 +49,14 @@ describe ActivityInsightPublicationImporter do
           expect(p2.issue).to eq '4'
           expect(p2.edition).to eq '1'
           expect(p2.page_range).to eq '20-30'
-          expect(p2.url).to eq nil
+          expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
           expect(p2.issn).to eq nil
           expect(p2.abstract).to eq nil
           expect(p2.authors_et_al).to eq false
           expect(p2.published_on).to eq nil
-          expect(p2.visible).to eq false
+          expect(p2.visible).to eq true
           expect(p2.updated_by_user_at).to eq nil
+          expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
           expect(p3.title).to eq 'Test Title Four'
           expect(p3.publication_type).to eq 'Academic Journal Article'
@@ -66,12 +68,13 @@ describe ActivityInsightPublicationImporter do
           expect(p3.edition).to eq nil
           expect(p3.page_range).to eq nil
           expect(p3.url).to eq 'url_2'
-          expect(p3.issn).to eq nil
+          expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
           expect(p3.abstract).to eq 'Test Abstract 2'
           expect(p3.authors_et_al).to eq false
           expect(p3.published_on).to eq Date.new(2017, 3, 1)
-          expect(p3.visible).to eq false
+          expect(p3.visible).to eq true
           expect(p3.updated_by_user_at).to eq nil
+          expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
         end
       end
 
@@ -96,7 +99,9 @@ describe ActivityInsightPublicationImporter do
                                     abstract: 'Existing abstract',
                                     authors_et_al: true,
                                     published_on: Date.new(1980, 1, 1),
-                                    updated_by_user_at: timestamp }
+                                    updated_by_user_at: timestamp,
+                                    visible: false,
+                                    doi: 'existing DOI' }
 
         context "when the existing publication has been updated by a human" do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
@@ -129,8 +134,9 @@ describe ActivityInsightPublicationImporter do
             expect(p1.abstract).to eq 'Test Abstract 1'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2015, 4, 1)
-            expect(p1.visible).to eq false
+            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
+            expect(p1.doi).to eq nil
 
             expect(p2.title).to eq 'Existing Title'
             expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -148,6 +154,7 @@ describe ActivityInsightPublicationImporter do
             expect(p2.published_on).to eq Date.new(1980, 1, 1)
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
+            expect(p2.doi).to eq 'existing DOI'
 
             expect(p3.title).to eq 'Test Title Four'
             expect(p3.publication_type).to eq 'Academic Journal Article'
@@ -159,12 +166,13 @@ describe ActivityInsightPublicationImporter do
             expect(p3.edition).to eq nil
             expect(p3.page_range).to eq nil
             expect(p3.url).to eq 'url_2'
-            expect(p3.issn).to eq nil
+            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
             expect(p3.abstract).to eq 'Test Abstract 2'
             expect(p3.authors_et_al).to eq false
             expect(p3.published_on).to eq Date.new(2017, 3, 1)
-            expect(p3.visible).to eq false
+            expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
+            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
           end
         end
 
@@ -199,8 +207,9 @@ describe ActivityInsightPublicationImporter do
             expect(p1.abstract).to eq 'Test Abstract 1'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2015, 4, 1)
-            expect(p1.visible).to eq false
+            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
+            expect(p1.doi).to eq nil
 
             expect(p2.title).to eq 'Test Title Two'
             expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -211,13 +220,14 @@ describe ActivityInsightPublicationImporter do
             expect(p2.issue).to eq '4'
             expect(p2.edition).to eq '1'
             expect(p2.page_range).to eq '20-30'
-            expect(p2.url).to eq nil
+            expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
             expect(p2.issn).to eq nil
             expect(p2.abstract).to eq nil
             expect(p2.authors_et_al).to eq false
             expect(p2.published_on).to eq nil
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq nil
+            expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
             expect(p3.title).to eq 'Test Title Four'
             expect(p3.publication_type).to eq 'Academic Journal Article'
@@ -229,12 +239,13 @@ describe ActivityInsightPublicationImporter do
             expect(p3.edition).to eq nil
             expect(p3.page_range).to eq nil
             expect(p3.url).to eq 'url_2'
-            expect(p3.issn).to eq nil
+            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
             expect(p3.abstract).to eq 'Test Abstract 2'
             expect(p3.authors_et_al).to eq false
             expect(p3.published_on).to eq Date.new(2017, 3, 1)
-            expect(p3.visible).to eq false
+            expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
+            expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
           end
         end
       end

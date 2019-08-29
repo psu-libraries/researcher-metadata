@@ -8,7 +8,7 @@ FactoryBot.define do
 
     factory :user_with_authorships do
       transient do
-        authorships_count 10
+        authorships_count { 10 }
       end
 
       after(:create) do |user, evaluator|
@@ -18,7 +18,7 @@ FactoryBot.define do
 
     factory :user_with_contracts do
       transient do
-        contracts_count 10
+        contracts_count { 10 }
       end
 
       after(:create) do |user, evaluator|
@@ -28,7 +28,7 @@ FactoryBot.define do
 
     factory :user_with_presentations do
       transient do
-        presentations_count 10
+        presentations_count { 10 }
       end
 
       after(:create) do |user, evaluator|
@@ -38,7 +38,7 @@ FactoryBot.define do
 
     factory :user_with_committee_memberships do
       transient do
-        committee_memberships_count 10
+        committee_memberships_count { 10 }
       end
 
       after(:create) do |user, evaluator|
@@ -48,7 +48,7 @@ FactoryBot.define do
 
     factory :user_with_news_feed_items do
       transient do
-        news_feed_items_count 10
+        news_feed_items_count { 10 }
       end
 
       after(:create) do |user, evaluator|
@@ -64,7 +64,7 @@ FactoryBot.define do
 
     factory :user_with_performances do
       transient do
-        performances_count 10
+        performances_count { 10 }
       end
 
       after(:create) do |user, evaluator|

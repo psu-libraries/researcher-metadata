@@ -13,7 +13,10 @@ feature "Profile page", type: :feature do
                        ai_teaching_interests: 'My interests for teaching',
                        ai_bio: 'My bio information',
                        show_all_publications: true,
-                       show_all_contracts: true }
+                       show_all_contracts: true,
+                       ai_office_area_code: '123',
+                       ai_office_phone_1: '456',
+                       ai_office_phone_2: '7890'}
   let!(:pub1) { create :publication,
                        total_scopus_citations: 5,
                        visible: true,
@@ -68,6 +71,7 @@ feature "Profile page", type: :feature do
                        author_first_name: 'Another',
                        author_last_name: 'Author',
                        year: 1999, submission_type: 'Dissertation' }
+  let!(:org) { create :organization, name: 'Test Organization' }
 
   before do
     create :authorship, user: user, publication: pub1
@@ -107,6 +111,11 @@ feature "Profile page", type: :feature do
            title: 'Second Story',
            published_on: Date.new(2017, 3, 4)
 
+    create :user_organization_membership,
+           user: user,
+           organization: org,
+           pure_identifier: 'pure123'
+
     visit profile_path(webaccess_id: 'abc123')
   end
 
@@ -118,8 +127,16 @@ feature "Profile page", type: :feature do
     expect(page).to have_content 'Bob Testuser'
   end
 
+  it "shows the name of the requested user's organization" do
+    expect(page).to have_content 'Test Organization'
+  end
+
   it "shows the office location for the requested user" do
     expect(page).to have_content '123 Office Building'
+  end
+
+  it "shows the office phone number for the requested user" do
+    expect(page).to have_content '(123) 456-7890'
   end
 
   it "shows the email address for the requested user" do

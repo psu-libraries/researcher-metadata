@@ -5,7 +5,7 @@ describe 'the organizations table', type: :model do
   subject { Organization.new }
 
   it { is_expected.to have_db_column(:name).of_type(:text).with_options(null: false) }
-  it { is_expected.to have_db_column(:visible).of_type(:boolean) }
+  it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:pure_uuid).of_type(:string) }
   it { is_expected.to have_db_column(:pure_external_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:organization_type).of_type(:string) }
@@ -31,7 +31,6 @@ describe Organization, type: :model do
   it { is_expected.to have_many(:children).class_name(:Organization) }
   it { is_expected.to have_many(:user_organization_memberships).inverse_of(:organization) }
   it { is_expected.to have_many(:users).through(:user_organization_memberships) }
-  it { is_expected.to have_many(:pubs).through(:users).source(:publications) }
 
   describe "deleting an organization with user memberships" do
     let(:o) { create :organization }
@@ -68,15 +67,15 @@ describe Organization, type: :model do
     let!(:pub_8) { create :publication, visible: false, published_on: Date.new(2019, 1, 1) }
 
     before do
-      create :authorship, user: user_1, publication: pub_1
-      create :authorship, user: user_2, publication: pub_1
-      create :authorship, user: user_1, publication: pub_2
-      create :authorship, user: user_2, publication: pub_3
-      create :authorship, user: user_1, publication: pub_4
-      create :authorship, user: user_2, publication: pub_5
-      create :authorship, user: user_3, publication: pub_6
-      create :authorship, user: user_1, publication: pub_7
-      create :authorship, user: user_1, publication: pub_8
+      create :authorship, user: user_1, publication: pub_1 # authored by first member during their first membership
+      create :authorship, user: user_2, publication: pub_1 # also authored by second member during their membership
+      create :authorship, user: user_1, publication: pub_2 # authored by first member after their membership
+      create :authorship, user: user_2, publication: pub_3 # authored by second member before their membership
+      create :authorship, user: user_1, publication: pub_4 # authored by first member during their first membership
+      create :authorship, user: user_2, publication: pub_5 # authored by second member during their membership
+      create :authorship, user: user_3, publication: pub_6 # authored by a non-member during their membership in another org
+      create :authorship, user: user_1, publication: pub_7 # authored by first member during their second membership
+      create :authorship, user: user_1, publication: pub_8 # authored by first member during their second membership, but invisible
 
       create :user_organization_membership,
              user: user_1,

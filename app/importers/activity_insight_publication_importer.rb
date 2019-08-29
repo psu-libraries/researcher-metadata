@@ -37,6 +37,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
       page_range: page_range(row),
       url: url(row),
       issn: row[:isbnissn],
+      doi: ActivityInsightPublication.new(row).doi,
       abstract: row[:abstract],
       authors_et_al: authors_et_al(row),
       published_on: published_on(row)

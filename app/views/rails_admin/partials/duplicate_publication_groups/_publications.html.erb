@@ -76,6 +76,16 @@
       <% end %>
     </tr>
     <tr>
+      <td class="publication-field-label">DOI</td>
+      <% publications.each do |p| %>
+        <td class="publication-field" title="<%= p.doi %>">
+          <% if p.doi.present? %>
+            <a href="<%= p.doi %>" target="_blank"><%= p.doi %></a>
+          <% end %>
+        </td>
+      <% end %>
+    </tr>
+    <tr>
       <td class="publication-field-label">Type</td>
       <% publications.each do |p| %>
         <td class="publication-field" title="<%= p.publication_type %>"><%= p.publication_type %></td>

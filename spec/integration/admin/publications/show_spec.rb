@@ -21,6 +21,7 @@ feature "Admin publication detail page", type: :feature do
                       edition: "14",
                       page_range: "12-15",
                       issn: "1234-5678",
+                      doi: "https://example.doi.org/test",
                       published_on: Date.new(2018, 8, 1) }
 
   let!(:auth1) { create :authorship,
@@ -91,6 +92,10 @@ feature "Admin publication detail page", type: :feature do
 
       it "shows the publication's ISSN" do
         expect(page).to have_content "1234-5678"
+      end
+
+      it "shows the publication's DOI" do
+        expect(page).to have_link "https://example.doi.org/test", href: "https://example.doi.org/test"
       end
 
       it "shows the publication's publication date" do

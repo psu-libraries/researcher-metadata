@@ -17,17 +17,23 @@ describe 'API::V1 Publications' do
     context "when a valid authorization header value is included in the request" do
       let!(:publications) { create_list(:publication, 10, visible: true) }
       let!(:invisible_pub) { create(:publication, visible: false) }
+      let!(:inaccessible_pub) { create(:publication, visible: true) }
       let(:params) { '' }
       let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
+      let(:org) { create :organization }
+      let(:user) { create :user }
 
       before do
+        publications.each { |p| create :authorship, publication: p, user: user }
+        create :user_organization_membership, user: user, organization: org
+        create :organization_api_permission, organization: org, api_token: token
         get "/v1/publications#{params}", headers: {"X-API-Key": 'token123'}
       end
 
       it 'returns HTTP status 200' do
         expect(response).to have_http_status 200
       end
-      it 'returns all visible publications' do
+      it 'returns all visible publications to which the given API token has access' do
         expect(json_response[:data].size).to eq(10)
       end
       it "updates the usage statistics on the API token" do
@@ -49,32 +55,41 @@ describe 'API::V1 Publications' do
 
   describe 'GET /v1/publications/:id' do
 
-    let!(:publications) { create_list(:publication, 10, visible: true) }
-    let!(:requested_publication) {
-      create(:publication, title: 'requested publication', visible: visible)
-    }
-    let(:visible) { nil }
+    let!(:pub) { create :publication,
+                        title: 'requested publication',
+                        visible: visible }
+    let!(:inaccessible_pub) { create :publication, visible: true }
+    let!(:token) { create :api_token,
+                          token: 'token123',
+                          total_requests: 0,
+                          last_used_at: nil }
+    let(:visible) { true }
+    let(:org) { create :organization }
+    let(:user) { create :user }
+
+    before do
+      create :organization_api_permission, organization: org, api_token: token
+      create :user_organization_membership, organization: org, user: user
+      create :authorship, user: user, publication: pub
+    end
 
     context "when no authorization header is included in the request" do
       it "returns 401 Unauthorized" do
-        get "/v1/publications/#{requested_publication.id}"
+        get "/v1/publications/#{pub.id}"
         expect(response).to have_http_status 401
       end
     end
     context "when an invalid authorization header value is included in the request" do
       it "returns 401 Unauthorized" do
-        get "/v1/publications/#{requested_publication.id}", headers: {"X-API-Key": 'bad-token'}
+        get "/v1/publications/#{pub.id}", headers: {"X-API-Key": 'bad-token'}
         expect(response).to have_http_status 401
       end
     end
     context "when a valid authorization header value is included in the request" do
-      let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
 
       context "when requesting a visible publication" do
-        let(:visible) { true }
-
         before do
-          get "/v1/publications/#{requested_publication.id}", headers: {"X-API-Key": 'token123'}
+          get "/v1/publications/#{pub.id}", headers: {"X-API-Key": 'token123'}
         end
 
         it 'returns HTTP status 200' do
@@ -96,7 +111,17 @@ describe 'API::V1 Publications' do
         let(:visible) { false }
 
         before do
-          get "/v1/publications/#{requested_publication.id}", headers: {"X-API-Key": 'token123'}
+          get "/v1/publications/#{pub.id}", headers: {"X-API-Key": 'token123'}
+        end
+
+        it 'returns HTTP status 404' do
+          expect(response).to have_http_status 404
+        end
+      end
+
+      context "when requesting an inaccessible publication" do
+        before do
+          get "/v1/publications/#{inaccessible_pub.id}", headers: {"X-API-Key": 'token123'}
         end
 
         it 'returns HTTP status 404' do

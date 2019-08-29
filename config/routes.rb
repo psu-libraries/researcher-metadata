@@ -12,6 +12,7 @@ Rails.application.routes.draw do
   match '/user/sign_out', to: 'user/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
 
   root to: 'public#home'
+  get '/resources' => 'public#resources', as: :resources
 
   scope module: 'api' do
     namespace :v1 do

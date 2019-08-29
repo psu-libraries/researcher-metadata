@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_07_11_183740) do
+ActiveRecord::Schema.define(version: 2019_08_16_141555) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,9 +141,18 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.index ["url"], name: "index_news_feed_items_on_url", unique: true
   end
 
+  create_table "organization_api_permissions", force: :cascade do |t|
+    t.integer "api_token_id", null: false
+    t.integer "organization_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["api_token_id"], name: "index_organization_api_permissions_on_api_token_id"
+    t.index ["organization_id"], name: "index_organization_api_permissions_on_organization_id"
+  end
+
   create_table "organizations", force: :cascade do |t|
     t.text "name", null: false
-    t.boolean "visible"
+    t.boolean "visible", default: true
     t.string "pure_uuid"
     t.string "pure_external_identifier"
     t.string "organization_type"
@@ -182,7 +191,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.datetime "updated_by_user_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "visible", default: false
+    t.boolean "visible", default: true
     t.bigint "activity_insight_id", null: false
     t.index ["activity_insight_id"], name: "index_performances_on_activity_insight_id", unique: true
   end
@@ -219,7 +228,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.text "comment"
     t.string "scope"
     t.datetime "updated_by_user_at"
-    t.boolean "visible", default: false
+    t.boolean "visible", default: true
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
@@ -269,7 +278,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.integer "total_scopus_citations"
     t.integer "duplicate_publication_group_id"
     t.datetime "updated_by_user_at"
-    t.boolean "visible", default: false
+    t.boolean "visible", default: true
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
     t.index ["volume"], name: "index_publications_on_volume"
@@ -337,7 +346,7 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
     t.string "pure_uuid"
     t.string "penn_state_identifier"
     t.datetime "updated_by_user_at"
-    t.boolean "show_all_publications", default: false
+    t.boolean "show_all_publications", default: true
     t.boolean "show_all_contracts", default: false
     t.integer "scopus_h_index"
     t.string "ai_title"
@@ -372,6 +381,8 @@ ActiveRecord::Schema.define(version: 2019_07_11_183740) do
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "news_feed_items", "users"
+  add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
+  add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
   add_foreign_key "organizations", "users", column: "owner_id", name: "organizations_owner_id_fk"
   add_foreign_key "performance_screenings", "performances", on_delete: :cascade

@@ -50,6 +50,9 @@
             <% if @profile.title %>
               <p class="role"><%= @profile.title %></p>
             <% end %>
+            <% if @profile.organization_name %>
+              <p><%= @profile.organization_name %></p>
+            <% end %>
           </div>
           <div class="profile-info">
             <table>
@@ -58,6 +61,12 @@
                 <tr>
                   <td><%= image_tag('address.png', alt: "Address") %></td>
                   <td><%= @profile.office_location %></td>
+                </tr>
+              <% end %>
+              <% if @profile.office_phone_number %>
+                <tr>
+                  <td><%= image_tag('phone.png', alt: "Phone") %></td>
+                  <td><%= @profile.office_phone_number %></td>
                 </tr>
               <% end %>
               <tr>
