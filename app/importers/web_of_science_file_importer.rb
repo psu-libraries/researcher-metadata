@@ -6,8 +6,9 @@ class WebOfScienceFileImporter
     Nokogiri::XML::Reader(File.open('/Volumes/WA_ext_HD/web_of_science_data/CORE_2013-2018/2013_CORE/WR_2013_20190215154350_CORE_0022.xml')).each do |node|
       if node.name == 'REC' && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
         rec = Nokogiri::XML(node.outer_xml).at('REC')
+        pub = WebOfSciencePublication.new(rec)
 
-        if rec.css('doctypes > doctype').map { |dt| dt.text }.include?("Article") && rec.css('addresses').detect { |a| a.css('address_name > address_spec > organizations').detect { |o| o.text =~ /Penn State Univ/ } }
+        if pub.importable?
           rec.css('summary > names > name[role="author"]').each do |n|
             user = User.find_by(first_name: n.css('first_name').text.split(' ').first, last_name: n.css('last_name').text)
 
@@ -15,7 +16,11 @@ class WebOfScienceFileImporter
               puts "USER:  #{user.name}"
 
               puts "TITLE:\n"
-              puts rec.css('title[type="item"]').first.text
+              puts pub.title
+              puts "\n"
+
+              puts "DOI:\n"
+              puts pub.doi
               puts "\n"
 
               puts "NAMES:\n"
@@ -23,9 +28,7 @@ class WebOfScienceFileImporter
               puts "\n"
 
               puts "ABSTRACT:\n"
-              rec.css('abstracts > abstract > abstract_text').each do |a|
-                puts a.text
-              end
+              puts pub.abstract
               puts "\n"
 
               puts "CONTRIBUTORS:\n"
