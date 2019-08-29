@@ -110,7 +110,7 @@ describe ActivityInsightPublicationImporter do
             expect { importer.call }.to change { PublicationImport.count }.by 2
           end
 
-          it "creates new records for the new publications and only updates the DOI for the existing publication" do
+          it "creates new records for the new publications and does not update the existing publication" do
             expect { importer.call }.to change { Publication.count }.by 2
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -154,7 +154,7 @@ describe ActivityInsightPublicationImporter do
             expect(p2.published_on).to eq Date.new(1980, 1, 1)
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
-            expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+            expect(p2.doi).to eq 'existing DOI'
 
             expect(p3.title).to eq 'Test Title Four'
             expect(p3.publication_type).to eq 'Academic Journal Article'

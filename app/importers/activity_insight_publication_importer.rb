@@ -9,11 +9,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
       p = pi.publication
 
       if pi.persisted?
-        if p.updated_by_user_at.present?
-          p.update_attributes!(doi: ActivityInsightPublication.new(row).doi)
-        else
-          p.update_attributes!(pub_attrs(row))
-        end
+        p.update_attributes!(pub_attrs(row)) unless p.updated_by_user_at.present?
         return nil
       end
 
