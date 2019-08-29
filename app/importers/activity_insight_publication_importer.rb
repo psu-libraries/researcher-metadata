@@ -9,7 +9,11 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
       p = pi.publication
 
       if pi.persisted?
-        p.update_attributes!(pub_attrs(row)) unless p.updated_by_user_at.present?
+        if p.updated_by_user_at.present?
+          p.update_attributes!(doi: ActivityInsightPublication.new(row).doi)
+        else
+          p.update_attributes!(pub_attrs(row))
+        end
         return nil
       end
 
@@ -37,6 +41,7 @@ class ActivityInsightPublicationImporter < ActivityInsightCSVImporter
       page_range: page_range(row),
       url: url(row),
       issn: row[:isbnissn],
+      doi: ActivityInsightPublication.new(row).doi,
       abstract: row[:abstract],
       authors_et_al: authors_et_al(row),
       published_on: published_on(row)
