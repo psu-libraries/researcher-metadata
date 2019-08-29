@@ -3,7 +3,7 @@ require 'byebug'
 
 class WebOfScienceFileImporter
   def call
-    Nokogiri::XML::Reader(File.open('/Volumes/unicorn/CORE_2013-2018/2013_CORE/WR_2013_20190215154350_CORE_0022.xml')).each do |node|
+    Nokogiri::XML::Reader(File.open('/Volumes/WA_ext_HD/web_of_science_data/CORE_2013-2018/2013_CORE/WR_2013_20190215154350_CORE_0022.xml')).each do |node|
       if node.name == 'REC' && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
         rec = Nokogiri::XML(node.outer_xml).at('REC')
 
