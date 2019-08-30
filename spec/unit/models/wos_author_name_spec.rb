@@ -6,6 +6,14 @@ describe WOSAuthorName do
   let(:wos_name) { WOSAuthorName.new(name) }
 
   describe '#first_name' do
+    context "given only one name" do
+      let(:name) { "Author" }
+
+      it "returns nil" do
+        expect(wos_name.first_name).to eq nil
+      end
+    end
+
     context "given a full name with a first initial and no middle name" do
       let(:name) { "Author, S." }
 
@@ -64,6 +72,14 @@ describe WOSAuthorName do
   end
 
   describe '#middle_name' do
+    context "given only one name" do
+      let(:name) { "Author" }
+
+      it "returns nil" do
+        expect(wos_name.middle_name).to eq nil
+      end
+    end
+
     context "given a full name with a first initial and no middle name" do
       let(:name) { "Author, S." }
 
@@ -122,6 +138,14 @@ describe WOSAuthorName do
   end
 
   describe '#last_name' do
+    context "given only one name" do
+      let(:name) { "Author" }
+
+      it "returns the name" do
+        expect(wos_name.last_name).to eq "Author"
+      end
+    end
+
     context "given a full name with a first initial and no middle name" do
       let(:name) { "Author, S." }
 
@@ -180,6 +204,14 @@ describe WOSAuthorName do
   end
 
   describe '#first_initial' do
+    context "given only one name" do
+      let(:name) { "Author" }
+
+      it "returns nil" do
+        expect(wos_name.first_initial).to eq nil
+      end
+    end
+
     context "given a full name with a first initial and no middle name" do
       let(:name) { "Author, S." }
 
@@ -238,6 +270,14 @@ describe WOSAuthorName do
   end
 
   describe '#middle_initial' do
+    context "given only one name" do
+      let(:name) { "Author" }
+
+      it "returns nil" do
+        expect(wos_name.middle_initial).to eq nil
+      end
+    end
+
     context "given a full name with a first initial and no middle name" do
       let(:name) { "Author, S." }
 

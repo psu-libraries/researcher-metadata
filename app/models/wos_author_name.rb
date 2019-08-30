@@ -4,7 +4,7 @@ class WOSAuthorName
   end
 
   def first_name
-    first_name_or_initial if first_name_or_initial.length > 1
+    first_name_or_initial if first_name_or_initial && first_name_or_initial.length > 1
   end
 
   def middle_name
@@ -16,7 +16,7 @@ class WOSAuthorName
   end
 
   def first_initial
-    first_name_or_initial if first_name_or_initial.length == 1
+    first_name_or_initial if first_name_or_initial && first_name_or_initial.length == 1
   end
 
   def middle_initial
@@ -28,14 +28,14 @@ class WOSAuthorName
   attr_reader :full_name
 
   def first_name_or_initial
-    first_and_middle[0].gsub('.', '')
+    first_and_middle[0].gsub('.', '') if first_and_middle
   end
 
   def middle_name_or_initial
-    first_and_middle[1].gsub('.', '') if first_and_middle[1]
+    first_and_middle[1].gsub('.', '') if first_and_middle && first_and_middle[1]
   end
 
   def first_and_middle
-    full_name.split(',')[1].strip.split(' ')
+    full_name.split(',')[1].strip.split(' ') if full_name.split(',')[1]
   end
 end
