@@ -17,4 +17,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'PSU'
   inflect.acronym 'ETD'
   inflect.acronym 'DOI'
+  inflect.acronym 'WOS'
 end

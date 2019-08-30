@@ -19,6 +19,24 @@ class WebOfSciencePublication
     parsed_pub.css('abstracts > abstract > abstract_text').map { |a| a.try(:text).try(:strip) }.join("\n\n").strip.presence
   end
 
+  def author_names
+    parsed_pub.css('summary > names > name[role="author"]').map do |n|
+      WOSAuthorName.new(n.text.strip)
+    end
+  end
+
+  def grants
+    parsed_pub.css('grants > grant').map do |g|
+      WOSGrant.new(g)
+    end
+  end
+
+  def contributors
+    parsed_pub.css('contributors > contributor').map do |c|
+      WOSContributor.new(c)
+    end
+  end
+
   private
 
   attr_reader :parsed_pub
