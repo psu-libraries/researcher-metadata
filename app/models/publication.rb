@@ -20,6 +20,8 @@ class Publication < ApplicationRecord
            inverse_of: :publication
   has_many :imports, class_name: :PublicationImport
   has_many :organizations, through: :users
+  has_many :research_funds
+  has_many :grants, through: :research_funds
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,

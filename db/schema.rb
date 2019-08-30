@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_08_30_193401) do
+ActiveRecord::Schema.define(version: 2019_08_30_200901) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -128,6 +128,14 @@ ActiveRecord::Schema.define(version: 2019_08_30_193401) do
     t.datetime "updated_by_user_at"
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
+  end
+
+  create_table "grants", force: :cascade do |t|
+    t.text "agency_name", null: false
+    t.string "identifier"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["identifier"], name: "index_grants_on_identifier"
   end
 
   create_table "news_feed_items", force: :cascade do |t|
@@ -285,6 +293,15 @@ ActiveRecord::Schema.define(version: 2019_08_30_193401) do
     t.index ["volume"], name: "index_publications_on_volume"
   end
 
+  create_table "research_funds", force: :cascade do |t|
+    t.integer "grant_id", null: false
+    t.integer "publication_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["grant_id"], name: "index_research_funds_on_grant_id"
+    t.index ["publication_id"], name: "index_research_funds_on_publication_id"
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
     t.string "source"
@@ -397,6 +414,8 @@ ActiveRecord::Schema.define(version: 2019_08_30_193401) do
   add_foreign_key "publication_taggings", "publications", on_delete: :cascade
   add_foreign_key "publication_taggings", "tags", on_delete: :cascade
   add_foreign_key "publications", "duplicate_publication_groups", name: "publications_duplicate_publication_group_id_fk"
+  add_foreign_key "research_funds", "grants", name: "research_funds_grant_id_fk", on_delete: :cascade
+  add_foreign_key "research_funds", "publications", name: "research_funds_publication_id_fk", on_delete: :cascade
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
   add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade

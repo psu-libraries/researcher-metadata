@@ -56,6 +56,8 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:tags).through(:taggings) }
     it { is_expected.to have_many(:organizations).through(:users) }
     it { is_expected.to have_many(:user_organization_memberships).through(:users) }
+    it { is_expected.to have_many(:research_funds) }
+    it { is_expected.to have_many(:grants).through(:research_funds) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
