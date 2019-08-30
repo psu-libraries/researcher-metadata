@@ -12,35 +12,34 @@ class WebOfScienceFileImporter
             user = User.find_by(first_name: n.first_name, last_name: n.last_name)
 
             if user
-              puts "USER:  #{user.name}"
+              puts "USER:  #{user.name}\n"
+              puts "TITLE:  #{pub.title}"
+              puts "DOI:  #{pub.doi}"
+              puts "JOURNAL TITLE:  #{pub.journal_title}"
+              puts "ISSUE:  #{pub.issue}"
+              puts "VOLUME:  #{pub.volume}"
+              puts "PAGES:  #{pub.page_range}"
+              puts "PUBLISHED ON:  #{pub.publication_date}"
 
-              puts "TITLE:\n"
-              puts pub.title
               puts "\n"
-
-              puts "DOI:\n"
-              puts pub.doi
-              puts "\n"
-
-              puts "NAMES:\n"
+              puts "NAMES:"
               pub.author_names.each do |n|
                 puts "#{n.first_name || n.first_initial} #{n.last_name}"
               end
               puts "\n"
 
-              puts "ABSTRACT:\n"
+              puts "ABSTRACT:"
               puts pub.abstract
               puts "\n"
 
-              puts "CONTRIBUTORS:\n"
+              puts "CONTRIBUTORS:"
               pub.contributors.each do |c|
                 puts "#{c.name.first_name || c.name.first_initial} #{c.name.last_name}"
                 puts c.orcid
                 puts "\n"
               end
 
-              puts "GRANTS:\n"
-
+              puts "GRANTS:"
               pub.grants.each do |g|
                 puts g.agency
                 g.ids.each do |id|

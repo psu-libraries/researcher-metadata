@@ -130,6 +130,89 @@ describe WebOfSciencePublication do
     end
   end
 
+  describe '#journal_title' do
+    let(:title_element) { double 'title element', text: "   \n Journal Title  \n"}
+    before { allow(parsed_pub).to receive(:css).with('title[type="source"]').and_return(title_element) }
+
+    it "returns the title of the publication's journal with any surrounding whitespace removed" do
+      expect(pub.journal_title).to eq "Journal Title"
+    end
+  end
+
+  describe '#issue' do
+    let(:info_element) { double 'pub info element' }
+    before do
+      allow(parsed_pub).to receive(:css).with('pub_info').and_return info_element
+      allow(info_element).to receive(:attribute).with('issue').and_return issue_attr
+    end
+
+    context "when the given data contains an issue number" do
+      let(:issue_attr) { double 'issue attribute', value: "17" }
+      it "returns the publication's issue number" do
+        expect(pub.issue).to eq "17"
+      end
+    end
+    context "when the given data does not contain an issue number" do
+      let(:issue_attr) { nil }
+      it "returns nil" do
+        expect(pub.issue).to eq nil
+      end
+    end
+  end
+
+  describe '#volume' do
+    let(:info_element) { double 'pub info element' }
+    before do
+      allow(parsed_pub).to receive(:css).with('pub_info').and_return info_element
+      allow(info_element).to receive(:attribute).with('vol').and_return volume_attr
+    end
+
+    context "when the given data contains a volume number" do
+      let(:volume_attr) { double 'volume attribute', value: "25" }
+      it "returns the publication's volume number" do
+        expect(pub.volume).to eq "25"
+      end
+    end
+    context "when the given data does not contain a volume number" do
+      let(:volume_attr) { nil }
+      it "returns nil" do
+        expect(pub.volume).to eq nil
+      end
+    end
+  end
+
+  describe '#page_range' do
+    let(:page_element) { double 'page element', text: "  \n 102-111 \n  " }
+    before do
+      allow(parsed_pub).to receive(:css).with('pub_info > page').and_return page_element
+    end
+
+    it "returns the publication's page numbers with any surrounding whitespace removed" do
+      expect(pub.page_range).to eq "102-111"
+    end
+  end
+
+  describe '#publication_date' do
+    let(:info_element) { double 'pub info element' }
+    before do
+      allow(parsed_pub).to receive(:css).with('pub_info').and_return info_element
+      allow(info_element).to receive(:attribute).with('sortdate').and_return date_attr
+    end
+
+    context "when the given data contains a date of publication" do
+      let(:date_attr) { double 'date attribute', value: "2003-05-27" }
+      it "returns the publication's date" do
+        expect(pub.publication_date).to eq Date.new(2003, 5, 27)
+      end
+    end
+    context "when the given data does not contain a date of publication" do
+      let(:date_attr) { nil }
+      it "returns nil" do
+        expect(pub.publication_date).to eq nil
+      end
+    end
+  end
+
   describe '#author_names' do
     let(:full_name) { double 'full name', text: "  \n Full Name  \n\n " }
     let(:wos_name) { double 'WOS author name' }
