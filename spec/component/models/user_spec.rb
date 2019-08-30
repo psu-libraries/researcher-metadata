@@ -40,6 +40,10 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
   it { is_expected.to have_db_index(:webaccess_id).unique(true) }
   it { is_expected.to have_db_index(:penn_state_identifier).unique(true) }
+  it { is_expected.to have_db_index(:orcid_identifier).unique(true) }
+  it { is_expected.to have_db_index(:first_name) }
+  it { is_expected.to have_db_index(:middle_name) }
+  it { is_expected.to have_db_index(:last_name) }
 end
 
 describe User, type: :model do
