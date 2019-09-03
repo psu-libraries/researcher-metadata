@@ -214,12 +214,14 @@ describe WebOfSciencePublication do
   end
 
   describe '#author_names' do
-    let(:full_name) { double 'full name', text: "  \n Full Name  \n\n " }
+    let(:name_element) { double 'name element' }
     let(:wos_name) { double 'WOS author name' }
+    let(:full_name_element) { double 'full name element', text: 'Full Name'}
 
     before do
       allow(WOSAuthorName).to receive(:new).with('Full Name').and_return(wos_name)
-      allow(parsed_pub).to receive(:css).with('summary > names > name[role="author"]').and_return([full_name])
+      allow(parsed_pub).to receive(:css).with('summary > names > name[role="author"]').and_return([name_element])
+      allow(name_element).to receive(:css).with('full_name').and_return full_name_element
     end
 
     it "returns an array of the names of the publication's authors" do

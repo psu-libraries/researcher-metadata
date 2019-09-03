@@ -41,7 +41,7 @@ class WebOfSciencePublication
 
   def author_names
     parsed_pub.css('summary > names > name[role="author"]').map do |n|
-      WOSAuthorName.new(n.text.strip)
+      WOSAuthorName.new(n.css('full_name').text)
     end
   end
 
