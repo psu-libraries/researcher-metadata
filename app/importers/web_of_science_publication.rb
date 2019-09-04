@@ -12,7 +12,10 @@ class WebOfSciencePublication
   end
 
   def doi
-    parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="doi"]').first.try(:[], :value).try(:strip)
+    parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="doi"]').
+      first.try(:[], :value).try(:strip) ||
+      parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="xref_doi"]').
+      first.try(:[], :value).try(:strip)
   end
 
   def abstract

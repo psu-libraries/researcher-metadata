@@ -88,19 +88,43 @@ describe WebOfSciencePublication do
   end
 
   describe '#doi' do
-    before { allow(parsed_pub).to receive(:css).with('dynamic_data > cluster_related > identifiers > identifier[type="doi"]').and_return [doi] }
+    before do
+      allow(parsed_pub).to receive(:css).with('dynamic_data > cluster_related > identifiers > identifier[type="doi"]').and_return [doi]
+      allow(parsed_pub).to receive(:css).with('dynamic_data > cluster_related > identifiers > identifier[type="xref_doi"]').and_return [xref_doi]
+    end
 
-    context "when the given data has a DOI identifier element" do
-      let(:doi) { {value: "\n    10.1000/DOI123  \n   "} }
-      it "returns the value of the DOI with any whitespace removed" do
-        expect(pub.doi).to eq '10.1000/DOI123'
+    context "when the given data does not have an xref DOI identifier element" do
+      let(:xref_doi) { nil }
+
+      context "when the given data has a DOI identifier element" do
+        let(:doi) { {value: "\n    10.1000/DOI123  \n   "} }
+        it "returns the value of the DOI with any whitespace removed" do
+          expect(pub.doi).to eq '10.1000/DOI123'
+        end
+      end
+
+      context "when the given data does not have a DOI identifier element" do
+        let(:doi) { nil }
+        it "returns nil" do
+          expect(pub.doi).to eq nil
+        end
       end
     end
 
-    context "when the given data does not have a DOI identifier element" do
-      let(:doi) { nil }
-      it "returns nil" do
-        expect(pub.doi).to eq nil
+    context "when the given data has an xref DOI identifier element" do
+      let(:xref_doi) { {value: " \n   10.2000/XREFDOI456  \n "}}
+      context "when the given data has a DOI identifier element" do
+        let(:doi) { {value: "\n    10.1000/DOI123  \n   "} }
+        it "returns the value of the DOI with any whitespace removed" do
+          expect(pub.doi).to eq '10.1000/DOI123'
+        end
+      end
+
+      context "when the given data does not have a DOI identifier element" do
+        let(:doi) { nil }
+        it "returns the value of the xref DOI identifier with any whitespace removed" do
+          expect(pub.doi).to eq '10.2000/XREFDOI456'
+        end
       end
     end
   end
