@@ -93,6 +93,15 @@ describe Publication, type: :model do
     end
   end
 
+  describe "deleting a publication with research funds" do
+    let(:p) { create :publication }
+    let!(:rf) { create :research_fund, publication: p}
+    it "also deletes the publication's research funds" do
+      p.destroy
+      expect { rf.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '.publication_types' do
     it "returns the list of valid publication types" do
       expect(Publication.publication_types).to eq ["Academic Journal Article",

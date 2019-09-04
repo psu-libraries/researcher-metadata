@@ -29,4 +29,13 @@ describe Grant, type: :model do
       expect(grant.name).to eq 'ID123'
     end
   end
+
+  describe "deleting a grant with research funds" do
+    let(:g) { create :grant }
+    let!(:rf) { create :research_fund, grant: g}
+    it "also deletes the grant's research funds" do
+      g.destroy
+      expect { rf.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
 end
