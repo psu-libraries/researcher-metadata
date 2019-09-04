@@ -18,6 +18,7 @@ feature "Admin dashboard", type: :feature do
         8.times { create :etd }
         2.times { create :organization }
         6.times { create :performance }
+        5.times { create :grant }
 
         visit rails_admin.dashboard_path
       end
@@ -57,6 +58,10 @@ feature "Admin dashboard", type: :feature do
 
         within 'tr.performance_links' do
           expect(page).to have_content '6'
+        end
+
+        within 'tr.grant_links' do
+          expect(page).to have_content '5'
         end
       end
     end

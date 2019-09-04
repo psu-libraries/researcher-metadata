@@ -22,4 +22,11 @@ describe Grant, type: :model do
   it { is_expected.to have_many(:publications).through(:research_funds) }
 
   it { is_expected.to validate_presence_of(:agency_name) }
+
+  describe '#name' do
+    let(:grant) { Grant.new(identifier: 'ID123') }
+    it "returns the grant's identifier" do
+      expect(grant.name).to eq 'ID123'
+    end
+  end
 end

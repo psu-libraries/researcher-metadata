@@ -46,7 +46,8 @@ RailsAdmin.config do |config|
             :Organization,
             :NewsFeedItem,
             :Performance,
-            :APIToken]
+            :APIToken,
+            :Grant]
     end
     new do
       only [:Publication, :User, :APIToken]

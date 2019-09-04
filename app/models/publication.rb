@@ -309,6 +309,7 @@ class Publication < ApplicationRecord
       field(:users) { read_only true }
       field(:authorships)
       field(:contributors)
+      field(:grants)
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?'}

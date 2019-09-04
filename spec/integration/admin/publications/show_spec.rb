@@ -48,6 +48,22 @@ feature "Admin publication detail page", type: :feature do
   let!(:imp2) { create :publication_import,
                        publication: pub }
 
+  let!(:grant1) { create :grant,
+                         agency_name: "Test Agency1",
+                         identifier: "GRANT-ID-123"}
+
+  let!(:grant2) { create :grant,
+                         agency_name: "Test Agency2",
+                         identifier: "GRANT-ID-456"}
+
+  let!(:rf1) { create :research_fund,
+                      grant: grant1,
+                      publication: pub }
+
+  let!(:rf2) { create :research_fund,
+                      grant: grant2,
+                      publication: pub }
+
   context "when the current user is an admin" do
     before { authenticate_admin_user }
 
@@ -115,6 +131,11 @@ feature "Admin publication detail page", type: :feature do
       it "shows the publication's contributors" do
         expect(page).to have_link "Jill Author"
         expect(page).to have_link "Jack Contributor"
+      end
+
+      it "shows the publication's grants" do
+        expect(page).to have_link "GRANT-ID-123"
+        expect(page).to have_link "GRANT-ID-456"
       end
 
       it "shows the publication's imports" do
