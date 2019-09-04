@@ -18,6 +18,11 @@ class WebOfSciencePublication
       first.try(:[], :value).try(:strip)
   end
 
+  def issn
+    parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="issn"]').
+      first.try(:[], :value).try(:strip)
+  end
+
   def abstract
     parsed_pub.css('abstracts > abstract > abstract_text').map { |a| a.try(:text).try(:strip) }.join("\n\n").strip.presence
   end

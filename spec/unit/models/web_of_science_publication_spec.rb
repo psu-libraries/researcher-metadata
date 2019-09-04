@@ -129,6 +129,25 @@ describe WebOfSciencePublication do
     end
   end
 
+  describe '#issn' do
+    before do
+      allow(parsed_pub).to receive(:css).with('dynamic_data > cluster_related > identifiers > identifier[type="issn"]').and_return [issn]
+    end
+    context "when the given data has an ISSN identifier element" do
+      let(:issn) { {value: "\n    1234-5678  \n   "} }
+      it "returns the value of the ISSN with any whitespace removed" do
+        expect(pub.issn).to eq '1234-5678'
+      end
+    end
+
+    context "when the given data does not have an ISSN identifier element" do
+      let(:issn) { nil }
+      it "returns nil" do
+        expect(pub.issn).to eq nil
+      end
+    end
+  end
+
   describe '#abstract' do
     before { allow(parsed_pub).to receive(:css).with('abstracts > abstract > abstract_text').and_return abstracts }
 
