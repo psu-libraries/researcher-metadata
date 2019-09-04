@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8"?> <!-- Copyright (c) 2019 Clarivate Analytics Web of Science  -->
+<records xmlns="http://clarivate.com/schema/wok5.30/public/FullRecord">
+
+  <REC r_id_disclaimer="ResearcherID data provided by Clarivate Analytics">
+    <UID>WOS:000323531400013</UID>
+    <static_data>
+      <summary>
+        <EWUID>
+          <WUID coll_id="WOS"/>
+          <edition value="WOS.SCI"/>
+          <edition value="WOS.SSCI"/>
+        </EWUID>
+        <pub_info sortdate="2013-09-01" pubyear="2013" has_abstract="Y" coverdate="SEP 2013" pubmonth="SEP" vol="74" issue="5" pubtype="Journal">
+          <page begin="765" end="769" page_count="5">765-769</page>
+        </pub_info>
+        <titles count="6">
+          <title type="source">JOURNAL OF STUDIES ON ALCOHOL AND DRUGS</title>
+          <title type="source_abbrev">J STUD ALCOHOL DRUGS</title>
+          <title type="abbrev_iso">J. Stud. Alcohol Drugs</title>
+          <title type="abbrev_11">J STUD AL D</title>
+          <title type="abbrev_29">J STUD ALCOHOL DRUGS</title>
+          <title type="item">Web of Science Test Publication</title>
+        </titles>
+        <names count="2">
+          <name seq_no="1" role="author" reprint="Y" addr_no="1">
+            <display_name>Testauthor, Jennifer A.</display_name>
+            <full_name>Testauthor, Jennifer A.</full_name>
+            <wos_standard>Testauthor, JA</wos_standard>
+            <first_name>Jennifer A.</first_name>
+            <last_name>Testauthor</last_name>
+            <email_addr>jat123@psu.edu</email_addr>
+          </name>
+          <name seq_no="2" role="author" addr_no="1 2">
+            <display_name>Author, Arthur</display_name>
+            <full_name>Author, Arthur</full_name>
+            <wos_standard>Author, A</wos_standard>
+            <first_name>Arthur</first_name>
+            <last_name>Author</last_name>
+          </name>
+        </names>
+        <doctypes count="1">
+          <doctype>Article</doctype>
+        </doctypes>
+        <publishers>
+          <publisher>
+            <address_spec addr_no="1">
+              <full_address>C/O DEIRDRE ENGLISH, 607 ALLISON RD, PISCATAWAY, NJ 08854-8001 USA</full_address>
+              <city>PISCATAWAY</city>
+            </address_spec>
+            <names count="1">
+              <name role="publisher" seq_no="1" addr_no="1">
+                <display_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</display_name>
+                <full_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</full_name>
+              </name>
+            </names>
+          </publisher>
+        </publishers>
+      </summary>
+      <fullrecord_metadata>
+        <languages count="1">
+          <language type="primary">English</language>
+        </languages>
+        <normalized_languages count="1">
+          <language type="primary">English</language>
+        </normalized_languages>
+        <normalized_doctypes count="1">
+          <doctype>Article</doctype>
+        </normalized_doctypes>
+        <references count="2">
+          <reference>
+            <uid>WOS:000267230100009</uid>
+            <citedAuthor>Turrisi, R</citedAuthor>
+            <year>2009</year>
+            <page>555</page>
+            <volume>70</volume>
+            <citedTitle>A Randomized Clinical Trial Evaluating a Combined Alcohol Intervention for High-Risk College Students</citedTitle>
+            <citedWork>JOURNAL OF STUDIES ON ALCOHOL AND DRUGS</citedWork>
+          </reference>
+          <reference>
+            <uid>000323531400013.29</uid>
+            <citedAuthor>Muthen, L. K.</citedAuthor>
+            <year>2010</year>
+            <citedWork>Mplus statistical modeling software: Release 6.1</citedWork>
+          </reference>
+        </references>
+        <addresses count="2">
+          <address_name>
+            <address_spec addr_no="1">
+              <full_address>Other University, AK 99501 USA</full_address>
+              <organizations count="3">
+                <organization>Other Univ</organization>
+                <organization pref="Y">Other University</organization>
+              </organizations>
+              <suborganizations count="1">
+                <suborganization>Dept Biology</suborganization>
+              </suborganizations>
+              <city>Anchorage</city>
+              <state>AK</state>
+              <country>USA</country>
+              <zip location="AP">99501</zip>
+            </address_spec>
+            <names count="2">
+              <name seq_no="1" role="author" reprint="Y" addr_no="1">
+                <display_name>Testauthor, Jennifer A.</display_name>
+                <full_name>Testauthor, Jennifer A.</full_name>
+                <wos_standard>Testauthor, JA</wos_standard>
+                <first_name>Jennifer A.</first_name>
+                <last_name>Testauthor</last_name>
+                <email_addr>jat123@psu.edu</email_addr>
+              </name>
+              <name seq_no="2" role="author" addr_no="1 2">
+                <display_name>Author, Arthur</display_name>
+                <full_name>Author, Arthur</full_name>
+                <wos_standard>Author, A</wos_standard>
+                <first_name>Arthur</first_name>
+                <last_name>Author</last_name>
+              </name>
+            </names>
+          </address_name>
+        </addresses>
+        <reprint_addresses count="1">
+          <address_name>
+            <address_spec addr_no="1">
+              <full_address>Other University, AK 99501 USA</full_address>
+              <organizations count="3">
+                <organization>Other Univ</organization>
+                <organization pref="Y">Other University</organization>
+              </organizations>
+              <suborganizations count="1">
+                <suborganization>Dept Biology</suborganization>
+              </suborganizations>
+              <city>Anchorage</city>
+              <state>AK</state>
+              <country>USA</country>
+              <zip location="AP">99501</zip>
+            </address_spec>
+            <names count="1">
+              <name seq_no="1" role="author" reprint="Y" addr_no="1">
+                <display_name>Testauthor, Jennifer A.</display_name>
+                <full_name>Testauthor, Jennifer A.</full_name>
+                <wos_standard>Testauthor, JA</wos_standard>
+                <first_name>Jennifer A.</first_name>
+                <last_name>Testauthor</last_name>
+                <email_addr>jat123@psu.edu</email_addr>
+              </name>
+            </names>
+          </address_name>
+        </reprint_addresses>
+        <category_info>
+          <headings count="2">
+            <heading>Science &amp; Technology</heading>
+            <heading>Social Sciences</heading>
+          </headings>
+          <subheadings count="1">
+            <subheading>Life Sciences &amp; Biomedicine</subheading>
+          </subheadings>
+          <subjects count="4">
+            <subject ascatype="traditional">Substance Abuse</subject>
+            <subject ascatype="traditional">Psychology</subject>
+            <subject ascatype="extended">Substance Abuse</subject>
+            <subject ascatype="extended">Psychology</subject>
+          </subjects>
+        </category_info>
+        <fund_ack>
+          <fund_text>
+            <p>This study was supported by a grant from the Pennsylvania State University Children, Youth, &amp; Families Consortium (to Michael J. Cleveland).</p>
+          </fund_text>
+          <grants count="2">
+            <grant>
+              <grant_agency>Pennsylvania State University Children, Youth, &amp; Families Consortium</grant_agency>
+            </grant>
+            <grant>
+              <grant_agency>National Science Foundation</grant_agency>
+              <grant_ids count="1">
+                <grant_id>ATMO-0803779</grant_id>
+              </grant_ids>
+            </grant>
+          </grants>
+        </fund_ack>
+        <abstracts count="1">
+          <abstract>
+            <abstract_text count="1">
+              <p>Objective: Studies show that emerging adults who do not obtain postsecondary education are at greater risk for developing alcohol use disorders later in life relative to their college-attending peers. Research examining constructs amenable to change within this population is necessary to inform intervention efforts. Thus, the current study aimed to identify psychosocial correlates of risky alcohol use for noncollege emerging adults. A secondary goal was to examine whether gender moderated the relationships between the psychosocial constructs and alcohol use. Method: Participants were a nationally representative sample of noncollege emerging adults (18-22 years old) who reported using alcohol in the past year, recruited through an established Internet panel (N = 209; 125 women). A path model was used to examine the relationship between theoretically derived constructs (expectancies, attitudes, normative beliefs) and risky (peak) drinking. A second model examined a multigroup solution to assess moderating effects of gender. Results: The full-sample model revealed significant associations between attitudes toward drinking and risky drinking. The model assessing gender differences revealed association between normative beliefs and drinking for women but not men, whereas attitudes were significantly associated with risky drinking for both men and women. Conclusions: Findings highlight the importance of attitudes and, for women, descriptive norms in the etiology of risky drinking among noncollege emerging adults, which emphasizes their potential utility in the development and adaptation of interventions for this at-risk population.</p>
+            </abstract_text>
+          </abstract>
+        </abstracts>
+      </fullrecord_metadata>
+      <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="itemType_wos">
+        <ids avail="Y">206OG</ids>
+        <bib_id>74 (5): 765-769 SEP 2013</bib_id>
+        <bib_pagecount type="Journal">168</bib_pagecount>
+        <keywords_plus count="10">
+          <keyword>COLLEGE DRINKING PREVENTION</keyword>
+          <keyword>RANDOMIZED CLINICAL-TRIAL</keyword>
+          <keyword>STUDENTS SELF-EFFICACY</keyword>
+          <keyword>HIGH-SCHOOL</keyword>
+          <keyword>YOUNG ADULTHOOD</keyword>
+          <keyword>SOCIAL NETWORKS</keyword>
+          <keyword>PEER INFLUENCES</keyword>
+          <keyword>SUBSTANCE USE</keyword>
+          <keyword>STRATEGIES</keyword>
+          <keyword>BEHAVIOR</keyword>
+        </keywords_plus>
+      </item>
+    </static_data>
+    <dynamic_data>
+      <cluster_related>
+        <identifiers>
+          <identifier type="accession_no" value="206OG"/>
+          <identifier type="issn" value="1937-1888"/>
+          <identifier type="eissn" value="1938-4114"/>
+          <identifier type="doi" value="10.15288/jsad.2013.74.765"/>
+        </identifiers>
+      </cluster_related>
+    </dynamic_data>
+  </REC>
+
+
+  <REC r_id_disclaimer="ResearcherID data provided by Clarivate Analytics">
+    <UID>WOS:000323531400014</UID>
+    <static_data>
+      <summary>
+        <EWUID>
+          <WUID coll_id="WOS"/>
+          <edition value="WOS.SCI"/>
+          <edition value="WOS.SSCI"/>
+        </EWUID>
+        <pub_info sortdate="2013-09-01" pubyear="2013" has_abstract="Y" coverdate="SEP 2013" pubmonth="SEP" vol="74" issue="5" pubtype="Journal">
+          <page begin="765" end="769" page_count="5">765-769</page>
+        </pub_info>
+        <titles count="6">
+          <title type="source">JOURNAL OF STUDIES ON ALCOHOL AND DRUGS</title>
+          <title type="source_abbrev">J STUD ALCOHOL DRUGS</title>
+          <title type="abbrev_iso">J. Stud. Alcohol Drugs</title>
+          <title type="abbrev_11">J STUD AL D</title>
+          <title type="abbrev_29">J STUD ALCOHOL DRUGS</title>
+          <title type="item">Another Publication</title>
+        </titles>
+        <names count="1">
+          <name seq_no="1" role="author" reprint="Y" addr_no="1">
+            <display_name>Testerson, Peter</display_name>
+            <full_name>Testerson, Peter.</full_name>
+            <wos_standard>Testerson, P</wos_standard>
+            <first_name>Peter</first_name>
+            <last_name>Testerson</last_name>
+            <email_addr>peter@test.edu</email_addr>
+          </name>
+        </names>
+        <doctypes count="1">
+          <doctype>Article</doctype>
+        </doctypes>
+        <publishers>
+          <publisher>
+            <address_spec addr_no="1">
+              <full_address>C/O DEIRDRE ENGLISH, 607 ALLISON RD, PISCATAWAY, NJ 08854-8001 USA</full_address>
+              <city>PISCATAWAY</city>
+            </address_spec>
+            <names count="1">
+              <name role="publisher" seq_no="1" addr_no="1">
+                <display_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</display_name>
+                <full_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</full_name>
+              </name>
+            </names>
+          </publisher>
+        </publishers>
+      </summary>
+      <fullrecord_metadata>
+        <languages count="1">
+          <language type="primary">English</language>
+        </languages>
+        <normalized_languages count="1">
+          <language type="primary">English</language>
+        </normalized_languages>
+        <normalized_doctypes count="1">
+          <doctype>Article</doctype>
+        </normalized_doctypes>
+        <references count="1">
+          <reference>
+            <uid>WOS:0002672301000010</uid>
+            <citedAuthor>Researcher, Z</citedAuthor>
+            <year>2010</year>
+            <page>132</page>
+            <volume>20</volume>
+            <citedTitle>A Publication</citedTitle>
+            <citedWork>A Science Journal</citedWork>
+          </reference>
+        </references>
+        <addresses count="2">
+          <address_name>
+            <address_spec addr_no="1">
+              <full_address>Other University, AK 99501 USA</full_address>
+              <organizations count="3">
+                <organization>Other Univ</organization>
+                <organization pref="Y">Other University</organization>
+              </organizations>
+              <suborganizations count="1">
+                <suborganization>Dept Biology</suborganization>
+              </suborganizations>
+              <city>Anchorage</city>
+              <state>AK</state>
+              <country>USA</country>
+              <zip location="AP">99501</zip>
+            </address_spec>
+            <names count="1">
+              <name seq_no="1" role="author" reprint="Y" addr_no="1">
+                <display_name>Testerson, Peter</display_name>
+                <full_name>Testerson, Peter.</full_name>
+                <wos_standard>Testerson, P</wos_standard>
+                <first_name>Peter</first_name>
+                <last_name>Testerson</last_name>
+                <email_addr>peter@test.edu</email_addr>
+              </name>
+            </names>
+          </address_name>
+          <address_name>
+            <address_spec addr_no="1">
+              <full_address>Other University, AK 99501 USA</full_address>
+              <organizations count="3">
+                <organization>Other Univ</organization>
+                <organization pref="Y">Other University</organization>
+              </organizations>
+              <suborganizations count="1">
+                <suborganization>Dept Biology</suborganization>
+              </suborganizations>
+              <city>Anchorage</city>
+              <state>AK</state>
+              <country>USA</country>
+              <zip location="AP">99501</zip>
+            </address_spec>
+            <names count="1">
+              <name seq_no="1" role="author" reprint="Y" addr_no="1">
+                <display_name>Testerson, Peter</display_name>
+                <full_name>Testerson, Peter.</full_name>
+                <wos_standard>Testerson, P</wos_standard>
+                <first_name>Peter</first_name>
+                <last_name>Testerson</last_name>
+                <email_addr>peter@test.edu</email_addr>
+              </name>
+            </names>
+          </address_name>
+        </addresses>
+        <reprint_addresses count="1">
+          <address_name>
+            <address_spec addr_no="1">
+              <full_address>Other University, AK 99501 USA</full_address>
+              <organizations count="3">
+                <organization>Other Univ</organization>
+                <organization pref="Y">Other University</organization>
+              </organizations>
+              <suborganizations count="1">
+                <suborganization>Dept Biology</suborganization>
+              </suborganizations>
+              <city>Anchorage</city>
+              <state>AK</state>
+              <country>USA</country>
+              <zip location="AP">99501</zip>
+            </address_spec>
+            <names count="1">
+              <name seq_no="1" role="author" reprint="Y" addr_no="1">
+                <display_name>Testerson, Peter</display_name>
+                <full_name>Testerson, Peter.</full_name>
+                <wos_standard>Testerson, P</wos_standard>
+                <first_name>Peter</first_name>
+                <last_name>Testerson</last_name>
+                <email_addr>peter@test.edu</email_addr>
+              </name>
+            </names>
+          </address_name>
+        </reprint_addresses>
+        <category_info>
+          <headings count="2">
+            <heading>Science &amp; Technology</heading>
+            <heading>Social Sciences</heading>
+          </headings>
+          <subheadings count="1">
+            <subheading>Life Sciences &amp; Biomedicine</subheading>
+          </subheadings>
+          <subjects count="4">
+            <subject ascatype="traditional">Substance Abuse</subject>
+            <subject ascatype="traditional">Psychology</subject>
+            <subject ascatype="extended">Substance Abuse</subject>
+            <subject ascatype="extended">Psychology</subject>
+          </subjects>
+        </category_info>
+        <fund_ack>
+          <fund_text>
+            <p>This study was funded by a government Agency</p>
+          </fund_text>
+          <grants count="2">
+            <grant>
+              <grant_agency>Government Agency</grant_agency>
+            </grant>
+            <grant>
+              <grant_agency>NIH</grant_agency>
+              <grant_ids count="1">
+                <grant_id>NIH-346346</grant_id>
+              </grant_ids>
+            </grant>
+          </grants>
+        </fund_ack>
+        <abstracts count="1">
+          <abstract>
+            <abstract_text count="1">
+              <p>A summary of the research and findings</p>
+            </abstract_text>
+          </abstract>
+        </abstracts>
+      </fullrecord_metadata>
+      <item xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="itemType_wos">
+        <ids avail="Y">206OG</ids>
+        <bib_id>74 (5): 765-769 SEP 2013</bib_id>
+        <bib_pagecount type="Journal">168</bib_pagecount>
+        <keywords_plus count="10">
+          <keyword>COLLEGE DRINKING PREVENTION</keyword>
+          <keyword>RANDOMIZED CLINICAL-TRIAL</keyword>
+          <keyword>STUDENTS SELF-EFFICACY</keyword>
+          <keyword>HIGH-SCHOOL</keyword>
+          <keyword>YOUNG ADULTHOOD</keyword>
+          <keyword>SOCIAL NETWORKS</keyword>
+          <keyword>PEER INFLUENCES</keyword>
+          <keyword>SUBSTANCE USE</keyword>
+          <keyword>STRATEGIES</keyword>
+          <keyword>BEHAVIOR</keyword>
+        </keywords_plus>
+      </item>
+    </static_data>
+    <dynamic_data>
+      <cluster_related>
+        <identifiers>
+          <identifier type="accession_no" value="206OG"/>
+          <identifier type="issn" value="1937-1888"/>
+          <identifier type="eissn" value="1938-4114"/>
+          <identifier type="doi" value="10.34564/jsad.2013.65.435"/>
+        </identifiers>
+      </cluster_related>
+    </dynamic_data>
+  </REC>
+
+</records>

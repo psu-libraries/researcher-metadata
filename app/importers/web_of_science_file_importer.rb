@@ -2,57 +2,47 @@ require 'nokogiri'
 require 'byebug'
 
 class WebOfScienceFileImporter
+  def initialize(filename:)
+    @filename = filename
+  end
+
   def call
-    Nokogiri::XML::Reader(File.open('/Volumes/WA_ext_HD/web_of_science_data/CORE_2013-2018/2013_CORE/WR_2013_20190215154350_CORE_0022.xml')).each do |node|
+    Nokogiri::XML::Reader(File.open(filename)).each do |node|
       if node.name == 'REC' && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
-        pub = WebOfSciencePublication.new(Nokogiri::XML(node.outer_xml).at('REC'))
+        wos_pub = WebOfSciencePublication.new(Nokogiri::XML(node.outer_xml).at('REC'))
+        if wos_pub.importable?
 
-        if pub.importable?
-          pub.author_names.each do |n|
-            user = User.find_by(first_name: n.first_name, last_name: n.last_name)
+          existing_pubs = Publication.find_by_wos_pub(wos_pub)
 
-            if user
-              puts "USER:  #{user.name}\n"
-              puts "TITLE:  #{pub.title}"
-              puts "DOI:  #{pub.doi}"
-              puts "JOURNAL TITLE:  #{pub.journal_title}"
-              puts "ISSUE:  #{pub.issue}"
-              puts "VOLUME:  #{pub.volume}"
-              puts "PAGES:  #{pub.page_range}"
-              puts "PUBLISHED ON:  #{pub.publication_date}"
+          if existing_pubs.any?
+            wos_pub.grants.each do |g|
+              ActiveRecord::Base.transaction do
+                if g.agency.present?
+                  g.ids.each do |id|
+                    unless Grant.find_by(agency_name: g.agency, identifier: id)
+                      grant = Grant.new
+                      grant.agency_name = g.agency
+                      grant.identifier = id
+                      grant.save!
 
-              puts "\n"
-              puts "NAMES:"
-              pub.author_names.each do |n|
-                puts "#{n.first_name || n.first_initial} #{n.last_name}"
-              end
-              puts "\n"
-
-              puts "ABSTRACT:"
-              puts pub.abstract
-              puts "\n"
-
-              puts "CONTRIBUTORS:"
-              pub.contributors.each do |c|
-                puts "#{c.name.first_name || c.name.first_initial} #{c.name.last_name}"
-                puts c.orcid
-                puts "\n"
-              end
-
-              puts "GRANTS:"
-              pub.grants.each do |g|
-                puts g.agency
-                g.ids.each do |id|
-                  puts id
+                      existing_pubs.each do |p|
+                        fund = ResearchFund.new
+                        fund.publication = p
+                        fund.grant = grant
+                        fund.save!
+                      end
+                    end
+                  end
                 end
-                puts "\n"
               end
-
-              puts "\n-------------------------------------------\n"
             end
           end
         end
       end
     end
   end
+
+  private
+
+  attr_reader :filename
 end
