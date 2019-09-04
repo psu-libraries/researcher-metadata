@@ -44,6 +44,13 @@ class Publication < ApplicationRecord
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
+  def self.find_by_wos_pub(pub)
+    find_by(doi: "https://doi.org/#{pub.doi}") ||
+      where("title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?",
+            "%#{pub.title}%",
+            pub.publication_date.try(:year)).first
+  end
+
   swagger_schema :PublicationV1 do
     key :type, :object
     key :required, [:id, :type, :attributes]

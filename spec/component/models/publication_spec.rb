@@ -171,6 +171,169 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#find_by_wos_pub' do
+    let(:wos_pub) { double 'WoS publication',
+                           doi: doi,
+                           title: title,
+                           publication_date: date }
+    let!(:pub1) { create :publication,
+                         doi: nil,
+                         title: "Another Publication",
+                         published_on: Date.new(2000, 1, 1) }
+    let!(:pub2) { create :publication,
+                         doi: "https://doi.org/DOI123",
+                         title: "Some Text Before The Title Some Text After",
+                         published_on: Date.new(2000, 1, 1) }
+    let!(:pub3) { create :publication,
+                         doi: "https://doi.org/DOI456",
+                         title: "Some Text Before The Title Some Text After",
+                         published_on: Date.new(2001, 2, 2) }
+    let!(:pub4) { create :publication,
+                         doi: "https://doi.org/DOI111",
+                         title: "Another Publication",
+                         published_on: Date.new(2001, 2, 2) }
+    let!(:pub5) { create :publication,
+                         doi: "https://doi.org/DOI222",
+                         title: "Another Publication",
+                         published_on: Date.new(2000, 1, 1) }
+
+    context "when given publication data with no DOI" do
+      let(:doi) { nil }
+      context "when given data with a title that is a case-insensitive, partial match for an existing publication" do
+        let(:title) { "THE TITLE" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns the publication that matches by title and date" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub2
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+      end
+      context "when given data with a title that is not a case-insensitive partial match for an existing publication" do
+        let(:title) { "Other Title" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+      end
+    end
+    context "when given publication data with a DOI that matches an existing publication" do
+      let(:doi) { "DOI456" }
+      context "when given data with a title that is a case-insensitive, partial match for an existing publication" do
+        let(:title) { "THE TITLE" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+      end
+      context "when given data with a title that is not a case-insensitive partial match for an existing publication" do
+        let(:title) { "Other Title" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns the publication with the matching DOI" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub3
+          end
+        end
+      end
+    end
+    context "when given publication data with a DOI that doesn't match an existing publication" do
+      let(:doi) { "DOI789" }
+      context "when given data with a title that is a case-insensitive, partial match for an existing publication" do
+        let(:title) { "THE TITLE" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns the publication that matches by title and date" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq pub2
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+      end
+      context "when given data with a title that is not a case-insensitive partial match for an existing publication" do
+        let(:title) { "Other Title" }
+        context "when given data with no publication date" do
+          let(:date) { nil }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that matches an existing publication" do
+          let(:date) { Date.new(2000, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+        context "when given data with a publication year that does not match an existing publication" do
+          let(:date) { Date.new(2010, 1, 1) }
+          it "returns nil" do
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq nil
+          end
+        end
+      end
+    end
+  end
+
   describe '#contributors' do
     let(:pub) { create :publication }
     let!(:c1) { create :contributor, position: 2, publication: pub }
