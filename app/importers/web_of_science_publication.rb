@@ -3,6 +3,10 @@ class WebOfSciencePublication
     @parsed_pub = parsed_pub
   end
 
+  def wos_id
+    parsed_pub.css('UID').text.strip
+  end
+  
   def title
     parsed_pub.css('title[type="item"]').first.text.strip.presence
   end

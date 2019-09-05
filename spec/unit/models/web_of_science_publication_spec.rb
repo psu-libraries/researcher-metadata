@@ -10,6 +10,15 @@ describe WebOfSciencePublication do
   let(:parsed_pub) { double 'parsed publication xml' }
   let(:pub) { WebOfSciencePublication.new(parsed_pub) }
 
+  describe '#wos_id' do
+    let(:id_element) { double 'id element', text: " \n WOS:1234567 \n "}
+    before { allow(parsed_pub).to receive(:css).with('UID').and_return id_element }
+
+    it "returns the Web of Science identifier for the publication with any surrounding whitespace removed" do
+      expect(pub.wos_id).to eq "WOS:1234567"
+    end
+  end
+
   describe '#title' do
     before { allow(parsed_pub).to receive(:css).with('title[type="item"]').and_return [title_element] }
 
