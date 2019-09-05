@@ -64,7 +64,7 @@
           <language type="primary">English</language>
         </normalized_languages>
         <normalized_doctypes count="1">
-          <doctype>Article</doctype>
+          <doctype>Book</doctype>
         </normalized_doctypes>
         <references count="2">
           <reference>
@@ -291,7 +291,7 @@
           </name>
         </names>
         <doctypes count="1">
-          <doctype>Article</doctype>
+          <doctype>Book</doctype>
         </doctypes>
         <publishers>
           <publisher>
