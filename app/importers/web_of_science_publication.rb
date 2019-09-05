@@ -43,6 +43,10 @@ class WebOfSciencePublication
     parsed_pub.css('pub_info > page').text.strip
   end
 
+  def publisher
+    parsed_pub.css('publishers > publisher > names > name[role="publisher"] > full_name').text.strip
+  end
+
   def publication_date
     Date.parse(pub_info.attribute('sortdate').value) if pub_info.attribute('sortdate')
   end
@@ -63,6 +67,10 @@ class WebOfSciencePublication
     parsed_pub.css('contributors > contributor').map do |c|
       WOSContributor.new(c)
     end
+  end
+
+  def orcids
+    contributors.map { |c| c.orcid }.compact
   end
 
   private

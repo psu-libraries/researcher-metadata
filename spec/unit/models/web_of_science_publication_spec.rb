@@ -235,6 +235,18 @@ describe WebOfSciencePublication do
     end
   end
 
+  describe '#publisher' do
+    let(:publisher_name_element) { double 'publisher name element', text: "  \n Test Publisher\n "}
+    before do
+      allow(parsed_pub).to receive(:css).with('publishers > publisher > names > name[role="publisher"] > full_name').
+        and_return(publisher_name_element)
+    end
+
+    it "returns the name of the publication's publisher with any surrounding whitespace removed" do
+      expect(pub.publisher).to eq "Test Publisher"
+    end
+  end
+
   describe '#publication_date' do
     let(:info_element) { double 'pub info element' }
     before do
@@ -303,6 +315,23 @@ describe WebOfSciencePublication do
 
     it "returns an array of the contributors associated with the publication" do
       expect(pub.contributors).to eq [cont1, cont2]
+    end
+  end
+
+  describe '#orcids' do
+    let(:cont_element1) { double 'contributor element 1' }
+    let(:cont_element2) { double 'contributor element 2' }
+    let(:cont1) { double 'contributor 1', orcid: nil }
+    let(:cont2) { double 'contributor 2', orcid: '1234' }
+
+    before do
+      allow(WOSContributor).to receive(:new).with(cont_element1).and_return(cont1)
+      allow(WOSContributor).to receive(:new).with(cont_element2).and_return(cont2)
+      allow(parsed_pub).to receive(:css).with('contributors > contributor').and_return([cont_element1, cont_element2])
+    end
+
+    it "returns an array of the orcids for contributors associated with the publication" do
+      expect(pub.orcids).to eq ['1234']
     end
   end
 end
