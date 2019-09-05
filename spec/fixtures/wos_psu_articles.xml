@@ -246,6 +246,16 @@
         <keyword>BEHAVIOR</keyword>
       </keywords_plus>
     </item>
+    <contributors count="1">
+      <contributor>
+        <name seq_no="1" role="researcher_id" orcid_id="1234-0003-3051-5678">
+          <display_name>Author, Arthur</display_name>
+          <full_name>Author, Arthur</full_name>
+          <first_name>Arthur</first_name>
+          <last_name>Author</last_name>
+          </name>
+      </contributor>
+    </contributors>
   </static_data>
   <dynamic_data>
     <cluster_related>
@@ -471,6 +481,16 @@
       <keyword>BEHAVIOR</keyword>
     </keywords_plus>
   </item>
+  <contributors count="1">
+    <contributor>
+      <name seq_no="1" role="researcher_id" orcid_id="5678-0003-3051-1234">
+        <display_name>Testerson, Peter</display_name>
+        <full_name>Testerson, Peter.</full_name>
+        <first_name>Peter</first_name>
+        <last_name>Testerson</last_name>
+      </name>
+    </contributor>
+  </contributors>
 </static_data>
 <dynamic_data>
   <cluster_related>
@@ -478,7 +498,6 @@
       <identifier type="accession_no" value="206OG"/>
       <identifier type="issn" value="1937-1888"/>
       <identifier type="eissn" value="1938-4114"/>
-      <identifier type="doi" value="10.34564/jsad.2013.65.435"/>
     </identifiers>
   </cluster_related>
 </dynamic_data>

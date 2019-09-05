@@ -6,13 +6,13 @@ class WebOfSciencePublication
   def wos_id
     parsed_pub.css('UID').text.strip
   end
-  
+
   def title
     parsed_pub.css('title[type="item"]').first.text.strip.presence
   end
 
   def importable?
-    article? && penn_state?
+    article? && penn_state? && not_imported?
   end
 
   def doi
@@ -89,6 +89,10 @@ class WebOfSciencePublication
     !!parsed_pub.css('addresses').
       detect { |a| a.css('address_name > address_spec > organizations').
         detect { |o| o.text =~ /Penn State Univ/ } }
+  end
+
+  def not_imported?
+    ! PublicationImport.find_by(source: 'Web of Science', source_identifier: wos_id)
   end
 
   def pub_info

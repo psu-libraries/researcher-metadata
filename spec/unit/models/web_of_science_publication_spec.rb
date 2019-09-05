@@ -6,6 +6,10 @@ require_relative '../../../app/models/wos_author_name'
 require_relative '../../../app/models/wos_grant'
 require_relative '../../../app/models/wos_contributor'
 
+class PublicationImport
+  def self.find_by(arg); end
+end
+
 describe WebOfSciencePublication do
   let(:parsed_pub) { double 'parsed publication xml' }
   let(:pub) { WebOfSciencePublication.new(parsed_pub) }
@@ -46,51 +50,118 @@ describe WebOfSciencePublication do
       allow(address).to receive(:css).with('address_name > address_spec > organizations').and_return [organization]
     end
 
-    context "when the given data includes a doctype of 'Article'" do
-      let(:doctypes) { [double('doctype', text: 'Article')] }
+    context "when the given data has not been imported before" do
+      let(:uid_element) { double 'UID element', text: 'ABC123' }
+      before do
+        allow(parsed_pub).to receive(:css).with('UID').and_return uid_element
+        allow(PublicationImport).to receive(:find_by).with({source: 'Web of Science', source_identifier: 'ABC123'}).
+          and_return nil
+      end
 
-      context "when the given data has an address with an organization called 'Penn State Univ'" do
-        let(:organization) { double 'organization', text: 'Penn State Univ' }
-        it "returns true" do
-          expect(pub.importable?).to eq true
+      context "when the given data includes a doctype of 'Article'" do
+        let(:doctypes) { [double('doctype', text: 'Article')] }
+
+        context "when the given data has an address with an organization called 'Penn State Univ'" do
+          let(:organization) { double 'organization', text: 'Penn State Univ' }
+          it "returns true" do
+            expect(pub.importable?).to eq true
+          end
+        end
+
+        context "when the given data has an address with an organization called 'Penn State University'" do
+          let(:organization) { double 'organization', text: 'Penn State University' }
+          it "returns true" do
+            expect(pub.importable?).to eq true
+          end
+        end
+
+        context "when the given data has an address with an organization called 'Other Univ'" do
+          let(:organization) { double 'organization', text: 'Other Univ' }
+          it "returns false" do
+            expect(pub.importable?).to eq false
+          end
         end
       end
 
-      context "when the given data has an address with an organization called 'Penn State University'" do
-        let(:organization) { double 'organization', text: 'Penn State University' }
-        it "returns true" do
-          expect(pub.importable?).to eq true
+      context "when the given data does not include a doctype of 'Article'" do
+        let(:doctypes) { [double('doctype', text: 'Other')] }
+        context "when the given data has an address with an organization called 'Penn State Univ'" do
+          let(:organization) { double 'organization', text: 'Penn State Univ' }
+          it "returns false" do
+            expect(pub.importable?).to eq false
+          end
+        end
+
+        context "when the given data has an address with an organization called 'Penn State University'" do
+          let(:organization) { double 'organization', text: 'Penn State University' }
+          it "returns false" do
+            expect(pub.importable?).to eq false
+          end
+        end
+
+        context "when the given data has an address with an organization called 'Other Univ'" do
+          let(:organization) { double 'organization', text: 'Other Univ' }
+          it "returns false" do
+            expect(pub.importable?).to eq false
+          end
         end
       end
 
-      context "when the given data has an address with an organization called 'Other Univ'" do
-        let(:organization) { double 'organization', text: 'Other Univ' }
-        it "returns false" do
-          expect(pub.importable?).to eq false
+      context "when the given data has been imported before" do
+        let(:uid_element) { double 'UID element', text: 'ABC123' }
+        before do
+          allow(parsed_pub).to receive(:css).with('UID').and_return uid_element
+          allow(PublicationImport).to receive(:find_by).with({source: 'Web of Science', source_identifier: 'ABC123'}).
+            and_return(double 'import')
         end
-      end
-    end
 
-    context "when the given data does not include a doctype of 'Article'" do
-      let(:doctypes) { [double('doctype', text: 'Other')] }
-      context "when the given data has an address with an organization called 'Penn State Univ'" do
-        let(:organization) { double 'organization', text: 'Penn State Univ' }
-        it "returns false" do
-          expect(pub.importable?).to eq false
+        context "when the given data includes a doctype of 'Article'" do
+          let(:doctypes) { [double('doctype', text: 'Article')] }
+
+          context "when the given data has an address with an organization called 'Penn State Univ'" do
+            let(:organization) { double 'organization', text: 'Penn State Univ' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
+
+          context "when the given data has an address with an organization called 'Penn State University'" do
+            let(:organization) { double 'organization', text: 'Penn State University' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
+
+          context "when the given data has an address with an organization called 'Other Univ'" do
+            let(:organization) { double 'organization', text: 'Other Univ' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
         end
-      end
 
-      context "when the given data has an address with an organization called 'Penn State University'" do
-        let(:organization) { double 'organization', text: 'Penn State University' }
-        it "returns false" do
-          expect(pub.importable?).to eq false
-        end
-      end
+        context "when the given data does not include a doctype of 'Article'" do
+          let(:doctypes) { [double('doctype', text: 'Other')] }
+          context "when the given data has an address with an organization called 'Penn State Univ'" do
+            let(:organization) { double 'organization', text: 'Penn State Univ' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
 
-      context "when the given data has an address with an organization called 'Other Univ'" do
-        let(:organization) { double 'organization', text: 'Other Univ' }
-        it "returns false" do
-          expect(pub.importable?).to eq false
+          context "when the given data has an address with an organization called 'Penn State University'" do
+            let(:organization) { double 'organization', text: 'Penn State University' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
+
+          context "when the given data has an address with an organization called 'Other Univ'" do
+            let(:organization) { double 'organization', text: 'Other Univ' }
+            it "returns false" do
+              expect(pub.importable?).to eq false
+            end
+          end
         end
       end
     end

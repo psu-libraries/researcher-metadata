@@ -213,6 +213,75 @@ describe User, type: :model do
     end
   end
 
+  describe '.find_by_wos_pub' do
+    let(:wp) { double 'Web of Science publication',
+                      orcids: ['orcid123', 'orcid456', 'orcid789'],
+                      author_names: [an1, an2, an3, an4] }
+    let(:an1) { double 'author name 1',
+                       first_name: 'First1',
+                       first_initial: nil,
+                       middle_name: 'Middle1',
+                       middle_initial: nil,
+                       last_name: 'Last1' }
+    let(:an2) { double 'author name 2',
+                       first_name: 'First2',
+                       first_initial: nil,
+                       middle_name: nil,
+                       middle_initial: 'M',
+                       last_name: 'Last2' }
+    let(:an3) { double 'author name 3',
+                       first_name: 'First3',
+                       first_initial: nil,
+                       middle_name: nil,
+                       middle_initial: nil,
+                       last_name: 'Last3' }
+    let(:an4) { double 'author name 4',
+                       first_name: nil,
+                       first_initial: 'F',
+                       middle_name: nil,
+                       middle_initial: 'M',
+                       last_name: 'Last4' }
+    context "when no users match the given Web of Science data" do
+      it "returns an empty array" do
+        expect(User.find_by_wos_pub(wp)).to eq []
+      end
+    end
+    context "when there are users that match the given Web of Science data" do
+      let!(:u1) { create :user, orcid_identifier: 'https://orcid.org/orcid123' }
+      let!(:u2) { create :user, orcid_identifier: 'https://orcid.org/orcid456' }
+      let!(:u3) { create :user, first_name: 'First1', middle_name: 'Middle1', last_name: 'Last1' }
+      let!(:u4) { create :user, first_name: 'First2', middle_name: 'Middle2', last_name: 'Last2' }
+      let!(:u5) { create :user, first_name: 'First2', middle_name: 'm', last_name: 'Last2' }
+      let!(:u6) { create :user, first_name: 'First3', middle_name: 'Middle3', last_name: 'Last3' }
+      let!(:u7) { create :user, first_name: 'First4', middle_name: 'Middle4', last_name: 'Last4' }
+      let!(:u8) { create :user, first_name: 'f', middle_name: 'm', last_name: 'Last4' }
+      let!(:u9) { create :user, first_name: 'f', middle_name: 'm', last_name: 'Last4', orcid_identifier: 'https://orcid.org/orcid789' }
+
+      before do
+        create :user, first_name: 'First1', middle_name: nil, last_name: 'Last1'
+        create :user, first_name: 'First1', middle_name: 'M', last_name: 'Last1'
+        create :user, first_name: 'Other', middle_name: 'Middle1', last_name: 'Last1'
+        create :user, first_name: 'First1', middle_name: 'Middle1', last_name: 'Other'
+        create :user, first_name: 'F', middle_name: 'M', last_name: 'Last1'
+
+        create :user, first_name: 'First2', middle_name: nil, last_name: 'Last2'
+        create :user, first_name: 'First2', middle_name: 'AMiddle2', last_name: 'Last2'
+        create :user, first_name: 'Other', middle_name: 'M', last_name: 'Other'
+        create :user, first_name: 'First2', middle_name: 'M', last_name: 'Other'
+        create :user, first_name: 'Other', middle_name: 'M', last_name: 'Last2'
+
+        create :user, first_name: 'AFirst4', middle_name: 'Middle4', last_name: 'Last4'
+        create :user, first_name: 'First4', middle_name: 'AMiddle4', last_name: 'Last4'
+        create :user, first_name: 'Other', middle_name: 'Middle4', last_name: 'Last4'
+        create :user, first_name: 'First4', middle_name: 'Other', last_name: 'Last4'
+        create :user, first_name: 'First4', middle_name: 'Middle4', last_name: 'Other'
+      end
+      it "returns one instance of each matching user" do
+        expect(User.find_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9]
+      end
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }
