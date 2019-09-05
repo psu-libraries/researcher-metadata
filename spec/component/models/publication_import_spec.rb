@@ -37,7 +37,7 @@ describe PublicationImport, type: :model do
 
   describe '.sources' do
     it "returns the list of valid publication import sources" do
-      expect(PublicationImport.sources).to eq ["Activity Insight", "Pure"]
+      expect(PublicationImport.sources).to eq ["Activity Insight", "Pure", "Web of Science"]
     end
   end
 end

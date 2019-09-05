@@ -1,6 +1,6 @@
 class PublicationImport < ApplicationRecord
   def self.sources
-    ["Activity Insight", "Pure"]
+    ["Activity Insight", "Pure", "Web of Science"]
   end
 
   belongs_to :publication
