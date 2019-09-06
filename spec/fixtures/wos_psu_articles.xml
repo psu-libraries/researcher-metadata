@@ -224,7 +224,7 @@
       <abstracts count="1">
         <abstract>
           <abstract_text count="1">
-            <p>Objective: Studies show that emerging adults who do not obtain postsecondary education are at greater risk for developing alcohol use disorders later in life relative to their college-attending peers. Research examining constructs amenable to change within this population is necessary to inform intervention efforts. Thus, the current study aimed to identify psychosocial correlates of risky alcohol use for noncollege emerging adults. A secondary goal was to examine whether gender moderated the relationships between the psychosocial constructs and alcohol use. Method: Participants were a nationally representative sample of noncollege emerging adults (18-22 years old) who reported using alcohol in the past year, recruited through an established Internet panel (N = 209; 125 women). A path model was used to examine the relationship between theoretically derived constructs (expectancies, attitudes, normative beliefs) and risky (peak) drinking. A second model examined a multigroup solution to assess moderating effects of gender. Results: The full-sample model revealed significant associations between attitudes toward drinking and risky drinking. The model assessing gender differences revealed association between normative beliefs and drinking for women but not men, whereas attitudes were significantly associated with risky drinking for both men and women. Conclusions: Findings highlight the importance of attitudes and, for women, descriptive norms in the etiology of risky drinking among noncollege emerging adults, which emphasizes their potential utility in the development and adaptation of interventions for this at-risk population.</p>
+            <p>Objective: Studies show that emerging adults who do not obtain postsecondary education are at greater risk for developing alcohol use disorders later in life relative to their college-attending peers.</p>
           </abstract_text>
         </abstract>
       </abstracts>
@@ -279,11 +279,11 @@
       <edition value="WOS.SCI"/>
       <edition value="WOS.SSCI"/>
     </EWUID>
-    <pub_info sortdate="2013-09-01" pubyear="2013" has_abstract="Y" coverdate="SEP 2013" pubmonth="SEP" vol="74" issue="5" pubtype="Journal">
-      <page begin="765" end="769" page_count="5">765-769</page>
+    <pub_info sortdate="2016-08-02" pubyear="2016" has_abstract="Y" coverdate="AUG 2016" pubmonth="AUG" vol="20" issue="8" pubtype="Journal">
+      <page begin="765" end="769" page_count="5">201-209</page>
     </pub_info>
     <titles count="6">
-      <title type="source">JOURNAL OF STUDIES ON ALCOHOL AND DRUGS</title>
+      <title type="source">Another Academic Journal</title>
       <title type="source_abbrev">J STUD ALCOHOL DRUGS</title>
       <title type="abbrev_iso">J. Stud. Alcohol Drugs</title>
       <title type="abbrev_11">J STUD AL D</title>
@@ -311,8 +311,8 @@
         </address_spec>
         <names count="1">
           <name role="publisher" seq_no="1" addr_no="1">
-            <display_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</display_name>
-            <full_name>ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV</full_name>
+            <display_name>Another Publisher</display_name>
+            <full_name>Another Publisher</full_name>
           </name>
         </names>
       </publisher>
@@ -496,7 +496,7 @@
   <cluster_related>
     <identifiers>
       <identifier type="accession_no" value="206OG"/>
-      <identifier type="issn" value="1937-1888"/>
+      <identifier type="issn" value="3964-0326"/>
       <identifier type="eissn" value="1938-4114"/>
     </identifiers>
   </cluster_related>

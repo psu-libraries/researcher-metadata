@@ -114,6 +114,7 @@ describe WebOfScienceFileImporter do
 
               expect(new_import1.source).to eq 'Web of Science'
               expect(new_import1.publication).to eq new_pub1
+
               expect(new_import2.source).to eq 'Web of Science'
               expect(new_import2.publication).to eq new_pub2
             end
@@ -123,15 +124,34 @@ describe WebOfScienceFileImporter do
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
 
-              expect(new_pub1).not_to be_nil
-              expect(new_pub2).not_to be_nil
+              expect(new_pub1.publication_type).to eq 'Journal Article'
+              expect(new_pub1.doi).to eq 'https://doi.org/10.15288/jsad.2013.74.765'
+              expect(new_pub1.issn).to eq '1937-1888'
+              expect(new_pub1.abstract).to eq 'Objective: Studies show that emerging adults who do not obtain postsecondary education are at greater risk for developing alcohol use disorders later in life relative to their college-attending peers.'
+              expect(new_pub1.journal_title).to eq 'JOURNAL OF STUDIES ON ALCOHOL AND DRUGS'
+              expect(new_pub1.issue).to eq '5'
+              expect(new_pub1.volume).to eq '74'
+              expect(new_pub1.page_range).to eq '765-769'
+              expect(new_pub1.publisher).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
+              expect(new_pub1.published_on).to eq Date.new(2013, 9, 1)
+
+              expect(new_pub2.publication_type).to eq 'Journal Article'
+              expect(new_pub2.doi).to be nil
+              expect(new_pub2.issn).to eq '3964-0326'
+              expect(new_pub2.abstract).to eq 'A summary of the research and findings'
+              expect(new_pub2.journal_title).to eq 'Another Academic Journal'
+              expect(new_pub2.issue).to eq '8'
+              expect(new_pub2.volume).to eq '20'
+              expect(new_pub2.page_range).to eq '201-209'
+              expect(new_pub2.publisher).to eq 'Another Publisher'
+              expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
             end
           end
         end
       end
       context "when existing publications match the data" do
         let!(:pub1) { create :publication, doi: 'https://doi.org/10.15288/jsad.2013.74.765' }
-        let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2013, 9, 1) }
+        let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2016, 8, 1) }
         context "when no existing grants match the data" do
           it "does not create any new publications" do
             expect { importer.call }.not_to change { Publication.count }
