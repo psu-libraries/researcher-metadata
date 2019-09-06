@@ -134,6 +134,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub1.page_range).to eq '765-769'
               expect(new_pub1.publisher).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
               expect(new_pub1.published_on).to eq Date.new(2013, 9, 1)
+              expect(new_pub1.status).to eq 'Published'
 
               expect(new_pub2.publication_type).to eq 'Journal Article'
               expect(new_pub2.doi).to be nil
@@ -145,6 +146,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.page_range).to eq '201-209'
               expect(new_pub2.publisher).to eq 'Another Publisher'
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
+              expect(new_pub2.status).to eq 'Published'
             end
             it "creates new authorships for every user referenced in the given XML file" do
               expect { importer.call }.to change { Authorship.count }.by 3

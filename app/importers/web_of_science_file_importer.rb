@@ -52,6 +52,7 @@ class WebOfScienceFileImporter
                 p.page_range = wos_pub.page_range
                 p.publisher = wos_pub.publisher
                 p.published_on = wos_pub.publication_date
+                p.status = 'Published'
                 p.save!
 
                 pi = PublicationImport.new
