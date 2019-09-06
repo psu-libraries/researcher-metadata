@@ -44,15 +44,45 @@ describe WebOfScienceFileImporter do
           context "when no existing grants match the data" do
             it "creates new grants for each publication in the given XML file" do
               expect { importer.call }.to change { Grant.count }.by 2
+              expect(Grant.find_by(agency_name: 'National Science Foundation',
+                                   identifier: 'ATMO-0803779')).not_to be_nil
+              expect(Grant.find_by(agency_name: 'NIH',
+                                   identifier: 'NIH-346346')).not_to be_nil
             end
             it "creates new associations between the new grants and new publications" do
               expect { importer.call }.to change { ResearchFund.count }.by 2
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+              new_grant1 = Grant.find_by(agency_name: 'National Science Foundation',
+                                         identifier: 'ATMO-0803779')
+              new_grant2 = Grant.find_by(agency_name: 'NIH',
+                                         identifier: 'NIH-346346')
+
+              expect(ResearchFund.find_by(publication: new_pub1, grant: new_grant1)).not_to be_nil
+              expect(ResearchFund.find_by(publication: new_pub2, grant: new_grant2)).not_to be_nil
             end
             it "creates a new publication import record for each publication in the given XML file" do
               expect { importer.call }.to change { PublicationImport.count }.by 2
+
+              new_import1 = PublicationImport.find_by(source_identifier: 'WOS:000323531400013')
+              new_import2 = PublicationImport.find_by(source_identifier: 'WOS:000323531400014')
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(new_import1.source).to eq 'Web of Science'
+              expect(new_import1.publication).to eq new_pub1
+              expect(new_import2.source).to eq 'Web of Science'
+              expect(new_import2.publication).to eq new_pub2
             end
             it "creates a new publication record for each publication in the given XML file" do
               expect { importer.call }.to change { Publication.count }.by 2
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(new_pub1).not_to be_nil
+              expect(new_pub2).not_to be_nil
             end
           end
           context "when existing grants match the data" do
@@ -67,12 +97,34 @@ describe WebOfScienceFileImporter do
             end
             it "creates new associations between the existing grants and new publications" do
               expect { importer.call }.to change { ResearchFund.count }.by 2
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(ResearchFund.find_by(publication: new_pub1, grant: grant1)).not_to be_nil
+              expect(ResearchFund.find_by(publication: new_pub2, grant: grant2)).not_to be_nil
             end
             it "creates a new publication import record for each publication in the given XML file" do
               expect { importer.call }.to change { PublicationImport.count }.by 2
+
+              new_import1 = PublicationImport.find_by(source_identifier: 'WOS:000323531400013')
+              new_import2 = PublicationImport.find_by(source_identifier: 'WOS:000323531400014')
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(new_import1.source).to eq 'Web of Science'
+              expect(new_import1.publication).to eq new_pub1
+              expect(new_import2.source).to eq 'Web of Science'
+              expect(new_import2.publication).to eq new_pub2
             end
             it "creates a new publication record for each publication in the given XML file" do
               expect { importer.call }.to change { Publication.count }.by 2
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(new_pub1).not_to be_nil
+              expect(new_pub2).not_to be_nil
             end
           end
         end
