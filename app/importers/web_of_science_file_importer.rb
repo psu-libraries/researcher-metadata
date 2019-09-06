@@ -77,6 +77,24 @@ class WebOfScienceFileImporter
                     end
                   end
                 end
+
+                users.each_with_index do |u, i|
+                  a = Authorship.new
+                  a.user = u
+                  a.publication = p
+                  a.author_number = i + 1
+                  a.save!
+                end
+
+                wos_pub.author_names.each_with_index do |an, i|
+                  c = Contributor.new
+                  c.publication = p
+                  c.first_name = an.first_name || an.first_initial
+                  c.middle_name = an.middle_name || an.middle_initial
+                  c.last_name = an.last_name
+                  c.position = i + 1
+                  c.save!
+                end
               end
             end
           end

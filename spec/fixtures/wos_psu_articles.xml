@@ -290,14 +290,21 @@
       <title type="abbrev_29">J STUD ALCOHOL DRUGS</title>
       <title type="item">Another Publication</title>
     </titles>
-    <names count="1">
+    <names count="2">
       <name seq_no="1" role="author" reprint="Y" addr_no="1">
-        <display_name>Testerson, Peter</display_name>
-        <full_name>Testerson, Peter.</full_name>
+        <display_name>Testerson, P</display_name>
+        <full_name>Testerson, P</full_name>
         <wos_standard>Testerson, P</wos_standard>
-        <first_name>Peter</first_name>
+        <first_name>P</first_name>
         <last_name>Testerson</last_name>
         <email_addr>peter@test.edu</email_addr>
+      </name>
+      <name seq_no="2" role="author" reprint="Y" addr_no="1">
+        <display_name>Testresearcher, Elizabeth Mary</display_name>
+        <full_name>Testresearcher, Elizabeth Mary</full_name>
+        <wos_standard>Testresearcher, E</wos_standard>
+        <first_name>Elizabeth Mary</first_name>
+        <last_name>Testresearcher</last_name>
       </name>
     </names>
     <doctypes count="1">
@@ -358,10 +365,10 @@
         </address_spec>
         <names count="1">
           <name seq_no="1" role="author" reprint="Y" addr_no="1">
-            <display_name>Testerson, Peter</display_name>
-            <full_name>Testerson, Peter.</full_name>
+            <display_name>Testerson, P</display_name>
+            <full_name>Testerson, P</full_name>
             <wos_standard>Testerson, P</wos_standard>
-            <first_name>Peter</first_name>
+            <first_name>P</first_name>
             <last_name>Testerson</last_name>
             <email_addr>peter@test.edu</email_addr>
           </name>
@@ -385,10 +392,10 @@
         </address_spec>
         <names count="1">
           <name seq_no="1" role="author" reprint="Y" addr_no="1">
-            <display_name>Testerson, Peter</display_name>
-            <full_name>Testerson, Peter.</full_name>
+            <display_name>Testerson, P</display_name>
+            <full_name>Testerson, P</full_name>
             <wos_standard>Testerson, P</wos_standard>
-            <first_name>Peter</first_name>
+            <first_name>P</first_name>
             <last_name>Testerson</last_name>
             <email_addr>peter@test.edu</email_addr>
           </name>
@@ -415,10 +422,10 @@
         </address_spec>
         <names count="1">
           <name seq_no="1" role="author" reprint="Y" addr_no="1">
-            <display_name>Testerson, Peter</display_name>
-            <full_name>Testerson, Peter.</full_name>
+            <display_name>Testerson, P</display_name>
+            <full_name>Testerson, P</full_name>
             <wos_standard>Testerson, P</wos_standard>
-            <first_name>Peter</first_name>
+            <first_name>P</first_name>
             <last_name>Testerson</last_name>
             <email_addr>peter@test.edu</email_addr>
           </name>
@@ -484,9 +491,9 @@
   <contributors count="1">
     <contributor>
       <name seq_no="1" role="researcher_id" orcid_id="5678-0003-3051-1234">
-        <display_name>Testerson, Peter</display_name>
-        <full_name>Testerson, Peter.</full_name>
-        <first_name>Peter</first_name>
+        <display_name>Testerson, P</display_name>
+        <full_name>Testerson, P</full_name>
+        <first_name>P</first_name>
         <last_name>Testerson</last_name>
       </name>
     </contributor>

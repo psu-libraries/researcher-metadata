@@ -256,16 +256,15 @@ describe User, type: :model do
       let!(:u7) { create :user, first_name: 'First4', middle_name: 'Middle4', last_name: 'Last4' }
       let!(:u8) { create :user, first_name: 'f', middle_name: 'm', last_name: 'Last4' }
       let!(:u9) { create :user, first_name: 'f', middle_name: 'm', last_name: 'Last4', orcid_identifier: 'https://orcid.org/orcid789' }
-
+      let!(:u10) { create :user, first_name: 'First1', middle_name: nil, last_name: 'Last1' }
+      let!(:u11) { create :user, first_name: 'First1', middle_name: 'M', last_name: 'Last1' }
+      let!(:u12) { create :user, first_name: 'First2', middle_name: nil, last_name: 'Last2' }
+      let!(:u13) { create :user, first_name: 'First2', middle_name: 'AMiddle2', last_name: 'Last2' }
       before do
-        create :user, first_name: 'First1', middle_name: nil, last_name: 'Last1'
-        create :user, first_name: 'First1', middle_name: 'M', last_name: 'Last1'
         create :user, first_name: 'Other', middle_name: 'Middle1', last_name: 'Last1'
         create :user, first_name: 'First1', middle_name: 'Middle1', last_name: 'Other'
         create :user, first_name: 'F', middle_name: 'M', last_name: 'Last1'
 
-        create :user, first_name: 'First2', middle_name: nil, last_name: 'Last2'
-        create :user, first_name: 'First2', middle_name: 'AMiddle2', last_name: 'Last2'
         create :user, first_name: 'Other', middle_name: 'M', last_name: 'Other'
         create :user, first_name: 'First2', middle_name: 'M', last_name: 'Other'
         create :user, first_name: 'Other', middle_name: 'M', last_name: 'Last2'
@@ -277,7 +276,7 @@ describe User, type: :model do
         create :user, first_name: 'First4', middle_name: 'Middle4', last_name: 'Other'
       end
       it "returns one instance of each matching user" do
-        expect(User.find_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9]
+        expect(User.find_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
       end
     end
   end

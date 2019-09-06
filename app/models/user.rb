@@ -44,13 +44,15 @@ class User < ApplicationRecord
     users += where(orcid_identifier: pub.orcids.map { |o| "https://orcid.org/#{o}" })
     pub.author_names.each do |an|
       if an.first_name && an.middle_name
-        users += where(first_name: an.first_name, middle_name: an.middle_name, last_name: an.last_name)
+        users += where(first_name: an.first_name, middle_name: an.middle_name, last_name: an.last_name).
+          or(where(first_name: an.first_name, last_name: an.last_name))
       end
       if an.first_name && an.middle_initial
         users += where("first_name = ? AND middle_name ILIKE ? AND last_name = ?",
                       an.first_name,
                       "#{an.middle_initial}%",
-                      an.last_name)
+                      an.last_name).
+          or(where(first_name: an.first_name, last_name: an.last_name))
       end
       if an.first_name && !(an.middle_name || an.middle_initial)
         users += where(first_name: an.first_name, last_name: an.last_name)

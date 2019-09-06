@@ -146,6 +146,47 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.publisher).to eq 'Another Publisher'
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
             end
+            it "creates new authorships for every user referenced in the given XML file" do
+              expect { importer.call }.to change { Authorship.count }.by 3
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              new_auth1 = Authorship.find_by(publication: new_pub1, user: u1)
+              new_auth2 = Authorship.find_by(publication: new_pub1, user: u2)
+              new_auth3 = Authorship.find_by(publication: new_pub2, user: u3)
+
+              expect(new_auth1.author_number).to eq 1
+              expect(new_auth2.author_number).to eq 2
+              expect(new_auth3.author_number).to eq 1
+            end
+            it "creates new contributors for every author in the given XML file" do
+              expect { importer.call }.to change { Contributor.count }.by 4
+
+              new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
+              new_pub2 = Publication.find_by(title: 'Another Publication')
+
+              expect(Contributor.find_by(publication: new_pub1,
+                                         first_name: 'Jennifer',
+                                         middle_name: 'A',
+                                         last_name: 'Testauthor',
+                                         position: 1)).not_to be_nil
+              expect(Contributor.find_by(publication: new_pub1,
+                                         first_name: 'Arthur',
+                                         middle_name: nil,
+                                         last_name: 'Author',
+                                         position: 2)).not_to be_nil
+              expect(Contributor.find_by(publication: new_pub2,
+                                         first_name: 'P',
+                                         middle_name: nil,
+                                         last_name: 'Testerson',
+                                         position: 1)).not_to be_nil
+              expect(Contributor.find_by(publication: new_pub2,
+                                         first_name: 'Elizabeth',
+                                         middle_name: 'Mary',
+                                         last_name: 'Testresearcher',
+                                         position: 2)).not_to be_nil
+            end
           end
         end
       end
