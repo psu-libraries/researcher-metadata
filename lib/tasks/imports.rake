@@ -7,7 +7,7 @@ namespace :import do
   desc 'Import Web of Science data from local files'
   task :web_of_science => :environment do
     if Rails.env.development?
-      dirname = '/Volumes/WA_ext_HD/web_of_science_data/import'
+      dirname = Pathname.new('/Volumes/WA_ext_HD/web_of_science_data/import')
     else
       dirname = Rails.root.join('db/data/wos')
     end
