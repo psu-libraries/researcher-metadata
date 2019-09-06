@@ -1,14 +1,4 @@
-require 'unit/unit_spec_helper'
-require 'active_support'
-require 'active_support/core_ext'
-require_relative '../../../app/importers/web_of_science_publication'
-require_relative '../../../app/models/wos_author_name'
-require_relative '../../../app/models/wos_grant'
-require_relative '../../../app/models/wos_contributor'
-
-class PublicationImport
-  def self.find_by(arg); end
-end
+require 'component/component_spec_helper'
 
 describe WebOfSciencePublication do
   let(:parsed_pub) { double 'parsed publication xml' }
