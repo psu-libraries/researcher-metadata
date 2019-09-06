@@ -1,11 +1,11 @@
 require 'component/component_spec_helper'
 
 describe WebOfScienceFileImporter do
-  let(:importer) { WebOfScienceFileImporter.new(filename: filename) }
+  let(:importer) { WebOfScienceFileImporter.new(dirname: dirname) }
 
   describe '#call' do
     context "when given an XML file of publication data from Web of Science with Penn State Journal Articles" do
-      let(:filename) { Rails.root.join('spec', 'fixtures', 'wos_psu_articles.xml') }
+      let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_psu_articles') }
       context "when no existing publications match the data" do
         context "when no existing users match the data" do
           context "when no existing grants match the data" do
@@ -272,7 +272,7 @@ describe WebOfScienceFileImporter do
     end
 
     context "when given an XML file of publication data from Web of Science with non-Penn State Journal Articles" do
-      let(:filename) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_articles.xml') }
+      let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_articles') }
       context "when no existing publications match the data" do
         context "when no existing grants match the data" do
           it "does not create any new grants" do
@@ -339,7 +339,7 @@ describe WebOfScienceFileImporter do
   end
 
   context "when given an XML file of publication data from Web of Science with Penn State non-Journal Articles" do
-    let(:filename) { Rails.root.join('spec', 'fixtures', 'wos_psu_non_articles.xml') }
+    let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_psu_non_articles') }
     context "when no existing publications match the data" do
       context "when no existing grants match the data" do
         it "does not create any new grants" do
@@ -405,7 +405,7 @@ describe WebOfScienceFileImporter do
   end
 
   context "when given an XML file of publication data from Web of Science with non-Penn State non-Journal Articles" do
-    let(:filename) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_non_articles.xml') }
+    let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_non_articles') }
     context "when no existing publications match the data" do
       context "when no existing grants match the data" do
         it "does not create any new grants" do
