@@ -41,7 +41,7 @@ class User < ApplicationRecord
 
   def self.find_all_by_wos_pub(pub)
     users = []
-    users += where(orcid_identifier: pub.orcids.map { |o| "https://orcid.org/#{o}" })
+    users += find_confirmed_by_wos_pub(pub)
     pub.author_names.each do |an|
       if an.first_name && an.middle_name
         users += where(first_name: an.first_name, middle_name: an.middle_name, last_name: an.last_name).
@@ -65,6 +65,10 @@ class User < ApplicationRecord
       end
     end
     users.uniq
+  end
+
+  def self.find_confirmed_by_wos_pub(pub)
+    where(orcid_identifier: pub.orcids.map { |o| "https://orcid.org/#{o}" })
   end
 
   def admin?

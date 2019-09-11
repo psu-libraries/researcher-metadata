@@ -281,6 +281,25 @@ describe User, type: :model do
     end
   end
 
+  describe '#find_confirmed_by_wos_pub' do
+    let(:wp) { double 'Web of Science publication',
+                      orcids: ['orcid123', 'orcid456', 'orcid789'] }
+
+    context "when no users match the given Web of Science data" do
+      it "returns an empty array" do
+        expect(User.find_confirmed_by_wos_pub(wp)).to eq []
+      end
+    end
+    context "when there are users that match the given Web of Science data by ORCID" do
+      let!(:u1) { create :user, orcid_identifier: 'https://orcid.org/orcid123' }
+      let!(:u2) { create :user, orcid_identifier: 'https://orcid.org/orcid456' }
+      before { create :user, orcid_identifier: nil }
+      it "returns one instance of each matching user" do
+        expect(User.find_confirmed_by_wos_pub(wp)).to match_array [u1, u2]
+      end
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }

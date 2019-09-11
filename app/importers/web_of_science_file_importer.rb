@@ -87,6 +87,9 @@ class WebOfScienceFileImporter
                     a.user = u
                     a.publication = p
                     a.author_number = i + 1
+                    unless User.find_confirmed_by_wos_pub(wos_pub).include?(u)
+                      a.confirmed = false
+                    end
                     a.save!
                   end
 

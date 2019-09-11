@@ -154,9 +154,9 @@ describe WebOfScienceFileImporter do
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
 
-              new_auth1 = Authorship.find_by(publication: new_pub1, user: u1)
-              new_auth2 = Authorship.find_by(publication: new_pub1, user: u2)
-              new_auth3 = Authorship.find_by(publication: new_pub2, user: u3)
+              new_auth1 = Authorship.find_by(publication: new_pub1, user: u1, confirmed: true)
+              new_auth2 = Authorship.find_by(publication: new_pub1, user: u2, confirmed: false)
+              new_auth3 = Authorship.find_by(publication: new_pub2, user: u3, confirmed: true)
 
               expect(new_auth1.author_number).to eq 1
               expect(new_auth2.author_number).to eq 2
