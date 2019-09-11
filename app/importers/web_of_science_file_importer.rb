@@ -40,7 +40,7 @@ class WebOfScienceFileImporter
                 end
               end
             else
-              users = User.find_by_wos_pub(wos_pub)
+              users = User.find_all_by_wos_pub(wos_pub)
               if users.any?
                 ActiveRecord::Base.transaction do
                   p = Publication.new

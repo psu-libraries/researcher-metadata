@@ -213,7 +213,7 @@ describe User, type: :model do
     end
   end
 
-  describe '.find_by_wos_pub' do
+  describe '.find_all_by_wos_pub' do
     let(:wp) { double 'Web of Science publication',
                       orcids: ['orcid123', 'orcid456', 'orcid789'],
                       author_names: [an1, an2, an3, an4] }
@@ -243,7 +243,7 @@ describe User, type: :model do
                        last_name: 'Last4' }
     context "when no users match the given Web of Science data" do
       it "returns an empty array" do
-        expect(User.find_by_wos_pub(wp)).to eq []
+        expect(User.find_all_by_wos_pub(wp)).to eq []
       end
     end
     context "when there are users that match the given Web of Science data" do
@@ -276,7 +276,7 @@ describe User, type: :model do
         create :user, first_name: 'First4', middle_name: 'Middle4', last_name: 'Other'
       end
       it "returns one instance of each matching user" do
-        expect(User.find_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
+        expect(User.find_all_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
       end
     end
   end
