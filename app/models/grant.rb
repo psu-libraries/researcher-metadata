@@ -29,6 +29,7 @@ class Grant < ApplicationRecord
       field(:start_date)
       field(:end_date)
       field(:publications)
+      field(:users)
       field(:created_at)
       field(:updated_at)
     end

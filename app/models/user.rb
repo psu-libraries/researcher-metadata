@@ -221,6 +221,7 @@ class User < ApplicationRecord
       field(:publications)
       field(:presentations)
       field(:contracts)
+      field(:grants)
       field(:etds)
       field(:news_feed_items)
       field(:user_organization_memberships)

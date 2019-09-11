@@ -11,12 +11,16 @@ feature "Admin grant detail page", type: :feature do
                         end_date: Date.new(2005, 2, 20), amount_in_dollars: 50123 }
   let!(:pub1) { create :publication, title: "Publication1" }
   let!(:pub2) { create :publication, title: "Publication2" }
+  let!(:user1) { create :user, first_name: "Test", last_name: "User1" }
+  let!(:user2) { create :user, first_name: "Test", last_name: "User2" }
   let!(:rf1) { create :research_fund,
                       grant: grant,
                       publication: pub1 }
   let!(:rf2) { create :research_fund,
                       grant: grant,
                       publication: pub2 }
+  let!(:f1) { create :researcher_fund, grant: grant, user: user1 }
+  let!(:f2) { create :researcher_fund, grant: grant, user: user2 }
 
   context "when the current user is an admin" do
     before { authenticate_admin_user }
@@ -59,6 +63,11 @@ feature "Admin grant detail page", type: :feature do
       it "shows the grant's publications" do
         expect(page).to have_link "Publication1"
         expect(page).to have_link "Publication2"
+      end
+
+      it "shows the grant's users" do
+        expect(page).to have_link "Test User1"
+        expect(page).to have_link "Test User2"
       end
     end
 

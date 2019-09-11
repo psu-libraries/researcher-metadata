@@ -62,6 +62,9 @@ feature "Admin user detail page", type: :feature do
   let!(:item1) { create :education_history_item, user: user }
   let!(:item2) { create :education_history_item, user: user }
 
+  let!(:grant1) { create :grant, identifier: "TestGrant123" }
+  let!(:grant2) { create :grant, identifier: "TestGrant456" }
+
   context "when the current user is an admin" do
     before do
       authenticate_admin_user
@@ -82,6 +85,9 @@ feature "Admin user detail page", type: :feature do
 
       create :user_performance, user: user, performance: perf1
       create :user_performance, user: user, performance: perf2
+
+      create :researcher_fund, user: user, grant: grant1
+      create :researcher_fund, user: user, grant: grant2
     end
 
     describe "the page content" do
@@ -205,6 +211,11 @@ feature "Admin user detail page", type: :feature do
       it "shows the user's contracts" do
         expect(page).to have_link "Test Contract One"
         expect(page).to have_link "Test Contract Two"
+      end
+
+      it "shows the user's grants" do
+        expect(page).to have_link "TestGrant123"
+        expect(page).to have_link "TestGrant456"
       end
 
       it "shows the user's ETDs" do
