@@ -3,6 +3,8 @@ class Grant < ApplicationRecord
 
   has_many :research_funds
   has_many :publications, through: :research_funds
+  has_many :researcher_funds
+  has_many :users, through: :researcher_funds
 
   def name
     identifier

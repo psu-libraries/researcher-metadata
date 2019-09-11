@@ -68,6 +68,8 @@ describe User, type: :model do
     it { is_expected.to have_many(:managed_organizations).class_name(:Organization).with_foreign_key(:owner_id) }
     it { is_expected.to have_many(:managed_users).through(:managed_organizations).source(:users) }
     it { is_expected.to have_many(:education_history_items) }
+    it { is_expected.to have_many(:researcher_funds).inverse_of(:user) }
+    it { is_expected.to have_many(:grants).through(:researcher_funds) }
   end
 
   describe 'validations' do
@@ -210,6 +212,15 @@ describe User, type: :model do
     it "also deletes the user's memberships" do
       u.destroy
       expect { m.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a user with researcher funds" do
+    let(:u) { create :user }
+    let!(:f) { create :researcher_fund, user: u}
+    it "also deletes the user's researcher_funds" do
+      u.destroy
+      expect { f.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 

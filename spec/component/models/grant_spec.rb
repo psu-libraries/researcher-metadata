@@ -25,6 +25,8 @@ describe Grant, type: :model do
 
   it { is_expected.to have_many(:research_funds) }
   it { is_expected.to have_many(:publications).through(:research_funds) }
+  it { is_expected.to have_many(:researcher_funds) }
+  it { is_expected.to have_many(:users).through(:researcher_funds) }
 
   it { is_expected.to validate_presence_of(:agency_name) }
 
@@ -39,6 +41,15 @@ describe Grant, type: :model do
     let(:g) { create :grant }
     let!(:rf) { create :research_fund, grant: g}
     it "also deletes the grant's research funds" do
+      g.destroy
+      expect { rf.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a grant with researcher funds" do
+    let(:g) { create :grant }
+    let!(:rf) { create :researcher_fund, grant: g}
+    it "also deletes the grant's researcher funds" do
       g.destroy
       expect { rf.reload }.to raise_error ActiveRecord::RecordNotFound
     end

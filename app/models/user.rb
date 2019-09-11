@@ -36,6 +36,8 @@ class User < ApplicationRecord
   has_many :managed_organizations, class_name: :Organization, foreign_key: :owner_id
   has_many :managed_users, through: :managed_organizations, source: :users
   has_many :education_history_items
+  has_many :researcher_funds, inverse_of: :user
+  has_many :grants, through: :researcher_funds
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
