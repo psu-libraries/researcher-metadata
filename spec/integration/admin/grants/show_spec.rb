@@ -4,7 +4,11 @@ require 'integration/admin/shared_examples_for_admin_page'
 feature "Admin grant detail page", type: :feature do
   let!(:grant) { create :grant,
                         agency_name: "Test Agency",
-                        identifier: "GRANT-ID-123"}
+                        identifier: "GRANT-ID-123",
+                        title: "Test Grant",
+                        abstract: "A description of the grant.",
+                        start_date: Date.new(2000, 1, 1),
+                        end_date: Date.new(2005, 2, 20), amount_in_dollars: 50123 }
   let!(:pub1) { create :publication, title: "Publication1" }
   let!(:pub2) { create :publication, title: "Publication2" }
   let!(:rf1) { create :research_fund,
@@ -30,6 +34,26 @@ feature "Admin grant detail page", type: :feature do
 
       it "shows the grant's identifier" do
         expect(page).to have_content "GRANT-ID-123"
+      end
+
+      it "shows the grant's title" do
+        expect(page).to have_content "Test Grant"
+      end
+
+      it "shows the grant's abstract" do
+        expect(page).to have_content "A description of the grant."
+      end
+
+      it "shows the grant's start date" do
+        expect(page).to have_content "January 01, 2000"
+      end
+
+      it "shows the grant's end date" do
+        expect(page).to have_content "February 20, 2005"
+      end
+
+      it "shows the grant's dollar amount" do
+        expect(page).to have_content "50123"
       end
 
       it "shows the grant's publications" do
