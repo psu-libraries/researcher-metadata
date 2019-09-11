@@ -27,9 +27,16 @@ describe ActivityInsightAuthorshipImporter do
               a4 = Authorship.find_by(user: u3, publication: pi3.publication)
 
               expect(a1.author_number).to eq 1
+              expect(a1.confirmed).to eq true
+
               expect(a2.author_number).to eq 1
+              expect(a2.confirmed).to eq true
+
               expect(a3.author_number).to eq 1
+              expect(a3.confirmed).to eq true
+
               expect(a4.author_number).to eq 2
+              expect(a4.confirmed).to eq true
             end
           end
 
@@ -45,8 +52,13 @@ describe ActivityInsightAuthorshipImporter do
               a3 = Authorship.find_by(user: u3, publication: pi2.publication)
 
               expect(a1.author_number).to eq 1
+              expect(a1.confirmed).to eq true
+
               expect(a2.author_number).to eq 1
+              expect(a2.confirmed).to eq true
+
               expect(a3.author_number).to eq 2
+              expect(a3.confirmed).to eq true
             end
           end
         end
@@ -68,8 +80,13 @@ describe ActivityInsightAuthorshipImporter do
               a3 = Authorship.find_by(user: u2, publication: pi3.publication)
 
               expect(a1.author_number).to eq 1
+              expect(a1.confirmed).to eq true
+
               expect(a2.author_number).to eq 1
+              expect(a2.confirmed).to eq true
+
               expect(a3.author_number).to eq 2
+              expect(a3.confirmed).to eq true
             end
           end
 
@@ -84,7 +101,10 @@ describe ActivityInsightAuthorshipImporter do
               a2 = Authorship.find_by(user: u2, publication: pi2.publication)
 
               expect(a1.author_number).to eq 1
+              expect(a1.confirmed).to eq true
+
               expect(a2.author_number).to eq 2
+              expect(a2.confirmed).to eq true
             end
           end
         end
@@ -115,9 +135,16 @@ describe ActivityInsightAuthorshipImporter do
                 a4 = Authorship.find_by(user: u3, publication: pi3.publication)
 
                 expect(a1.author_number).to eq 4
+                expect(a1.confirmed).to eq true
+
                 expect(a2.author_number).to eq 1
+                expect(a2.confirmed).to eq true
+
                 expect(a3.author_number).to eq 1
+                expect(a3.confirmed).to eq true
+
                 expect(a4.author_number).to eq 2
+                expect(a4.confirmed).to eq true
               end
             end
 
@@ -131,9 +158,16 @@ describe ActivityInsightAuthorshipImporter do
                 a4 = Authorship.find_by(user: u3, publication: pi3.publication)
 
                 expect(a1.author_number).to eq 1
+                expect(a1.confirmed).to eq true
+
                 expect(a2.author_number).to eq 1
+                expect(a2.confirmed).to eq true
+
                 expect(a3.author_number).to eq 1
+                expect(a3.confirmed).to eq true
+
                 expect(a4.author_number).to eq 2
+                expect(a4.confirmed).to eq true
               end
             end
           end

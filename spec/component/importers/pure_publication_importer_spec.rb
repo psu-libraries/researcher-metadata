@@ -218,11 +218,13 @@ describe PurePublicationImporter do
 
               expect(Authorship.find_by(publication: found_pub1.publication,
                                         user: pub1auth1,
-                                        author_number: 1)).not_to be_nil
+                                        author_number: 1,
+                                        confirmed: true)).not_to be_nil
 
               expect(Authorship.find_by(publication: found_pub2.publication,
                                         user: pub3auth2,
-                                        author_number: 2)).not_to be_nil
+                                        author_number: 2,
+                                        confirmed: true)).not_to be_nil
             end
           end
   
@@ -336,7 +338,8 @@ describe PurePublicationImporter do
 
               expect(Authorship.find_by(publication: found_pub2.publication,
                                         user: pub3auth2,
-                                        author_number: 2)).not_to be_nil
+                                        author_number: 2,
+                                        confirmed: true)).not_to be_nil
             end
           end
 
