@@ -1,5 +1,5 @@
 class Grant < ApplicationRecord
-  validates :agency_name, presence: true
+  validates :wos_agency_name, presence: true
 
   has_many :research_funds
   has_many :publications, through: :research_funds
@@ -7,14 +7,14 @@ class Grant < ApplicationRecord
   has_many :users, through: :researcher_funds
 
   def name
-    identifier
+    wos_identifier
   end
 
   rails_admin do
     list do
       field(:id)
-      field(:agency_name)
-      field(:identifier)
+      field(:wos_agency_name)
+      field(:wos_identifier)
       field(:created_at)
       field(:updated_at)
     end
@@ -22,8 +22,8 @@ class Grant < ApplicationRecord
     show do
       field(:id)
       field(:title)
-      field(:agency_name)
-      field(:identifier)
+      field(:wos_agency_name)
+      field(:wos_identifier)
       field(:amount_in_dollars)
       field(:abstract)
       field(:start_date)

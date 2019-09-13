@@ -3,8 +3,8 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin grant detail page", type: :feature do
   let!(:grant) { create :grant,
-                        agency_name: "Test Agency",
-                        identifier: "GRANT-ID-123",
+                        wos_agency_name: "Test Agency",
+                        wos_identifier: "GRANT-ID-123",
                         title: "Test Grant",
                         abstract: "A description of the grant.",
                         start_date: Date.new(2000, 1, 1),

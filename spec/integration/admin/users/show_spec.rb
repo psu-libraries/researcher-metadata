@@ -62,8 +62,8 @@ feature "Admin user detail page", type: :feature do
   let!(:item1) { create :education_history_item, user: user }
   let!(:item2) { create :education_history_item, user: user }
 
-  let!(:grant1) { create :grant, identifier: "TestGrant123" }
-  let!(:grant2) { create :grant, identifier: "TestGrant456" }
+  let!(:grant1) { create :grant, wos_identifier: "TestGrant123" }
+  let!(:grant2) { create :grant, wos_identifier: "TestGrant456" }
 
   context "when the current user is an admin" do
     before do

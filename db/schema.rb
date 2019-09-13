@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_11_175932) do
+ActiveRecord::Schema.define(version: 2019_09_13_141112) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -132,8 +132,8 @@ ActiveRecord::Schema.define(version: 2019_09_11_175932) do
   end
 
   create_table "grants", force: :cascade do |t|
-    t.text "agency_name", null: false
-    t.string "identifier"
+    t.text "wos_agency_name", null: false
+    t.string "wos_identifier"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.text "title"
@@ -141,7 +141,7 @@ ActiveRecord::Schema.define(version: 2019_09_11_175932) do
     t.date "end_date"
     t.text "abstract"
     t.integer "amount_in_dollars"
-    t.index ["identifier"], name: "index_grants_on_identifier"
+    t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
   end
 
   create_table "news_feed_items", force: :cascade do |t|
