@@ -10,10 +10,14 @@ class WOSGrant
   def agency
     if (wos_agency =~ /National Science Foundation/i ||
        wos_agency =~ /NSF/) &&
-        wos_agency !~ /Chinese NSF/i &&
-         wos_agency !~ /CNSF/ &&
-          wos_agency !~ /NSFC/ &&
-           wos_agency !~ /NSF of China/i
+       wos_agency !~ /Chinese NSF/i &&
+       wos_agency !~ /CNSF/ &&
+       wos_agency !~ /NSFC/ &&
+       wos_agency !~ /NSF of China/i &&
+       wos_agency !~ /National Science Foundation of China/i &&
+       wos_agency !~ /Swiss National Science Foundation/i &&
+       wos_agency !~ /GNSF/ &&
+       wos_agency !~ /SNSF/
       "National Science Foundation"
     end
   end
