@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_09_13_141112) do
+ActiveRecord::Schema.define(version: 2019_09_13_143857) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -141,6 +141,7 @@ ActiveRecord::Schema.define(version: 2019_09_13_141112) do
     t.date "end_date"
     t.text "abstract"
     t.integer "amount_in_dollars"
+    t.index ["wos_agency_name"], name: "index_grants_on_wos_agency_name"
     t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
   end
 

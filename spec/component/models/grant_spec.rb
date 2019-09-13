@@ -16,6 +16,7 @@ describe 'the grants table', type: :model do
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
   it { is_expected.to have_db_index(:wos_identifier) }
+  it { is_expected.to have_db_index(:wos_agency_name) }
 end
 
 describe Grant, type: :model do
