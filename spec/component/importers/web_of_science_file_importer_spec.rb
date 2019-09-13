@@ -21,7 +21,7 @@ describe WebOfScienceFileImporter do
           end
           context "when existing grants match the data" do
             let!(:grant1) { create :grant,
-                                   wos_agency_name: 'National Science Foundation',
+                                   wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
@@ -44,17 +44,19 @@ describe WebOfScienceFileImporter do
           context "when no existing grants match the data" do
             it "creates new grants for each publication in the given XML file" do
               expect { importer.call }.to change { Grant.count }.by 2
-              expect(Grant.find_by(wos_agency_name: 'National Science Foundation',
-                                   wos_identifier: 'ATMO-0803779')).not_to be_nil
+              expect(Grant.find_by(wos_agency_name: 'NSF',
+                                   wos_identifier: 'ATMO-0803779',
+                                   agency_name: 'National Science Foundation')).not_to be_nil
               expect(Grant.find_by(wos_agency_name: 'NIH',
-                                   wos_identifier: 'NIH-346346')).not_to be_nil
+                                   wos_identifier: 'NIH-346346',
+                                   agency_name: nil)).not_to be_nil
             end
             it "creates new associations between the new grants and new publications" do
               expect { importer.call }.to change { ResearchFund.count }.by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
-              new_grant1 = Grant.find_by(wos_agency_name: 'National Science Foundation',
+              new_grant1 = Grant.find_by(wos_agency_name: 'NSF',
                                          wos_identifier: 'ATMO-0803779')
               new_grant2 = Grant.find_by(wos_agency_name: 'NIH',
                                          wos_identifier: 'NIH-346346')
@@ -87,7 +89,7 @@ describe WebOfScienceFileImporter do
           end
           context "when existing grants match the data" do
             let!(:grant1) { create :grant,
-                                   wos_agency_name: 'National Science Foundation',
+                                   wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
@@ -201,14 +203,16 @@ describe WebOfScienceFileImporter do
           end
           it "creates new grants where agency name and ID information are available" do
             expect { importer.call }.to change { Grant.count }.by 2
-            expect(Grant.find_by(wos_agency_name: 'National Science Foundation',
-                                 wos_identifier: 'ATMO-0803779')).not_to be_nil
+            expect(Grant.find_by(wos_agency_name: 'NSF',
+                                 wos_identifier: 'ATMO-0803779',
+                                 agency_name: 'National Science Foundation')).not_to be_nil
             expect(Grant.find_by(wos_agency_name: 'NIH',
-                                 wos_identifier: 'NIH-346346')).not_to be_nil
+                                 wos_identifier: 'NIH-346346',
+                                 agency_name: nil)).not_to be_nil
           end
           it "creates new research fund records to associate the grants with the publications" do
             expect { importer.call }.to change { ResearchFund.count }.by 2
-            new_grant1 = Grant.find_by(wos_agency_name: 'National Science Foundation',
+            new_grant1 = Grant.find_by(wos_agency_name: 'NSF',
                                       wos_identifier: 'ATMO-0803779')
             new_grant2 = Grant.find_by(wos_agency_name: 'NIH',
                                        wos_identifier: 'NIH-346346')
@@ -218,7 +222,7 @@ describe WebOfScienceFileImporter do
         end
         context "when existing grants match the data" do
           let!(:grant1) { create :grant,
-                                 wos_agency_name: 'National Science Foundation',
+                                 wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
@@ -253,7 +257,7 @@ describe WebOfScienceFileImporter do
         end
         context "when existing grants match the data" do
           let!(:grant1) { create :grant,
-                                 wos_agency_name: 'National Science Foundation',
+                                 wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
@@ -287,7 +291,7 @@ describe WebOfScienceFileImporter do
         end
         context "when existing grants match the data" do
           let!(:grant1) { create :grant,
-                                 wos_agency_name: 'National Science Foundation',
+                                 wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
@@ -319,7 +323,7 @@ describe WebOfScienceFileImporter do
         end
         context "when existing grants match the data" do
           let!(:grant1) { create :grant,
-                                 wos_agency_name: 'National Science Foundation',
+                                 wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
@@ -354,7 +358,7 @@ describe WebOfScienceFileImporter do
       end
       context "when existing grants match the data" do
         let!(:grant1) { create :grant,
-                               wos_agency_name: 'National Science Foundation',
+                               wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
@@ -386,7 +390,7 @@ describe WebOfScienceFileImporter do
       end
       context "when existing grants match the data" do
         let!(:grant1) { create :grant,
-                               wos_agency_name: 'National Science Foundation',
+                               wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
@@ -420,7 +424,7 @@ describe WebOfScienceFileImporter do
       end
       context "when existing grants match the data" do
         let!(:grant1) { create :grant,
-                               wos_agency_name: 'National Science Foundation',
+                               wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
@@ -452,7 +456,7 @@ describe WebOfScienceFileImporter do
       end
       context "when existing grants match the data" do
         let!(:grant1) { create :grant,
-                               wos_agency_name: 'National Science Foundation',
+                               wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
