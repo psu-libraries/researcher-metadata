@@ -3,9 +3,9 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin grant detail page", type: :feature do
   let!(:grant) { create :grant,
-                        wos_agency_name: "TA",
+                        wos_agency_name: "Test Agency",
                         wos_identifier: "GRANT-ID-123",
-                        agency_name: "Test Agency",
+                        agency_name: "National Science Foundation",
                         identifier: "123",
                         title: "Test Grant",
                         abstract: "A description of the grant.",
@@ -35,7 +35,7 @@ feature "Admin grant detail page", type: :feature do
       end
 
       it "shows the grant's agency name in Web of Science" do
-        expect(page).to have_content "TA"
+        expect(page).to have_content "Test Agency"
       end
 
       it "shows the grant's identifier in Web of Science" do
@@ -47,7 +47,7 @@ feature "Admin grant detail page", type: :feature do
       end
 
       it "shows the grant's canonical agency name" do
-        expect(page).to have_content "Test Agency"
+        expect(page).to have_content "National Science Foundation"
       end
 
       it "shows the grant's title" do
