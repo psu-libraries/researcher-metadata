@@ -19,7 +19,7 @@ class WOSGrant
   end
 
   def ids
-    parsed_grant.css('grant_ids > grant_id').map { |i| i.text.try(:strip) }
+    parsed_grant.css('grant_ids > grant_id').map { |i| WOSGrantID.new(self, i) }
   end
 
   private

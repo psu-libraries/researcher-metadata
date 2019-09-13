@@ -2,6 +2,7 @@ require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/wos_grant'
+require_relative '../../../app/models/wos_grant_id'
 
 describe WOSGrant do
   let(:parsed_grant) { double 'parsed_grant' }
@@ -107,12 +108,19 @@ describe WOSGrant do
   end
 
   describe '#ids' do
-    let(:id1) { double 'grant ID 1', text: "  \n  grant ID 1    \n" }
-    let(:id2) { double 'grant ID 2', text: "\n  grant ID 2  \n  " }
-    before { allow(parsed_grant).to receive(:css).with('grant_ids > grant_id').and_return [id1, id2] }
+    let(:id_element1) { double 'id element 1' }
+    let(:id_element2) { double 'id element 2' }
+    let(:id1) { double 'id 1' }
+    let(:id2) { double 'id 2' }
 
-    it "returns an array of the IDs for the grant with any surrounding whitespace removed" do
-      expect(grant.ids).to eq ["grant ID 1", "grant ID 2"]
+    before do
+      allow(WOSGrantID).to receive(:new).with(grant, id_element1).and_return(id1)
+      allow(WOSGrantID).to receive(:new).with(grant, id_element2).and_return(id2)
+      allow(parsed_grant).to receive(:css).with('grant_ids > grant_id').and_return([id_element1, id_element2])
+    end
+
+    it "returns an array of the ids associated with the grant" do
+      expect(grant.ids).to eq [id1, id2]
     end
   end
 end

@@ -46,10 +46,12 @@ describe WebOfScienceFileImporter do
               expect { importer.call }.to change { Grant.count }.by 2
               expect(Grant.find_by(wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779',
-                                   agency_name: 'National Science Foundation')).not_to be_nil
+                                   agency_name: 'National Science Foundation',
+                                   identifier: '0803779')).not_to be_nil
               expect(Grant.find_by(wos_agency_name: 'NIH',
                                    wos_identifier: 'NIH-346346',
-                                   agency_name: nil)).not_to be_nil
+                                   agency_name: nil,
+                                   identifier: nil)).not_to be_nil
             end
             it "creates new associations between the new grants and new publications" do
               expect { importer.call }.to change { ResearchFund.count }.by 2
@@ -205,10 +207,12 @@ describe WebOfScienceFileImporter do
             expect { importer.call }.to change { Grant.count }.by 2
             expect(Grant.find_by(wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779',
-                                 agency_name: 'National Science Foundation')).not_to be_nil
+                                 agency_name: 'National Science Foundation',
+                                 identifier: '0803779')).not_to be_nil
             expect(Grant.find_by(wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346',
-                                 agency_name: nil)).not_to be_nil
+                                 agency_name: nil,
+                                 identifier: nil)).not_to be_nil
           end
           it "creates new research fund records to associate the grants with the publications" do
             expect { importer.call }.to change { ResearchFund.count }.by 2
