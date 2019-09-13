@@ -3,8 +3,10 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin grant detail page", type: :feature do
   let!(:grant) { create :grant,
-                        wos_agency_name: "Test Agency",
+                        wos_agency_name: "TA",
                         wos_identifier: "GRANT-ID-123",
+                        agency_name: "Test Agency",
+                        identifier: "123",
                         title: "Test Grant",
                         abstract: "A description of the grant.",
                         start_date: Date.new(2000, 1, 1),
@@ -29,15 +31,23 @@ feature "Admin grant detail page", type: :feature do
       before { visit rails_admin.show_path(model_name: :grant, id: grant.id) }
 
       it "shows the grant detail heading" do
-        expect(page).to have_content "Details for Grant 'GRANT-ID-123'"
+        expect(page).to have_content "Details for Grant '123'"
       end
 
-      it "shows the grant's agency" do
-        expect(page).to have_content "Test Agency"
+      it "shows the grant's agency name in Web of Science" do
+        expect(page).to have_content "TA"
       end
 
-      it "shows the grant's identifier" do
+      it "shows the grant's identifier in Web of Science" do
         expect(page).to have_content "GRANT-ID-123"
+      end
+
+      it "shows the grant's canonical identifier" do
+        expect(page).to have_content "123"
+      end
+
+      it "shows the grant's canonical agency name" do
+        expect(page).to have_content "Test Agency"
       end
 
       it "shows the grant's title" do

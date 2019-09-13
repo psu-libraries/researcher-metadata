@@ -5,14 +5,20 @@ class Grant < ApplicationRecord
   has_many :users, through: :researcher_funds
 
   def name
-    wos_identifier
+    identifier.presence || wos_identifier.presence
+  end
+
+  def agency
+    agency_name.presence || wos_agency_name.presence
   end
 
   rails_admin do
     list do
       field(:id)
-      field(:wos_agency_name)
-      field(:wos_identifier)
+      field(:agency)
+      field(:name) do
+        label "Identifier"
+      end
       field(:created_at)
       field(:updated_at)
     end
@@ -20,6 +26,8 @@ class Grant < ApplicationRecord
     show do
       field(:id)
       field(:title)
+      field(:agency_name)
+      field(:identifier)
       field(:wos_agency_name)
       field(:wos_identifier)
       field(:amount_in_dollars)

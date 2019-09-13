@@ -6,8 +6,8 @@ feature "Admin grants list", type: :feature do
     before { authenticate_admin_user }
 
     describe "the page content" do
-      let!(:grant1) { create(:grant, wos_agency_name: 'Test Grant Agency') }
-      let!(:grant2) { create(:grant, wos_agency_name: 'Another Grant Agency') }
+      let!(:grant1) { create(:grant, agency_name: 'Test Grant Agency') }
+      let!(:grant2) { create(:grant, agency_name: 'Another Grant Agency') }
 
       before { visit rails_admin.index_path(model_name: :grant) }
 
