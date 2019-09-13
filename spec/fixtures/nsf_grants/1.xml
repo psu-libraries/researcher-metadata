@@ -1,0 +1,67 @@
+<!-- No Penn State affiliation -->
+<?xml version="1.0" encoding="UTF-8"?>
+<rootTag>
+  <Award>
+    <AwardTitle>Phylogeny and Evolution of Cornales:  Integrating Molecules, Morphology, and Fossils</AwardTitle>
+    <AwardEffectiveDate>03/01/2005</AwardEffectiveDate>
+    <AwardExpirationDate>02/29/2008</AwardExpirationDate>
+    <AwardTotalIntnAmount>150000.00</AwardTotalIntnAmount>
+    <AwardAmount>150000</AwardAmount>
+    <AwardInstrument>
+      <Value>Standard Grant</Value>
+    </AwardInstrument>
+    <Organization>
+      <Code>08010206</Code>
+      <Directorate>
+        <Abbreviation>BIO</Abbreviation>
+        <LongName>Direct For Biological Sciences</LongName>
+      </Directorate>
+      <Division>
+        <Abbreviation>DEB</Abbreviation>
+        <LongName>Division Of Environmental Biology</LongName>
+      </Division>
+    </Organization>
+    <ProgramOfficer>
+      <SignBlockName>Maureen M. Kearney</SignBlockName>
+    </ProgramOfficer>
+    <AbstractNarration> Recent advances in plant phylogenetic studies revealed that the dogwoods and close relatives (order Cornales) represent an ancient evolutionary lineage within the most diverse and highly specialized group of flowering plants, the Asterid group.  The order contains several morphologically diverse families with excellent fossil records and provides an exceptional system to understand the evolution and diversification of early asterids.  The major goal of the project is to reconstruct the phylogeny of Cornales using evidence from extensive DNA sequences, morphology, and fossils. The phylogeny will serve as the basis for studies of: (1) key morphological transformations among members of the order; (2) biogeographic origin, intercontinental migration, and radiation of major cornalean lineages; and (3) pattern and rate of molecular evolution in relation to morphological differentiation and speciation.  The phylogeny will also provide a framework for a predictive and stable classification within Cornales. &lt;br/&gt;Plants of Cornales are common tree elements in the forests of northern hemisphere and are widely cultivated for ornamental and medicinal uses. They are critically important to forest ecology and many dogwood species have great importance in horticulture. They also are medically relevant; for example, Camptotheca acuminata is a close relative of the flowering dogwoods and it contains a natural anti-cancer drug (camptothecin) that is considered second in importance to taxol for certain chemotherapy treatments.  A robust phylogeny and predictive and stable classification of the order will provide a basis for directing horticultural, pharmacological, and other biological studies of these plants. The extensive gene sequences to be collected in the study will contribute significantly to the existing molecular datasets of angiosperms and will facilitate comparative evolutionary studies at higher taxonomic levels. Furthermore, the project provides training for graduate and undergraduate students in plant evolutionary biology and systematics.  Finally, this project will add key information to the "Tree of Life" for flowering plants&lt;br/&gt;</AbstractNarration>
+    <MinAmdLetterDate>03/02/2005</MinAmdLetterDate>
+    <MaxAmdLetterDate>03/02/2005</MaxAmdLetterDate>
+    <ARRAAmount/>
+    <AwardID>0444125</AwardID>
+    <Investigator>
+      <FirstName>JennyQiuyun</FirstName>
+      <LastName>Xiang</LastName>
+      <EmailAddress>jenny_xiang@ncsu.edu</EmailAddress>
+      <StartDate>03/02/2005</StartDate>
+      <EndDate/>
+      <RoleCode>Principal Investigator</RoleCode>
+    </Investigator>
+    <Institution>
+      <Name>North Carolina State University</Name>
+      <CityName>Raleigh</CityName>
+      <ZipCode>276950001</ZipCode>
+      <PhoneNumber>9195152444</PhoneNumber>
+      <StreetAddress>2701 Sullivan DR STE 240</StreetAddress>
+      <CountryName>United States</CountryName>
+      <StateName>North Carolina</StateName>
+      <StateCode>NC</StateCode>
+    </Institution>
+    <ProgramElement>
+      <Code>1171</Code>
+      <Text>PHYLOGENETIC SYSTEMATICS</Text>
+    </ProgramElement>
+    <ProgramReference>
+      <Code>1171</Code>
+      <Text>PHYLOGENETIC SYSTEMATICS</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>9169</Code>
+      <Text>BIODIVERSITY AND ECOSYSTEM DYNAMICS</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>EGCH</Code>
+      <Text>ENVIRONMENT AND GLOBAL CHANGE</Text>
+    </ProgramReference>
+  </Award>
+</rootTag>

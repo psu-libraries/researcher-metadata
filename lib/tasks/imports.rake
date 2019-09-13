@@ -14,6 +14,14 @@ namespace :import do
     WebOfScienceFileImporter.new(dirname: dirname).call
   end
 
+  desc 'Import NSF grant data from local files'
+  task :nsf_grants, [:dirname] => :environment do |_task, args|
+    args.with_defaults(
+      dirname: dirname_for(:nsf_grants)
+    )
+    NSFGrantImporter.new(dirname: args.dirname).call
+  end
+
   desc 'Import Activity Insight users'
   task :ai_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
@@ -283,5 +291,6 @@ end
 def dirname_for(key)
   case key
   when :pure_publications then Rails.root.join('db/data/pure_publications')
+  when :nsf_grants then Rails.root.join('db/data/nsf_grants')
   end
 end
