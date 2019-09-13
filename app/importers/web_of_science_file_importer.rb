@@ -20,11 +20,11 @@ class WebOfScienceFileImporter
             if existing_pubs.any?
               wos_pub.grants.each do |g|
                 ActiveRecord::Base.transaction do
-                  if g.agency.present?
+                  if g.wos_agency.present?
                     g.ids.each do |id|
-                      unless Grant.find_by(wos_agency_name: g.agency, wos_identifier: id)
+                      unless Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id)
                         grant = Grant.new
-                        grant.wos_agency_name = g.agency
+                        grant.wos_agency_name = g.wos_agency
                         grant.wos_identifier = id
                         grant.save!
 
@@ -65,12 +65,12 @@ class WebOfScienceFileImporter
                   pi.save!
 
                   wos_pub.grants.each do |g|
-                    if g.agency.present?
+                    if g.wos_agency.present?
                       g.ids.each do |id|
-                        grant = Grant.find_by(wos_agency_name: g.agency, wos_identifier: id) || Grant.new
+                        grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id) || Grant.new
                         if grant.new_record?
                           grant = Grant.new
-                          grant.wos_agency_name = g.agency
+                          grant.wos_agency_name = g.wos_agency
                           grant.wos_identifier = id
                           grant.save!
                         end

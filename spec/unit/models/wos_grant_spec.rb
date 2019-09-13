@@ -7,12 +7,12 @@ describe WOSGrant do
   let(:parsed_grant) { double 'parsed_grant' }
   let(:grant) { WOSGrant.new(parsed_grant) }
 
-  describe '#agency' do
+  describe '#wos_agency' do
     before { allow(parsed_grant).to receive(:css).with('grant_agency').and_return(agency_element) }
     let(:agency_element) { double 'agency', text: "  \n  National Science Foundation\n  " }
 
     it "returns the name of the grant agency with any surrounding whitespace removed" do
-      expect(grant.agency).to eq "National Science Foundation"
+      expect(grant.wos_agency).to eq "National Science Foundation"
     end
   end
 

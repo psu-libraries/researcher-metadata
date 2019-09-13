@@ -3,7 +3,7 @@ class WOSGrant
     @parsed_grant = parsed_grant
   end
 
-  def agency
+  def wos_agency
     parsed_grant.css('grant_agency').text.try(:strip)
   end
 
