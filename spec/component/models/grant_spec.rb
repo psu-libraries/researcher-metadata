@@ -33,6 +33,14 @@ describe Grant, type: :model do
   it { is_expected.to have_many(:researcher_funds) }
   it { is_expected.to have_many(:users).through(:researcher_funds) }
 
+  it { is_expected.to validate_inclusion_of(:agency_name).in_array(["National Science Foundation"]).allow_nil }
+
+  describe '.agency_names' do
+    it "returns the list of possible canonical agency names for a grant" do
+      expect(Grant.agency_names).to eq ["National Science Foundation"]
+    end
+  end
+
   describe '#name' do
     let(:grant) { Grant.new(wos_identifier: wos_id, identifier: id) }
     context "when the grant has a canonical identifier" do

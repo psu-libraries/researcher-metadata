@@ -1,8 +1,14 @@
 class Grant < ApplicationRecord
+  def self.agency_names
+    ["National Science Foundation"]
+  end
+
   has_many :research_funds
   has_many :publications, through: :research_funds
   has_many :researcher_funds
   has_many :users, through: :researcher_funds
+
+  validates :agency_name, inclusion: {in: agency_names, allow_nil: true}
 
   def name
     identifier.presence || wos_identifier.presence
