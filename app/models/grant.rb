@@ -1,6 +1,4 @@
 class Grant < ApplicationRecord
-  validates :wos_agency_name, presence: true
-
   has_many :research_funds
   has_many :publications, through: :research_funds
   has_many :researcher_funds

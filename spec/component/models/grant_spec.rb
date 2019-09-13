@@ -5,7 +5,7 @@ describe 'the grants table', type: :model do
   subject { Grant.new }
 
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:wos_agency_name).of_type(:text).with_options(null: false) }
+  it { is_expected.to have_db_column(:wos_agency_name).of_type(:text).with_options(null: true) }
   it { is_expected.to have_db_column(:wos_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:title).of_type(:text) }
   it { is_expected.to have_db_column(:start_date).of_type(:date) }
@@ -28,8 +28,6 @@ describe Grant, type: :model do
   it { is_expected.to have_many(:publications).through(:research_funds) }
   it { is_expected.to have_many(:researcher_funds) }
   it { is_expected.to have_many(:users).through(:researcher_funds) }
-
-  it { is_expected.to validate_presence_of(:wos_agency_name) }
 
   describe '#name' do
     let(:grant) { Grant.new(wos_identifier: 'ID123') }
