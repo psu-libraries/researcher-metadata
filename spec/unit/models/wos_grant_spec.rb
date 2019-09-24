@@ -129,6 +129,36 @@ describe WOSGrant do
         expect(grant.agency).to eq nil
       end
     end
+    context "when the agency name in the given data is 'German National Science Foundation'" do
+      let(:agency_text) { "German National Science Foundation" }
+      it "returns nil" do
+        expect(grant.agency).to eq nil
+      end
+    end
+    context "when the agency name in the given data is 'SFFR-NSF'" do
+      let(:agency_text) { "SFFR-NSF" }
+      it "returns nil" do
+        expect(grant.agency).to eq nil
+      end
+    end
+    context "when the agency name in the given data is 'Chinese National Science Foundation'" do
+      let(:agency_text) { "Chinese National Science Foundation" }
+      it "returns nil" do
+        expect(grant.agency).to eq nil
+      end
+    end
+    context "when the agency name in the given data is 'National Science Foundation for Distinguished Young Scholars of China'" do
+      let(:agency_text) { "National Science Foundation for Distinguished Young Scholars of China" }
+      it "returns nil" do
+        expect(grant.agency).to eq nil
+      end
+    end
+    context "when the agency name in the given data is 'China National Science Foundation'" do
+      let(:agency_text) { "China National Science Foundation" }
+      it "returns nil" do
+        expect(grant.agency).to eq nil
+      end
+    end
   end
 
   describe '#ids' do

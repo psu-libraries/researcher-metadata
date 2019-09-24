@@ -17,7 +17,12 @@ class WOSGrant
        wos_agency !~ /National Science Foundation of China/i &&
        wos_agency !~ /Swiss National Science Foundation/i &&
        wos_agency !~ /GNSF/ &&
-       wos_agency !~ /SNSF/
+       wos_agency !~ /SNSF/ &&
+       wos_agency !~ /German National Science Foundation/i &&
+       wos_agency !~ /SFFR-NSF/ &&
+       wos_agency !~ /Chinese National Science Foundation/i &&
+       wos_agency !~ /National Science Foundation for Distinguished Young Scholars of China/i &&
+       wos_agency !~ /China National Science Foundation/
       "National Science Foundation"
     end
   end
