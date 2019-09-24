@@ -8,8 +8,9 @@ describe NSFGrant do
     context "when the given data lists no institutions" do
       before { allow(parsed_grant).to receive(:css).with('Institution').and_return [] }
 
-      xit
-
+      it "returns false" do
+        expect(grant.importable?).to eq false
+      end
     end
     context "when the given data lists an institution that does not match Penn State" do
       let(:inst) { double 'institution' }
@@ -19,8 +20,9 @@ describe NSFGrant do
         allow(inst).to receive(:css).with('Name').and_return name_element
       end
 
-      xit
-
+      it "returns false" do
+        expect(grant.importable?).to eq false
+      end
     end
     context "when the given data lists an institution that matches Penn State" do
       let(:inst1) { double 'institution 1' }
@@ -33,8 +35,9 @@ describe NSFGrant do
         allow(inst2).to receive(:css).with('Name').and_return name_element2
       end
 
-      xit
-      
+      it "returns true" do
+        expect(grant.importable?).to eq true
+      end
     end
   end
 
@@ -54,6 +57,107 @@ describe NSFGrant do
       it "returns the text with surrounding whitespace removed" do
         expect(grant.title).to eq 'Title'
       end
+    end
+  end
+
+  describe '#start_date' do
+    before { allow(parsed_grant).to receive(:css).with('AwardEffectiveDate').and_return start_date_element }
+
+    context "when the start date element in the given data is empty" do
+      let(:start_date_element) { double 'start date element', text: '' }
+      it "returns nil" do
+        expect(grant.start_date).to be_nil
+      end
+    end
+
+    context "when the start date element in the given data contains text" do
+      let(:start_date_element) { double 'start date element', text: "\n   07/15/2009    \n   " }
+
+      it "returns the start date of the grant" do
+        expect(grant.start_date).to eq Date.new(2009, 7, 15)
+      end
+    end
+  end
+
+  describe '#end_date' do
+    before { allow(parsed_grant).to receive(:css).with('AwardEffectiveDate').and_return start_date_element }
+
+    context "when the end date element in the given data is empty" do
+      let(:start_date_element) { double 'end date element', text: '' }
+      it "returns nil" do
+        expect(grant.start_date).to be_nil
+      end
+    end
+
+    context "when the end date element in the given data contains text" do
+      let(:start_date_element) { double 'end date element', text: "\n   07/15/2009    \n   " }
+
+      it "returns the end date of the grant" do
+        expect(grant.start_date).to eq Date.new(2009, 7, 15)
+      end
+    end
+  end
+
+  describe '#abstract' do
+    before { allow(parsed_grant).to receive(:css).with('AbstractNarration').and_return abstract_element }
+
+    context "when the abstract element in the given data is empty" do
+      let(:abstract_element) { double 'abstract element', text: '' }
+      it "returns nil" do
+        expect(grant.abstract).to be_nil
+      end
+    end
+
+    context "when the abstract element in the given data contains text" do
+      let(:abstract_element) { double 'abstract element', text: "\n     This is the abstract.  \n   " }
+
+      it "returns the text with surrounding whitespace removed" do
+        expect(grant.abstract).to eq 'This is the abstract.'
+      end
+    end
+  end
+
+  describe '#amount_in_dollars' do
+    before { allow(parsed_grant).to receive(:css).with('AwardAmount').and_return amount_element }
+
+    context "when the amount element in the given data is empty" do
+      let(:amount_element) { double 'amount element', text: '' }
+      it "returns nil" do
+        expect(grant.amount_in_dollars).to be_nil
+      end
+    end
+
+    context "when the amount element in the given data contains text" do
+      let(:amount_element) { double 'amount element', text: "\n     20000  \n   " }
+
+      it "returns the amount of the grant in dollars" do
+        expect(grant.amount_in_dollars).to eq 20000
+      end
+    end
+  end
+
+  describe '#identifier' do
+    before { allow(parsed_grant).to receive(:css).with('AwardID').and_return id_element }
+
+    context "when the ID element in the given data is empty" do
+      let(:id_element) { double 'id element', text: '' }
+      it "returns nil" do
+        expect(grant.identifier).to be_nil
+      end
+    end
+
+    context "when the ID element in the given data contains text" do
+      let(:id_element) { double 'id element', text: "\n     1234567  \n   " }
+
+      it "returns the text with surrounding whitespace removed" do
+        expect(grant.identifier).to eq '1234567'
+      end
+    end
+  end
+
+  describe '#agency_name' do
+    it "returns 'National Science Foundation'" do
+      expect(grant.agency_name).to eq "National Science Foundation"
     end
   end
 end
