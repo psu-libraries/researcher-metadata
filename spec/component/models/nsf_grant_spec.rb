@@ -80,20 +80,20 @@ describe NSFGrant do
   end
 
   describe '#end_date' do
-    before { allow(parsed_grant).to receive(:css).with('AwardEffectiveDate').and_return start_date_element }
+    before { allow(parsed_grant).to receive(:css).with('AwardExpirationDate').and_return end_date_element }
 
     context "when the end date element in the given data is empty" do
-      let(:start_date_element) { double 'end date element', text: '' }
+      let(:end_date_element) { double 'end date element', text: '' }
       it "returns nil" do
-        expect(grant.start_date).to be_nil
+        expect(grant.end_date).to be_nil
       end
     end
 
     context "when the end date element in the given data contains text" do
-      let(:start_date_element) { double 'end date element', text: "\n   07/15/2009    \n   " }
+      let(:end_date_element) { double 'end date element', text: "\n   07/14/2012    \n   " }
 
       it "returns the end date of the grant" do
-        expect(grant.start_date).to eq Date.new(2009, 7, 15)
+        expect(grant.end_date).to eq Date.new(2012, 7, 14)
       end
     end
   end

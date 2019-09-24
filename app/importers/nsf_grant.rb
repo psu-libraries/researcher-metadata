@@ -18,6 +18,11 @@ class NSFGrant
     Date.strptime(date, "%m/%d/%Y") if date
   end
 
+  def end_date
+    date = text_for_element('AwardExpirationDate')
+    Date.strptime(date, "%m/%d/%Y") if date
+  end
+
   def abstract
     text_for_element('AbstractNarration')
   end
