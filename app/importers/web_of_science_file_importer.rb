@@ -22,7 +22,10 @@ class WebOfScienceFileImporter
                 ActiveRecord::Base.transaction do
                   if g.wos_agency.present?
                     g.ids.each do |id|
-                      unless Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
+                      existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
+                      matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
+
+                      if ! existing_grant && ! matching_grant
                         grant = Grant.new
                         grant.wos_agency_name = g.wos_agency
                         grant.agency_name = g.agency
@@ -34,6 +37,13 @@ class WebOfScienceFileImporter
                           fund = ResearchFund.new
                           fund.publication = p
                           fund.grant = grant
+                          fund.save!
+                        end
+                      elsif matching_grant
+                        existing_pubs.each do |p|
+                          fund = ResearchFund.new
+                          fund.publication = p
+                          fund.grant = matching_grant
                           fund.save!
                         end
                       end
@@ -69,7 +79,10 @@ class WebOfScienceFileImporter
                   wos_pub.grants.each do |g|
                     if g.wos_agency.present?
                       g.ids.each do |id|
-                        grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value) || Grant.new
+                        grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value) ||
+                          Grant.find_by(agency_name: g.agency, identifier: id.value) ||
+                          Grant.new
+
                         if grant.new_record?
                           grant = Grant.new
                           grant.wos_agency_name = g.wos_agency
