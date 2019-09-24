@@ -160,4 +160,21 @@ describe NSFGrant do
       expect(grant.agency_name).to eq "National Science Foundation"
     end
   end
+
+  describe '#investigators' do
+    let(:investigator_element1) { double 'investigator element 1' }
+    let(:investigator_element2) { double 'investigator element 2' }
+    let(:investigator1) { double 'investigator 1' }
+    let(:investigator2) { double 'investigator 2' }
+
+    before do
+      allow(NSFInvestigator).to receive(:new).with(investigator_element1).and_return(investigator1)
+      allow(NSFInvestigator).to receive(:new).with(investigator_element2).and_return(investigator2)
+      allow(parsed_grant).to receive(:css).with('Investigator').and_return([investigator_element1, investigator_element2])
+    end
+
+    it "returns an array of the investigators associated with the grant" do
+      expect(grant.investigators).to eq [investigator1, investigator2]
+    end
+  end
 end

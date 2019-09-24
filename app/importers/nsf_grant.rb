@@ -39,6 +39,12 @@ class NSFGrant
     "National Science Foundation"
   end
 
+  def investigators
+    parsed_grant.css('Investigator').map do |i|
+      NSFInvestigator.new(i)
+    end
+  end
+
   private
 
   attr_reader :parsed_grant
