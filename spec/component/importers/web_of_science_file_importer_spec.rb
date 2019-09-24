@@ -59,6 +59,7 @@ describe WebOfScienceFileImporter do
           let!(:u2) { create :user, first_name: 'Jennifer', last_name: 'Testauthor' }
           let!(:u3) { create :user, orcid_identifier: 'https://orcid.org/5678-0003-3051-1234' }
           context "when no existing grants match the data" do
+            let!(:grant) { create :grant, agency_name: nil, identifier: nil }
             it "creates new grants for each publication in the given XML file" do
               expect { importer.call }.to change { Grant.count }.by 2
               expect(Grant.find_by(wos_agency_name: 'NSF',

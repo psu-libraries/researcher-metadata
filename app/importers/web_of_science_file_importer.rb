@@ -79,9 +79,10 @@ class WebOfScienceFileImporter
                   wos_pub.grants.each do |g|
                     if g.wos_agency.present?
                       g.ids.each do |id|
-                        grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value) ||
-                          Grant.find_by(agency_name: g.agency, identifier: id.value) ||
-                          Grant.new
+                        existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
+                        matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
+                        
+                        grant = existing_grant || matching_grant || Grant.new
 
                         if grant.new_record?
                           grant = Grant.new
