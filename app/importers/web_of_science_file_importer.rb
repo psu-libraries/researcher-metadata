@@ -86,7 +86,6 @@ class WebOfScienceFileImporter
                         grant = existing_grant || matching_grant || Grant.new
 
                         if grant.new_record?
-                          grant = Grant.new
                           grant.wos_agency_name = g.wos_agency
                           grant.agency_name = g.agency
                           grant.wos_identifier = id.wos_value
