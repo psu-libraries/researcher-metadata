@@ -378,9 +378,17 @@ describe WebOfScienceFileImporter do
           it "does not create any new publications" do
             expect { importer.call }.not_to change { Publication.count }
           end
-          it "creates new research fund records to associate the matching grants with the publications" do
-            expect { importer.call }.to change { ResearchFund.count }.by 1
-            expect(pub1.grants).to eq [grant1]
+          context "when no associations between the matching grant and the publication exist" do
+            it "creates new research fund records to associate the matching grants with the publications" do
+              expect { importer.call }.to change { ResearchFund.count }.by 1
+              expect(pub1.grants).to eq [grant1]
+            end
+          end
+          context "when an association between the matching grant and the publication already exists" do
+            before { create :research_fund, publication: pub1, grant: grant1}
+            it "does not create any new associations" do
+              expect { importer.call }.to change { ResearchFund.count }.by 0
+            end
           end
         end
       end

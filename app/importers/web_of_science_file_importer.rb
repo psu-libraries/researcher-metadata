@@ -41,10 +41,12 @@ class WebOfScienceFileImporter
                         end
                       elsif matching_grant
                         existing_pubs.each do |p|
-                          fund = ResearchFund.new
-                          fund.publication = p
-                          fund.grant = matching_grant
-                          fund.save!
+                          unless ResearchFund.find_by(publication: p, grant: matching_grant)
+                            fund = ResearchFund.new
+                            fund.publication = p
+                            fund.grant = matching_grant
+                            fund.save!
+                          end
                         end
                       end
                     end
