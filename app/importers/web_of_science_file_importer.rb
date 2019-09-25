@@ -1,5 +1,4 @@
 require 'nokogiri'
-require 'byebug'
 
 class WebOfScienceFileImporter
   def initialize(dirname:)
