@@ -311,6 +311,21 @@ describe User, type: :model do
     end
   end
 
+  describe '#find_by_nsf_grant' do
+    let!(:u1) { create :user, first_name: 'Susan', last_name: 'Tester', webaccess_id: 'sat123' }
+    let!(:u2) { create :user, first_name: 'Robert', last_name: 'Testuser', webaccess_id: 'rbt456' }
+    let!(:u3) { create :user, first_name: 'Other', last_name: 'User', webaccess_id: 'ou111' }
+
+    context "when given a grant with investigators that match existing users" do
+      let(:i1) { double 'investigator', first_name: 'Nick', last_name: 'Name', psu_email_name: 'rbt456' } 
+      let(:i2) { double 'investigator', first_name: 'Susan', last_name: 'Tester', psu_email_name: nil } 
+      let(:grant) { double 'grant', investigators: [i1, i2] }
+      it "returns the existing users" do
+        expect(User.find_by_nsf_grant(grant)).to match_array [u1, u2]
+      end
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }

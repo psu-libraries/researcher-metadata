@@ -73,6 +73,21 @@ class User < ApplicationRecord
     where(orcid_identifier: pub.orcids.map { |o| "https://orcid.org/#{o}" })
   end
 
+  def self.find_by_nsf_grant(grant)
+    users = []
+    grant.investigators.each do |i|
+      if i.psu_email_name
+        user_by_email = find_by(webaccess_id: i.psu_email_name)
+        users << user_by_email if user_by_email
+      end
+      if i.first_name && i.last_name
+        user_by_name = find_by(first_name: i.first_name, last_name: i.last_name)
+        users << user_by_name if user_by_name
+      end
+    end
+    users.uniq
+  end
+
   def admin?
     is_admin
   end

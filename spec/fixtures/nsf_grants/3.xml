@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rootTag>
+  <Award>
+    <AwardTitle>Example Grant 2</AwardTitle>
+    <AwardEffectiveDate>01/01/2010</AwardEffectiveDate>
+    <AwardExpirationDate>12/31/2020</AwardExpirationDate>
+    <AwardTotalIntnAmount>5000000.00</AwardTotalIntnAmount>
+    <AwardAmount>5000000</AwardAmount>
+    <AwardInstrument>
+      <Value>Standard Grant</Value>
+    </AwardInstrument>
+    <Organization>
+      <Code>11010123</Code>
+      <Directorate>
+        <Abbreviation>EHR</Abbreviation>
+        <LongName>Direct For Education and Human Resources</LongName>
+      </Directorate>
+      <Division>
+        <Abbreviation>DGE</Abbreviation>
+        <LongName>Division Of Graduate Education</LongName>
+      </Division>
+    </Organization>
+    <ProgramOfficer>
+      <SignBlockName>Victor Piotrowski</SignBlockName>
+    </ProgramOfficer>
+    <AbstractNarration>Abstract for example grant 2</AbstractNarration>
+    <MinAmdLetterDate>06/25/2019</MinAmdLetterDate>
+    <MaxAmdLetterDate>06/25/2019</MaxAmdLetterDate>
+    <ARRAAmount/>
+    <AwardID>1057936</AwardID>
+    <Investigator>
+      <FirstName>Richard</FirstName>
+      <LastName>Testuser</LastName>
+      <EmailAddress>rat@psu.edu</EmailAddress>
+      <StartDate>01/01/2010</StartDate>
+      <EndDate/>
+      <RoleCode>Principal Investigator</RoleCode>
+    </Investigator>
+    <Institution>
+      <Name>Pennsylvania State Univ University Park</Name>
+      <CityName>UNIVERSITY PARK</CityName>
+      <ZipCode>168027000</ZipCode>
+      <PhoneNumber>8148651372</PhoneNumber>
+      <StreetAddress>110 Technology Center Building</StreetAddress>
+      <CountryName>United States</CountryName>
+      <StateName>Pennsylvania</StateName>
+      <StateCode>PA</StateCode>
+    </Institution>
+    <ProgramElement>
+      <Code>1668</Code>
+      <Text>CYBERCORPS: SCHLAR FOR SER</Text>
+    </ProgramElement>
+    <ProgramReference>
+      <Code>7254</Code>
+      <Text>CYBER SECURITY ACT PROPOSALS</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>7434</Code>
+      <Text>CNCI</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>7916</Code>
+      <Text>EAGER</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>9178</Code>
+      <Text>UNDERGRADUATE EDUCATION</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>9179</Code>
+      <Text>GRADUATE INVOLVEMENT</Text>
+    </ProgramReference>
+    <ProgramReference>
+      <Code>SMET</Code>
+      <Text>SCIENCE, MATH, ENG &amp; TECH EDUCATION</Text>
+    </ProgramReference>
+  </Award>
+</rootTag>
