@@ -326,6 +326,21 @@ describe User, type: :model do
     end
   end
 
+  describe '#confirmed_publications' do
+    let!(:u) { create :user }
+    let!(:p1) { create :publication }
+    let!(:p2) { create :publication }
+    let!(:p3) { create :publication }
+    before do
+      create :authorship, user: u, publication: p2, confirmed: false
+      create :authorship, user: u, publication: p3, confirmed: true
+    end
+
+    it "returns publications that are associated through the user through confirmed authorships" do
+      expect(u.confirmed_publications).to eq [p3]
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }

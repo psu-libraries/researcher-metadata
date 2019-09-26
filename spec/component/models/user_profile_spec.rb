@@ -80,6 +80,8 @@ describe UserProfile do
                          visible: false }
     let!(:pub6) { create :publication, title: "Hidden Authorship Publication",
                          visible: true }
+    let!(:pub7) { create :publication, title: "Unconfirmed Publication",
+                         visible: true }
     let(:pos1) { nil }
     let(:pos2) { nil }
     let(:pos3) { nil }
@@ -94,6 +96,7 @@ describe UserProfile do
       create :authorship, user: user, publication: pub4, position_in_profile: pos4
       create :authorship, user: user, publication: pub5, position_in_profile: pos5
       create :authorship, user: user, publication: pub6, position_in_profile: pos6, visible_in_profile: false
+      create :authorship, user: user, publication: pub7, confirmed: false
 
       create :authorship, user: other_user, publication: pub1
     end
@@ -158,6 +161,9 @@ describe UserProfile do
     let!(:pub5) { create :publication,
                          title: "Invisible Publication",
                          visible: false }
+    let!(:pub6) { create :publication,
+                         title: "Unconfirmed Publication",
+                         visible: true }
     let(:pos1) { nil }
     let(:pos2) { nil }
     let(:pos3) { nil }
@@ -170,6 +176,7 @@ describe UserProfile do
       create :authorship, user: user, publication: pub3, position_in_profile: pos3
       create :authorship, user: user, publication: pub4, position_in_profile: pos4
       create :authorship, user: user, publication: pub5, position_in_profile: pos5
+      create :authorship, user: user, publication: pub6, confirmed: false
     end
 
     context "when none of the user's authorships have a profile position" do

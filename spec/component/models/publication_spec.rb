@@ -171,7 +171,7 @@ describe Publication, type: :model do
     end
   end
 
-  describe '#find_by_wos_pub' do
+  describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
                            title: title,
@@ -331,6 +331,15 @@ describe Publication, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe '#confirmed_authorships' do
+    let!(:pub) { create :publication }
+    let!(:a1) { create :authorship, publication: pub, confirmed: false }
+    let!(:a2) { create :authorship, publication: pub, confirmed: true }
+    it "returns only the publication's authorships that are confirmed" do
+      expect(pub.confirmed_authorships).to eq [a2]
     end
   end
 

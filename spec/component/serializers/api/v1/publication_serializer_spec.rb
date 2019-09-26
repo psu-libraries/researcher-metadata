@@ -114,18 +114,27 @@ describe API::V1::PublicationSerializer do
     context "when the publication has authorships" do
       let(:u1) { create :user, webaccess_id: 'abc123' }
       let(:u2) { create :user, webaccess_id: 'def456' }
+      let(:u3) { create :user }
       before do
         create :authorship,
                publication: publication,
                user: u1,
                visible_in_profile: true,
-               position_in_profile: 4
+               position_in_profile: 4,
+               confirmed: true
 
         create :authorship,
                publication: publication,
                user: u2,
                visible_in_profile: false,
-               position_in_profile: nil
+               position_in_profile: nil,
+               confirmed: true
+
+        create :authorship,
+               publication: publication,
+               user: u3,
+               confirmed: false
+
       end
 
       it { is_expected.to include(:profile_preferences => [{user_id: u1.id,

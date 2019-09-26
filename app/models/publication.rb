@@ -55,6 +55,10 @@ class Publication < ApplicationRecord
     end
   end
 
+  def confirmed_authorships
+    authorships.where(confirmed: true)
+  end
+
   swagger_schema :PublicationV1 do
     key :type, :object
     key :required, [:id, :type, :attributes]

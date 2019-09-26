@@ -37,7 +37,7 @@ module API::V1
     end
 
     attribute :profile_preferences do |object|
-      object.authorships.map do |a|
+      object.confirmed_authorships.map do |a|
         {user_id: a.user_id,
          webaccess_id: a.user_webaccess_id,
          visible_in_profile: a.visible_in_profile,

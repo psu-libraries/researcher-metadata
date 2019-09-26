@@ -92,14 +92,28 @@ describe API::V1::UserQuery do
       end
       context "when the user has publications" do
         let(:invis_pub) { create :publication, visible: false }
-        let(:vis_pub) { create :publication, visible: true }
+        let(:vis_conf_pub) { create :publication, visible: true }
+        let(:vis_unconf_pub) { create :publication, visible: true }
         before do
-          create :authorship, user: user, publication: invis_pub, author_number: 1
-          create :authorship, user: user, publication: vis_pub, author_number: 1
+          create :authorship,
+                 user: user,
+                 publication: invis_pub,
+                 author_number: 1,
+                 confirmed: true
+          create :authorship,
+                 user: user,
+                 publication: vis_conf_pub,
+                 author_number: 1,
+                 confirmed: true
+          create :authorship,
+                 user: user,
+                 publication: vis_unconf_pub,
+                 author_number: 1,
+                 confirmed: false
         end
 
-        it "returns the user's visible publications" do
-          expect(uq.publications({})).to eq [vis_pub]
+        it "returns the user's visible, confirmed publications" do
+          expect(uq.publications({})).to eq [vis_conf_pub]
         end
       end
     end

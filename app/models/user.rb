@@ -88,6 +88,10 @@ class User < ApplicationRecord
     users.uniq
   end
 
+  def confirmed_publications
+    publications.joins(:authorships).where('authorships.confirmed = true')
+  end
+
   def admin?
     is_admin
   end

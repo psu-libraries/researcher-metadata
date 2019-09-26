@@ -39,7 +39,7 @@ module API::V1
           ends_on = Date.new(params[:end_year].to_i).end_of_year
           data = user.publications.visible.where(published_on: starts_on..ends_on)
         else
-          data = user.publications.visible
+          data = user.confirmed_publications.visible
         end
 
         if params[:order_first_by].present?
