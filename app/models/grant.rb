@@ -11,7 +11,7 @@ class Grant < ApplicationRecord
   validates :agency_name, inclusion: {in: agency_names, allow_nil: true}
 
   def name
-    identifier.presence || wos_identifier.presence
+    title.presence || identifier.presence || wos_identifier.presence
   end
 
   def agency

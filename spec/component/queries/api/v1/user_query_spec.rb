@@ -23,6 +23,27 @@ describe API::V1::UserQuery do
     end
   end
 
+  describe '#grants' do
+    context "when the given user has no grants" do
+      it "returns an empty array" do
+        expect(uq.grants).to eq []
+      end
+    end
+
+    context "when the given user has grants" do
+      let!(:g1) { create :grant }
+      let!(:g2) { create :grant }
+      before do
+        create :researcher_fund, user: user, grant: g1
+        create :researcher_fund, user: user, grant: g2
+      end
+
+      it "returns all of the user's grants" do
+        expect(uq.grants).to match_array [g1, g2]
+      end
+    end
+  end
+
   describe '#performances' do
     context "when the given user has no performances" do
       it "returns an empty array" do

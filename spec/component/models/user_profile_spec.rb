@@ -206,8 +206,10 @@ describe UserProfile do
 
   describe '#grants' do
 
-    it "returns an empty array" do
-      expect(profile.grants).to eq []
+    context "when the user has no grants" do
+      it "returns an empty array" do
+        expect(profile.grants).to eq []
+      end
     end
   end
 

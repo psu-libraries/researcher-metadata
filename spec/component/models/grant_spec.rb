@@ -42,67 +42,204 @@ describe Grant, type: :model do
   end
 
   describe '#name' do
-    let(:grant) { Grant.new(wos_identifier: wos_id, identifier: id) }
-    context "when the grant has a canonical identifier" do
-      let(:id) { 'CID123' }
-      context "when the grant has a Web of Science identifier" do
-        let(:wos_id) { 'WOSID456' }
-        it "returns the canonical identifier" do
-          expect(grant.name).to eq  'CID123'
+    let(:grant) { Grant.new(wos_identifier: wos_id, identifier: id, title: title) }
+    context "when the grant has a title" do
+      let(:title) { 'Example Grant' }
+      context "when the grant has a canonical identifier" do
+        let(:id) { 'CID123' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
         end
       end
-      context "when the grant's Web of Science identifier is blank" do
-        let(:wos_id) { '' }
-        it "returns the canonical identifier" do
-          expect(grant.name).to eq  'CID123'
+      context "when the grant's canonical identifier is blank" do
+        let(:id) { '' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
         end
       end
-      context "when the grant has no Web of Science identifier" do
-        let(:wos_id) { nil }
-        it "returns the canonical identifier" do
-          expect(grant.name).to eq  'CID123'
+      context "when the grant has no canonical identifier" do
+        let(:id) { nil }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns the title" do
+            expect(grant.name).to eq  'Example Grant'
+          end
         end
       end
     end
-    context "when the grant's canonical identifier is blank" do
-      let(:id) { '' }
-      context "when the grant has a Web of Science identifier" do
-        let(:wos_id) { 'WOSID456' }
-        it "returns the Web of Science identifier" do
-          expect(grant.name).to eq 'WOSID456'
+    
+    context "when the grant's title is blank" do
+      let(:title) { '' }
+      context "when the grant has a canonical identifier" do
+        let(:id) { 'CID123' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
         end
       end
-      context "when the grant's Web of Science identifier is blank" do
-        let(:wos_id) { '' }
-        it "returns nil" do
-          expect(grant.name).to eq nil
+      context "when the grant's canonical identifier is blank" do
+        let(:id) { '' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the Web of Science identifier" do
+            expect(grant.name).to eq 'WOSID456'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
         end
       end
-      context "when the grant has no Web of Science identifier" do
-        let(:wos_id) { nil }
-        it "returns nil" do
-          expect(grant.name).to eq nil
+      context "when the grant has no canonical identifier" do
+        let(:id) { nil }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the Web of Science identifier" do
+            expect(grant.name).to eq 'WOSID456'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
         end
       end
     end
-    context "when the grant has no canonical identifier" do
-      let(:id) { nil }
-      context "when the grant has a Web of Science identifier" do
-        let(:wos_id) { 'WOSID456' }
-        it "returns the Web of Science identifier" do
-          expect(grant.name).to eq 'WOSID456'
+
+    context "when the grant has no title" do
+      let(:title) { nil }
+      context "when the grant has a canonical identifier" do
+        let(:id) { 'CID123' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns the canonical identifier" do
+            expect(grant.name).to eq  'CID123'
+          end
         end
       end
-      context "when the grant's Web of Science identifier is blank" do
-        let(:wos_id) { '' }
-        it "returns nil" do
-          expect(grant.name).to eq nil
+      context "when the grant's canonical identifier is blank" do
+        let(:id) { '' }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the Web of Science identifier" do
+            expect(grant.name).to eq 'WOSID456'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
         end
       end
-      context "when the grant has no Web of Science identifier" do
-        let(:wos_id) { nil }
-        it "returns nil" do
-          expect(grant.name).to eq nil
+      context "when the grant has no canonical identifier" do
+        let(:id) { nil }
+        context "when the grant has a Web of Science identifier" do
+          let(:wos_id) { 'WOSID456' }
+          it "returns the Web of Science identifier" do
+            expect(grant.name).to eq 'WOSID456'
+          end
+        end
+        context "when the grant's Web of Science identifier is blank" do
+          let(:wos_id) { '' }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
+        end
+        context "when the grant has no Web of Science identifier" do
+          let(:wos_id) { nil }
+          it "returns nil" do
+            expect(grant.name).to eq nil
+          end
         end
       end
     end

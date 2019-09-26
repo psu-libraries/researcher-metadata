@@ -31,7 +31,7 @@ feature "Admin grant detail page", type: :feature do
       before { visit rails_admin.show_path(model_name: :grant, id: grant.id) }
 
       it "shows the grant detail heading" do
-        expect(page).to have_content "Details for Grant '123'"
+        expect(page).to have_content "Details for Grant 'Test Grant'"
       end
 
       it "shows the grant's agency name in Web of Science" do

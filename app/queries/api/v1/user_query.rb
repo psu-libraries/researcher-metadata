@@ -11,6 +11,10 @@ module API::V1
       user.presentations.visible
     end
 
+    def grants
+      user.grants
+    end
+
     def news_feed_items(params={})
       user.news_feed_items
     end
