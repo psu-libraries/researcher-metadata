@@ -292,7 +292,7 @@ describe User, type: :model do
     end
   end
 
-  describe '#find_confirmed_by_wos_pub' do
+  describe '.find_confirmed_by_wos_pub' do
     let(:wp) { double 'Web of Science publication',
                       orcids: ['orcid123', 'orcid456', 'orcid789'] }
 
@@ -311,7 +311,7 @@ describe User, type: :model do
     end
   end
 
-  describe '#find_by_nsf_grant' do
+  describe '.find_by_nsf_grant' do
     let!(:u1) { create :user, first_name: 'Susan', last_name: 'Tester', webaccess_id: 'sat123' }
     let!(:u2) { create :user, first_name: 'Robert', last_name: 'Testuser', webaccess_id: 'rbt456' }
     let!(:u3) { create :user, first_name: 'Other', last_name: 'User', webaccess_id: 'ou111' }
