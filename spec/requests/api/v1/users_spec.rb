@@ -97,87 +97,6 @@ describe 'API::V1 Users' do
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/contracts' do
-    let!(:user) { create(:user_with_contracts,
-                         webaccess_id: 'xyz321',
-                         contracts_count: 10,
-                         show_all_contracts: true) }
-    let!(:other_user) { create :user, show_all_contracts: false }
-    let!(:hidden_contract) { create :contract, visible: true }
-    let!(:invisible_contract) { create :contract, visible: false }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
-    let(:user_without_contracts) { create(:user, webaccess_id: "nocons123") }
-
-    before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: other_user, organization: org
-      create :user_organization_membership, user: user_without_contracts, organization: org
-      create :user_contract, user: user, contract: invisible_contract
-      create :user_contract, user: user, contract: hidden_contract
-      create :user_contract, user: other_user, contract: hidden_contract
-      get "/v1/users/#{webaccess_id}/contracts#{params}", headers: headers
-    end
-
-    context "for a valid webaccess_id" do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status 200
-      end
-      it "updates the usage statistics on the API token" do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-      context "when the user has contracts" do
-        it "returns all the user's contracts" do
-          expect(json_response[:data].size).to eq(10)
-        end
-      end
-      context "when the user has no contracts" do
-        let(:webaccess_id) { user_without_contracts.webaccess_id }
-        it "returns an empty JSON data hash" do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-      context "when an html-formatted response is requested" do
-        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status 200
-        end
-        it "updates the usage statistics on the API token" do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-    context "for an invalid webaccess_id" do
-      let(:webaccess_id) { "aaa" }
-      it "returns 404 not found" do
-        expect(response).to have_http_status 404
-      end
-      it "updates the usage statistics on the API token" do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-    context "for a webaccess_id of a user that is inaccessible to the given API token" do
-      let(:webaccess_id) { "inaccessible" }
-
-      it "updates the usage statistics on the API token" do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it "returns 404" do
-        expect(response.code).to eq '404'
-      end
-    end
-  end
-
   describe 'GET /v1/users/:webaccess_id/news_feed_items' do
     let!(:user) { create(:user_with_news_feed_items, webaccess_id: 'xyz321', news_feed_items_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
@@ -687,50 +606,6 @@ describe 'API::V1 Users' do
                              title: "Invisible Publication",
                              visible: false }
 
-        let!(:con1) { create :contract,
-                             contract_type: "Contract",
-                             status: "Awarded",
-                             title: "Awarded Contract",
-                             visible: true }
-        let!(:con2) { create :contract,
-                             contract_type: "Grant",
-                             status: "Pending",
-                             title: "Pending Grant",
-                             visible: true }
-        let!(:con3) { create :contract,
-                             contract_type: "Grant",
-                             status: "Awarded",
-                             title: "Awarded Grant One",
-                             sponsor: "Test Sponsor",
-                             award_start_on: Date.new(2010, 1, 1),
-                             award_end_on: Date.new(2010, 5, 1),
-                             visible: true }
-        let!(:con4) { create :contract,
-                             contract_type: "Grant",
-                             status: "Awarded",
-                             title: "Awarded Grant Two",
-                             sponsor: "Other Sponsor",
-                             award_start_on: Date.new(2015, 2, 1),
-                             award_end_on: Date.new(2016, 1, 1),
-                             visible: true }
-        let!(:con5) { create :contract,
-                             contract_type: "Grant",
-                             status: "Awarded",
-                             title: "Awarded Grant Three",
-                             sponsor: "Sponsor",
-                             award_start_on: nil,
-                             visible: true }
-        let!(:con6) { create :contract,
-                             contract_type: "Grant",
-                             status: "Awarded",
-                             title: "Invisible Awarded Grant",
-                             visible: false }
-        let!(:con7) { create :contract,
-                             contract_type: "Grant",
-                             status: "Awarded",
-                             title: "Hidden by other",
-                             visible: true }
-
         let!(:pres1) { create :presentation,
                               name: "Presentation Two",
                               organization: "An Organization",
@@ -794,15 +669,6 @@ describe 'API::V1 Users' do
           create :authorship, user: user, publication: pub4
           create :authorship, user: user, publication: pub5
 
-          create :user_contract, user: user, contract: con1
-          create :user_contract, user: user, contract: con2
-          create :user_contract, user: user, contract: con3
-          create :user_contract, user: user, contract: con4
-          create :user_contract, user: user, contract: con5
-          create :user_contract, user: user, contract: con6
-          create :user_contract, user: user, contract: con7
-          create :user_contract, user: other_user, contract: con7
-
           create :presentation_contribution, user: user, presentation: pres1
           create :presentation_contribution, user: user, presentation: pres2
           create :presentation_contribution, user: user, presentation: pres3
@@ -845,14 +711,6 @@ describe 'API::V1 Users' do
                       <li><span class="publication-title">Third Publication</span>, 2018</li>
                       <li><span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015</li>
                       <li><span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010</li>
-                  </ul>
-                </div>
-                <div id="md-grants">
-                  <h3>Grants</h3>
-                  <ul>
-                      <li>Awarded Grant Three, Sponsor</li>
-                      <li>Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016</li>
-                      <li>Awarded Grant One, Test Sponsor, 1/2010 - 5/2010</li>
                   </ul>
                 </div>
                 <div id="md-presentations">

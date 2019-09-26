@@ -16,19 +16,6 @@ module API::V1
       end
     end
 
-    def contracts
-      user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
-      if user
-        @contracts = API::V1::UserQuery.new(user).contracts(params)
-        respond_to do |format|
-          format.html
-          format.json { render json: API::V1::ContractSerializer.new(@contracts) }
-        end
-      else
-        render json: { :message => "User not found", :code => 404 }, status: 404
-      end
-    end
-
     def news_feed_items
       user = api_token.users.find_by(webaccess_id: params[:webaccess_id])
       if user
@@ -434,111 +421,6 @@ module API::V1
                         key :description, "The user's preference for what position this publication should occupy in a list of their publications in their profile"
                       end
                     end
-                  end
-                end
-              end
-            end
-          end
-        end
-        response 401 do
-          key :description, 'unauthorized'
-          schema do
-            key :'$ref', :ErrorModelV1
-          end
-        end
-        response 404 do
-          key :description, 'not found'
-          schema do
-            key :'$ref', :ErrorModelV1
-          end
-        end
-        security do
-          key :api_key, []
-        end
-      end
-    end
-
-    swagger_path '/v1/users/{webaccess_id}/contracts' do
-      operation :get do
-        key :summary, "Retrieve a user's contracts"
-        key :description, 'Returns a contracts for a user'
-        key :operationId, 'findUserContracts'
-        key :produces, [
-          'application/json',
-          'text/html'
-        ]
-        key :tags, [
-          'user'
-        ]
-        parameter do
-          key :name, :webaccess_id
-          key :in, :path
-          key :description, 'Webaccess ID of user to retrieve contracts'
-          key :required, true
-          key :type, :string
-        end
-
-        response 200 do
-          key :description, 'user contracts response'
-          schema do
-            key :required, [:data]
-            property :data do
-              key :type, :array
-              items do
-                key :type, :object
-                key :required, [:id, :type, :attributes]
-                property :id do
-                  key :type, :string
-                  key :example, '123'
-                  key :description, 'The ID of the object'
-                end
-                property :type do
-                  key :type, :string
-                  key :example, 'contract'
-                  key :description, 'The type of the object'
-                end
-                property :attributes do
-                  key :type, :object
-                  key :required, [:title, :sponsor, :status, :amount, :ospkey]
-                  property :title do
-                    key :type, :string
-                    key :example, 'A Research Project Proposal'
-                    key :description, 'The title of the contract'
-                  end
-                  property :contract_type do
-                    key :type, [:string, :null]
-                    key :example, 'Grant'
-                    key :description, 'The type of the contract'
-                  end
-                  property :sponsor do
-                    key :type, :string
-                    key :example, 'National Science Foundation'
-                    key :description, 'The name of the organization sponsoring the contract'
-                  end
-                  property :status do
-                    key :type, :string
-                    key :example, 'Awarded'
-                    key :description, 'The status of the contract'
-                  end
-                  property :amount do
-                    key :type, :integer
-                    key :example, 50000
-                    key :description, 'The monetary amount of the contract in U.S. dollars'
-                  end
-                  property :ospkey do
-                    key :type, :string
-                    key :example, 123456
-                    key :description, 'The OSP key of the contract'
-                  end
-                  property :award_start_on do
-                    key :type, [:string, :null]
-                    key :example, '2017-12-05'
-                    key :description, 'The date on which the contract award starts'
-                  end
-                  property :award_end_on do
-                    key :type, [:string, :null]
-                    key :example, '2019-12-05'
-                    key :description, 'The date on which the contract award ends'
                   end
                 end
               end

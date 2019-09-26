@@ -54,11 +54,7 @@ class UserProfile
   end
 
   def grants
-    user_query.contracts.where(status: 'Awarded', contract_type: 'Grant').order(award_start_on: :desc).map do |grant|
-      g = "#{grant.title}, #{grant.sponsor}"
-      g += ", #{grant.award_start_on.strftime('%-m/%Y')} - #{grant.award_end_on.try(:strftime, '%-m/%Y')}" if grant.award_start_on.present?
-      g
-    end
+    []
   end
 
   def presentations

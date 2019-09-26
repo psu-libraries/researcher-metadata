@@ -15,15 +15,6 @@ module API::V1
       user.news_feed_items
     end
 
-    def contracts(params={})
-      if user.show_all_contracts
-        sub_query = user.contracts.joins(:users).where('users.show_all_contracts is false').select('contracts.id').to_sql
-        user.contracts.where(%{contracts.id NOT IN (#{sub_query})}).distinct.visible
-      else
-        Contract.none
-      end
-    end
-
     def performances(params={})
       user.performances.visible
     end

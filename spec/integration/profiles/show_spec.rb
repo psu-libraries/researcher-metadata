@@ -29,18 +29,6 @@ feature "Profile page", type: :feature do
                        title: 'Second Publication',
                        journal_title: 'Journal 2',
                        published_on: Date.new(2011, 1, 1) }
-  let!(:con1) { create :contract,
-                       title: 'First Grant',
-                       sponsor: 'Sponsor 1',
-                       award_start_on: Time.new(2015, 1, 1, 0, 0, 0),
-                       award_end_on: Time.new(2015, 6, 1, 0, 0, 0),
-                       visible: true }
-  let!(:con2) { create :contract,
-                       title: 'Second Grant',
-                       sponsor: 'Sponsor 2',
-                       award_start_on: Time.new(2016, 1, 1, 0, 0, 0),
-                       award_end_on: Time.new(2016, 6, 1, 0, 0, 0),
-                       visible: true }
   let!(:pres1) { create :presentation,
                         visible: true,
                         title: 'First Presentation',
@@ -76,9 +64,6 @@ feature "Profile page", type: :feature do
   before do
     create :authorship, user: user, publication: pub1
     create :authorship, user: user, publication: pub2
-
-    create :user_contract, user: user, contract: con1
-    create :user_contract, user: user, contract: con2
 
     create :presentation_contribution, user: user, presentation: pres1
     create :presentation_contribution, user: user, presentation: pres2
@@ -198,14 +183,6 @@ feature "Profile page", type: :feature do
       expect(page).to have_content 'Publications'
       expect(page).to have_content 'First Publication, Journal 1, 2010'
       expect(page).to have_content 'Second Publication, Journal 2, 2011'
-    end
-  end
-
-  it "shows the requested user's grants in the Grants tab" do
-    within '#grants' do
-      expect(page).to have_content 'Grants'
-      expect(page).to have_content 'First Grant, Sponsor 1, 1/2015 - 6/2015'
-      expect(page).to have_content 'Second Grant, Sponsor 2, 1/2016 - 6/2016'
     end
   end
 

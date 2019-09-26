@@ -205,67 +205,9 @@ describe UserProfile do
   end
 
   describe '#grants' do
-    let!(:con1) { create :contract,
-                         contract_type: "Contract",
-                         status: "Awarded",
-                         title: "Awarded Contract",
-                         visible: true }
-    let!(:con2) { create :contract,
-                         contract_type: "Grant",
-                         status: "Pending",
-                         title: "Pending Grant",
-                         visible: true }
-    let!(:con3) { create :contract,
-                         contract_type: "Grant",
-                         status: "Awarded",
-                         title: "Awarded Grant One",
-                         sponsor: "Test Sponsor",
-                         award_start_on: Date.new(2010, 1, 1),
-                         award_end_on: Date.new(2010, 5, 1),
-                         visible: true }
-    let!(:con4) { create :contract,
-                         contract_type: "Grant",
-                         status: "Awarded",
-                         title: "Awarded Grant Two",
-                         sponsor: "Other Sponsor",
-                         award_start_on: Date.new(2015, 2, 1),
-                         award_end_on: Date.new(2016, 1, 1),
-                         visible: true }
-    let!(:con5) { create :contract,
-                         contract_type: "Grant",
-                         status: "Awarded",
-                         title: "Awarded Grant Three",
-                         sponsor: "Sponsor",
-                         award_start_on: nil,
-                         visible: true }
-    let!(:con6) { create :contract,
-                         contract_type: "Grant",
-                         status: "Awarded",
-                         title: "Invisible Awarded Grant",
-                         visible: false }
-    let!(:con7) { create :contract,
-                         contract_type: "Grant",
-                         status: "Awarded",
-                         title: "Hidden by other",
-                         visible: true }
-    let(:other_user) { create :user, show_all_contracts: false }
 
-    before do
-      create :user_contract, user: user, contract: con1
-      create :user_contract, user: user, contract: con2
-      create :user_contract, user: user, contract: con3
-      create :user_contract, user: user, contract: con4
-      create :user_contract, user: user, contract: con5
-      create :user_contract, user: user, contract: con6
-      create :user_contract, user: user, contract: con7
-      create :user_contract, user: other_user, contract: con7
-    end
-    it "returns an array of strings describing the given user's visible, awarded grants in order by date" do
-      expect(profile.grants).to eq [
-                                     "Awarded Grant Three, Sponsor",
-                                     "Awarded Grant Two, Other Sponsor, 2/2015 - 1/2016",
-                                     "Awarded Grant One, Test Sponsor, 1/2010 - 5/2010"
-                                   ]
+    it "returns an empty array" do
+      expect(profile.grants).to eq []
     end
   end
 
