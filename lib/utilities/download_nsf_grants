@@ -1,0 +1,27 @@
+#!/usr/bin/env ruby
+
+require 'pathname'
+require 'date'
+require 'fileutils'
+
+def nsf_data_dir
+  Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..')).join('db', 'data', 'nsf_grants')
+end
+
+unless Dir.exists? nsf_data_dir
+  puts "Creating directory #{nsf_data_dir}..."
+  Dir.mkdir nsf_data_dir
+end
+
+1959.upto(Date.today.year).each do |y|
+  unless Dir.exist?(nsf_data_dir.join(y.to_s))
+    Dir.mkdir nsf_data_dir.join(y.to_s)
+
+    puts "Downloading NSF data for #{y}...\n"
+    `wget "https://www.nsf.gov/awardsearch/download?DownloadFileName=#{y}&All=true" -O #{nsf_data_dir.join(y.to_s, "#{y}.zip")}`
+
+    puts "Extracting NSF data for #{y}...\n\n"
+    `unzip #{nsf_data_dir.join(y.to_s, "#{y}.zip")} -d #{nsf_data_dir.join(y.to_s)}`
+    FileUtils.rm(nsf_data_dir.join(y.to_s, "#{y}.zip"))
+  end
+end
