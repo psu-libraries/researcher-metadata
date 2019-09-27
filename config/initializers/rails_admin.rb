@@ -41,7 +41,6 @@ RailsAdmin.config do |config|
             :User,
             :DuplicatePublicationGroup,
             :ETD,
-            :Contract,
             :Presentation,
             :Organization,
             :NewsFeedItem,
@@ -58,7 +57,7 @@ RailsAdmin.config do |config|
     end
     show
     edit do
-      only [:Publication, :User, :Contract, :Presentation, :Performance, :APIToken]
+      only [:Publication, :User, :Presentation, :Performance, :APIToken]
     end
     delete do
       only [:Publication, :User, :APIToken]

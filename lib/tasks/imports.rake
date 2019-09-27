@@ -46,14 +46,6 @@ namespace :import do
     ActivityInsightEducationHistoryImporter.new(filename: args.filename).call
   end
 
-  desc 'Import Activity Insight contracts'
-  task :ai_contracts, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:ai_contracts)
-    )
-    ActivityInsightContractImporter.new(filename: args.filename).call
-  end
-
   desc 'Import PSU RSS news feed items'
   task :rss_news => :environment do
     NewsFeedItemImporter.new().call
@@ -224,10 +216,6 @@ namespace :import do
       filename: filename_for(:ai_authorships)
     ).call
 
-    ActivityInsightContractImporter.new(
-      filename: filename_for(:ai_contracts)
-    ).call
-
     ActivityInsightPresentationImporter.new(
       filename: filename_for(:ai_presentations)
     ).call
@@ -277,7 +265,6 @@ def filename_for(key)
   when :ai_authorships then Rails.root.join('db/data/ai_authorships.csv')
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
-  when :ai_contracts then Rails.root.join('db/data/ai_contracts.csv')
   when :ai_presentations then Rails.root.join('db/data/ai_presentations.csv')
   when :ai_presenters then Rails.root.join('db/data/ai_presenters.csv')
   when :ai_performances then Rails.root.join('db/data/ai_performances.csv')

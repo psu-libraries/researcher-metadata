@@ -38,7 +38,6 @@ administrator in CSV/spreadsheet format for our data imports. We're currently tr
 old CSV file imports to importing data directly via the API. We import the following types of records 
 from Activity Insight:
     - authorships
-    - contracts
     - contributors
     - education_history_items
     - performances
@@ -47,7 +46,6 @@ from Activity Insight:
     - presentation_contributions
     - publications
     - users
-    - user_contracts
     - user_performances
 
 1. **Pure** - This is a web application/database made by Elsevier. It contains data about Penn State

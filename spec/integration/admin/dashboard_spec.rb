@@ -28,10 +28,6 @@ feature "Admin dashboard", type: :feature do
       end
 
       it "shows a count of the records in the database" do
-        within 'tr.contract_links' do
-          expect(page).to have_content '4'
-        end
-
         within 'tr.publication_links' do
           expect(page).to have_content '4'
         end
