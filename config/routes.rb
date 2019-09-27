@@ -18,6 +18,7 @@ Rails.application.routes.draw do
     namespace :v1 do
       get 'publications' => 'publications#index', as: :publications
       get 'publications/:id' => 'publications#show', as: :publication
+      get 'publications/:id/grants' => 'publications#grants', as: :publication_grants
 
       get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
       get 'users/:webaccess_id/grants' => 'users#grants', as: :user_grants

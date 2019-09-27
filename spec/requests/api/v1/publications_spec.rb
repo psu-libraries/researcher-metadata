@@ -130,4 +130,95 @@ describe 'API::V1 Publications' do
       end
     end
   end
+
+  describe 'GET /v1/publications/:id/grants' do
+    let!(:pub) { create :publication, visible: visible }
+    let!(:inaccessible_pub) { create :publication, visible: true }
+    let!(:token) { create :api_token,
+                          token: 'token123',
+                          total_requests: 0,
+                          last_used_at: nil }
+    let(:visible) { true }
+    let(:org) { create :organization }
+    let(:user) { create :user }
+    let(:g1) { create :grant }
+    let(:g2) { create :grant }
+
+    before do
+      create :organization_api_permission, organization: org, api_token: token
+      create :user_organization_membership, organization: org, user: user
+      create :authorship, user: user, publication: pub
+      create :research_fund, publication: pub, grant: g1
+      create :research_fund, publication: pub, grant: g2
+    end
+
+    context "when no authorization header is included in the request" do
+      it "returns 401 Unauthorized" do
+        get "/v1/publications/#{pub.id}/grants"
+        expect(response).to have_http_status 401
+      end
+    end
+    context "when an invalid authorization header value is included in the request" do
+      it "returns 401 Unauthorized" do
+        get "/v1/publications/#{pub.id}/grants", headers: {"X-API-Key": 'bad-token'}
+        expect(response).to have_http_status 401
+      end
+    end
+    context "when a valid authorization header value is included in the request" do
+
+      context "when requesting grants for a visible publication" do
+        before do
+          get "/v1/publications/#{pub.id}/grants", headers: {"X-API-Key": 'token123'}
+        end
+
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+        it 'returns the grants for the given publication' do
+          expect(json_response[:data].size).to eq(2)
+          expect(json_response[:data].detect { |grant| grant[:id] == g1.id.to_s && grant[:type] == 'grant' }).not_to be_nil
+          expect(json_response[:data].detect { |grant| grant[:id] == g2.id.to_s && grant[:type] == 'grant' }).not_to be_nil
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
+      end
+
+      context "when requesting an invisible publication" do
+        let(:visible) { false }
+
+        before do
+          get "/v1/publications/#{pub.id}/grants", headers: {"X-API-Key": 'token123'}
+        end
+
+        it 'returns HTTP status 404' do
+          expect(response).to have_http_status 404
+        end
+
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
+      end
+
+      context "when requesting an inaccessible publication" do
+        before do
+          get "/v1/publications/#{inaccessible_pub.id}/grants", headers: {"X-API-Key": 'token123'}
+        end
+
+        it 'returns HTTP status 404' do
+          expect(response).to have_http_status 404
+        end
+
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
+      end
+    end
+  end
 end

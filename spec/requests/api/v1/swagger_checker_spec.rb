@@ -6,6 +6,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
   context 'has valid paths' do
     let!(:org) { create :organization, visible: true }
     let!(:publication_1) { create :publication, visible: true }
+    let!(:publication_with_grants) { create :publication, visible: true }
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:user_with_grants) { create(:user_with_grants, webaccess_id: 'grant123', grants_count: 10) }
     let!(:user_with_presentations) { create(:user_with_presentations, webaccess_id: 'pres123', presentations_count: 10) }
@@ -14,6 +15,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user_with_performances) { create(:user_with_performances, webaccess_id: 'per123', performances_count: 10) }
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
     let!(:api_token) { create :api_token, token: 'token123' }
+    let!(:grant) { create :grant }
     let(:publications_params) { {'query_string': 'limit=1', '_headers' => {'X-API-Key' => 'token123'}} }
     let(:organizations_params) { {'_headers' => {'X-API-Key' => 'token123'}} }
     let(:organization_publication_params) { {'id' => org.id, '_headers' => {'X-API-Key' => 'token123'}} }
@@ -89,6 +91,12 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
+    let(:publication_grants_params) {
+      {
+        "id" => publication_with_grants.id,
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
+      }
+    }
 
     before do
       create :organization_api_permission, api_token: api_token, organization: org
@@ -100,6 +108,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       create :user_organization_membership, organization: org, user: user_with_performances
       create :user_organization_membership, organization: org, user: user_with_organization_memberships
       create :authorship, user: user, publication: publication_1
+      create :authorship, user: user, publication: publication_with_grants
+      create :research_fund, grant: grant, publication: publication_with_grants
     end
 
     it { is_expected.to validate( :get, '/v1/publications', 200, publications_params ) }
@@ -108,6 +118,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     it { is_expected.to validate( :get, '/v1/publications/{id}', 200, publication_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 401, unauthorized_params ) }
     it { is_expected.to validate( :get, '/v1/publications/{id}', 404, invalid_publication_params ) }
+
+    it { is_expected.to validate( :get, '/v1/publications/{id}/grants', 200, publication_grants_params ) }
+    it { is_expected.to validate( :get, '/v1/publications/{id}/grants', 401, unauthorized_params ) }
+    it { is_expected.to validate( :get, '/v1/publications/{id}/grants', 404, invalid_publication_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 200, user_grants_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 401, unauthorized_params ) }
