@@ -16,7 +16,9 @@ Rails.application.routes.draw do
 
   scope module: 'api' do
     namespace :v1 do
-      resources :publications
+      get 'publications' => 'publications#index', as: :publications
+      get 'publications/:id' => 'publications#show', as: :publication
+
       get 'users/:webaccess_id/publications' => 'users#publications', as: :user_publications
       get 'users/:webaccess_id/grants' => 'users#grants', as: :user_grants
       get 'users/:webaccess_id/news_feed_items' => 'users#news_feed_items', as: :user_news_feed_items
