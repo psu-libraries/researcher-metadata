@@ -16,10 +16,6 @@ eval "$(rbenv init -)"
 rbenv install -s
 rbenv version
 
-echo '========== Gem Security ================================================='
-bundle-audit update
-bundle-audit check
-
 echo '========== Install Gems ================================================='
 bundle install --no-color --local
 
