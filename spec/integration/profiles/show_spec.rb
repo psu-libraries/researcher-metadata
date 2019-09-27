@@ -60,6 +60,16 @@ feature "Profile page", type: :feature do
                        author_last_name: 'Author',
                        year: 1999, submission_type: 'Dissertation' }
   let!(:org) { create :organization, name: 'Test Organization' }
+  let!(:grant1) { create :grant,
+                         title: "First Grant",
+                         agency_name: "National Science Foundation",
+                         start_date: Date.new(2001, 2, 3),
+                         end_date: Date.new(2004, 5, 6) }
+  let!(:grant2) { create :grant,
+                         identifier: "Grant123",
+                         wos_agency_name: "Agency 2",
+                         start_date: Date.new(2010, 1, 1),
+                         end_date: Date.new(2015, 2, 2) }
 
   before do
     create :authorship, user: user, publication: pub1
@@ -100,6 +110,9 @@ feature "Profile page", type: :feature do
            user: user,
            organization: org,
            pure_identifier: 'pure123'
+
+    create :researcher_fund, grant: grant1, user: user
+    create :researcher_fund, grant: grant2, user: user
 
     visit profile_path(webaccess_id: 'abc123')
   end
@@ -228,6 +241,14 @@ feature "Profile page", type: :feature do
       expect(page).to have_content '1/2/2016'
       expect(page).to have_link 'Second Story'
       expect(page).to have_content '3/4/2017'
+    end
+  end
+
+  it "shows the requested user's grants in the Grants tab" do
+    within '#grants' do
+      expect(page).to have_content 'Grants'
+      expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
+      expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
     end
   end
 end

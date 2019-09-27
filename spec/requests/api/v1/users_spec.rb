@@ -662,6 +662,22 @@ describe 'API::V1 Users' do
                               location: nil,
                               start_on: Date.new(2018, 12, 1) }
 
+        let!(:grant1) { create :grant,
+                               title: "Grant One",
+                               wos_agency_name: "Test Agency",
+                               start_date: Date.new(2010, 1, 1),
+                               end_date: Date.new(2010, 5, 1) }
+        let!(:grant2) { create :grant,
+                               title: "Grant Two",
+                               wos_agency_name: "Other Agency",
+                               start_date: Date.new(2015, 2, 1),
+                               end_date: Date.new(2016, 1, 1) }
+        let!(:grant3) { create :grant,
+                               title: "Grant Three",
+                               agency_name: "National Science Foundation",
+                               start_date: Date.new(2018, 1, 1),
+                               end_date: nil }
+
         before do
           create :authorship, user: user, publication: pub1
           create :authorship, user: user, publication: pub2
@@ -680,6 +696,10 @@ describe 'API::V1 Users' do
           create :user_performance, user: user, performance: perf2
           create :user_performance, user: user, performance: perf3
           create :user_performance, user: user, performance: perf4
+
+          create :researcher_fund, user: user, grant: grant1
+          create :researcher_fund, user: user, grant: grant2
+          create :researcher_fund, user: user, grant: grant3
 
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end
@@ -711,6 +731,14 @@ describe 'API::V1 Users' do
                       <li><span class="publication-title">Third Publication</span>, 2018</li>
                       <li><span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015</li>
                       <li><span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010</li>
+                  </ul>
+                </div>
+                <div id="md-grants">
+                  <h3>Grants</h3>
+                  <ul>
+                      <li>Grant Three, National Science Foundation</li>
+                      <li>Grant Two, Other Agency, 2/2015 - 1/2016</li>
+                      <li>Grant One, Test Agency, 1/2010 - 5/2010</li>
                   </ul>
                 </div>
                 <div id="md-presentations">

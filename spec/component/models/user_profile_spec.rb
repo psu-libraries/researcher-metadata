@@ -211,6 +211,57 @@ describe UserProfile do
         expect(profile.grants).to eq []
       end
     end
+    context "when the user has grants" do
+      let!(:grant1) { create :grant,
+                             title: "Grant 1",
+                             agency_name: "National Science Foundation",
+                             start_date: Date.new(1980, 1, 1),
+                             end_date: Date.new(1990, 2, 2) }
+      let!(:grant2) { create :grant,
+                             identifier: "Grant 2",
+                             wos_agency_name: "Agency 2",
+                             start_date: Date.new(1985, 1, 1),
+                             end_date: Date.new(1986, 2, 2) }
+      let!(:grant3) { create :grant,
+                             wos_identifier: "Grant 3",
+                             agency_name: "National Science Foundation",
+                             start_date: Date.new(2000, 1, 1),
+                             end_date: Date.new(2002, 2, 2) }
+      let!(:grant4) { create :grant,
+                             title: "Grant 4",
+                             agency_name: "National Science Foundation",
+                             start_date: Date.new(1990, 1, 1),
+                             end_date: nil }
+      let!(:grant5) { create :grant,
+                             title: "Grant 5",
+                             agency_name: "National Science Foundation",
+                             start_date: nil,
+                             end_date: nil }
+      let!(:grant6) { create :grant,
+                             title: "Grant 6",
+                             agency_name: "National Science Foundation",
+                             start_date: Date.new(2010, 1, 1),
+                             end_date: Date.new(2015, 2, 2) }
+      before do
+        create :researcher_fund, grant: grant1, user: user
+        create :researcher_fund, grant: grant2, user: user
+        create :researcher_fund, grant: grant3, user: user
+        create :researcher_fund, grant: grant4, user: user
+        create :researcher_fund, grant: grant5, user: user
+        create :researcher_fund, grant: grant6, user: user
+      end
+
+      it "returns an array of strings describing the grants in order by date" do
+        expect(profile.grants).to eq [
+          "Grant 6, National Science Foundation, 1/2010 - 2/2015",
+          "Grant 3, National Science Foundation, 1/2000 - 2/2002",
+          "Grant 4, National Science Foundation",
+          "Grant 2, Agency 2, 1/1985 - 2/1986",
+          "Grant 1, National Science Foundation, 1/1980 - 2/1990",
+          "Grant 5, National Science Foundation"
+        ]
+      end
+    end
   end
 
   describe '#presentations' do

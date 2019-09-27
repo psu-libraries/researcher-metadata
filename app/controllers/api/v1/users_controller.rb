@@ -956,7 +956,7 @@ module API::V1
                   key :type, :array
                   items do
                     key :type, :string
-                    key :example, 'My Grant, NSF, 5/2007'
+                    key :example, 'My Grant, NSF, 5/2007 - 5/2009'
                     key :description, 'A description of an awarded grant'
                   end
                 end

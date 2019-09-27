@@ -54,7 +54,13 @@ class UserProfile
   end
 
   def grants
-    []
+    user_query.grants.order('start_date DESC NULLS LAST').map do |grant|
+      g = "#{grant.name}, #{grant.agency}"
+      if grant.start_date.present? && grant.end_date.present?
+        g += ", #{grant.start_date.strftime('%-m/%Y')} - #{grant.end_date.try(:strftime, '%-m/%Y')}"
+      end
+      g
+    end
   end
 
   def presentations
