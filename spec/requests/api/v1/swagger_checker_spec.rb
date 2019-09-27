@@ -32,22 +32,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
-    let(:invalid_user_grants_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
-      }
-    }
     let(:user_presentations_params) {
       {
         "webaccess_id" => user_with_presentations.webaccess_id,
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
-      }
-    }
-    let(:invalid_user_presentations_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_with_committee_memberships_params) {
@@ -56,22 +44,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
-    let(:invalid_user_with_committee_memberships_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
-      }
-    }
     let(:user_news_feed_items_params) {
       {
         "webaccess_id" => user_with_news_feed_items.webaccess_id,
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
-      }
-    }
-    let(:invalid_user_news_feed_items_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:user_performances_params) {
@@ -80,22 +56,10 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
       }
     }
-    let(:invalid_user_performances_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
-      }
-    }
     let(:user_organization_memberships_params) {
       {
         "webaccess_id" => user_with_organization_memberships.webaccess_id,
         "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'}
-      }
-    }
-    let(:invalid_user_organization_memberships_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
     let(:invalid_user_profile_params) {
@@ -105,12 +69,6 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       }
     }
     let(:invalid_publication_params) { {"id" => -2000, '_headers' => {'X-API-Key' => 'token123'}} }
-    let(:invalid_user_publications_params) {
-      {
-        "webaccess_id" => "aaa",
-        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
-      }
-    }
     let(:users_publications_params) {
       {
         '_json': %w(abc123 xyz321 cws161 fake123),
@@ -123,6 +81,12 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
         "id" => publication_1.id,
         "webaccess_id" => user.webaccess_id,
         '_headers' => {'X-API-Key' => 'bad_token'}
+      }
+    }
+    let(:invalid_user_params) {
+      {
+        "webaccess_id" => "aaa",
+        "_headers" => {'accept' => 'application/json', 'X-API-Key' => 'token123'},
       }
     }
 
@@ -147,7 +111,7 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 200, user_grants_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 404, invalid_user_grants_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/grants', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/organizations', 200, organizations_params ) }
     it { is_expected.to validate( :get, '/v1/organizations', 401, unauthorized_params ) }
@@ -158,27 +122,27 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 200, user_publications_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_publications_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/publications', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 200, user_performances_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 404, invalid_user_performances_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/performances', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 200, user_presentations_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 404, invalid_user_presentations_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/presentations', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 200, user_with_committee_memberships_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_with_committee_memberships_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/etds', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 200, user_news_feed_items_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 404, invalid_user_news_feed_items_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/news_feed_items', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 200, user_organization_memberships_params ) }
     it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 401, unauthorized_params ) }
-    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 404, invalid_user_organization_memberships_params ) }
+    it { is_expected.to validate( :get, '/v1/users/{webaccess_id}/organization_memberships', 404, invalid_user_params ) }
 
     it { is_expected.to validate( :post, '/v1/users/publications', 200, users_publications_params ) }
     it { is_expected.to validate( :post, '/v1/users/publications', 401, unauthorized_params ) }
