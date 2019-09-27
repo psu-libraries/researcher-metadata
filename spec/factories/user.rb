@@ -26,6 +26,16 @@ FactoryBot.define do
       end
     end
 
+    factory :user_with_grants do
+      transient do
+        grants_count { 10 }
+      end
+
+      after(:create) do |user, evaluator|
+        create_list(:researcher_fund, evaluator.grants_count, user: user)
+      end
+    end
+
     factory :user_with_presentations do
       transient do
         presentations_count { 10 }

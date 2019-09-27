@@ -97,6 +97,83 @@ describe 'API::V1 Users' do
     end
   end
 
+  describe 'GET /v1/users/:webaccess_id/grants' do
+    let!(:user) { create(:user_with_grants,
+                         webaccess_id: 'xyz321',
+                         grants_count: 10) }
+    let!(:other_user) { create :user }
+    let!(:hidden_grant) { create :grant }
+    let(:webaccess_id) { user.webaccess_id }
+    let(:params) { '' }
+    let(:headers) { { "accept" => "application/json", 'X-API-Key' => 'token123' } }
+    let(:user_without_grants) { create(:user, webaccess_id: "nocons123") }
+
+    before do
+      create :user_organization_membership, user: user, organization: org
+      create :user_organization_membership, user: other_user, organization: org
+      create :user_organization_membership, user: user_without_grants, organization: org
+      create :researcher_fund, user: other_user, grant: hidden_grant
+      get "/v1/users/#{webaccess_id}/grants#{params}", headers: headers
+    end
+
+    context "for a valid webaccess_id" do
+      it 'returns HTTP status 200' do
+        expect(response).to have_http_status 200
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+      context "when the user has grants" do
+        it "returns all the user's grants" do
+          expect(json_response[:data].size).to eq(10)
+        end
+      end
+      context "when the user has no grants" do
+        let(:webaccess_id) { user_without_grants.webaccess_id }
+        it "returns an empty JSON data hash" do
+          expect(json_response[:data].size).to eq(0)
+        end
+      end
+      context "when an html-formatted response is requested" do
+        let(:headers) { { "accept" => "text/html", 'X-API-Key' => 'token123' } }
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status 200
+        end
+        it "updates the usage statistics on the API token" do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
+      end
+    end
+    context "for an invalid webaccess_id" do
+      let(:webaccess_id) { "aaa" }
+      it "returns 404 not found" do
+        expect(response).to have_http_status 404
+      end
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+    end
+    context "for a webaccess_id of a user that is inaccessible to the given API token" do
+      let(:webaccess_id) { "inaccessible" }
+
+      it "updates the usage statistics on the API token" do
+        updated_token = token.reload
+        expect(updated_token.total_requests).to eq 1
+        expect(updated_token.last_used_at).not_to be_nil
+      end
+
+      it "returns 404" do
+        expect(response.code).to eq '404'
+      end
+    end
+  end
+
   describe 'GET /v1/users/:webaccess_id/news_feed_items' do
     let!(:user) { create(:user_with_news_feed_items, webaccess_id: 'xyz321', news_feed_items_count: 10) }
     let(:webaccess_id) { user.webaccess_id }
