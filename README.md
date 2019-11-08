@@ -85,6 +85,13 @@ from news.psu.edu:
 
 1. **Penn State LDAP** - We import some data for existing user records from Penn State's directory of people.
 
+1. **Web of Science** - We performed a one-time import of a static set of publication and grant data from
+Web of Science for publications that were published from 2013 to 2018. We obtained a copy of this data on
+a physical disk.
+
+1. **National Science Foundation** - We import grant data that we download from the National Science
+Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files.
+
 ### Obtaining New Data
 Some of our data importing involves parsing files that were exported from the data sources. By convention,
 we place those files in the `db/data/` directory within the application and give them the names that are 
@@ -162,6 +169,11 @@ prior to running the import.
 #### Penn State LDAP
 We import data directly from LDAP over the internet. There is no need to obtain any data prior to running the import.
 
+#### National Science Foundation
+In the `lib/utilities/` directory in this repository, there is a utility script for automatically downloading grant
+data from the National Science Foundation website and preparing it for import by decompressing the files and placing
+them in the correct location.
+
 ### Importing New Data
 Once updated data files have been obtained (if applicable), importing new data is just a matter of running
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
@@ -182,16 +194,46 @@ represent the same publication after we have finished importing data. This helps
 duplicate data when they query our own API. Running the rake task `rake group_duplicate_pubs` will compare the
 publication records that exist in the database using several different attributes, and it will put any publication
 records that appear to be the same into groups. This allows admin users to review the groups and pick which record
-in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times.Subsequent
+in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times. Subsequent
 imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
 duplicate publications is also run as part of the `rake import:all` task.
+
+### Merging Duplicate Publication Records
+Whenever we import a new publication, we create a record in two different tables in the database. We create a record
+for the publication itself which contains the publication's metadata, and we create a record of the import which
+contains information about the source of the import (the name of the source, and the unique identifier for the
+publication within that source). The record of the import has a foreign key to the record of the publication.
+
+Then, whenever we run a publication import, for each publication in the input data, the first thing that we do is
+look for an import record that has the same source name and unique identifier. If one exists, then we know that we
+already imported the publication from this source, and we may or may not update the existing publication record
+depending on whether or not the record has been updated by an administrator. If no import record exists, we create
+new records as described above.
+
+When we discover two publication records that are duplicates, each of those will have its own import record as well.
+For example, Publication Record 1 has an associated import record with the import_source being "Activity Insight"
+and the source_identifier being "123". Publication Record 2 is a duplicate of publication record 1, and it has an
+associated import record with the import_source being "Pure" and the source_identifier being "789". Whenever an admin
+user merges these two publication records, the following happens:
+1. The admin user picks one publication record to keep (probably the one with the most complete/accurate metadata).
+1. We take the import record from the publication record that we're not keeping and reassign it to the publication record that we are keeping.
+1. We delete the publication record that we're not keeping.
+1. We flag the publication record that we kept as having been manually modified by an admin user because we assume that the admin has picked the record with the best data (and possibly also made corrections to the chosen data after the merge), and we don't want future imports to overwrite this manually curated data.
+
+So in the example, if we merge the duplicate publications and decide to keep Publication Record 2, then it will now
+have both import records - the one from Pure and the one from Activity Insight, and Publication Record 1 will be
+deleted. Then when we reimport publications from Pure and we come to this publication in the data, we'll find the
+import record for Pure attached to Publication Record 2, and we won't create a new record (but may update the existing
+record). Likewise when we reimport publications from Activity Insight.
 
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
 exist, then the import may update the attributes of that record. However, for records that can be fully or partially
 updated by admin users of this app, we keep track of whether or not a record has been modified in any way by an admin.
-If a record has been modified by an admin user, then subsequent data imports no longer update that record. Data imports
-never delete whole records from our database - even if formerly present records have been removed from the data source.
+If a record has been modified by an admin user, then subsequent data imports no longer update that record because we assume
+that any changes that were made manually by an admin user are corrections or additions that we don't want to overwrite.
+Data imports never delete whole records from our database - even if formerly present records have been removed from the
+data source.
 
 Importing `user` records involves some additional logic since we import user data from two sources (Pure and Activity
 Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a users data
