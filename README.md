@@ -6,7 +6,9 @@ provides a means of semi-automated data importing from several different sources
 interface for Penn State Libraries admins to manage and curate the data, and an API for end-users and
 other applications to access the data. One specific use case for the API is to provide all of the data
 needed to produce the kind of profile web page for each faculty member that might be found in the faculty
-directory on a department website.
+directory on a department website. The application also provides an interface for faculty users to see
+an example of what a profile page about them would look like, and a management interface for them to
+adjust some preferences with regard to how data appears in their profile.
 
 ## Data Importing and Updating
 
