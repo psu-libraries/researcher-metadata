@@ -313,6 +313,9 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:open_access_url) do
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)

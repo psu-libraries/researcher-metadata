@@ -22,6 +22,7 @@ feature "Admin publication detail page", type: :feature do
                       page_range: "12-15",
                       issn: "1234-5678",
                       doi: "https://example.doi.org/test",
+                      open_access_url: "https://openaccess.org/publications/1",
                       published_on: Date.new(2018, 8, 1) }
 
   let!(:auth1) { create :authorship,
@@ -114,6 +115,10 @@ feature "Admin publication detail page", type: :feature do
         expect(page).to have_link "https://example.doi.org/test", href: "https://example.doi.org/test"
       end
 
+      it "shows a link to the publication's open access content" do
+        expect(page).to have_link "https://openaccess.org/publications/1", href: "https://openaccess.org/publications/1"
+      end
+      
       it "shows the publication's publication date" do
         expect(page).to have_content "August 01, 2018"
       end
