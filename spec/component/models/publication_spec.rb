@@ -528,4 +528,22 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#doi_url_path' do
+    let(:pub) { Publication.new(doi: doi) }
+
+    context "when the publication's DOI is nil" do
+      let(:doi) { nil }
+      it "returns nil" do
+        expect(pub.doi_url_path).to eq nil
+      end
+    end
+
+    context "when the publication's DOI is a full URL" do
+      let(:doi) { "https://doi.org/10.1016/S0148-2963(01)00209-0" }
+      it "returns only the path part of the URL" do
+        expect(pub.doi_url_path).to eq "10.1016/S0148-2963(01)00209-0"
+      end
+    end
+  end
 end

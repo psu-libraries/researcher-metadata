@@ -59,6 +59,12 @@ class Publication < ApplicationRecord
     authorships.where(confirmed: true)
   end
 
+  def doi_url_path
+    d = doi
+    d.try(:slice!, "https://doi.org/")
+    d
+  end
+
   swagger_schema :PublicationV1 do
     key :type, :object
     key :required, [:id, :type, :attributes]
