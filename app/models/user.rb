@@ -89,7 +89,7 @@ class User < ApplicationRecord
   end
 
   def confirmed_publications
-    publications.joins(:authorships).where('authorships.confirmed = true')
+    publications.where(authorships: { confirmed: true })
   end
 
   def admin?

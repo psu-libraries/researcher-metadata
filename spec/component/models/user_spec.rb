@@ -327,17 +327,20 @@ describe User, type: :model do
   end
 
   describe '#confirmed_publications' do
-    let!(:u) { create :user }
+    let!(:u1) { create :user }
+    let!(:u2) { create :user }
     let!(:p1) { create :publication }
     let!(:p2) { create :publication }
     let!(:p3) { create :publication }
     before do
-      create :authorship, user: u, publication: p2, confirmed: false
-      create :authorship, user: u, publication: p3, confirmed: true
+      create :authorship, user: u1, publication: p2, confirmed: false
+      create :authorship, user: u1, publication: p3, confirmed: true
+      create :authorship, user: u2, publication: p3, confirmed: true
     end
 
     it "returns publications that are associated through the user through confirmed authorships" do
-      expect(u.confirmed_publications).to eq [p3]
+      expect(u1.confirmed_publications).to eq [p3]
+      expect(u1.confirmed_publications.length).to eq 1
     end
   end
 

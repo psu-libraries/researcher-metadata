@@ -39,7 +39,7 @@ class UserProfile
   end
   
   def publications
-    publication_records.where('authorships.visible_in_profile is true').uniq.map do |pub|
+    publication_records.where('authorships.visible_in_profile is true').map do |pub|
       p = %{<span class="publication-title">#{pub.title}</span>}
       p += %{, <span class="journal-name">#{pub.published_by}</span>} if pub.published_by
       p += ", #{pub.year}" if pub.year
@@ -49,7 +49,6 @@ class UserProfile
 
   def publication_records
     user_query.publications.
-      joins(:authorships).
       order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 

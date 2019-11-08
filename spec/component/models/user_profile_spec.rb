@@ -143,6 +143,7 @@ describe UserProfile do
   end
   
   describe '#publication_records' do
+    let!(:user2) { create :user }
     let!(:pub1) { create :publication,
                          title: "First Publication",
                          visible: true,
@@ -171,6 +172,7 @@ describe UserProfile do
     let(:pos5) { nil }
 
     before do
+      create :authorship, user: user2, publication: pub1
       create :authorship, user: user, publication: pub1, position_in_profile: pos1
       create :authorship, user: user, publication: pub2, position_in_profile: pos2
       create :authorship, user: user, publication: pub3, position_in_profile: pos3
