@@ -22,6 +22,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:total_scopus_citations).of_type(:integer) }
+  it { is_expected.to have_db_column(:open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
