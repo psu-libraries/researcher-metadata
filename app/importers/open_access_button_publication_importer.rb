@@ -8,7 +8,8 @@ class OpenAccessButtonPublicationImporter
 
       available_article = oab_json['data']['availability'].detect { |a| a['type'] == "article" }
       if available_article
-        puts available_article['url']
+        p.open_access_url = available_article['url']
+        p.save!
       end
 
       # Open Access Button does not enforce any rate limits for their API, but they ask
