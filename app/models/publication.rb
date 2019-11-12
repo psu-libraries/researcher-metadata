@@ -61,8 +61,7 @@ class Publication < ApplicationRecord
 
   def doi_url_path
     d = doi
-    d.try(:slice!, "https://doi.org/")
-    d
+    d.try(:gsub, "https://doi.org/", "")
   end
 
   swagger_schema :PublicationV1 do
