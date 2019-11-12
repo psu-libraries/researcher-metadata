@@ -260,6 +260,9 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:open_access_url) do
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
