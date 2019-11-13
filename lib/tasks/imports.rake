@@ -22,6 +22,11 @@ namespace :import do
     NSFGrantImporter.new(dirname: args.dirname).call
   end
 
+  desc 'Import Open Access Button publication URLs'
+  task :open_access_button => :environment do
+    OpenAccessButtonPublicationImporter.new.call
+  end
+
   desc 'Import Activity Insight users'
   task :ai_users, [:filename] => :environment do |_task, args|
     args.with_defaults(
