@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_08_165421) do
+ActiveRecord::Schema.define(version: 2019_11_13_142315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -299,6 +299,7 @@ ActiveRecord::Schema.define(version: 2019_11_08_165421) do
     t.datetime "updated_by_user_at"
     t.boolean "visible", default: true
     t.text "open_access_url"
+    t.datetime "open_access_button_last_checked_at"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"

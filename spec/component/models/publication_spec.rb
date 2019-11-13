@@ -28,6 +28,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
+  it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
 
