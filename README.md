@@ -94,6 +94,11 @@ a physical disk.
 1. **National Science Foundation** - We import grant data that we download from the National Science
 Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files.
 
+1. **Open Access Button** - We import URLs to the content of open access publications that are provided by
+Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
+Open Access Button by DOI, so this import only adds data to existing publications in our database that have
+DOIs.
+
 ### Obtaining New Data
 Some of our data importing involves parsing files that were exported from the data sources. By convention,
 we place those files in the `db/data/` directory within the application and give them the names that are 
@@ -176,18 +181,23 @@ In the `lib/utilities/` directory in this repository, there is a utility script 
 data from the National Science Foundation website and preparing it for import by decompressing the files and placing
 them in the correct location.
 
+#### Open Access Button
+We import data directly from the Open Access Button API. There is no need to obtain any data prior to running the import.
+
 ### Importing New Data
 Once updated data files have been obtained (if applicable), importing new data is just a matter of running
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
 for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
 correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources - `rake import:all`. A separate task is used to import all of the currently supported data
-directly via the Activity Insight API:  `rake import:activity_insight`. All of these tasks are designed to be idempotent 
-given the same source data. If you are using the individual tasks to import only a subset of the data and you're 
-going to be running more than one, the order in which the tasks are run is important. Some tasks create records 
-that other tasks will find and use if they are present. Running the tasks in the correct order ensures that 
-your data import will be complete. The correct order for running the tasks is given by the order in which their
-associated classes are called in the definition of the `import:all` task.
+data from all sources - `rake import:all`. The Open Access Button import is not included in this task because it
+can take a very long time to run (a couple of days) due to rate limiting and our volume of queries. A separate task
+is used to import all of the currently supported data directly via the Activity Insight API:  `rake import:activity_insight`.
+All of these tasks are designed to be idempotent given the same source data. If you are using the individual tasks
+to import only a subset of the data and you're going to be running more than one, the order in which the tasks are
+run is important. Some tasks create records that other tasks will find and use if they are present. Running the
+tasks in the correct order ensures that your data import will be complete. The correct order for running the tasks
+is given by the order in which their associated classes are called in the definition of the `import:all` task. The
+Open Access Button import depends on having publications already imported from other sources.
 
 ### Identifying Duplicate Publication Data
 Because we import metadata about research publications from more than one source, and because duplicate entries
