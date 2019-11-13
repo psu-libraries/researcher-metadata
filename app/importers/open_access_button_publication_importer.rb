@@ -1,6 +1,7 @@
 class OpenAccessButtonPublicationImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button', total: pub_query.count) unless Rails.env.test?
+    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
+                              total: pub_query.count) unless Rails.env.test?
 
     pub_query.find_each do |p|
       find_url = "https://api.openaccessbutton.org/find?id=#{p.doi_url_path}"
