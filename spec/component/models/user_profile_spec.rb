@@ -110,6 +110,18 @@ describe UserProfile do
                                              '<span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010'
                                            ]
       end
+
+      context "when a publication has an open access URL" do
+        before { pub1.update_attribute(:open_access_url, "https://example.org/pubs/1") }
+        it "returns that publication's title as a link to the URL" do
+          expect(profile.publications).to eq [
+            '<span class="publication-title">Undated Publication</span>',
+            '<span class="publication-title">Third Publication</span>, 2018',
+            '<span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015',
+            '<span class="publication-title"><a href="https://example.org/pubs/1" target="_blank">First Publication</a></span>, <span class="journal-name">Test Journal</span>, 2010'
+          ]
+        end
+      end
     end
     context "when one of the user's authorships has a profile position set" do
       let(:pos2) { 1 }

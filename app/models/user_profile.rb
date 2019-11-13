@@ -40,7 +40,7 @@ class UserProfile
   
   def publications
     publication_records.where('authorships.visible_in_profile is true').map do |pub|
-      p = %{<span class="publication-title">#{pub.title}</span>}
+      p = %{<span class="publication-title">#{pub_title(pub)}</span>}
       p += %{, <span class="journal-name">#{pub.published_by}</span>} if pub.published_by
       p += ", #{pub.year}" if pub.year
       p
@@ -154,6 +154,14 @@ class UserProfile
   def format_advising_roles(committee_memberships)
     most_significant_memberships(committee_memberships).map do |m|
       %{#{m.role} for #{m.etd.author_full_name} - <a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> #{m.etd.year}}
+    end
+  end
+
+  def pub_title(pub)
+    if pub.open_access_url.present?
+      %{<a href="#{pub.open_access_url}" target="_blank">#{pub.title}</a>}
+    else
+      pub.title
     end
   end
 end

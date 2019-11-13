@@ -28,7 +28,8 @@ feature "Profile page", type: :feature do
                        visible: true,
                        title: 'Second Publication',
                        journal_title: 'Journal 2',
-                       published_on: Date.new(2011, 1, 1) }
+                       published_on: Date.new(2011, 1, 1),
+                       open_access_url: "https://example.org/pubs/123.pdf" }
   let!(:pres1) { create :presentation,
                         visible: true,
                         title: 'First Presentation',
@@ -196,6 +197,7 @@ feature "Profile page", type: :feature do
       expect(page).to have_content 'Publications'
       expect(page).to have_content 'First Publication, Journal 1, 2010'
       expect(page).to have_content 'Second Publication, Journal 2, 2011'
+      expect(page).to have_link 'Second Publication', href: 'https://example.org/pubs/123.pdf'
     end
   end
 
