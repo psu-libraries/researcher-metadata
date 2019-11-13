@@ -1,0 +1,23 @@
+{
+  "data": {
+    "match": "https://doi.org/pub/doi1",
+    "availability": [
+      {
+        "type": "other",
+        "url": "http://openaccessexample.org/publications/pub1.pdf"
+      }
+    ],
+    "requests": [],
+    "accepts": [],
+    "meta": {
+      "article": {
+        "redirect": "",
+        "url": "",
+        "source": "eupmc"
+      },
+      "data": {},
+      "cache": true,
+      "refresh": 30
+    }
+  }
+}

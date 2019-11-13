@@ -1,0 +1,18 @@
+{
+  "data": {
+    "match": "https://doi.org/pub/doi1",
+    "availability": [],
+    "requests": [],
+    "accepts": [],
+    "meta": {
+      "article": {
+        "redirect": "",
+        "url": "",
+        "source": "eupmc"
+      },
+      "data": {},
+      "cache": true,
+      "refresh": 30
+    }
+  }
+}
