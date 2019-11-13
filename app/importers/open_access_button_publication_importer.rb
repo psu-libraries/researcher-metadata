@@ -8,10 +8,9 @@ class OpenAccessButtonPublicationImporter
       oab_json = JSON.parse(HTTParty.get(find_url).to_s)
 
       available_article = oab_json['data']['availability'].detect { |a| a['type'] == "article" }
-      if available_article
-        p.open_access_url = available_article['url']
-        p.save!
-      end
+      p.open_access_url = available_article['url'] if available_article
+      p.open_access_button_last_checked_at = Time.current
+      p.save!
 
       # Open Access Button does not enforce any rate limits for their API, but they ask
       # that users make no more than 1 request per second.
@@ -24,6 +23,7 @@ class OpenAccessButtonPublicationImporter
   private
 
   def pub_query
-    Publication.where.not(doi: nil).where(open_access_url: nil)
+    Publication.where.not(doi: nil).where(open_access_url: nil).
+      where('open_access_button_last_checked_at IS NULL OR open_access_button_last_checked_at < ?', 1.week.ago)
   end
 end
