@@ -7,6 +7,14 @@ class Authorship < ApplicationRecord
 
   validates :user_id, uniqueness: {scope: :publication_id}
 
-  delegate :title, :published_by, :year, :open_access_url, to: :publication, prefix: true
+  delegate :title, :published_by, :year, :open_access_url, to: :publication, prefix: false
   delegate :webaccess_id, to: :user, prefix: true
+
+  def description
+    "Authorship ##{id}"
+  end
+
+  rails_admin do
+    object_label_method { :description }
+  end
 end

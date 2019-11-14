@@ -39,9 +39,16 @@ describe Authorship, type: :model do
     end
   end
 
-  it { is_expected.to delegate_method(:publication_title).to(:publication).as(:title) }
-  it { is_expected.to delegate_method(:publication_published_by).to(:publication).as(:published_by) }
-  it { is_expected.to delegate_method(:publication_year).to(:publication).as(:year) }
-  it { is_expected.to delegate_method(:publication_open_access_url).to(:publication).as(:open_access_url) }
+  it { is_expected.to delegate_method(:title).to(:publication) }
+  it { is_expected.to delegate_method(:published_by).to(:publication) }
+  it { is_expected.to delegate_method(:year).to(:publication) }
+  it { is_expected.to delegate_method(:open_access_url).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
+
+  describe "#description" do
+    let(:a) { create :authorship }
+    it "returns a string describing the record" do
+      expect(a.description).to eq "Authorship ##{a.id}"
+    end
+  end
 end

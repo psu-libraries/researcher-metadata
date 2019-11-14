@@ -3,10 +3,10 @@ require_relative '../../../app/decorators/authorship_decorator'
 
 describe AuthorshipDecorator do
   let(:auth) { double 'authorship',
-                       publication_title: 'Test Title',
-                       publication_published_by: 'A Journal',
-                       publication_year: 2000,
-                       publication_open_access_url: url }
+                       title: 'Test Title',
+                       published_by: 'A Journal',
+                       year: 2000,
+                       open_access_url: url }
   let(:url) { nil }
   let(:ad) { AuthorshipDecorator.new(auth) }
 
