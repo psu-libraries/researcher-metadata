@@ -4,6 +4,10 @@ class AuthorshipDecorator < SimpleDelegator
   end
 
   def label
-    "#{publication_title} - #{publication_published_by} - #{publication_year}"
+    if publication_open_access_url
+      %{<a href="#{publication_open_access_url}" target="_blank">#{publication_title}</a> - #{publication_published_by} - #{publication_year}}
+    else
+      "#{publication_title} - #{publication_published_by} - #{publication_year}"
+    end
   end
 end
