@@ -196,7 +196,7 @@ describe "editing profile preferences" do
     end
 
     it "shows descriptions of the user's visible publications" do
-      expect(page).to have_content "Bob's Publication - The Journal - 2007"
+      expect(page).to have_content "Bob's Publication, The Journal, 2007"
       expect(page).to_not have_content "Bob's Other Publication"
     end
   end
