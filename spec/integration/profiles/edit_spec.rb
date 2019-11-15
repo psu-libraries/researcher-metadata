@@ -1,4 +1,5 @@
 require 'integration/integration_spec_helper'
+require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe "editing profile preferences" do
   let!(:user) { create :user,
@@ -165,75 +166,87 @@ describe "editing profile preferences" do
     end
   end
 
-  shared_examples_for "a profile management page" do
-    it "shows a link to return to the public profile" do
-      expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
-    end
-
-    it "shows a link to the edit profile publications page" do
-      expect(page).to have_link "Publications", href: edit_profile_publications_path
-    end
-
-    it "shows a link to the edit profile presentations page" do
-      expect(page).to have_link "Presentations", href: edit_profile_presentations_path
-    end
-
-    it "shows a link to the edit profile performances page" do
-      expect(page).to have_link "Performances", href: edit_profile_performances_path
-    end
-  end
-
   feature "the profile publications edit page" do
-    before do
-      authenticate_as(user)
-      visit edit_profile_publications_path
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit edit_profile_publications_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Publications for Bob Testuser"
+      end
+
+      it "shows descriptions of the user's visible publications" do
+        expect(page).to have_content "Bob's Publication, The Journal, 2007"
+        expect(page).to_not have_content "Bob's Other Publication"
+      end
     end
+    
+    context "when the user is not signed in" do
+      before { visit edit_profile_publications_path }
 
-    it_behaves_like "a profile management page"
-
-    it "shows the correct heading content" do
-      expect(page).to have_content "Publications for Bob Testuser"
-    end
-
-    it "shows descriptions of the user's visible publications" do
-      expect(page).to have_content "Bob's Publication, The Journal, 2007"
-      expect(page).to_not have_content "Bob's Other Publication"
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq edit_profile_publications_path
+      end
     end
   end
 
   feature "the profile presentations edit page" do
-    before do
-      authenticate_as(user)
-      visit edit_profile_presentations_path
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit edit_profile_presentations_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Presentations for Bob Testuser"
+      end
+
+      it "shows descriptions of the user's visible presentations" do
+        expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
+        expect(page).to_not have_content "Bob's Other Presentation - -"
+      end
     end
 
-    it_behaves_like "a profile management page"
+    context "when the user is not signed in" do
+      before { visit edit_profile_presentations_path }
 
-    it "shows the correct heading content" do
-      expect(page).to have_content "Presentations for Bob Testuser"
-    end
-
-    it "shows descriptions of the user's visible presentations" do
-      expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
-      expect(page).to_not have_content "Bob's Other Presentation - -"
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq edit_profile_presentations_path
+      end
     end
   end
 
   feature "the profile performances edit page" do
-    before do
-      authenticate_as(user)
-      visit edit_profile_performances_path
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit edit_profile_performances_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Performances for Bob Testuser"
+      end
+
+      it "shows descriptions of the user's visible performances" do
+        expect(page).to have_content "Bob's Performance - University Park, PA - 2000-01-01"
+        expect(page).to_not have_content "Bob's Other Performance - -"
+      end
     end
 
-    it_behaves_like "a profile management page"
+    context "when the user is not signed in" do
+      before { visit edit_profile_performances_path }
 
-    it "shows the correct heading content" do
-      expect(page).to have_content "Performances for Bob Testuser"
-    end
-
-    it "shows descriptions of the user's visible performances" do
-      expect(page).to have_content "Bob's Performance - University Park, PA - 2000-01-01"
-      expect(page).to_not have_content "Bob's Other Performance - -"
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq edit_profile_performances_path
+      end
     end
   end
 end
