@@ -39,6 +39,7 @@ Rails.application.routes.draw do
   get 'profile/publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
   get 'profile/presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
   get 'profile/performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
+  get 'profile/publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
 
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship

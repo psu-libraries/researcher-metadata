@@ -1,4 +1,4 @@
-class ProfilesController < ApplicationController
+class ProfilesController < UserController
   layout :resolve_layout
 
   before_action :authenticate!, except: [:show]
@@ -29,11 +29,6 @@ class ProfilesController < ApplicationController
 
   def profile_for_current_user?
     current_user && current_user.webaccess_id == params[:webaccess_id]
-  end
-
-  def authenticate!
-    session[:requested_url] = request.url
-    authenticate_user!
   end
 
   def resolve_layout

@@ -7,6 +7,7 @@
       <th></th>
       <th>Publication</th>
       <th>Visible in profile</th>
+      <th></th>
     </tr>
     </thead>
     <tbody id="authorships">
@@ -17,6 +18,11 @@
           <td class="visibility">
             <%= form_with model: a, method: :put, class: 'visibility-control', remote: true do |f| %>
               <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
+            <% end %>
+          </td>
+          <td class="actions">
+            <% unless a.open_access_url.present? %>
+              <%= link_to(fa_icon('unlock'), edit_open_access_publication_path(a.publication)) %>
             <% end %>
           </td>
         </tr>

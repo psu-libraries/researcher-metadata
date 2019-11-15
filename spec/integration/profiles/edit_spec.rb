@@ -17,8 +17,13 @@ describe "editing profile preferences" do
   let!(:pub_2) { create :publication,
                         title: "Bob's Other Publication",
                         visible: false }
+  let!(:pub_3) { create :publication,
+                        title: "Bob's Open Access Publication",
+                        visible: true,
+                        open_access_url: "https://example.org/pubs/1" }
   let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
   let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
+  let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
   let!(:pres1) { create :presentation,
                         title: "Bob's Presentation",
                         organization: "Penn State",
@@ -181,7 +186,23 @@ describe "editing profile preferences" do
 
       it "shows descriptions of the user's visible publications" do
         expect(page).to have_content "Bob's Publication, The Journal, 2007"
+        expect(page).not_to have_link "Bob's Publication"
         expect(page).to_not have_content "Bob's Other Publication"
+        expect(page).to have_link "Bob's Open Access Publication", href: 'https://example.org/pubs/1'
+      end
+
+      it "shows links to add open access info for non-open access publications" do
+        within "tr#authorship_#{auth_1.id}" do
+          expect(page).to have_css '.fa-unlock'
+          expect(page).to have_link '', href: edit_open_access_publication_path(pub_1)
+        end
+      end
+
+      it "does not show links to add open access info for open access publications" do
+        within "tr#authorship_#{auth_3.id}" do
+          expect(page).not_to have_css '.fa-unlock'
+          expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_3)
+        end
       end
     end
     
