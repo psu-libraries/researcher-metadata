@@ -21,8 +21,8 @@
             <% end %>
           </td>
           <td class="actions">
-            <% unless a.open_access_url.present? %>
-              <%= link_to(fa_icon('unlock'), edit_open_access_publication_path(a.publication)) %>
+            <% unless a.preferred_open_access_url.present? %>
+              <%= link_to(fa_icon('unlock-alt'), edit_open_access_publication_path(a.publication)) %>
             <% end %>
           </td>
         </tr>

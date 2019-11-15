@@ -13,8 +13,8 @@ class AuthorshipDecorator < SimpleDelegator
   private 
 
   def pub_title
-    if open_access_url.present?
-      %{<a href="#{open_access_url}" target="_blank">#{title}</a>}
+    if preferred_open_access_url.present?
+      %{<a href="#{preferred_open_access_url}" target="_blank">#{title}</a>}
     else
       title
     end

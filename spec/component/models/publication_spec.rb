@@ -23,6 +23,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:total_scopus_citations).of_type(:integer) }
   it { is_expected.to have_db_column(:open_access_url).of_type(:text) }
+  it { is_expected.to have_db_column(:user_submitted_open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -544,6 +545,71 @@ describe Publication, type: :model do
       let(:doi) { "https://doi.org/10.1016/S0148-2963(01)00209-0" }
       it "returns only the path part of the URL" do
         expect(pub.doi_url_path).to eq "10.1016/S0148-2963(01)00209-0"
+      end
+    end
+  end
+
+  describe '#preferred_open_access_url' do
+    let(:pub) { Publication.new }
+    context "when the publication has an open access URL" do
+      before { pub.open_access_url = 'A URL' }
+      context "when the publication has a user-submitted open access URL" do
+        before { pub.user_submitted_open_access_url = 'User URL' }
+        it "returns the open access URL" do
+          expect(pub.preferred_open_access_url).to eq 'A URL'
+        end
+      end
+      context "when the publication's user-submitted open access URL is blank" do
+        before { pub.user_submitted_open_access_url = '' }
+        it "returns the open access URL" do
+          expect(pub.preferred_open_access_url).to eq 'A URL'
+        end
+      end
+      context "when the publication does not have a user-submitted open access URL" do
+        it "returns the open access URL" do
+          expect(pub.preferred_open_access_url).to eq 'A URL'
+        end
+      end
+    end
+
+    context "when the publication's open access URL is blank" do
+      before { pub.open_access_url = '' }
+      context "when the publication has a user-submitted open access URL" do
+        before { pub.user_submitted_open_access_url = 'User URL' }
+        it "returns the user-submitted open access URL" do
+          expect(pub.preferred_open_access_url).to eq 'User URL'
+        end
+      end
+      context "when the publication's user-submitted open access URL is blank" do
+        before { pub.user_submitted_open_access_url = '' }
+        it "returns nil" do
+          expect(pub.preferred_open_access_url).to be_nil
+        end
+      end
+      context "when the publication does not have a user-submitted open access URL" do
+        it "returns nil" do
+          expect(pub.preferred_open_access_url).to be_nil
+        end
+      end
+    end
+    
+    context "when the publication does not have an open access URL" do
+      context "when the publication has a user-submitted open access URL" do
+        before { pub.user_submitted_open_access_url = 'User URL' }
+        it "returns the user-submitted open access URL" do
+          expect(pub.preferred_open_access_url).to eq 'User URL'
+        end
+      end
+      context "when the publication's user-submitted open access URL is blank" do
+        before { pub.user_submitted_open_access_url = '' }
+        it "returns nil" do
+          expect(pub.preferred_open_access_url).to be_nil
+        end
+      end
+      context "when the publication does not have a user-submitted open access URL" do
+        it "returns nil" do
+          expect(pub.preferred_open_access_url).to be_nil
+        end
       end
     end
   end

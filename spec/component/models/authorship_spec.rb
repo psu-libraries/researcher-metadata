@@ -42,7 +42,7 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:title).to(:publication) }
   it { is_expected.to delegate_method(:published_by).to(:publication) }
   it { is_expected.to delegate_method(:year).to(:publication) }
-  it { is_expected.to delegate_method(:open_access_url).to(:publication) }
+  it { is_expected.to delegate_method(:preferred_open_access_url).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
   describe "#description" do

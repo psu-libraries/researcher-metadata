@@ -21,9 +21,14 @@ describe "editing profile preferences" do
                         title: "Bob's Open Access Publication",
                         visible: true,
                         open_access_url: "https://example.org/pubs/1" }
+  let!(:pub_4) { create :publication,
+                        title: "Bob's Other Open Access Publication",
+                        visible: true,
+                        user_submitted_open_access_url: "https://example.org/pubs/2" }
   let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
   let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
   let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
+  let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
   let!(:pres1) { create :presentation,
                         title: "Bob's Presentation",
                         organization: "Penn State",
@@ -189,19 +194,25 @@ describe "editing profile preferences" do
         expect(page).not_to have_link "Bob's Publication"
         expect(page).to_not have_content "Bob's Other Publication"
         expect(page).to have_link "Bob's Open Access Publication", href: 'https://example.org/pubs/1'
+        expect(page).to have_link "Bob's Other Open Access Publication", href: 'https://example.org/pubs/2'
       end
 
       it "shows links to add open access info for non-open access publications" do
         within "tr#authorship_#{auth_1.id}" do
-          expect(page).to have_css '.fa-unlock'
+          expect(page).to have_css '.fa-unlock-alt'
           expect(page).to have_link '', href: edit_open_access_publication_path(pub_1)
         end
       end
 
       it "does not show links to add open access info for open access publications" do
         within "tr#authorship_#{auth_3.id}" do
-          expect(page).not_to have_css '.fa-unlock'
+          expect(page).not_to have_css '.fa-unlock-alt'
           expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_3)
+        end
+
+        within "tr#authorship_#{auth_4.id}" do
+          expect(page).not_to have_css '.fa-unlock-alt'
+          expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_4)
         end
       end
     end

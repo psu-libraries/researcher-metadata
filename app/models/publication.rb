@@ -399,4 +399,8 @@ class Publication < ApplicationRecord
   def published_by
     journal_title.presence || publisher.presence
   end
+
+  def preferred_open_access_url
+    open_access_url.presence || user_submitted_open_access_url.presence
+  end
 end

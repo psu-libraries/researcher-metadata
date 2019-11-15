@@ -3,13 +3,21 @@ require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe "visiting the page to edit the open acess status of a publication" do
   let(:user) { create :user }
-  let(:pub) { create :publication, title: 'Test Publication' }
+  let(:pub) { create :publication,
+                     title: 'Test Publication',
+                     journal_title: 'A Prestegious Journal',
+                     issue: "583",
+                     volume: "971",
+                     page_range: "478-483",
+                     published_on: Date.new(2019, 1, 1) }
   let(:other_pub) { create :publication }
   let(:oa_pub) { create :publication, open_access_url: 'a URL' }
+  let(:uoa_pub) { create :publication, user_submitted_open_access_url: 'user URL' }
 
   before do
     create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
+    create :authorship, user: user, publication: uoa_pub
   end
 
   context "when the user is not signed in" do
@@ -30,11 +38,55 @@ describe "visiting the page to edit the open acess status of a publication" do
       it "shows the title of the publication" do
         expect(page).to have_content "Test Publication"
       end
+      it "shows the publication's journal" do
+        expect(page).to have_content "A Prestegious Journal"
+      end
+      it "shows the publication's issue number" do
+        expect(page).to have_content "583"
+      end
+      it "shows the publication's volume number" do
+        expect(page).to have_content "971"
+      end
+      it "shows the publication's page range" do
+        expect(page).to have_content "478-483"
+      end
+      it "shows the publication's year" do
+        expect(page).to have_content "2019"
+      end
+
+      describe "successfully submitting the form to add an open access URL" do
+        before do
+          fill_in "Open Access URL", with: 'https://example.org/pubs/1.pdf'
+          click_on "Submit"
+        end
+
+        it "updates the publication with the sumbitted URL" do
+          expect(pub.reload.user_submitted_open_access_url).to eq 'https://example.org/pubs/1.pdf'
+        end
+
+        it "redirects back to the publication list" do
+          expect(page.current_path).to eq edit_profile_publications_path
+        end
+
+        it "shows a success message" do
+          expect(page).to have_content I18n.t('profile.open_access_publications.update.success')
+        end
+      end
+
+      describe "submitting the form to add an open access URL with an error" do
+        xit
+      end
     end
 
     context "when requesting a publication that belongs to the user and has an open access URL" do
       it "returns 404" do
         expect { visit edit_open_access_publication_path(oa_pub) }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context "when requesting a publication that belongs to the user and has a user-submitted open access URL" do
+      it "returns 404" do
+        expect { visit edit_open_access_publication_path(uoa_pub) }.to raise_error ActiveRecord::RecordNotFound
       end
     end
 

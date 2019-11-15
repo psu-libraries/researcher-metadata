@@ -8,7 +8,7 @@ describe AuthorshipDecorator do
                        title: title,
                        published_by: publisher,
                        year: year,
-                       open_access_url: url }
+                       preferred_open_access_url: url }
   let(:title) { '' }
   let(:publisher) { '' }
   let(:year) { '' }
