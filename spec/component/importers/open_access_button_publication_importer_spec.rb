@@ -23,6 +23,20 @@ describe OpenAccessButtonPublicationImporter do
       end
     end
 
+    context "when an existing publication has a blank DOI" do
+      let!(:pub) { create :publication, doi: ''}
+
+      it "does not update the publication's open access URL" do
+        importer.call
+        expect(pub.reload.open_access_url).to be_nil
+      end
+
+      it "does not update the publication's Open Access Button check timestamp" do
+        importer.call
+        expect(pub.reload.open_access_button_last_checked_at).to be_nil
+      end
+    end
+
     context "when an existing publication has a DOI that corresponds to an available article listed with Open Access Button" do
       let!(:pub) { create :publication,
                           doi: 'https://doi.org/pub/doi1',
