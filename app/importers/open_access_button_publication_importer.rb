@@ -23,7 +23,7 @@ class OpenAccessButtonPublicationImporter
   private
 
   def pub_query
-    Publication.where.not(doi: nil).where(open_access_url: nil).
+    Publication.where.not(doi: nil).where.not(doi: '').where(open_access_url: nil).
       where('open_access_button_last_checked_at IS NULL OR open_access_button_last_checked_at < ?', 1.week.ago)
   end
 end
