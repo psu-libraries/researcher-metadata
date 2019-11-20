@@ -145,7 +145,7 @@ class Publication < ApplicationRecord
         key :example, 'https://doi.org/example'
         key :description, 'The Digital Object Identifier URL for the publication'
       end
-      property :open_access_url do
+      property :preferred_open_access_url do
         key :type, [:string, :null]
         key :example, 'https://example.org/articles/article-123.pdf'
         key :description, 'A URL for an open access copy of the publication'

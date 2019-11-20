@@ -36,7 +36,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:abstract => 'an abstract') }
     it { is_expected.to include(:citation_count => 1000) }
     it { is_expected.to include(:doi => 'publication DOI') }
-    it { is_expected.to include(:open_access_url => 'OA URL') }
+    it { is_expected.to include(:preferred_open_access_url => 'OA URL') }
 
     context "when the publication has a published_on date" do
       let(:date) { Date.new(2018, 8, 3) }
