@@ -19,7 +19,8 @@ class OpenAccessURLForm
   end
 
   def validate_response
-    unless HTTParty.get(open_access_url).code == 200
+    response_code = HTTParty.head(open_access_url, follow_redirects: false).code
+    unless response_code == 200 || response_code == 301 || response_code == 302
       errors.add(:open_access_url, I18n.t('models.open_access_url_form.validation_errors.url_response'))
     end
   end

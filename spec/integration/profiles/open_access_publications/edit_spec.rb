@@ -20,7 +20,7 @@ describe "visiting the page to edit the open acess status of a publication" do
     create :authorship, user: user, publication: oa_pub
     create :authorship, user: user, publication: uoa_pub
 
-    allow(HTTParty).to receive(:get).and_return(response)
+    allow(HTTParty).to receive(:head).and_return(response)
     allow(response).to receive(:code).and_return 200
   end
 

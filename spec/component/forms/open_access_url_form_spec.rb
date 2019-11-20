@@ -4,7 +4,7 @@ describe OpenAccessURLForm do
   let(:form) { OpenAccessURLForm.new(open_access_url: url) }
   let(:response) { double 'response' }
   before do
-    allow(HTTParty).to receive(:get).with(url).and_return(response)
+    allow(HTTParty).to receive(:head).with(url, follow_redirects: false).and_return(response)
   end
 
   describe '#valid?' do
@@ -48,7 +48,23 @@ describe OpenAccessURLForm do
       end
     end
 
-    context "when given an open access URL that does not return a 200 OK response" do
+    context "when given an open access URL that returns a 301 response" do
+      let(:url) { 'https://threeohone.com' }
+      before { allow(response).to receive(:code).and_return 301 }
+      it "returns true" do
+        expect(form.valid?).to eq true
+      end
+    end
+
+    context "when given an open access URL that returns a 302 response" do
+      let(:url) { 'https://threeohtwo.com' }
+      before { allow(response).to receive(:code).and_return 302 }
+      it "returns true" do
+        expect(form.valid?).to eq true
+      end
+    end
+
+    context "when given an open access URL that returns a 404 response" do
       let(:url) { 'https://fake.fake' }
       before { allow(response).to receive(:code).and_return 404 }
       it "returns false" do
