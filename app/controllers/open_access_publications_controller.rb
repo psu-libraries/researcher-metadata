@@ -4,19 +4,26 @@ class OpenAccessPublicationsController < UserController
 
   def edit
     @publication = find_publication
+    @form = OpenAccessURLForm.new
   end
 
   def update
-    publication = find_publication
-    publication.update_attributes!(publication_params)
-    flash[:notice] = I18n.t('profile.open_access_publications.update.success')
-    redirect_to edit_profile_publications_path
+    @publication = find_publication
+    @form = OpenAccessURLForm.new(form_params)
+    
+    if @form.valid?
+      @publication.update_attributes!(user_submitted_open_access_url: @form.open_access_url)
+      flash[:notice] = I18n.t('profile.open_access_publications.update.success')
+      redirect_to edit_profile_publications_path
+    else
+      render 'edit'
+    end
   end
 
   private
 
-  def publication_params
-    params.require(:publication).permit([:user_submitted_open_access_url])
+  def form_params
+    params.require(:open_access_url_form).permit([:open_access_url])
   end
 
   def find_publication

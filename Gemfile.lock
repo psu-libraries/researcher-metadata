@@ -318,6 +318,9 @@ GEM
       sprockets (> 3.0)
       sprockets-rails
       tilt
+    simple_form (5.0.1)
+      actionpack (>= 5.0)
+      activemodel (>= 5.0)
     smarter_csv (1.2.6)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
@@ -408,6 +411,7 @@ DEPENDENCIES
   rspec-rails
   sass-rails (~> 5.0)
   shoulda-matchers!
+  simple_form
   smarter_csv
   spring
   spring-commands-rspec

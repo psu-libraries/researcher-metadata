@@ -13,11 +13,15 @@ describe "visiting the page to edit the open acess status of a publication" do
   let(:other_pub) { create :publication }
   let(:oa_pub) { create :publication, open_access_url: 'a URL' }
   let(:uoa_pub) { create :publication, user_submitted_open_access_url: 'user URL' }
+  let(:response) { double 'response' }
 
   before do
     create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
     create :authorship, user: user, publication: uoa_pub
+
+    allow(HTTParty).to receive(:get).and_return(response)
+    allow(response).to receive(:code).and_return 200
   end
 
   context "when the user is not signed in" do
@@ -74,7 +78,23 @@ describe "visiting the page to edit the open acess status of a publication" do
       end
 
       describe "submitting the form to add an open access URL with an error" do
-        xit
+        before do
+          fill_in "Open Access URL", with: 'derp derp derp'
+          click_on "Submit"
+        end
+
+        it "does not update the publication with the sumbitted data" do
+          expect(pub.reload.user_submitted_open_access_url).to be_nil
+        end
+
+        it "rerenders the form" do
+          expect(page.current_path).to eq open_access_publication_path(pub)
+          expect(page).to have_field "Open Access URL"
+        end
+
+        it "shows an error message" do
+          expect(page).to have_content I18n.t('models.open_access_url_form.validation_errors.url_format')
+        end
       end
     end
 

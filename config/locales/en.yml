@@ -16,3 +16,8 @@ en:
     open_access_publications:
       update:
         success: "Thank you for taking the time to submit your open access URL. It was successfully saved."
+  models:
+    open_access_url_form:
+      validation_errors:
+        url_format: "does not have valid format. Please enter a full URL that begins with 'http://' or 'https://'."
+        url_response: "cannot be accessed."

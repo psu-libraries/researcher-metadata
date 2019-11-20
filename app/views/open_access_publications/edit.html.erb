@@ -45,15 +45,14 @@
         <p>
           If an open access version of your publication is already available anywhere on the public web,
           then please submit the URL here. This should be a full and valid URL that points directly
-          to a PDF document of your publication.
+          to a publicly accessible copy of your publication.
         </p>
 
-        <%= form_with model: @publication, url: open_access_publication_path(@publication), method: :patch, id: 'open-access', local: true do |f| %>
+        <%= simple_form_for @form, url: open_access_publication_path(@publication), method: :patch, id: 'open-access' do |f| %>
           <div class='form-group'>
-            <%= f.label :user_submitted_open_access_url, "Open Access URL" %>
-            <%= f.text_field :user_submitted_open_access_url, class: 'form-control' %>
+            <%= f.input :open_access_url, label: 'Open Access URL' %>
           </div>
-          <%= f.submit "Submit", class: 'btn btn-primary' %>
+          <%= f.submit 'Submit', class: 'btn btn-primary' %>
         <% end %>
       </div>
     </div>
