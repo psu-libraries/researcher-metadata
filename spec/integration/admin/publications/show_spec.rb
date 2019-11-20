@@ -23,6 +23,7 @@ feature "Admin publication detail page", type: :feature do
                       issn: "1234-5678",
                       doi: "https://example.doi.org/test",
                       open_access_url: "https://openaccess.org/publications/1",
+                      user_submitted_open_access_url: "https://example.org/publications/2",
                       published_on: Date.new(2018, 8, 1) }
 
   let!(:auth1) { create :authorship,
@@ -117,6 +118,10 @@ feature "Admin publication detail page", type: :feature do
 
       it "shows a link to the publication's open access content" do
         expect(page).to have_link "https://openaccess.org/publications/1", href: "https://openaccess.org/publications/1"
+      end
+
+      it "shows a link to the publication's user-submitted open access content" do
+        expect(page).to have_link "https://example.org/publications/2", href: "https://example.org/publications/2"
       end
       
       it "shows the publication's publication date" do

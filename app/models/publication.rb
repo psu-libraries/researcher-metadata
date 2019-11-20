@@ -331,6 +331,10 @@ class Publication < ApplicationRecord
         label 'Open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:user_submitted_open_access_url) do
+        label 'User-submitted open access URL'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
