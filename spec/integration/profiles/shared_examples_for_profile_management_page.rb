@@ -1,6 +1,6 @@
 shared_examples_for "a profile management page" do
   it "shows a link to return to the public profile" do
-    expect(page).to have_link "Back to Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
+    expect(page).to have_link "Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
   end
 
   it "shows a link to the edit profile publications page" do

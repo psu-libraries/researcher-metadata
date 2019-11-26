@@ -1,6 +1,42 @@
 @import "bootstrap";
 @import "font-awesome";
 
+body {
+  font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.manage-profile-nav {
+  border-bottom: 1px solid lightgrey;
+  margin-bottom: 20px;
+  background-color: #fff;
+  clear: both;
+  padding: 0 16px 0 0;
+
+  .navbar-brand {
+    padding-top: 0px;
+    margin: 0 60px 0 8px;
+  }
+}
+
+.manage-profile-header {
+  height: 38px;
+  background-color: #595959;
+
+  ul {
+    list-style: none;
+    float: right;
+    padding: 6px 16px 0 0;
+  }
+
+  a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 17px;
+  }
+}
+
 .open-access-info {
   margin: 30px 0 30px 0;
 }

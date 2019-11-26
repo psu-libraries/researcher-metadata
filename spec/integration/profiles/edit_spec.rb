@@ -186,7 +186,7 @@ describe "editing profile preferences" do
       it_behaves_like "a profile management page"
 
       it "shows the correct heading content" do
-        expect(page).to have_content "Publications for Bob Testuser"
+        expect(page).to have_content "Manage Profile Publications"
       end
 
       it "shows descriptions of the user's visible publications" do
@@ -236,7 +236,7 @@ describe "editing profile preferences" do
       it_behaves_like "a profile management page"
 
       it "shows the correct heading content" do
-        expect(page).to have_content "Presentations for Bob Testuser"
+        expect(page).to have_content "Manage Profile Presentations"
       end
 
       it "shows descriptions of the user's visible presentations" do
@@ -264,7 +264,7 @@ describe "editing profile preferences" do
       it_behaves_like "a profile management page"
 
       it "shows the correct heading content" do
-        expect(page).to have_content "Performances for Bob Testuser"
+        expect(page).to have_content "Manage Profile Performances"
       end
 
       it "shows descriptions of the user's visible performances" do
