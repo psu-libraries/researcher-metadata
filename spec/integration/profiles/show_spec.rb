@@ -119,7 +119,7 @@ feature "Profile page", type: :feature do
   end
 
   it "shows the profile layout" do
-    expect(page).to have_link "Privacy and Legal Statements"
+    expect(page).to have_link "2019 The Pennsylvania State University"
   end
 
   it "shows the name of the requested user" do
