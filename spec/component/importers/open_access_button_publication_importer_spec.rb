@@ -46,8 +46,8 @@ describe OpenAccessButtonPublicationImporter do
         allow(HTTParty).to receive(:get).with("https://api.openaccessbutton.org/find?id=pub/doi1").
         and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
       end
-      context "when the publication was last checked in Open Access Button more than a week ago" do
-        let(:last_check) { now - 8.days }
+      context "when the publication was last checked in Open Access Button more than a month ago" do
+        let(:last_check) { now - (32.days) }
         it "updates the publication with the URL to the open access content" do
           importer.call
           expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
@@ -68,7 +68,7 @@ describe OpenAccessButtonPublicationImporter do
     
           it "does not update the publication's Open Access Button check timestamp" do
             importer.call
-            expect(pub.reload.open_access_button_last_checked_at).to eq now - 8.days
+            expect(pub.reload.open_access_button_last_checked_at).to eq now - 32.days
           end
         end
       end
@@ -97,8 +97,8 @@ describe OpenAccessButtonPublicationImporter do
           end
         end
       end
-      context "when the publication was last checked in Open Access Button less than a week ago" do
-        let(:last_check) { now - 6.days }
+      context "when the publication was last checked in Open Access Button less than a month ago" do
+        let(:last_check) { now - (30.days) }
         it "does not update the publication's open access URL" do
           importer.call
           expect(pub.reload.open_access_url).to be_nil
@@ -106,7 +106,7 @@ describe OpenAccessButtonPublicationImporter do
   
         it "does not update the publication's Open Access Button check timestamp" do
           importer.call
-          expect(pub.reload.open_access_button_last_checked_at).to eq now - 6.days
+          expect(pub.reload.open_access_button_last_checked_at).to eq now - 30.days
         end
       end
     end
@@ -120,8 +120,8 @@ describe OpenAccessButtonPublicationImporter do
         allow(HTTParty).to receive(:get).with("https://api.openaccessbutton.org/find?id=pub/doi1").
         and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
       end
-      context "when the publication was last checked in Open Access Button more than a week ago" do
-        let(:last_check) { now - 8.days }
+      context "when the publication was last checked in Open Access Button more than a month ago" do
+        let(:last_check) { now - (32.days) }
         it "does not update the publication's open access URL" do
           importer.call
           expect(pub.reload.open_access_url).to be_nil
@@ -142,7 +142,7 @@ describe OpenAccessButtonPublicationImporter do
     
           it "does not update the publication's Open Access Button check timestamp" do
             importer.call
-            expect(pub.reload.open_access_button_last_checked_at).to eq now - 8.days
+            expect(pub.reload.open_access_button_last_checked_at).to eq now - 32.days
           end
         end
       end
@@ -173,8 +173,8 @@ describe OpenAccessButtonPublicationImporter do
           end
         end
       end
-      context "when the publication was last checked in Open Access Button less than a week ago" do
-        let(:last_check) { now - 6.days }
+      context "when the publication was last checked in Open Access Button less than a month ago" do
+        let(:last_check) { now - (30.days) }
         it "does not update the publication's open access URL" do
           importer.call
           expect(pub.reload.open_access_url).to be_nil
@@ -182,7 +182,7 @@ describe OpenAccessButtonPublicationImporter do
   
         it "does not update the publication's Open Access Button check timestamp" do
           importer.call
-          expect(pub.reload.open_access_button_last_checked_at).to eq now - 6.days
+          expect(pub.reload.open_access_button_last_checked_at).to eq now - 30.days
         end
       end
     end
