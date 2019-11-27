@@ -5,7 +5,7 @@
         <h2>Open Access <%=fa_icon('unlock-alt') %></h2>
         <p>
           We haven't been able to find an open access version of your publication,
-          <em>for <%= @publication.title %></em>, on the web. If an open access version
+          <em><%= @publication.title %></em>, on the web. If an open access version
           of your work has been pulished, you can let us know about it by submitting a URL for
           the document in the form below. If an open access version of this publication
           has not yet been published, we encourage you to submit it to ScholarSphere,
@@ -41,19 +41,31 @@
           </tr>
         </table>
       </div>
-      <div class="add-open-access-url">
-        <p>
-          If an open access version of your publication is already available anywhere on the public web,
-          then please submit the URL here. This should be a full and valid URL that points directly
-          to a publicly accessible copy of your publication.
-        </p>
+      <div class="open-access-actions">
+        <div class="open-access-action">
+          <h5>Submit a URL</h5>
+          <p>
+            If an open access version of your publication is already available anywhere on the public web,
+            then please submit the URL here. This should be a full and valid URL that points directly
+            to a publicly accessible copy of your publication.
+          </p>
 
-        <%= simple_form_for @form, url: open_access_publication_path(@publication), method: :patch, id: 'open-access' do |f| %>
-          <div class='form-group'>
-            <%= f.input :open_access_url, label: 'Open Access URL' %>
-          </div>
-          <%= f.submit 'Submit', class: 'btn btn-primary' %>
-        <% end %>
+          <%= simple_form_for @form, url: open_access_publication_path(@publication), method: :patch, id: 'open-access' do |f| %>
+            <div class='form-group'>
+              <%= f.input :open_access_url, label: 'Open Access URL' %>
+            </div>
+            <%= f.submit 'Submit', class: 'btn btn-primary' %>
+          <% end %>
+        </div>
+        <div class="action-separator">or</div>
+        <div class="open-access-action">
+          <h5>Upload to ScholarSphere</h5>
+          <p>
+            If there isn't already an open access version of your work available on the web, please
+            consider uploading it to ScholarSphere.
+          </p>
+          <%= link_to "Upload", "#", class: 'btn btn-primary' %>
+        </div>
       </div>
     </div>
   </div>

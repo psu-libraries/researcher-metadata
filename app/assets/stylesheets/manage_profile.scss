@@ -50,8 +50,18 @@ body {
   margin-bottom: 30px;
 }
 
-.add-open-access-url {
+.open-access-action {
   padding: 30px;
   border: 1px solid lightgrey;
   border-radius: 10px;
+  margin: 20px 0
+}
+
+.open-access-actions {
+  margin-bottom: 40px;
+}
+
+.action-separator {
+  font-size: 24px;
+  text-align: center;
 }
