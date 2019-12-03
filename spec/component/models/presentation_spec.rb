@@ -78,8 +78,8 @@ describe Presentation, type: :model do
       context "when the presentation has a title" do
         let(:title) { 'Test Title' }
 
-        it "returns the presentation's name" do
-          expect(p.label_name).to eq 'Test Name'
+        it "returns the presentation's name followed by its title" do
+          expect(p.label_name).to eq 'Test Name - Test Title'
         end
       end
 
@@ -123,8 +123,8 @@ describe Presentation, type: :model do
       context "when the presentation has a title" do
         let(:title) { 'Test Title' }
 
-        it "returns the presentation's name" do
-          expect(p.label).to eq 'Test Name'
+        it "returns the presentation's name followed by its title" do
+          expect(p.label).to eq 'Test Name - Test Title'
         end
       end
 

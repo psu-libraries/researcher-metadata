@@ -15,7 +15,10 @@ class Presentation < ApplicationRecord
   end
 
   def label
-    self.name.presence || self.title.presence
+    l = name.to_s
+    l += " - " if name.present? && title.present?
+    l += title.to_s if title.present?
+    l.presence
   end
 
   rails_admin do

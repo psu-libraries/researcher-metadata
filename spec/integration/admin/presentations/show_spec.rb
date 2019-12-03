@@ -34,7 +34,7 @@ feature "Admin presentation detail page", type: :feature do
       before { visit rails_admin.show_path(model_name: :presentation, id: pres.id) }
 
       it "shows the presentation detail heading" do
-        expect(page).to have_content "Details for Presentation 'Test Name'"
+        expect(page).to have_content "Details for Presentation 'Test Name - Test Title'"
       end
 
       it "shows the presentation's title" do
