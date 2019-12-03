@@ -8,18 +8,18 @@ class ProfilesController < UserController
   end
 
   def edit_publications
-    authorships = UserProfile.new(current_user).publication_records.uniq.
+    authorships = UserProfile.new(current_user).publication_records.
       map { |p| p.authorships.find_by(user: current_user) }
     @authorships = authorships.map { |a| AuthorshipDecorator.new(a) }
   end
 
   def edit_presentations
-    @presentation_contributions = UserProfile.new(current_user).presentation_records.uniq.
+    @presentation_contributions = UserProfile.new(current_user).presentation_records.
       map { |p| p.presentation_contributions.find_by(user: current_user) }
   end
 
   def edit_performances
-    @user_performances = UserProfile.new(current_user).performance_records.uniq.
+    @user_performances = UserProfile.new(current_user).performance_records.
       map { |p| p.user_performances.find_by(user: current_user) }
   end
 

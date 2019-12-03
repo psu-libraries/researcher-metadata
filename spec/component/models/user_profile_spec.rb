@@ -348,6 +348,7 @@ describe UserProfile do
   end
 
   describe '#presentation_records' do
+    let!(:other_user) { create :user }
     let!(:pres1) { create :presentation,
                           name: "Presentation Two",
                           organization: "An Organization",
@@ -377,6 +378,10 @@ describe UserProfile do
                           visible: true }
 
     before do
+      create :presentation_contribution,
+             user: other_user,
+             presentation: pres1,
+             visible_in_profile: true
       create :presentation_contribution,
              user: user,
              presentation: pres1,
@@ -514,6 +519,7 @@ describe UserProfile do
   end
 
   describe '#performance_records' do
+    let!(:other_user) { create :user }
     let!(:perf1) { create :performance,
                           title: "Performance One",
                           location: "Location One",
@@ -545,6 +551,11 @@ describe UserProfile do
 
 
     before do
+      create :user_performance,
+             user: other_user,
+             performance: perf1,
+             visible_in_profile: true,
+             position_in_profile: nil
       create :user_performance,
              user: user,
              performance: perf1,

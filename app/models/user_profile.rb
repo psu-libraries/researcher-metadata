@@ -71,7 +71,6 @@ class UserProfile
   def presentation_records
     user_query.
       presentations.
-      joins(:presentation_contributions).
       where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')").
       order('presentation_contributions.position_in_profile ASC NULLS FIRST')
   end
@@ -87,7 +86,6 @@ class UserProfile
 
   def performance_records
     user.performances.
-      joins(:user_performances).
       order('user_performances.position_in_profile ASC NULLS FIRST, start_on DESC NULLS LAST')
   end
 
