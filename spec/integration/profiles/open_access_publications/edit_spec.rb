@@ -58,8 +58,8 @@ describe "visiting the page to edit the open acess status of a publication" do
         expect(page).to have_content "2019"
       end
 
-      it "shows an upload link" do
-        expect(page).to have_link "Upload"
+      it "shows an upload button" do
+        expect(page).to have_button "Upload"
       end
 
       describe "successfully submitting the form to add an open access URL" do

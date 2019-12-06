@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get 'profile/performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
   get 'profile/publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
   patch 'profile/publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
+  post 'profile/publications/:id/open_access/scholarsphere_uploads' => 'scholarsphere_uploads#create', as: :scholarsphere_uploads
 
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship
