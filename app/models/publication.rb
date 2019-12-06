@@ -407,4 +407,8 @@ class Publication < ApplicationRecord
   def preferred_open_access_url
     open_access_url.presence || user_submitted_open_access_url.presence
   end
+
+  def scholarsphere_upload_pending?
+    authorships.where.not(scholarsphere_uploaded_at: nil).any?
+  end
 end

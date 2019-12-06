@@ -613,4 +613,26 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe "#scholarsphere_upload_pending?" do
+    let(:pub) { create :publication }
+
+    before do
+      create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time
+    end
+
+    context "when the publication has no authorships that have been uploaded to ScholarSphere" do
+      let(:upload_time) { nil }
+      it "returns false" do
+        expect(pub.scholarsphere_upload_pending?).to eq false
+      end
+    end
+    
+    context "when the publication has no authorships that have been uploaded to ScholarSphere" do
+      let(:upload_time) { Time.current }
+      it "returns true" do
+        expect(pub.scholarsphere_upload_pending?).to eq true
+      end
+    end
+  end
 end

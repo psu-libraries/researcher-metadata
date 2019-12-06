@@ -13,15 +13,34 @@ describe ScholarsphereUploadsController, type: :controller do
 
     context "when authenticated" do
       let!(:user) { create :user }
+      let!(:other_user) { create :user }
       let!(:pub) { create :publication }
       let!(:oa_pub) { create :publication, open_access_url: "url" }
       let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
       let!(:other_pub) { create :publication }
+      let!(:uploaded_pub) { create :publication }
+      let!(:other_uploaded_pub) { create :publication }
       
+      let!(:auth) { create :authorship, user: user, publication: pub }
+
+      let(:now) { Time.new 2019, 1, 1, 0, 0, 0 }
+
       before do
-        create :authorship, user: user, publication: pub
+        allow(Time).to receive(:current).and_return(now)
         create :authorship, user: user, publication: oa_pub
         create :authorship, user: user, publication: uoa_pub
+        create :authorship,
+               user: user,
+               publication: uploaded_pub,
+               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+        create :authorship,
+               user: user,
+               publication: other_uploaded_pub
+        create :authorship,
+               user: other_user,
+               publication: other_uploaded_pub,
+               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+
         authenticate_as(user)
       end
 
@@ -43,7 +62,24 @@ describe ScholarsphereUploadsController, type: :controller do
         end
       end
 
+      context "when given the ID for a publication that has already been uploaded to ScholarSphere by the user" do
+        it "returns 404" do
+          expect { post :create, params: {id: uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
+        it "returns 404" do
+          expect { post :create, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
       context "when given the ID for a publication that belongs to the user and is not open access" do
+        it "sets the timestamp on the user's authorship of the publication" do
+          post :create, params: {id: pub.id}
+          expect(auth.reload.scholarsphere_uploaded_at).to eq now
+        end
+          
         it "redirects to the ScholarSphere website" do
           post :create, params: {id: pub.id}
           expect(response).to redirect_to 'https://scholarsphere.psu.edu/concern/generic_works/new'
