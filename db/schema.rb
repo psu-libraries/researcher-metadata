@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_11_15_202327) do
+ActiveRecord::Schema.define(version: 2019_12_06_215734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -35,6 +35,7 @@ ActiveRecord::Schema.define(version: 2019_11_15_202327) do
     t.boolean "visible_in_profile", default: true
     t.integer "position_in_profile"
     t.boolean "confirmed", default: true
+    t.datetime "scholarsphere_uploaded_at"
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
