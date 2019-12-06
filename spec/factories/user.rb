@@ -1,7 +1,7 @@
 FactoryBot.define do
   factory :user do
     sequence :webaccess_id do |n|
-      "abc#{n}"
+      "user#{n}"
     end
     first_name { 'Test' }
     last_name { 'User' }
