@@ -41,6 +41,8 @@ describe Authorship, type: :model do
   end
 
   it { is_expected.to delegate_method(:title).to(:publication) }
+  it { is_expected.to delegate_method(:abstract).to(:publication) }
+  it { is_expected.to delegate_method(:doi).to(:publication) }
   it { is_expected.to delegate_method(:published_by).to(:publication) }
   it { is_expected.to delegate_method(:year).to(:publication) }
   it { is_expected.to delegate_method(:preferred_open_access_url).to(:publication) }

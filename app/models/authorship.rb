@@ -8,6 +8,8 @@ class Authorship < ApplicationRecord
   validates :user_id, uniqueness: {scope: :publication_id}
 
   delegate :title,
+           :abstract,
+           :doi,
            :published_by,
            :year,
            :preferred_open_access_url,

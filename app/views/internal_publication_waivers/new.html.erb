@@ -1,0 +1,25 @@
+<h2>Open Access Waiver</h2>
+<p>
+  Use this form to waive your obligations under AC02:  Open Access to Scholarly Articles
+  for the publication described below. This waiver will only be applicable to the publication
+  described here. To waive your obligations for another publication, you must submit another
+  waiver specifically for that publication. This form only enables you to waive your
+  obligations under Penn State policy; if you have public access requirements from a federal
+  funder such as NIH, NSF, or DOE, you must still comply with them.
+</p>
+<p>
+  As permitted by Penn State Policy AC02:  Open Access to Scholarly Articles, under which I
+  have granted Penn State a license to my scholarly articles, I hereby request a waiver of
+  the license with respect to the following publication:
+</p>
+
+<h3>Publication Information</h3>
+
+<%= simple_form_for @waiver, url: "" do |f| %>
+  <div class='form-group'>
+    <%= f.input :title, label: 'Title', readonly: true %>
+    <%= f.input :abstract, label: 'Abstract', as: :text, readonly: true %>
+    <%= f.input :doi, label: 'Digital Object Identifier (DOI)', readonly: true %>
+    <%= f.input :published_by, label: 'Journal', readonly: true %>
+  </div>
+<% end %>
