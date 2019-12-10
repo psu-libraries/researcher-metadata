@@ -4,19 +4,27 @@ class OpenAccessPublicationsController < UserController
 
   def edit
     @publication = find_publication
-    @form = OpenAccessURLForm.new
+    if @publication.scholarsphere_upload_pending?
+      raise ActiveRecord::RecordNotFound
+    else
+      @form = OpenAccessURLForm.new
+    end
   end
 
   def update
     @publication = find_publication
-    @form = OpenAccessURLForm.new(form_params)
-    
-    if @form.valid?
-      @publication.update_attributes!(user_submitted_open_access_url: @form.open_access_url)
-      flash[:notice] = I18n.t('profile.open_access_publications.update.success')
-      redirect_to edit_profile_publications_path
+    if @publication.scholarsphere_upload_pending?
+      raise ActiveRecord::RecordNotFound
     else
-      render 'edit'
+      @form = OpenAccessURLForm.new(form_params)
+      
+      if @form.valid?
+        @publication.update_attributes!(user_submitted_open_access_url: @form.open_access_url)
+        flash[:notice] = I18n.t('profile.open_access_publications.update.success')
+        redirect_to edit_profile_publications_path
+      else
+        render 'edit'
+      end
     end
   end
 
