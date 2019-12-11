@@ -1,8 +1,4 @@
-class InternalPublicationWaiversController < UserController
-  before_action :authenticate_user!
-  before_action :raise_if_inaccessible
-  layout 'manage_profile'
-
+class InternalPublicationWaiversController < OpenAccessWorkflowController
   def new
     authorship = current_user.authorships.find_by!(publication_id: params[:id])
     @waiver = InternalPublicationWaiver.new(authorship: authorship)
@@ -19,19 +15,7 @@ class InternalPublicationWaiversController < UserController
 
   private
 
-  def publication
-    @publication ||= current_user.publications
-      .where(open_access_url: nil, user_submitted_open_access_url: nil)
-      .find(params[:id])
-  end
-
   def waiver_params
     params.require(:internal_publication_waiver).permit([:reason_for_waiver])
-  end
-
-  def raise_if_inaccessible
-    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
-      raise ActiveRecord::RecordNotFound
-    end
   end
 end
