@@ -1,6 +1,31 @@
 require 'component/component_spec_helper'
 
 describe OpenAccessPublicationsController, type: :controller do
+  let!(:user) { create :user }
+  let!(:other_user) { create :user }
+  let!(:pub) { create :publication }
+  let!(:oa_pub) { create :publication, open_access_url: "url" }
+  let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
+  let!(:other_pub) { create :publication }
+  let!(:uploaded_pub) { create :publication }
+  let!(:other_uploaded_pub) { create :publication }
+  let!(:auth) { create :authorship, user: user, publication: pub }
+
+  before do
+    create :authorship, user: user, publication: oa_pub
+    create :authorship, user: user, publication: uoa_pub
+    create :authorship,
+           user: user,
+           publication: uploaded_pub,
+           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+    create :authorship,
+           user: user,
+           publication: other_uploaded_pub
+    create :authorship,
+           user: other_user,
+           publication: other_uploaded_pub,
+           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+  end
 
   describe '#edit' do
     context "when not authenticated" do
@@ -12,31 +37,7 @@ describe OpenAccessPublicationsController, type: :controller do
     end
 
     context "when authenticated" do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
-      let!(:pub) { create :publication }
-      let!(:oa_pub) { create :publication, open_access_url: "url" }
-      let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
-      let!(:other_pub) { create :publication }
-      let!(:uploaded_pub) { create :publication }
-      let!(:other_uploaded_pub) { create :publication }
-      let!(:auth) { create :authorship, user: user, publication: pub }
-
       before do
-        create :authorship, user: user, publication: oa_pub
-        create :authorship, user: user, publication: uoa_pub
-        create :authorship,
-               user: user,
-               publication: uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-        create :authorship,
-               user: user,
-               publication: other_uploaded_pub
-        create :authorship,
-               user: other_user,
-               publication: other_uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-
         authenticate_as(user)
       end
 
@@ -89,31 +90,7 @@ describe OpenAccessPublicationsController, type: :controller do
     end
 
     context "when authenticated" do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
-      let!(:pub) { create :publication }
-      let!(:oa_pub) { create :publication, open_access_url: "url" }
-      let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
-      let!(:other_pub) { create :publication }
-      let!(:uploaded_pub) { create :publication }
-      let!(:other_uploaded_pub) { create :publication }
-      let!(:auth) { create :authorship, user: user, publication: pub }
-
       before do
-        create :authorship, user: user, publication: oa_pub
-        create :authorship, user: user, publication: uoa_pub
-        create :authorship,
-               user: user,
-               publication: uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-        create :authorship,
-               user: user,
-               publication: other_uploaded_pub
-        create :authorship,
-               user: other_user,
-               publication: other_uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-
         authenticate_as(user)
       end
 

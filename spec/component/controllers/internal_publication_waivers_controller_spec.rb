@@ -1,6 +1,46 @@
 require 'component/component_spec_helper'
 
 describe InternalPublicationWaiversController, type: :controller do
+  let!(:user) { create :user }
+  let!(:other_user) { create :user }
+  let!(:pub) { create :publication }
+  let!(:oa_pub) { create :publication, open_access_url: "url" }
+  let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
+  let!(:other_pub) { create :publication }
+  let!(:uploaded_pub) { create :publication }
+  let!(:other_uploaded_pub) { create :publication }
+  let!(:auth) { create :authorship, user: user, publication: pub }
+  let!(:waived_pub) { create :publication }
+  let!(:other_waived_pub) { create :publication }
+  let!(:auth) { create :authorship, user: user, publication: pub }
+  let!(:waived_auth) { create :authorship, user: user, publication: waived_pub}
+  let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub}
+
+  before do
+    create :authorship, user: user, publication: oa_pub
+    create :authorship, user: user, publication: uoa_pub
+    create :authorship,
+           user: user,
+           publication: uploaded_pub,
+           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+    create :authorship,
+           user: user,
+           publication: other_uploaded_pub
+    create :authorship,
+           user: other_user,
+           publication: other_uploaded_pub,
+           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+
+    create :authorship,
+           user: user,
+           publication: other_waived_pub
+
+    create :internal_publication_waiver,
+           authorship: waived_auth
+    create :internal_publication_waiver,
+           authorship: other_waived_auth
+  end
+
   describe '#new' do
     context "when not authenticated" do
       it "redirects to the sign in page" do
@@ -11,44 +51,7 @@ describe InternalPublicationWaiversController, type: :controller do
     end
 
     context "when authenticated" do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
-      let!(:pub) { create :publication }
-      let!(:oa_pub) { create :publication, open_access_url: "url" }
-      let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
-      let!(:other_pub) { create :publication }
-      let!(:uploaded_pub) { create :publication }
-      let!(:other_uploaded_pub) { create :publication }
-      let!(:auth) { create :authorship, user: user, publication: pub }
-      let!(:waived_pub) { create :publication }
-      let!(:other_waived_pub) { create :publication }
-      let!(:auth) { create :authorship, user: user, publication: pub }
-      let!(:waived_auth) { create :authorship, user: user, publication: waived_pub}
-      let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub}
-
       before do
-        create :authorship, user: user, publication: oa_pub
-        create :authorship, user: user, publication: uoa_pub
-        create :authorship,
-               user: user,
-               publication: uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-        create :authorship,
-               user: user,
-               publication: other_uploaded_pub
-        create :authorship,
-               user: other_user,
-               publication: other_uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-
-        create :authorship,
-               user: user,
-               publication: other_waived_pub
-
-        create :internal_publication_waiver,
-               authorship: waived_auth
-        create :internal_publication_waiver,
-               authorship: other_waived_auth
         authenticate_as(user)
       end
 
@@ -113,43 +116,7 @@ describe InternalPublicationWaiversController, type: :controller do
     end
 
     context "when authenticated" do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
-      let!(:pub) { create :publication }
-      let!(:oa_pub) { create :publication, open_access_url: "url" }
-      let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
-      let!(:other_pub) { create :publication }
-      let!(:uploaded_pub) { create :publication }
-      let!(:other_uploaded_pub) { create :publication }
-      let!(:waived_pub) { create :publication }
-      let!(:other_waived_pub) { create :publication }
-      let!(:auth) { create :authorship, user: user, publication: pub }
-      let!(:waived_auth) { create :authorship, user: user, publication: waived_pub}
-      let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub}
-
       before do
-        create :authorship, user: user, publication: oa_pub
-        create :authorship, user: user, publication: uoa_pub
-        create :authorship,
-               user: user,
-               publication: uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-        create :authorship,
-               user: user,
-               publication: other_uploaded_pub
-        create :authorship,
-               user: other_user,
-               publication: other_uploaded_pub,
-               scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-        create :authorship,
-               user: user,
-               publication: other_waived_pub
-
-        create :internal_publication_waiver,
-               authorship: waived_auth
-        create :internal_publication_waiver,
-               authorship: other_waived_auth
-
         authenticate_as(user)
       end
 
