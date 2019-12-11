@@ -52,6 +52,10 @@ describe "visiting the page to submit an open access waiver for a publication" d
       it "shows the publication's journal" do
         expect(page.find_field('Journal').value).to eq "A Prestegious Journal"
       end
+
+      it "shows a link to the ScholarSphere website" do
+        expect(page).to have_link "ScholarSphere", href: "https://scholarsphere.psu.edu/"
+      end
     end
 
     context "when requesting a publication that does not belong to the user" do
