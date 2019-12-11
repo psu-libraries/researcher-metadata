@@ -10,6 +10,11 @@ describe OpenAccessPublicationsController, type: :controller do
   let!(:uploaded_pub) { create :publication }
   let!(:other_uploaded_pub) { create :publication }
   let!(:auth) { create :authorship, user: user, publication: pub }
+  let!(:waived_pub) { create :publication }
+  let!(:other_waived_pub) { create :publication }
+  let!(:auth) { create :authorship, user: user, publication: pub }
+  let!(:waived_auth) { create :authorship, user: user, publication: waived_pub}
+  let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub}
 
   before do
     create :authorship, user: user, publication: oa_pub
@@ -25,6 +30,15 @@ describe OpenAccessPublicationsController, type: :controller do
            user: other_user,
            publication: other_uploaded_pub,
            scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+
+    create :authorship,
+           user: user,
+           publication: other_waived_pub
+
+    create :internal_publication_waiver,
+           authorship: waived_auth
+    create :internal_publication_waiver,
+           authorship: other_waived_auth
   end
 
   describe '#edit' do
@@ -68,6 +82,18 @@ describe OpenAccessPublicationsController, type: :controller do
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
         it "returns 404" do
           expect { get :edit, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication for which the user has waived open access" do
+        it "returns 404" do
+          expect { get :edit, params: {id: waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication for which another user has waived open access" do
+        it "returns 404" do
+          expect { get :edit, params: {id: other_waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -121,6 +147,18 @@ describe OpenAccessPublicationsController, type: :controller do
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
         it "returns 404" do
           expect { patch :update, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication for which the user has waived open access" do
+        it "returns 404" do
+          expect { patch :update, params: {id: waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication for which another user has waived open access" do
+        it "returns 404" do
+          expect { patch :update, params: {id: other_waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
         end
       end
     end

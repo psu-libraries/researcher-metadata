@@ -6,7 +6,7 @@ class ScholarsphereUploadsController < UserController
       .where(open_access_url: nil, user_submitted_open_access_url: nil)
       .find(params[:id])
 
-    if publication.scholarsphere_upload_pending?
+    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
       raise ActiveRecord::RecordNotFound
     else
       authorship = Authorship.find_by(user: current_user, publication: publication)

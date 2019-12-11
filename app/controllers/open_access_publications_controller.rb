@@ -33,7 +33,7 @@ class OpenAccessPublicationsController < UserController
   end
 
   def raise_if_inaccessible
-    if publication.scholarsphere_upload_pending?
+    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
       raise ActiveRecord::RecordNotFound
     end
   end
