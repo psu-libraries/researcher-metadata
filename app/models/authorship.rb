@@ -1,6 +1,8 @@
 class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
+  has_one :waiver, class_name: :InternalPublicationWaiver
+  
   validates :user_id,
     :publication_id,
     :author_number, presence: true

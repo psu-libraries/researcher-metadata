@@ -15,9 +15,9 @@ describe "visiting the page to submit an open access waiver for a publication" d
   let(:other_pub) { create :publication }
   let(:oa_pub) { create :publication, open_access_url: 'a URL' }
   let(:uoa_pub) { create :publication, user_submitted_open_access_url: 'user URL' }
+  let!(:auth) { create :authorship, user: user, publication: pub }
 
   before do
-    create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
     create :authorship, user: user, publication: uoa_pub
   end
@@ -55,6 +55,23 @@ describe "visiting the page to submit an open access waiver for a publication" d
 
       it "shows a link to the ScholarSphere website" do
         expect(page).to have_link "ScholarSphere", href: "https://scholarsphere.psu.edu/"
+      end
+
+      describe "submitting the waiver" do
+        before do
+          fill_in "Reason for waiver", with: "Because I said so."
+          click_button "Submit"
+        end
+
+        it "saves the waiver" do
+          waiver = auth.waiver
+          expect(waiver).not_to be_nil
+          expect(waiver.reason_for_waiver).to eq "Because I said so."
+        end
+
+        it "redirects to the publication list" do
+          expect(page.current_path).to eq edit_profile_publications_path
+        end
       end
     end
 

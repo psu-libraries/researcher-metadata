@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_06_215734) do
+ActiveRecord::Schema.define(version: 2019_12_11_163942) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -148,6 +148,14 @@ ActiveRecord::Schema.define(version: 2019_12_06_215734) do
     t.index ["identifier"], name: "index_grants_on_identifier"
     t.index ["wos_agency_name"], name: "index_grants_on_wos_agency_name"
     t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
+  end
+
+  create_table "internal_publication_waivers", force: :cascade do |t|
+    t.integer "authorship_id", null: false
+    t.text "reason_for_waiver"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authorship_id"], name: "index_internal_publication_waivers_on_authorship_id"
   end
 
   create_table "news_feed_items", force: :cascade do |t|
@@ -426,6 +434,7 @@ ActiveRecord::Schema.define(version: 2019_12_06_215734) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
+  add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade

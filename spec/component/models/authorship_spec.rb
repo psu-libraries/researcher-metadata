@@ -27,6 +27,7 @@ describe Authorship, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
+    it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver) }
   end
 
   describe 'validations' do
