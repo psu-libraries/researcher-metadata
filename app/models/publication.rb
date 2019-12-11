@@ -22,6 +22,7 @@ class Publication < ApplicationRecord
   has_many :organizations, through: :users
   has_many :research_funds
   has_many :grants, through: :research_funds
+  has_many :waivers, through: :authorships
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
@@ -410,5 +411,9 @@ class Publication < ApplicationRecord
 
   def scholarsphere_upload_pending?
     authorships.where.not(scholarsphere_uploaded_at: nil).any?
+  end
+
+  def open_access_waived?
+    waivers.any?
   end
 end

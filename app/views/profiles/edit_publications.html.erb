@@ -22,7 +22,11 @@
           </td>
           <td class="actions">
             <% if a.preferred_open_access_url.blank? && !a.scholarsphere_upload_pending? %>
-              <%= link_to(fa_icon('unlock-alt'), edit_open_access_publication_path(a.publication)) %>
+              <% if a.open_access_waived? %>
+                <%= fa_icon('lock') %>
+              <% else %>
+                <%= link_to(fa_icon('unlock-alt'), edit_open_access_publication_path(a.publication)) %>
+              <% end %>
             <% elsif a.scholarsphere_upload_pending? %>
               <%= fa_icon('hourglass-half') %>
             <% end %>

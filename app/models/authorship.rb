@@ -2,7 +2,7 @@ class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
   has_one :waiver, class_name: :InternalPublicationWaiver
-  
+
   validates :user_id,
     :publication_id,
     :author_number, presence: true
@@ -16,6 +16,7 @@ class Authorship < ApplicationRecord
            :year,
            :preferred_open_access_url,
            :scholarsphere_upload_pending?,
+           :open_access_waived?,
            to: :publication,
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true

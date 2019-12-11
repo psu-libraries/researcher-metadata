@@ -61,6 +61,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:user_organization_memberships).through(:users) }
     it { is_expected.to have_many(:research_funds) }
     it { is_expected.to have_many(:grants).through(:research_funds) }
+    it { is_expected.to have_many(:waivers).through(:authorships) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
@@ -632,6 +633,25 @@ describe Publication, type: :model do
       let(:upload_time) { Time.current }
       it "returns true" do
         expect(pub.scholarsphere_upload_pending?).to eq true
+      end
+    end
+  end
+
+  describe '#open_access_waived?' do
+    let(:pub) { create :publication }
+    let!(:auth1) { create :authorship, publication: pub }
+    let!(:auth2) { create :authorship, publication: pub }
+
+    context "when none of the publication's authorships have a waiver" do
+      it "returns false" do
+        expect(pub.open_access_waived?).to eq false
+      end
+    end
+
+    context "when one of the publication's authorships has a waiver" do
+      before { create :internal_publication_waiver, authorship: auth2 }
+      it "returns true" do
+        expect(pub.open_access_waived?).to eq true
       end
     end
   end
