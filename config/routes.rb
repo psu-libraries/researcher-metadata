@@ -43,6 +43,7 @@ Rails.application.routes.draw do
   patch 'profile/publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
   post 'profile/publications/:id/open_access/scholarsphere_uploads' => 'scholarsphere_uploads#create', as: :scholarsphere_uploads
   get 'profile/publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
+  post 'profile/publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
 
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship

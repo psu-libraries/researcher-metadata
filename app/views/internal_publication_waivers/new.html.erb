@@ -13,16 +13,18 @@
   the license with respect to the following publication:
 </p>
 
-<h3>Publication Information</h3>
-
-<%= simple_form_for @waiver, url: "" do |f| %>
-  <div class='form-group'>
-    <%= f.input :title, label: 'Title', readonly: true %>
-    <%= f.input :abstract, label: 'Abstract', as: :text, readonly: true %>
-    <%= f.input :doi, label: 'Digital Object Identifier (DOI)', readonly: true %>
-    <%= f.input :published_by, label: 'Journal', readonly: true %>
-  </div>
-<% end %>
+<div class="open-access-action">
+  <%= simple_form_for @waiver do |f| %>
+    <div class='form-group'>
+      <%= f.input :title, label: 'Title', readonly: true %>
+      <%= f.input :abstract, label: 'Abstract', as: :text, readonly: true %>
+      <%= f.input :doi, label: 'Digital Object Identifier (DOI)', readonly: true %>
+      <%= f.input :published_by, label: 'Journal', readonly: true %>
+      <%= f.input :reason_for_waiver, as: :text, hint: "Please explain why the waiver should be granted. This is optional but encouranged." %>
+    </div>
+    <%= f.submit "Submit", class: 'btn btn-primary' %>
+  <% end %>
+</div>
 
 <p>
   Even though you are requesting a waiver, you should still consider depositing the accepted
