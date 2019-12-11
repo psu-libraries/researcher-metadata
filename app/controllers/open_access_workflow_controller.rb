@@ -1,13 +1,13 @@
 class OpenAccessWorkflowController < UserController
   before_action :authenticate!
   before_action :raise_if_inaccessible
-  
+
   layout 'manage_profile'
 
   private
 
   def publication
-    @publiation ||= current_user.publications
+    @publication ||= current_user.publications
       .where(open_access_url: nil, user_submitted_open_access_url: nil)
       .find(params[:id])
   end
