@@ -19,6 +19,8 @@ describe InternalPublicationWaiver, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:authorship).inverse_of(:waiver) }
+    it { is_expected.to have_one(:user).through(:authorship) }
+    it { is_expected.to have_one(:publication).through(:authorship) }
   end
 
   it { is_expected.to delegate_method(:title).to(:authorship) }
