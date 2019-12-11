@@ -1,27 +1,20 @@
 class InternalPublicationWaiversController < UserController
   before_action :authenticate_user!
+  before_action :raise_if_inaccessible
   layout 'manage_profile'
 
   def new
-    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
-      raise ActiveRecord::RecordNotFound
-    else
-      authorship = current_user.authorships.find_by!(publication_id: params[:id])
-      @waiver = InternalPublicationWaiver.new(authorship: authorship)
-    end
+    authorship = current_user.authorships.find_by!(publication_id: params[:id])
+    @waiver = InternalPublicationWaiver.new(authorship: authorship)
   end
 
   def create
-    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
-      raise ActiveRecord::RecordNotFound
-    else
-      authorship = current_user.authorships.find_by!(publication_id: params[:id])
-      waiver = InternalPublicationWaiver.new(waiver_params)
-      waiver.authorship = authorship
-      waiver.save!
+    authorship = current_user.authorships.find_by!(publication_id: params[:id])
+    waiver = InternalPublicationWaiver.new(waiver_params)
+    waiver.authorship = authorship
+    waiver.save!
 
-      redirect_to edit_profile_publications_path
-    end
+    redirect_to edit_profile_publications_path
   end
 
   private
@@ -34,5 +27,11 @@ class InternalPublicationWaiversController < UserController
 
   def waiver_params
     params.require(:internal_publication_waiver).permit([:reason_for_waiver])
+  end
+
+  def raise_if_inaccessible
+    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
+      raise ActiveRecord::RecordNotFound
+    end
   end
 end
