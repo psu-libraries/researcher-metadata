@@ -3,7 +3,7 @@ class InternalPublicationWaiversController < UserController
   layout 'manage_profile'
 
   def new
-    if publication.scholarsphere_upload_pending?
+    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
       raise ActiveRecord::RecordNotFound
     else
       authorship = current_user.authorships.find_by!(publication_id: params[:id])
@@ -12,7 +12,7 @@ class InternalPublicationWaiversController < UserController
   end
 
   def create
-    if publication.scholarsphere_upload_pending?
+    if publication.scholarsphere_upload_pending? || publication.open_access_waived?
       raise ActiveRecord::RecordNotFound
     else
       authorship = current_user.authorships.find_by!(publication_id: params[:id])
