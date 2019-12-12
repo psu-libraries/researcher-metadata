@@ -18,11 +18,11 @@ feature "Admin internal publication waiver detail page", type: :feature do
       end
 
       it "shows the title of the publication associated with the waiver" do
-        expect(page).to have_content "Publication One"
+        expect(page).to have_link "Publication One", href: rails_admin.show_path(model_name: :publication, id: pub.id)
       end
 
       it "shows the name of the user associated with the waiver" do
-        expect(page).to have_content "Joe Testerson"
+        expect(page).to have_link "Joe Testerson", href: rails_admin.show_path(model_name: :user, id: user.id)
       end
 
       it "shows the reason for the waiver" do

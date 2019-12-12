@@ -19,10 +19,10 @@ class InternalPublicationWaiver < ApplicationRecord
     show do
       field(:id)
       field(:publication) do
-        pretty_value { value.title }
+        pretty_value { %{<a href="#{RailsAdmin.railtie_routes_url_helpers.show_path(model_name: :publication, id: value.id)}">#{value.title}</a>}.html_safe }
       end
       field(:user) do
-        pretty_value { value.name }
+        pretty_value { %{<a href="#{RailsAdmin.railtie_routes_url_helpers.show_path(model_name: :user, id: value.id)}">#{value.name}</a>}.html_safe }
       end
       field(:reason_for_waiver)
       field(:authorship)
