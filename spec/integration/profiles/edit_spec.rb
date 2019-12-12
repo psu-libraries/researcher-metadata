@@ -281,4 +281,15 @@ describe "editing profile preferences" do
       end
     end
   end
+
+  describe "the path /profile" do
+    before do
+      authenticate_as(user)
+      visit 'profile'
+    end
+
+    it "redirects to the profile publications edit page" do
+      expect(page.current_path).to eq edit_profile_publications_path
+    end
+  end
 end

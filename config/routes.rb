@@ -45,6 +45,8 @@ Rails.application.routes.draw do
   get 'profile/publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
   post 'profile/publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
 
+  get 'profile' => redirect('profile/publications/edit')
+
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship
 
