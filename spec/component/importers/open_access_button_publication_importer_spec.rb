@@ -45,6 +45,18 @@ describe OpenAccessButtonPublicationImporter do
       end
     end
 
+    context "when an existing publication's DOI does not return usable data" do
+      let!(:pub) { create :publication, doi: "https://doi.org/pub/nodata" }
+      before do
+        allow(HTTParty).to receive(:get).with("https://api.openaccessbutton.org/find?id=pub/nodata").
+        and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab5.json')))
+      end
+
+      it "does not raise an error" do
+        expect { importer.call }.not_to raise_error
+      end
+    end
+
     context "when an existing publication has a DOI that corresponds to an available article listed with Open Access Button" do
       let!(:pub) { create :publication,
                           doi: 'https://doi.org/pub/doi1',
