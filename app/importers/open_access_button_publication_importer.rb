@@ -4,7 +4,7 @@ class OpenAccessButtonPublicationImporter
                               total: pub_query.count) unless Rails.env.test?
 
     pub_query.find_each do |p|
-      find_url = "https://api.openaccessbutton.org/find?id=#{p.doi_url_path}"
+      find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{p.doi_url_path}")
       oab_json = JSON.parse(HTTParty.get(find_url).to_s)
 
       available_article = oab_json['data']['availability'].detect { |a| a['type'] == "article" }

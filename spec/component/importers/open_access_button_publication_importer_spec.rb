@@ -37,6 +37,14 @@ describe OpenAccessButtonPublicationImporter do
       end
     end
 
+    context "when an existing publication has a DOI that contains non-ASCII characters" do
+      let!(:pub) { create :publication, doi: "https://api.openaccessbutton.org/find?id=10.094/PHI-A-2008-0129\u201302" }
+
+      it "does not raise an error" do
+        expect { importer.call }.not_to raise_error URI::InvalidURIError
+      end
+    end
+
     context "when an existing publication has a DOI that corresponds to an available article listed with Open Access Button" do
       let!(:pub) { create :publication,
                           doi: 'https://doi.org/pub/doi1',
