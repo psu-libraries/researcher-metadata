@@ -215,6 +215,10 @@ describe "editing profile preferences" do
           expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_4)
         end
       end
+
+      it "shows a link to submit a waiver for a publication that is outside of the system" do
+        expect(page).to have_link "here", href: new_external_publication_waiver_path
+      end
     end
     
     context "when the user is not signed in" do

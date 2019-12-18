@@ -44,6 +44,7 @@ Rails.application.routes.draw do
   post 'profile/publications/:id/open_access/scholarsphere_uploads' => 'scholarsphere_uploads#create', as: :scholarsphere_uploads
   get 'profile/publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
   post 'profile/publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
+  get 'profile/publications/open_access_waivers/new' => 'external_publication_waivers#new', as: :new_external_publication_waiver
 
   get 'profile' => redirect('profile/publications/edit')
 
