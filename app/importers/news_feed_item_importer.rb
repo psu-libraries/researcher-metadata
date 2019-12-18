@@ -5,28 +5,25 @@ class NewsFeedItemImporter
 
   # parse rss feeds from news.psu.edu
   def call
-    selector = "//a[starts-with(@href, \"mailto:\")]/@href"
     rss_feeds.each do |feed|
       rss = RSS::Parser.parse(open(feed).read, false).items
       rss.each do |result|
         html_doc = Nokogiri::HTML(open(result.link))
-        nodes = html_doc.xpath selector
-        addresses = nodes.collect {|n| n.value[7..-1]}
-        addresses.each do |a|
-          if a.end_with?("psu.edu")
-            if local_user(a) ==  true
-              webaccess_id = a[0..-9]
-              u = User.find_by(webaccess_id: webaccess_id)
+        mailto_ids = get_access_ids_from_mailto_selector(html_doc)
+        tag_ids = get_access_ids_from_tag_selector(html_doc)
+        access_ids = gather_access_ids(mailto_ids, tag_ids)
+        access_ids.each do |a|
+          if local_user?(a)
+            u = User.find_by(webaccess_id: a)
 
-              nfi = NewsFeedItem.find_or_create_by(url: result.link) do |item|
-                item.user = u
-                item.title = result.title
-                item.url = result.link
-                item.published_on = result.pubDate
-                item.description = result.description
-              end
-
+            NewsFeedItem.find_or_create_by(url: result.link) do |item|
+              item.user = u
+              item.title = result.title
+              item.url = result.link
+              item.published_on = result.pubDate
+              item.description = result.description
             end
+
           end
         end
       end
@@ -36,15 +33,53 @@ class NewsFeedItemImporter
 
   private
 
-  def local_user(q)
+  def gather_access_ids(*args)
+    args.flatten.compact
+  end
+
+  def get_access_ids_from_mailto_selector(html_doc)
+    mailto_selector = "//a[starts-with(@href, \"mailto:\")]/@href"
+    mailto_nodes = html_doc.xpath mailto_selector
+    mailto_addresses = mailto_nodes.collect {|n| n.value[7..-1]}
+    mailto_addresses.collect {|n| n[0..-9] if n.end_with?("psu.edu")}
+  end
+
+  def get_access_ids_from_tag_selector(html_doc)
+    names = []
+    tag_selector = "//a[starts-with(@href, \"/tag/\")]/@href"
+    tag_nodes = html_doc.xpath tag_selector
+    tag_nodes.each do |node|
+      name = node.value.gsub('/tag/', '').split('-')
+      next if name.length > 3 || name.length < 2
+
+      name.delete_at(1) if name.length == 3
+      names << name
+    end
+    get_access_ids_from_ldap(names)
+  end
+
+  def get_access_ids_from_ldap(names)
+    access_ids = []
+    ldap ||= Net::LDAP.new(host: 'dirapps.aset.psu.edu', port: 389)
+    names.each do |name|
+      filter = Net::LDAP::Filter.eq('givenname', name[0]) & Net::LDAP::Filter.eq('sn', name[1])
+      entry = ldap.search(base: 'dc=psu,dc=edu', filter: filter).first
+      next if entry.blank?
+
+      access_ids << entry["uid"]
+    end
+    access_ids
+  end
+
+  def local_user?(q)
     users = User.pluck(:webaccess_id)
-    if users.include? q[0..-9]
+    if users.include? q
       true
     end
   end
 
   def rss_feeds
-    return ['https://news.psu.edu/rss/topic/research', 'https://news.psu.edu/rss/topic/academic', 'https://news.psu.edu/rss/topic/impact', 'https://news.psu.edu/rss/topic/campus-life']
+    ['https://news.psu.edu/rss/topic/research', 'https://news.psu.edu/rss/topic/academic', 'https://news.psu.edu/rss/topic/impact', 'https://news.psu.edu/rss/topic/campus-life']
   end
 end
 
