@@ -20,5 +20,14 @@ describe "visiting the page to submit an open access waiver for a publication th
     end
 
     it_behaves_like "a profile management page"
+
+    it "shows the correct content" do
+      expect(page).to have_content "Open Access Waiver"
+      expect(page).to have_content "Use this form to waive your obligations under AC02"
+    end
+
+    it "shows a link to the ScholarSphere website" do
+      expect(page).to have_link "ScholarSphere", href: "https://scholarsphere.psu.edu/"
+    end
   end
 end
