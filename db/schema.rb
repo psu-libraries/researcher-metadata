@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_11_163942) do
+ActiveRecord::Schema.define(version: 2019_12_18_212329) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -130,6 +130,19 @@ ActiveRecord::Schema.define(version: 2019_12_11_163942) do
     t.datetime "updated_by_user_at"
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
+  end
+
+  create_table "external_publication_waivers", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "publication_title", null: false
+    t.text "reason_for_waiver"
+    t.text "abstract"
+    t.string "doi"
+    t.string "journal_title", null: false
+    t.string "publisher"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_external_publication_waivers_on_user_id"
   end
 
   create_table "grants", force: :cascade do |t|
@@ -434,6 +447,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_163942) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
+  add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade

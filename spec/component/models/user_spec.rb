@@ -70,6 +70,7 @@ describe User, type: :model do
     it { is_expected.to have_many(:education_history_items) }
     it { is_expected.to have_many(:researcher_funds).inverse_of(:user) }
     it { is_expected.to have_many(:grants).through(:researcher_funds) }
+    it { is_expected.to have_many(:external_publication_waivers) }
   end
 
   describe 'validations' do
