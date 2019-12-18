@@ -72,6 +72,11 @@ describe "visiting the page to submit an open access waiver for a publication" d
         it "redirects to the publication list" do
           expect(page.current_path).to eq edit_profile_publications_path
         end
+
+        it "shows a success message" do
+          expect(page).to have_content I18n.t('profile.internal_publication_waivers.create.success',
+                                              title: "Test Publication")
+        end
       end
     end
 

@@ -19,6 +19,9 @@ en:
     external_publication_waivers:
       create:
         success: "Your waiver has been successfully submitted."
+    internal_publication_waivers:
+      create:
+        success: "The open access waiver for your publication, \"%{title}\", was successfully submitted."
   models:
     open_access_url_form:
       validation_errors:
