@@ -11,6 +11,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       flash[:notice] = I18n.t('profile.open_access_publications.update.success')
       redirect_to edit_profile_publications_path
     else
+      flash[:alert] = "Validation failed:  #{@form.errors.full_messages.join(', ')}"
       render 'edit'
     end
   end
