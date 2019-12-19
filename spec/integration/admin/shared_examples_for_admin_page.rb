@@ -47,6 +47,18 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
+  it "shows a link to the internal publication waivers index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Internal publication waivers'
+    end
+  end
+
+  it "shows a link to the external publication waivers index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'External publication waivers'
+    end
+  end
+
   it "shows a link to the admin dashboard" do
     expect(page).to have_link 'Dashboard'
   end

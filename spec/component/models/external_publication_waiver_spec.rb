@@ -31,4 +31,11 @@ describe ExternalPublicationWaiver, type: :model do
     it { is_expected.to validate_presence_of(:publication_title) }
     it { is_expected.to validate_presence_of(:journal_title) }
   end
+
+  describe '#title' do
+    let(:waiver) { ExternalPublicationWaiver.new(publication_title: "The Title") }
+    it "returns the value for publication title" do
+      expect(waiver.title).to eq "The Title"
+    end
+  end
 end

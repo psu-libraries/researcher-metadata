@@ -47,7 +47,8 @@ RailsAdmin.config do |config|
             :Performance,
             :APIToken,
             :Grant,
-            :InternalPublicationWaiver]
+            :InternalPublicationWaiver,
+            :ExternalPublicationWaiver]
     end
     new do
       only [:Publication, :User, :APIToken]
