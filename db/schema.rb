@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2019_12_11_163942) do
+ActiveRecord::Schema.define(version: 2019_12_19_170847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -166,7 +166,7 @@ ActiveRecord::Schema.define(version: 2019_12_11_163942) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.date "published_on", null: false
-    t.index ["url"], name: "index_news_feed_items_on_url", unique: true
+    t.index ["url", "user_id"], name: "index_news_feed_items_on_url_and_user_id", unique: true
   end
 
   create_table "organization_api_permissions", force: :cascade do |t|

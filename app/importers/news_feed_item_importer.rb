@@ -16,14 +16,13 @@ class NewsFeedItemImporter
           if local_user?(a)
             u = User.find_by(webaccess_id: a)
 
-            NewsFeedItem.find_or_create_by(url: result.link) do |item|
-              item.user = u
-              item.title = result.title
-              item.url = result.link
-              item.published_on = result.pubDate
-              item.description = result.description
+            NewsFeedItem.find_or_create_by(user_id: u.id, url: result.link) do |n|
+              n.user = u
+              n.title = result.title
+              n.url = result.link
+              n.published_on = result.pubDate
+              n.description = result.description
             end
-
           end
         end
       end
@@ -79,7 +78,7 @@ class NewsFeedItemImporter
   end
 
   def rss_feeds
-    ['https://news.psu.edu/rss/topic/research', 'https://news.psu.edu/rss/topic/academic', 'https://news.psu.edu/rss/topic/impact', 'https://news.psu.edu/rss/topic/campus-life']
+    ['https://news.psu.edu/rss/topic/research', 'https://news.psu.edu/rss/topic/academics', 'https://news.psu.edu/rss/topic/impact', 'https://news.psu.edu/rss/topic/campus-life']
   end
 end
 
