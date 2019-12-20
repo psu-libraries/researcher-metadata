@@ -90,4 +90,12 @@ describe AuthorshipDecorator do
       end
     end
   end
+
+  describe '#profile_management_label' do
+    xit
+  end
+
+  describe '#open_access_status_icon' do
+    xit
+  end
 end

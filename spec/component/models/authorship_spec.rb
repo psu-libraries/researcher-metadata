@@ -57,4 +57,93 @@ describe Authorship, type: :model do
       expect(a.description).to eq "Authorship ##{a.id}"
     end
   end
+
+  describe "#no_open_access_information?" do
+    let(:pub) { create :publication,
+                       open_access_url: url }
+    let(:a) { create :authorship,
+                     publication: pub,
+                     scholarsphere_uploaded_at: upload_ts }
+
+    context "when the authorship's publication has an open access URL" do
+      let(:url) { "a-url" }
+
+      context "when the authorship's publication has a pending ScholarSphere upload" do
+        let(:upload_ts) { Time.current }
+
+        context "when the authorship's publication has an open access waiver" do
+          before { create :internal_publication_waiver, authorship: a}
+
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+
+        context "when the authorship's publication does not have an open access waiver" do
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+      end
+
+      context "when the authorship's publication does not have a pending ScholarSphere upload" do
+        let(:upload_ts) { nil }
+
+        context "when the authorship's publication has an open access waiver" do
+          before { create :internal_publication_waiver, authorship: a}
+
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+
+        context "when the authorship's publication does not have an open access waiver" do
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+      end
+    end
+
+    context "when the authorship's publication does not have an open access URL" do
+      let(:url) { nil }
+
+      context "when the authorship's publication has a pending ScholarSphere upload" do
+        let(:upload_ts) { Time.current }
+
+        context "when the authorship's publication has an open access waiver" do
+          before { create :internal_publication_waiver, authorship: a}
+
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+
+        context "when the authorship's publication does not have an open access waiver" do
+
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+      end
+
+      context "when the authorship's publication does not have a pending ScholarSphere upload" do
+        let(:upload_ts) { nil }
+
+        context "when the authorship's publication has an open access waiver" do
+          before { create :internal_publication_waiver, authorship: a}
+
+          it "returns false" do
+            expect(a.no_open_access_information?).to eq false
+          end
+        end
+
+        context "when the authorship's publication does not have an open access waiver" do
+          it "returns true" do
+            expect(a.no_open_access_information?).to eq true
+          end
+        end
+      end
+    end
+  end
 end

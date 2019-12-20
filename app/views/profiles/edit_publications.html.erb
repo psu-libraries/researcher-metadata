@@ -1,18 +1,23 @@
 <div class="manage-profile-list">
   <h4>Manage Profile Publications</h4>
-  <p>
-    This is a list of all of your publications that are in our system. If we know about an open
-    access version of a publication, then its title will appear as a link. A closed lock 
-    icon (<%= fa_icon('lock') %>) indicates that an open access waiver has been submitted
-    for the publication. Otherwise, the open lock icon link (<%= fa_icon('unlock-alt') %>)
-    will allow you to either submit information about an open access version of the publication
-    or fill out an open access waiver. You can submit an open access waiver for a publication
-    that is not in this list <%= link_to "here", new_external_publication_waiver_path %>. An 
-    hourglass icon (<%= fa_icon('hourglass-half') %>) indicates that we're waiting for an 
-    uploaded open access version of the publication to be processed in ScholarSphere. Using
-    the list below you can also select which items you want to appear in your public profile,
-    and you can drag items up or down the list to change their order of appearance.
-  </p>
+  <table class="legend">
+    <tr>
+      <td><%= fa_icon('unlock-alt') %></td>
+      <td>The publication has a known open access version.</td>
+    </tr>
+    <tr>
+      <td><%= fa_icon('lock') %></td>
+      <td>Open access obligations have been waived for this publication.</td>
+    </tr>
+    <tr>
+      <td><%= fa_icon('hourglass-half') %></td>
+      <td>An open access version of this publication is currently being added to ScholarSphere.</td>
+    </tr>
+    <tr>
+      <td><%= fa_icon('question') %></td>
+      <td>The open access status of this publication is currently unknown. Click the title to add information or submit a waiver.</td>
+    </tr>
+  </table>
   <table class="table">
     <thead>
     <tr>
@@ -26,22 +31,14 @@
       <% @authorships.each do |a| %>
         <tr id="<%= dom_id(a) %>">
           <td><%= fa_icon 'arrows-v' %></td>
-          <td class="pub-title"><%= a.label.html_safe %></td>
+          <td class="pub-title"><%= a.profile_management_label.html_safe %></td>
           <td class="visibility">
             <%= form_with model: a, method: :put, class: 'visibility-control', remote: true do |f| %>
               <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
             <% end %>
           </td>
-          <td class="actions">
-            <% if a.preferred_open_access_url.blank? && !a.scholarsphere_upload_pending? %>
-              <% if a.open_access_waived? %>
-                <%= fa_icon('lock') %>
-              <% else %>
-                <%= link_to(fa_icon('unlock-alt'), edit_open_access_publication_path(a.publication)) %>
-              <% end %>
-            <% elsif a.scholarsphere_upload_pending? %>
-              <%= fa_icon('hourglass-half') %>
-            <% end %>
+          <td class="oa-status">
+            <%= fa_icon(a.open_access_status_icon) %>
           </td>
         </tr>
       <% end %>

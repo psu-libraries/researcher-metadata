@@ -25,10 +25,23 @@ describe "editing profile preferences" do
                         title: "Bob's Other Open Access Publication",
                         visible: true,
                         user_submitted_open_access_url: "https://example.org/pubs/2" }
+  let!(:pub_5) { create :publication,
+                        title: "Bob's Non-Open Access Publication",
+                        visible: true }
+  let!(:pub_6) { create :publication,
+                        title: "Bob's Pending ScholarSphere Publication",
+                        visible: true }
   let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
   let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
   let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
   let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
+  let!(:auth_5) { create :authorship, publication: pub_5, user: user, visible_in_profile: false }
+  let!(:auth_6) { create :authorship,
+                         publication: pub_6,
+                         user: user,
+                         visible_in_profile: false,
+                         scholarsphere_uploaded_at: Time.current }
+  let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
   let!(:pres1) { create :presentation,
                         title: "Bob's Presentation",
                         organization: "Penn State",
@@ -191,28 +204,43 @@ describe "editing profile preferences" do
 
       it "shows descriptions of the user's visible publications" do
         expect(page).to have_content "Bob's Publication, The Journal, 2007"
-        expect(page).not_to have_link "Bob's Publication"
+        expect(page).to have_link "Bob's Publication", href: edit_open_access_publication_path(pub_1)
         expect(page).to_not have_content "Bob's Other Publication"
-        expect(page).to have_link "Bob's Open Access Publication", href: 'https://example.org/pubs/1'
-        expect(page).to have_link "Bob's Other Open Access Publication", href: 'https://example.org/pubs/2'
+        expect(page).to have_content "Bob's Open Access Publication"
+        expect(page).not_to have_link "Bob's Open Access Publication"
+        expect(page).to have_content "Bob's Other Open Access Publication"
+        expect(page).not_to have_link "Bob's Other Open Access Publication"
+        expect(page).to have_content "Bob's Non-Open Access Publication"
+        expect(page).not_to have_link "Bob's Non-Open Access Publication"
+        expect(page).to have_content "Bob's Pending ScholarSphere Publication"
+        expect(page).not_to have_link "Bob's Pending ScholarSphere Publication"
       end
 
-      it "shows links to add open access info for non-open access publications" do
+      it "shows an icon to indicate when we don't have open access information for a publication" do
         within "tr#authorship_#{auth_1.id}" do
-          expect(page).to have_css '.fa-unlock-alt'
-          expect(page).to have_link '', href: edit_open_access_publication_path(pub_1)
+          expect(page).to have_css '.fa-question'
         end
       end
 
-      it "does not show links to add open access info for open access publications" do
+      it "shows an icon to indicate when we have an open access URL for a publication" do
         within "tr#authorship_#{auth_3.id}" do
-          expect(page).not_to have_css '.fa-unlock-alt'
-          expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_3)
+          expect(page).to have_css '.fa-unlock-alt'
         end
 
         within "tr#authorship_#{auth_4.id}" do
-          expect(page).not_to have_css '.fa-unlock-alt'
-          expect(page).not_to have_link '', href: edit_open_access_publication_path(pub_4)
+          expect(page).to have_css '.fa-unlock-alt'
+        end
+      end
+
+      it "shows an icon to indicate when open access obligations have been waived for a publication" do
+        within "tr#authorship_#{auth_5.id}" do
+          expect(page).to have_css '.fa-lock'
+        end
+      end
+
+      it "shows an icon to indicate when a publication is being added to ScholarSphere" do
+        within "tr#authorship_#{auth_6.id}" do
+          expect(page).to have_css '.fa-hourglass-half'
         end
       end
 

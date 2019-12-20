@@ -10,7 +10,7 @@ class ProfilesController < UserController
   def edit_publications
     authorships = UserProfile.new(current_user).publication_records.
       map { |p| p.authorships.find_by(user: current_user) }
-    @authorships = authorships.map { |a| AuthorshipDecorator.new(a) }
+    @authorships = authorships.map { |a| AuthorshipDecorator.new(a, view_context) }
   end
 
   def edit_presentations
