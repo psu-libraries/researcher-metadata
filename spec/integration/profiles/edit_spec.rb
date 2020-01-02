@@ -245,7 +245,7 @@ describe "editing profile preferences" do
       end
 
       it "shows a link to submit a waiver for a publication that is outside of the system" do
-        expect(page).to have_link "here", href: new_external_publication_waiver_path
+        expect(page).to have_link "waiver form", href: new_external_publication_waiver_path
       end
     end
     
