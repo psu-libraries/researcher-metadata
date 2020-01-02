@@ -26,6 +26,7 @@
     </ul>
     <ul class="navbar-nav ml-auto">
       <li class="nav-item"><%= link_to "Public Profile", profile_path(webaccess_id: current_user.webaccess_id), class: 'nav-link' %></li>
+      <li class="nav-item"><%= link_to "Home", root_path, class: 'nav-link' %></li>
     </ul>
   </nav>
   <% if flash[:alert].present? %>

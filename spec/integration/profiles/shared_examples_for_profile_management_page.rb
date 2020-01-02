@@ -3,6 +3,10 @@ shared_examples_for "a profile management page" do
     expect(page).to have_link "Public Profile", href: profile_path(webaccess_id: user.webaccess_id)
   end
 
+  it "shows a link to return to the home page" do
+    expect(page).to have_link "Home", href: root_path
+  end
+
   it "shows a link to the edit profile publications page" do
     expect(page).to have_link "Publications", href: edit_profile_publications_path
   end
