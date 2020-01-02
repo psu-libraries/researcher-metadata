@@ -8,12 +8,26 @@ describe AuthorshipDecorator do
                        title: title,
                        published_by: publisher,
                        year: year,
-                       preferred_open_access_url: url }
+                       preferred_open_access_url: url,
+                       scholarsphere_upload_pending?: pending,
+                       open_access_waived?: waived,
+                       no_open_access_information?: no_info,
+                       publication: pub }
   let(:title) { '' }
   let(:publisher) { '' }
   let(:year) { '' }
   let(:url) { '' }
-  let(:ad) { AuthorshipDecorator.new(auth) }
+  let(:pending) { false }
+  let(:waived) { false }
+  let(:no_info) { true }
+  let(:pub) { double 'publication' }
+  let(:context) { double 'view context' }
+  let(:ad) { AuthorshipDecorator.new(auth, context) }
+
+  before do
+    allow(context).to receive(:edit_open_access_publication_path).with(pub).and_return 'the pub path'
+    allow(context).to receive(:link_to).with(title, 'the pub path').and_return 'the pub link'
+  end
 
   describe '#class' do
     it "returns the class name of the wrapped object" do
@@ -92,10 +106,139 @@ describe AuthorshipDecorator do
   end
 
   describe '#profile_management_label' do
-    xit
+    context "when the given object has open access information" do
+      let(:no_info) { false }
+
+      context "when the given objet has a title" do
+        let(:title) { 'Test Title' }
+        context "when the given object has a publisher" do
+          let(:publisher) { 'A Journal' }
+          context "when the given object has a year" do
+            let(:year) { 2000 }
+            it "returns a label for the given object with the publication title, publisher, and year" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>, <span class="journal-name">A Journal</span>, 2000}
+            end
+          end
+          context "when the given object does not have a year" do
+            it "returns a label for the given object with the publication title and publisher" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>, <span class="journal-name">A Journal</span>}
+            end
+          end
+        end
+        context "when the given object does not have a publisher" do
+          context "when the given object has a year" do
+            let(:year) { 2000 }
+            it "returns a label for the given object with the publication title and year" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>, 2000}
+            end
+          end
+          context "when the given object does not have a year" do
+            it "returns a label for the given object with the publication title" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
+            end
+          end
+        end
+      end
+    end
+
+    context "when the given object does not have open access information" do
+      context "when the given objet has a title" do
+        let(:title) { 'Test Title' }
+        context "when the given object has a publisher" do
+          let(:publisher) { 'A Journal' }
+          context "when the given object has a year" do
+            let(:year) { 2000 }
+            it "returns a label for the given object with a publication link, publisher, and year" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>, <span class="journal-name">A Journal</span>, 2000}
+            end
+          end
+          context "when the given object does not have a year" do
+            it "returns a label for the given object with a publication link and publisher" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>, <span class="journal-name">A Journal</span>}
+            end
+          end
+        end
+        context "when the given object does not have a publisher" do
+          context "when the given object has a year" do
+            let(:year) { 2000 }
+            it "returns a label for the given object with a publication link and year" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>, 2000}
+            end
+          end
+          context "when the given object does not have a year" do
+            it "returns a label for the given object with a publication link" do
+              expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>}
+            end
+          end
+        end
+      end
+    end
   end
 
   describe '#open_access_status_icon' do
-    xit
+    context "when the given object does not have an open access URL" do
+      context "when the given object does not have a pending ScholarSphere upload" do
+        context "when the given object does not have an open access waiver" do
+          it "returns 'question'" do
+            expect(ad.open_access_status_icon).to eq 'question'
+          end
+        end
+
+        context "when the given object has an open access waiver" do
+          let(:waived) { true }
+          it "returns 'lock'" do
+            expect(ad.open_access_status_icon).to eq 'lock'
+          end
+        end
+      end
+      context "when the given object has a pending ScholarSphere upload" do
+        let(:pending) { true }
+        context "when the given object does not have an open access waiver" do
+          it "returns 'hourglass-half'" do
+            expect(ad.open_access_status_icon).to eq 'hourglass-half'
+          end
+        end
+
+        context "when the given object has an open access waiver" do
+          let(:waived) { true }
+          it "returns 'hourglass-half'" do
+            expect(ad.open_access_status_icon).to eq 'hourglass-half'
+          end
+        end
+      end
+    end
+
+    context "when the given object has an open access URL" do
+      let(:url) { 'a_url' }
+      context "when the given object does not have a pending ScholarSphere upload" do
+        context "when the given object does not have an open access waiver" do
+          it "returns 'unlock-alt'" do
+            expect(ad.open_access_status_icon).to eq 'unlock-alt'
+          end
+        end
+
+        context "when the given object has an open access waiver" do
+          let(:waived) { true }
+          it "returns 'unlock-alt'" do
+            expect(ad.open_access_status_icon).to eq 'unlock-alt'
+          end
+        end
+      end
+      context "when the given object has a pending ScholarSphere upload" do
+        let(:pending) { true }
+        context "when the given object does not have an open access waiver" do
+          it "returns 'unlock-alt'" do
+            expect(ad.open_access_status_icon).to eq 'unlock-alt'
+          end
+        end
+
+        context "when the given object has an open access waiver" do
+          let(:waived) { true }
+          it "returns 'unlock-alt'" do
+            expect(ad.open_access_status_icon).to eq 'unlock-alt'
+          end
+        end
+      end
+    end
   end
 end
