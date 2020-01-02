@@ -65,3 +65,17 @@ body {
   font-size: 24px;
   text-align: center;
 }
+
+table.legend {
+  font-size: 13px;
+  td {
+    padding: 4px 8px;
+  }
+}
+
+#icon-key {
+  border-radius: 10px;
+  padding: 16px;
+  margin-bottom: 20px;
+  background-color: lightgrey;
+}

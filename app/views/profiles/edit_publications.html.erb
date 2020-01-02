@@ -1,23 +1,26 @@
 <div class="manage-profile-list">
   <h4>Manage Profile Publications</h4>
-  <table class="legend">
-    <tr>
-      <td><%= fa_icon('unlock-alt') %></td>
-      <td>The publication has a known open access version.</td>
-    </tr>
-    <tr>
-      <td><%= fa_icon('lock') %></td>
-      <td>Open access obligations have been waived for this publication.</td>
-    </tr>
-    <tr>
-      <td><%= fa_icon('hourglass-half') %></td>
-      <td>An open access version of this publication is currently being added to ScholarSphere.</td>
-    </tr>
-    <tr>
-      <td><%= fa_icon('question') %></td>
-      <td>The open access status of this publication is currently unknown. Click the title to add information or submit a waiver.</td>
-    </tr>
-  </table>
+  <div id="icon-key">
+    <h6>Icon key:</h6>
+    <table class="legend">
+      <tr>
+        <td><%= fa_icon('unlock-alt') %></td>
+        <td>The publication has a known open access version.</td>
+      </tr>
+      <tr>
+        <td><%= fa_icon('lock') %></td>
+        <td>Open access obligations have been waived for this publication.</td>
+      </tr>
+      <tr>
+        <td><%= fa_icon('hourglass-half') %></td>
+        <td>An open access version of this publication is currently being added to ScholarSphere.</td>
+      </tr>
+      <tr>
+        <td><%= fa_icon('question') %></td>
+        <td>The open access status of this publication is currently unknown. Click the title to add information or submit a waiver.</td>
+      </tr>
+    </table>
+  </div>
   <table class="table">
     <thead>
     <tr>
