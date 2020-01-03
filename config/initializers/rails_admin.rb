@@ -64,7 +64,6 @@ RailsAdmin.config do |config|
     delete do
       only [:Publication, :User, :APIToken]
     end
-    show_in_app
 
     toggle
     ## With an audit adapter, you can add:
