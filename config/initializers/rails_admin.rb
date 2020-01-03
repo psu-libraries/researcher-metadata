@@ -1,3 +1,7 @@
+require_relative '../../app/rails_admin_actions/edit_open_access'
+
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::EditOpenAccess)
+
 RailsAdmin.config do |config|
 
   config.parent_controller = 'ApplicationController'
@@ -66,6 +70,9 @@ RailsAdmin.config do |config|
     end
     delete do
       only [:Publication, :User, :APIToken]
+    end
+    edit_open_access do
+      only [:Authorship]
     end
 
     toggle
