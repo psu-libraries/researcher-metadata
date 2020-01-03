@@ -11,14 +11,13 @@ feature "Admin dashboard", type: :feature do
     describe "the page content" do
       before do
         4.times { create :contract }
-        4.times { create :publication }
-        4.times { create :user }
         3.times { create :duplicate_publication_group }
         7.times { create :presentation }
         8.times { create :etd }
         2.times { create :organization }
         6.times { create :performance }
         5.times { create :grant }
+        3.times { create :authorship }
 
         visit rails_admin.dashboard_path
       end
@@ -29,11 +28,11 @@ feature "Admin dashboard", type: :feature do
 
       it "shows a count of the records in the database" do
         within 'tr.publication_links' do
-          expect(page).to have_content '4'
+          expect(page).to have_content '3'
         end
 
         within 'tr.user_links' do
-          expect(page).to have_content '5'
+          expect(page).to have_content '4'
         end
 
         within 'tr.duplicate_publication_group_links' do
@@ -58,6 +57,10 @@ feature "Admin dashboard", type: :feature do
 
         within 'tr.grant_links' do
           expect(page).to have_content '5'
+        end
+
+        within 'tr.authorship_links' do
+          expect(page).to have_content '3'
         end
       end
     end

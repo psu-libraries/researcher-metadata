@@ -48,7 +48,8 @@ RailsAdmin.config do |config|
             :APIToken,
             :Grant,
             :InternalPublicationWaiver,
-            :ExternalPublicationWaiver]
+            :ExternalPublicationWaiver,
+            :Authorship]
     end
     new do
       only [:Publication, :User, :APIToken]
@@ -57,7 +58,9 @@ RailsAdmin.config do |config|
     bulk_delete do
       only [:Publication, :User]
     end
-    show
+    show do
+      except [:Authorship]
+    end
     edit do
       only [:Publication, :User, :Presentation, :Performance, :APIToken]
     end
