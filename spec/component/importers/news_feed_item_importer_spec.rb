@@ -15,12 +15,10 @@ describe NewsFeedItemImporter do
 
   subject(:importer){ NewsFeedItemImporter.new }
   let(:file) { fixture_file_upload('rss_output.xml') }
-  let(:ldap_search_result) { [{ "uid" => "def456" }] }
 
   describe "#call" do
     it "populates database with news feed items" do
       allow_any_instance_of(NewsFeedItemImporter).to receive(:rss_feeds).and_return(["spec/fixtures/rss_output.xml"])
-      allow_any_instance_of(Net::LDAP).to receive(:search).and_return(ldap_search_result)
       importer.call
       expect(User.find_by( webaccess_id: "abc123" ).news_feed_items.first.title).to eq("Title")
       expect(User.find_by( webaccess_id: "def456" ).news_feed_items.first.title).to eq("Title")
