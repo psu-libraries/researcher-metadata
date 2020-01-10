@@ -1,4 +1,4 @@
-class ExternalPublicationWaiversController < ProfilesController
+class ExternalPublicationWaiversController < ProfileManagementController
   def new
     @waiver = current_user.external_publication_waivers.build
   end

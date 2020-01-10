@@ -14,7 +14,13 @@ module Devise
         if user
           success! user
         else
-          fail! "The WebAccess ID or password that you entered is invalid."
+          if URI.parse(request.url).path == Rails.application.routes.url_helpers.new_external_publication_waiver_path ||
+            URI.parse(request.url).path == Rails.application.routes.url_helpers.edit_profile_publications_path
+
+            redirect!("https://sites.psu.edu/openaccess/waiver-form/")
+          else
+            redirect!(Rails.application.routes.url_helpers.root_path)
+          end
         end
       end
 
