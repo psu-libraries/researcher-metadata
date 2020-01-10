@@ -1,5 +1,5 @@
 class ProfilesController < ProfileManagementController
-  before_action :authenticate!, except: [:show]
+  skip_before_action :authenticate!, only: [:show]
 
   def show
     @profile = UserProfile.new(User.find_by!(webaccess_id: params[:webaccess_id]))
