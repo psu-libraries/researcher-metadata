@@ -1,4 +1,6 @@
-class ExternalPublicationWaiversController < ProfilesController
+class ExternalPublicationWaiversController < ProfileManagementController
+  before_action :authenticate!
+
   def new
     @waiver = current_user.external_publication_waivers.build
   end

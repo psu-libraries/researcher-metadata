@@ -1,6 +1,4 @@
-class ProfilesController < UserController
-  layout :resolve_layout
-
+class ProfilesController < ProfileManagementController
   before_action :authenticate!, except: [:show]
 
   def show
@@ -29,13 +27,5 @@ class ProfilesController < UserController
 
   def profile_for_current_user?
     current_user && current_user.webaccess_id == params[:webaccess_id]
-  end
-
-  def resolve_layout
-    if action_name == 'show'
-      'profile'
-    else
-      'manage_profile'
-    end
   end
 end
