@@ -18,10 +18,12 @@ class NewsFeedItemImporter
         end
         tag_names = get_names_from_tag_selector(html_doc)
         tag_names.each do |name|
-          u = User.where('lower(first_name) = ? AND lower(last_name) = ?', name[0].downcase, name[1].downcase).first
-          next if u.blank?
+          mu = matched_users(name)
+          next if mu.blank?
 
-          find_or_create_news_feed_item(u, result)
+          mu.each do |user|
+            find_or_create_news_feed_item(user, result)
+          end
         end
       end
     end
@@ -44,10 +46,21 @@ class NewsFeedItemImporter
       name = node.value.gsub('/tag/', '').split('-')
       next if name.length > 3 || name.length < 2
 
-      name.delete_at(1) if name.length == 3
+      name.insert(1, '') if name.length == 2
       names << name
     end
     names
+  end
+
+  def matched_users(name)
+    u = User.where('similarity(first_name, ?) > 0.35 AND lower(last_name) = ?', name[0].downcase, name[2].downcase)
+    return u if u.count == 1 || u.blank?
+
+    u_final = u.where('lower(middle_name) = ?', name[1].downcase)
+    u_final = u.where('lower(left(middle_name, 1)) = ?', name[1][0].downcase) if u_final.blank?
+    return u if u_final.blank?
+
+    u_final
   end
 
   def find_or_create_news_feed_item(user, rss_result)
