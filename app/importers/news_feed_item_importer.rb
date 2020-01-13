@@ -57,6 +57,7 @@ class NewsFeedItemImporter
     return u if u.count == 1 || u.blank?
 
     u_final = u.where('lower(middle_name) = ?', name[1].downcase)
+    return u_final if name[1].blank?
     u_final = u.where('lower(left(middle_name, 1)) = ?', name[1][0].downcase) if u_final.blank?
     return u if u_final.blank?
 

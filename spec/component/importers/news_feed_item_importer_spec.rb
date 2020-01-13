@@ -11,6 +11,16 @@ describe NewsFeedItemImporter do
     User.create( webaccess_id: "def456",
                  first_name: "Test",
                  last_name: "McTester")
+    User.create( webaccess_id: "ghi789",
+                 first_name: "Fuzzy",
+                 last_name: "Matchman")
+    User.create( webaccess_id: "jkl987",
+                 first_name: "Middle",
+                 middle_name: "N",
+                 last_name: "Test")
+    User.create( webaccess_id: "jkl654",
+                 first_name: "Middle",
+                 last_name: "Test")
   end
 
   subject(:importer){ NewsFeedItemImporter.new }
@@ -22,13 +32,16 @@ describe NewsFeedItemImporter do
       importer.call
       expect(User.find_by( webaccess_id: "abc123" ).news_feed_items.first.title).to eq("Title")
       expect(User.find_by( webaccess_id: "def456" ).news_feed_items.first.title).to eq("Title")
+      expect(User.find_by( webaccess_id: "ghi789" ).news_feed_items.first.title).to eq("Title")
+      expect(User.find_by( webaccess_id: "jkl987" ).news_feed_items.first.title).to eq("Title")
+      expect(User.find_by( webaccess_id: "jkl654" ).news_feed_items.count).to eq(0)
       expect(NewsFeedItem.first.user.webaccess_id).to eq("abc123")
       expect(NewsFeedItem.first.published_on).to eq(Date.parse("Thu, 10 Oct 2013"))
       expect(NewsFeedItem.first.description).to eq("Description")
       expect(NewsFeedItem.second.user.webaccess_id).to eq("def456")
       expect(NewsFeedItem.second.published_on).to eq(Date.parse("Thu, 10 Oct 2013"))
       expect(NewsFeedItem.second.description).to eq("Description")
-      expect(NewsFeedItem.count).to eq(2)
+      expect(NewsFeedItem.count).to eq(4)
     end
   end
 
