@@ -12,7 +12,7 @@ describe 'the news_feed_item table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
-  it { is_expected.to have_db_index(:url).unique(true) }
+  it { is_expected.to have_db_index([:url, :user_id]).unique(true) }
 end
 
 describe NewsFeedItem, type: :model do
