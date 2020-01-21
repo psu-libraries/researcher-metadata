@@ -9,39 +9,7 @@ describe "editing profile preferences" do
                        show_all_publications: true,
                        orcid_identifier: orcid_id }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
-  let!(:pub_1) { create :publication,
-                        title: "Bob's Publication",
-                        visible: true,
-                        journal_title: "The Journal",
-                        published_on: Date.new(2007, 1, 1) }
-  let!(:pub_2) { create :publication,
-                        title: "Bob's Other Publication",
-                        visible: false }
-  let!(:pub_3) { create :publication,
-                        title: "Bob's Open Access Publication",
-                        visible: true,
-                        open_access_url: "https://example.org/pubs/1" }
-  let!(:pub_4) { create :publication,
-                        title: "Bob's Other Open Access Publication",
-                        visible: true,
-                        user_submitted_open_access_url: "https://example.org/pubs/2" }
-  let!(:pub_5) { create :publication,
-                        title: "Bob's Non-Open Access Publication",
-                        visible: true }
-  let!(:pub_6) { create :publication,
-                        title: "Bob's Pending ScholarSphere Publication",
-                        visible: true }
-  let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
-  let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
-  let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
-  let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
-  let!(:auth_5) { create :authorship, publication: pub_5, user: user, visible_in_profile: false }
-  let!(:auth_6) { create :authorship,
-                         publication: pub_6,
-                         user: user,
-                         visible_in_profile: false,
-                         scholarsphere_uploaded_at: Time.current }
-  let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
+
   let!(:pres1) { create :presentation,
                         title: "Bob's Presentation",
                         organization: "Penn State",
@@ -202,50 +170,98 @@ describe "editing profile preferences" do
         expect(page).to have_content "Manage Profile Publications"
       end
 
-      it "shows descriptions of the user's visible publications" do
-        expect(page).to have_content "Bob's Publication, The Journal, 2007"
-        expect(page).to have_link "Bob's Publication", href: edit_open_access_publication_path(pub_1)
-        expect(page).to_not have_content "Bob's Other Publication"
-        expect(page).to have_content "Bob's Open Access Publication"
-        expect(page).not_to have_link "Bob's Open Access Publication"
-        expect(page).to have_content "Bob's Other Open Access Publication"
-        expect(page).not_to have_link "Bob's Other Open Access Publication"
-        expect(page).to have_content "Bob's Non-Open Access Publication"
-        expect(page).not_to have_link "Bob's Non-Open Access Publication"
-        expect(page).to have_content "Bob's Pending ScholarSphere Publication"
-        expect(page).not_to have_link "Bob's Pending ScholarSphere Publication"
-      end
+      context "when the user has publications" do
+        let!(:pub_1) { create :publication,
+                              title: "Bob's Publication",
+                              visible: true,
+                              journal_title: "The Journal",
+                              published_on: Date.new(2007, 1, 1) }
+        let!(:pub_2) { create :publication,
+                              title: "Bob's Other Publication",
+                              visible: false }
+        let!(:pub_3) { create :publication,
+                              title: "Bob's Open Access Publication",
+                              visible: true,
+                              open_access_url: "https://example.org/pubs/1" }
+        let!(:pub_4) { create :publication,
+                              title: "Bob's Other Open Access Publication",
+                              visible: true,
+                              user_submitted_open_access_url: "https://example.org/pubs/2" }
+        let!(:pub_5) { create :publication,
+                              title: "Bob's Non-Open Access Publication",
+                              visible: true }
+        let!(:pub_6) { create :publication,
+                              title: "Bob's Pending ScholarSphere Publication",
+                              visible: true }
+        let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
+        let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
+        let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
+        let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
+        let!(:auth_5) { create :authorship, publication: pub_5, user: user, visible_in_profile: false }
+        let!(:auth_6) { create :authorship,
+                                publication: pub_6,
+                                user: user,
+                                visible_in_profile: false,
+                                scholarsphere_uploaded_at: Time.current }
+        let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
 
-      it "shows an icon to indicate when we don't have open access information for a publication" do
-        within "tr#authorship_#{auth_1.id}" do
-          expect(page).to have_css '.fa-question'
+        before { visit edit_profile_publications_path }
+
+        it "shows descriptions of the user's visible publications" do
+          expect(page).to have_content "Bob's Publication, The Journal, 2007"
+          expect(page).to have_link "Bob's Publication", href: edit_open_access_publication_path(pub_1)
+          expect(page).to_not have_content "Bob's Other Publication"
+          expect(page).to have_content "Bob's Open Access Publication"
+          expect(page).not_to have_link "Bob's Open Access Publication"
+          expect(page).to have_content "Bob's Other Open Access Publication"
+          expect(page).not_to have_link "Bob's Other Open Access Publication"
+          expect(page).to have_content "Bob's Non-Open Access Publication"
+          expect(page).not_to have_link "Bob's Non-Open Access Publication"
+          expect(page).to have_content "Bob's Pending ScholarSphere Publication"
+          expect(page).not_to have_link "Bob's Pending ScholarSphere Publication"
+        end
+
+        it "shows an icon to indicate when we don't have open access information for a publication" do
+          within "tr#authorship_#{auth_1.id}" do
+            expect(page).to have_css '.fa-question'
+          end
+        end
+
+        it "shows an icon to indicate when we have an open access URL for a publication" do
+          within "tr#authorship_#{auth_3.id}" do
+            expect(page).to have_css '.fa-unlock-alt'
+          end
+
+          within "tr#authorship_#{auth_4.id}" do
+            expect(page).to have_css '.fa-unlock-alt'
+          end
+        end
+
+        it "shows an icon to indicate when open access obligations have been waived for a publication" do
+          within "tr#authorship_#{auth_5.id}" do
+            expect(page).to have_css '.fa-lock'
+          end
+        end
+
+        it "shows an icon to indicate when a publication is being added to ScholarSphere" do
+          within "tr#authorship_#{auth_6.id}" do
+            expect(page).to have_css '.fa-hourglass-half'
+          end
+        end
+
+        it "shows a link to submit a waiver for a publication that is outside of the system" do
+          expect(page).to have_link "waiver form", href: new_external_publication_waiver_path
+        end
+
+        it "does not show the empty list message" do
+          expect(page).not_to have_content "There are currently no publications to show for your profile."
         end
       end
 
-      it "shows an icon to indicate when we have an open access URL for a publication" do
-        within "tr#authorship_#{auth_3.id}" do
-          expect(page).to have_css '.fa-unlock-alt'
+      context "when the user has no publications" do
+        it "shows a message about the empty list" do
+          expect(page).to have_content "There are currently no publications to show for your profile."
         end
-
-        within "tr#authorship_#{auth_4.id}" do
-          expect(page).to have_css '.fa-unlock-alt'
-        end
-      end
-
-      it "shows an icon to indicate when open access obligations have been waived for a publication" do
-        within "tr#authorship_#{auth_5.id}" do
-          expect(page).to have_css '.fa-lock'
-        end
-      end
-
-      it "shows an icon to indicate when a publication is being added to ScholarSphere" do
-        within "tr#authorship_#{auth_6.id}" do
-          expect(page).to have_css '.fa-hourglass-half'
-        end
-      end
-
-      it "shows a link to submit a waiver for a publication that is outside of the system" do
-        expect(page).to have_link "waiver form", href: new_external_publication_waiver_path
       end
     end
     
