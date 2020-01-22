@@ -1,0 +1,4 @@
+<%= simple_form_for @form, url: rails_admin.edit_open_access_path(model_name: :authorship, id: @object.id), method: :patch do |f| %>
+  <%= f.input :open_access_url, label: 'Open Access URL' %>
+  <%= f.submit 'Save', class: 'btn btn-primary' %>
+<% end %>

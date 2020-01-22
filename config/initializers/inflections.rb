@@ -18,4 +18,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'ETD'
   inflect.acronym 'DOI'
   inflect.acronym 'WOS'
+  inflect.acronym 'URLs'
 end
