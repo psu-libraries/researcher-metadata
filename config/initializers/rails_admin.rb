@@ -63,7 +63,6 @@ RailsAdmin.config do |config|
       only [:Publication, :User]
     end
     show do
-      except [:Authorship]
     end
     edit do
       only [:Publication, :User, :Presentation, :Performance, :APIToken]
