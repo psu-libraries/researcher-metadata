@@ -12,6 +12,8 @@ en:
     actions:
       edit_open_access:
         menu: "Open Access"
+        title: "Open Access Settings"
+        breadcrumb: "Open Access Settings"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
