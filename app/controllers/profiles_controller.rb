@@ -21,6 +21,9 @@ class ProfilesController < ProfileManagementController
       map { |p| p.user_performances.find_by(user: current_user) }
   end
 
+  def bio
+  end
+
   helper_method :profile_for_current_user?
 
   private
