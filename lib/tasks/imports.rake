@@ -216,6 +216,12 @@ namespace :import do
     CommitteeImporter.new(
       filename: filename_for(:committees)
     ).call
+
+    NSFGrantImporter.new(
+      dirname: dirname_for(:nsf_grants)
+    ).call
+
+    OpenAccessButtonPublicationImporter.new.call
   end
 end
 
