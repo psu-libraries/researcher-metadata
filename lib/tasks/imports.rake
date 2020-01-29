@@ -183,19 +183,11 @@ namespace :import do
       filename: filename_for(:pure_organizations)
     ).call
 
-    ActivityInsightUserImporter.new(
-      filename: filename_for(:ai_users)
-    ).call
-
-    ActivityInsightUserProfileImporter.new(
-      filename: filename_for(:ai_users)
-    ).call
+    ActivityInsightImporter.new.call
     
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call
-
-    LDAPImporter.new.call
 
     PurePublicationImporter.new(
       dirname: dirname_for(:pure_publications)
@@ -203,10 +195,6 @@ namespace :import do
 
     PurePublicationTagImporter.new(
       filename: filename_for(:pure_publication_tags)
-    ).call
-
-    ActivityInsightEducationHistoryImporter.new(
-      filename: filename_for(:ai_education_history)
     ).call
     
     ActivityInsightPublicationImporter.new(
@@ -221,30 +209,6 @@ namespace :import do
       filename: filename_for(:ai_authorships)
     ).call
 
-    ActivityInsightPresentationImporter.new(
-      filename: filename_for(:ai_presentations)
-    ).call
-
-    ActivityInsightPresenterImporter.new(
-      filename: filename_for(:ai_presenters)
-    ).call
-
-    ActivityInsightPerformanceImporter.new(
-      filename: filename_for(:ai_performances)
-    ).call
-
-    ActivityInsightPerformanceContributorsImporter.new(
-      filename: filename_for(:ai_performance_contributors1)
-    ).call
-
-    ActivityInsightPerformanceContributorsImporter.new(
-      filename: filename_for(:ai_performance_contributors2)
-    ).call
-
-    ActivityInsightPerformanceScreeningImporter.new(
-      filename: filename_for(:ai_performance_screenings)
-    ).call
-
     ETDCSVImporter.new(
       filename: filename_for(:etds)
     ).call
@@ -252,10 +216,6 @@ namespace :import do
     CommitteeImporter.new(
       filename: filename_for(:committees)
     ).call
-
-    NewsFeedItemImporter.new().call
-
-    DuplicatePublicationGroup.group_duplicates
   end
 end
 
