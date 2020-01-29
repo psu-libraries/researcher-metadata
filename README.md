@@ -189,15 +189,13 @@ Once updated data files have been obtained (if applicable), importing new data i
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
 for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
 correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources - `rake import:all`. The Open Access Button import is not included in this task because it
-can take a very long time to run (a couple of days) due to rate limiting and our volume of queries. A separate task
-is used to import all of the currently supported data directly via the Activity Insight API:  `rake import:activity_insight`.
-All of these tasks are designed to be idempotent given the same source data. If you are using the individual tasks
-to import only a subset of the data and you're going to be running more than one, the order in which the tasks are
-run is important. Some tasks create records that other tasks will find and use if they are present. Running the
-tasks in the correct order ensures that your data import will be complete. The correct order for running the tasks
-is given by the order in which their associated classes are called in the definition of the `import:all` task. The
-Open Access Button import depends on having publications already imported from other sources.
+data from all sources, `rake import:all`, but in practice it's probably better to run each import individually in
+case any of the imports fail to complete for any reason. All of these tasks are designed to be idempotent given the
+same source data. If you are using the individual tasks to import only a subset of the data and you're going to 
+be running more than one, the order in which the tasks are run is important. Some tasks create records that other
+tasks will find and use if they are present. Running the tasks in the correct order ensures that your data import
+will be complete. The correct order for running the tasks is given by the order in which their associated classes
+are called in the definition of the `import:all` task.
 
 ### Identifying Duplicate Publication Data
 Because we import metadata about research publications from more than one source, and because duplicate entries
@@ -207,8 +205,7 @@ duplicate data when they query our own API. Running the rake task `rake group_du
 publication records that exist in the database using several different attributes, and it will put any publication
 records that appear to be the same into groups. This allows admin users to review the groups and pick which record
 in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times. Subsequent
-imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
-duplicate publications is also run as part of the `rake import:all` task.
+imports of the same data will then not recreate the discarded duplicates.
 
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record
