@@ -54,11 +54,11 @@ class PureDownloader
   def download_pure_fingerprints
     get_api_key
 
-    first_fingerprint_result = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": 1, "offset": 0, "rendering": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/515/research-outputs'`
+    first_fingerprint_result = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": 1, "offset": 0, "renderings": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/515/research-outputs'`
 
     total_fingerprints = JSON.parse(first_fingerprint_result)['count']
 
-    all_fingerprints_results = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": #{total_fingerprints}, "offset": 0, "rendering": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/515/research-outputs'`
+    all_fingerprints_results = `curl -X POST --header 'Content-Type: application/json' --header 'Accept: application/json' --header 'api-key: #{api_key}' -d '{"size": #{total_fingerprints}, "offset": 0, "renderings": ["fingerprint"] }' 'https://pennstate.pure.elsevier.com/ws/api/515/research-outputs'`
 
     File.open(fingerprint_data_file, 'w') do |f|
       f.puts all_fingerprints_results
