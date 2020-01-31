@@ -42,7 +42,6 @@ class PureUserImporter
               o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
 
               if o
-                pt = a['jobDescription'] && a['jobDescription'].first['value']
                 m = UserOrganizationMembership.find_by(pure_identifier: a['pureId']) || UserOrganizationMembership.new
 
                 m.pure_identifier = a['pureId'] if m.new_record?
@@ -50,7 +49,7 @@ class PureUserImporter
                 m.user = u
                 m.imported_from_pure = true
                 m.primary = a['isPrimaryAssociation']
-                m.position_title = pt
+                m.position_title = position_title(a)
                 m.started_on = a['period']['startDate']
                 m.ended_on = a['period']['endDate']
                 m.save!
@@ -88,5 +87,9 @@ class PureUserImporter
 
       create_parent_org_membership(parent, user, m)
     end
+  end
+
+  def position_title(association)
+    association['jobDescription'] && association['jobDescription']['text'].detect { |text| text['locale'] == 'en_US' }['value']
   end
 end
