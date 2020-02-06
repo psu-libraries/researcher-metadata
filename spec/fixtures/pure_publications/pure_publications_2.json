@@ -455,6 +455,29 @@
           }
         }
       } ]
+    }, {
+      "pureId" : 84276844,
+      "authorCollaboration" : {
+        "uuid" : "f086571b-e5a1-4597-9193-df4bfd1a73bc",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "The WISSARD Science Team"
+          } ]
+        }
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      }
     } ],
     "organisationalUnits" : [ {
       "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
