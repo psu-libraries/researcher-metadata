@@ -131,8 +131,8 @@ The process for obtaining and preparing eTD data for import involves several ste
 State Libraries admin. Justin Patterson has been able to do this for us in the past.
 1. Create a MySQL database locally and load in the eTD production dump.
 1. The production database dump contains a view called `student_submissions` that presents most of the eTD data
-that we need to import, but it's missing one column that we need. So, in our local database we need to create
-a new view with all the same data plus the one additional column:
+that we need to import, but it's missing one column that we need. So, in our local database we need to add
+one additional column called `submission_public_id` to the `student_submissions` view:
 
     ```sql
     CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `metadata_import_view`
@@ -158,7 +158,18 @@ a new view with all the same data plus the one additional column:
        `id`.`id_number` AS `inv_disclosure_num`,group_concat(concat(`cm`.`name`,_utf8'|',nullif(`cm`.`email`,_utf8'|'),_utf8' ',`cr`.`name`) order by `cr`.`id` ASC separator ' || ') AS `committee_members`
     FROM ((((((`submissions` `s` left join `invention_disclosures` `id` on((`s`.`id` = `id`.`submission_id`))) left join `authors` on((`s`.`author_id` = `authors`.`id`))) left join `programs` `p` on((`s`.`program_id` = `p`.`id`))) left join `degrees` `d` on((`s`.`degree_id` = `d`.`id`))) left join `committee_members` `cm` on((`s`.`id` = `cm`.`submission_id`))) left join `committee_roles` `cr` on((`cm`.`committee_role_id` = `cr`.`id`))) group by `s`.`id`;
     ```
-1. Next, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
+NOTE: The default SQL mode in MySQL 5.7 and later enables several modes including `ONLY_FULL_GROUP_BY` that were turned off by default in older versions. `ONLY_FULL_GROUP_BY` causes the `student_submissions` view to be rejected. Here's some background on this issue:
+
+https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-changes
+https://www.percona.com/blog/2019/05/13/solve-query-failures-regarding-only_full_group_by-sql-mode/
+
+To restore operation for the `student_submissions` view we've been turning off SQL modes when starting a new MySQL
+session like so: `mysql.server start --sql-mode=''` To verify no modes were activated go into MySQL and do the following:
+``` mysql> SELECT @@sql_mode; ```
+Note: This approach is somewhat heavy-handed, but the results from the `student_submissions` view seem okay. A more precise approach would be to not invoke `ONLY_FULL_GROUP_BY` when starting a new MySQL session and leave all
+the other modes activated.
+    
+1. After starting up MySQL with SQL modes turned off, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
 substituting your local database name if you called it something different.
 1. Open the TSV file in vim. You'll probably see that the file is littered with `^M` control characters that we
 need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in 
