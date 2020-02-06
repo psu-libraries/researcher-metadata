@@ -19,7 +19,7 @@ class PurePublicationImporter
     import_files.each do |filename|
       File.open(dirname.join(filename), 'r') do |file|
         MultiJson.load(file)['items'].each do |publication|
-          if publication['type'].detect { |t| t['value'] == 'Article' }
+          if publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Article"
 
             ActiveRecord::Base.transaction do
               pi = PublicationImport.find_by(source: IMPORT_SOURCE,
@@ -47,8 +47,10 @@ class PurePublicationImporter
               unless p.updated_by_user_at.present?
                 p.contributors.delete_all
 
-                authorships = publication['personAssociations'].select { |a| !a['authorCollaboration'].present? &&
-                  a['personRole'].detect { |r| r['value'] == 'Author' }.present? }
+                authorships = publication['personAssociations'].select do |a|
+                  !a['authorCollaboration'].present? &&
+                    a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
+                end
 
                 authorships.each_with_index do |a, i|
                   if a['person'].present?
@@ -90,15 +92,15 @@ class PurePublicationImporter
 
   def pub_attrs(publication)
     {
-      title: publication['title'],
-      secondary_title: publication['subTitle'],
+      title: publication['title']['value'],
+      secondary_title: publication['subTitle'].try('[]', 'value'),
       publication_type: "Academic Journal Article",
       page_range: publication['pages'],
       volume: publication['volume'],
       issue: publication['journalNumber'],
       journal_title: publication['journalAssociation']['title']['value'],
       issn: issn(publication),
-      status: status(publication)['publicationStatus'][0]['value'],
+      status: status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value'],
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
                              published_day(publication)),
@@ -126,15 +128,15 @@ class PurePublicationImporter
   end
 
   def abstract(publication)
-    publication['abstract'].try(:first).try(:[], 'value')
+    if publication['abstract']
+      publication['abstract']['text'].detect { |t| t['locale'] == 'en_US'}['value']
+    end
   end
 
   def doi(publication)
-    if publication['electronicVersions'] &&
-      publication['electronicVersions'].first['versionType'] &&
-      publication['electronicVersions'].first['versionType'].detect { |t| t['value'] == 'Final published version' }
-
-      publication['electronicVersions'].first['doi']
+    v = publication['electronicVersions'].detect do |ev| 
+      ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Final published version" 
     end
+    v.try('[]', 'doi')
   end
 end
