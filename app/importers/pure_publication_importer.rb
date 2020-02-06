@@ -135,8 +135,10 @@ class PurePublicationImporter
 
   def doi(publication)
     if publication['electronicVersions']
-      v = publication['electronicVersions'].detect do |ev| 
-        ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Final published version" 
+      v = publication['electronicVersions'].detect do |ev|
+        if ev['versionType']
+          ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Final published version"
+        end
       end
       v.try('[]', 'doi')
     end
