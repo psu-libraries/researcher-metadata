@@ -9,7 +9,7 @@
     "confidential" : false,
     "renderings" : [ {
       "format" : "fingerprint",
-      "html" : "<fingerprint uuid=\"3733ae15-1f72-4500-813d-170064d946ff\"><rankedConcept><thesaurus>msh</thesaurus><term>Psychotherapy</term><conceptId>18053</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept></fingerprint>"
+      "html" : "<fingerprint uuid=\"3733ae15-1f72-4500-813d-170064d946ff\"><rankedConcept><thesaurus>msh</thesaurus><term>Psychotherapy</term><conceptId>18053</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept><rankedConcept><thesaurus>other</thesaurus><term>psychotherapy</term><conceptId>12345</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept></fingerprint>"
     } ]
   }, {
     "uuid" : "890420eb-eff9-4cbc-8e1b-20f68460f4eb",
