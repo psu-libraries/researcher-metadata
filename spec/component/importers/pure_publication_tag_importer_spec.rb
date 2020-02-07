@@ -11,6 +11,10 @@ describe PurePublicationTagImporter do
         it "runs" do
           expect { importer.call }.not_to raise_error
         end
+
+        it "does not create any new tags" do
+          expect { importer.call }.not_to change { Tag.count }
+        end
       end
 
       context "when publications in the database match the publication data being imported" do
@@ -28,6 +32,10 @@ describe PurePublicationTagImporter do
 
         it "runs" do
           expect { importer.call }.not_to raise_error
+        end
+        
+        it "creates new tags" do
+          expect { importer.call }.to change { Tag.count }
         end
       end
     end
