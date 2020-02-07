@@ -22,7 +22,7 @@ class PurePublicationTagImporter
                   # We don't care about the high-level categories, just the
                   # terms.
         # Pure outputs fingerprints as XML within the publication JSON
-        fingerprint_xml = publication['rendering'][0]['value']
+        fingerprint_xml = publication['renderings'][0]['value']
         # We need to parse these xml fingerprints
         f = Nokogiri::XML(fingerprint_xml)
         f.xpath('fingerprint').xpath('rankedConcept').each do |rc|
