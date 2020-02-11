@@ -330,10 +330,10 @@
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
     <INTELLCONT id="171620739072" dmd:originalSource="BIBTEX" dmd:created="2018-11-01T14:52:45" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2020-01-20T15:38:27" dmd:startDate="2019-01-01" dmd:endDate="2019-12-31">
-      <CONTYPE>Journal Article</CONTYPE>
+      <CONTYPE>Journal Article, Professional Journal</CONTYPE>
       <CONTYPEOTHER>Journal Article</CONTYPEOTHER>
       <TITLE>
-Second Test Publication
+        Second Test Publication
       </TITLE>
       <JOURNAL_NAME>Test Jouranl 2</JOURNAL_NAME>
       <TITLE_SECONDARY>
@@ -418,7 +418,7 @@ Second Test Publication
       <PURE_ID/>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
-        <INTELLCONT id="983756284081" dmd:originalSource="WEB_OF_SCIENCE_LITE" dmd:created="2017-02-22T15:29:29" dmd:lastModifiedSource="WEB_OF_SCIENCE" dmd:wosUid="WOS:000234636234" dmd:lastModified="2017-08-15T15:29:29" dmd:startDate="2017-01-01" dmd:endDate="2017-12-31">
+    <INTELLCONT id="983756284081" dmd:originalSource="WEB_OF_SCIENCE_LITE" dmd:created="2017-02-22T15:29:29" dmd:lastModifiedSource="WEB_OF_SCIENCE" dmd:wosUid="WOS:000234636234" dmd:lastModified="2017-08-15T15:29:29" dmd:startDate="2017-01-01" dmd:endDate="2017-12-31">
       <CONTYPE>Other</CONTYPE>
       <CONTYPEOTHER/>
       <TITLE>Non-article Test Publication</TITLE>
@@ -571,9 +571,9 @@ Second Test Publication
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
     <INTELLCONT id="92747188475" dmd:originalSource="WEB_OF_SCIENCE_LITE" dmd:created="2010-08-15T15:29:29" dmd:lastModifiedSource="WEB_OF_SCIENCE" dmd:wosUid="WOS:0004245745743" dmd:lastModified="2010-08-15T15:29:29" dmd:startDate="2010-01-01" dmd:endDate="2010-12-31">
-      <CONTYPE>Other</CONTYPE>
-      <CONTYPEOTHER>Another Kind of Journal Article</CONTYPEOTHER>
-      <TITLE>First Test Publication</TITLE>
+      <CONTYPE>Other</CONTYPE> 
+      <CONTYPEOTHER>Journal Article, Academic Journal</CONTYPEOTHER>
+      <TITLE>Fifth Test Publication</TITLE>
       <JOURNAL_NAME>OTHER</JOURNAL_NAME>
       <JOURNAL_NAME_OTHER>Some Other Journal</JOURNAL_NAME_OTHER>
       <TITLE_SECONDARY/>
@@ -607,7 +607,7 @@ Second Test Publication
       <VOLUME>17</VOLUME>
       <ISSUE>8</ISSUE>
       <EDITION>4</EDITION>
-      <PAGENUM>
+      <PAGENUM/>
       <PUB_PAGENUM>1276-1288</PUB_PAGENUM>
       <WEB_ADDRESS/>
       <FORMAT/>
@@ -652,7 +652,7 @@ Second Test Publication
       <CONTYPE>Another Kind of Publication</CONTYPE>
       <CONTYPEOTHER/>
       <TITLE>
-A Book
+        A Book
       </TITLE>
       <JOURNAL_NAME/>
       <TITLE_SECONDARY/>
@@ -724,5 +724,6 @@ A Book
       <PUB_END>2019-12-31</PUB_END>
       <PURE_ID/>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </INTELLCONT>
   </Record>
 </Data>
