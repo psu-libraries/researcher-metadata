@@ -721,6 +721,82 @@ describe ActivityInsightImporter do
           end
         end
       end
+
+      context "when no included publications exist in the database" do
+        it "creates a new publication record for every published journal article in the imported data" do
+          expect { importer.call }.to change { Publication.count }.by 3
+
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190706413568').publication
+          p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '171620739072').publication
+          p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '92747188475').publication
+
+          expect(p1.title).to eq 'First Test Publication'
+          expect(p1.publication_type).to eq 'Journal Article'
+          # expect(p1.publisher).to eq 'Test Publisher One'
+          # expect(p1.secondary_title).to eq '2015'
+          # expect(p1.status).to eq 'Published'
+          # expect(p1.volume).to eq '41'
+          # expect(p1.issue).to eq '6'
+          # expect(p1.edition).to eq '3'
+          # expect(p1.page_range).to eq '189-234'
+          # expect(p1.url).to eq 'url_1'
+          # expect(p1.issn).to eq 'ISSN1'
+          # expect(p1.abstract).to eq 'Test Abstract 1'
+          # expect(p1.authors_et_al).to eq true
+          # expect(p1.published_on).to eq Date.new(2015, 4, 1)
+          # expect(p1.visible).to eq true
+          # expect(p1.updated_by_user_at).to eq nil
+          # expect(p1.doi).to eq nil
+
+          expect(p2.title).to eq 'Second Test Publication'
+          expect(p2.publication_type).to eq 'Professional Journal Article'
+          # expect(p2.publisher).to eq 'Test Publisher Two'
+          # expect(p2.secondary_title).to eq nil
+          # expect(p2.status).to eq 'Published'
+          # expect(p2.volume).to eq '12'
+          # expect(p2.issue).to eq '4'
+          # expect(p2.edition).to eq '1'
+          # expect(p2.page_range).to eq '20-30'
+          # expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          # expect(p2.issn).to eq nil
+          # expect(p2.abstract).to eq nil
+          # expect(p2.authors_et_al).to eq false
+          # expect(p2.published_on).to eq nil
+          # expect(p2.visible).to eq true
+          # expect(p2.updated_by_user_at).to eq nil
+          # expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+
+          expect(p3.title).to eq 'Fifth Test Publication'
+          expect(p3.publication_type).to eq 'Academic Journal Article'
+          # expect(p3.publisher).to eq 'Test Publisher Three'
+          # expect(p3.secondary_title).to eq nil
+          # expect(p3.status).to eq 'Published'
+          # expect(p3.volume).to eq nil
+          # expect(p3.issue).to eq nil
+          # expect(p3.edition).to eq nil
+          # expect(p3.page_range).to eq nil
+          # expect(p3.url).to eq 'url_2'
+          # expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          # expect(p3.abstract).to eq 'Test Abstract 2'
+          # expect(p3.authors_et_al).to eq false
+          # expect(p3.published_on).to eq Date.new(2017, 3, 1)
+          # expect(p3.visible).to eq true
+          # expect(p3.updated_by_user_at).to eq nil
+          # expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+        end
+      end
+      context "when an included publication exists in the database" do
+        context "when the existing publication has been modified by an admin user" do
+          xit
+        end
+
+        context "when the existing publication has not been modified by an admin user" do
+          xit
+        end
+      end
     end
 
 

@@ -1,4 +1,6 @@
 class ActivityInsightImporter
+  IMPORT_SOURCE = 'Activity Insight'
+
   def initialize
     @errors = []
   end
@@ -137,6 +139,20 @@ class ActivityInsightImporter
 
                 up.save!
               end
+            end
+          end
+        end
+
+        details.publications.each do |pub|
+          if pub.importable?
+            pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
+              PublicationImport.new(source: IMPORT_SOURCE,
+                                    source_identifier: pub.activity_insight_id,
+                                    publication: Publication.create!(title: pub.title,
+                                                                     publication_type: pub.publication_type))
+            if pi.persisted?
+            else
+              pi.save!
             end
           end
         end
@@ -291,6 +307,10 @@ class ActivityInsightDetailUser
 
   def performances
     user.css('PERFORM_EXHIBIT').map { |p| ActivityInsightPerformance.new(p) }
+  end
+
+  def publications
+    user.css('INTELLCONT').map { |p| ActivityInsightAPIPublication.new(p) }
   end
 
   private
@@ -586,5 +606,64 @@ class ActivityInsightPerformanceContributor
 
   def text_for(element)
     parsed_contributor.css(element).text.strip.presence
+  end
+end
+
+
+class ActivityInsightAPIPublication
+  def initialize(parsed_publication)
+    @parsed_publication = parsed_publication
+  end
+
+  def publication_type
+    if cleaned_ai_type == 'journal article, academic journal'
+      'Academic Journal Article'
+    elsif cleaned_ai_type == 'journal article, in-house journal' ||
+      cleaned_ai_type == 'journal article, in-house'
+      'In-house Journal Article'
+    elsif cleaned_ai_type == 'journal article, professional journal'
+      'Professional Journal Article'
+    elsif cleaned_ai_type == 'journal article, public or trade journal' ||
+      cleaned_ai_type == 'magazine or trade journal article'
+      'Trade Journal Article'
+    elsif cleaned_ai_type == 'journal article'
+      'Journal Article'
+    end
+  end
+
+  def status
+    text_for('STATUS')
+  end
+
+  def importable?
+    !!(publication_type =~ /journal article/i) && (status == 'Published')
+  end
+
+  def activity_insight_id
+    parsed_publication.attribute('id').value
+  end
+
+  def title
+    text_for('TITLE')
+  end
+
+  private
+
+  attr_reader :parsed_publication
+
+  def text_for(element)
+    parsed_publication.css(element).text.strip.presence
+  end
+
+  def contype
+    text_for('CONTYPE').try(:downcase)
+  end
+
+  def cleaned_ai_type
+    if contype == 'other'
+      text_for('CONTYPEOTHER').try(:downcase)
+    else
+      contype
+    end
   end
 end

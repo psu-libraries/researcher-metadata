@@ -319,4 +319,21 @@ describe ActivityInsightDetailUser do
       expect(user.performances).to eq [perf1, perf2]
     end
   end
+
+  describe '#publications' do
+    let(:element1) { double 'XML element 1' }
+    let(:element2) { double 'XML element 2' }
+    let(:pub1) { double 'publication 1' }
+    let(:pub2) { double 'publication 2' }
+
+    before do
+      allow(user_data).to receive(:css).with('INTELLCONT').and_return([element1, element2])
+      allow(ActivityInsightAPIPublication).to receive(:new).with(element1).and_return(pub1)
+      allow(ActivityInsightAPIPublication).to receive(:new).with(element2).and_return(pub2)
+    end
+
+    it "returns an array of publications from the given data" do
+      expect(user.publications).to eq [pub1, pub2]
+    end
+  end
 end
