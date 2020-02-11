@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_01_13_181629) do
+ActiveRecord::Schema.define(version: 2020_02_11_180255) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_181629) do
     t.integer "position_in_profile"
     t.boolean "confirmed", default: true
     t.datetime "scholarsphere_uploaded_at"
+    t.string "role"
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
@@ -83,6 +84,7 @@ ActiveRecord::Schema.define(version: 2020_01_13_181629) do
     t.integer "position", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "role"
     t.index ["publication_id"], name: "index_contributors_on_publication_id"
   end
 
