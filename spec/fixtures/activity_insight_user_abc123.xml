@@ -570,5 +570,159 @@ Second Test Publication
       <PURE_ID/>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
+    <INTELLCONT id="92747188475" dmd:originalSource="WEB_OF_SCIENCE_LITE" dmd:created="2010-08-15T15:29:29" dmd:lastModifiedSource="WEB_OF_SCIENCE" dmd:wosUid="WOS:0004245745743" dmd:lastModified="2010-08-15T15:29:29" dmd:startDate="2010-01-01" dmd:endDate="2010-12-31">
+      <CONTYPE>Other</CONTYPE>
+      <CONTYPEOTHER>Another Kind of Journal Article</CONTYPEOTHER>
+      <TITLE>First Test Publication</TITLE>
+      <JOURNAL_NAME>OTHER</JOURNAL_NAME>
+      <JOURNAL_NAME_OTHER>Some Other Journal</JOURNAL_NAME_OTHER>
+      <TITLE_SECONDARY/>
+      <STATUS>Published</STATUS>
+      <REFEREED/>
+      <INTELLCONT_AUTH id="929385869394">
+        <FACULTY_NAME/>
+        <FNAME>Mary</FNAME>
+        <MNAME>E.</MNAME>
+        <LNAME>Paperauthor</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH id="990283885213">
+        <FACULTY_NAME/>
+        <FNAME>Peter</FNAME>
+        <MNAME/>
+        <LNAME>Anotherauthor</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <AUTHORS_ETAL/>
+      <PUBLISHER>other</PUBLISHER>
+      <PUBLISHER_OTHER>Some Other Publisher</PUBLISHER_OTHER>
+      <PUBCTYST/>
+      <PUBCNTRY/>
+      <VOLUME>17</VOLUME>
+      <ISSUE>8</ISSUE>
+      <EDITION>4</EDITION>
+      <PAGENUM>
+      <PUB_PAGENUM>1276-1288</PUB_PAGENUM>
+      <WEB_ADDRESS/>
+      <FORMAT/>
+      <EDITORS/>
+      <ISBNISSN/>
+      <PMCID/>
+      <PROCEED_LOCATION/>
+      <ABSTRACT/>
+      <COMMENT/>
+      <CITATION_COUNT/>
+      <CITATION_SOURCE/>
+      <DTM_CITATION/>
+      <DTD_CITATION/>
+      <DTY_CITATION/>
+      <CITATION_START/>
+      <CITATION_END/>
+      <DESC_INTERNATIONAL/>
+      <RESEARCH_PROJECT/>
+      <DTM_EXPSUB/>
+      <DTD_EXPSUB/>
+      <DTY_EXPSUB/>
+      <EXPSUB_START/>
+      <EXPSUB_END/>
+      <DTM_SUB/>
+      <DTD_SUB/>
+      <DTY_SUB/>
+      <SUB_START/>
+      <SUB_END/>
+      <DTM_ACC/>
+      <DTY_ACC/>
+      <ACC_START/>
+      <ACC_END/>
+      <DTM_PUB/>
+      <DTD_PUB/>
+      <DTY_PUB>2010</DTY_PUB>
+      <PUB_START>2010-01-01</PUB_START>
+      <PUB_END>2010-12-31</PUB_END>
+      <PURE_ID/>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </INTELLCONT>
+    <INTELLCONT id="38695690123" dmd:originalSource="BIBTEX" dmd:created="2018-11-01T14:52:45" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2020-01-20T15:38:27" dmd:startDate="2019-01-01" dmd:endDate="2019-12-31">
+      <CONTYPE>Another Kind of Publication</CONTYPE>
+      <CONTYPEOTHER/>
+      <TITLE>
+A Book
+      </TITLE>
+      <JOURNAL_NAME/>
+      <TITLE_SECONDARY/>
+      <STATUS>Published</STATUS>
+      <REFEREED>Yes</REFEREED>
+      <INTELLCONT_AUTH id="2456234363734">
+        <FACULTY_NAME/>
+        <FNAME>Henry</FNAME>
+        <MNAME/>
+        <LNAME>Bookauthor</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Primary Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <AUTHORS_ETAL/>
+      <PUBLISHER/>
+      <PUBCTYST/>
+      <PUBCNTRY/>
+      <VOLUME/>
+      <ISSUE/>
+      <EDITION/>
+      <PAGENUM/>
+      <PUB_PAGENUM/>
+      <WEB_ADDRESS/>
+      <FORMAT/>
+      <EDITORS/>
+      <ISBNISSN/>
+      <PMCID/>
+      <PROCEED_LOCATION/>
+      <ABSTRACT/>
+      <COMMENT/>
+      <CITATION_COUNT/>
+      <CITATION_SOURCE/>
+      <DTM_CITATION/>
+      <DTD_CITATION/>
+      <DTY_CITATION/>
+      <CITATION_START/>
+      <CITATION_END/>
+      <INTELLCONT_COUNTRY id="171620739078">
+        <COUNTRY/>
+      </INTELLCONT_COUNTRY>
+      <DESC_INTERNATIONAL/>
+      <RESEARCH_PROJECT/>
+      <INTELLCONT_FILE id="171620739079">
+        <FULL_TEXT/>
+      </INTELLCONT_FILE>
+      <POST_FILE id="171620739080">
+        <DOC/>
+      </POST_FILE>
+      <DTM_EXPSUB/>
+      <DTD_EXPSUB/>
+      <DTY_EXPSUB/>
+      <EXPSUB_START/>
+      <EXPSUB_END/>
+      <DTM_SUB/>
+      <DTD_SUB/>
+      <DTY_SUB/>
+      <SUB_START/>
+      <SUB_END/>
+      <DTM_ACC/>
+      <DTY_ACC/>
+      <ACC_START/>
+      <ACC_END/>
+      <DTM_PUB/>
+      <DTD_PUB/>
+      <DTY_PUB>2019</DTY_PUB>
+      <PUB_START>2019-01-01</PUB_START>
+      <PUB_END>2019-12-31</PUB_END>
+      <PURE_ID/>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
   </Record>
 </Data>
