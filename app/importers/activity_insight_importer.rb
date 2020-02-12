@@ -149,7 +149,20 @@ class ActivityInsightImporter
               PublicationImport.new(source: IMPORT_SOURCE,
                                     source_identifier: pub.activity_insight_id,
                                     publication: Publication.create!(title: pub.title,
-                                                                     publication_type: pub.publication_type))
+                                                                     publication_type: pub.publication_type,
+                                                                     journal_title: pub.journal_title,
+                                                                     publisher: pub.publisher,
+                                                                     secondary_title: pub.secondary_title,
+                                                                     status: pub.status,
+                                                                     volume: pub.volume,
+                                                                     issue: pub.issue,
+                                                                     edition: pub.edition,
+                                                                     page_range: pub.page_range,
+                                                                     url: pub.url,
+                                                                     issn: pub.issn,
+                                                                     abstract: pub.abstract,
+                                                                     authors_et_al: pub.authors_et_al,
+                                                                     published_on: pub.published_on))
             if pi.persisted?
             else
               pi.save!
@@ -645,6 +658,68 @@ class ActivityInsightAPIPublication
 
   def title
     text_for('TITLE')
+  end
+
+  def secondary_title
+    text_for('TITLE_SECONDARY')
+  end
+
+  def journal_title
+    jnt = text_for('JOURNAL_NAME')
+    if jnt == 'other'
+      text_for('JOURNAL_NAME_OTHER')
+    else
+      jnt
+    end
+  end
+
+  def publisher
+    pt = text_for('PUBLISHER')
+    if pt == 'other'
+      text_for('PUBLISHER_OTHER')
+    else
+      pt
+    end
+  end
+
+  def volume
+    text_for('VOLUME')
+  end
+
+  def issue
+    text_for('ISSUE')
+  end
+
+  def edition
+    text_for('EDITION')
+  end
+
+  def page_range
+    text_for('PAGENUM') || text_for('PUB_PAGENUM')
+  end
+
+  def url
+    text_for('WEB_ADDRESS')
+  end
+
+  def issn
+    text_for('ISBNISSN')
+  end
+
+  def abstract
+    text_for('ABSTRACT')
+  end
+
+  def authors_et_al
+    text_for('AUTHORS_ETAL').try(:downcase) == 'true'
+  end
+
+  def published_on
+    text_for('PUB_START')
+  end
+
+  def doi
+    DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
   private

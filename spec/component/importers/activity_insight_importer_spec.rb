@@ -735,24 +735,26 @@ describe ActivityInsightImporter do
 
           expect(p1.title).to eq 'First Test Publication'
           expect(p1.publication_type).to eq 'Journal Article'
-          # expect(p1.publisher).to eq 'Test Publisher One'
-          # expect(p1.secondary_title).to eq '2015'
-          # expect(p1.status).to eq 'Published'
-          # expect(p1.volume).to eq '41'
-          # expect(p1.issue).to eq '6'
-          # expect(p1.edition).to eq '3'
-          # expect(p1.page_range).to eq '189-234'
-          # expect(p1.url).to eq 'url_1'
-          # expect(p1.issn).to eq 'ISSN1'
-          # expect(p1.abstract).to eq 'Test Abstract 1'
-          # expect(p1.authors_et_al).to eq true
-          # expect(p1.published_on).to eq Date.new(2015, 4, 1)
-          # expect(p1.visible).to eq true
-          # expect(p1.updated_by_user_at).to eq nil
-          # expect(p1.doi).to eq nil
+          expect(p1.journal_title).to eq 'Test Journal 1'
+          expect(p1.publisher).to eq 'Test Publisher 1'
+          expect(p1.secondary_title).to eq 'Subtitle 1'
+          expect(p1.status).to eq 'Published'
+          expect(p1.volume).to eq '9'
+          expect(p1.issue).to eq '5'
+          expect(p1.edition).to eq '10'
+          expect(p1.page_range).to eq '1633-1646'
+          expect(p1.url).to eq 'https://example.com/publication1'
+          expect(p1.issn).to eq '6532-1836'
+          expect(p1.abstract).to eq 'First publication abstract.'
+          expect(p1.authors_et_al).to eq true
+          expect(p1.published_on).to eq Date.new(2019, 1, 1)
+          expect(p1.visible).to eq true
+          expect(p1.updated_by_user_at).to eq nil
+          expect(p1.doi).to eq nil
 
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'Professional Journal Article'
+          # expect(p1.journal_title).to eq ''
           # expect(p2.publisher).to eq 'Test Publisher Two'
           # expect(p2.secondary_title).to eq nil
           # expect(p2.status).to eq 'Published'
@@ -771,6 +773,7 @@ describe ActivityInsightImporter do
 
           expect(p3.title).to eq 'Fifth Test Publication'
           expect(p3.publication_type).to eq 'Academic Journal Article'
+          # expect(p1.journal_title).to eq ''
           # expect(p3.publisher).to eq 'Test Publisher Three'
           # expect(p3.secondary_title).to eq nil
           # expect(p3.status).to eq 'Published'
