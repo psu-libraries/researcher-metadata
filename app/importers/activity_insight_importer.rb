@@ -162,7 +162,8 @@ class ActivityInsightImporter
                                                                      issn: pub.issn,
                                                                      abstract: pub.abstract,
                                                                      authors_et_al: pub.authors_et_al,
-                                                                     published_on: pub.published_on))
+                                                                     published_on: pub.published_on,
+                                                                     doi: pub.doi))
             if pi.persisted?
             else
               pi.save!

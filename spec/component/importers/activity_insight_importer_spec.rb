@@ -754,41 +754,41 @@ describe ActivityInsightImporter do
 
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'Professional Journal Article'
-          # expect(p1.journal_title).to eq ''
-          # expect(p2.publisher).to eq 'Test Publisher Two'
-          # expect(p2.secondary_title).to eq nil
-          # expect(p2.status).to eq 'Published'
-          # expect(p2.volume).to eq '12'
-          # expect(p2.issue).to eq '4'
-          # expect(p2.edition).to eq '1'
-          # expect(p2.page_range).to eq '20-30'
-          # expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-          # expect(p2.issn).to eq nil
-          # expect(p2.abstract).to eq nil
-          # expect(p2.authors_et_al).to eq false
-          # expect(p2.published_on).to eq nil
-          # expect(p2.visible).to eq true
-          # expect(p2.updated_by_user_at).to eq nil
-          # expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          expect(p2.journal_title).to eq 'Test Jouranl 2'
+          expect(p2.publisher).to eq nil
+          expect(p2.secondary_title).to eq 'Second Pub Subtitle'
+          expect(p2.status).to eq 'Published'
+          expect(p2.volume).to eq '7'
+          expect(p2.issue).to eq nil
+          expect(p2.edition).to eq nil
+          expect(p2.page_range).to eq nil
+          expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
+          expect(p2.issn).to eq nil
+          expect(p2.abstract).to eq nil
+          expect(p2.authors_et_al).to eq false
+          expect(p2.published_on).to eq Date.new(2019, 1, 1)
+          expect(p2.visible).to eq true
+          expect(p2.updated_by_user_at).to eq nil
+          expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
           expect(p3.title).to eq 'Fifth Test Publication'
           expect(p3.publication_type).to eq 'Academic Journal Article'
-          # expect(p1.journal_title).to eq ''
-          # expect(p3.publisher).to eq 'Test Publisher Three'
-          # expect(p3.secondary_title).to eq nil
-          # expect(p3.status).to eq 'Published'
-          # expect(p3.volume).to eq nil
-          # expect(p3.issue).to eq nil
-          # expect(p3.edition).to eq nil
-          # expect(p3.page_range).to eq nil
-          # expect(p3.url).to eq 'url_2'
-          # expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-          # expect(p3.abstract).to eq 'Test Abstract 2'
-          # expect(p3.authors_et_al).to eq false
-          # expect(p3.published_on).to eq Date.new(2017, 3, 1)
-          # expect(p3.visible).to eq true
-          # expect(p3.updated_by_user_at).to eq nil
-          # expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          expect(p3.journal_title).to eq 'Some Other Journal'
+          expect(p3.publisher).to eq 'Some Other Publisher'
+          expect(p3.secondary_title).to eq nil
+          expect(p3.status).to eq 'Published'
+          expect(p3.volume).to eq '17'
+          expect(p3.issue).to eq '8'
+          expect(p3.edition).to eq '4'
+          expect(p3.page_range).to eq '1276-1288'
+          expect(p3.url).to eq nil
+          expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          expect(p3.abstract).to eq nil
+          expect(p3.authors_et_al).to eq false
+          expect(p3.published_on).to eq Date.new(2010, 1, 1)
+          expect(p3.visible).to eq true
+          expect(p3.updated_by_user_at).to eq nil
+          expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
         end
       end
       context "when an included publication exists in the database" do
