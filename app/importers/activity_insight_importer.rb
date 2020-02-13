@@ -148,23 +148,11 @@ class ActivityInsightImporter
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
               PublicationImport.new(source: IMPORT_SOURCE,
                                     source_identifier: pub.activity_insight_id,
-                                    publication: Publication.create!(title: pub.title,
-                                                                     publication_type: pub.publication_type,
-                                                                     journal_title: pub.journal_title,
-                                                                     publisher: pub.publisher,
-                                                                     secondary_title: pub.secondary_title,
-                                                                     status: pub.status,
-                                                                     volume: pub.volume,
-                                                                     issue: pub.issue,
-                                                                     edition: pub.edition,
-                                                                     page_range: pub.page_range,
-                                                                     url: pub.url,
-                                                                     issn: pub.issn,
-                                                                     abstract: pub.abstract,
-                                                                     authors_et_al: pub.authors_et_al,
-                                                                     published_on: pub.published_on,
-                                                                     doi: pub.doi))
+                                    publication: Publication.create!(pub_attrs(pub)))
+            p = pi.publication
+
             if pi.persisted?
+              p.update_attributes!(pub_attrs(pub)) unless p.updated_by_user_at.present?
             else
               pi.save!
             end
@@ -180,6 +168,27 @@ class ActivityInsightImporter
   end
 
   private
+
+  def pub_attrs(pub)
+    {
+      title: pub.title,
+      publication_type: pub.publication_type,
+      journal_title: pub.journal_title,
+      publisher: pub.publisher,
+      secondary_title: pub.secondary_title,
+      status: pub.status,
+      volume: pub.volume,
+      issue: pub.issue,
+      edition: pub.edition,
+      page_range: pub.page_range,
+      url: pub.url,
+      issn: pub.issn,
+      abstract: pub.abstract,
+      authors_et_al: pub.authors_et_al,
+      published_on: pub.published_on,
+      doi: pub.doi
+    }
+  end
 
   def ai_users
     @users ||= Nokogiri::XML(ai_users_xml).css('Users User').map { |u| ActivityInsightListUser.new(u) }
