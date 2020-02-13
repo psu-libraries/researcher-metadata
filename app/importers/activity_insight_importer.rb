@@ -149,12 +149,42 @@ class ActivityInsightImporter
               PublicationImport.new(source: IMPORT_SOURCE,
                                     source_identifier: pub.activity_insight_id,
                                     publication: Publication.create!(pub_attrs(pub)))
-            p = pi.publication
+            pub_record = pi.publication
 
             if pi.persisted?
-              p.update_attributes!(pub_attrs(pub)) unless p.updated_by_user_at.present?
+              pub_record.update_attributes!(pub_attrs(pub)) unless pub_record.updated_by_user_at.present?
             else
               pi.save!
+            end
+
+            unless pub_record.updated_by_user_at.present?
+              pub.faculty_authors.each do |author|
+                user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
+                if user
+                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+
+                  if authorship.new_record?
+                    authorship.user = user
+                    authorship.publication = pub_record
+                  end
+                  authorship.author_number = pub.contributors.index(author) + 1
+                  authorship.role = author.role
+
+                  authorship.save!
+                end
+              end
+
+              pub_record.contributors.delete_all
+              pub.contributors.each_with_index do |cont, i|
+                c = Contributor.new
+                c.publication = pub_record
+                c.first_name = cont.first_name
+                c.middle_name = cont.middle_name
+                c.last_name = cont.last_name
+                c.role = cont.role
+                c.position = i + 1
+                c.save!
+              end
             end
           end
         end
@@ -732,6 +762,16 @@ class ActivityInsightAPIPublication
     DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
+  def faculty_authors
+    contributors.select { |c| c.activity_insight_user_id }
+  end
+
+  def contributors
+    parsed_publication.css('INTELLCONT_AUTH').map do |a|
+      ActivityInsightPublicationAuthor.new(a)
+    end
+  end
+
   private
 
   attr_reader :parsed_publication
@@ -750,5 +790,48 @@ class ActivityInsightAPIPublication
     else
       contype
     end
+  end
+end
+
+
+class ActivityInsightPublicationAuthor
+  def initialize(parsed_author)
+    @parsed_author = parsed_author
+  end
+
+  def activity_insight_user_id
+    text_for('FACULTY_NAME')
+  end
+
+  def first_name
+    text_for('FNAME')
+  end
+
+  def middle_name
+    text_for('MNAME')
+  end
+
+  def last_name
+    text_for('LNAME')
+  end
+
+  def role
+    text_for('ROLE')
+  end
+
+  def activity_insight_id
+    parsed_author.attribute('id').value
+  end
+
+  def ==(other)
+    other.is_a?(self.class) && activity_insight_id == other.activity_insight_id
+  end
+
+  private
+
+  attr_reader :parsed_author
+  
+  def text_for(element)
+    parsed_author.css(element).text.strip.presence
   end
 end

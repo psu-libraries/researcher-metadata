@@ -270,10 +270,10 @@
         <PERCENT/>
       </INTELLCONT_AUTH>
       <INTELLCONT_AUTH id="190706413570">
-        <FACULTY_NAME/>
-        <FNAME>Joshua</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Gradstudent</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Author</ROLE>
@@ -342,10 +342,10 @@
       <STATUS>Published</STATUS>
       <REFEREED>Yes</REFEREED>
       <INTELLCONT_AUTH id="171620739073">
-        <FACULTY_NAME/>
-        <FNAME>John</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Testresearcher</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Primary Author</ROLE>
@@ -437,10 +437,10 @@
         <PERCENT/>
       </INTELLCONT_AUTH>
       <INTELLCONT_AUTH id="396748521734">
-        <FACULTY_NAME/>
-        <FNAME>Thomas</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Resercher</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Author</ROLE>
@@ -513,10 +513,10 @@
         <PERCENT/>
       </INTELLCONT_AUTH>
       <INTELLCONT_AUTH id="903776248924">
-        <FACULTY_NAME/>
-        <FNAME>Robert</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Gradstudent</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Author</ROLE>
@@ -590,10 +590,10 @@
         <PERCENT/>
       </INTELLCONT_AUTH>
       <INTELLCONT_AUTH id="990283885213">
-        <FACULTY_NAME/>
-        <FNAME>Peter</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Anotherauthor</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Author</ROLE>
@@ -659,10 +659,10 @@
       <STATUS>Published</STATUS>
       <REFEREED>Yes</REFEREED>
       <INTELLCONT_AUTH id="2456234363734">
-        <FACULTY_NAME/>
-        <FNAME>Henry</FNAME>
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
         <MNAME/>
-        <LNAME>Bookauthor</LNAME>
+        <LNAME>Testuser</LNAME>
         <INSTITUTION/>
         <STATUS/>
         <ROLE>Primary Author</ROLE>

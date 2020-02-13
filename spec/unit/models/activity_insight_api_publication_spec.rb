@@ -1187,4 +1187,48 @@ describe ActivityInsightAPIPublication do
       end
     end
   end
+
+  describe '#faculty_authors' do
+    let(:auth_element1) { double 'XML element 1' }
+    let(:auth_element2) { double 'XML element 2' }
+    let(:auth_element3) { double 'XML element 3' }
+    let(:auth1) { double 'author 1', activity_insight_user_id: 123 }
+    let(:auth2) { double 'author 2', activity_insight_user_id: 456 }
+    let(:auth3) { double 'author 3', activity_insight_user_id: nil }
+
+    before do
+      allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
+                                                                             auth_element2,
+                                                                             auth_element3])
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+    end
+
+    it "returns an array of the publication's authors from the given data who have a user ID" do
+      expect(pub.faculty_authors).to eq [auth1, auth2]
+    end
+  end
+
+  describe '#contributors' do
+    let(:auth_element1) { double 'XML element 1' }
+    let(:auth_element2) { double 'XML element 2' }
+    let(:auth_element3) { double 'XML element 3' }
+    let(:auth1) { double 'author 1', activity_insight_user_id: 123 }
+    let(:auth2) { double 'author 2', activity_insight_user_id: 456 }
+    let(:auth3) { double 'author 3', activity_insight_user_id: nil }
+
+    before do
+      allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
+                                                                             auth_element2,
+                                                                             auth_element3])
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+    end
+
+    it "returns an array of the publication's authors from the given data" do
+      expect(pub.contributors).to eq [auth1, auth2, auth3]
+    end
+  end
 end

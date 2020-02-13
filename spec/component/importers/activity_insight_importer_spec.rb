@@ -798,6 +798,87 @@ describe ActivityInsightImporter do
           expect(p3.updated_by_user_at).to eq nil
           expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
         end
+
+        it "creates a new authorship record for every faculty author for each imported publication" do
+          expect { importer.call }.to change { Authorship.count }.by 3
+        end
+
+        it "saves the correct attributes with each new authorship" do
+          importer.call
+          u = User.find_by(webaccess_id: 'abc123')
+
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190706413568').publication
+          p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '171620739072').publication
+          p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '92747188475').publication
+          a1 = Authorship.find_by(publication: p1, user: u)
+          a2 = Authorship.find_by(publication: p2, user: u)
+          a3 = Authorship.find_by(publication: p3, user: u)
+
+          expect(a1.author_number).to eq 2
+          expect(a1.role).to eq 'Author'
+
+          expect(a2.author_number).to eq 1
+          expect(a2.role).to eq 'Primary Author'
+
+          expect(a3.author_number).to eq 2
+          expect(a3.role).to eq 'Author'
+        end
+
+        it "creates a new contributor record for every faculty author for each imported publication" do
+          expect { importer.call }.to change { Contributor.count }.by 6
+        end
+
+        it "saves the correct attributes with each new contributor" do
+          importer.call
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190706413568').publication
+          p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '171620739072').publication
+          p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '92747188475').publication
+
+          expect(Contributor.find_by(publication: p1,
+                                     first_name: 'Elizabeth',
+                                     middle_name: 'A.',
+                                     last_name: 'Testauthor',
+                                     position: 1,
+                                     role: 'Author')).not_to be_nil
+          expect(Contributor.find_by(publication: p1,
+                                     first_name: 'Sally',
+                                     middle_name: nil,
+                                     last_name: 'Testuser',
+                                     position: 2,
+                                     role: 'Author')).not_to be_nil
+
+          expect(Contributor.find_by(publication: p2,
+                                     first_name: 'Sally',
+                                     middle_name: nil,
+                                     last_name: 'Testuser',
+                                     position: 1,
+                                     role: 'Primary Author')).not_to be_nil
+          expect(Contributor.find_by(publication: p2,
+                                     first_name: 'B.',
+                                     middle_name: nil,
+                                     last_name: 'Tester',
+                                     position: 2,
+                                     role: 'Author')).not_to be_nil
+
+          expect(Contributor.find_by(publication: p3,
+                                     first_name: 'Mary',
+                                     middle_name: 'E.',
+                                     last_name: 'Paperauthor',
+                                     position: 1,
+                                     role: 'Author')).not_to be_nil
+          expect(Contributor.find_by(publication: p3,
+                                     first_name: 'Sally',
+                                     middle_name: nil,
+                                     last_name: 'Testuser',
+                                     position: 2,
+                                     role: 'Author')).not_to be_nil
+        end
       end
       context "when an included publication exists in the database" do
         let!(:existing_import) { create :publication_import,
@@ -901,6 +982,131 @@ describe ActivityInsightImporter do
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
           end
+
+          context "when an authorship already exists for the existing publication" do
+            let!(:existing_authorship) { create :authorship,
+                                                user: user,
+                                                publication: existing_pub,
+                                                role: 'Existing Role',
+                                                author_number: 6 }
+            let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+            it "creates new authorship records for every new faculty author for each new imported publication" do
+              expect { importer.call }.to change { Authorship.count }.by 2
+            end
+
+            it "saves the correct attributes with each new authorship and does not update the existing authorship" do
+              importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+    
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190706413568').publication
+              p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '171620739072').publication
+              p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '92747188475').publication
+              a1 = Authorship.find_by(publication: p1, user: u)
+              a2 = Authorship.find_by(publication: p2, user: u)
+              a3 = Authorship.find_by(publication: p3, user: u)
+    
+              expect(a1.author_number).to eq 2
+              expect(a1.role).to eq 'Author'
+    
+              expect(a2.author_number).to eq 6
+              expect(a2.role).to eq 'Existing Role'
+    
+              expect(a3.author_number).to eq 2
+              expect(a3.role).to eq 'Author'
+            end
+          end
+
+          context "when no authorships exist for the existing publication" do
+            it "creates a new authorship record for every new faculty author for each new imported publication" do
+              expect { importer.call }.to change { Authorship.count }.by 2
+            end
+    
+            it "saves the correct attributes with each new authorship" do
+              importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+    
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190706413568').publication
+              p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '171620739072').publication
+              p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '92747188475').publication
+              a1 = Authorship.find_by(publication: p1, user: u)
+              a2 = Authorship.find_by(publication: p2, user: u)
+              a3 = Authorship.find_by(publication: p3, user: u)
+    
+              expect(a1.author_number).to eq 2
+              expect(a1.role).to eq 'Author'
+    
+              expect(a2).to eq nil
+    
+              expect(a3.author_number).to eq 2
+              expect(a3.role).to eq 'Author'
+            end
+          end
+
+          let!(:existing_cont) { create :contributor, publication: existing_pub }
+
+          it "creates a new contributor record for every faculty author for each new imported publication" do
+            expect { importer.call }.to change { Contributor.count }.by 4
+          end
+          
+          it "does not remove any existing contributors on the existing publication" do
+            importer.call
+            expect(existing_cont.reload).not_to be_nil
+          end
+  
+          it "saves the correct attributes with each new contributor" do
+            importer.call
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+            p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '171620739072').publication
+            p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '92747188475').publication
+  
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Elizabeth',
+                                       middle_name: 'A.',
+                                       last_name: 'Testauthor',
+                                       position: 1,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 2,
+                                       role: 'Author')).not_to be_nil
+  
+            expect(Contributor.find_by(publication: p2,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 1,
+                                       role: 'Primary Author')).to be_nil
+            expect(Contributor.find_by(publication: p2,
+                                       first_name: 'B.',
+                                       middle_name: nil,
+                                       last_name: 'Tester',
+                                       position: 2,
+                                       role: 'Author')).to be_nil
+  
+            expect(Contributor.find_by(publication: p3,
+                                       first_name: 'Mary',
+                                       middle_name: 'E.',
+                                       last_name: 'Paperauthor',
+                                       position: 1,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p3,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 2,
+                                       role: 'Author')).not_to be_nil
+          end
         end
 
         context "when the existing publication has not been modified by an admin user" do
@@ -980,6 +1186,132 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          end
+
+          context "when an authorship already exists for the existing publication" do
+            let!(:existing_authorship) { create :authorship,
+                                                user: user,
+                                                publication: existing_pub,
+                                                role: 'Existing Role',
+                                                author_number: 6 }
+            let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+            it "creates new authorship records for every new faculty author for each new imported publication" do
+              expect { importer.call }.to change { Authorship.count }.by 2
+            end
+
+            it "saves the correct attributes with each new authorship and updates the existing authorship" do
+              importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+    
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190706413568').publication
+              p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '171620739072').publication
+              p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '92747188475').publication
+              a1 = Authorship.find_by(publication: p1, user: u)
+              a2 = Authorship.find_by(publication: p2, user: u)
+              a3 = Authorship.find_by(publication: p3, user: u)
+    
+              expect(a1.author_number).to eq 2
+              expect(a1.role).to eq 'Author'
+    
+              expect(a2.author_number).to eq 1
+              expect(a2.role).to eq 'Primary Author'
+    
+              expect(a3.author_number).to eq 2
+              expect(a3.role).to eq 'Author'
+            end
+          end
+
+          context "when no authorships exist for the existing publication" do
+            it "creates a new authorship record for every new faculty author for each imported publication" do
+              expect { importer.call }.to change { Authorship.count }.by 3
+            end
+    
+            it "saves the correct attributes with each new authorship" do
+              importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+    
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190706413568').publication
+              p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '171620739072').publication
+              p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '92747188475').publication
+              a1 = Authorship.find_by(publication: p1, user: u)
+              a2 = Authorship.find_by(publication: p2, user: u)
+              a3 = Authorship.find_by(publication: p3, user: u)
+    
+              expect(a1.author_number).to eq 2
+              expect(a1.role).to eq 'Author'
+    
+              expect(a2.author_number).to eq 1
+              expect(a2.role).to eq 'Primary Author'
+
+              expect(a3.author_number).to eq 2
+              expect(a3.role).to eq 'Author'
+            end
+          end
+
+          let!(:existing_cont) { create :contributor, publication: existing_pub }
+
+          it "creates a new contributor record for every faculty author for each imported publication" do
+            expect { importer.call }.to change { Contributor.count }.by 5
+          end
+
+          it "removes any existing contributors that are not in the new import" do
+            importer.call
+            expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
+          end
+  
+          it "saves the correct attributes with each new contributor" do
+            importer.call
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+            p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '171620739072').publication
+            p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '92747188475').publication
+  
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Elizabeth',
+                                       middle_name: 'A.',
+                                       last_name: 'Testauthor',
+                                       position: 1,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 2,
+                                       role: 'Author')).not_to be_nil
+  
+            expect(Contributor.find_by(publication: p2,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 1,
+                                       role: 'Primary Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p2,
+                                       first_name: 'B.',
+                                       middle_name: nil,
+                                       last_name: 'Tester',
+                                       position: 2,
+                                       role: 'Author')).not_to be_nil
+  
+            expect(Contributor.find_by(publication: p3,
+                                       first_name: 'Mary',
+                                       middle_name: 'E.',
+                                       last_name: 'Paperauthor',
+                                       position: 1,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p3,
+                                       first_name: 'Sally',
+                                       middle_name: nil,
+                                       last_name: 'Testuser',
+                                       position: 2,
+                                       role: 'Author')).not_to be_nil
           end
         end
       end
