@@ -799,7 +799,7 @@ describe ActivityInsightAPIPublication do
     end
     
     context "when the journal name element in the given data contains 'Other'" do
-      let(:journal_name_element) { double 'journal name element', text: "other" }
+      let(:journal_name_element) { double 'journal name element', text: "Other" }
       context "when the journal_name_other element in the given data is empty" do
         let(:journal_name_other_element) { double 'journal name other element', text: '' }
         it "returns nil" do
@@ -816,7 +816,7 @@ describe ActivityInsightAPIPublication do
     end
 
     context "when the journal name element in the given data contains '  other  '" do
-      let(:journal_name_element) { double 'journal name element', text: "other" }
+      let(:journal_name_element) { double 'journal name element', text: "  other  " }
       context "when the journal_name_other element in the given data is empty" do
         let(:journal_name_other_element) { double 'journal name other element', text: '' }
         it "returns nil" do
@@ -899,7 +899,7 @@ describe ActivityInsightAPIPublication do
     end
     
     context "when the publisher element in the given data contains 'Other'" do
-      let(:publisher_element) { double 'publisher element', text: "other" }
+      let(:publisher_element) { double 'publisher element', text: "Other" }
       context "when the publisher_other element in the given data is empty" do
         let(:publisher_other_element) { double 'publisher other element', text: '' }
         it "returns nil" do
@@ -916,7 +916,7 @@ describe ActivityInsightAPIPublication do
     end
 
     context "when the publisher element in the given data contains '  other  '" do
-      let(:publisher_element) { double 'publisher element', text: "other" }
+      let(:publisher_element) { double 'publisher element', text: "  other  " }
       context "when the publisher_other element in the given data is empty" do
         let(:publisher_other_element) { double 'publisher other element', text: '' }
         it "returns nil" do

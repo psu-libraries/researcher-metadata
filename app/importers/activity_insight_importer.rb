@@ -666,7 +666,7 @@ class ActivityInsightAPIPublication
 
   def journal_title
     jnt = text_for('JOURNAL_NAME')
-    if jnt == 'other'
+    if jnt.try(:downcase) == 'other'
       text_for('JOURNAL_NAME_OTHER')
     else
       jnt
@@ -675,7 +675,7 @@ class ActivityInsightAPIPublication
 
   def publisher
     pt = text_for('PUBLISHER')
-    if pt == 'other'
+    if pt.try(:downcase) == 'other'
       text_for('PUBLISHER_OTHER')
     else
       pt
