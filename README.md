@@ -18,7 +18,7 @@ after the end of each semester) at a minimum. Our methods for importing new data
 are evolving, but we'll attempt to document the process for importing new data here until it is more
 completely automated.
 
-Broadly, the process currently consists of three steps for most of the data sources:
+Broadly, the process currently consists of three steps for some of the data sources:
 1. Gather new data in the form of correctly-formatted files from each source
 1. Place the new data files in the conventional location on the production server
 1. Run the Rake task to automatically import all of the data from the new files
@@ -34,11 +34,7 @@ Below is a list of the data sources along with the types of records that are imp
 
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
-etc. This application has a [REST API](https://webservices.digitalmeasures.com/login/service/v4) to which
-we have access, but in the past we have relied on files that are manually exported by a Penn State Libraries
-administrator in CSV/spreadsheet format for our data imports. We're currently transitioning from using the
-old CSV file imports to importing data directly via the API. We import the following types of records 
-from Activity Insight:
+etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) for directly importing data. We import the following types of records from Activity Insight:
     - authorships
     - contributors
     - education_history_items
@@ -107,13 +103,8 @@ on the application servers it is shared between application releases. Below is a
 new data from each source.
  
 #### Activity Insight
-Obtaining new data files for import from Activity Insight is tricky and the process is too nuanced to
-reasonably document. The files are manually exported from an Activity Insight web admin interface, and
-then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
-all have the expected file type and encoding as well as the expected columns, column header names, and
-complete data in each column. There is danger that if expected columns are missing from these files, then
-importing them **may delete existing data** from our database. Because this process is so unsustainable, we're
-in the process of transitioning to importing all of the data directly via the Activity Insight API.
+We import data directly via Activity Insight's API. There is no need to obtain any data prior to running
+the import.
 
 #### Pure
 In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
