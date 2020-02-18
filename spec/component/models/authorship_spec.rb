@@ -13,6 +13,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:position_in_profile).of_type(:integer) }
   it { is_expected.to have_db_column(:confirmed).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:scholarsphere_uploaded_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:role).of_type(:string) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }

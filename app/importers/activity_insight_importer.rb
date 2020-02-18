@@ -1,4 +1,6 @@
 class ActivityInsightImporter
+  IMPORT_SOURCE = 'Activity Insight'
+
   def initialize
     @errors = []
   end
@@ -141,6 +143,52 @@ class ActivityInsightImporter
           end
         end
 
+        details.publications.each do |pub|
+          if pub.importable?
+            pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
+              PublicationImport.new(source: IMPORT_SOURCE,
+                                    source_identifier: pub.activity_insight_id,
+                                    publication: Publication.create!(pub_attrs(pub)))
+            pub_record = pi.publication
+
+            if pi.persisted?
+              pub_record.update_attributes!(pub_attrs(pub)) unless pub_record.updated_by_user_at.present?
+            else
+              pi.save!
+            end
+
+            unless pub_record.updated_by_user_at.present?
+              pub.faculty_authors.each do |author|
+                user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
+                if user
+                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+
+                  if authorship.new_record?
+                    authorship.user = user
+                    authorship.publication = pub_record
+                  end
+                  authorship.author_number = pub.contributors.index(author) + 1
+                  authorship.role = author.role
+
+                  authorship.save!
+                end
+              end
+
+              pub_record.contributors.delete_all
+              pub.contributors.each_with_index do |cont, i|
+                c = Contributor.new
+                c.publication = pub_record
+                c.first_name = cont.first_name
+                c.middle_name = cont.middle_name
+                c.last_name = cont.last_name
+                c.role = cont.role
+                c.position = i + 1
+                c.save!
+              end
+            end
+          end
+        end
+
       rescue Exception => e
         errors << e
       end
@@ -150,6 +198,27 @@ class ActivityInsightImporter
   end
 
   private
+
+  def pub_attrs(pub)
+    {
+      title: pub.title,
+      publication_type: pub.publication_type,
+      journal_title: pub.journal_title,
+      publisher: pub.publisher,
+      secondary_title: pub.secondary_title,
+      status: pub.status,
+      volume: pub.volume,
+      issue: pub.issue,
+      edition: pub.edition,
+      page_range: pub.page_range,
+      url: pub.url,
+      issn: pub.issn,
+      abstract: pub.abstract,
+      authors_et_al: pub.authors_et_al,
+      published_on: pub.published_on,
+      doi: pub.doi
+    }
+  end
 
   def ai_users
     @users ||= Nokogiri::XML(ai_users_xml).css('Users User').map { |u| ActivityInsightListUser.new(u) }
@@ -291,6 +360,10 @@ class ActivityInsightDetailUser
 
   def performances
     user.css('PERFORM_EXHIBIT').map { |p| ActivityInsightPerformance.new(p) }
+  end
+
+  def publications
+    user.css('INTELLCONT').map { |p| ActivityInsightAPIPublication.new(p) }
   end
 
   private
@@ -586,5 +659,179 @@ class ActivityInsightPerformanceContributor
 
   def text_for(element)
     parsed_contributor.css(element).text.strip.presence
+  end
+end
+
+
+class ActivityInsightAPIPublication
+  def initialize(parsed_publication)
+    @parsed_publication = parsed_publication
+  end
+
+  def publication_type
+    if cleaned_ai_type == 'journal article, academic journal'
+      'Academic Journal Article'
+    elsif cleaned_ai_type == 'journal article, in-house journal' ||
+      cleaned_ai_type == 'journal article, in-house'
+      'In-house Journal Article'
+    elsif cleaned_ai_type == 'journal article, professional journal'
+      'Professional Journal Article'
+    elsif cleaned_ai_type == 'journal article, public or trade journal' ||
+      cleaned_ai_type == 'magazine or trade journal article'
+      'Trade Journal Article'
+    elsif cleaned_ai_type == 'journal article'
+      'Journal Article'
+    end
+  end
+
+  def status
+    text_for('STATUS')
+  end
+
+  def importable?
+    !!(publication_type =~ /journal article/i) && (status == 'Published')
+  end
+
+  def activity_insight_id
+    parsed_publication.attribute('id').value
+  end
+
+  def title
+    text_for('TITLE')
+  end
+
+  def secondary_title
+    text_for('TITLE_SECONDARY')
+  end
+
+  def journal_title
+    jnt = text_for('JOURNAL_NAME')
+    if jnt.try(:downcase) == 'other'
+      text_for('JOURNAL_NAME_OTHER')
+    else
+      jnt
+    end
+  end
+
+  def publisher
+    pt = text_for('PUBLISHER')
+    if pt.try(:downcase) == 'other'
+      text_for('PUBLISHER_OTHER')
+    else
+      pt
+    end
+  end
+
+  def volume
+    text_for('VOLUME')
+  end
+
+  def issue
+    text_for('ISSUE')
+  end
+
+  def edition
+    text_for('EDITION')
+  end
+
+  def page_range
+    text_for('PAGENUM') || text_for('PUB_PAGENUM')
+  end
+
+  def url
+    text_for('WEB_ADDRESS')
+  end
+
+  def issn
+    text_for('ISBNISSN')
+  end
+
+  def abstract
+    text_for('ABSTRACT')
+  end
+
+  def authors_et_al
+    text_for('AUTHORS_ETAL').try(:downcase) == 'true'
+  end
+
+  def published_on
+    text_for('PUB_START')
+  end
+
+  def doi
+    DOIParser.new(url).url || DOIParser.new(issn).url
+  end
+
+  def faculty_authors
+    contributors.select { |c| c.activity_insight_user_id }
+  end
+
+  def contributors
+    parsed_publication.css('INTELLCONT_AUTH').map do |a|
+      ActivityInsightPublicationAuthor.new(a)
+    end
+  end
+
+  private
+
+  attr_reader :parsed_publication
+
+  def text_for(element)
+    parsed_publication.css(element).text.strip.presence
+  end
+
+  def contype
+    text_for('CONTYPE').try(:downcase)
+  end
+
+  def cleaned_ai_type
+    if contype == 'other'
+      text_for('CONTYPEOTHER').try(:downcase)
+    else
+      contype
+    end
+  end
+end
+
+
+class ActivityInsightPublicationAuthor
+  def initialize(parsed_author)
+    @parsed_author = parsed_author
+  end
+
+  def activity_insight_user_id
+    text_for('FACULTY_NAME')
+  end
+
+  def first_name
+    text_for('FNAME')
+  end
+
+  def middle_name
+    text_for('MNAME')
+  end
+
+  def last_name
+    text_for('LNAME')
+  end
+
+  def role
+    text_for('ROLE')
+  end
+
+  def activity_insight_id
+    parsed_author.attribute('id').value
+  end
+
+  def ==(other)
+    other.is_a?(self.class) && activity_insight_id == other.activity_insight_id
+  end
+
+  private
+
+  attr_reader :parsed_author
+  
+  def text_for(element)
+    parsed_author.css(element).text.strip.presence
   end
 end

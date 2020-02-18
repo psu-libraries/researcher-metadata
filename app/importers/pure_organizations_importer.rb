@@ -15,9 +15,9 @@ class PureOrganizationsImporter
         o = Organization.find_by(pure_uuid: org['uuid']) || Organization.new
 
         o.pure_uuid = org['uuid'] if o.new_record?
-        o.name = org['name'].first['value']
+        o.name = extract_name(org)
         o.pure_external_identifier = org['externalId']
-        o.organization_type = org['type'].first['value']
+        o.organization_type = extract_organization_type(org)
         o.save!
       end
       pbar.finish unless Rails.env.test?
@@ -45,4 +45,12 @@ class PureOrganizationsImporter
   private
 
   attr_reader :filename
+
+  def extract_name(org)
+    org["name"]["text"].detect { |text| text["locale"] == "en_US" }["value"]
+  end
+
+  def extract_organization_type(org)
+    org["type"]["term"]["text"].detect { |text| text["locale"] == "en_US" }["value"]
+  end
 end

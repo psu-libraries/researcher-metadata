@@ -18,7 +18,7 @@ after the end of each semester) at a minimum. Our methods for importing new data
 are evolving, but we'll attempt to document the process for importing new data here until it is more
 completely automated.
 
-Broadly, the process currently consists of three steps for most of the data sources:
+Broadly, the process currently consists of three steps for some of the data sources:
 1. Gather new data in the form of correctly-formatted files from each source
 1. Place the new data files in the conventional location on the production server
 1. Run the Rake task to automatically import all of the data from the new files
@@ -34,11 +34,7 @@ Below is a list of the data sources along with the types of records that are imp
 
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
-etc. This application has a [REST API](https://webservices.digitalmeasures.com/login/service/v4) to which
-we have access, but in the past we have relied on files that are manually exported by a Penn State Libraries
-administrator in CSV/spreadsheet format for our data imports. We're currently transitioning from using the
-old CSV file imports to importing data directly via the API. We import the following types of records 
-from Activity Insight:
+etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) for directly importing data. We import the following types of records from Activity Insight:
     - authorships
     - contributors
     - education_history_items
@@ -107,13 +103,8 @@ on the application servers it is shared between application releases. Below is a
 new data from each source.
  
 #### Activity Insight
-Obtaining new data files for import from Activity Insight is tricky and the process is too nuanced to
-reasonably document. The files are manually exported from an Activity Insight web admin interface, and
-then manually manipulated in some cases before they are handed off to us. We have to ensure that the files
-all have the expected file type and encoding as well as the expected columns, column header names, and
-complete data in each column. There is danger that if expected columns are missing from these files, then
-importing them **may delete existing data** from our database. Because this process is so unsustainable, we're
-in the process of transitioning to importing all of the data directly via the Activity Insight API.
+We import data directly via Activity Insight's API. There is no need to obtain any data prior to running
+the import.
 
 #### Pure
 In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
@@ -131,8 +122,8 @@ The process for obtaining and preparing eTD data for import involves several ste
 State Libraries admin. Justin Patterson has been able to do this for us in the past.
 1. Create a MySQL database locally and load in the eTD production dump.
 1. The production database dump contains a view called `student_submissions` that presents most of the eTD data
-that we need to import, but it's missing one column that we need. So, in our local database we need to create
-a new view with all the same data plus the one additional column:
+that we need to import, but it's missing one column that we need. So, in our local database we need to add
+one additional column called `submission_public_id` to the `student_submissions` view:
 
     ```sql
     CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `metadata_import_view`
@@ -158,7 +149,18 @@ a new view with all the same data plus the one additional column:
        `id`.`id_number` AS `inv_disclosure_num`,group_concat(concat(`cm`.`name`,_utf8'|',nullif(`cm`.`email`,_utf8'|'),_utf8' ',`cr`.`name`) order by `cr`.`id` ASC separator ' || ') AS `committee_members`
     FROM ((((((`submissions` `s` left join `invention_disclosures` `id` on((`s`.`id` = `id`.`submission_id`))) left join `authors` on((`s`.`author_id` = `authors`.`id`))) left join `programs` `p` on((`s`.`program_id` = `p`.`id`))) left join `degrees` `d` on((`s`.`degree_id` = `d`.`id`))) left join `committee_members` `cm` on((`s`.`id` = `cm`.`submission_id`))) left join `committee_roles` `cr` on((`cm`.`committee_role_id` = `cr`.`id`))) group by `s`.`id`;
     ```
-1. Next, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
+NOTE: The default SQL mode in MySQL 5.7 and later enables several modes including `ONLY_FULL_GROUP_BY` that were turned off by default in older versions. `ONLY_FULL_GROUP_BY` causes the `student_submissions` view to be rejected. Here's some background on this issue:
+
+https://dev.mysql.com/doc/refman/5.7/en/sql-mode.html#sql-mode-changes
+https://www.percona.com/blog/2019/05/13/solve-query-failures-regarding-only_full_group_by-sql-mode/
+
+To restore operation for the `student_submissions` view we've been turning off SQL modes when starting a new MySQL
+session like so: `mysql.server start --sql-mode=''` To verify no modes were activated go into MySQL and do the following:
+``` mysql> SELECT @@sql_mode; ```
+Note: This approach is somewhat heavy-handed, but the results from the `student_submissions` view seem okay. A more precise approach would be to not invoke `ONLY_FULL_GROUP_BY` when starting a new MySQL session and leave all
+the other modes activated.
+    
+1. After starting up MySQL with SQL modes turned off, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
 substituting your local database name if you called it something different.
 1. Open the TSV file in vim. You'll probably see that the file is littered with `^M` control characters that we
 need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in 
@@ -189,15 +191,13 @@ Once updated data files have been obtained (if applicable), importing new data i
 the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
 for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
 correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources - `rake import:all`. The Open Access Button import is not included in this task because it
-can take a very long time to run (a couple of days) due to rate limiting and our volume of queries. A separate task
-is used to import all of the currently supported data directly via the Activity Insight API:  `rake import:activity_insight`.
-All of these tasks are designed to be idempotent given the same source data. If you are using the individual tasks
-to import only a subset of the data and you're going to be running more than one, the order in which the tasks are
-run is important. Some tasks create records that other tasks will find and use if they are present. Running the
-tasks in the correct order ensures that your data import will be complete. The correct order for running the tasks
-is given by the order in which their associated classes are called in the definition of the `import:all` task. The
-Open Access Button import depends on having publications already imported from other sources.
+data from all sources, `rake import:all`, but in practice it's probably better to run each import individually in
+case any of the imports fail to complete for any reason. All of these tasks are designed to be idempotent given the
+same source data. If you are using the individual tasks to import only a subset of the data and you're going to 
+be running more than one, the order in which the tasks are run is important. Some tasks create records that other
+tasks will find and use if they are present. Running the tasks in the correct order ensures that your data import
+will be complete. The correct order for running the tasks is given by the order in which their associated classes
+are called in the definition of the `import:all` task.
 
 ### Identifying Duplicate Publication Data
 Because we import metadata about research publications from more than one source, and because duplicate entries
@@ -207,8 +207,7 @@ duplicate data when they query our own API. Running the rake task `rake group_du
 publication records that exist in the database using several different attributes, and it will put any publication
 records that appear to be the same into groups. This allows admin users to review the groups and pick which record
 in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times. Subsequent
-imports of the same data will then not recreate the discarded duplicates. The procedure that finds and groups
-duplicate publications is also run as part of the `rake import:all` task.
+imports of the same data will then not recreate the discarded duplicates.
 
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record

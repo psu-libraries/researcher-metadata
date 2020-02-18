@@ -1,5 +1,9 @@
 {
   "count" : 3,
+  "pageInformation" : {
+    "offset" : 0,
+    "size" : 3
+  },
   "items" : [ {
     "pureId" : 8289293,
     "externalId" : "SAT1",
@@ -17,26 +21,57 @@
       "createdBy" : "root",
       "createdDate" : "2016-12-23T14:06:33.688+0000",
       "modifiedBy" : "sync_user",
-      "modifiedDate" : "2018-06-28T06:52:02.603+0000",
-      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/9530a014-c29f-4081-88ae-b923dc919001"
+      "modifiedDate" : "2019-07-22T18:35:49.484+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/9530a014-c29f-4081-88ae-b923dc919001",
+      "prettyURLIdentifiers" : [ "susan-a-tester" ]
     },
-    "visibility" : [ {
-      "value" : "Public - No restriction",
-      "key" : "FREE"
-    } ],
+    "visibility" : {
+      "key" : "FREE",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Public - No restriction"
+        } ]
+      }
+    },
     "ids" : [ {
       "pureId" : 21183542,
       "externalId" : "autoid:SAT1-employee-SAT1",
       "externalIdSource" : "synchronisedPerson",
       "externallyManaged" : true,
-      "typeUri" : "/dk/atira/pure/person/personsources/employee",
-      "type" : "Employee ID",
-      "value" : "SAT1"
+      "value" : {
+        "formatted" : false,
+        "value" : "SAT1"
+      },
+      "type" : {
+        "pureId" : 3434254,
+        "uri" : "/dk/atira/pure/person/personsources/employee",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Employee ID"
+          } ]
+        }
+      }
     }, {
       "pureId" : 23578976,
-      "typeUri" : "/dk/atira/pure/person/personsources/scopusauthor",
-      "type" : "Scopus Author ID",
-      "value" : "6603393977"
+      "value" : {
+        "formatted" : false,
+        "value" : "6603393977"
+      },
+      "type" : {
+        "pureId" : 3434256,
+        "uri" : "/dk/atira/pure/person/personsources/scopusauthor",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus Author ID"
+          } ]
+        }
+      }
     } ],
     "staffOrganisationAssociations" : [ {
       "pureId" : 21279128,
@@ -45,55 +80,94 @@
       "externallyManaged" : true,
       "person" : {
         "uuid" : "9530a014-c29f-4081-88ae-b923dc919001",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/9530a014-c29f-4081-88ae-b923dc919001"
-        },
-        "name" : [ {
-          "value" : "Susan A Tester"
-        } ]
+        "externalId" : "SAT1",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Susan A Tester"
+          } ]
+        }
       },
       "period" : {
         "startDate" : "1984-08-14T12:00:00.000+0000",
-        "endDate": "1990-08-14T12:00:00.000+0000"
+        "endDate" : "1990-08-14T12:00:00.000+0000"
       },
       "isPrimaryAssociation" : false,
-      "employmentType" : [ {
-        "value" : "Academic",
+      "employmentType" : {
         "pureId" : 4754,
-        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
-      } ],
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
       "organisationalUnit" : {
         "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/937d604c-a16a-499d-80eb-bd6f931a343c"
+        "externalId" : "SCHOOL-CAM-BD-SCI",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "School of Science (Behrend)"
+          } ]
         },
-        "name" : [ {
-          "value" : "School of Science (Behrend)"
-        } ],
-        "type" : [ {
-          "value" : "Department",
+        "type" : {
           "pureId" : 855,
-          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department"
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "jobDescription" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Associate Professor"
         } ]
       },
-      "staffType" : [ {
-        "value" : "Academic",
-        "pureId" : 3434337,
-        "uri" : "/dk/atira/pure/person/personstafftype/academic"
-      } ],
-      "jobDescription" : [ {
-        "value" : "Associate Professor"
-      } ],
       "emails" : [ {
         "pureId" : 21279130,
         "externalId" : "synchronisedPerson",
         "externalIdSource" : "synchronisedPerson",
         "externallyManaged" : true,
-        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
-        "type" : "Email",
-        "value" : "SAT1@psu.edu"
+        "value" : {
+          "formatted" : false,
+          "value" : "SAT1@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
       } ]
     } ]
   }, {
@@ -112,27 +186,58 @@
     "info" : {
       "createdBy" : "root",
       "createdDate" : "2016-12-23T14:06:33.695+0000",
-      "modifiedBy" : "sync_user",
-      "modifiedDate" : "2018-06-28T06:50:19.948+0000",
-      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
+      "modifiedBy" : "root",
+      "modifiedDate" : "2020-01-02T02:01:04.791+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582",
+      "prettyURLIdentifiers" : [ "bob-b-testuser" ]
     },
-    "visibility" : [ {
-      "value" : "Public - No restriction",
-      "key" : "FREE"
-    } ],
+    "visibility" : {
+      "key" : "FREE",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Public - No restriction"
+        } ]
+      }
+    },
     "ids" : [ {
       "pureId" : 21183537,
       "externalId" : "autoid:bbt2-employee-bbt2",
       "externalIdSource" : "synchronisedPerson",
       "externallyManaged" : true,
-      "typeUri" : "/dk/atira/pure/person/personsources/employee",
-      "type" : "Employee ID",
-      "value" : "bbt2"
+      "value" : {
+        "formatted" : false,
+        "value" : "bbt2"
+      },
+      "type" : {
+        "pureId" : 3434254,
+        "uri" : "/dk/atira/pure/person/personsources/employee",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Employee ID"
+          } ]
+        }
+      }
     }, {
       "pureId" : 23575031,
-      "typeUri" : "/dk/atira/pure/person/personsources/scopusauthor",
-      "type" : "Scopus Author ID",
-      "value" : "6602150313"
+      "value" : {
+        "formatted" : false,
+        "value" : "6602150313"
+      },
+      "type" : {
+        "pureId" : 3434256,
+        "uri" : "/dk/atira/pure/person/personsources/scopusauthor",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus Author ID"
+          } ]
+        }
+      }
     } ],
     "staffOrganisationAssociations" : [ {
       "pureId" : 21309545,
@@ -141,55 +246,94 @@
       "externallyManaged" : true,
       "person" : {
         "uuid" : "a9ea5e62-9b39-4281-a759-e1c58f0ec582",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
-        },
-        "name" : [ {
-          "value" : "Bob B Testuser"
-        } ]
+        "externalId" : "bbt2",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Bob B. Testuser"
+          } ]
+        }
       },
       "period" : {
         "startDate" : "1997-09-01T12:00:00.000+0000",
         "endDate" : "2000-01-01T12:00:00.000+0000"
       },
       "isPrimaryAssociation" : false,
-      "employmentType" : [ {
-        "value" : "Academic",
+      "employmentType" : {
         "pureId" : 4754,
-        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
-      } ],
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
       "organisationalUnit" : {
         "uuid" : "e99fcbec-818a-4b90-a04a-986d05696395",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/e99fcbec-818a-4b90-a04a-986d05696395"
+        "externalId" : "PROGRAM-COL-EN-ACOUSTICS",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Graduate Program in Acoustics"
+          } ]
         },
-        "name" : [ {
-          "value" : "Graduate Program in Acoustics"
-        } ],
-        "type" : [ {
-          "value" : "Department",
+        "type" : {
           "pureId" : 855,
-          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department"
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "jobDescription" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Professor"
         } ]
       },
-      "staffType" : [ {
-        "value" : "Academic",
-        "pureId" : 3434337,
-        "uri" : "/dk/atira/pure/person/personstafftype/academic"
-      } ],
-      "jobDescription" : [ {
-        "value" : "Professor"
-      } ],
       "emails" : [ {
         "pureId" : 21309546,
         "externalId" : "synchronisedPerson",
         "externalIdSource" : "synchronisedPerson",
         "externallyManaged" : true,
-        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
-        "type" : "Email",
-        "value" : "bbt2@psu.edu"
+        "value" : {
+          "formatted" : false,
+          "value" : "bbt2@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
       } ]
     }, {
       "pureId" : 24766061,
@@ -198,203 +342,551 @@
       "externallyManaged" : true,
       "person" : {
         "uuid" : "a9ea5e62-9b39-4281-a759-e1c58f0ec582",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/persons/a9ea5e62-9b39-4281-a759-e1c58f0ec582"
-        },
-        "name" : [ {
-          "value" : "Bob B Testuser"
-        } ]
+        "externalId" : "bbt2",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Bob B. Testuser"
+          } ]
+        }
       },
       "period" : {
         "startDate" : "1997-09-01T12:00:00.000+0000"
       },
       "isPrimaryAssociation" : false,
-      "employmentType" : [ {
-        "value" : "Academic",
+      "employmentType" : {
         "pureId" : 4754,
-        "uri" : "/dk/atira/pure/person/employmenttypes/academic"
-      } ],
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
       "organisationalUnit" : {
         "uuid" : "47bf26c5-18c0-45d1-8aab-9f4597321764",
-        "link" : {
-          "ref" : "content",
-          "href" : "https://pennstate.pure.elsevier.com/ws/api/511/organisational-units/47bf26c5-18c0-45d1-8aab-9f4597321764"
+        "externalId" : "COLLEGE-EN",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "College of Engineering"
+          } ]
         },
-        "name" : [ {
-          "value" : "College of Engineering"
-        } ],
-        "type" : [ {
-          "value" : "College",
+        "type" : {
           "pureId" : 8288437,
-          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/college"
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/college",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "College"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "jobDescription" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Senior Associate Dean"
         } ]
       },
-      "staffType" : [ {
-        "value" : "Academic",
-        "pureId" : 3434337,
-        "uri" : "/dk/atira/pure/person/personstafftype/academic"
-      } ],
-      "jobDescription" : [ {
-        "value" : "Senior Associate Dean"
-      } ],
       "emails" : [ {
         "pureId" : 24766062,
         "externalId" : "synchronisedPerson",
         "externalIdSource" : "synchronisedPerson",
         "externallyManaged" : true,
-        "typeUri" : "/dk/atira/pure/person/personemailtype/email",
-        "type" : "Email",
-        "value" : "bbt2@psu.edu"
+        "value" : {
+          "formatted" : false,
+          "value" : "bbt2@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
       } ]
     } ]
-  },
-    {
-      "pureId": 8289297,
-      "externalId": "jct3",
-      "externalIdSource": "synchronisedPerson",
-      "externallyManaged": true,
-      "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
-      "name": {
-        "firstName": "Jill",
-        "lastName": "Test"
-      },
-      "profiled": true,
-      "scopusHIndex": 2,
-      "fte": 0.0,
-      "info": {
-        "createdBy": "root",
-        "createdDate": "2016-12-23T14:06:33.697+0000",
-        "modifiedBy": "sync_user",
-        "modifiedDate": "2018-06-28T06:52:54.527+0000",
-        "portalUrl": "https://pennstate.pure.elsevier.com/en/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
-      },
-      "visibility": [
-        {
-          "value": "Public - No restriction",
-          "key": "FREE"
-        }
-      ],
-      "titles": [
-        {
-          "value": "MD",
-          "pureId": 22189043,
-          "externalId": "synchronisedPerson",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/titles/postnominal",
-          "type": "Post-nominal title"
-        }
-      ],
-      "ids": [
-        {
-          "pureId": 8289308,
-          "externalId": "autoid:jct3-scopus-35573635700",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/personsources/scopus",
-          "type": "Scopus ID",
-          "value": "35573635700"
-        },
-        {
-          "pureId": 21183541,
-          "externalId": "autoid:jct3-employee-jct3",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/personsources/employee",
-          "type": "Employee ID",
-          "value": "jct3"
-        },
-        {
-          "pureId": 23580879,
-          "typeUri": "/dk/atira/pure/person/personsources/scopusauthor",
-          "type": "Scopus Author ID",
-          "value": "35573635700"
-        }
-      ],
-      "profilePhotos": [
-        {
-          "pureId": 24891913,
-          "typeUri": "/dk/atira/pure/person/personfiles/portrait",
-          "type": "Portrait",
-          "url": "https://pennstate.pure.elsevier.com/ws/files/24891913/jct3.jpg",
-          "filename": "jct3.jpg",
-          "mimetype": "image/jpeg",
-          "size": 0
-        }
-      ]
+  }, {
+    "pureId" : 8289296,
+    "externalId" : "jct3",
+    "externalIdSource" : "synchronisedPerson",
+    "externallyManaged" : true,
+    "uuid" : "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+    "name" : {
+      "firstName" : "Jill",
+      "lastName" : "Test"
     },
-    {
-      "pureId": 2345235,
-      "uuid": "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
-      "name": {
-        "firstName": "NoExternalID",
-        "lastName": "Person"
+    "profiled" : false,
+    "scopusHIndex" : 2,
+    "fte" : 0.0,
+    "info" : {
+      "createdBy" : "root",
+      "createdDate" : "2016-12-23T14:06:33.690+0000",
+      "modifiedBy" : "root",
+      "modifiedDate" : "2019-08-02T00:03:27.708+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+      "prettyURLIdentifiers" : [ "jill-test" ]
+    },
+    "visibility" : {
+      "key" : "BACKEND",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Backend - Restricted to Pure users"
+        } ]
+      }
+    },
+    "titles" : [ {
+      "pureId" : 31701759,
+      "externalId" : "synchronisedPerson",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "PhD"
+        } ]
       },
-      "profiled": true,
-      "scopusHIndex": 2,
-      "fte": 0.0,
-      "info": {
-        "createdBy": "root",
-        "createdDate": "2016-12-23T14:06:33.697+0000",
-        "modifiedBy": "sync_user",
-        "modifiedDate": "2018-06-28T06:52:54.527+0000",
-        "portalUrl": "https://pennstate.pure.elsevier.com/en/persons/0177f1b1-bf3c-4f8d-af2a-10fe0034754c"
+      "type" : {
+        "pureId" : 3434232,
+        "uri" : "/dk/atira/pure/person/titles/postnominal",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Post-nominal title"
+          } ]
+        }
+      }
+    } ],
+    "ids" : [ {
+      "pureId" : 21183540,
+      "externalId" : "autoid:jct3-employee-jct3",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "value" : {
+        "formatted" : false,
+        "value" : "jct3"
       },
-      "visibility": [
-        {
-          "value": "Public - No restriction",
-          "key": "FREE"
+      "type" : {
+        "pureId" : 3434254,
+        "uri" : "/dk/atira/pure/person/personsources/employee",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Employee ID"
+          } ]
         }
-      ],
-      "titles": [
-        {
-          "value": "MD",
-          "pureId": 22189043,
-          "externalId": "synchronisedPerson",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/titles/postnominal",
-          "type": "Post-nominal title"
+      }
+    }, {
+      "pureId" : 23577409,
+      "value" : {
+        "formatted" : false,
+        "value" : "7005029080"
+      },
+      "type" : {
+        "pureId" : 3434256,
+        "uri" : "/dk/atira/pure/person/personsources/scopusauthor",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus Author ID"
+          } ]
         }
-      ],
-      "ids": [
-        {
-          "pureId": 8289308,
-          "externalId": "autoid:jct3-scopus-35573635700",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/personsources/scopus",
-          "type": "Scopus ID",
-          "value": "35573635700"
+      }
+    } ],
+    "staffOrganisationAssociations" : [ {
+      "pureId" : 21279123,
+      "externalId" : "autoid:jct3-DEPT-COL-SC-BMB-Professor-academic-1975-05-01",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+        "externalId" : "jct3",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Jill Test"
+          } ]
+        }
+      },
+      "period" : {
+        "startDate" : "1975-05-01T12:00:00.000+0000",
+        "endDate" : "2017-06-30T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : {
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "organisationalUnit" : {
+        "uuid" : "6d3354f6-fddd-4199-83a1-9732c3d6ca20",
+        "externalId" : "DEPT-COL-SC-BMB",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Biochemistry & Molecular Biology"
+          } ]
         },
-        {
-          "pureId": 21183541,
-          "externalId": "autoid:jct3-employee-jct3",
-          "externalIdSource": "synchronisedPerson",
-          "externallyManaged": true,
-          "typeUri": "/dk/atira/pure/person/personsources/employee",
-          "type": "Employee ID",
-          "value": "jct3"
+        "type" : {
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "jobDescription" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Professor"
+        } ]
+      },
+      "emails" : [ {
+        "pureId" : 21279124,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "value" : {
+          "formatted" : false,
+          "value" : "jct3@psu.edu"
         },
-        {
-          "pureId": 23580879,
-          "typeUri": "/dk/atira/pure/person/personsources/scopusauthor",
-          "type": "Scopus Author ID",
-          "value": "35573635700"
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
         }
-      ],
-      "profilePhotos": [
-        {
-          "pureId": 24891913,
-          "typeUri": "/dk/atira/pure/person/personfiles/portrait",
-          "type": "Portrait",
-          "url": "https://pennstate.pure.elsevier.com/ws/files/24891913/jct3.jpg",
-          "filename": "jct3.jpg",
-          "mimetype": "image/jpeg",
-          "size": 0
+      } ]
+    }, {
+      "pureId" : 31701756,
+      "externalId" : "autoid:jct3-INSTITUTE-CI-academic-1900-01-31",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+        "externalId" : "jct3",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Jill Test"
+          } ]
         }
-      ]
-    }
-  ]
+      },
+      "period" : {
+        "startDate" : "1900-01-31T12:00:00.000+0000",
+        "endDate" : "2017-06-30T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : {
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "organisationalUnit" : {
+        "uuid" : "c9234067-389e-4de1-a5cb-91dbe0173964",
+        "externalId" : "INSTITUTE-CI",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Penn State Cancer Institute"
+          } ]
+        },
+        "type" : {
+          "pureId" : 8288457,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Interdisciplinary Research Unit"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "emails" : [ {
+        "pureId" : 31701757,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "value" : {
+          "formatted" : false,
+          "value" : "jct3@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 24841920,
+      "externalId" : "autoid:jct3-INSTITUTE-CI-M-academic-1900-01-01",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+        "externalId" : "jct3",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Jill Test"
+          } ]
+        }
+      },
+      "period" : {
+        "startDate" : "1900-01-01T12:00:00.000+0000",
+        "endDate" : "2017-06-30T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : {
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "organisationalUnit" : {
+        "uuid" : "c8ef3672-fcc3-465b-a8db-fdae80649dfb",
+        "externalId" : "INSTITUTE-CI-M",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Cancer Institute - Members"
+          } ]
+        },
+        "type" : {
+          "pureId" : 8288457,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Interdisciplinary Research Unit"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "emails" : [ {
+        "pureId" : 24841921,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "value" : {
+          "formatted" : false,
+          "value" : "jct3@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 24841923,
+      "externalId" : "autoid:jct3-INSTITUTE-CI-METH-academic-1900-01-01",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "0177f1b1-bf3c-4f8d-af2a-10fe0034754c",
+        "externalId" : "jct3",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Jill Test"
+          } ]
+        }
+      },
+      "period" : {
+        "startDate" : "1900-01-01T12:00:00.000+0000",
+        "endDate" : "2017-06-30T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : {
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "organisationalUnit" : {
+        "uuid" : "c39609ae-0da6-4c44-9df4-81ba86cf65dd",
+        "externalId" : "INSTITUTE-CI-METH",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Cancer Institute, Mechanisms of Carcinogenesis"
+          } ]
+        },
+        "type" : {
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "emails" : [ {
+        "pureId" : 24841924,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "value" : {
+          "formatted" : false,
+          "value" : "jct3@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
+      } ]
+    } ]
+  } ]
 }

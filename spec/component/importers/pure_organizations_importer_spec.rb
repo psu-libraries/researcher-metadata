@@ -39,7 +39,7 @@ describe PureOrganizationsImporter do
                  pure_uuid: 'pure-uuid-002',
                  pure_external_identifier: 'existing id',
                  organization_type: 'existing type',
-                 parent: create(:organization)
+                 parent: create(:organization, pure_uuid: 'something')
         end
 
         it "creates a new organization for every new object in the .json file and updates the existing organization" do
