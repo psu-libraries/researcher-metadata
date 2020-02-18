@@ -5,7 +5,7 @@ class OpenAccessButtonPublicationImporter
 
     pub_query.find_each do |p|
       find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{p.doi_url_path}")
-      oab_json = JSON.parse(HTTParty.get(find_url).to_s)
+      oab_json = JSON.parse(get_pub(find_url))
 
       if oab_json['data']
         available_article = oab_json['data']['availability'].detect { |a| a['type'] == "article" }
@@ -27,5 +27,17 @@ class OpenAccessButtonPublicationImporter
   def pub_query
     Publication.where.not(doi: nil).where.not(doi: '').where(open_access_url: nil).
       where('open_access_button_last_checked_at IS NULL OR open_access_button_last_checked_at < ?', 31.days.ago)
+  end
+
+  def get_pub(url)
+    attempts = 0
+    HTTParty.get(url).to_s
+  rescue Net::ReadTimeout
+    if attempts <= 10
+      attempts += 1
+      retry
+    else
+      raise
+    end
   end
 end
