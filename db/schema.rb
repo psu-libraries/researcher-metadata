@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_02_11_180255) do
+ActiveRecord::Schema.define(version: 2020_02_18_223334) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -433,6 +433,7 @@ ActiveRecord::Schema.define(version: 2020_02_11_180255) do
     t.text "ai_teaching_interests"
     t.text "ai_research_interests"
     t.text "ai_google_scholar"
+    t.string "orcid_access_token"
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
