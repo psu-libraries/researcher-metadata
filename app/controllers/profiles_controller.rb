@@ -22,6 +22,7 @@ class ProfilesController < ProfileManagementController
   end
 
   def bio
+    @profile = UserProfile.new(current_user)
   end
 
   helper_method :profile_for_current_user?

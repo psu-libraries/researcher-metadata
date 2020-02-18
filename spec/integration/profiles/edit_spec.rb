@@ -6,6 +6,7 @@ describe "editing profile preferences" do
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
                        last_name: 'Testuser',
+                       ai_bio: "Bob's bio info",
                        show_all_publications: true,
                        orcid_identifier: orcid_id }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
@@ -326,6 +327,34 @@ describe "editing profile preferences" do
 
       it "does not allow the user to visit the page" do
         expect(page.current_path).not_to eq edit_profile_performances_path
+      end
+    end
+  end
+
+  feature "the profile bio page" do
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit profile_bio_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Bio Information"
+      end
+
+      it "shows bio information for the user" do
+        expect(page).to have_content "Bob Testuser"
+        expect(page).to have_content "Bob's bio info"
+      end
+    end
+
+    context "when the user is not signed in" do
+      before { visit profile_bio_path }
+
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq profile_bio_path
       end
     end
   end
