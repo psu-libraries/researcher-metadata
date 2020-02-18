@@ -35,6 +35,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:ai_bio).of_type(:text) }
   it { is_expected.to have_db_column(:ai_teaching_interests).of_type(:text) }
   it { is_expected.to have_db_column(:ai_research_interests).of_type(:text) }
+  it { is_expected.to have_db_column(:orcid_access_token).of_type(:string) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
