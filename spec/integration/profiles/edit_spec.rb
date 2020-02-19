@@ -346,7 +346,6 @@ describe "editing profile preferences" do
 
       it "shows bio information for the user" do
         expect(page).to have_content "Bob Testuser"
-        expect(page).to have_content "Bob's bio info"
       end
     end
 
