@@ -1,9 +1,43 @@
-<h4>Profile Bio Information</h4>
-<table class="table">
-  <tbody>
-    <tr>
-      <td><strong>Name:</strong></td>
-      <td><%= @profile.name %></td>
-    </tr>
-  </tbody>
-</table>
+<h4>Profile Bio</h4>
+<div class="profile-bio-section">
+  <h5>Personal Information</h5>
+  <table class="table">
+    <tbody>
+      <tr>
+        <td><strong>Name:</strong></td>
+        <td><%= @user.name %></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<% if @membership %>
+  <div class="profile-bio-section">
+    <h5>Organization</h5>
+    <table class="table">
+      <tbody>
+        <tr>
+          <td><strong>Name:</strong></td>
+          <td><%= @membership.organization.name %></td>
+        </tr>
+        <tr>
+          <td><strong>Position:</strong></td>
+          <td><%= @membership.position_title %></td>
+        </tr>
+        <tr>
+          <td><strong>Start date:</strong></td>
+          <td><%= @membership.started_on %></td>
+        </tr>
+        <% if @membership.ended_on %>
+          <tr>
+            <td><strong>End date:</strong></td>
+            <td><%= @membership.ended_on %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    <% if @user.orcid_identifier %>
+      <%= button_to "Add to my ORCiD Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
+    <% end %>
+  </div>
+<% end %>

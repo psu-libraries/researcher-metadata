@@ -341,11 +341,52 @@ describe "editing profile preferences" do
       it_behaves_like "a profile management page"
 
       it "shows the correct heading content" do
-        expect(page).to have_content "Bio Information"
+        expect(page).to have_content "Profile Bio"
       end
 
       it "shows bio information for the user" do
         expect(page).to have_content "Bob Testuser"
+      end
+
+      context "when the user doesn't belong to an organization" do
+        it "does not show organization information" do
+          expect(page).not_to have_content "Organization"
+        end
+      end
+
+      context "when the user belongs to an organization" do
+        let(:org) { create :organization, name: "Biology" }
+        let(:employment_button_text) { "Add to my ORCiD Employment History" }
+        before do
+          create :user_organization_membership,
+                 user: user,
+                 organization: org,
+                 position_title: "Professor",
+                 started_on: Date.new(2010, 1, 1),
+                 ended_on: Date.new(2015, 12, 31),
+                 pure_identifier: '123456789'
+
+          visit profile_bio_path
+        end
+        it "shows organization information" do
+          expect(page).to have_content "Organization"
+          expect(page).to have_content "Biology"
+          expect(page).to have_content "Professor"
+          expect(page).to have_content "2010-01-01"
+          expect(page).to have_content "2015-12-31"
+        end
+
+        context "when the user does not have an ORCiD" do
+          it "does not show a button to add employment history to their ORCiD profile" do
+            expect(page).not_to have_button employment_button_text
+          end
+        end
+        context "when the user has an ORCiD" do
+          let(:orcid_id) { "123456789" }
+          it "shows a button to add employment history to their ORCiD profile" do
+            expect(page).to have_button employment_button_text
+          end
+        end
       end
     end
 

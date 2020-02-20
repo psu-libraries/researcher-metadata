@@ -22,7 +22,8 @@ class ProfilesController < ProfileManagementController
   end
 
   def bio
-    @profile = UserProfile.new(current_user)
+    @user = current_user
+    @membership = current_user.user_organization_memberships.where.not(pure_identifier: nil).first
   end
 
   helper_method :profile_for_current_user?
