@@ -29,9 +29,10 @@ class OrcidEmploymentsController < UserController
       body: employment
     }
 
-    HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid_identifier}/employment",
-                  request)
+    response = HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid_identifier}/employment",
+                  request).to_s
 
+    flash[:notice] = response
     redirect_to profile_bio_path
   end
 end
