@@ -18,8 +18,8 @@ class OrcidAccessTokensController < UserController
       }
     }
 
-    response = HTTParty.post("https://sandbox.orcid.org/oauth/token", request)
+    response = JSON.parse(HTTParty.post("https://sandbox.orcid.org/oauth/token", request))
 
-    raise response.inspect
+    current_user.update_attributes!(orcid_access_token: response['access_token'])
   end
 end
