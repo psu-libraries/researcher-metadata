@@ -14,8 +14,7 @@ class OrcidAccessTokensController < UserController
         client_id: Rails.configuration.x.orcid['client_id'],
         client_secret: Rails.configuration.x.orcid['client_secret'],
         grant_type: 'authorization_code',
-        code: params['code'],
-        redirect_uri: profile_bio_url
+        code: params['code']
       }
     }
 
