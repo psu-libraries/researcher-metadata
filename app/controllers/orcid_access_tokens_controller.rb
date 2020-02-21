@@ -8,7 +8,8 @@ class OrcidAccessTokensController < UserController
   end
 
   def create
-    request_body = {
+    request = {
+      headers: {"Accept" => "application/json"},
       body: {
         client_id: Rails.configuration.x.orcid['client_id'],
         client_secret: Rails.configuration.x.orcid['client_secret'],
@@ -18,9 +19,7 @@ class OrcidAccessTokensController < UserController
       }
     }
 
-    response = HTTParty.post("https://sandbox.orcid.org/oauth/token",
-                             request_body,
-                             headers: {"Accept" => "application/json"})
+    response = HTTParty.post("https://sandbox.orcid.org/oauth/token", request)
 
     raise response.inspect
   end
