@@ -1,4 +1,8 @@
 <h4>Profile Bio</h4>
+<% if @user.orcid_identifier && ! @user.orcid_access_token %>
+  <%= button_to "Connect to my ORCiD", new_orcid_access_token_path, class: 'btn btn-primary orcid-button', remote: false %>
+<% end %>
+
 <div class="profile-bio-section">
   <h5>Personal Information</h5>
   <table class="table">
@@ -36,7 +40,7 @@
         <% end %>
       </tbody>
     </table>
-    <% if @user.orcid_identifier %>
+    <% if @user.orcid_access_token %>
       <%= button_to "Add to my ORCiD Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
     <% end %>
   </div>

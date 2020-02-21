@@ -8,7 +8,8 @@ describe "editing profile preferences" do
                        last_name: 'Testuser',
                        ai_bio: "Bob's bio info",
                        show_all_publications: true,
-                       orcid_identifier: orcid_id }
+                       orcid_identifier: orcid_id,
+                       orcid_access_token: orcid_token }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
 
   let!(:pres1) { create :presentation,
@@ -42,6 +43,7 @@ describe "editing profile preferences" do
                        performance: perf_2,
                        user: user }
   let(:orcid_id) { nil }
+  let(:orcid_token) { nil }
 
   feature "the manage profile link", type: :feature do
     describe "visiting the profile page for a given user" do
@@ -357,6 +359,7 @@ describe "editing profile preferences" do
       context "when the user belongs to an organization" do
         let(:org) { create :organization, name: "Biology" }
         let(:employment_button_text) { "Add to my ORCiD Employment History" }
+        let(:connect_orcid_button_text) { "Connect to my ORCiD" }
         before do
           create :user_organization_membership,
                  user: user,
@@ -377,14 +380,35 @@ describe "editing profile preferences" do
         end
 
         context "when the user does not have an ORCiD" do
+          it "does not show a button to connect to the user's ORCiD account" do
+            expect(page).not_to have_button connect_orcid_button_text
+          end
+
           it "does not show a button to add employment history to their ORCiD profile" do
             expect(page).not_to have_button employment_button_text
           end
         end
         context "when the user has an ORCiD" do
           let(:orcid_id) { "123456789" }
-          it "shows a button to add employment history to their ORCiD profile" do
-            expect(page).to have_button employment_button_text
+          context "when the user has an ORCiD access token" do
+            let(:orcid_token) { "abc123" }
+            it "does not show a button to connect to the user's ORCiD account" do
+              expect(page).not_to have_button connect_orcid_button_text
+            end
+
+            it "shows a button to add employment history to their ORCiD profile" do
+              expect(page).to have_button employment_button_text
+            end
+          end
+
+          context "when the user does not have an ORCiD access token" do
+            it "shows a button to connect to the user's ORCiD account" do
+              expect(page).to have_button connect_orcid_button_text
+            end
+
+            it "does not show a button to add employment history to their ORCiD profile" do
+              expect(page).not_to have_button employment_button_text
+            end
           end
         end
       end
