@@ -21,5 +21,7 @@ class OrcidAccessTokensController < UserController
     response = JSON.parse(HTTParty.post("https://sandbox.orcid.org/oauth/token", request))
 
     current_user.update_attributes!(orcid_access_token: response['access_token'])
+
+    redirect_to profile_bio_path
   end
 end
