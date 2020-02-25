@@ -136,6 +136,10 @@ class User < ApplicationRecord
     user_organization_memberships.where.not(pure_identifier: nil).first.try(:organization).try(:name)
   end
 
+  def orcid
+    orcid_identifier.gsub("https://orcid.org/", "").presence if orcid_identifier
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

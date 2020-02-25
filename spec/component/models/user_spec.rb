@@ -775,4 +775,26 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#orcid' do
+    let(:user) { User.new(orcid_identifier: orcid_id) }
+    let(:orcid_id) { nil }
+    context "when the user has no orcid_identifier" do
+      it "returns nil" do
+        expect(user.orcid).to be_nil
+      end
+    end
+    context "when the user's orcid_identifier is blank" do
+      let(:orcid_id) { "" }
+      it "returns nil" do
+        expect(user.orcid).to be_nil
+      end
+    end
+    context "when the user has an orcid_identifier URL" do
+      let(:orcid_id) { "https://orcid.org/0000-0123-4567-890X" }
+      it "returns just the ORCiD ID part of the URL" do
+        expect(user.orcid).to eq "0000-0123-4567-890X"
+      end
+    end
+  end
 end

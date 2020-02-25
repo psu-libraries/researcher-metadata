@@ -29,7 +29,7 @@ class OrcidEmploymentsController < UserController
       body: employment
     }
 
-    response = HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid_identifier}/employment",
+    response = HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid}/employment",
                   request).to_s
 
     flash[:notice] = response
