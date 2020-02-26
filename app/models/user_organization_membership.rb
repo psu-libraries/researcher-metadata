@@ -4,6 +4,8 @@ class UserOrganizationMembership < ApplicationRecord
 
   validates :user, :organization, presence: true
 
+  delegate :name, to: :organization, prefix: true
+  
   def name
     "#{user.name} - #{organization.name}"
   end

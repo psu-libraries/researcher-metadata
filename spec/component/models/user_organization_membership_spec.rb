@@ -26,7 +26,11 @@ describe 'the user_organization_memberships table', type: :model do
 end
 
 describe UserOrganizationMembership, type: :model do
+  subject { UserOrganizationMembership.new }
+
   it_behaves_like "an application record"
+
+  it { is_expected.to delegate_method(:organization_name).to(:organization).as(:name) }
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:user_organization_memberships) }

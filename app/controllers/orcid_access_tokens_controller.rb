@@ -8,18 +8,8 @@ class OrcidAccessTokensController < UserController
   end
 
   def create
-    request = {
-      headers: {"Accept" => "application/json"},
-      body: {
-        client_id: Rails.configuration.x.orcid['client_id'],
-        client_secret: Rails.configuration.x.orcid['client_secret'],
-        grant_type: 'authorization_code',
-        code: params['code']
-      }
-    }
-
-    response = JSON.parse(HTTParty.post("https://sandbox.orcid.org/oauth/token", request).to_s)
-
+    client = OrcidOauthClient.new
+    response = JSON.parse(client.create_token(params[:code]).to_s)
     current_user.update_attributes!(orcid_access_token: response['access_token'])
 
     redirect_to profile_bio_path

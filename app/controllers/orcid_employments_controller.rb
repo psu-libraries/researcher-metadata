@@ -2,7 +2,7 @@ class OrcidEmploymentsController < UserController
   before_action :authenticate!
 
   def create
-    membership = current_user.user_organization_memberships.where.not(pure_identifier: nil).first
+    membership = current_user.primary_organization_membership
 
     employment = {
       organization: {
@@ -18,21 +18,39 @@ class OrcidEmploymentsController < UserController
         }
       },
       "department-name": membership.organization.name,
-      "role-title": membership.position_title
-    }.to_json
+      "role-title": membership.position_title,
+      "start-date": {
+        year: membership.started_on.year,
+        month: membership.started_on.month,
+        day: membership.started_on.day
+      }
+    }
+
+    if membership.ended_on
+      employment[:"end-date"] = {
+        year: membership.ended_on.year,
+        month: membership.ended_on.month,
+        day: membership.ended_on.day
+      }
+    end
 
     request = {
       headers: {
         "Content-type" => "application/vnd.orcid+json",
         "Authorization" => "Bearer #{current_user.orcid_access_token}",
       },
-      body: employment
+      body: employment.to_json
     }
 
     response = HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid}/employment",
-                  request).to_s
+                  request)
 
-    flash[:notice] = response
+    if response.code == 201
+      flash[:notice] = "The employment record was successfully added to your ORCiD profile."
+    else
+      flash[:alert] = response.to_s
+    end
+
     redirect_to profile_bio_path
   end
 end
