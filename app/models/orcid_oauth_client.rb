@@ -9,7 +9,7 @@ class OrcidOauthClient
         client_id: Rails.configuration.x.orcid['client_id'],
         client_secret: Rails.configuration.x.orcid['client_secret'],
         grant_type: 'authorization_code',
-        code: params['code']
+        code: code
       }
     }
 
