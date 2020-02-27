@@ -44,11 +44,11 @@ class OrcidEmploymentsController < UserController
 
     response = HTTParty.post("https://api.sandbox.orcid.org/v3.0/#{current_user.orcid}/employment",
                   request)
-    response_body = JSON.parse(response.to_s)
 
     if response.code == 201
       flash[:notice] = "The employment record was successfully added to your ORCiD profile."
     else
+      response_body = JSON.parse(response.to_s)
       if response_body["error"] == "invalid_token"
         current_user.clear_orcid_access_token
         flash[:alert] = "Your ORCiD account is no longer linked to your metadata profile."
