@@ -8,10 +8,22 @@ class OrcidAccessTokensController < UserController
   end
 
   def create
-    client = OrcidOauthClient.new
-    response = JSON.parse(client.create_token(params[:code]).to_s)
-    current_user.update_attributes!(orcid_access_token: response['access_token'])
+    response = oauth_client.create_token(params[:code])
+
+    if response.code == 200
+      response_body = JSON.parse(response.to_s)
+      current_user.update_attributes!(orcid_access_token: response['access_token'])
+      flash[:notice] = "Your ORCiD account was successfully linked to your metadata profile."
+    else
+      flash[:alert] = "There was an error linking your ORCiD account to your metadata profile."
+    end
 
     redirect_to profile_bio_path
+  end
+
+  private
+
+  def oauth_client
+    @oauth_client ||= OrcidOauthClient.new
   end
 end
