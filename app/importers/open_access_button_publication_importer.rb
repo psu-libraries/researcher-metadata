@@ -32,7 +32,7 @@ class OpenAccessButtonPublicationImporter
   def get_pub(url)
     attempts = 0
     HTTParty.get(url).to_s
-  rescue Net::ReadTimeout
+  rescue Net::ReadTimeout, Net::OpenTimeout
     if attempts <= 10
       attempts += 1
       retry
