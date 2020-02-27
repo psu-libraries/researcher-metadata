@@ -836,4 +836,16 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#clear_orcid_access_token' do
+    let(:user) { create :user, orcid_access_token: token }
+    context "when the user has an orcid_access_token value" do
+      let(:token) { 'a_token' }
+
+      it "removes the value" do
+        user.clear_orcid_access_token
+        expect(user.reload.orcid_access_token).to be_nil
+      end
+    end
+  end
 end

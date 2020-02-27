@@ -50,6 +50,7 @@ class OrcidEmploymentsController < UserController
       flash[:notice] = "The employment record was successfully added to your ORCiD profile."
     else
       if response_body["error"] == "invalid_token"
+        current_user.clear_orcid_access_token
         flash[:alert] = "Your ORCiD account is no longer linked to your metadata profile."
       else
         flash[:alert] = "There was an error adding your employment history to your ORCiD profile."

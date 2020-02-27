@@ -144,6 +144,10 @@ class User < ApplicationRecord
     orcid_identifier.gsub("https://orcid.org/", "").presence if orcid_identifier
   end
 
+  def clear_orcid_access_token
+    update_attribute(:orcid_access_token, nil)
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do
