@@ -31,6 +31,7 @@ describe LDAPImporter do
                                              filter: user_3_filter).and_return([])
     allow(psu_ldap).to receive(:search).with(base: 'dc=psu,dc=edu',
                                              filter: user_4_filter).and_return([{edupersonorcid: []}])
+    allow(psu_ldap).to receive(:open).and_yield
   end
   describe "#call" do
     it "updates each user's ORCID ID with the value returned from LDAP" do
