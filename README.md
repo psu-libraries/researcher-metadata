@@ -1,4 +1,4 @@
-![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries_logo.png)
+![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
 # psu-research-metadata
 
