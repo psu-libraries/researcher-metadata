@@ -8,7 +8,7 @@ require 'capistrano-helpers/migrations' # Run all migrations automatically
 require 'capistrano-helpers/robots'     # Keep robots out of staging and beta
 
 # Location of the source code.
-set :repository,  'git@github.com:westarete/psu-research-metadata.git'
+set :repository,  'git@github.com:westarete/researcher-metadata.git'
 
 # The remote user to log in as.
 set :user, 'deploy'
