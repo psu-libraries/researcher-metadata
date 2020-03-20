@@ -1,6 +1,6 @@
 ![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
-# psu-research-metadata
+# Research Metadata
 
 This is the repository for a Ruby on Rails application built for Penn State University Libraries to
 gather metadata about Penn State faculty and the research that they conduct and publish. The application
