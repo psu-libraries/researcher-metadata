@@ -1,6 +1,6 @@
-![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries_logo.png)
+![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
-# psu-research-metadata
+# Researcher Metadata
 
 This is the repository for a Ruby on Rails application built for Penn State University Libraries to
 gather metadata about Penn State faculty and the research that they conduct and publish. The application
@@ -273,3 +273,7 @@ This API is intended to conform to the Swagger 2.0 specification. As such, we're
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
+
+---
+
+This project was developed by the The Pennsylvania State University Libraries Digital Scholarship and Repository Development team in collaboration with [West Arete](https://westarete.com).
