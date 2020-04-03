@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 5.2.0'
+gem 'rails', '~> 5.2.4'
 
 # Use postgresql as the database for Active Record
 gem 'pg', '>= 0.18', '< 2.0'
@@ -41,7 +41,7 @@ gem 'activerecord-import'
 gem 'progressbar'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem "rails_admin", "~> 1.3"
+gem "rails_admin", "~> 1.4"
 
 gem 'rails_admin_toggleable'
 
