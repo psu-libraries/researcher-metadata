@@ -299,9 +299,10 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
+      field(:doi) { label 'DOI' }
+      field(:open_access_url) { label 'Open Access URL' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -372,9 +373,10 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
+      field(:open_access_url) { label 'Open Access URL' }
+      field(:doi) { label 'DOI' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) { label 'DOI' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
