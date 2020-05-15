@@ -4,6 +4,7 @@ describe OpenAccessPublicationsController, type: :controller do
   let!(:user) { create :user }
   let!(:other_user) { create :user }
   let!(:pub) { create :publication }
+  let!(:blank_oa_pub) { create :publication, open_access_url: "", user_submitted_open_access_url: "" }
   let!(:oa_pub) { create :publication, open_access_url: "url" }
   let!(:uoa_pub) { create :publication, user_submitted_open_access_url: "url" }
   let!(:other_pub) { create :publication }
@@ -30,6 +31,8 @@ describe OpenAccessPublicationsController, type: :controller do
            user: other_user,
            publication: other_uploaded_pub,
            scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
+    create :authorship, user: user, publication: blank_oa_pub
+
 
     create :authorship,
            user: user,
@@ -97,10 +100,18 @@ describe OpenAccessPublicationsController, type: :controller do
         end
       end
 
-      context "when given the ID for a publication that belongs to the user and is not open access" do          
-        it "returns 200 OK" do
-          get :edit, params: {id: pub.id}
-          expect(response.code).to eq "200"
+      context "when given the ID for a publication that belongs to the user and is not open access" do
+        context "when the open access fields are nil" do          
+          it "returns 200 OK" do
+            get :edit, params: {id: pub.id}
+            expect(response.code).to eq "200"
+          end
+        end
+        context "when the open access fields are blank" do
+          it "returns 200 OK" do
+            get :edit, params: {id: blank_oa_pub.id}
+            expect(response.code).to eq "200"
+          end
         end
       end
     end

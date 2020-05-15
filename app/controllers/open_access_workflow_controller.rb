@@ -8,7 +8,7 @@ class OpenAccessWorkflowController < UserController
 
   def publication
     @publication ||= current_user.publications
-      .where(open_access_url: nil, user_submitted_open_access_url: nil)
+      .where(%{(open_access_url IS NULL OR open_access_url = '') AND (user_submitted_open_access_url IS NULL OR user_submitted_open_access_url = '')})
       .find(params[:id])
   end
 
