@@ -4,6 +4,12 @@ class InternalPublicationWaiver < ApplicationRecord
   has_one :publication, through: :authorship
 
   delegate :title, :abstract, :doi, :published_by, to: :authorship, prefix: false
+  alias_method :publication_title, :title
+  alias_method :journal_title, :published_by
+
+  def publisher
+    nil
+  end
 
   rails_admin do
     list do

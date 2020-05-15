@@ -15,6 +15,8 @@ describe 'the internal_publication_waivers table', type: :model do
 end
 
 describe InternalPublicationWaiver, type: :model do
+  subject(:waiver) { InternalPublicationWaiver.new }
+
   it_behaves_like "an application record"
 
   describe 'associations' do
@@ -27,4 +29,24 @@ describe InternalPublicationWaiver, type: :model do
   it { is_expected.to delegate_method(:abstract).to(:authorship) }
   it { is_expected.to delegate_method(:doi).to(:authorship) }
   it { is_expected.to delegate_method(:published_by).to(:authorship) }
+
+  describe '#publisher' do
+    it "returns nil" do
+      expect(waiver.publisher).to be_nil
+    end
+  end
+
+  describe '#publication_title' do
+    before { waiver.authorship = Authorship.new(publication: Publication.new(title: "The Title"))}
+    it "returns the authorship's publication's title" do
+      expect(waiver.publication_title).to eq "The Title"
+    end
+  end
+
+  describe '#journal_title' do
+  before { waiver.authorship = Authorship.new(publication: Publication.new(journal_title: "The Title"))}
+    it "returns the authorship's publication's journal title" do
+      expect(waiver.journal_title).to eq "The Title"
+    end
+  end
 end

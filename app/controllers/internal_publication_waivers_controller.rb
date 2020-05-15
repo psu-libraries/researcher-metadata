@@ -10,6 +10,8 @@ class InternalPublicationWaiversController < OpenAccessWorkflowController
     waiver.authorship = authorship
     waiver.save!
 
+    FacultyConfirmationsMailer.open_access_waiver_confirmation(UserProfile.new(current_user), waiver).deliver_now
+
     flash[:notice] = I18n.t('profile.internal_publication_waivers.create.success',
                             title: authorship.title)
     redirect_to edit_profile_publications_path

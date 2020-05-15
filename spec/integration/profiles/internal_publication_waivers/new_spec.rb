@@ -2,7 +2,10 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe "visiting the page to submit an open access waiver for a publication" do
-  let(:user) { create :user }
+  let(:user) { create :user,
+                      webaccess_id: 'test123',
+                      first_name: 'Test',
+                      last_name: 'User' }
   let(:pub) { create :publication,
                      title: 'Test Publication',
                      abstract: 'This is the abstract.',
@@ -67,6 +70,14 @@ describe "visiting the page to submit an open access waiver for a publication" d
           waiver = auth.waiver
           expect(waiver).not_to be_nil
           expect(waiver.reason_for_waiver).to eq "Because I said so."
+        end
+
+        it "sends a confirmation email to the user" do
+          open_email('test123@psu.edu')
+          expect(current_email).not_to be_nil
+          expect(current_email.subject).to match(/open access waiver confirmation/i)
+          expect(current_email.body).to match(/Test User/)
+          expect(current_email.body).to match(/Test Publication/)
         end
 
         it "redirects to the publication list" do
