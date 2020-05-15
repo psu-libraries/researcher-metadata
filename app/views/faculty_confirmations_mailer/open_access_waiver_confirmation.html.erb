@@ -1,0 +1,22 @@
+<p>Hello <%= @user.name %>,</p>
+
+<p>Your request to waive open access obligations for the following publication
+has been received by Penn State University Libraries.</p>
+
+<div>
+  <strong>Title:</strong>  <%= @waiver.publication_title %>
+  <br/>
+  <strong>Journal:</strong>  <%= @waiver.journal_title %>
+  <% if @waiver.publisher.present? %>
+    <br/>
+    <strong>Publisher:</strong>  <%= @waiver.publisher %>
+  <% end %>
+  <% if @waiver.doi.present? %>
+    <br/>
+    <strong>DOI:</strong>  <%= @waiver.doi %>
+  <% end %>
+  <% if @waiver.reason_for_waiver.present? %>
+    <br/>
+    <strong>Reason for waiver:</strong>  <%= @waiver.reason_for_waiver %>
+  <% end %>
+</div>

@@ -2,7 +2,10 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe "submitting an open access waiver for a publication that is not in the database" do
-  let(:user) { create :user, webaccess_id: 'test123' }
+  let(:user) { create :user,
+                      webaccess_id: 'test123',
+                      first_name: 'Test',
+                      last_name: 'User' }
   before do 
     authenticate_as(user)
     visit new_external_publication_waiver_path
@@ -41,6 +44,7 @@ describe "submitting an open access waiver for a publication that is not in the 
       open_email('test123@psu.edu')
       expect(current_email).not_to be_nil
       expect(current_email.subject).to match(/open access waiver confirmation/i)
+      expect(current_email.body).to match(/Test User/)
       expect(current_email.body).to match(/My Test Publication/)
     end
   end

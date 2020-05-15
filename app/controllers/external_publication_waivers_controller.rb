@@ -7,6 +7,7 @@ class ExternalPublicationWaiversController < ProfileManagementController
     @waiver = current_user.external_publication_waivers.build(waiver_params)
     @waiver.save!
     flash[:notice] = I18n.t('profile.external_publication_waivers.create.success')
+    FacultyConfirmationsMailer.open_access_waiver_confirmation(UserProfile.new(current_user), @waiver).deliver_now
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid => e
     flash[:alert] = e
