@@ -775,4 +775,77 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#primary_organization_membership' do
+    let!(:user) { create :user }
+    let(:org1) { create :organization, name: 'My Org 1' }
+    let(:org2) { create :organization, name: 'My Org 2' }
+    let(:org3) { create :organization, name: 'My Org 3' }
+
+    context "when the user has no organizations" do
+      it "returns nil" do
+        expect(user.primary_organization_membership).to be_nil
+      end
+    end
+    context "when the user does not have an organization from Pure" do
+      before { create :user_organization_membership,
+                      user: user,
+                      organization: org1,
+                      pure_identifier: nil }
+      it "returns nil" do
+        expect(user.primary_organization_membership).to be_nil
+      end
+    end
+    context "when the user has multiple organization memberships" do
+      let!(:membership1) { create :user_organization_membership,
+                           user: user,
+                           organization: org1,
+                           pure_identifier: nil }
+      let!(:membership2) { create :user_organization_membership,
+                           user: user,
+                           organization: org2,
+                           pure_identifier: 'pure123' }
+      let!(:membership3) { create :user_organization_membership,
+                           user: user,
+                           organization: org3,
+                           pure_identifier: 'pure456' }
+      it "returns the first record of membership in an organization from Pure" do
+        expect(user.primary_organization_membership).to eq membership2
+      end
+    end
+  end
+
+  describe '#orcid' do
+    let(:user) { User.new(orcid_identifier: orcid_id) }
+    let(:orcid_id) { nil }
+    context "when the user has no orcid_identifier" do
+      it "returns nil" do
+        expect(user.orcid).to be_nil
+      end
+    end
+    context "when the user's orcid_identifier is blank" do
+      let(:orcid_id) { "" }
+      it "returns nil" do
+        expect(user.orcid).to be_nil
+      end
+    end
+    context "when the user has an orcid_identifier URL" do
+      let(:orcid_id) { "https://orcid.org/0000-0123-4567-890X" }
+      it "returns just the ORCiD ID part of the URL" do
+        expect(user.orcid).to eq "0000-0123-4567-890X"
+      end
+    end
+  end
+
+  describe '#clear_orcid_access_token' do
+    let(:user) { create :user, orcid_access_token: token }
+    context "when the user has an orcid_access_token value" do
+      let(:token) { 'a_token' }
+
+      it "removes the value" do
+        user.clear_orcid_access_token
+        expect(user.reload.orcid_access_token).to be_nil
+      end
+    end
+  end
 end

@@ -21,6 +21,11 @@ class ProfilesController < ProfileManagementController
       map { |p| p.user_performances.find_by(user: current_user) }
   end
 
+  def bio
+    @user = current_user
+    @membership = current_user.primary_organization_membership
+  end
+
   helper_method :profile_for_current_user?
 
   private

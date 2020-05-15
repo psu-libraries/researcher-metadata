@@ -133,7 +133,19 @@ class User < ApplicationRecord
   end
 
   def organization_name
-    user_organization_memberships.where.not(pure_identifier: nil).first.try(:organization).try(:name)
+    primary_organization_membership.try(:organization_name)
+  end
+
+  def primary_organization_membership
+    user_organization_memberships.where.not(pure_identifier: nil).first
+  end
+
+  def orcid
+    orcid_identifier.gsub("https://orcid.org/", "").presence if orcid_identifier
+  end
+
+  def clear_orcid_access_token
+    update_attribute(:orcid_access_token, nil)
   end
 
   rails_admin do

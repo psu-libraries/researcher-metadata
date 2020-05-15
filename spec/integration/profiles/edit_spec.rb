@@ -6,8 +6,10 @@ describe "editing profile preferences" do
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
                        last_name: 'Testuser',
+                       ai_bio: "Bob's bio info",
                        show_all_publications: true,
-                       orcid_identifier: orcid_id }
+                       orcid_identifier: orcid_id,
+                       orcid_access_token: orcid_token }
   let!(:other_user) { create :user, webaccess_id: 'xyz789'}
 
   let!(:pres1) { create :presentation,
@@ -41,6 +43,7 @@ describe "editing profile preferences" do
                        performance: perf_2,
                        user: user }
   let(:orcid_id) { nil }
+  let(:orcid_token) { nil }
 
   feature "the manage profile link", type: :feature do
     describe "visiting the profile page for a given user" do
@@ -326,6 +329,96 @@ describe "editing profile preferences" do
 
       it "does not allow the user to visit the page" do
         expect(page.current_path).not_to eq edit_profile_performances_path
+      end
+    end
+  end
+
+  feature "the profile bio page" do
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit profile_bio_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Profile Bio"
+      end
+
+      it "shows bio information for the user" do
+        expect(page).to have_content "Bob Testuser"
+      end
+
+      context "when the user doesn't belong to an organization" do
+        it "does not show organization information" do
+          expect(page).not_to have_content "Organization"
+        end
+      end
+
+      context "when the user belongs to an organization" do
+        let(:org) { create :organization, name: "Biology" }
+        let(:employment_button_text) { "Add to my ORCiD Employment History" }
+        let(:connect_orcid_button_text) { "Connect to my ORCiD" }
+        before do
+          create :user_organization_membership,
+                 user: user,
+                 organization: org,
+                 position_title: "Professor",
+                 started_on: Date.new(2010, 1, 1),
+                 ended_on: Date.new(2015, 12, 31),
+                 pure_identifier: '123456789'
+
+          visit profile_bio_path
+        end
+        it "shows organization information" do
+          expect(page).to have_content "Organization"
+          expect(page).to have_content "Biology"
+          expect(page).to have_content "Professor"
+          expect(page).to have_content "2010-01-01"
+          expect(page).to have_content "2015-12-31"
+        end
+
+        context "when the user does not have an ORCiD" do
+          it "does not show a button to connect to the user's ORCiD account" do
+            expect(page).not_to have_button connect_orcid_button_text
+          end
+
+          it "does not show a button to add employment history to their ORCiD profile" do
+            expect(page).not_to have_button employment_button_text
+          end
+        end
+        context "when the user has an ORCiD" do
+          let(:orcid_id) { "123456789" }
+          context "when the user has an ORCiD access token" do
+            let(:orcid_token) { "abc123" }
+            it "does not show a button to connect to the user's ORCiD account" do
+              expect(page).not_to have_button connect_orcid_button_text
+            end
+
+            it "shows a button to add employment history to their ORCiD profile" do
+              expect(page).to have_button employment_button_text
+            end
+          end
+
+          context "when the user does not have an ORCiD access token" do
+            it "shows a button to connect to the user's ORCiD account" do
+              expect(page).to have_button connect_orcid_button_text
+            end
+
+            it "does not show a button to add employment history to their ORCiD profile" do
+              expect(page).not_to have_button employment_button_text
+            end
+          end
+        end
+      end
+    end
+
+    context "when the user is not signed in" do
+      before { visit profile_bio_path }
+
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq profile_bio_path
       end
     end
   end

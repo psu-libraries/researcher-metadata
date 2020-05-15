@@ -39,6 +39,8 @@ Rails.application.routes.draw do
   get 'profile/publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
   get 'profile/presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
   get 'profile/performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
+  get 'profile/bio' => 'profiles#bio', as: :profile_bio
+  post 'profile/bio/orcid/employments' => 'orcid_employments#create', as: :orcid_employments
   get 'profile/publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
   patch 'profile/publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
   post 'profile/publications/:id/open_access/scholarsphere_uploads' => 'scholarsphere_uploads#create', as: :scholarsphere_uploads
@@ -46,6 +48,9 @@ Rails.application.routes.draw do
   post 'profile/publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
   get 'profile/publications/open_access_waivers/new' => 'external_publication_waivers#new', as: :new_external_publication_waiver
   post 'profile/publications/open_access_waivers' => 'external_publication_waivers#create', as: :external_publication_waivers
+  post 'orcid_access_token' => 'orcid_access_tokens#new', as: :new_orcid_access_token
+  get 'orcid_access_token' => 'orcid_access_tokens#create', as: :orcid_access_token
+  
 
   get 'profile' => redirect('profile/publications/edit')
 

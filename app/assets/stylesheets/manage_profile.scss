@@ -50,7 +50,7 @@ body {
   margin-bottom: 30px;
 }
 
-.open-access-action {
+.open-access-action, .profile-bio-section {
   padding: 30px;
   border: 1px solid lightgrey;
   border-radius: 10px;
@@ -78,4 +78,10 @@ table.legend {
   padding: 16px;
   margin-bottom: 20px;
   background-color: lightgrey;
+}
+
+.profile-bio-section {
+  .orcid-button {
+    display: inline-block;
+  }
 }

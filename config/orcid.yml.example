@@ -1,0 +1,7 @@
+development:
+  client_id: my-orcid-client-id
+  client_secret: my-orcid-client-secret
+test:
+  client_id: test
+  client_secret: secret
+  
