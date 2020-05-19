@@ -14,6 +14,7 @@ describe 'the user_organization_memberships table', type: :model do
   it { is_expected.to have_db_column(:started_on).of_type(:date) }
   it { is_expected.to have_db_column(:ended_on).of_type(:date) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:orcid_resource_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
