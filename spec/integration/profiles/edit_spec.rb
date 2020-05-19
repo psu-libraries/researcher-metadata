@@ -358,7 +358,7 @@ describe "editing profile preferences" do
 
       context "when the user belongs to an organization" do
         let(:org) { create :organization, name: "Biology" }
-        let(:employment_button_text) { "Add to my ORCiD Employment History" }
+        let(:employment_button_text) { "Add to my ORCID Employment History" }
         let(:connect_orcid_button_text) { "Register or Connect your ORCID iD" }
         before do
           create :user_organization_membership,
@@ -389,11 +389,16 @@ describe "editing profile preferences" do
           end
         end
         context "when the user has an ORCiD" do
-          let(:orcid_id) { "123456789" }
+          let(:orcid_id) { "https://orcid.org/0000-0000-1234-5678" }
           context "when the user has an ORCiD access token" do
             let(:orcid_token) { "abc123" }
             it "does not show a button to connect to the user's ORCiD account" do
               expect(page).not_to have_button connect_orcid_button_text
+            end
+
+            it "shows the user's ORCiD" do
+              expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
+                                        href: "https://orcid.org/0000-0000-1234-5678"
             end
 
             it "shows a button to add employment history to their ORCiD profile" do
@@ -402,6 +407,11 @@ describe "editing profile preferences" do
           end
 
           context "when the user does not have an ORCiD access token" do
+            it "shows the user's ORCiD" do
+              expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
+                                        href: "https://orcid.org/0000-0000-1234-5678"
+            end
+            
             it "shows a button to connect to the user's ORCiD account" do
               expect(page).to have_button connect_orcid_button_text
             end

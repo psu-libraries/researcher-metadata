@@ -1,6 +1,6 @@
 <h4>Profile Bio</h4>
 <div class="row">
-  <div class="col-lg">
+  <div class="col-xl">
     <div class="profile-bio-section">
       <h5>Personal Information</h5>
       <table class="table">
@@ -39,28 +39,38 @@
           </tbody>
         </table>
         <% if @user.orcid_access_token %>
-          <%= button_to "Add to my ORCiD Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
+          <%= button_to "Add to my ORCID Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
         <% end %>
       </div>
     <% end %>
   </div>
   
-  <% if @user.orcid_identifier && ! @user.orcid_access_token %>
-    <div class="col-lg-4">
-      <div class="profile-bio-section">
-        <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
+  <% if @user.orcid_identifier %>
+    <div class="col-xl-4">
+      <div class="profile-bio-section" id="orcid-info">
+        <%= link_to @user.orcid_identifier, id: "orcid-link", target: "_blank" do %>
           <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
-          Register or Connect your ORCID iD
+          <%= @user.orcid_identifier %>
         <% end %>
-        <br/>
         <p>
           ORCID provides a persistent digital identifier that distinguishes you from other researchers.
           Learn more at <%= link_to "orcid.org", "https://orcid.org", target: "_blank" %>
         </p>
-        <p>
-          Connecting your Research Metadata Database profile to your ORCID iD will give you the option to
-          update your ORCID profile using some of your profile information that is shown here.
-        </p>
+        <% if @user.orcid_access_token %>
+          <p>
+            Your Research Metadata Database profile has been connected to your ORCID iD. You can now
+            choose to update your ORCID profile using some of the profile information that is shown here.
+          </p>
+        <% else %>
+          <p>
+            Connecting your Research Metadata Database profile to your ORCID iD will give you the option to
+            update your ORCID profile using some of your profile information that is shown here.
+          </p>
+          <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
+            <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
+            Register or Connect your ORCID iD
+          <% end %>
+        <% end %>
       </div>
     </div>
   <% end %>
