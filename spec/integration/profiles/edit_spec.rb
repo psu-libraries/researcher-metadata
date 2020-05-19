@@ -360,6 +360,7 @@ describe "editing profile preferences" do
         let(:org) { create :organization, name: "Biology" }
         let(:employment_button_text) { "Add to my ORCID Employment History" }
         let(:connect_orcid_button_text) { "Register or Connect your ORCID iD" }
+        let(:orcid_employment_id) { nil }
         before do
           create :user_organization_membership,
                  user: user,
@@ -367,7 +368,8 @@ describe "editing profile preferences" do
                  position_title: "Professor",
                  started_on: Date.new(2010, 1, 1),
                  ended_on: Date.new(2015, 12, 31),
-                 pure_identifier: '123456789'
+                 pure_identifier: '123456789',
+                 orcid_resource_identifier: orcid_employment_id
 
           visit profile_bio_path
         end
@@ -401,8 +403,18 @@ describe "editing profile preferences" do
                                         href: "https://orcid.org/0000-0000-1234-5678"
             end
 
-            it "shows a button to add employment history to their ORCiD profile" do
-              expect(page).to have_button employment_button_text
+            context "when the user's primary organization membership has been added to their ORCID profile" do
+              let(:orcid_employment_id) { "an identifier" }
+
+              it "does not show a button to add employment history to their ORCiD profile" do
+                expect(page).not_to have_button employment_button_text
+              end
+            end
+
+            context "when the user's primary organization membership has not been added to their ORCID profile" do
+              it "shows a button to add employment history to their ORCiD profile" do
+                expect(page).to have_button employment_button_text
+              end
             end
           end
 

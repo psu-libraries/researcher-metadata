@@ -2,6 +2,8 @@ class OrcidEmployment
   class InvalidToken < RuntimeError; end
   class FailedRequest < RuntimeError; end
 
+  attr_reader :location
+
   def initialize(user_organization_membership)
     @membership = user_organization_membership
   end
@@ -45,6 +47,7 @@ class OrcidEmployment
     response = client.post
 
     if response.code == 201
+      @location = response.headers["location"]
       return true
     else
       response_body = JSON.parse(response.to_s)

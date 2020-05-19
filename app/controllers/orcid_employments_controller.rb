@@ -2,10 +2,17 @@ class OrcidEmploymentsController < UserController
   before_action :authenticate!
 
   def create
-    employment = OrcidEmployment.new(current_user.primary_organization_membership)
-    employment.save!
+    membership = current_user.primary_organization_membership
 
-    flash[:notice] = "The employment record was successfully added to your ORCiD profile."
+    if membership.orcid_resource_identifier.present?
+      flash[:notice] = "The employment record has already been added to your ORCID profile."
+    else
+      employment = OrcidEmployment.new(membership)
+      employment.save!
+      membership.update_attributes!(orcid_resource_identifier: employment.location)
+
+      flash[:notice] = "The employment record was successfully added to your ORCiD profile."
+    end
     
   rescue OrcidEmployment::InvalidToken
         current_user.clear_orcid_access_token
