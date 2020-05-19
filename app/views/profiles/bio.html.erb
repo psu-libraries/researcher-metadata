@@ -1,51 +1,58 @@
 <h4>Profile Bio</h4>
-<div class="profile-bio-section">
-  <h5>Personal Information</h5>
-  <table class="table">
-    <tbody>
-      <tr>
-        <td><strong>Name:</strong></td>
-        <td><%= @user.name %></td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-
-<% if @membership %>
-  <div class="profile-bio-section">
-    <h5>Organization</h5>
-    <table class="table">
-      <tbody>
-        <tr>
-          <td><strong>Name:</strong></td>
-          <td><%= @membership.organization.name %></td>
-        </tr>
-        <tr>
-          <td><strong>Position:</strong></td>
-          <td><%= @membership.position_title %></td>
-        </tr>
-        <tr>
-          <td><strong>Start date:</strong></td>
-          <td><%= @membership.started_on %></td>
-        </tr>
-        <% if @membership.ended_on %>
+<div class="row">
+  <div class="col-lg">
+    <div class="profile-bio-section">
+      <h5>Personal Information</h5>
+      <table class="table">
+        <tbody>
           <tr>
-            <td><strong>End date:</strong></td>
-            <td><%= @membership.ended_on %></td>
+            <td><strong>Name:</strong></td>
+            <td><%= @user.name %></td>
           </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <% if @membership %>
+      <div class="profile-bio-section">
+        <h5>Organization</h5>
+        <table class="table">
+          <tbody>
+            <tr>
+              <td><strong>Name:</strong></td>
+              <td><%= @membership.organization.name %></td>
+            </tr>
+            <tr>
+              <td><strong>Position:</strong></td>
+              <td><%= @membership.position_title %></td>
+            </tr>
+            <tr>
+              <td><strong>Start date:</strong></td>
+              <td><%= @membership.started_on %></td>
+            </tr>
+            <% if @membership.ended_on %>
+              <tr>
+                <td><strong>End date:</strong></td>
+                <td><%= @membership.ended_on %></td>
+              </tr>
+            <% end %>
+          </tbody>
+        </table>
+        <% if @user.orcid_access_token %>
+          <%= button_to "Add to my ORCiD Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
         <% end %>
-      </tbody>
-    </table>
-    <% if @user.orcid_access_token %>
-      <%= button_to "Add to my ORCiD Employment History", orcid_employments_path, class: 'btn btn-primary orcid-button', remote: false %>
+      </div>
     <% end %>
   </div>
-<% end %>
-
-<% if @user.orcid_identifier && ! @user.orcid_access_token %>
-  <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
-    <img id="orcid-id-icon" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width="24" height="24" alt="ORCID iD icon"/>
-    Register or Connect your ORCID iD
+  
+  <% if @user.orcid_identifier && ! @user.orcid_access_token %>
+    <div class="col-lg-4">
+      <div class="profile-bio-section">
+        <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
+          <img id="orcid-id-icon" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width="24" height="24" alt="ORCID iD icon"/>
+          Register or Connect your ORCID iD
+        <% end %>
+      </div>
+    </div>
   <% end %>
-  <br/>
-<% end %>
+</div>
