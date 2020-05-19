@@ -22,7 +22,7 @@ class OrcidEmployment
           "disambiguation-source": "GRID"
         }
       },
-      "department-name": membership.organization.name,
+      "department-name": membership.organization_name,
       "role-title": membership.position_title,
       "start-date": {
         year: membership.started_on.year,
