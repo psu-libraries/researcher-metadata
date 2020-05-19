@@ -49,7 +49,7 @@
     <div class="col-lg-4">
       <div class="profile-bio-section">
         <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
-          <img id="orcid-id-icon" src="https://orcid.org/sites/default/files/images/orcid_24x24.png" width="24" height="24" alt="ORCID iD icon"/>
+          <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
           Register or Connect your ORCID iD
         <% end %>
         <br/>
