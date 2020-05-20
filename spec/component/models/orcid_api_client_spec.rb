@@ -1,7 +1,4 @@
-require 'unit/unit_spec_helper'
-require 'json'
-require 'httparty'
-require_relative '../../../app/models/orcid_api_client'
+require 'component/component_spec_helper'
 
 describe OrcidAPIClient do
   let(:client) { OrcidAPIClient.new(resource) }
