@@ -3,6 +3,11 @@ require 'date'
 require 'json'
 require_relative '../../../app/models/orcid_employment'
 
+class OrcidAPIClient
+  def initialize(arg)
+  end
+end
+
 describe OrcidEmployment do
   let(:membership) { double 'user organization membership',
                             user: user,
@@ -18,7 +23,33 @@ describe OrcidEmployment do
     context "when the given organization membership has an end date" do
       before { allow(membership).to receive(:ended_on).and_return(Date.new(2020, 1, 2)) }
 
-      xit "returns a JSON representation of an ORCID employment that includes an end date" do
+      it "returns a JSON representation of an ORCID employment that includes an end date" do
+        expect(employment.to_json).to eq ({
+          organization: {
+            name: "The Pennsylvania State University",
+            address: {
+              city: "University Park",
+              region: "Pennsylvania",
+              country: "US"
+            },
+            "disambiguated-organization": {
+              "disambiguated-organization-identifier": "grid.29857.31",
+              "disambiguation-source": "GRID"
+            }
+          },
+          "department-name": "Test Organization",
+          "role-title": "Test Title",
+          "start-date": {
+            year: 1999,
+            month: 12,
+            day: 31
+          },
+          "end-date": {
+            year: 2020,
+            month: 1,
+            day: 2
+          }
+        }.to_json)
       end
     end
 
@@ -52,7 +83,47 @@ describe OrcidEmployment do
   end
 
   describe "#save!" do
-    xit
+    let(:client) { double 'ORCID API client' }
+    let(:response) { double 'ORCID API response' }
+    let(:headers) { {"location" => "the_location"} }
+    before do
+      allow(OrcidAPIClient).to receive(:new).with(employment).and_return client
+      allow(client).to receive(:post).and_return(response)
+      allow(response).to receive(:headers).and_return(headers)
+    end
+
+    context "when the response from the ORCID API is 201" do
+      before { allow(response).to receive(:code).and_return 201 }
+
+      it "sets the employment's location attribute with data from the reponse" do
+        employment.save!
+        expect(employment.location).to eq "the_location"
+      end
+
+      it "returns true" do
+        expect(employment.save!).to eq true
+      end
+    end
+
+    context "when the response from the ORCID API is not 201" do
+      before { allow(response).to receive(:code).and_return 400 }
+
+      context "when the response contains an invalid token error" do
+        before { allow(response).to receive(:to_s).and_return(%{{"error": "invalid_token"}}) }
+
+        it "raises an InvalidToken error" do
+          expect { employment.save! }.to raise_error(OrcidEmployment::InvalidToken)
+        end
+      end
+
+      context "when the response does not contain an invalid token error" do
+        before { allow(response).to receive(:to_s).and_return(%{{"error": "something_else"}}) }
+
+        it "raises a FailedRequest error" do
+          expect { employment.save! }.to raise_error(OrcidEmployment::FailedRequest)
+        end
+      end
+    end
   end
 
   describe "#orcid_type" do
