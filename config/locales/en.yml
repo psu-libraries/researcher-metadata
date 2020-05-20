@@ -29,6 +29,12 @@ en:
     internal_publication_waivers:
       create:
         success: "The open access waiver for your publication, \"%{title}\", was successfully submitted."
+    orcid_access_tokens:
+      new:
+        already_linked: "Your ORCID record is already linked to your metadata profile."
+      create:
+        success: "Your ORCID record was successfully linked to your metadata profile."
+        error: "There was an error linking your ORCID record to your metadata profile."
   models:
     open_access_url_form:
       validation_errors:
