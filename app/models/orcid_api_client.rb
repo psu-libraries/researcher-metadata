@@ -10,7 +10,7 @@ class OrcidAPIClient
     request = {
       headers: {
         "Content-type" => "application/vnd.orcid+json",
-        "Authorization" => "Bearer #{resource.access_token}",
+        "Authorization" => "Bearer #{resource.access_token}"
       },
       body: resource.to_json
     }
