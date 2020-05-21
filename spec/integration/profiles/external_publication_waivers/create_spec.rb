@@ -43,9 +43,10 @@ describe "submitting an open access waiver for a publication that is not in the 
     it "sends a confirmation email to the user" do
       open_email('test123@psu.edu')
       expect(current_email).not_to be_nil
-      expect(current_email.subject).to match(/open access waiver confirmation/i)
+      expect(current_email.subject).to match(/PSU Open Access Policy Waiver for Requested Article/i)
       expect(current_email.body).to match(/Test User/)
       expect(current_email.body).to match(/My Test Publication/)
+      expect(current_email.body).to match(/Test Journal/)
     end
   end
 

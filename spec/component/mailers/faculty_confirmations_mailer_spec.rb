@@ -24,7 +24,7 @@ describe FacultyConfirmationsMailer, type: :model do
     end
 
     it "sends the email with the correct subject" do
-      expect(email.subject).to eq "open access waiver confirmation"
+      expect(email.subject).to eq "PSU Open Access Policy Waiver for Requested Article"
     end
 
     describe "the message body" do
@@ -34,60 +34,16 @@ describe FacultyConfirmationsMailer, type: :model do
         expect(body).to match(user.name)
       end
 
-      it "lists the publication title" do
+      it "mentions the publication title" do
         expect(body).to match("Test Pub")
       end
 
-      it "lists the journal name" do
+      it "mentions the journal name" do
         expect(body).to match("Test Journal")
       end
 
-      context "when the waiver has no DOI" do
-        before { waiver.doi = "" }
-
-        it "does not mention a DOI" do
-          expect(body).not_to match(/DOI/i)
-        end
-      end
-
-      context "when the waiver has a DOI" do
-        before { waiver.doi = "test-digital-object-identifier" }
-
-        it "lists the DOI" do
-          expect(body).to match("test-digital-object-identifier")
-        end
-      end
-
-      context "when the waiver has no publisher" do
-        before { waiver.publisher = "" }
-
-        it "does not mention a publisher" do
-          expect(body).not_to match(/publisher/i)
-        end
-      end
-
-      context "when the waiver has a publisher" do
-        before { waiver.publisher = "Test Publisher" }
-
-        it "lists the publisher" do
-          expect(body).to match("Test Publisher")
-        end
-      end
-
-      context "when the waiver has no reason" do
-        before { waiver.reason_for_waiver = "" }
-
-        it "does not mention a reason" do
-          expect(body).not_to match(/reason/i)
-        end
-      end
-
-      context "when the waiver has a reason" do
-        before { waiver.reason_for_waiver = "The reason" }
-
-        it "lists the reason" do
-          expect(body).to match("The reason")
-        end
+      it "mentions the name of the open access policy" do
+        expect(body).to match("AC02")
       end
     end
   end
