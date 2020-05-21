@@ -14,7 +14,6 @@ class OrcidAccessTokensController < UserController
     response = oauth_client.create_token(params[:code])
 
     if response.code == 200
-      response_body = JSON.parse(response.to_s)
       current_user.update_attributes!(orcid_access_token: response['access_token'])
       flash[:notice] = I18n.t('profile.orcid_access_tokens.create.success')
     else
