@@ -358,7 +358,7 @@ describe "editing profile preferences" do
 
       context "when the user belongs to an organization" do
         let(:org) { create :organization, name: "Biology" }
-        let(:employment_button_text) { "Add to my ORCID Employment History" }
+        let(:employment_button_text) { "Add to my ORCID Record" }
         let(:connect_orcid_button_text) { "Register or Connect your ORCID iD" }
         let(:orcid_employment_id) { nil }
         before do
@@ -381,32 +381,32 @@ describe "editing profile preferences" do
           expect(page).to have_content "2015-12-31"
         end
 
-        context "when the user does not have an ORCiD" do
-          it "does not show a button to connect to the user's ORCiD account" do
+        context "when the user does not have an ORCID iD" do
+          it "does not show a button to connect to the user's ORCID record" do
             expect(page).not_to have_button connect_orcid_button_text
           end
 
-          it "does not show a button to add employment history to their ORCiD profile" do
+          it "does not show a button to add an employment to their ORCID record" do
             expect(page).not_to have_button employment_button_text
           end
         end
         context "when the user has an ORCiD" do
           let(:orcid_id) { "https://orcid.org/0000-0000-1234-5678" }
-          context "when the user has an ORCiD access token" do
+          context "when the user has an ORCID access token" do
             let(:orcid_token) { "abc123" }
-            it "does not show a button to connect to the user's ORCiD account" do
+            it "does not show a button to connect to the user's ORCID record" do
               expect(page).not_to have_button connect_orcid_button_text
             end
 
-            it "shows the user's ORCiD" do
+            it "shows the user's ORCID iD" do
               expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
                                         href: "https://orcid.org/0000-0000-1234-5678"
             end
 
-            context "when the user's primary organization membership has been added to their ORCID profile" do
+            context "when the user's primary organization membership has been added to their ORCID record" do
               let(:orcid_employment_id) { "an identifier" }
 
-              it "does not show a button to add employment history to their ORCiD profile" do
+              it "does not show a button to add the employment to their ORCID record" do
                 expect(page).not_to have_button employment_button_text
               end
 
@@ -415,24 +415,24 @@ describe "editing profile preferences" do
               end
             end
 
-            context "when the user's primary organization membership has not been added to their ORCID profile" do
-              it "shows a button to add employment history to their ORCiD profile" do
+            context "when the user's primary organization membership has not been added to their ORCID record" do
+              it "shows a button to add the employment to their ORCID record" do
                 expect(page).to have_button employment_button_text
               end
             end
           end
 
-          context "when the user does not have an ORCiD access token" do
-            it "shows the user's ORCiD" do
+          context "when the user does not have an ORCID access token" do
+            it "shows the user's ORCID iD" do
               expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
                                         href: "https://orcid.org/0000-0000-1234-5678"
             end
             
-            it "shows a button to connect to the user's ORCiD account" do
+            it "shows a button to connect to the user's ORCID record" do
               expect(page).to have_button connect_orcid_button_text
             end
 
-            it "does not show a button to add employment history to their ORCiD profile" do
+            it "does not show a button to add the employment to their ORCID record" do
               expect(page).not_to have_button employment_button_text
             end
           end

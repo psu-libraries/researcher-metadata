@@ -42,7 +42,7 @@
           <% if @membership.orcid_resource_identifier.present? %>
             <sup>*</sup>This information has been added to your ORCID record.
           <% else %>
-            <%= button_to "Add to my ORCID Employment History", orcid_employments_path, class: 'btn orcid-button', remote: false %>
+            <%= button_to "Add to my ORCID Record", orcid_employments_path, class: 'btn orcid-button', remote: false %>
           <% end %>
         <% end %>
       </div>
