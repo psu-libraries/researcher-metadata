@@ -15,10 +15,10 @@ class OrcidEmploymentsController < UserController
     end
     
   rescue OrcidEmployment::InvalidToken
-        current_user.clear_orcid_access_token
-        flash[:alert] = I18n.t('profile.orcid_employments.create.account_not_linked')
+    current_user.clear_orcid_access_token
+    flash[:alert] = I18n.t('profile.orcid_employments.create.account_not_linked')
   rescue OrcidEmployment::FailedRequest
-        flash[:alert] = I18n.t('profile.orcid_employments.create.error')
+    flash[:alert] = I18n.t('profile.orcid_employments.create.error')
   ensure
     redirect_to profile_bio_path
   end
