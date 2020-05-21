@@ -1,12 +1,4 @@
-require 'unit/unit_spec_helper'
-require 'date'
-require 'json'
-require_relative '../../../app/models/orcid_employment'
-
-class OrcidAPIClient
-  def initialize(arg)
-  end
-end
+require 'component/component_spec_helper'
 
 describe OrcidEmployment do
   let(:membership) { double 'user organization membership',
