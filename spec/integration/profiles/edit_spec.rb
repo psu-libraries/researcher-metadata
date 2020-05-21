@@ -409,6 +409,10 @@ describe "editing profile preferences" do
               it "does not show a button to add employment history to their ORCiD profile" do
                 expect(page).not_to have_button employment_button_text
               end
+
+              it "tells the user that the information has been added" do
+                expect(page).to have_content "information has been added to your ORCID record"
+              end
             end
 
             context "when the user's primary organization membership has not been added to their ORCID profile" do

@@ -38,8 +38,12 @@
             <% end %>
           </tbody>
         </table>
-        <% if @user.orcid_access_token && ! @membership.orcid_resource_identifier.present? %>
-          <%= button_to "Add to my ORCID Employment History", orcid_employments_path, class: 'btn orcid-button', remote: false %>
+        <% if @user.orcid_access_token %>
+          <% if @membership.orcid_resource_identifier.present? %>
+            <sup>*</sup>This information has been added to your ORCID record.
+          <% else %>
+            <%= button_to "Add to my ORCID Employment History", orcid_employments_path, class: 'btn orcid-button', remote: false %>
+          <% end %>
         <% end %>
       </div>
     <% end %>
