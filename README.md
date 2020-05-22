@@ -274,6 +274,49 @@ This API is intended to conform to the Swagger 2.0 specification. As such, we're
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
 
+## ORCID Integration
+### Background
+Since much of the data that is stored in the Researcher Metadata database is the same data that
+people would use to populate their ORCID records, it's useful for us to offer users the ability to
+automatically write their data to ORCID. In order to do this, our application must be authorized to
+update the ORCID record on behalf of the user.
+
+Penn State has a system that allows users to connect their ORCID records to their Penn State Access
+Accounts. This system uses the usual 3-legged OAuth process to obtain the user's ORCID iD and a
+read/write access token from ORCID. The access token so obtained has permission to read data from the
+user's ORCID record and also to write data to their record via ORCID's API. This access token and ORCID
+iD are stored in a database managed by Penn State central IT. The ORCID iD is then published in the 
+user's Penn State LDAP record.
+
+### Researcher Metadata Database Integration
+#### Current Workflow
+In our production environment, a job runs houly that queries Penn State LDAP for each user in our database
+and saves their ORCID iD if it is present in their LDAP record. We then use the presence of the ORCID iD 
+that we obtained in this way to determine if the user can connect their Researcher Metadata profile to
+their ORCID record. If we've obtained an ORCID iD from LDAP, then they are able to make this new
+connection.
+
+If such a user chooses to connect their Researcher Metadata profile to their ORCID record, then they
+go through the 3-legged OAuth process again, and we receive our own read/write access token for the user's
+ORCID record. We save the data that we obtained directly from ORCID in this way (including the access
+token and the user's ORCID iD) to the user's record in our database and use it for all subsequent ORCID
+API calls on behalf of that user. It should be noted that if a user has multiple ORCID accounts, then
+the ORCID iD that they've connected to their Penn State Access Account could be different from the ORCID
+iD that they've connected to their Researcher Metadata profile.
+
+#### Ideal Workflow
+Currently, it's not possible for us to access the ORCID OAuth access tokens that are stored in the database
+at Penn State central IT. If it were, then we could simply use those tokens instead of obtaining our own.
+This would simplify our process and eliminate the possibility that different ORCID iDs for a given user
+could end up being linked to the two different systems. This would also make the workflow much more streamlined
+for our users.
+
+The best compromise for now is to only allow users who have linked their ORCID records to their Penn State 
+Access Accounts to also link them to their Researcher Metadata profile. This ensures that if we are later
+able to use the centralized access tokens, then one of those tokens will exist for every user who has linked
+their ORCID record to their Researcher Metadata profile. It also gives users one more incentive to link their
+ORCID record to their Penn State Access Account (which we want them to do regardless).
+
 ---
 
 This project was developed by the The Pennsylvania State University Libraries Digital Scholarship and Repository Development team in collaboration with [West Arete](https://westarete.com).
