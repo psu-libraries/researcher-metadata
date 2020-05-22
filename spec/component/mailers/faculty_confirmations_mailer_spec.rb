@@ -20,7 +20,7 @@ describe FacultyConfirmationsMailer, type: :model do
     end
 
     it "sends the email from the correct address" do
-      expect(email.from).to eq ["no-reply@example.com"]
+      expect(email.from).to eq ["openaccess@psu.edu"]
     end
 
     it "sends the email with the correct subject" do
