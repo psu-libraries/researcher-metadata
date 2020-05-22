@@ -76,6 +76,18 @@ describe OrcidEmploymentsController, type: :controller do
           end
         end
       end
+
+      context "when the user does not have a primary organization membership" do
+        let(:membership) { nil }
+
+        it "does not try to save an employment in the user's ORCID record" do
+          expect(employment).not_to have_received :save!
+        end
+
+        it "redirects back to the profile bio page" do
+          expect(response).to redirect_to profile_bio_path
+        end
+      end
     end
 
     context "when the user is not authenticated" do

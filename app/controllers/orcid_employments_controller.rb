@@ -4,14 +4,16 @@ class OrcidEmploymentsController < UserController
   def create
     membership = current_user.primary_organization_membership
 
-    if membership.orcid_resource_identifier.present?
-      flash[:notice] = I18n.t('profile.orcid_employments.create.already_added')
-    else
-      employment = OrcidEmployment.new(membership)
-      employment.save!
-      membership.update_attributes!(orcid_resource_identifier: employment.location)
+    if membership
+      if membership.orcid_resource_identifier.present?
+        flash[:notice] = I18n.t('profile.orcid_employments.create.already_added')
+      else
+        employment = OrcidEmployment.new(membership)
+        employment.save!
+        membership.update_attributes!(orcid_resource_identifier: employment.location)
 
-      flash[:notice] = I18n.t('profile.orcid_employments.create.success')
+        flash[:notice] = I18n.t('profile.orcid_employments.create.success')
+      end
     end
     
   rescue OrcidEmployment::InvalidToken
