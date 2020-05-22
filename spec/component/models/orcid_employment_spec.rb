@@ -6,7 +6,8 @@ describe OrcidEmployment do
                             organization_name: "Test Organization",
                             position_title: "Test Title",
                             started_on: Date.new(1999, 12, 31) }
-  let(:user) { double 'user', orcid_access_token: 'the orcid token', orcid: 'the orcid id' }
+  let(:user) { double 'user', orcid_access_token: 'the orcid token',
+                              authenticated_orcid_identifier: 'the orcid id' }
   subject(:employment) { OrcidEmployment.new(membership) }
 
   it { is_expected.to respond_to :location }

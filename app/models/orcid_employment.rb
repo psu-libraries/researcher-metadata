@@ -72,7 +72,7 @@ class OrcidEmployment
   end
 
   def orcid_id
-    user.orcid
+    user.authenticated_orcid_identifier
   end
 
   private
