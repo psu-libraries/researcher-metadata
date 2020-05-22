@@ -54,6 +54,10 @@ describe OrcidAccessTokensController, type: :controller do
         allow(OrcidOauthClient).to receive(:new).and_return(client)
         allow(client).to receive(:create_token).with('abc123').and_return(response)
         allow(response).to receive(:[]).with('access_token').and_return('xyz789')
+        allow(response).to receive(:[]).with('refresh_token').and_return('def456')
+        allow(response).to receive(:[]).with('expires_in').and_return(20000000)
+        allow(response).to receive(:[]).with('scope').and_return('/authenticate')
+        allow(response).to receive(:[]).with('orcid').and_return('0000-0001-2345-6789')
       end
 
       let!(:user) { create :user }
@@ -65,8 +69,12 @@ describe OrcidAccessTokensController, type: :controller do
       context "when the request to create an access token is successful" do
         let(:code) { 200 }
 
-        it "saves the access token" do
+        it "saves the data from the response" do
           expect(user.orcid_access_token).to eq 'xyz789'
+          expect(user.orcid_refresh_token).to eq 'def456'
+          expect(user.orcid_access_token_expires_in).to eq 20000000
+          expect(user.orcid_access_token_scope).to eq '/authenticate'
+          expect(user.authenticated_orcid_identifier).to eq '0000-0001-2345-6789'
         end
 
         it "sets a flash message" do
