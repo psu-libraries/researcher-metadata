@@ -266,6 +266,38 @@ describe "editing profile preferences" do
           expect(page).to have_content "There are currently no publications to show for your profile."
         end
       end
+
+      context "when the user has no external publication waivers" do
+        it "does not show the waiver list" do
+          expect(page).not_to have_content "Open Access Waivers"
+        end
+      end
+
+      context "when the user has external publication waivers" do
+        let!(:waiver1) { create :external_publication_waiver,
+                                user: user,
+                                publication_title: "Waived Publication",
+                                journal_title: "Example Journal" }
+        let!(:waiver2) { create :external_publication_waiver,
+                                user: user,
+                                publication_title: "Another Waived Publication",
+                                journal_title: "Other Journal" }
+
+        before { visit edit_profile_publications_path }
+        it "shows the list of waivers" do
+          expect(page).to have_content "Open Access Waivers"
+
+          within "#external_publication_waiver_#{waiver1.id}" do
+            expect(page).to have_content "Waived Publication"
+            expect(page).to have_content "Example Journal"
+          end
+
+          within "#external_publication_waiver_#{waiver2.id}" do
+            expect(page).to have_content "Another Waived Publication"
+            expect(page).to have_content "Other Journal"
+          end
+        end
+      end
     end
     
     context "when the user is not signed in" do

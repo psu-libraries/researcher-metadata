@@ -59,3 +59,29 @@
     </p>
   <% end %>
 </div>
+
+<% if @waivers.any? %>
+<div id="waiver-list">
+  <h4>Open Access Waivers</h4>
+  <p>
+    Listed below are any open access waivers that you have requested for publcations that were not in our
+    database at the time when the waiver request was submitted.
+  </p>
+    <table class="table">
+      <thead>
+      <tr>
+        <th>Publication Title</th>
+        <th>Journal Title</th>
+      </tr>
+      </thead>
+      <tbody id="waivers">
+        <% @waivers.each do |w| %>
+          <tr id="<%= dom_id(w) %>">
+            <td class="pub-title"><%= w.publication_title %></td>
+            <td class="journal-title"><%= w.journal_title %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+<% end %>
