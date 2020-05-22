@@ -306,7 +306,9 @@ Currently, it's not possible for us to access the ORCID OAuth access tokens that
 at Penn State central IT. If it were, then we could simply use those tokens instead of obtaining our own.
 This would simplify our process and eliminate the possibility that different ORCID iDs for a given user
 could end up being linked to the two different systems. This would also make the workflow much more streamlined
-for our users.
+for our users and prevent Penn State from needing to pay for an additional ORCID integration. However, it
+will probably add a little complexity in terms of caching access tokens and attempting to retrieve a new
+token if we find the one in our cache to no longer be valid.
 
 The best compromise for now is to only allow users who have linked their ORCID records to their Penn State 
 Access Accounts to also link them to their Researcher Metadata profile. This ensures that if we are later
