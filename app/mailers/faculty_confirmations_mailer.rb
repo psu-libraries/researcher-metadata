@@ -4,6 +4,7 @@ class FacultyConfirmationsMailer < ApplicationMailer
     @user = user
     mail to: @user.email,
          subject: "PSU Open Access Policy Waiver for Requested Article",
-         from: "no-reply@#{ActionMailer::Base.default_url_options[:host]}"
+         from: "no-reply@#{ActionMailer::Base.default_url_options[:host]}",
+         reply_to: "openaccess@psu.edu"
   end
 end
