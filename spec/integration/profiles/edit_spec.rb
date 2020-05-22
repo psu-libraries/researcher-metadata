@@ -114,7 +114,7 @@ describe "editing profile preferences" do
             expect(page).to_not have_link "ORCID iD"
           end
 
-          it "does displays an ORCID call to action" do
+          it "does display an ORCID call to action" do
             expect(page).to have_link "Link my ORCID ID", href: 'https://guides.libraries.psu.edu/orcid'
           end
         end
