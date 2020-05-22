@@ -271,9 +271,6 @@ This API is intended to conform to the Swagger 2.0 specification. As such, we're
 - In addition to the apivore spec, we've also been using request specs to "integration" test our endpoints and params. See: ```spec/requests/api/v1/users_spec.rb``` for an example. The apivore specs are good for ensuring the DSL/documentation jives with the actual enpoints, but the request specs allow us to be more thorough.
 - Once specs are passing it's a good idea to manually test the endpoint using the swagger-ui: ```/api_docs/swagger_docs/v1```
 
-## Dependencies
-This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
-
 ## ORCID Integration
 ### Background
 Since much of the data that is stored in the Researcher Metadata database is the same data that
@@ -316,6 +313,9 @@ Access Accounts to also link them to their Researcher Metadata profile. This ens
 able to use the centralized access tokens, then one of those tokens will exist for every user who has linked
 their ORCID record to their Researcher Metadata profile. It also gives users one more incentive to link their
 ORCID record to their Penn State Access Account (which we want them to do regardless).
+
+## Dependencies
+This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
 
 ---
 
