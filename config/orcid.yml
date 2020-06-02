@@ -1,7 +1,0 @@
-development:
-  client_id: APP-324B66XSD3MU4JS5
-  client_secret: 960cf1cc-3b12-4246-9324-c0d126791ca2
-test:
-  client_id: test
-  client_secret: secret
-  
