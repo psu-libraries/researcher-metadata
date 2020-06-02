@@ -12,21 +12,23 @@ class OrcidAccessTokensController < UserController
   end
 
   def create
-    response = oauth_client.create_token(params[:code])
-
-    if response.code == 200
-      current_user.update_attributes!(orcid_access_token: response['access_token'],
-                                      orcid_refresh_token: response['refresh_token'],
-                                      orcid_access_token_expires_in: response['expires_in'],
-                                      orcid_access_token_scope: response['scope'],
-                                      authenticated_orcid_identifier: response['orcid'])
-      flash[:notice] = I18n.t('profile.orcid_access_tokens.create.success')
-      redirect_to profile_bio_path
-    elsif response.code == 400 && response.parsed_response["error"] == "invalid_grant"
+    if params[:error] == 'access_denied'
       render :create
     else
-      flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
-      redirect_to profile_bio_path
+      response = oauth_client.create_token(params[:code])
+
+      if response.code == 200
+        current_user.update_attributes!(orcid_access_token: response['access_token'],
+                                        orcid_refresh_token: response['refresh_token'],
+                                        orcid_access_token_expires_in: response['expires_in'],
+                                        orcid_access_token_scope: response['scope'],
+                                        authenticated_orcid_identifier: response['orcid'])
+        flash[:notice] = I18n.t('profile.orcid_access_tokens.create.success')
+        redirect_to profile_bio_path
+      else
+        flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
+        redirect_to profile_bio_path
+      end
     end
   end
 

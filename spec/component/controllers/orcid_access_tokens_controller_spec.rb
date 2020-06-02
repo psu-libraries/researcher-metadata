@@ -49,9 +49,9 @@ describe OrcidAccessTokensController, type: :controller do
       let(:response) { double 'ORCID Oauth response',
                               code: response_code,
                               content_type: nil,
-                              parsed_response: parsed_response,
                               body: nil }
       let(:parsed_response) { {} }
+      let(:response_code) { 200 }
 
       before do
         allow(OrcidOauthClient).to receive(:new).and_return(client)
@@ -69,44 +69,45 @@ describe OrcidAccessTokensController, type: :controller do
         post :create, params: {code: 'abc123'}
       end
       
-      context "when the request to create an access token is successful" do
-        let(:response_code) { 200 }
-
-        it "saves the data from the response" do
-          expect(user.orcid_access_token).to eq 'xyz789'
-          expect(user.orcid_refresh_token).to eq 'def456'
-          expect(user.orcid_access_token_expires_in).to eq 20000000
-          expect(user.orcid_access_token_scope).to eq '/authenticate'
-          expect(user.authenticated_orcid_identifier).to eq '0000-0001-2345-6789'
-        end
-
-        it "sets a flash message" do
-          expect(flash[:notice]).to eq I18n.t('profile.orcid_access_tokens.create.success')
-        end
-
-        it "redirects back to the profile bio page" do
-          expect(response).to redirect_to profile_bio_path
-        end
-      end
-
-      context "when the request to create an access token fails because the user denied it" do
-        let(:response_code) { 400 }
-        let(:parsed_response) { {"error" => "invalid_grant"} }
-
+      context "when ORCID redirects back with an access_denied error" do
+        before { post :create, params: {error: 'access_denied'} }
+  
         it "renders the create template" do
           expect(response).to render_template('create')
         end
       end
 
-      context "when the request to create an access token fails" do
-        let(:response_code) { 500 }
+      context "when ORCID redirects back with no error" do
+        before { post :create, params: {code: 'abc123'} }
 
-        it "sets a flash message" do
-          expect(flash[:alert]).to eq I18n.t('profile.orcid_access_tokens.create.error')
+        context "when the request to create an access token is successful" do
+          it "saves the data from the response" do
+            expect(user.orcid_access_token).to eq 'xyz789'
+            expect(user.orcid_refresh_token).to eq 'def456'
+            expect(user.orcid_access_token_expires_in).to eq 20000000
+            expect(user.orcid_access_token_scope).to eq '/authenticate'
+            expect(user.authenticated_orcid_identifier).to eq '0000-0001-2345-6789'
+          end
+  
+          it "sets a flash message" do
+            expect(flash[:notice]).to eq I18n.t('profile.orcid_access_tokens.create.success')
+          end
+  
+          it "redirects back to the profile bio page" do
+            expect(response).to redirect_to profile_bio_path
+          end
         end
-
-        it "redirects back to the profile bio page" do
-          expect(response).to redirect_to profile_bio_path
+  
+        context "when the request to create an access token fails" do
+          let(:response_code) { 500 }
+  
+          it "sets a flash message" do
+            expect(flash[:alert]).to eq I18n.t('profile.orcid_access_tokens.create.error')
+          end
+  
+          it "redirects back to the profile bio page" do
+            expect(response).to redirect_to profile_bio_path
+          end
         end
       end
     end
