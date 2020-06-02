@@ -11,13 +11,13 @@ describe OrcidAccessTokensController, type: :controller do
         let(:token) { "abc123" }
 
         it "sets a flash message" do
-          get :new
+          post :new
 
           expect(flash[:notice]).to eq I18n.t('profile.orcid_access_tokens.new.already_linked')
         end
 
         it "redirects back to the profile bio page" do
-          get :new
+          post :new
 
           expect(response).to redirect_to profile_bio_path
         end
@@ -27,7 +27,7 @@ describe OrcidAccessTokensController, type: :controller do
         let(:token) { nil }
         
         it "redirects to the start of the ORCID Oauth page" do
-          get :new
+          post :new
           
           expect(response).to redirect_to "https://sandbox.orcid.org/oauth/authorize?client_id=test&response_type=code&scope=/activities/update&redirect_uri=http://test.host/orcid_access_token"
         end
@@ -36,7 +36,7 @@ describe OrcidAccessTokensController, type: :controller do
 
     context "when the user is not authenticated" do
       it "redirects to the sign in page" do
-        get :new
+        post :new
 
         expect(response).to redirect_to new_user_session_path
       end
@@ -70,7 +70,7 @@ describe OrcidAccessTokensController, type: :controller do
       end
       
       context "when ORCID redirects back with an access_denied error" do
-        before { post :create, params: {error: 'access_denied'} }
+        before { get :create, params: {error: 'access_denied'} }
   
         it "renders the create template" do
           expect(response).to render_template('create')
@@ -78,7 +78,7 @@ describe OrcidAccessTokensController, type: :controller do
       end
 
       context "when ORCID redirects back with no error" do
-        before { post :create, params: {code: 'abc123'} }
+        before { get :create, params: {code: 'abc123'} }
 
         context "when the request to create an access token is successful" do
           it "saves the data from the response" do
@@ -114,7 +114,7 @@ describe OrcidAccessTokensController, type: :controller do
 
     context "when the user is not authenticated" do
       it "redirects to the sign in page" do
-        post :create
+        get :create
 
         expect(response).to redirect_to new_user_session_path
       end
