@@ -141,6 +141,9 @@ group :test do
 
   # Integration test helpers for mailers
   gem 'capybara-email'
+
+  # Extracted test matchers for rails controllers
+  gem 'rails-controller-testing'
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

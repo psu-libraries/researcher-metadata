@@ -20,12 +20,13 @@ class OrcidAccessTokensController < UserController
                                       orcid_access_token_scope: response['scope'],
                                       authenticated_orcid_identifier: response['orcid'])
       flash[:notice] = I18n.t('profile.orcid_access_tokens.create.success')
+      redirect_to profile_bio_path
+    elsif response.code == 400 && response.parsed_response["error"] == "invalid_grant"
+      render :create
     else
-      flash[:alert] = response.code.inspect + " --- " + response.body
-      # flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
+      flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
+      redirect_to profile_bio_path
     end
-
-    redirect_to profile_bio_path
   end
 
   private
