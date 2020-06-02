@@ -21,7 +21,8 @@ class OrcidAccessTokensController < UserController
                                       authenticated_orcid_identifier: response['orcid'])
       flash[:notice] = I18n.t('profile.orcid_access_tokens.create.success')
     else
-      flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
+      flash[:alert] = response.code.inspect + " --- " + response.body
+      # flash[:alert] = I18n.t('profile.orcid_access_tokens.create.error')
     end
 
     redirect_to profile_bio_path
