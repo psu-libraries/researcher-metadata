@@ -1,5 +1,6 @@
 class OrcidAccessTokensController < UserController
   before_action :authenticate!
+  layout 'manage_profile'
 
   def new
     if current_user.orcid_access_token.present?
