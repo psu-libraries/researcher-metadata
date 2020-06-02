@@ -28,5 +28,6 @@
 # Ignore import data
 /db/data/*
 
-# Ignore config for Activity Insight API
+# Ignore config files that contain secrets
 /config/activity_insight.yml
+/config/orcid.yml
