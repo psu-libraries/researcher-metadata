@@ -391,7 +391,7 @@ describe "editing profile preferences" do
       context "when the user belongs to an organization" do
         let(:org) { create :organization, name: "Biology" }
         let(:employment_button_text) { "Add to my ORCID Record" }
-        let(:connect_orcid_button_text) { "Register or Connect your ORCID iD" }
+        let(:connect_orcid_button_text) { "Connect your ORCID iD" }
         let(:orcid_employment_id) { nil }
         before do
           create :user_organization_membership,
