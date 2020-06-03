@@ -72,6 +72,10 @@ describe OrcidAccessTokensController, type: :controller do
       context "when ORCID redirects back with an access_denied error" do
         before { get :create, params: {error: 'access_denied'} }
   
+        it "sets a flash message" do
+          expect(flash.now[:alert]).to eq I18n.t('profile.orcid_access_tokens.create.authorization_denied')
+        end
+        
         it "renders the create template" do
           expect(response).to render_template('create')
         end

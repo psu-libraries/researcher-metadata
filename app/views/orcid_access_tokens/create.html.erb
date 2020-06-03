@@ -1,20 +1,8 @@
-<p>
-  You have denied authorization for the Penn State Research Metadata Database to add data to your ORCID record
-  on your behalf.
-</p>
-<p>
-  Clicked "Deny" by mistake? Reauthorize now...
-<p>
-
-<%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
-  <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
-  Register or Connect your ORCID iD
-<% end %>
-
+<h3>ORCID and the Penn State Research Metadata Database</h3>
 <br/>
 <h4>Why Connect?</h4>
 <p>
-  Connecting your ORCID iD with your Penn State Research Metadata Database profile will allow you to:
+  Connecting your ORCID iD with your Research Metadata Database profile will allow you to:
 </p>
 <ul>
   <li>Add your affiliation with Penn State to your ORCID record with a single click</li>
@@ -36,12 +24,11 @@
   Learn about ORCID's <a href="https://orcid.org/privacy-policy" target="_blank">privacy policy</a>.
 </p>
 
-<p>
-  Click the button below to authorize the connection, or you may <%= link_to "return to your Research Metadata Database profile", profile_bio_path %> or
-  <a href="https://www.orcid.org/account" target="_blank">log in to your ORCID account</a>.
-</p>
+<br/>
 
 <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
   <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
-  Register or Connect your ORCID iD
+  I changed my mind, connect my ORCID iD
 <% end %>
+<br/>
+<%= link_to "Return to my profile", profile_bio_path, class: 'btn btn-light' %>

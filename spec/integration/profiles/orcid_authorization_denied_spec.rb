@@ -8,16 +8,20 @@ feature "The landing page that a user sees when they deny authorization to conne
     visit orcid_access_token_path(params: {error: "access_denied"})
   end
 
+  it "shows a message saying that the user denied authorization" do
+    expect(page).to have_content I18n.t('profile.orcid_access_tokens.create.authorization_denied')
+  end
+
   it "shows the correct content" do
     expect(page).to have_content "Why Connect?"
   end
 
   it "shows a button to try to authorize the ORCID connection again" do
-    expect(page).to have_button "Register or Connect your ORCID iD"
+    expect(page).to have_button "I changed my mind, connect my ORCID iD"
   end
 
   it "shows a link to return to the profile bio management page" do
-    expect(page).to have_link "return to your Research Metadata Database profile", href: profile_bio_path
+    expect(page).to have_link "Return to my profile", href: profile_bio_path
   end
 
   it "shows a link to ORCID's privacy policy" do

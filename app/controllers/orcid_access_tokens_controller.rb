@@ -13,6 +13,7 @@ class OrcidAccessTokensController < UserController
 
   def create
     if params[:error] == 'access_denied'
+      flash.now[:alert] = I18n.t('profile.orcid_access_tokens.create.authorization_denied')
       render :create
     else
       response = oauth_client.create_token(params[:code])
