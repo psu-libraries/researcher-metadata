@@ -1,6 +1,6 @@
 class OrcidOauthClient
   include HTTParty
-  base_uri "https://sandbox.orcid.org/oauth"
+  base_uri "https://#{'sandbox.' unless Rails.env.production?}orcid.org/oauth"
 
   def create_token(code)
     request = {

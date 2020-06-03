@@ -1,6 +1,6 @@
 class OrcidAPIClient
   include HTTParty
-  base_uri "https://api.sandbox.orcid.org/v3.0"
+  base_uri "https://api.#{'sandbox.' unless Rails.env.production?}orcid.org/v3.0"
 
   def initialize(resource)
     @resource = resource
