@@ -1,6 +1,45 @@
 <p>
+  You have denied authorization for the Penn State Research Metadata Database to add data to your ORCID record
+  on your behalf.
+</p>
+<p>
   Clicked "Deny" by mistake? Reauthorize now...
 <p>
+
+<%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
+  <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
+  Register or Connect your ORCID iD
+<% end %>
+
+<br/>
+<h4>Why Connect?</h4>
+<p>
+  Connecting your ORCID iD with your Penn State Research Metadata Database profile will allow you to:
+</p>
+<ul>
+  <li>Add your affiliation with Penn State to your ORCID record with a single click</li>
+  <li>Selectively add each of your publications to your ORCID record with one click</li>
+  <li>Add other profile metadata to your ORCID record as the functionality becomes available</li>
+</ul>
+<p><a href="https://orcid.org/blog/2018/07/27/six-ways-make-your-orcid-id-work-you" target="_blank">See other ways to make your ORCID iD work for you</a></p>
+
+<br>
+<h4>Privacy and Security</h4>
+<ul>
+  <li>You may set to “private” any part of your ORCID record, except your name and ORCID iD number.</li>
+  <li>Penn State will never have access to your ORCID password.</li>
+  <li>You may <a href="https://orcid.org/account" target="_blank">revoke your authorization</a> at any time.</li>
+  <li>You are always in <a href="https://orcid.org/about/trust/control" target="_blank">control</a> of your ORCID record.
+</ul>
+
+<p>
+  Learn about ORCID's <a href="https://orcid.org/privacy-policy" target="_blank">privacy policy</a>.
+</p>
+
+<p>
+  Click the button below to authorize the connection, or you may <%= link_to "return to your Research Metadata Database profile", profile_bio_path %> or
+  <a href="https://www.orcid.org/account" target="_blank">log in to your ORCID account</a>.
+</p>
 
 <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
   <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
