@@ -29,7 +29,7 @@ describe OrcidAccessTokensController, type: :controller do
         it "redirects to the start of the ORCID Oauth page" do
           post :new
           
-          expect(response).to redirect_to "https://sandbox.orcid.org/oauth/authorize?client_id=test&response_type=code&scope=/activities/update&redirect_uri=http://test.host/orcid_access_token"
+          expect(response).to redirect_to "https://sandbox.orcid.org/oauth/authorize?client_id=test&response_type=code&scope=/read-limited%20/activities/update%20/person/update&redirect_uri=http://test.host/orcid_access_token"
         end
       end
     end

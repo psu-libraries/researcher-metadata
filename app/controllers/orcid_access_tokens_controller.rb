@@ -7,7 +7,7 @@ class OrcidAccessTokensController < UserController
       flash[:notice] = I18n.t('profile.orcid_access_tokens.new.already_linked')
       redirect_to profile_bio_path
     else
-      redirect_to "https://#{'sandbox.' unless Rails.env.production?}orcid.org/oauth/authorize?client_id=#{Rails.configuration.x.orcid['client_id']}&response_type=code&scope=/activities/update&redirect_uri=#{URI::encode(orcid_access_token_url)}"
+      redirect_to "https://#{'sandbox.' unless Rails.env.production?}orcid.org/oauth/authorize?client_id=#{Rails.configuration.x.orcid['client_id']}&response_type=code&scope=/read-limited%20/activities/update%20/person/update&redirect_uri=#{URI::encode(orcid_access_token_url)}"
     end
   end
 
