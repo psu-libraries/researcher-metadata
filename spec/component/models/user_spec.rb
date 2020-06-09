@@ -333,6 +333,8255 @@ describe User, type: :model do
     end
   end
 
+  describe '.needs_open_access_notification' do
+    context "when a user exists who has received an open access notification recently" do
+      let!(:recently_notified_user) { create :user, open_access_notification_sent_at: 1.week.ago }
+
+      context "when the user has a publication that was published before the open access policy date" do
+        let!(:non_open_access_policy_pub) { create :publication,
+                                                   published_on: Date.new(2019, 12, 31),
+                                                   open_access_url: oa_url,
+                                                   user_submitted_open_access_url: uoa_url }
+        let!(:authorship) { create :authorship,
+                                   user: recently_notified_user,
+                                   publication: non_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication that was published after the open access policy date" do
+        let!(:open_access_policy_pub) { create :publication,
+                                               published_on: Date.new(2020, 1, 1),
+                                               open_access_url: oa_url,
+                                               user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: recently_notified_user,
+                                   publication: open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication with an unknown publish date" do
+        let!(:unknown_open_access_policy_pub) { create :publication,
+                                                       published_on: nil,
+                                                       open_access_url: oa_url,
+                                                       user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: recently_notified_user,
+                                   publication: unknown_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include recently_notified_user
+                end
+              end
+            end
+          end
+        end
+
+      end
+    end
+
+
+    context "when a user exists who has never received an open access notifictaion" do
+      let!(:non_notified_user) { create :user, open_access_notification_sent_at: nil }
+
+      context "when the user has a publication that was published before the open access policy date" do
+        let!(:non_open_access_policy_pub) { create :publication,
+                                                   published_on: Date.new(2019, 12, 31),
+                                                   open_access_url: oa_url,
+                                                   user_submitted_open_access_url: uoa_url }
+        let!(:authorship) { create :authorship,
+                                   user: non_notified_user,
+                                   publication: non_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication that was published after the open access policy date" do
+        let!(:open_access_policy_pub) { create :publication,
+                                               published_on: Date.new(2020, 1, 1),
+                                               open_access_url: oa_url,
+                                               user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: non_notified_user,
+                                   publication: open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication with an unknown publish date" do
+        let!(:unknown_open_access_policy_pub) { create :publication,
+                                                       published_on: nil,
+                                                       open_access_url: oa_url,
+                                                       user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: non_notified_user,
+                                   publication: unknown_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include non_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+
+
+    context "when a user exists who received an open access notification a long time ago" do
+      let!(:past_notified_user) { create :user, open_access_notification_sent_at: 1.year.ago }
+
+      context "when the user has a publication that was published before the open access policy date" do
+        let!(:non_open_access_policy_pub) { create :publication,
+                                                   published_on: Date.new(2019, 12, 31),
+                                                   open_access_url: oa_url,
+                                                   user_submitted_open_access_url: uoa_url }
+        let!(:authorship) { create :authorship,
+                                   user: past_notified_user,
+                                   publication: non_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: non_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: non_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication that was published after the open access policy date" do
+        let!(:open_access_policy_pub) { create :publication,
+                                               published_on: Date.new(2020, 1, 1),
+                                               open_access_url: oa_url,
+                                               user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: past_notified_user,
+                                   publication: open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "returns the user" do
+                  expect(User.needs_open_access_notification).to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+
+      context "when the user has a publication with an unknown publish date" do
+        let!(:unknown_open_access_policy_pub) { create :publication,
+                                                       published_on: nil,
+                                                       open_access_url: oa_url,
+                                                       user_submitted_open_access_url: uoa_url }
+
+        let!(:authorship) { create :authorship,
+                                   user: past_notified_user,
+                                   publication: unknown_open_access_policy_pub,
+                                   scholarsphere_uploaded_at: ss_upload_time }
+
+        context "when the publication has an open access URL" do
+          let(:oa_url) { 'a_url' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication does not have an open access URL" do
+          let(:oa_url) { nil }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+
+        context "when the publication has a blank open access URL" do
+          let(:oa_url) { '' }
+
+          context "when the publication has a user-submitted open access URL" do
+            let(:uoa_url) { 'a_user_url' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication does not have a user-submitted open access URL" do
+            let(:uoa_url) { nil }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+
+          context "when the publication has a blank user-submitted open access URL" do
+            let(:uoa_url) { '' }
+
+            context "when the publication has a pending Scholarsphere submission from the user" do
+              let(:ss_upload_time) { 1.day.ago }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication has a pending Scholarsphere submission from a different author" do
+              let(:ss_upload_time) { nil }
+              let(:other_author) { create :user }
+              let!(:other_authorship) { create :authorship,
+                                        user: other_author,
+                                        publication: unknown_open_access_policy_pub,
+                                        scholarsphere_uploaded_at: 1.day.ago }
+            
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+
+            context "when the publication does not have a pending Scholarsphere submission" do
+              let(:ss_upload_time) { nil }
+
+              context "when the user has submitted an open access waiver for the publication" do
+                let!(:waiver) { create :internal_publication_waiver, authorship: authorship }
+                
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when a different author has submitted an open access waiver for the publication" do
+                let(:other_author) { create :user }
+                let!(:other_authorship) { create :authorship,
+                                          user: other_author,
+                                          publication: unknown_open_access_policy_pub }
+                let!(:other_waiver) { create :internal_publication_waiver, authorship: other_authorship }
+
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+
+              context "when no authors have submitted an open access waiver for the publication" do
+                it "does not return the user" do
+                  expect(User.needs_open_access_notification).not_to include past_notified_user
+                end
+              end
+            end
+          end
+        end
+      end
+    end
+  end
+
   describe '#confirmed_publications' do
     let!(:u1) { create :user }
     let!(:u2) { create :user }
