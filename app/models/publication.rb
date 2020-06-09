@@ -42,6 +42,8 @@ class Publication < ApplicationRecord
           where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
           distinct(:id) }
 
+  scope :subject_to_open_access_policy, -> { where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true

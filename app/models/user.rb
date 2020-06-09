@@ -93,7 +93,7 @@ class User < ApplicationRecord
     joins(:publications).
     where('open_access_notification_sent_at IS NULL OR open_access_notification_sent_at < ?', 6.months.ago).
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
-    select { |u| u.publications.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
+    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
   end
 
   def confirmed_publications
