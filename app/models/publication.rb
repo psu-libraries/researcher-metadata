@@ -1,4 +1,5 @@
 class Publication < ApplicationRecord
+  OPEN_ACCESS_POLICY_START = Date.new(2020, 1, 1)
   include Swagger::Blocks
 
   def self.publication_types
