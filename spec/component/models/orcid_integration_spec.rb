@@ -29,7 +29,7 @@ describe OrcidAPIClient do
   }
 
   describe "integrating with ORCID", glacial: true do
-    it "receives a response from the ORCID API" do
+    it "successfully POSTs to ORCID and does not return an error" do
       expect(client.post.parsed_response).to eq nil
     end
   end
