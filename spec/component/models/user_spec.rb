@@ -525,6 +525,112 @@ describe User, type: :model do
     end
   end
 
+  describe '#potential_open_access_publications' do
+    let!(:user) { create :user }
+    let!(:org) { create :organization }
+    let!(:membership) { create :user_organization_membership,
+                               user: user,
+                               organization: org,
+                               started_on: Date.new(2000, 1, 1),
+                               ended_on: Date.new(2020, 2, 1) }
+    
+    # Publications that meet the criteria for an open access reminder
+    let!(:potential_pub_1) { create :publication,
+                                    published_on: Date.new(2020, 1, 1) }
+    let!(:p_auth_1) { create :authorship,
+                             user: user,
+                             publication: potential_pub_1,
+                             confirmed: true }
+
+    let!(:potential_pub_2) { create :publication,
+                                    published_on: Date.new(2020, 1, 1),
+                                    open_access_url: '',
+                                    user_submitted_open_access_url: '' }
+    let!(:p_auth_2) { create :authorship,
+                             user: user,
+                             publication: potential_pub_2,
+                             confirmed: true }
+
+    # Filtered out due to being published before open access policy
+    let!(:other_pub_1) { create :publication,
+                                published_on: Date.new(2019, 12, 31) }
+    let!(:o_auth_1) { create :authorship,
+                             user: user,
+                             publication: other_pub_1,
+                             confirmed: true }
+
+    # Filtered out due to presence of open_access_url
+    let!(:other_pub_5) { create :publication,
+                                published_on: Date.new(2020, 1, 1),
+                                open_access_url: 'a_url' }
+    let!(:o_auth_5) { create :authorship,
+                             user: user,
+                             publication: other_pub_5,
+                             confirmed: true }
+
+    # Filtered out due to presence of user_submitted_open_access_url
+    let!(:other_pub_6) { create :publication,
+                                published_on: Date.new(2020, 1, 1),
+                                user_submitted_open_access_url: 'a_url' }
+    let!(:o_auth_6) { create :authorship,
+                             user: user,
+                             publication: other_pub_6,
+                             confirmed: true }
+
+    # Filtered out due to presence of Scholarsphere upload timestamp on authorship
+    let!(:other_pub_7) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_7) { create :authorship,
+                             user: user,
+                             publication: other_pub_7,
+                             confirmed: true,
+                             scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
+    let!(:other_pub_8) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_8) { create :authorship,
+                             user: user,
+                             publication: other_pub_8,
+                             confirmed: true }
+    let!(:another_auth_8) { create :authorship,
+                                   publication: other_pub_8,
+                                   scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to presence of open access waiver
+    let!(:other_pub_9) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_9) { create :authorship,
+                             user: user,
+                             publication: other_pub_9,
+                             confirmed: true }
+    let!(:waiver_9) { create :internal_publication_waiver, authorship: o_auth_9 }
+
+    # Filtered out due to presence of open access waiver on another authorship
+    let!(:other_pub_10) { create :publication,
+                                 published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_10) { create :authorship,
+                              user: user,
+                              publication: other_pub_10,
+                              confirmed: true }
+    let!(:another_auth_10) { create :authorship,
+                                    publication: other_pub_10 }
+    let!(:waiver_10) { create :internal_publication_waiver, authorship: another_auth_10 }
+
+    # Filtered out due to authorship not being confirmed
+    let!(:other_pub_11) { create :publication,
+                                 published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_11) { create :authorship,
+                              user: user,
+                              publication: other_pub_11,
+                              confirmed: false }
+
+    it "returns the user's recent publications that don't have any associated open access information" do
+      expect(user.potential_open_access_publications).to match_array [potential_pub_1,
+                                                                      potential_pub_2]
+    end
+  end
+
   describe '#confirmed_publications' do
     let!(:u1) { create :user }
     let!(:u2) { create :user }

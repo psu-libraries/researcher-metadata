@@ -98,6 +98,15 @@ class User < ApplicationRecord
     select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
   end
 
+  def potential_open_access_publications
+    publications.
+      joins(:authorships).
+      published_during_membership.
+      subject_to_open_access_policy.
+      where('authorships.confirmed IS TRUE').
+      select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
+  end
+
   def confirmed_publications
     publications.where(authorships: { confirmed: true })
   end
