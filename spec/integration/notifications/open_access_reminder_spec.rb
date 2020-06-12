@@ -4,7 +4,9 @@ describe 'sending open access reminder emails' do
   let!(:user1) { create :user, webaccess_id: 'abc123', first_name: "Tester", last_name: "Testerson" }
   let!(:membership1) { create :user_organization_membership, user: user1, started_on: Date.new(2019, 1, 1) }
   let!(:pub1) { create :publication, published_on: Date.new(2020, 2, 1), title: "Test Pub" }
+  let!(:pub2) { create :publication, published_on: Date.new(2019, 2, 1), title: "Irrelevant Pub" }
   let!(:auth1) { create :authorship, user: user1, publication: pub1, confirmed: true }
+  let!(:auth2) { create :authorship, user: user1, publication: pub2, confirmed: true }
 
   let!(:user2) { create :user, webaccess_id: 'def456', first_name: "Other", last_name: "User" }
   let!(:membership2) { create :user_organization_membership, user: user2, started_on: Date.new(2019, 1, 1) }
@@ -24,6 +26,12 @@ describe 'sending open access reminder emails' do
   it "includes the user's name in the message" do
     open_email('abc123@psu.edu')
     expect(current_email.body).to match(/Tester Testerson/)
+  end
+
+  it "includes the titles of only relevant publications in the message" do
+    open_email('abc123@psu.edu')
+    expect(current_email.body).to match(/Test Pub/)
+    expect(current_email.body).not_to match(/Irrelevant Pub/)
   end
 
   context "when done twice in immediate succession" do
