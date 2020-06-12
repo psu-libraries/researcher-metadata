@@ -166,6 +166,10 @@ class User < ApplicationRecord
     update_attribute(:orcid_access_token, nil)
   end
 
+  def record_open_access_notification
+    update_attribute(:open_access_notification_sent_at, Time.current)
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

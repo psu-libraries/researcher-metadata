@@ -1151,4 +1151,15 @@ describe User, type: :model do
       end
     end
   end
+
+  describe '#record_open_access_notification' do
+    let(:user) { create :user }
+    let(:now) { Time.new(2020, 6, 12, 15, 21, 0) }
+    before { allow(Time).to receive(:current).and_return(now) }
+
+    it "saves the current time in the open access notification timestamp field" do
+      user.record_open_access_notification
+      expect(user.reload.open_access_notification_sent_at).to eq now
+    end
+  end
 end
