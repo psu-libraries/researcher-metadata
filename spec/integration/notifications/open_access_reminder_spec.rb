@@ -34,6 +34,11 @@ describe 'sending open access reminder emails' do
     expect(current_email.body).not_to match(/Irrelevant Pub/)
   end
 
+  it "records when the notification was sent on each authorship" do
+    expect(auth1.reload.open_access_notification_sent_at).to be_within(1.minute).of(Time.current)
+    expect(auth2.reload.open_access_notification_sent_at).to be_nil
+  end
+
   context "when done twice in immediate succession" do
     before { clear_emails }
 

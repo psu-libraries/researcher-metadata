@@ -29,6 +29,10 @@ class Authorship < ApplicationRecord
     preferred_open_access_url.blank? && !scholarsphere_upload_pending? && !open_access_waived?
   end
 
+  def record_open_access_notification
+    update_attribute(:open_access_notification_sent_at, Time.current)
+  end
+  
   rails_admin do
     object_label_method { :description }
 
