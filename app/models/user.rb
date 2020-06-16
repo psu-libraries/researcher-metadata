@@ -91,7 +91,7 @@ class User < ApplicationRecord
 
   def self.needs_open_access_notification
     joins({authorships: :publication}, :user_organization_memberships).
-    where('open_access_notification_sent_at IS NULL OR open_access_notification_sent_at < ?', 6.months.ago).
+    where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago).
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
     where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
     where('authorships.confirmed IS TRUE').
