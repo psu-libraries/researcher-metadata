@@ -98,12 +98,15 @@ class User < ApplicationRecord
     select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
   end
 
-  def potential_open_access_publications
-    publications.
-      joins(:authorships).
-      published_during_membership.
-      subject_to_open_access_policy.
-      where('authorships.confirmed IS TRUE').
+  def old_potential_open_access_publications
+    potential_open_access_publications.
+      where('authorships.open_access_notification_sent_at IS NOT NULL').
+      select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
+  end
+
+  def new_potential_open_access_publications
+    potential_open_access_publications.
+      where('authorships.open_access_notification_sent_at IS NULL').
       select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
   end
 
@@ -411,5 +414,13 @@ class User < ApplicationRecord
 
   def convert_blank_ai_id_to_nil
     self.activity_insight_identifier = nil if self.activity_insight_identifier.blank?
+  end
+
+  def potential_open_access_publications
+    publications.
+      joins(:authorships).
+      published_during_membership.
+      subject_to_open_access_policy.
+      where('authorships.confirmed IS TRUE')
   end
 end
