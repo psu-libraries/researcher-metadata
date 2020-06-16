@@ -1,5 +1,5 @@
 class FacultyConfirmationsMailerPreview < ActionMailer::Preview
-  # Accessible from http://localhost:3000/rails/mailers/faculty_confirmation_mailer/open_access_waiver_confirmation
+  # Accessible from http://localhost:3000/rails/mailers/faculty_confirmations_mailer/open_access_waiver_confirmation
   def open_access_waiver_confirmation
     fake_user = OpenStruct.new({email: 'test@example.com',
                                 name: 'Example User'})

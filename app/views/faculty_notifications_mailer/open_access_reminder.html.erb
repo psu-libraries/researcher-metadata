@@ -1,0 +1,24 @@
+<p>Dear <%= @user.name %>,</p>
+
+<p>
+  Some publications for which you are listed as an author are subject to the University's
+  Open Access to Scholarly Articles policy (AC02). Below is a list of the publications for
+  which we do not currently have any information with regard to open access status.
+</p>
+
+<ul>
+  <% @publications.each do |p| %>
+    <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
+  <% end %>
+</ul>
+
+<p>
+  We encourage you to visit the links in the list and follow the instructions to provide us
+  with information about the open access status of each of your publications.
+</p>
+
+<p>
+  The Office of Scholarly Communications and Copyright
+  <br/>
+  Penn State University Libraries
+</p>

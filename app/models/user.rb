@@ -89,6 +89,24 @@ class User < ApplicationRecord
     users.uniq
   end
 
+  def self.needs_open_access_notification
+    joins({authorships: :publication}, :user_organization_memberships).
+    where('open_access_notification_sent_at IS NULL OR open_access_notification_sent_at < ?', 6.months.ago).
+    where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
+    where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
+    where('authorships.confirmed IS TRUE').
+    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
+  end
+
+  def potential_open_access_publications
+    publications.
+      joins(:authorships).
+      published_during_membership.
+      subject_to_open_access_policy.
+      where('authorships.confirmed IS TRUE').
+      select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
+  end
+
   def confirmed_publications
     publications.where(authorships: { confirmed: true })
   end
@@ -146,6 +164,10 @@ class User < ApplicationRecord
 
   def clear_orcid_access_token
     update_attribute(:orcid_access_token, nil)
+  end
+
+  def record_open_access_notification
+    update_attribute(:open_access_notification_sent_at, Time.current)
   end
 
   rails_admin do

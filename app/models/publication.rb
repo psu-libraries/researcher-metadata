@@ -1,4 +1,5 @@
 class Publication < ApplicationRecord
+  OPEN_ACCESS_POLICY_START = Date.new(2020, 1, 1)
   include Swagger::Blocks
 
   def self.publication_types
@@ -40,6 +41,8 @@ class Publication < ApplicationRecord
           joins(:user_organization_memberships).
           where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
           distinct(:id) }
+
+  scope :subject_to_open_access_policy, -> { where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true

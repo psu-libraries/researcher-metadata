@@ -40,6 +40,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:orcid_access_token_scope).of_type(:string) }
   it { is_expected.to have_db_column(:orcid_access_token_expires_in).of_type(:integer) }
   it { is_expected.to have_db_column(:authenticated_orcid_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
@@ -329,6 +330,304 @@ describe User, type: :model do
       it "returns the existing users" do
         expect(User.find_by_nsf_grant(grant)).to match_array [u1, u2]
       end
+    end
+  end
+
+  describe '.needs_open_access_notification' do
+    # Users who meet all of the criteria to receive an email
+    let!(:email_user_1) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:eu_mem_1) { create :user_organization_membership,
+                             user: email_user_1,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:eu_pub_1) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:eu_auth_1) { create :authorship,
+                              user: email_user_1,
+                              publication: eu_pub_1,
+                              confirmed: true }
+
+    let!(:email_user_2) { create :user, open_access_notification_sent_at: nil }
+    let!(:eu_mem_2) { create :user_organization_membership,
+                              user: email_user_2,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil }
+    let!(:eu_pub_2) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:eu_auth_2) { create :authorship,
+                              user: email_user_2,
+                              publication: eu_pub_2,
+                              confirmed: true }
+
+    let!(:email_user_3) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:eu_mem_3) { create :user_organization_membership,
+                              user: email_user_3,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: Date.new(2020, 1, 2) }
+    let!(:eu_pub_3) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:eu_auth_3) { create :authorship,
+                              user: email_user_3,
+                              publication: eu_pub_3,
+                              confirmed: true }
+
+    let!(:email_user_4) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:eu_mem_4) { create :user_organization_membership,
+                             user: email_user_4,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:eu_pub_4) { create :publication, 
+                             published_on: Date.new(2020, 1, 1),
+                             open_access_url: '',
+                             user_submitted_open_access_url: '' }
+    let!(:eu_auth_4) { create :authorship,
+                              user: email_user_4,
+                              publication: eu_pub_4,
+                              confirmed: true }    
+
+    # Filtered out due to recent notification timestamp
+    let!(:other_user_1) { create :user, open_access_notification_sent_at: 1.month.ago }
+    let!(:ou_mem_1) { create :user_organization_membership,
+                             user: other_user_1,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_1) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_1) { create :authorship,
+                              user: other_user_1,
+                              publication: ou_pub_1,
+                              confirmed: true }
+
+    # Filtered out due to not having an organization membership
+    let!(:other_user_2) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_pub_2) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_2) { create :authorship,
+                              user: other_user_2,
+                              publication: ou_pub_2,
+                              confirmed: true }
+
+    # Filtered out due to publication being published outside of org membership
+    let!(:other_user_3) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_3) { create :user_organization_membership,
+                             user: other_user_3,
+                             started_on: Date.new(2020, 2, 1),
+                             ended_on: nil }
+    let!(:ou_pub_3) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_3) { create :authorship,
+                              user: other_user_3,
+                              publication: ou_pub_3,
+                              confirmed: true }
+
+    # Filtered out due to publication being published before open access policy
+    let!(:other_user_4) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_4) { create :user_organization_membership,
+                             user: other_user_4,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_4) { create :publication, published_on: Date.new(2019, 12, 31) }
+    let!(:ou_auth_4) { create :authorship,
+                              user: other_user_4,
+                              publication: ou_pub_4,
+                              confirmed: true }
+
+    # Filtered out due to authorship not being confirmed
+    let!(:other_user_5) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_5) { create :user_organization_membership,
+                             user: other_user_5,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_5) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_5) { create :authorship,
+                              user: other_user_5,
+                              publication: ou_pub_5,
+                              confirmed: false }
+
+    # Filtered out due to open_access_url being present
+    let!(:other_user_6) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_6) { create :user_organization_membership,
+                             user: other_user_6,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_6) { create :publication, published_on: Date.new(2020, 1, 1), open_access_url: 'a_url' }
+    let!(:ou_auth_6) { create :authorship,
+                              user: other_user_6,
+                              publication: ou_pub_6,
+                              confirmed: true }
+
+    # Filtered out due to user_submitted_open_access_url being present
+    let!(:other_user_7) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_7) { create :user_organization_membership,
+                             user: other_user_7,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_7) { create :publication, published_on: Date.new(2020, 1, 1), user_submitted_open_access_url: 'a_url' }
+    let!(:ou_auth_7) { create :authorship,
+                              user: other_user_7,
+                              publication: ou_pub_7,
+                              confirmed: true }
+
+    # Filtered out due to scholarsphere upload timestamp being present
+    let!(:other_user_8) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_8) { create :user_organization_membership,
+                             user: other_user_8,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_8) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_8) { create :authorship,
+                              user: other_user_8,
+                              publication: ou_pub_8,
+                              confirmed: true,
+                              scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to scholarsphere upload timestamp being present on another authorship
+    let!(:other_user_9) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_9) { create :user_organization_membership,
+                             user: other_user_9,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_9) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_9) { create :authorship,
+                              user: other_user_9,
+                              publication: ou_pub_9,
+                              confirmed: true }
+    let!(:another_authorship_9) { create :authorship,
+                                         publication: ou_pub_9,
+                                         scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to presence of open access waiver
+    let!(:other_user_10) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_10) { create :user_organization_membership,
+                              user: other_user_10,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil }
+    let!(:ou_pub_10) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_10) { create :authorship,
+                               user: other_user_10,
+                               publication: ou_pub_10,
+                               confirmed: true }
+    let!(:waiver_10) { create :internal_publication_waiver, authorship: ou_auth_10 }
+
+    # Filtered out due to presence of open access waiver on another authorship
+    let!(:other_user_11) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:ou_mem_11) { create :user_organization_membership,
+                              user: other_user_11,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil }
+    let!(:ou_pub_11) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_auth_11) { create :authorship,
+                               user: other_user_11,
+                               publication: ou_pub_11,
+                               confirmed: true }
+    let!(:another_authorship_11) { create :authorship, publication: ou_pub_11 }
+    let!(:waiver_11) { create :internal_publication_waiver, authorship: another_authorship_11 }
+
+    it "returns only users who should currently receive an email reminder about open access publications" do
+      expect(User.needs_open_access_notification).to match_array [email_user_1,
+                                                                  email_user_2,
+                                                                  email_user_3,
+                                                                  email_user_4]
+    end
+  end
+
+  describe '#potential_open_access_publications' do
+    let!(:user) { create :user }
+    let!(:org) { create :organization }
+    let!(:membership) { create :user_organization_membership,
+                               user: user,
+                               organization: org,
+                               started_on: Date.new(2000, 1, 1),
+                               ended_on: Date.new(2020, 2, 1) }
+    
+    # Publications that meet the criteria for an open access reminder
+    let!(:potential_pub_1) { create :publication,
+                                    published_on: Date.new(2020, 1, 1) }
+    let!(:p_auth_1) { create :authorship,
+                             user: user,
+                             publication: potential_pub_1,
+                             confirmed: true }
+
+    let!(:potential_pub_2) { create :publication,
+                                    published_on: Date.new(2020, 1, 1),
+                                    open_access_url: '',
+                                    user_submitted_open_access_url: '' }
+    let!(:p_auth_2) { create :authorship,
+                             user: user,
+                             publication: potential_pub_2,
+                             confirmed: true }
+
+    # Filtered out due to being published before open access policy
+    let!(:other_pub_1) { create :publication,
+                                published_on: Date.new(2019, 12, 31) }
+    let!(:o_auth_1) { create :authorship,
+                             user: user,
+                             publication: other_pub_1,
+                             confirmed: true }
+
+    # Filtered out due to presence of open_access_url
+    let!(:other_pub_5) { create :publication,
+                                published_on: Date.new(2020, 1, 1),
+                                open_access_url: 'a_url' }
+    let!(:o_auth_5) { create :authorship,
+                             user: user,
+                             publication: other_pub_5,
+                             confirmed: true }
+
+    # Filtered out due to presence of user_submitted_open_access_url
+    let!(:other_pub_6) { create :publication,
+                                published_on: Date.new(2020, 1, 1),
+                                user_submitted_open_access_url: 'a_url' }
+    let!(:o_auth_6) { create :authorship,
+                             user: user,
+                             publication: other_pub_6,
+                             confirmed: true }
+
+    # Filtered out due to presence of Scholarsphere upload timestamp on authorship
+    let!(:other_pub_7) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_7) { create :authorship,
+                             user: user,
+                             publication: other_pub_7,
+                             confirmed: true,
+                             scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
+    let!(:other_pub_8) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_8) { create :authorship,
+                             user: user,
+                             publication: other_pub_8,
+                             confirmed: true }
+    let!(:another_auth_8) { create :authorship,
+                                   publication: other_pub_8,
+                                   scholarsphere_uploaded_at: 1.day.ago }
+
+    # Filtered out due to presence of open access waiver
+    let!(:other_pub_9) { create :publication,
+                                published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_9) { create :authorship,
+                             user: user,
+                             publication: other_pub_9,
+                             confirmed: true }
+    let!(:waiver_9) { create :internal_publication_waiver, authorship: o_auth_9 }
+
+    # Filtered out due to presence of open access waiver on another authorship
+    let!(:other_pub_10) { create :publication,
+                                 published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_10) { create :authorship,
+                              user: user,
+                              publication: other_pub_10,
+                              confirmed: true }
+    let!(:another_auth_10) { create :authorship,
+                                    publication: other_pub_10 }
+    let!(:waiver_10) { create :internal_publication_waiver, authorship: another_auth_10 }
+
+    # Filtered out due to authorship not being confirmed
+    let!(:other_pub_11) { create :publication,
+                                 published_on: Date.new(2020, 1, 1) }
+    let!(:o_auth_11) { create :authorship,
+                              user: user,
+                              publication: other_pub_11,
+                              confirmed: false }
+
+    it "returns the user's recent publications that don't have any associated open access information" do
+      expect(user.potential_open_access_publications).to match_array [potential_pub_1,
+                                                                      potential_pub_2]
     end
   end
 
@@ -850,6 +1149,17 @@ describe User, type: :model do
         user.clear_orcid_access_token
         expect(user.reload.orcid_access_token).to be_nil
       end
+    end
+  end
+
+  describe '#record_open_access_notification' do
+    let(:user) { create :user }
+    let(:now) { Time.new(2020, 6, 12, 15, 21, 0) }
+    before { allow(Time).to receive(:current).and_return(now) }
+
+    it "saves the current time in the open access notification timestamp field" do
+      user.record_open_access_notification
+      expect(user.reload.open_access_notification_sent_at).to eq now
     end
   end
 end
