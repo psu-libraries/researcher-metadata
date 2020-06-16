@@ -104,8 +104,7 @@ class UserProfile
   end
 
   def education_history
-    degrees = user.education_history_items.where.not(degree: nil,
-                                                     degree: "Other",
+    degrees = user.education_history_items.where.not(degree: [nil, "Other"],
                                                      institution: nil,
                                                      emphasis_or_major: nil,
                                                      end_year: nil).order(end_year: :desc)
