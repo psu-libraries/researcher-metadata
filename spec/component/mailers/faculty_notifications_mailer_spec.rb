@@ -3,11 +3,12 @@ require 'component/component_spec_helper'
 describe FacultyNotificationsMailer, type: :model do
 
   describe '#open_access_reminder' do
-    subject(:email) { FacultyNotificationsMailer.open_access_reminder(user, publications) }
+    subject(:email) { FacultyNotificationsMailer.open_access_reminder(user, old_publications, new_publications) }
     let(:user) { double 'user',
                         email: "test123@psu.edu",
                         name: "Test User" }
-    let(:publications) { [pub1, pub2] }
+    let(:old_publications) { [pub1] }
+    let(:new_publications) { [pub2] }
     let(:pub1) { double 'publication 1', to_param: "1", title: "Test Pub One" }
     let(:pub2) { double 'publication 2', to_param: "2", title: "Test Pub Two" }
 

@@ -5,8 +5,10 @@ class FacultyNotificationsMailerPreview < ActionMailer::Preview
                                 name: 'Example User'})
     pub1 = OpenStruct.new({title: "Example Publication One"})
     pub2 = OpenStruct.new({title: "Example Publication Two"})
-    fake_pubs = [pub1, pub2]
+    pub3 = OpenStruct.new({title: "Example Publication Three"})
+    old_fake_pubs = [pub1, pub2]
+    new_fake_pubs = [pub3]
 
-    FacultyNotificationsMailer.open_access_reminder(fake_user, fake_pubs)
+    FacultyNotificationsMailer.open_access_reminder(fake_user, old_fake_pubs, new_fake_pubs)
   end
 end

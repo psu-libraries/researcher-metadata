@@ -1,7 +1,8 @@
 class FacultyNotificationsMailer < ApplicationMailer
-  def open_access_reminder(user, publications)
+  def open_access_reminder(user, old_publications, new_publications)
     @user = user
-    @publications = publications
+    @old_publications = old_publications
+    @new_publications = new_publications
     mail to: @user.email,
          subject: "PSU Open Access Policy Reminder",
          from: "openaccess@psu.edu",

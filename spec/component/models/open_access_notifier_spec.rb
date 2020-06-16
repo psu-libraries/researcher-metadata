@@ -2,10 +2,18 @@ require 'component/component_spec_helper'
 
 describe OpenAccessNotifier do
   let(:notifier) { OpenAccessNotifier.new }
-  let(:user1) { double 'user 1', potential_open_access_publications: pubs1, record_open_access_notification: nil }
-  let(:user2) { double 'user 1', potential_open_access_publications: pubs2, record_open_access_notification: nil }
-  let(:pubs1) { [pub1, pub2] }
-  let(:pubs2) { [pub3, pub4] }
+  let(:user1) { double 'user 1',
+                       old_potential_open_access_publications: pubs1,
+                       new_potential_open_access_publications: pubs2,
+                       record_open_access_notification: nil }
+  let(:user2) { double 'user 2',
+                       old_potential_open_access_publications: pubs3,
+                       new_potential_open_access_publications: pubs4,
+                       record_open_access_notification: nil }
+  let(:pubs1) { [pub1] }
+  let(:pubs2) { [pub2] }
+  let(:pubs3) { [pub3] }
+  let(:pubs4) { [pub4] }
   let(:profile1) { double 'user profile 1' }
   let(:profile2) { double 'user profile 2' }
   let(:email1) { double 'email 1', deliver_now: nil }
@@ -28,8 +36,8 @@ describe OpenAccessNotifier do
       allow(User).to receive(:needs_open_access_notification).and_return([user1, user2])
       allow(UserProfile).to receive(:new).with(user1).and_return profile1
       allow(UserProfile).to receive(:new).with(user2).and_return profile2
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1).and_return email1
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, pubs2).and_return email2
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_return email1
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, pubs3, pubs4).and_return email2
       allow(pub1_auths).to receive(:find_by).with(user: user1).and_return auth1
       allow(pub2_auths).to receive(:find_by).with(user: user1).and_return auth2
       allow(pub3_auths).to receive(:find_by).with(user: user2).and_return auth3
