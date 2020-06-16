@@ -30,7 +30,6 @@ describe ExternalPublicationWaiver, type: :model do
     it { is_expected.to validate_presence_of(:user) }
     it { is_expected.to validate_presence_of(:publication_title) }
     it { is_expected.to validate_presence_of(:journal_title) }
-    it { is_expected.to validate_presence_of(:doi) }
   end
 
   describe '#title' do
