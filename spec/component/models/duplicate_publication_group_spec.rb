@@ -21,197 +21,119 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:existing_group1) { create :duplicate_publication_group }
       let!(:existing_group2) { create :duplicate_publication_group }
 
+      # three publications that match perfectly
+      let!(:p1_1) { create :publication,
+                           title: "Publication with an Exactly Duplicated Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
+                         
+      let!(:p1_2) { create :publication,
+                           title: "Publication with an Exactly Duplicated Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
+
+      let!(:p1_3) { create :publication,
+                           title: "Publication with an Exactly Duplicated Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
+
+      # two publications that have similar titles and otherwise match
+      let!(:p2_1) { create :publication,
+                           title: "Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-987654321" }
+                         
+      let!(:p2_2) { create :publication,
+                           title: "Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-987654321" }
+
+      # two publications with somewhat different titles and the same publication date
+      let!(:p3_1) { create :publication,
+                           title: "Utilizing cloud computing to address big geospatial data challenges",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
+                         
+      let!(:p3_2) { create :publication,
+                           title: "Utilizing cloud computing to do something entirely different with big data sets",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
+
+      # two publications with similar titles and no other data
+      let!(:p4_1) { create :publication,
+                           title: "Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
+                           published_on: nil,
+                           doi: nil }
+                         
+      let!(:p4_2) { create :publication,
+                           title: "Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
+                           published_on: nil,
+                           doi: nil }
+
+      # two publications with similar titles and different publication dates that have the same year
+      let!(:p5_1) { create :publication,
+                           title: "Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV",
+                           published_on: Date.new(2000, 5, 20),
+                           doi: nil }
+                         
+      let!(:p5_2) { create :publication,
+                           title: "Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
+
+      # two publications with the same title and publication date but with different DOIs
+      let!(:p6_1) { create :publication,
+                           title: "A Really Generic Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-23456431" }
+                         
+      let!(:p6_2) { create :publication,
+                           title: "A Really Generic Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-4563457245" }
+
+      # two publications with the same title where only one has a DOI and publication date
+      let!(:p7_1) { create :publication,
+                           title: "A Publication That Matches Another Publication",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-22357534" }
+                         
+      let!(:p7_2) { create :publication,
+                           title: "A Publication That Matches Another Publication",
+                           published_on: nil,
+                           doi: nil }
+
+      # a publication that is already in a group that has the same title as other publications
       let!(:p1) { create :publication,
                          title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
-
-      let!(:p2) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 2,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
-
-      let!(:p3) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 2,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
-
-      let!(:p4) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 2",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1),
                          duplicate_group: existing_group1 }
 
-      let!(:p5) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 2",
-                         published_on: Date.new(2018, 1, 1),
-                         duplicate_group: existing_group2 }
-
-      let!(:p6) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2017, 1, 1) }
-
-      let!(:p7) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 2) }
-
-      let!(:p8) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
-
-      let!(:p9) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         volume: 1,
-                         issue: 1,
-                         journal_title: "Journal 1",
-                         publisher: "Publisher 1",
-                         published_on: Date.new(2018, 1, 1) }
-
-      let!(:p10) { create :publication,
-                          title: "Publication with Duplicated Title that Differs Only by Case",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p11) { create :publication,
-                          title: "publication with duplicated title that differs only by case",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p12) { create :publication,
-                          title: "Duplicate Publication Where Journal Matches Publisher",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: nil,
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p13) { create :publication,
-                          title: "Duplicate Publication Where Journal Matches Publisher",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: nil,
-                          publisher: "Journal 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p14) { create :publication,
-                          title: "Other Publication with No Matching Title",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: nil,
-                          publisher: "Journal 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p15) { create :publication,
-                          title: "Publication with Title that Partially Matches Other Titles",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p16) { create :publication,
-                          title: "Publication with Title that Partially",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p17) { create :publication,
-                          title: "Title that Partially Matches",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p18) { create :publication,
-                          title: "Partially Matches Other Titles",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p19) { create :publication,
-                          title: "Duplicate Publication Where Journal Differs Only by Case",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "Journal 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p20) { create :publication,
-                          title: "Duplicate Publication Where Journal Differs Only by Case",
-                          volume: 1,
-                          issue: 1,
-                          journal_title: "JOURNAL 1",
-                          publisher: "Publisher 1",
-                          published_on: Date.new(2018, 1, 1) }
-
-      let!(:p21) { create :publication, duplicate_group: existing_group1 }
-      let!(:p22) { create :publication, duplicate_group: existing_group2 }
-
       it "finds similar publications and groups them" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 3
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 4
 
-        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9, p21, p22]
-        expect(p2.reload.duplicate_group).to be_nil
-        expect(p3.reload.duplicate_group).to be_nil
-        expect(p6.reload.duplicate_group).to be_nil
-        expect(p10.reload.duplicate_group.publications).to match_array [p10, p11]
-        expect(p12.reload.duplicate_group.publications).to match_array [p12, p13]
-        expect(p14.reload.duplicate_group).to be_nil
-        expect(p15.reload.duplicate_group.publications).to match_array [p15, p16, p17, p18]
-        expect(p19.reload.duplicate_group.publications).to match_array [p19, p20]
+        expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
+        expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
+        expect(p3_1.reload.duplicate_group).to be_nil
+        expect(p3_2.reload.duplicate_group).to be_nil
+        expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
+        expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
+        expect(p6_1.reload.duplicate_group).to be_nil
+        expect(p6_2.reload.duplicate_group).to be_nil
+        expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 3
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 4
 
-        expect(p1.reload.duplicate_group.publications).to match_array [p1, p4, p5, p7, p8, p9, p21, p22]
-        expect(p2.reload.duplicate_group).to be_nil
-        expect(p3.reload.duplicate_group).to be_nil
-        expect(p6.reload.duplicate_group).to be_nil
-        expect(p10.reload.duplicate_group.publications).to match_array [p10, p11]
-        expect(p12.reload.duplicate_group.publications).to match_array [p12, p13]
-        expect(p14.reload.duplicate_group).to be_nil
-        expect(p15.reload.duplicate_group.publications).to match_array [p15, p16, p17, p18]
-        expect(p19.reload.duplicate_group.publications).to match_array [p19, p20]
+        expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
+        expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
+        expect(p3_1.reload.duplicate_group).to be_nil
+        expect(p3_2.reload.duplicate_group).to be_nil
+        expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
+        expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
+        expect(p6_1.reload.duplicate_group).to be_nil
+        expect(p6_2.reload.duplicate_group).to be_nil
+        expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
       end
     end
   end

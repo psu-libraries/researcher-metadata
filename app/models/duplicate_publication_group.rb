@@ -6,15 +6,10 @@ class DuplicatePublicationGroup < ApplicationRecord
                               total: Publication.count) unless Rails.env.test?
 
     Publication.find_each do |p|
-      duplicates = Publication.where("volume = ? AND issue = ? AND title ILIKE ? and (journal_title ILIKE ? OR journal_title ILIKE ? OR publisher ILIKE ? OR publisher ILIKE ?) AND EXTRACT(YEAR FROM published_on) = ?",
-                                     p.volume,
-                                     p.issue,
-                                     "%#{p.title}%",
-                                     p.journal_title,
-                                     p.publisher,
-                                     p.journal_title,
-                                     p.publisher,
-                                     p.published_on.try(:year))
+      duplicates = Publication.where(%{similarity(title, ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi IS NULL)},
+                                     p.title,
+                                     p.published_on.try(:year),
+                                     p.doi)
 
       group_publications(duplicates)
 
