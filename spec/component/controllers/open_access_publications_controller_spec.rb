@@ -65,38 +65,68 @@ describe OpenAccessPublicationsController, type: :controller do
       end
 
       context "when given the ID for a publication that belongs to the user and has an open access URL" do
-        it "returns 404" do
-          expect { get :edit, params: {id: oa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: oa_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: oa_pub.id}).to render_template(:readonly_edit)
         end
       end
 
       context "when given the ID for a publication that belongs to the user and has a user-submitted open access URL" do
-        it "returns 404" do
-          expect { get :edit, params: {id: uoa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: uoa_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: uoa_pub.id}).to render_template(:readonly_edit)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by the user" do
-        it "returns 404" do
-          expect { get :edit, params: {id: uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: uploaded_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: uploaded_pub.id}).to render_template(:readonly_edit)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
-        it "returns 404" do
-          expect { get :edit, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: other_uploaded_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: other_uploaded_pub.id}).to render_template(:readonly_edit)
         end
       end
 
       context "when given the ID for a publication for which the user has waived open access" do
-        it "returns 404" do
-          expect { get :edit, params: {id: waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: waived_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: waived_pub.id}).to render_template(:readonly_edit)
         end
       end
 
       context "when given the ID for a publication for which another user has waived open access" do
-        it "returns 404" do
-          expect { get :edit, params: {id: other_waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "returns 200 OK" do
+          get :edit, params: {id: other_waived_pub.id}
+          expect(response.code).to eq "200"
+        end
+
+        it "renders a readonly view of the publication" do
+          expect(get :edit, params: {id: other_waived_pub.id}).to render_template(:readonly_edit)
         end
       end
 
@@ -106,11 +136,19 @@ describe OpenAccessPublicationsController, type: :controller do
             get :edit, params: {id: pub.id}
             expect(response.code).to eq "200"
           end
+
+          it "renders the open access form" do
+            expect(get :edit, params: {id: pub.id}).to render_template(:edit)
+          end
         end
         context "when the open access fields are blank" do
           it "returns 200 OK" do
             get :edit, params: {id: blank_oa_pub.id}
             expect(response.code).to eq "200"
+          end
+
+          it "renders the open access form" do
+            expect(get :edit, params: {id: pub.id}).to render_template(:edit)
           end
         end
       end

@@ -11,15 +11,38 @@ describe "visiting the page to edit the open acess status of a publication" do
                      page_range: "478-483",
                      published_on: Date.new(2019, 1, 1) }
   let(:other_pub) { create :publication }
-  let(:oa_pub) { create :publication, open_access_url: 'a URL' }
-  let(:uoa_pub) { create :publication, user_submitted_open_access_url: 'user URL' }
+  let(:oa_pub) { create :publication,
+                        title: 'Open Access Publication',
+                        journal_title: 'Open Access Journal',
+                        issue: "834",
+                        volume: "620",
+                        page_range: "112-124",
+                        published_on: Date.new(2020, 1, 1),
+                        open_access_url: 'a_url' }
+  let(:ss_pub) { create :publication,
+                        title: 'Scholarsphere Publication',
+                        journal_title: 'Another Journal',
+                        issue: "54",
+                        volume: "16",
+                        page_range: "63-81",
+                        published_on: Date.new(2018, 1, 1) }
+  let(:waived_pub) { create :publication,
+                            title: 'Waived Publication',
+                            journal_title: 'Closed Access Journal',
+                            issue: "89",
+                            volume: "27",
+                            page_range: "160-173",
+                            published_on: Date.new(2017, 1, 1) }
   let(:response) { double 'response' }
+
+  let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
 
   before do
     create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
-    create :authorship, user: user, publication: uoa_pub
-
+    create :authorship, user: user, publication: ss_pub, scholarsphere_uploaded_at: 1.day.ago
+    create :internal_publication_waiver, authorship: waived_auth
+    
     allow(HTTParty).to receive(:head).and_return(response)
     allow(response).to receive(:code).and_return 200
   end
@@ -107,14 +130,96 @@ describe "visiting the page to edit the open acess status of a publication" do
     end
 
     context "when requesting a publication that belongs to the user and has an open access URL" do
-      it "returns 404" do
-        expect { visit edit_open_access_publication_path(oa_pub) }.to raise_error ActiveRecord::RecordNotFound
+      before { visit edit_open_access_publication_path(oa_pub) }
+
+      it_behaves_like "a profile management page"
+      
+      it "shows an appropriate message" do
+        expect(page).to have_content "no further action"
+      end
+      it "shows the title of the publication" do
+        expect(page).to have_content "Open Access Publication"
+      end
+      it "shows the publication's journal" do
+        expect(page).to have_content "Open Access Journal"
+      end
+      it "shows the publication's issue number" do
+        expect(page).to have_content "834"
+      end
+      it "shows the publication's volume number" do
+        expect(page).to have_content "620"
+      end
+      it "shows the publication's page range" do
+        expect(page).to have_content "112-124"
+      end
+      it "shows the publication's year" do
+        expect(page).to have_content "2020"
+      end
+      it "shows the open access status of the publication" do
+        expect(page).to have_content "This publication is open access"
+        expect(page).to have_link 'a_url', href: 'a_url'
       end
     end
 
-    context "when requesting a publication that belongs to the user and has a user-submitted open access URL" do
-      it "returns 404" do
-        expect { visit edit_open_access_publication_path(uoa_pub) }.to raise_error ActiveRecord::RecordNotFound
+    context "when requesting a publication that belongs to the user and has a pending Scholarsphere upload" do
+      before { visit edit_open_access_publication_path(ss_pub) }
+
+      it_behaves_like "a profile management page"
+      
+      it "shows an appropriate message" do
+        expect(page).to have_content "no further action"
+      end
+      it "shows the title of the publication" do
+        expect(page).to have_content "Scholarsphere Publication"
+      end
+      it "shows the publication's journal" do
+        expect(page).to have_content "Another Journal"
+      end
+      it "shows the publication's issue number" do
+        expect(page).to have_content "54"
+      end
+      it "shows the publication's volume number" do
+        expect(page).to have_content "16"
+      end
+      it "shows the publication's page range" do
+        expect(page).to have_content "63-81"
+      end
+      it "shows the publication's year" do
+        expect(page).to have_content "2018"
+      end
+      it "shows the open access status of the publication" do
+        expect(page).to have_content "This publication is in the process of being added to Scholarsphere"
+      end
+    end
+
+    context "when requesting a publication that belongs to the user and has had open access waived" do
+      before { visit edit_open_access_publication_path(waived_pub) }
+
+      it_behaves_like "a profile management page"
+      
+      it "shows an appropriate message" do
+        expect(page).to have_content "no further action"
+      end
+      it "shows the title of the publication" do
+        expect(page).to have_content "Waived Publication"
+      end
+      it "shows the publication's journal" do
+        expect(page).to have_content "Closed Access Journal"
+      end
+      it "shows the publication's issue number" do
+        expect(page).to have_content "89"
+      end
+      it "shows the publication's volume number" do
+        expect(page).to have_content "27"
+      end
+      it "shows the publication's page range" do
+        expect(page).to have_content "160-173"
+      end
+      it "shows the publication's year" do
+        expect(page).to have_content "2017"
+      end
+      it "shows the open access status of the publication" do
+        expect(page).to have_content "Open access obligations have been waived for this publication"
       end
     end
 

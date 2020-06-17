@@ -1,0 +1,55 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xl">
+      <div class="open-access-info">
+        <h2>Open Access <%=fa_icon('unlock-alt') %></h2>
+        <p>
+          The open access status of your publication, <em><%= publication.title %></em>, has
+          been updated. If you received an email about this publication asking you to provide
+          information about its open access status, there is no further action that you need
+          to take at this time. If you did not update the status yourself, it may have been
+          updated by another author of the publication or by a Penn State University Libraries
+          administrator.
+        </p>
+      </div>
+      <div class="oa-publication-details">
+        <h4>Publication Details</h4>
+        <table>
+          <tr>
+            <td><strong>Title:</strong></td>
+            <td><%= publication.title %></td>
+          </tr>
+          <tr>
+            <td><strong>Journal:</strong></td>
+            <td><%= publication.published_by %></td>
+          </tr>
+          <tr>
+            <td><strong>Volume:</strong></td>
+            <td><%= publication.volume %></td>
+          </tr>
+          <tr>
+            <td><strong>Issue:</strong></td>
+            <td><%= publication.issue %></td>
+          </tr>
+          <tr>
+            <td><strong>Pages:</strong></td>
+            <td><%= publication.page_range %></td>
+          <tr>
+            <td><strong>Year Published:</strong></td>
+            <td><%= publication.year %></td>
+          </tr>
+          <tr>
+            <td><strong>Open Access Status:</strong></td>
+            <% if publication.preferred_open_access_url %>
+              <td>This publication is open access - <%= link_to publication.preferred_open_access_url, publication.preferred_open_access_url, target: '_blank' %></td>
+            <% elsif publication.scholarsphere_upload_pending? %>
+              <td>This publication is in the process of being added to <%= link_to "Scholarsphere", "https://scholarsphere.psu.edu/", target: '_blank' %>.</td>
+            <% elsif publication.open_access_waived? %>
+              <td>Open access obligations have been waived for this publication.</td>
+            <% end %>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
