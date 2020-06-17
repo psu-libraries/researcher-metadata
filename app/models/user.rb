@@ -90,12 +90,14 @@ class User < ApplicationRecord
   end
 
   def self.needs_open_access_notification
-    joins({authorships: :publication}, :user_organization_memberships).
-    where('open_access_notification_sent_at IS NULL OR open_access_notification_sent_at < ?', 6.months.ago).
+    joins({authorships: {publication: :authorships}}, :user_organization_memberships).
+    joins('LEFT JOIN internal_publication_waivers waivers ON waivers.authorship_id = authorships_publications.id').
+    where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago).
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
     where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
-    where('authorships.confirmed IS TRUE').
-    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
+    where('authorships_publications.confirmed IS TRUE').
+    where("((publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '')) AND (authorships_publications.scholarsphere_uploaded_at IS NULL) AND (waivers.authorship_id IS NULL)").
+    group(:id).to_a
   end
 
   def potential_open_access_publications
