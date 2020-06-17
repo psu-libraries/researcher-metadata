@@ -17,16 +17,13 @@ class Authorship < ApplicationRecord
            :preferred_open_access_url,
            :scholarsphere_upload_pending?,
            :open_access_waived?,
+           :no_open_access_information?,
            to: :publication,
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true
 
   def description
     "Authorship ##{id}"
-  end
-
-  def no_open_access_information?
-    preferred_open_access_url.blank? && !scholarsphere_upload_pending? && !open_access_waived?
   end
 
   def record_open_access_notification

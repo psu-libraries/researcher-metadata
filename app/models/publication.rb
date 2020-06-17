@@ -425,4 +425,12 @@ class Publication < ApplicationRecord
   def open_access_waived?
     waivers.any?
   end
+
+  def no_open_access_information?
+    !has_open_access_information?
+  end
+
+  def has_open_access_information?
+    !preferred_open_access_url.blank? || scholarsphere_upload_pending? || open_access_waived?
+  end
 end

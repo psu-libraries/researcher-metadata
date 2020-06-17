@@ -95,19 +95,19 @@ class User < ApplicationRecord
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
     where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
     where('authorships.confirmed IS TRUE').
-    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.authorships.detect { |a| a.no_open_access_information? } } }.uniq
+    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.no_open_access_information? } }.uniq
   end
 
   def old_potential_open_access_publications
     potential_open_access_publications.
       where('authorships.open_access_notification_sent_at IS NOT NULL').
-      select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
+      select { |p| p.no_open_access_information? }
   end
 
   def new_potential_open_access_publications
     potential_open_access_publications.
       where('authorships.open_access_notification_sent_at IS NULL').
-      select { |p| p.authorships.detect { |a| a.no_open_access_information? } }
+      select { |p| p.no_open_access_information? }
   end
 
   def confirmed_publications
