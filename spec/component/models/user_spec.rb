@@ -337,7 +337,7 @@ describe User, type: :model do
 
   describe '.needs_open_access_notification' do
     # Users who meet all of the criteria to receive an email
-    let!(:email_user_1) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:email_user_1) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_1' }
     let!(:eu_mem_1) { create :user_organization_membership,
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
@@ -348,7 +348,7 @@ describe User, type: :model do
                               publication: eu_pub_1,
                               confirmed: true }
 
-    let!(:email_user_2) { create :user, open_access_notification_sent_at: nil }
+    let!(:email_user_2) { create :user, open_access_notification_sent_at: nil, first_name: 'email_user_2' }
     let!(:eu_mem_2) { create :user_organization_membership,
                               user: email_user_2,
                               started_on: Date.new(2019, 1, 1),
@@ -359,7 +359,7 @@ describe User, type: :model do
                               publication: eu_pub_2,
                               confirmed: true }
 
-    let!(:email_user_3) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:email_user_3) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_3' }
     let!(:eu_mem_3) { create :user_organization_membership,
                               user: email_user_3,
                               started_on: Date.new(2019, 1, 1),
@@ -370,7 +370,7 @@ describe User, type: :model do
                               publication: eu_pub_3,
                               confirmed: true }
 
-    let!(:email_user_4) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:email_user_4) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_4' }
     let!(:eu_mem_4) { create :user_organization_membership,
                              user: email_user_4,
                              started_on: Date.new(2019, 1, 1),
@@ -385,7 +385,7 @@ describe User, type: :model do
                               confirmed: true }    
 
     # Filtered out due to recent notification timestamp
-    let!(:other_user_1) { create :user, open_access_notification_sent_at: 1.month.ago }
+    let!(:other_user_1) { create :user, open_access_notification_sent_at: 1.month.ago, first_name: 'other_user_1' }
     let!(:ou_mem_1) { create :user_organization_membership,
                              user: other_user_1,
                              started_on: Date.new(2019, 1, 1),
@@ -397,7 +397,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to not having an organization membership
-    let!(:other_user_2) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_2) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_2' }
     let!(:ou_pub_2) { create :publication, published_on: Date.new(2020, 1, 1) }
     let!(:ou_auth_2) { create :authorship,
                               user: other_user_2,
@@ -405,7 +405,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to publication being published outside of org membership
-    let!(:other_user_3) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_3) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_3' }
     let!(:ou_mem_3) { create :user_organization_membership,
                              user: other_user_3,
                              started_on: Date.new(2020, 2, 1),
@@ -417,7 +417,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to publication being published before open access policy
-    let!(:other_user_4) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_4) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_4' }
     let!(:ou_mem_4) { create :user_organization_membership,
                              user: other_user_4,
                              started_on: Date.new(2019, 1, 1),
@@ -429,7 +429,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to authorship not being confirmed
-    let!(:other_user_5) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_5) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_5' }
     let!(:ou_mem_5) { create :user_organization_membership,
                              user: other_user_5,
                              started_on: Date.new(2019, 1, 1),
@@ -441,7 +441,7 @@ describe User, type: :model do
                               confirmed: false }
 
     # Filtered out due to open_access_url being present
-    let!(:other_user_6) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_6) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_6' }
     let!(:ou_mem_6) { create :user_organization_membership,
                              user: other_user_6,
                              started_on: Date.new(2019, 1, 1),
@@ -453,7 +453,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to user_submitted_open_access_url being present
-    let!(:other_user_7) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_7) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_7' }
     let!(:ou_mem_7) { create :user_organization_membership,
                              user: other_user_7,
                              started_on: Date.new(2019, 1, 1),
@@ -465,7 +465,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to scholarsphere upload timestamp being present
-    let!(:other_user_8) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_8) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_8' }
     let!(:ou_mem_8) { create :user_organization_membership,
                              user: other_user_8,
                              started_on: Date.new(2019, 1, 1),
@@ -478,7 +478,7 @@ describe User, type: :model do
                               scholarsphere_uploaded_at: 1.day.ago }
 
     # Filtered out due to scholarsphere upload timestamp being present on another authorship
-    let!(:other_user_9) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_9) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_9' }
     let!(:ou_mem_9) { create :user_organization_membership,
                              user: other_user_9,
                              started_on: Date.new(2019, 1, 1),
@@ -493,7 +493,7 @@ describe User, type: :model do
                                          scholarsphere_uploaded_at: 1.day.ago }
 
     # Filtered out due to presence of open access waiver
-    let!(:other_user_10) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_10) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_10' }
     let!(:ou_mem_10) { create :user_organization_membership,
                               user: other_user_10,
                               started_on: Date.new(2019, 1, 1),
@@ -506,7 +506,7 @@ describe User, type: :model do
     let!(:waiver_10) { create :internal_publication_waiver, authorship: ou_auth_10 }
 
     # Filtered out due to presence of open access waiver on another authorship
-    let!(:other_user_11) { create :user, open_access_notification_sent_at: 1.year.ago }
+    let!(:other_user_11) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_11' }
     let!(:ou_mem_11) { create :user_organization_membership,
                               user: other_user_11,
                               started_on: Date.new(2019, 1, 1),
