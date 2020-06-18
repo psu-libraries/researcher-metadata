@@ -1,6 +1,8 @@
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
+
 describe 'the users table', type: :model do
   subject(:user) { User.new }
   it { is_expected.to have_db_column(:activity_insight_identifier).of_type(:string) }
