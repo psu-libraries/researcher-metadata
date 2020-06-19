@@ -90,12 +90,15 @@ class User < ApplicationRecord
   end
 
   def self.needs_open_access_notification
-    joins({authorships: :publication}, :user_organization_memberships).
+    joins(:authorships, :publications, :user_organization_memberships).
+    where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id from internal_publication_waivers))').
+    where('publications.id NOT IN (SELECT publication_id from authorships WHERE scholarsphere_uploaded_at IS NOT NULL)').
     where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago).
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
     where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
     where('authorships.confirmed IS TRUE').
-    select { |u| u.publications.subject_to_open_access_policy.detect { |p| p.no_open_access_information? } }.uniq
+    where("((publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '')) AND (authorships.scholarsphere_uploaded_at IS NULL)").
+    distinct(:id)
   end
 
   def old_potential_open_access_publications
