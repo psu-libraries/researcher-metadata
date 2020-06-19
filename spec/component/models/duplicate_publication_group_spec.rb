@@ -103,13 +103,26 @@ describe DuplicatePublicationGroup, type: :model do
                            published_on: nil,
                            doi: nil }
 
+      # two publications with the same title where one has the title split between the two title fields
+      let!(:p8_1) { create :publication,
+                           title: "Assessing and investigating clinicians' research interests",
+                           secondary_title: "Lessons on expanding practices and data collection in a large practice research network",
+                           published_on: nil,
+                           doi: nil }
+                         
+      let!(:p8_2) { create :publication,
+                           title: "Assessing and investigating clinicians' research interests: Lessons on expanding practices and data collection in a large practice research network",
+                           secondary_title: nil,
+                           published_on: nil,
+                           doi: nil }
+
       # a publication that is already in a group that has the same title as other publications
       let!(:p1) { create :publication,
                          title: "Publication with an Exactly Duplicated Title",
                          duplicate_group: existing_group1 }
 
       it "finds similar publications and groups them" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 4
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 5
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -120,10 +133,11 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p6_1.reload.duplicate_group).to be_nil
         expect(p6_2.reload.duplicate_group).to be_nil
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
+        expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 4
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 5
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -134,6 +148,7 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p6_1.reload.duplicate_group).to be_nil
         expect(p6_2.reload.duplicate_group).to be_nil
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
+        expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
       end
     end
   end
