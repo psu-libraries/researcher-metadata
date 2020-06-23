@@ -7,7 +7,20 @@ class ExternalPublicationWaiver < ApplicationRecord
     publication_title
   end
 
+  def matching_publications
+    Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6}, publication_title)
+  end
+
+  def has_matching_publications
+    matching_publications.any?
+  end
+
   rails_admin do
+    configure :matching_publications do
+      pretty_value do
+        bindings[:view].render :partial => "rails_admin/partials/external_publication_waivers/matching_publications.html.erb", :locals => { :publications => value }
+      end
+    end
     list do
       field(:id)
       field(:publication_title)
@@ -27,6 +40,7 @@ class ExternalPublicationWaiver < ApplicationRecord
       field(:user) do
         pretty_value { %{<a href="#{RailsAdmin.railtie_routes_url_helpers.show_path(model_name: :user, id: value.id)}">#{value.name}</a>}.html_safe }
       end
+      field(:matching_publications)
     end
   end
 end

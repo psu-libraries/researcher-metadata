@@ -38,4 +38,35 @@ describe ExternalPublicationWaiver, type: :model do
       expect(waiver.title).to eq "The Title"
     end
   end
+
+  describe '#matching_publications' do
+    let(:waiver) { ExternalPublicationWaiver.new(publication_title: "A Publication with a Distinct Title of Some Sort") }
+    let!(:pub1) { create :publication, title: "A test publication with a long, distinct title of some sort" }
+    let!(:pub2) { create :publication, title: "Another publication", secondary_title: "with a longer, distinct title of some sort" }
+    let!(:pub3) { create :publication, title: "Some Other Publication" }
+    let!(:pub4) { create :publication, title: "A publication with a long, but rather different title" }
+    let!(:pub5) { create :publication, title: "A Publication with a Distinct Title of Some Sort" }
+    
+    it "returns all publications with a title that closely matches the title in the waiver" do
+      expect(waiver.matching_publications).to match_array [pub1, pub2, pub5]
+    end
+  end
+
+  describe '#has_matching_publications' do
+    let(:waiver) { ExternalPublicationWaiver.new(publication_title: "A Publication with a Distinct Title of Some Sort") }
+
+    context "when there is a publication with a title that closely matches the title in the waiver" do
+      let!(:pub) { create :publication, title: "A test publication with a long, distinct title of some sort" }
+      it "returns true" do
+        expect(waiver.has_matching_publications).to eq true
+      end
+    end
+
+    context "when there are no publications with a title that closely matches the title in the waiver" do
+      let!(:pub) { create :publication, title: "A publication with a long, but rather different title" }
+      it "returns false" do
+        expect(waiver.has_matching_publications).to eq false
+      end
+    end
+  end
 end

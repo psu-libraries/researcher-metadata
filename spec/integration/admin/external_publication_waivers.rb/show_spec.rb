@@ -4,7 +4,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 feature "Admin external publication waiver detail page", type: :feature do
   let!(:waiver) { create :external_publication_waiver,
                          user: user,
-                         publication_title: "Publication One",
+                         publication_title: "A Publication with a Distinct Title of Some Sort",
                          reason_for_waiver: "Just because.",
                          abstract: "What this publication is all about.",
                          doi: "https://doi.org/the-doi",
@@ -19,11 +19,11 @@ feature "Admin external publication waiver detail page", type: :feature do
       before { visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id) }
 
       it "shows the waiver detail heading" do
-        expect(page).to have_content "Details for External publication waiver 'Publication One'"
+        expect(page).to have_content "Details for External publication waiver 'A Publication with a Distinct Title of Some Sort'"
       end
 
       it "shows the title of the publication associated with the waiver" do
-        expect(page).to have_content "Publication One"
+        expect(page).to have_content "A Publication with a Distinct Title of Some Sort"
       end
 
       it "shows the reason for the waiver" do
@@ -48,6 +48,48 @@ feature "Admin external publication waiver detail page", type: :feature do
 
       it "shows the name of the user associated with the waiver" do
         expect(page).to have_link "Joe Testerson", href: rails_admin.show_path(model_name: :user, id: user.id)
+      end
+
+      context "when there are publications in the database that match the title in the waiver" do
+        let!(:user1) { create :user, first_name: 'Author', last_name: "One" }
+        let!(:user2) { create :user, first_name: 'Author', last_name: "Two" }
+        let!(:user3) { create :user, first_name: 'Author', last_name: "Three" }
+        let!(:pub1) { create :publication,
+                             title: "A test publication with a long, distinct title of some sort",
+                             published_on: Date.new(2011, 1, 1),
+                             journal_title: "Test Journal" }
+        let!(:pub2) { create :publication,
+                             title: "Another publication",
+                             secondary_title: "with a longer, distinct title of some sort",
+                             published_on: Date.new(1999, 1, 1),
+                             journal_title: "Another Journal" }
+        let!(:pub3) { create :publication,
+                             title: "Some Other Publication" }
+
+        before do
+          create :authorship, user: user1, publication: pub1
+          create :authorship, user: user2, publication: pub1
+          create :authorship, user: user3, publication: pub2
+        end
+
+        before { visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id) }
+        it "lists the matching publications" do
+          within "#publication_#{pub1.id}" do
+            expect(page).to have_link "A test publication with a long, distinct title of some sort"
+            expect(page).to have_content "2011"
+            expect(page).to have_content "Test Journal"
+            expect(page).to have_content "Author One, Author Two"
+          end
+
+          within "#publication_#{pub2.id}" do
+            expect(page).to have_link "Another publication"
+            expect(page).to have_content "1999"
+            expect(page).to have_content "Another Journal"
+            expect(page).to have_content "Author Three"
+          end
+
+          expect(page).not_to have_content "Some Other Publication"
+        end
       end
     end
 
