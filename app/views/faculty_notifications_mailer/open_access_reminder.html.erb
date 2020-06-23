@@ -1,9 +1,18 @@
 <p>Dear <%= @user.name %>,</p>
 
 <p>
-  Some publications for which you are listed as an author are subject to the University's
-  Open Access to Scholarly Articles policy (AC02). Below is a list of the publications for
-  which we do not currently have any information with regard to open access status.
+  Penn State Policy AC02: Open Access to Scholarly Articles, requires university researchers to 
+  provide the accepted manuscript version of their scholarly articles to the University Libraries
+  to be made available to the public free of charge. Researchers who cannot or do not wish to 
+  make a particular article freely available can obtain a waiver. The policy went into effect on
+  January 1, 2020 after endorsement by Faculty Senate and approval by the President’s Council.
+</p>
+
+<p>
+  We have identified one or more recent articles for which you are listed as an author that may
+  be subject to the policy. We have not found an open access version of these articles. We
+  encourage you to visit the links in the list and follow the instructions to provide your
+  accepted manuscript or obtain a waiver of the policy.
 </p>
 
 <% if @new_publications.any? %>
@@ -25,9 +34,20 @@
 <% end %>
 
 <p>
-  We encourage you to visit the links in the list and follow the instructions to provide us
-  with information about the open access status of each of these publications.
+  For more information on the policy, please visit the 
+  <%= link_to "open access policy website", "https://openaccess.psu.edu/" %>, including its 
+  <%= link_to "FAQ", "https://openaccess.psu.edu/faq/" %> section. Here are some FAQs that 
+  may be especially helpful at this juncture:
 </p>
+
+<ul>
+  <li><%= link_to "I was working on an article at the time the open access policy went into effect (January 1, 2020). Does the policy apply to my article?", "https://psu.libanswers.com/faq/279964" %></li>
+  <li><%= link_to "Which version of my scholarly article should I deposit in order to comply with the open access policy?", "https://psu.libanswers.com/faq/279953" %></li>
+  <li><%= link_to "What is the definition of scholarly article?", "https://psu.libanswers.com/faq/279967" %></li>
+  <li><%= link_to "What is the definition of university researcher?", "https://psu.libanswers.com/faq/279966" %></li>
+</ul>
+
+<br/>
 
 <p>
   The Office of Scholarly Communications and Copyright
