@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_16_183430) do
+ActiveRecord::Schema.define(version: 2020_06_24_193001) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -146,6 +146,8 @@ ActiveRecord::Schema.define(version: 2020_06_16_183430) do
     t.string "publisher"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "internal_publication_waiver_id"
+    t.index ["internal_publication_waiver_id"], name: "index_external_waivers_on_internal_waiver_id"
     t.index ["user_id"], name: "index_external_publication_waivers_on_user_id"
   end
 
@@ -458,6 +460,7 @@ ActiveRecord::Schema.define(version: 2020_06_16_183430) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributors", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
+  add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
   add_foreign_key "news_feed_items", "users"

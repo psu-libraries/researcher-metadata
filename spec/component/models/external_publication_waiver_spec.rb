@@ -13,10 +13,13 @@ describe 'the external_publication_waivers table', type: :model do
   it { is_expected.to have_db_column(:publisher).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:internal_publication_waiver_id).of_type(:integer) }
 
   it { is_expected.to have_db_index :user_id }
+  it { is_expected.to have_db_index :internal_publication_waiver_id }
 
   it { is_expected.to have_db_foreign_key(:user_id) }
+  it { is_expected.to have_db_foreign_key(:internal_publication_waiver_id) }
 end
 
 describe ExternalPublicationWaiver, type: :model do
@@ -24,6 +27,7 @@ describe ExternalPublicationWaiver, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:external_publication_waivers) }
+    it { is_expected.to belong_to(:internal_publication_waiver).inverse_of(:external_publication_waiver).optional }
   end
 
   describe 'validations' do

@@ -23,6 +23,7 @@ describe InternalPublicationWaiver, type: :model do
     it { is_expected.to belong_to(:authorship).inverse_of(:waiver) }
     it { is_expected.to have_one(:user).through(:authorship) }
     it { is_expected.to have_one(:publication).through(:authorship) }
+    it { is_expected.to have_one(:external_publication_waiver) }
   end
 
   it { is_expected.to delegate_method(:title).to(:authorship) }
