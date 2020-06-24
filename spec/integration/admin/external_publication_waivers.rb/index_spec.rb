@@ -12,9 +12,16 @@ feature "Admin external publication waivers list", type: :feature do
       let!(:waiver2) { create :external_publication_waiver,
                               user: user2,
                               publication_title: "Publication Two" }
+      let!(:waiver3) { create :external_publication_waiver,
+                              user: user3,
+                              publication_title: "Publication Three",
+                              internal_publication_waiver: int_waiver }
       let!(:user1) { create :user, first_name: "Joe", last_name: "Testerson" }
       let!(:user2) { create :user, first_name: "Beth", last_name: "Testuser" }
+      let!(:user3) { create :user, first_name: "Felix", last_name: "Tester" }
 
+      let!(:int_waiver) { create :internal_publication_waiver }
+      
       before { visit rails_admin.index_path(model_name: :external_publication_waiver) }
 
       it "shows the waiver list heading" do
@@ -29,6 +36,12 @@ feature "Admin external publication waivers list", type: :feature do
         expect(page).to have_content waiver2.id
         expect(page).to have_content 'Beth Testuser'
         expect(page).to have_content 'Publication Two'
+      end
+
+      it "does not show waivers that have been linked to publications" do
+        expect(page).not_to have_content waiver3.id
+        expect(page).not_to have_content 'Felix Tester'
+        expect(page).not_to have_content 'Publication Three'
       end
     end
 

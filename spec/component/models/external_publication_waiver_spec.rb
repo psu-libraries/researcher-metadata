@@ -36,6 +36,15 @@ describe ExternalPublicationWaiver, type: :model do
     it { is_expected.to validate_presence_of(:journal_title) }
   end
 
+  describe '.not_linked' do
+    let!(:w1) { create :external_publication_waiver }
+    let!(:w2) { create :external_publication_waiver, internal_publication_waiver: int_waiver }
+    let(:int_waiver) { create :internal_publication_waiver }
+    it "returns external publication waivers that are not associated with an internal publication waiver" do
+      expect(ExternalPublicationWaiver.not_linked).to eq [w1]
+    end
+  end
+
   describe '#title' do
     let(:waiver) { ExternalPublicationWaiver.new(publication_title: "The Title") }
     it "returns the value for publication title" do

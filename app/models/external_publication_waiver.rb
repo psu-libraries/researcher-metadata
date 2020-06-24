@@ -4,6 +4,8 @@ class ExternalPublicationWaiver < ApplicationRecord
 
   validates :user, :publication_title, :journal_title, presence: true
 
+  scope :not_linked, ->{ where(internal_publication_waiver_id: nil) }
+  
   def title
     publication_title
   end
@@ -23,6 +25,7 @@ class ExternalPublicationWaiver < ApplicationRecord
       end
     end
     list do
+      scopes [:not_linked]
       field(:id)
       field(:publication_title)
       field(:user) do
