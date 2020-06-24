@@ -1,3 +1,4 @@
+<% unless @object.internal_publication_waiver.present? %>
   <table class="table table-condensed table-striped">
     <thead>
       <tr>
@@ -12,9 +13,11 @@
       <% publications.order(Arel.sql("date_trunc('year', published_on) DESC")).order(journal_title: :asc).order(title: :asc).each do |p| %>
         <tr class="publication_row" id="publication_<%= p.id %>">
           <td><%= button_to "Link Waiver",
-                            "",
+                            Rails.application.routes.url_helpers.admin_publication_waiver_link_path(@object),
+                            params: {publication_id: p.id},
                             class: 'btn btn-primary btn-sm',
-                            'data-confirm': "Are you sure that you want to link this wavier to the publication, #{p.title}?" %>
+                            'data-confirm': "Are you sure that you want to link this wavier to the publication, #{p.title}?",
+                            remote: false %>
           <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
           <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
           <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
@@ -23,3 +26,4 @@
       <% end %>
     </tbody>
   </table>
+<% end %>

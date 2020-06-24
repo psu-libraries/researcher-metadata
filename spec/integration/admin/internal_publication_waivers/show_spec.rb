@@ -6,6 +6,9 @@ feature "Admin internal publication waiver detail page", type: :feature do
   let!(:auth) { create :authorship, publication: pub, user: user }
   let!(:user) { create :user, first_name: "Joe", last_name: "Testerson" }
   let!(:pub) { create :publication, title: "Publication One" }
+  let!(:ext_waiver) { create :external_publication_waiver,
+                             internal_publication_waiver: waiver,
+                             publication_title: "The External Waiver" }
 
   context "when the current user is an admin" do
     before { authenticate_admin_user }
@@ -27,6 +30,10 @@ feature "Admin internal publication waiver detail page", type: :feature do
 
       it "shows the reason for the waiver" do
         expect(page).to have_content "Just because."
+      end
+
+      it "show the associated external waiver record" do
+        expect(page).to have_link "The External Waiver"
       end
     end
 

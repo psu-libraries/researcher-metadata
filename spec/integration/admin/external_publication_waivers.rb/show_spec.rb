@@ -57,7 +57,7 @@ feature "Admin external publication waiver detail page", type: :feature do
         let!(:pub1) { create :publication,
                              title: "A test publication with a long, distinct title of some sort",
                              published_on: Date.new(2011, 1, 1),
-                             journal_title: "Test Journal" }
+                             journal_title: "Some Journal" }
         let!(:pub2) { create :publication,
                              title: "Another publication",
                              secondary_title: "with a longer, distinct title of some sort",
@@ -66,29 +66,68 @@ feature "Admin external publication waiver detail page", type: :feature do
         let!(:pub3) { create :publication,
                              title: "Some Other Publication" }
 
-        before do
-          create :authorship, user: user1, publication: pub1
-          create :authorship, user: user2, publication: pub1
-          create :authorship, user: user3, publication: pub2
+        let!(:auth1) { create :authorship, user: user, publication: pub1 }
+        let!(:auth2) { create :authorship, user: user1, publication: pub1 }
+        let!(:auth3) { create :authorship, user: user2, publication: pub1 }
+        let!(:auth4) { create :authorship, user: user3, publication: pub2 }
+
+        context "when the waiver has not already been linked to a publication" do
+          before { visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id) }
+
+          it "lists the matching publications" do
+            within "#publication_#{pub1.id}" do
+              expect(page).to have_link "A test publication with a long, distinct title of some sort"
+              expect(page).to have_content "2011"
+              expect(page).to have_content "Some Journal"
+              expect(page).to have_content "Joe Testerson, Author One, Author Two"
+            end
+
+            within "#publication_#{pub2.id}" do
+              expect(page).to have_link "Another publication"
+              expect(page).to have_content "1999"
+              expect(page).to have_content "Another Journal"
+              expect(page).to have_content "Author Three"
+            end
+
+            expect(page).not_to have_content "Some Other Publication"
+          end
+
+          describe "linking a publication to the waiver" do
+            before do
+              within "#publication_#{pub1.id}" do
+                click_on "Link Waiver"
+              end
+            end
+
+            xit "does something" do
+
+            end
+          end
         end
 
-        before { visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id) }
-        it "lists the matching publications" do
-          within "#publication_#{pub1.id}" do
+        context "when the waiver has already been linked to a publication" do
+          let!(:int_waiver) { create :internal_publication_waiver, authorship: auth1 }
+          before do
+            waiver.update_attributes!(internal_publication_waiver: int_waiver)
+            visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id)
+          end
+
+          it "does not list matching publications" do
+            expect(page).not_to have_content "2011"
+            expect(page).not_to have_content "Some Journal"
+            expect(page).not_to have_content "Joe Testerson, Author One, Author Two"
+
+            expect(page).not_to have_link "Another publication"
+            expect(page).not_to have_content "1999"
+            expect(page).not_to have_content "Another Journal"
+            expect(page).not_to have_content "Author Three"
+
+            expect(page).not_to have_content "Some Other Publication"
+          end
+
+          it "shows a link to the internal waiver" do
             expect(page).to have_link "A test publication with a long, distinct title of some sort"
-            expect(page).to have_content "2011"
-            expect(page).to have_content "Test Journal"
-            expect(page).to have_content "Author One, Author Two"
           end
-
-          within "#publication_#{pub2.id}" do
-            expect(page).to have_link "Another publication"
-            expect(page).to have_content "1999"
-            expect(page).to have_content "Another Journal"
-            expect(page).to have_content "Author Three"
-          end
-
-          expect(page).not_to have_content "Some Other Publication"
         end
       end
     end

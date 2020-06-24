@@ -2,7 +2,7 @@ class InternalPublicationWaiver < ApplicationRecord
   belongs_to :authorship, inverse_of: :waiver
   has_one :user, through: :authorship
   has_one :publication, through: :authorship
-  has_one :external_publication_waiver
+  has_one :external_publication_waiver, inverse_of: :internal_publication_waiver
 
   delegate :title, :abstract, :doi, :published_by, to: :authorship, prefix: false
   alias_method :publication_title, :title
@@ -33,6 +33,7 @@ class InternalPublicationWaiver < ApplicationRecord
       end
       field(:reason_for_waiver)
       field(:authorship)
+      field(:external_publication_waiver)
     end
   end
 end

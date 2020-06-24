@@ -41,6 +41,7 @@ class ExternalPublicationWaiver < ApplicationRecord
       field(:user) do
         pretty_value { %{<a href="#{RailsAdmin.railtie_routes_url_helpers.show_path(model_name: :user, id: value.id)}">#{value.name}</a>}.html_safe }
       end
+      field(:internal_publication_waiver)
       field(:matching_publications)
     end
   end
