@@ -9,6 +9,11 @@ en:
     publication_merges:
       create:
         success: "The publications were successfully merged."
+    publication_waiver_links:
+      create:
+        success: "The waiver was successfully linked to the selected publication."
+        no_authorship_error: "The user who submitted this waiver is not listed as one of the authors of the selected publication. If this is the correct publication for this waiver and the submitting user is actually an author, then please add the missing authorship data to this publication and try again."
+        waiver_already_linked_error: "A waiver from this user has already been linked to the selected publication."
     actions:
       edit_open_access:
         menu: "Open Access"

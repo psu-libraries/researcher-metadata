@@ -99,8 +99,16 @@ feature "Admin external publication waiver detail page", type: :feature do
               end
             end
 
-            xit "does something" do
+            it "links the waiver to the user's authorship for the selected publication" do
+              expect(InternalPublicationWaiver.find_by(authorship: auth1)).not_to be_nil
+            end
 
+            it "redirects to the waiver list" do
+              expect(page.current_path).to eq rails_admin.index_path(model_name: :external_publication_waiver)
+            end
+
+            it "shows a success message" do
+              expect(page).to have_content I18n.t('admin.publication_waiver_links.create.success')
             end
           end
         end
