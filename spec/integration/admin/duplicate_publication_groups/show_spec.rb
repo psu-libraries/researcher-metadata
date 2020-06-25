@@ -16,7 +16,8 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        issn: "issn1",
                        doi: "DOI1",
                        publication_type: "Trade Journal Article",
-                       duplicate_group: group }
+                       duplicate_group: pub1_group }
+
   let!(:pub2) { create :publication,
                        title: "A duplicate publication",
                        secondary_title: "subtitle2",
@@ -31,7 +32,10 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        issn: "issn2",
                        doi: "DOI2",
                        publication_type: "Academic Journal Article",
-                       duplicate_group: group }
+                       duplicate_group: pub2_group }
+
+  let(:pub1_group) { nil }
+  let(:pub2_group) { nil }
 
   let(:group) { create :duplicate_publication_group }
 
@@ -69,95 +73,165 @@ feature "Admin duplicate publication group detail page", type: :feature do
   context "when the current user is an admin" do
     before { authenticate_admin_user }
 
-    describe "the page content" do
-      before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
+    context "when the group has more than one publication" do
+      let(:pub1_group) { group }
+      let(:pub2_group) { group }
+      
+      describe "the page content" do
+        before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
-      it "shows the ids of the publications in the group" do
-        expect(page).to have_content pub1.id
-        expect(page).to have_content pub2.id
+        it "shows the ids of the publications in the group" do
+          expect(page).to have_content pub1.id
+          expect(page).to have_content pub2.id
+        end
+
+        it "shows the titles of the publications in the group" do
+          expect(page).to have_link "Duplicate Publication"
+          expect(page).to have_link "A duplicate publication"
+        end
+
+        it "shows the subtitles of the publications in the group" do
+          expect(page).to have_content "subtitle1"
+          expect(page).to have_content "subtitle2"
+        end
+
+        it "shows the journal names of the publications in the group" do
+          expect(page).to have_content "journal1"
+          expect(page).to have_content "journal2"
+        end
+
+        it "shows the publishers of the publications in the group" do
+          expect(page).to have_content "publisher1"
+          expect(page).to have_content "publisher2"
+        end
+
+        it "shows the publication dates of the publications in the group" do
+          expect(page).to have_content "2018-08-13"
+          expect(page).to have_content "2018-08-14"
+        end
+
+        it "shows the statuses of the publications in the group" do
+          expect(page).to have_content "status1"
+          expect(page).to have_content "status2"
+        end
+
+        it "shows the volumes of the publications in the group" do
+          expect(page).to have_content "volume1"
+          expect(page).to have_content "volume2"
+        end
+
+        it "shows the issues of the publications in the group" do
+          expect(page).to have_content "issue1"
+          expect(page).to have_content "issue2"
+        end
+
+        it "shows the editions of the publications in the group" do
+          expect(page).to have_content "edition1"
+          expect(page).to have_content "edition2"
+        end
+
+        it "shows the pages of the publications in the group" do
+          expect(page).to have_content "pages1"
+          expect(page).to have_content "pages2"
+        end
+
+        it "shows the ISSNs of the publications in the group" do
+          expect(page).to have_content "issn1"
+          expect(page).to have_content "issn2"
+        end
+
+        it "shows the DOIs of the publications in the group" do
+          expect(page).to have_link "DOI1", href: "DOI1"
+          expect(page).to have_link "DOI2", href: "DOI2"
+        end
+
+        it "shows the types of the publications in the group" do
+          expect(page).to have_content "Trade Journal Article"
+          expect(page).to have_content "Academic Journal Article"
+        end
+
+        it "shows the user names for the publications in the group" do
+          expect(page).to have_link "Test1 User1"
+          expect(page).to have_link "Test2 User2"
+          expect(page).to have_link "Test3 User3"
+        end
+
+        it "shows the contributor names for the publications in the group" do
+          expect(page).to have_content "Test2 Contributor2, Test1 Contributor1"
+          expect(page).to have_content "Test3 Contributor3"
+        end
+
+        it "shows the import identifiers for the publications in the group" do
+          expect(page).to have_content "pure-abc123"
+          expect(page).to have_content "pure-xyz789"
+          expect(page).to have_content "ai-abc123"
+          expect(page).to have_content "ai-xyz789"
+        end
+
+        it "shows the selection controls" do
+          expect(page).to have_content "Select"
+          expect(page).to have_content "Merge Target"
+        end
+
+        it "shows the merge button" do
+          expect(page).to have_button "Merge Selected"
+        end
+
+        it "shows the ignore button" do
+          expect(page).to have_button "Ignore Selected"
+        end
+
+        it "does not show the delete button" do
+          expect(page).not_to have_content "Delete"
+        end
       end
+    end
 
-      it "shows the titles of the publications in the group" do
-        expect(page).to have_link "Duplicate Publication"
-        expect(page).to have_link "A duplicate publication"
+    context "when the group has one publication" do
+      let(:pub1_group) { group }
+
+      describe "the page content" do
+        before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
+
+        it "does not show the selection controls" do
+          expect(page).not_to have_content "Select"
+          expect(page).not_to have_content "Merge Target"
+        end
+
+        it "does not show the merge button" do
+          expect(page).not_to have_content "Merge Selected"
+        end
+
+        it "does not show the ignore button" do
+          expect(page).not_to have_content "Ignore Selected"
+        end
+
+        it "shows the delete button" do
+          expect(page).to have_button "Delete Group"
+        end
       end
+    end
 
-      it "shows the subtitles of the publications in the group" do
-        expect(page).to have_content "subtitle1"
-        expect(page).to have_content "subtitle2"
-      end
+    context "when the group has no publications" do
+      describe "the page content" do
+        before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
-      it "shows the journal names of the publications in the group" do
-        expect(page).to have_content "journal1"
-        expect(page).to have_content "journal2"
-      end
+        it "does not show the selection controls" do
+          expect(page).not_to have_content "Select"
+          expect(page).not_to have_content "Merge Target"
+        end
 
-      it "shows the publishers of the publications in the group" do
-        expect(page).to have_content "publisher1"
-        expect(page).to have_content "publisher2"
-      end
+        it "does not show the merge button" do
+          expect(page).not_to have_content "Merge Selected"
+        end
 
-      it "shows the publication dates of the publications in the group" do
-        expect(page).to have_content "2018-08-13"
-        expect(page).to have_content "2018-08-14"
-      end
+        it "does not show the ignore button" do
+          expect(page).not_to have_content "Ignore Selected"
+        end
 
-      it "shows the statuses of the publications in the group" do
-        expect(page).to have_content "status1"
-        expect(page).to have_content "status2"
-      end
-
-      it "shows the volumes of the publications in the group" do
-        expect(page).to have_content "volume1"
-        expect(page).to have_content "volume2"
-      end
-
-      it "shows the issues of the publications in the group" do
-        expect(page).to have_content "issue1"
-        expect(page).to have_content "issue2"
-      end
-
-      it "shows the editions of the publications in the group" do
-        expect(page).to have_content "edition1"
-        expect(page).to have_content "edition2"
-      end
-
-      it "shows the pages of the publications in the group" do
-        expect(page).to have_content "pages1"
-        expect(page).to have_content "pages2"
-      end
-
-      it "shows the ISSNs of the publications in the group" do
-        expect(page).to have_content "issn1"
-        expect(page).to have_content "issn2"
-      end
-
-      it "shows the DOIs of the publications in the group" do
-        expect(page).to have_link "DOI1", href: "DOI1"
-        expect(page).to have_link "DOI2", href: "DOI2"
-      end
-
-      it "shows the types of the publications in the group" do
-        expect(page).to have_content "Trade Journal Article"
-        expect(page).to have_content "Academic Journal Article"
-      end
-
-      it "shows the user names for the publications in the group" do
-        expect(page).to have_link "Test1 User1"
-        expect(page).to have_link "Test2 User2"
-        expect(page).to have_link "Test3 User3"
-      end
-
-      it "shows the contributor names for the publications in the group" do
-        expect(page).to have_content "Test2 Contributor2, Test1 Contributor1"
-        expect(page).to have_content "Test3 Contributor3"
-      end
-
-      it "shows the import identifiers for the publications in the group" do
-        expect(page).to have_content "pure-abc123"
-        expect(page).to have_content "pure-xyz789"
-        expect(page).to have_content "ai-abc123"
-        expect(page).to have_content "ai-xyz789"
+        it "shows the delete button" do
+          expect(page).to have_button "Delete Group"
+        end
       end
     end
 

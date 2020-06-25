@@ -6,6 +6,10 @@ en:
       create:
         success: "The selected publications were successfully grouped."
         no_pub_error: "You must select at least two publications to group together."
+    duplicate_publication_groups:
+      delete:
+        success: "The duplicate publication group was successfully deleted."
+        multiple_publications_error: "Cannot delete a group with more than one publication."
     publication_merges:
       create:
         success: "The publications were successfully merged."
