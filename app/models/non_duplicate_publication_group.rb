@@ -1,0 +1,3 @@
+class NonDuplicatePublicationGroup < ApplicationRecord
+  
+end
