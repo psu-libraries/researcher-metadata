@@ -13,7 +13,7 @@
       <tr>
         <td class="publication-field-label">Title</td>
         <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.title %>"><%= link_to p.title, show_path(model_name: :publication, id: p.id) %></td>
+          <td class="publication-field" title="<%= p.title %>"><%= link_to p.title, edit_path(model_name: :publication, id: p.id) %></td>
         <% end %>
       </tr>
       <tr>
