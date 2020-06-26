@@ -13,4 +13,6 @@ describe NonDuplicatePublicationGroup, type: :model do
   subject(:ndpg) { NonDuplicatePublicationGroup.new }
 
   it_behaves_like "an application record"
+
+  it { is_expected.to have_many(:publications).inverse_of(:non_duplicate_group) }
 end

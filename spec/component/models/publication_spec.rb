@@ -30,10 +30,13 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:non_duplicate_publication_group_id).of_type(:integer) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
+  it { is_expected.to have_db_foreign_key(:non_duplicate_publication_group_id) }
 
   it { is_expected.to have_db_index(:duplicate_publication_group_id) }
+  it { is_expected.to have_db_index(:non_duplicate_publication_group_id) }
   it { is_expected.to have_db_index(:volume) }
   it { is_expected.to have_db_index(:issue) }
   it { is_expected.to have_db_index(:doi) }
@@ -64,6 +67,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:waivers).through(:authorships) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
+    it { is_expected.to belong_to(:non_duplicate_group).class_name(:NonDuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }

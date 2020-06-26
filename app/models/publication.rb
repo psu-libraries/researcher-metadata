@@ -31,6 +31,12 @@ class Publication < ApplicationRecord
              optional: true,
              inverse_of: :publications
 
+  belongs_to :non_duplicate_group,
+             class_name: :NonDuplicatePublicationGroup,
+             foreign_key: :non_duplicate_publication_group_id,
+             optional: true,
+             inverse_of: :publications
+
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
 
