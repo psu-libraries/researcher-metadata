@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_185838) do
+ActiveRecord::Schema.define(version: 2020_06_26_191346) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -186,6 +186,15 @@ ActiveRecord::Schema.define(version: 2020_06_26_185838) do
     t.datetime "updated_at", null: false
     t.date "published_on", null: false
     t.index ["url", "user_id"], name: "index_news_feed_items_on_url_and_user_id", unique: true
+  end
+
+  create_table "non_duplicate_publication_group_memberships", force: :cascade do |t|
+    t.integer "publication_id", null: false
+    t.integer "non_duplicate_publication_group_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["non_duplicate_publication_group_id"], name: "index_ndpg_memberships_on_ndpg_id"
+    t.index ["publication_id"], name: "index_ndpg_memberships_on_publication_id"
   end
 
   create_table "non_duplicate_publication_groups", force: :cascade do |t|
@@ -469,6 +478,8 @@ ActiveRecord::Schema.define(version: 2020_06_26_185838) do
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
   add_foreign_key "news_feed_items", "users"
+  add_foreign_key "non_duplicate_publication_group_memberships", "non_duplicate_publication_groups", name: "non_duplicate_publication_group_membership_group_id_fk", on_delete: :cascade
+  add_foreign_key "non_duplicate_publication_group_memberships", "publications", name: "non_duplicate_publication_group_membership_publication_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict

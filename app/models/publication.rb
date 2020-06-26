@@ -24,6 +24,12 @@ class Publication < ApplicationRecord
   has_many :research_funds
   has_many :grants, through: :research_funds
   has_many :waivers, through: :authorships
+  has_many :non_duplicate_group_memberships,
+           class_name: :NonDuplicatePublicationGroupMembership,
+           inverse_of: :publication
+  has_many :non_duplicate_groups,
+           class_name: :NonDuplicatePublicationGroup,
+           through: :non_duplicate_group_memberships
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,

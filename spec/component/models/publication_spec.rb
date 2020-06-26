@@ -62,6 +62,8 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:research_funds) }
     it { is_expected.to have_many(:grants).through(:research_funds) }
     it { is_expected.to have_many(:waivers).through(:authorships) }
+    it { is_expected.to have_many(:non_duplicate_group_memberships).class_name(:NonDuplicatePublicationGroupMembership).inverse_of(:publication) }
+    it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships)}
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
