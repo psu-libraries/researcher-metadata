@@ -13,6 +13,7 @@ en:
     publication_merges:
       create:
         success: "The publications were successfully merged."
+        missing_params_error: "To perform a merge, you must select a merge target and at least one other publication to merge into the target."
     publication_waiver_links:
       create:
         success: "The waiver was successfully linked to the selected publication."

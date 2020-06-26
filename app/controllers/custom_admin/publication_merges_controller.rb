@@ -6,7 +6,7 @@ class CustomAdmin::PublicationMergesController < RailsAdmin::ApplicationControll
       if params[:merge_target_publication_id].blank? ||
          params[:selected_publication_ids].blank? ||
           params[:selected_publication_ids] == [params[:merge_target_publication_id]]
-        flash[:error] = "To perform a merge, you must select a merge target and at least one other publication to merge into the target."
+        flash[:error] = I18n.t('admin.publication_merges.create.missing_params_error')
         redirect_to rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         return
       end

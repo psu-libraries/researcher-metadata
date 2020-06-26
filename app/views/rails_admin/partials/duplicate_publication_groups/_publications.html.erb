@@ -132,7 +132,7 @@
         <tr>
           <td class="publication-field-label">Select</td>
           <% publications.each do |p| %>
-            <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id %></td>
+            <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id, false, id: "selected_publication_ids_#{p.id}" %></td>
           <% end %>
         </tr>
       <% end %>
