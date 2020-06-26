@@ -123,7 +123,7 @@ feature "managing duplicate publication groups", type: :feature do
       end
     end
 
-    context "selecting the same publication as the merge target and merging" do
+    context "selecting the same publication as the chosen merge target and merging" do
       before do
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub1.id}"
@@ -145,9 +145,42 @@ feature "managing duplicate publication groups", type: :feature do
       end
     end
 
-    context "selecting one publication as the merge target and the other publication to merge" do
+    context "choosing one publication as the merge target and selecting another publication to merge" do
       before do
         choose "merge_target_publication_id_#{pub1.id}"
+        check "selected_publication_ids_#{pub2.id}"
+        click_on "Merge Selected"
+      end
+
+      it "redirects back to the group" do
+        expect(page.current_path).to eq rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+      end
+
+      it "shows a success message" do
+        expect(page).to have_content I18n.t('admin.publication_merges.create.success')
+      end
+
+      it "deletes the merged publication" do
+        expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it "reassigns the merged publication's imports" do
+        expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
+      end
+
+      it "doesn't change the unselected publication" do
+        expect(pub3.reload.imports).to eq [pub3_import1]
+      end
+
+      it "leaves the group containing the correct publications" do
+        expect(group.reload.publications).to eq [pub1, pub3]
+      end
+    end
+
+    context "choosing one publication as the merge target and selecting both the merge target and another publication to merge" do
+      before do
+        choose "merge_target_publication_id_#{pub1.id}"
+        check "selected_publication_ids_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
         click_on "Merge Selected"
       end
