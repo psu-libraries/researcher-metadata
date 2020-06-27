@@ -1,6 +1,8 @@
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
+
 describe 'the duplicate_publication_groups table', type: :model do
   subject { DuplicatePublicationGroup.new }
 
@@ -36,6 +38,11 @@ describe DuplicatePublicationGroup, type: :model do
                            title: "Publication with an Exactly Duplicated Title",
                            published_on: Date.new(2000, 1, 1),
                            doi: "https://doi.org/some-doi-123456789" }
+
+      # a publication that is already in a group that has the same title as other publications
+      let!(:p1) { create :publication,
+                         title: "Publication with an Exactly Duplicated Title",
+                         duplicate_group: existing_group1 }
 
       # two publications that have similar titles and otherwise match
       let!(:p2_1) { create :publication,
@@ -116,28 +123,200 @@ describe DuplicatePublicationGroup, type: :model do
                            published_on: nil,
                            doi: nil }
 
-      # a publication that is already in a group that has the same title as other publications
-      let!(:p1) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
-                         duplicate_group: existing_group1 }
+      # two publications that match but are in the same non-duplicate publication group
+      let!(:p9_1) { create :publication,
+                           title: "Same as another publication but grouped as false-positive",
+                           published_on: Date.new(1980, 1, 1),
+                           doi: "https://doi.org/some-doi-234623613" }
+                         
+      let!(:p9_2) { create :publication,
+                           title: "Same as another publication but grouped as false-positive",
+                           published_on: Date.new(1980, 1, 1),
+                           doi: "https://doi.org/some-doi-234623613" }
+
+      let!(:p9_ndpg) { create :non_duplicate_publication_group,
+                              publications: [p9_1, p9_2] }
+
+      # two publications that match and are in different non-duplicate publication groups
+      let!(:p10_1) { create :publication,
+                            title: "In a different false-positive group from the match",
+                            published_on: Date.new(1981, 1, 1),
+                            doi: "https://doi.org/some-doi-854537454" }
+                         
+      let!(:p10_2) { create :publication,
+                            title: "In a different false-positive group from the match",
+                            published_on: Date.new(1981, 1, 1),
+                            doi: "https://doi.org/some-doi-854537454" }
+
+      let!(:other1) { create :publication, title: "uquwegflkqulkuagekahkwehf"}
+      let!(:other2) { create :publication, title: "kvbkbcbebbcubibekubkubeuke" }
+
+      let!(:p_10_ndpg1) { create :non_duplicate_publication_group,
+                                 publications: [p10_1, other1] }
+
+      let!(:p_10_ndpg2) { create :non_duplicate_publication_group,
+                                 publications: [p10_2, other2] }
+
+      # three publications that match but are in the same non-duplicate publication group
+      let!(:p11_1) { create :publication,
+                            title: "One in a group of three matching false-positives",
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
+                         
+      let!(:p11_2) { create :publication,
+                            title: "One in a group of three matching false-positives",
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
+
+      let!(:p11_3) { create :publication,
+                            title: "One in a group of three matching false-positives",
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
+
+      let!(:p_11_ndpg) { create :non_duplicate_publication_group,
+                                publications: [p11_1, p11_2, p11_3] }
+
+      # three publications that match where only two are in the same non-duplicate publication group
+      let!(:p12_1) { create :publication,
+                            title: "Publication with a two matches where one might not be legit",
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
+                         
+      let!(:p12_2) { create :publication,
+                            title: "Publication with a two matches where one might not be legit",
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
+
+      let!(:p12_3) { create :publication,
+                            title: "Publication with a two matches where one might not be legit",
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
+
+      let!(:p_12_ndpg) { create :non_duplicate_publication_group,
+                                publications: [p12_1, p12_3] }
+
+      # two publications that match and that each belong to two identical non-duplicate publication groups
+      let!(:p13_1) { create :publication,
+                            title: "Publication in two identical false-positive groups with another publication",
+                            published_on: Date.new(1984, 1, 1),
+                            doi: "https://doi.org/some-doi-956525657" }
+                         
+      let!(:p13_2) { create :publication,
+                            title: "Publication in two identical false-positive groups with another publication",
+                            published_on: Date.new(1984, 1, 1),
+                            doi: "https://doi.org/some-doi-956525657" }
+
+      let!(:p13_ndpg1) { create :non_duplicate_publication_group,
+                                publications: [p13_1, p13_2] }
+      let!(:p13_ndpg2) { create :non_duplicate_publication_group,
+                                publications: [p13_1, p13_2] }
+
+      # four publications that match where two belong to one non-duplicate publication group and the other
+      # two belong to a different group
+      # I'm not sure that this one would ever occur in real life, but it's good to think about
+      # what would happen if it somehow did.
+      let!(:p14_1) { create :publication,
+                            title: "One of four matches in two different false-positive groups",
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
+                         
+      let!(:p14_2) { create :publication,
+                            title: "One of four matches in two different false-positive groups",
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
+
+      let!(:p14_3) { create :publication,
+                            title: "One of four matches in two different false-positive groups",
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
+
+      let!(:p14_4) { create :publication,
+                            title: "One of four matches in two different false-positive groups",
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
+
+      let!(:p_14_ndpg1) { create :non_duplicate_publication_group,
+                                 publications: [p14_1, p14_2] }
+      let!(:p_14_ndpg2) { create :non_duplicate_publication_group,
+                                 publications: [p14_3, p14_4] }
+
+      it "creates the correct number of duplicate groups" do
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 8
+      end
 
       it "finds similar publications and groups them" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 5
+        DuplicatePublicationGroup.group_duplicates
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
+
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
+
         expect(p3_1.reload.duplicate_group).to be_nil
         expect(p3_2.reload.duplicate_group).to be_nil
+
         expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
+
         expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
+
         expect(p6_1.reload.duplicate_group).to be_nil
         expect(p6_2.reload.duplicate_group).to be_nil
+
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
+
         expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
+
+        expect(p9_1.reload.duplicate_group).to be_nil
+        expect(p9_2.reload.duplicate_group).to be_nil
+
+        expect(p10_1.reload.duplicate_group.publications).to match_array [p10_1, p10_2]
+
+        expect(p11_1.reload.duplicate_group).to be_nil
+        expect(p11_2.reload.duplicate_group).to be_nil
+        expect(p11_3.reload.duplicate_group).to be_nil
+
+        # This one is a little counter-intuitive, but it's probably the right behavior.
+        # The second publication here ties together the first and the third which have
+        # been grouped as false-positive matches of each other. The second publication
+        # could be a true match for either the first or the third (but not both). Thus
+        # they all need to be placed into the same duplicate group together so that 
+        # they can be sorted out. In that scenario a few things could happen:
+        #   1. We might say that second publication is also a false match for both the
+        #      first and the third. In that case, we'd select all three, put them into
+        #      a new group of false-positives, and delete the duplicate group.
+        #   2. We might say that the second publication is a true match for the first, and we
+        #      merge the first publication into the second thereby deleting the first. This
+        #      leaves a false-positive group with only the third publication as a member.
+        #      The second publication and the third publication have to be a false-positive
+        #      match (by the transitive property of equality!) so we put them into a new
+        #      false-positive group and delete the duplicate group.
+        #   3. We might say that the second publication is a true match for the first, and
+        #      we merge the second publication into the first (opposite of #2 above) thereby
+        #      deleting the second. Now we're left with a duplicate group that contains the
+        #      same publications (the first and the third) as a false-positive group.
+        #      Although this duplicate group still exists, it wouldn't get recreated if it
+        #      were deleted due to the presence of the false-positive group. In practice,
+        #      our workflow will probably require us to create a second false-positive group
+        #      containing the first and third publications in order to empty the duplicate
+        #      group and allow it to be deleted. This extra record shouldn't cause any
+        #      problem, and if anything it will track a little bit of the history of the
+        #      deduplication process.
+        #   4. The same scenarios as #2 and #3 above may occur only with the second and third
+        #      publication being the true match instead of the first and the second.
+        expect(p12_1.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_2.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_3.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+
+        expect(p13_1.reload.duplicate_group).to be_nil
+        expect(p13_2.reload.duplicate_group).to be_nil
+
+        expect(p14_1.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 5
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 8
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -149,6 +328,21 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p6_2.reload.duplicate_group).to be_nil
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
         expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
+        expect(p9_1.reload.duplicate_group).to be_nil
+        expect(p9_2.reload.duplicate_group).to be_nil
+        expect(p10_1.reload.duplicate_group.publications).to match_array [p10_1, p10_2]
+        expect(p11_1.reload.duplicate_group).to be_nil
+        expect(p11_2.reload.duplicate_group).to be_nil
+        expect(p11_3.reload.duplicate_group).to be_nil
+        expect(p12_1.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_2.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_3.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p13_1.reload.duplicate_group).to be_nil
+        expect(p13_2.reload.duplicate_group).to be_nil
+        expect(p14_1.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
       end
     end
   end

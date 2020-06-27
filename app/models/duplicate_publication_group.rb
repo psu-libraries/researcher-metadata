@@ -10,6 +10,7 @@ class DuplicatePublicationGroup < ApplicationRecord
                                      "#{p.title}#{p.secondary_title}",
                                      p.published_on.try(:year),
                                      p.doi)
+                               .where.not(id: p.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: p.id))
 
       group_publications(duplicates)
 
