@@ -242,14 +242,14 @@ describe DuplicatePublicationGroup, type: :model do
 
       # two publications with the same title where only one has a publication date and one has a blank DOI
       let!(:p15_1) { create :publication,
-                           title: "A Perfect Title Match Where a DOI is blank",
-                           published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/some-doi-22357534" }
+                            title: "A Perfect Title Match Where a DOI is blank",
+                            published_on: Date.new(2000, 1, 1),
+                            doi: "https://doi.org/some-doi-22357534" }
                          
       let!(:p15_2) { create :publication,
-                           title: "A Perfect Title Match Where a DOI is blank",
-                           published_on: nil,
-                           doi: '' }
+                            title: "A Perfect Title Match Where a DOI is blank",
+                            published_on: nil,
+                            doi: '' }
 
       it "creates the correct number of duplicate groups" do
         expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 9
