@@ -1216,4 +1216,348 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#merge!' do
+    let!(:pub1) { create :publication, updated_by_user_at: nil }
+    let!(:pub2) { create :publication }
+    let!(:pub3) { create :publication }
+    let!(:pub4) { create :publication }
+
+    let!(:pub1_import1) { create :publication_import, publication: pub1 }
+    let!(:pub2_import1) { create :publication_import, publication: pub2 }
+    let!(:pub2_import2) { create :publication_import, publication: pub2 }
+    let!(:pub3_import1) { create :publication_import, publication: pub3 }
+
+    it "reassigns all of the imports from the given publications to the publication" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.reload.imports).to match_array [pub1_import1,
+                                                  pub2_import1,
+                                                  pub2_import2,
+                                                  pub3_import1]
+    end
+
+    it "deletes the given publications" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+      expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
+      expect { pub4.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    it "updates the modification timestamp on the publication" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
+    end
+
+
+    context "when the given publications include the publication" do
+      it "reassigns all of the imports from the given publications to the publication" do
+        pub1.merge!([pub1, pub2, pub3, pub4])
+
+        expect(pub1.reload.imports).to match_array [pub1_import1,
+                                                    pub2_import1,
+                                                    pub2_import2,
+                                                    pub3_import1]
+      end
+
+      it "deletes the given publications except for the publication" do
+        pub1.merge!([pub1, pub2, pub3, pub4])
+
+        expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub4.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it "updates the modification timestamp on the publication" do
+        pub1.merge!([pub1, pub2, pub3, pub4])
+
+        expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
+      end
+    end
+
+    context "when an error is raised" do
+      before { allow(pub3).to receive(:destroy).and_raise RuntimeError }
+
+      it "does not reassign any imports" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        expect(pub1.reload.imports).to match_array [pub1_import1]
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub4.reload.imports).to eq []
+      end
+
+      it "does not delete any publications" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        expect(pub2.reload).to eq pub2
+        expect(pub3.reload).to eq pub3
+        expect(pub4.reload).to eq pub4
+      end
+
+      it "does not update the modification timestamp on the publication" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+        
+        expect(pub1.reload.updated_by_user_at).to be_nil
+      end
+    end
+
+    context "when one of the given publications is in a non-duplicate group" do
+      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub2] }
+
+      it "reassigns all of the imports from the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.imports).to match_array [pub1_import1,
+                                                    pub2_import1,
+                                                    pub2_import2,
+                                                    pub3_import1]
+      end
+
+      it "deletes the given publications" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub4.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it "updates the modification timestamp on the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
+      end
+
+      it "reassigns the publication to the non-duplicate group" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(ndpg.reload.publications).to eq [pub1]
+      end
+    end
+
+    context "when two of the given publications are in two different non-duplicate groups" do
+      let!(:ndpg1) { create :non_duplicate_publication_group, publications: [pub2] }
+      let!(:ndpg2) { create :non_duplicate_publication_group, publications: [pub4] }
+
+      it "reassigns all of the imports from the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.imports).to match_array [pub1_import1,
+                                                    pub2_import1,
+                                                    pub2_import2,
+                                                    pub3_import1]
+      end
+
+      it "deletes the given publications" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { pub4.reload }.to raise_error ActiveRecord::RecordNotFound
+      end
+
+      it "updates the modification timestamp on the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
+      end
+
+      it "reassigns the publications to the non-duplicate groups" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(ndpg1.reload.publications).to eq [pub1]
+        expect(ndpg2.reload.publications).to eq [pub1]
+      end
+    end
+
+    context "when two of the given publications are in the same non-duplicate group" do
+      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
+
+      it "raises an error" do
+        expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
+      end
+
+      it "does not reassign any imports" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.imports).to match_array [pub1_import1]
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub4.reload.imports).to eq []
+      end
+
+      it "does not delete any publications" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub2.reload).to eq pub2
+        expect(pub3.reload).to eq pub3
+        expect(pub4.reload).to eq pub4
+      end
+
+      it "does not update the modification timestamp on the publication" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.updated_by_user_at).to be_nil
+      end
+
+      it "does not update any non-duplicate groups" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(ndpg.reload.publications).to match_array [pub2, pub4]
+      end
+    end
+
+    context "when two of the given publications are both in two different non-duplicate group" do
+      let!(:ndpg1) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
+      let!(:ndpg2) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
+
+      it "raises an error" do
+        expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
+      end
+
+      it "does not reassign any imports" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.imports).to match_array [pub1_import1]
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub4.reload.imports).to eq []
+      end
+
+      it "does not delete any publications" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub2.reload).to eq pub2
+        expect(pub3.reload).to eq pub3
+        expect(pub4.reload).to eq pub4
+      end
+
+      it "does not update the modification timestamp on the publication" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.updated_by_user_at).to be_nil
+      end
+
+      it "does not update any non-duplicate groups" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(ndpg1.reload.publications).to match_array [pub2, pub4]
+        expect(ndpg2.reload.publications).to match_array [pub2, pub4]
+      end
+    end
+
+    context "when one of the given publications is in the same non-duplicate group as the publication" do
+      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub1, pub3] }
+
+      it "raises an error" do
+        expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
+      end
+
+      it "does not reassign any imports" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.imports).to match_array [pub1_import1]
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub4.reload.imports).to eq []
+      end
+
+      it "does not delete any publications" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub2.reload).to eq pub2
+        expect(pub3.reload).to eq pub3
+        expect(pub4.reload).to eq pub4
+      end
+
+      it "does not update the modification timestamp on the publication" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.updated_by_user_at).to be_nil
+      end
+
+      it "does not update any non-duplicate groups" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(ndpg.reload.publications).to match_array [pub1, pub3]
+      end
+    end
+
+    context "when all of the publications are in the same non-duplicate group" do
+      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub1, pub2, pub3, pub4] }
+
+      it "raises an error" do
+        expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
+      end
+
+      it "does not reassign any imports" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.imports).to match_array [pub1_import1]
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub4.reload.imports).to eq []
+      end
+
+      it "does not delete any publications" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub2.reload).to eq pub2
+        expect(pub3.reload).to eq pub3
+        expect(pub4.reload).to eq pub4
+      end
+
+      it "does not update the modification timestamp on the publication" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.reload.updated_by_user_at).to be_nil
+      end
+
+      it "does not update any non-duplicate groups" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
+      end
+    end
+  end
 end

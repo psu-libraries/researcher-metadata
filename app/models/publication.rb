@@ -1,5 +1,8 @@
 class Publication < ApplicationRecord
   OPEN_ACCESS_POLICY_START = Date.new(2020, 1, 1)
+
+  class NonDuplicateMerge < ArgumentError; end
+
   include Swagger::Blocks
 
   def self.publication_types
@@ -444,5 +447,38 @@ class Publication < ApplicationRecord
 
   def has_open_access_information?
     !preferred_open_access_url.blank? || scholarsphere_upload_pending? || open_access_waived?
+  end
+
+  def merge!(publications_to_merge)
+    pubs_to_delete = publications_to_merge - [self]
+    all_pubs = (publications_to_merge.to_a + [self]).uniq
+
+    all_pubs.each do |p|
+      other_pubs = all_pubs - [p]
+
+      p.non_duplicate_groups.each do |ndg|
+        if other_pubs.map { |op| op.non_duplicate_groups }.flatten.include?(ndg)
+          raise NonDuplicateMerge
+        end
+      end
+    end
+
+    ActiveRecord::Base.transaction do
+      imports_to_reassign = pubs_to_delete.map { |p| p.imports }.flatten
+
+      imports_to_reassign.each do |i|
+        i.update_attributes!(publication: self)
+      end
+
+      pubs_to_delete.each do |p|
+        p.non_duplicate_groups.each do |ndg|
+          ndg.publications << self
+        end
+
+        p.destroy
+      end
+
+      update_attributes!(updated_by_user_at: Time.current)
+    end
   end
 end

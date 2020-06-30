@@ -13,25 +13,34 @@ class CustomAdmin::PublicationMergesController < RailsAdmin::ApplicationControll
 
       merge_target_pub = group.publications.find(params[:merge_target_publication_id])
       selected_pubs = group.publications.find(params[:selected_publication_ids])
-      pubs_to_delete = selected_pubs - [merge_target_pub]
 
-      ActiveRecord::Base.transaction do
-        imports_to_reassign = pubs_to_delete.map { |p| p.imports }.flatten
-
-        imports_to_reassign.each do |i|
-          i.update_attributes!(publication: merge_target_pub)
-        end
-
-        pubs_to_delete.each do |p|
-          p.destroy
-        end
-
-        merge_target_pub.update_attributes!(updated_by_user_at: Time.current)
+      begin
+        merge_target_pub.merge!(selected_pubs)
+      rescue Publication::NonDuplicateMerge
+        flash[:error] = I18n.t('admin.publication_merges.create.non_duplicate_merge_error')
+        redirect_to rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        return
       end
 
-      flash[:success] = I18n.t('admin.publication_merges.create.success')
+      flash[:success] = I18n.t('admin.publication_merges.create.merge_success')
     elsif params[:commit] = 'Ignore Selected'
-      flash[:alert] = "This feature has not been implemented yet."
+      unless params[:selected_publication_ids] && params[:selected_publication_ids].count >= 2
+        flash[:error] = I18n.t('admin.publication_merges.create.too_few_pubs_to_ignore_error')
+        redirect_to rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        return
+      end
+      
+      selected_pubs = group.publications.find(params[:selected_publication_ids])
+
+      ActiveRecord::Base.transaction do
+        selected_pubs.each { |p| p.update_attributes!(duplicate_group: nil) }
+
+        g = NonDuplicatePublicationGroup.new
+        g.publications = selected_pubs
+        g.save!
+      end
+
+      flash[:success] = I18n.t('admin.publication_merges.create.ignore_success')
     end
 
     redirect_to rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)

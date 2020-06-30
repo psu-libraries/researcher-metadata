@@ -12,8 +12,11 @@ en:
         multiple_publications_error: "Cannot delete a group with more than one publication."
     publication_merges:
       create:
-        success: "The publications were successfully merged."
+        merge_success: "The publications were successfully merged."
         missing_params_error: "To perform a merge, you must select a merge target and at least one other publication to merge into the target."
+        non_duplicate_merge_error: "Some of the selected publications cannot be merged because they have already been identified as non-duplicates."
+        too_few_pubs_to_ignore_error: "You must select at least two publications that are false duplicates to ignore."
+        ignore_success: "The suspected duplication of the selected publications has been ignored. These publications will no longer be automatically grouped as duplicates, and they will be prevented from being merged."
     publication_waiver_links:
       create:
         success: "The waiver was successfully linked to the selected publication."
