@@ -251,8 +251,42 @@ describe DuplicatePublicationGroup, type: :model do
                             published_on: nil,
                             doi: '' }
 
+      # two publications that match except for DOI and one has only an Activity Insight import
+      let!(:p16_1) { create :publication,
+                            title: "A match where there's a junk DOI from Activity Insight",
+                            published_on: Date.new(1986, 1, 1),
+                            doi: "https://doi.org/some-doi-457472486" }
+                         
+      let!(:p16_2) { create :publication,
+                            title: "A match where there's a junk DOI from Activity Insight",
+                            published_on: Date.new(1986, 1, 1),
+                            doi: 'some nonsense' }
+
+      let!(:p16_2_import_1) { create :publication_import,
+                                     source: 'Activity Insight',
+                                     publication: p16_2}
+
+      # two publications that match except for DOI and one has an Activity Insight import and a Pure import
+      let!(:p17_1) { create :publication,
+                            title: "consider DOI because AI is not the only import",
+                            published_on: Date.new(1987, 1, 1),
+                            doi: "https://doi.org/some-doi-457472486" }
+                         
+      let!(:p17_2) { create :publication,
+                            title: "consider DOI because AI is not the only import",
+                            published_on: Date.new(1987, 1, 1),
+                            doi: 'some nonsense' }
+
+      let!(:p17_2_import_1) { create :publication_import,
+                                     source: 'Activity Insight',
+                                     publication: p17_2}
+
+      let!(:p17_2_import_2) { create :publication_import,
+                                     source: 'Pure',
+                                     publication: p17_2}
+
       it "creates the correct number of duplicate groups" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 9
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 10
       end
 
       it "finds similar publications and groups them" do
@@ -326,10 +360,15 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
 
         expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
+
+        expect(p16_1.reload.duplicate_group.publications).to match_array [p16_1, p16_2]
+
+        expect(p17_1.reload.duplicate_group).to be_nil
+        expect(p17_2.reload.duplicate_group).to be_nil
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 9
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 10
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -357,6 +396,7 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
+        expect(p16_1.reload.duplicate_group.publications).to match_array [p16_1, p16_2]
       end
     end
   end
