@@ -26,15 +26,18 @@ describe DuplicatePublicationGroup, type: :model do
       # three publications that match perfectly
       let!(:p1_1) { create :publication,
                            title: "Publication with an Exactly Duplicated Title",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
                          
       let!(:p1_2) { create :publication,
                            title: "Publication with an Exactly Duplicated Title",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
 
       let!(:p1_3) { create :publication,
                            title: "Publication with an Exactly Duplicated Title",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-123456789" }
 
       # a publication that is already in a group that has the same title as other publications
       let!(:p1) { create :publication,
@@ -44,43 +47,63 @@ describe DuplicatePublicationGroup, type: :model do
       # two publications that have similar titles and otherwise match
       let!(:p2_1) { create :publication,
                            title: "Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-987654321" }
                          
       let!(:p2_2) { create :publication,
                            title: "Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-987654321" }
 
       # two publications with somewhat different titles and the same publication date
       let!(:p3_1) { create :publication,
                            title: "Utilizing cloud computing to address big geospatial data challenges",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
                          
       let!(:p3_2) { create :publication,
                            title: "Utilizing cloud computing to do something entirely different with big data sets",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
 
       # two publications with similar titles and no other data
       let!(:p4_1) { create :publication,
                            title: "Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
-                           published_on: nil }
+                           published_on: nil,
+                           doi: nil }
                          
       let!(:p4_2) { create :publication,
                            title: "Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
-                           published_on: nil }
+                           published_on: nil,
+                           doi: nil }
 
       # two publications with similar titles and different publication dates that have the same year
       let!(:p5_1) { create :publication,
                            title: "Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV",
-                           published_on: Date.new(2000, 5, 20) }
+                           published_on: Date.new(2000, 5, 20),
+                           doi: nil }
                          
       let!(:p5_2) { create :publication,
                            title: "Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: nil }
+
+      # two publications with the same title and publication date but with different DOIs
+      let!(:p6_1) { create :publication,
+                           title: "A Really Generic Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-23456431" }
+                         
+      let!(:p6_2) { create :publication,
+                           title: "A Really Generic Title",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-4563457245" }
 
       # two publications with the same title where only one has a DOI and publication date
       let!(:p7_1) { create :publication,
                            title: "A Publication That Matches Another Publication",
-                           published_on: Date.new(2000, 1, 1) }
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-22357534" }
                          
       let!(:p7_2) { create :publication,
                            title: "A Publication That Matches Another Publication",
@@ -91,21 +114,25 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p8_1) { create :publication,
                            title: "Assessing and investigating clinicians' research interests",
                            secondary_title: "Lessons on expanding practices and data collection in a large practice research network",
-                           published_on: nil }
+                           published_on: nil,
+                           doi: nil }
                          
       let!(:p8_2) { create :publication,
                            title: "Assessing and investigating clinicians' research interests: Lessons on expanding practices and data collection in a large practice research network",
                            secondary_title: nil,
-                           published_on: nil }
+                           published_on: nil,
+                           doi: nil }
 
       # two publications that match but are in the same non-duplicate publication group
       let!(:p9_1) { create :publication,
                            title: "Same as another publication but grouped as false-positive",
-                           published_on: Date.new(1980, 1, 1) }
+                           published_on: Date.new(1980, 1, 1),
+                           doi: "https://doi.org/some-doi-234623613" }
                          
       let!(:p9_2) { create :publication,
                            title: "Same as another publication but grouped as false-positive",
-                           published_on: Date.new(1980, 1, 1) }
+                           published_on: Date.new(1980, 1, 1),
+                           doi: "https://doi.org/some-doi-234623613" }
 
       let!(:p9_ndpg) { create :non_duplicate_publication_group,
                               publications: [p9_1, p9_2] }
@@ -113,7 +140,8 @@ describe DuplicatePublicationGroup, type: :model do
       # two publications that match and are in different non-duplicate publication groups
       let!(:p10_1) { create :publication,
                             title: "In a different false-positive group from the match",
-                            published_on: Date.new(1981, 1, 1) }
+                            published_on: Date.new(1981, 1, 1),
+                            doi: "https://doi.org/some-doi-854537454" }
                          
       let!(:p10_2) { create :publication,
                             title: "In a different false-positive group from the match",
@@ -132,15 +160,18 @@ describe DuplicatePublicationGroup, type: :model do
       # three publications that match but are in the same non-duplicate publication group
       let!(:p11_1) { create :publication,
                             title: "One in a group of three matching false-positives",
-                            published_on: Date.new(1982, 1, 1) }
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
                          
       let!(:p11_2) { create :publication,
                             title: "One in a group of three matching false-positives",
-                            published_on: Date.new(1982, 1, 1) }
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
 
       let!(:p11_3) { create :publication,
                             title: "One in a group of three matching false-positives",
-                            published_on: Date.new(1982, 1, 1) }
+                            published_on: Date.new(1982, 1, 1),
+                            doi: "https://doi.org/some-doi-3463473" }
 
       let!(:p_11_ndpg) { create :non_duplicate_publication_group,
                                 publications: [p11_1, p11_2, p11_3] }
@@ -148,15 +179,18 @@ describe DuplicatePublicationGroup, type: :model do
       # three publications that match where only two are in the same non-duplicate publication group
       let!(:p12_1) { create :publication,
                             title: "Publication with a two matches where one might not be legit",
-                            published_on: Date.new(1983, 1, 1) }
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
                          
       let!(:p12_2) { create :publication,
                             title: "Publication with a two matches where one might not be legit",
-                            published_on: Date.new(1983, 1, 1) }
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
 
       let!(:p12_3) { create :publication,
                             title: "Publication with a two matches where one might not be legit",
-                            published_on: Date.new(1983, 1, 1) }
+                            published_on: Date.new(1983, 1, 1),
+                            doi: "https://doi.org/some-doi-234534363" }
 
       let!(:p_12_ndpg) { create :non_duplicate_publication_group,
                                 publications: [p12_1, p12_3] }
@@ -164,11 +198,13 @@ describe DuplicatePublicationGroup, type: :model do
       # two publications that match and that each belong to two identical non-duplicate publication groups
       let!(:p13_1) { create :publication,
                             title: "Publication in two identical false-positive groups with another publication",
-                            published_on: Date.new(1984, 1, 1) }
+                            published_on: Date.new(1984, 1, 1),
+                            doi: "https://doi.org/some-doi-956525657" }
                          
       let!(:p13_2) { create :publication,
                             title: "Publication in two identical false-positive groups with another publication",
-                            published_on: Date.new(1984, 1, 1) }
+                            published_on: Date.new(1984, 1, 1),
+                            doi: "https://doi.org/some-doi-956525657" }
 
       let!(:p13_ndpg1) { create :non_duplicate_publication_group,
                                 publications: [p13_1, p13_2] }
@@ -181,19 +217,23 @@ describe DuplicatePublicationGroup, type: :model do
       # what would happen if it somehow did.
       let!(:p14_1) { create :publication,
                             title: "One of four matches in two different false-positive groups",
-                            published_on: Date.new(1985, 1, 1) }
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
                          
       let!(:p14_2) { create :publication,
                             title: "One of four matches in two different false-positive groups",
-                            published_on: Date.new(1985, 1, 1) }
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
 
       let!(:p14_3) { create :publication,
                             title: "One of four matches in two different false-positive groups",
-                            published_on: Date.new(1985, 1, 1) }
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
 
       let!(:p14_4) { create :publication,
                             title: "One of four matches in two different false-positive groups",
-                            published_on: Date.new(1985, 1, 1) }
+                            published_on: Date.new(1985, 1, 1),
+                            doi: "https://doi.org/some-doi-45782186" }
 
       let!(:p_14_ndpg1) { create :non_duplicate_publication_group,
                                  publications: [p14_1, p14_2] }
@@ -217,6 +257,9 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
 
         expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
+
+        expect(p6_1.reload.duplicate_group).to be_nil
+        expect(p6_2.reload.duplicate_group).to be_nil
 
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
 
@@ -281,6 +324,8 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p3_2.reload.duplicate_group).to be_nil
         expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
         expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
+        expect(p6_1.reload.duplicate_group).to be_nil
+        expect(p6_2.reload.duplicate_group).to be_nil
         expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
         expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
         expect(p9_1.reload.duplicate_group).to be_nil
