@@ -6,10 +6,9 @@ class DuplicatePublicationGroup < ApplicationRecord
                               total: Publication.count) unless Rails.env.test?
 
     Publication.find_each do |p|
-      duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi IS NULL)},
+      duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL)},
                                      "#{p.title}#{p.secondary_title}",
-                                     p.published_on.try(:year),
-                                     p.doi)
+                                     p.published_on.try(:year))
                                .where.not(id: p.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: p.id))
 
       group_publications(duplicates)
