@@ -240,8 +240,19 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p_14_ndpg2) { create :non_duplicate_publication_group,
                                  publications: [p14_3, p14_4] }
 
+      # two publications with the same title where only one has a publication date and one has a blank DOI
+      let!(:p15_1) { create :publication,
+                           title: "A Perfect Title Match Where a DOI is blank",
+                           published_on: Date.new(2000, 1, 1),
+                           doi: "https://doi.org/some-doi-22357534" }
+                         
+      let!(:p15_2) { create :publication,
+                           title: "A Perfect Title Match Where a DOI is blank",
+                           published_on: nil,
+                           doi: '' }
+
       it "creates the correct number of duplicate groups" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 8
+        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 9
       end
 
       it "finds similar publications and groups them" do
@@ -313,10 +324,12 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+
+        expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
       end
 
       it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 8
+        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 9
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -343,6 +356,7 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
         expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
       end
     end
   end
