@@ -126,13 +126,13 @@
         <tr>
           <td class="publication-field-label">Merge Target</td>
           <% publications.each do |p| %>
-            <td class="publication-field"><%= radio_button_tag :merge_target_publication_id, p.id %></td>
+            <td class="publication-field"><%= radio_button_tag :merge_target_publication_id, p.id, false, class: 'merge-target-selector' %></td>
           <% end %>
         </tr>
         <tr>
           <td class="publication-field-label">Select</td>
           <% publications.each do |p| %>
-            <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id, false, id: "selected_publication_ids_#{p.id}" %></td>
+            <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id, false, id: "selected_publication_ids_#{p.id}", class: 'publication-selector' %></td>
           <% end %>
         </tr>
       <% end %>
@@ -142,9 +142,11 @@
     <% if publications.count > 1 %>
       <%= submit_tag "Merge Selected",
                      class: 'btn btn-primary',
+                     id: 'merge-selected-button',
                      data: {confirm: "Are you sure that you want to merge the selected publications into the chosen target publication? This cannot be undone."} %>
       <%= submit_tag "Ignore Selected",
                      class: 'btn btn-primary',
+                     id: 'ignore-selected-button',
                      data: {confirm: "Are you sure that you want to permanently ignore all of the selected publications as non-duplicates of each other? This cannot be undone."} %>
     <% end %>
   </div>
