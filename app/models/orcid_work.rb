@@ -13,34 +13,52 @@ class OrcidWork
 
     work = {
       title: {
-          title: {
-              value: authorship.publication.title
-          },
-          subtitle: authorship.publication.secondary_title,
+          title: publication.title,
+          subtitle: publication.secondary_title,
           "translated-title": nil
       },
-      "journal-title": {
-          value: authorship.publication.journal_title
-      },
-      "short-description": authorship.publication.abstract,
-      type: authorship.publication.publication_type,
+      "journal-title": publication.journal_title,
+      "short-description": publication.abstract,
+      type: publication.publication_type,
       "publication-date": {
-          year: Date.parse(authorship.publication.published_on).year,
-          month: Date.parse(authorship.publication.published_on).month,
-          day: Date.parse(authorship.publication.published_on).day
-      }
+          year: publication.published_on.year,
+          month: publication.published_on.month,
+          day: publication.published_on.day
+      },
+      url: publication.url
     }
 
     external_ids.each do |type|
-      if authorship.publication.send(type).present?
-        relationship = (type == i%[doi] ? 'self' : 'part-of')
+      if publication.send(type).present?
+        relationship = (type == :doi ? 'self' : 'part-of')
+        work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
         work[:"external-ids"][:"external-id"] << {
                 "external-id-type": type.to_s,
-                "external-id-value": authorship.publication.send(type).to_s,
+                "external-id-value": publication.send(type).to_s,
                 "external-id-relationship": relationship
         }
       end
     end
+
+    publication.authorships.each do |ext_author|
+      next if ext_author.user.id == user.id
+
+      work[:contributors] = { contributor: [] } unless work[:contributors].present?
+      work[:contributors][:contributor] << {
+          "contributor-orcid": {
+              uri: "https://orcid.org/#{ext_author.user.orcid_identifier}",
+              path: ext_author.user.orcid_identifier.to_s,
+              host: 'orcid.org'
+          },
+          "credit-name": "#{ext_author.user.first_name} #{ext_author.user.middle_name} #{ext_author.user.last_name}",
+          "contributor-attributes": {
+              "contributor-sequence": ext_author.author_number.to_s,
+              "contributor-role": ext_author.role
+          }
+      }
+    end
+
+    work.to_json
   end
 
   def save!
@@ -62,6 +80,10 @@ class OrcidWork
 
   def orcid_type
     "work"
+  end
+
+  def publication
+    authorship.publication
   end
 
   def user
