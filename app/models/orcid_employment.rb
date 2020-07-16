@@ -1,13 +1,4 @@
-class OrcidEmployment
-  class InvalidToken < RuntimeError; end
-  class FailedRequest < RuntimeError; end
-
-  attr_reader :location
-
-  def initialize(user_organization_membership)
-    @membership = user_organization_membership
-  end
-
+class OrcidEmployment < OrcidResource
   def to_json
     employment = {
       organization: {
@@ -42,40 +33,11 @@ class OrcidEmployment
     employment.to_json
   end
 
-  def save!
-    client = OrcidAPIClient.new(self)
-    response = client.post
-
-    if response.code == 201
-      @location = response.headers["location"]
-      return true
-    else
-      response_body = JSON.parse(response.to_s)
-      if response_body["error"] == "invalid_token"
-        raise InvalidToken
-      else
-        raise FailedRequest
-      end
-    end
-  end
-
   def orcid_type
     "employment"
   end
 
-  def user
-    membership.user
+  def membership
+    model
   end
-
-  def access_token
-    user.orcid_access_token
-  end
-
-  def orcid_id
-    user.authenticated_orcid_identifier
-  end
-
-  private
-
-  attr_reader :membership
 end

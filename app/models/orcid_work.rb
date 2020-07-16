@@ -1,13 +1,4 @@
-class OrcidWork
-  class InvalidToken < RuntimeError; end
-  class FailedRequest < RuntimeError; end
-
-  attr_reader :location
-
-  def initialize(authorship)
-    @authorship = authorship
-  end
-
+class OrcidWork < OrcidResource
   def to_json
     external_ids = %i[isbn issn doi]
 
@@ -54,23 +45,6 @@ class OrcidWork
     work.to_json
   end
 
-  def save!
-    client = OrcidAPIClient.new(self)
-    response = client.post
-
-    if response.code == 201
-      @location = response.headers["location"]
-      return true
-    else
-      response_body = JSON.parse(response.to_s)
-      if response_body["error"] == "invalid_token"
-        raise InvalidToken
-      else
-        raise FailedRequest
-      end
-    end
-  end
-
   def orcid_type
     "work"
   end
@@ -79,19 +53,7 @@ class OrcidWork
     authorship.publication
   end
 
-  def user
-    authorship.user
+  def authorship
+    model
   end
-
-  def access_token
-    user.orcid_access_token
-  end
-
-  def orcid_id
-    user.authenticated_orcid_identifier
-  end
-
-  private
-
-  attr_reader :authorship
 end
