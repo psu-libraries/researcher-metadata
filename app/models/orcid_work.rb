@@ -13,17 +13,16 @@ class OrcidWork
 
     work = {
       title: {
-          title: publication.title,
-          subtitle: publication.secondary_title,
-          "translated-title": nil
+        title: publication.title,
+        subtitle: publication.secondary_title,
       },
       "journal-title": publication.journal_title,
       "short-description": publication.abstract,
-      type: publication.publication_type,
+      type: 'journal-article',
       "publication-date": {
-          year: publication.published_on.year,
-          month: publication.published_on.month,
-          day: publication.published_on.day
+        year: publication.published_on.year,
+        month: publication.published_on.month,
+        day: publication.published_on.day
       },
       url: publication.url
     }
@@ -33,28 +32,22 @@ class OrcidWork
         relationship = (type == :doi ? 'self' : 'part-of')
         work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
         work[:"external-ids"][:"external-id"] << {
-                "external-id-type": type.to_s,
-                "external-id-value": publication.send(type).to_s,
-                "external-id-relationship": relationship
+              "external-id-type": type.to_s,
+              "external-id-value": publication.send(type).to_s,
+              "external-id-relationship": relationship
         }
       end
     end
 
     publication.authorships.each do |ext_author|
-      next if ext_author.user.id == user.id
+      next if ext_author.user.id == user.id || ext_author.user.authenticated_orcid_identifier.blank?
 
       work[:contributors] = { contributor: [] } unless work[:contributors].present?
       work[:contributors][:contributor] << {
           "contributor-orcid": {
-              uri: "https://orcid.org/#{ext_author.user.orcid_identifier}",
-              path: ext_author.user.orcid_identifier.to_s,
-              host: 'orcid.org'
+            path: ext_author.user.authenticated_orcid_identifier
           },
-          "credit-name": "#{ext_author.user.first_name} #{ext_author.user.middle_name} #{ext_author.user.last_name}",
-          "contributor-attributes": {
-              "contributor-sequence": ext_author.author_number.to_s,
-              "contributor-role": ext_author.role
-          }
+          "credit-name": "#{ext_author.user.first_name} #{ext_author.user.middle_name} #{ext_author.user.last_name}"
       }
     end
 
