@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_06_26_191346) do
+ActiveRecord::Schema.define(version: 2020_07_17_152829) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -39,6 +39,7 @@ ActiveRecord::Schema.define(version: 2020_06_26_191346) do
     t.datetime "scholarsphere_uploaded_at"
     t.string "role"
     t.datetime "open_access_notification_sent_at"
+    t.string "orcid_resource_identifier"
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end

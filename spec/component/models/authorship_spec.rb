@@ -15,6 +15,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:scholarsphere_uploaded_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:role).of_type(:string) }
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:orcid_resource_identifier).of_type(:string) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
