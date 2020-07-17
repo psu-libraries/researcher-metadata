@@ -55,6 +55,12 @@ en:
         success: "The employment record was successfully added to your ORCID record."
         account_not_linked: "Your ORCID record is no longer linked to your metadata profile."
         error: "There was an error adding your employment history to your ORCID record."
+    orcid_works:
+      create:
+        already_added: "The work record has already been added to your ORCID record."
+        success: "The work record was successfully added to your ORCID record."
+        account_not_linked: "Your ORCID record is no longer linked to your metadata profile."
+        error: "There was an error adding your work history to your ORCID record."
   models:
     open_access_url_form:
       validation_errors:
