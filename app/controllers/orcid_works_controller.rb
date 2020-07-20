@@ -1,6 +1,7 @@
 class OrcidWorksController < UserController
+  before_action :authenticate!
+
   def create
-    byebug
     authorship = Authorship.find(params[:authorship_id])
 
     if authorship
@@ -9,7 +10,7 @@ class OrcidWorksController < UserController
       else
         work = OrcidWork.new(authorship)
         work.save!
-        work.update_attributes!(orcid_resource_identifier: work.location)
+        authorship.update_attributes!(orcid_resource_identifier: work.location)
 
         flash[:notice] = I18n.t('profile.orcid_works.create.success')
       end
@@ -21,6 +22,6 @@ class OrcidWorksController < UserController
   rescue OrcidWork::FailedRequest
     flash[:alert] = I18n.t('profile.orcid_works.create.error')
   ensure
-    redirect_to profile_bio_path
+    redirect_to edit_profile_publications_path
   end
 end
