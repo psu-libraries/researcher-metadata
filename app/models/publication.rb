@@ -449,6 +449,10 @@ class Publication < ApplicationRecord
     !preferred_open_access_url.blank? || scholarsphere_upload_pending? || open_access_waived?
   end
 
+  def orcid_allowed?
+    doi.present? || url.present? || open_access_url.present?
+  end
+
   def merge!(publications_to_merge)
     pubs_to_delete = publications_to_merge - [self]
     all_pubs = (publications_to_merge.to_a + [self]).uniq

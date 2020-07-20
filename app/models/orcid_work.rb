@@ -1,6 +1,6 @@
 class OrcidWork < OrcidResource
   def to_json
-    external_ids = %i[isbn issn doi]
+    external_ids = %i[isbn issn doi url]
 
     work = {
       title: {
@@ -20,11 +20,13 @@ class OrcidWork < OrcidResource
 
     external_ids.each do |type|
       if publication.send(type).present?
-        relationship = (type == :doi ? 'self' : 'part-of')
+        relationship = ([:doi, :url].include?(type) ? 'self' : 'part-of')
+        orcid_type = (type == :url ? :uri : type)
+        url = publication.open_access_url || publication.url
         work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
         work[:"external-ids"][:"external-id"] << {
-              "external-id-type": type.to_s,
-              "external-id-value": publication.send(type).to_s,
+              "external-id-type": orcid_type.to_s,
+              "external-id-value": (type == :url ? url : publication.send(type).to_s),
               "external-id-relationship": relationship
         }
       end
