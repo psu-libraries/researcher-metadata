@@ -14,6 +14,7 @@ describe OrcidWork do
                              edition: '3',
                              page_range: '4-5',
                              url: 'https://url.org',
+                             open_access_url: nil,
                              isbn: nil,
                              issn: nil,
                              doi: nil,
@@ -49,6 +50,7 @@ describe OrcidWork do
     context "when the given authorship has external ids" do
       before { allow(publication).to receive(:issn).and_return('12345') }
       before { allow(publication).to receive(:doi).and_return('https://doi.org') }
+      before { allow(publication).to receive(:open_access_url).and_return('https://scholarsphere.org') }
       before { allow(publication).to receive(:authorships).and_return([authorship]) }
 
       it "returns a JSON representation of an ORCID work that includes external ids" do
@@ -62,7 +64,7 @@ describe OrcidWork do
                                          {"year":date.year,
                                           "month":date.month,
                                           "day":date.day},
-                                     "url":"https://url.org",
+                                     "url":"https://scholarsphere.org",
                                      "external-ids":
                                          {"external-id":
                                               [{"external-id-type":"issn",
@@ -70,6 +72,9 @@ describe OrcidWork do
                                                 "external-id-relationship":"part-of"},
                                                {"external-id-type":"doi",
                                                 "external-id-value":"https://doi.org",
+                                                "external-id-relationship":"self"},
+                                               {"external-id-type":"uri",
+                                                "external-id-value":"https://scholarsphere.org",
                                                 "external-id-relationship":"self"}]
                                          }
         }.to_json)
@@ -91,6 +96,12 @@ describe OrcidWork do
                                           "month":date.month,
                                           "day":date.day},
                                      "url":"https://url.org",
+                                     "external-ids":
+                                         {"external-id":
+                                              [{"external-id-type":"uri",
+                                                "external-id-value":"https://url.org",
+                                                "external-id-relationship":"self"}]
+                                         },
                                      "contributors":
                                          {"contributor":
                                               [{"contributor-orcid":
