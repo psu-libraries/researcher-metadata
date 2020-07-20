@@ -1,6 +1,7 @@
 require 'component/component_spec_helper'
 
 describe OrcidWork do
+  let(:date) { Date.yesterday }
   let(:publication) { double 'publication',
                              title: 'Test Title',
                              publication_type: 'Academic Journal Article',
@@ -18,7 +19,7 @@ describe OrcidWork do
                              doi: nil,
                              abstract: 'Test Abstract',
                              authors_et_al: false,
-                             published_on: Date.yesterday
+                             published_on: date
   }
   let(:authorship) { double 'authorship',
                             user: user,
@@ -58,9 +59,9 @@ describe OrcidWork do
                                      "short-description":"Test Abstract",
                                      "type":"journal-article",
                                      "publication-date":
-                                         {"year":2020,
-                                          "month":7,
-                                          "day":16},
+                                         {"year":date.year,
+                                          "month":date.month,
+                                          "day":date.day},
                                      "url":"https://url.org",
                                      "external-ids":
                                          {"external-id":
@@ -86,8 +87,9 @@ describe OrcidWork do
                                      "short-description":"Test Abstract",
                                      "type":"journal-article",
                                      "publication-date":
-                                         {"year":2020,
-                                          "month":7,"day":16},
+                                         {"year":date.year,
+                                          "month":date.month,
+                                          "day":date.day},
                                      "url":"https://url.org",
                                      "contributors":
                                          {"contributor":
