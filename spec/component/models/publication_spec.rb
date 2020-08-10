@@ -37,6 +37,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_index(:volume) }
   it { is_expected.to have_db_index(:issue) }
   it { is_expected.to have_db_index(:doi) }
+  it { is_expected.to have_db_index(:published_on) }
 end
 
 

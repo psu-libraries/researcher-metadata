@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_07_17_152829) do
+ActiveRecord::Schema.define(version: 2020_08_07_195118) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -344,9 +344,11 @@ ActiveRecord::Schema.define(version: 2020_07_17_152829) do
     t.text "open_access_url"
     t.datetime "open_access_button_last_checked_at"
     t.text "user_submitted_open_access_url"
+    t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
+    t.index ["published_on"], name: "index_publications_on_published_on"
     t.index ["volume"], name: "index_publications_on_volume"
   end
 
