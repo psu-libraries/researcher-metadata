@@ -1,23 +1,65 @@
 {
-  "data": {
-    "match": "https://doi.org/pub/doi1",
-    "availability": [
+  "url": "http://openaccessexample.org/publications/pub1.pdf",
+  "checked": [
+    "crossref",
+    "oadoi",
+    "epmc"
+  ],
+  "input": "id: \"https://doi.org/pub/doi1\"",
+  "all": false,
+  "parallel": true,
+  "find": true,
+  "sources": [
+    "oabutton",
+    "oadoi",
+    "crossref",
+    "epmc",
+    "doaj",
+    "reverse",
+    "scrape"
+  ],
+  "refresh": 30,
+  "found": {
+    "oadoi": "http://openaccessexample.org/publications/pub1.pdf"
+  },
+  "redirect": "http://openaccessexample.org/publications/pub1.pdf",
+  "metadata": {
+    "doi": "doi1",
+    "title": "Test Title",
+    "crossref_type": "journal-article",
+    "author": [
       {
-        "type": "article",
-        "url": "http://openaccessexample.org/publications/pub1.pdf"
+        "given": "Test",
+        "family": "Author1",
+        "sequence": "first",
+        "name": "Test Author1"
+      },
+      {
+        "given": "Test",
+        "family": "Author2",
+        "sequence": "additional",
+        "name": "Test Author2"
       }
     ],
-    "requests": [],
-    "accepts": [],
-    "meta": {
-      "article": {
-        "redirect": "",
-        "url": "",
-        "source": "eupmc"
-      },
-      "data": {},
-      "cache": true,
-      "refresh": 30
-    }
-  }
+    "journal": "Test Journal",
+    "journal_short": "Test Jnrl",
+    "issue": "4",
+    "volume": "30",
+    "page": "930-935",
+    "issn": "1234-5678",
+    "publisher": "Test Publisher",
+    "year": "1997",
+    "published": "1997-01-01",
+    "url": [
+      "https://doi.org/pub/doi1",
+      "http://openaccessexample.org/publications/pub1.pdf"
+    ]
+  },
+  "catalogue": "dfhjtsdrhfgEdfGRse",
+  "started": 1597175690399,
+  "ended": 1597175691490,
+  "took": 1091,
+  "createdAt": 1597175691490,
+  "created_date": "2020-08-11 2054.51",
+  "_id": "sthwrtEueR7sDFeghr"
 }
