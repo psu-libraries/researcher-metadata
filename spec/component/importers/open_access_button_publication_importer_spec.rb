@@ -207,42 +207,4 @@ describe OpenAccessButtonPublicationImporter do
       end
     end
   end
-
-  context "when an existing publication has a DOI that corresponds to more than one available article listed with Open Access Button" do
-    let!(:pub) { create :publication, doi: 'https://doi.org/pub/doi1' }
-
-    before do
-      allow(HTTParty).to receive(:get).with("https://api.openaccessbutton.org/find?id=pub/doi1").
-      and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
-    end
-
-    it "updates the publication with the first URL to the open access content" do
-      importer.call
-      expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
-    end
-
-    it "updates Open Access Button check timestamp on the publication" do
-      importer.call
-      expect(pub.reload.open_access_button_last_checked_at).to eq now
-    end
-  end
-
-  context "when an existing publication has a DOI that corresponds to content listed with Open Access Button that is not an article" do
-    let!(:pub) { create :publication, doi: 'https://doi.org/pub/doi1' }
-
-    before do
-      allow(HTTParty).to receive(:get).with("https://api.openaccessbutton.org/find?id=pub/doi1").
-      and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab4.json')))
-    end
-
-    it "does not update the publication's open access URL" do
-      importer.call
-      expect(pub.reload.open_access_url).to be_nil
-    end
-
-    it "updates Open Access Button check timestamp on the publication" do
-      importer.call
-      expect(pub.reload.open_access_button_last_checked_at).to eq now
-    end
-  end
 end
