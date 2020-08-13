@@ -1,8 +1,5 @@
 class OrcidWork < OrcidResource
   def to_json
-    external_ids = %i[isbn issn doi url]
-    url = publication.open_access_url || publication.url
-
     work = {
       title: {
         title: publication.title,
@@ -10,37 +7,40 @@ class OrcidWork < OrcidResource
       },
       "journal-title": publication.journal_title,
       "short-description": publication.abstract,
-      type: 'journal-article',
-      "publication-date": {
-        year: publication.published_on.year,
-        month: publication.published_on.month,
-        day: publication.published_on.day
-      },
-      url: url
+      type: 'journal-article'
     }
 
-    external_ids.each do |type|
-      if publication.send(type).present?
-        relationship = ([:doi, :url].include?(type) ? 'self' : 'part-of')
-        orcid_type = (type == :url ? :uri : type)
-        work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
-        work[:"external-ids"][:"external-id"] << {
-              "external-id-type": orcid_type.to_s,
-              "external-id-value": (type == :url ? url : publication.send(type).to_s),
-              "external-id-relationship": relationship
-        }
-      end
+    if published_date.present?
+      work[:"publication-date"] = {
+          year: published_date.year,
+          month: published_date.month,
+          day: published_date.day
+      }
     end
 
-    publication.authorships.each do |ext_author|
-      next if ext_author.user.id == user.id || ext_author.user.authenticated_orcid_identifier.blank?
+    if external_url.present?
+      work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
+      work[:"external-ids"][:"external-id"] << {
+            "external-id-type": 'uri',
+            "external-id-value": external_url.to_s,
+            "external-id-relationship": 'self'
+      }
+    end
 
+    if doi.present?
+      work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
+      work[:"external-ids"][:"external-id"] << {
+          "external-id-type": 'doi',
+          "external-id-value": publication.doi.to_s,
+          "external-id-relationship": 'self'
+      }
+    end
+
+    contributors.each do |ext_author|
+      middle_name = ext_author.middle_name.present? ? " #{ext_author.middle_name}" : ""
       work[:contributors] = { contributor: [] } unless work[:contributors].present?
       work[:contributors][:contributor] << {
-          "contributor-orcid": {
-            path: ext_author.user.authenticated_orcid_identifier
-          },
-          "credit-name": "#{ext_author.user.first_name} #{ext_author.user.middle_name} #{ext_author.user.last_name}"
+          "credit-name": "#{ext_author.first_name}" + middle_name + " #{ext_author.last_name}"
       }
     end
 
@@ -57,5 +57,23 @@ class OrcidWork < OrcidResource
 
   def authorship
     model
+  end
+
+  private
+
+  def external_url
+    publication.preferred_open_access_url || publication.url
+  end
+
+  def doi
+    publication.doi
+  end
+
+  def contributors
+    publication.contributors
+  end
+
+  def published_date
+    publication.published_on
   end
 end

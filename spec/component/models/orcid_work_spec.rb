@@ -23,25 +23,18 @@ describe OrcidWork do
                              published_on: date
   }
   let(:authorship) { double 'authorship',
-                            user: user,
                             publication: publication,
                             author_number: 1,
                             orcid_resource_identifier: nil
   }
-  let(:authorship2) { double 'authorship',
-                            user: user2,
-                            publication: publication,
-                            author_number: 2,
-                            orcid_resource_identifier: nil
+  let(:contributor1) { double 'contributor', id: 1,
+                       first_name: 'Terry',
+                       middle_name: "Test",
+                       last_name: "McTester"
   }
-  let(:user) { double 'user', id: 1,
-                      orcid_access_token: 'the orcid token',
-                      authenticated_orcid_identifier: 'the orcid id' }
-  let(:user2) { double 'user', id: 2,
-                       orcid_access_token: 'another orcid token',
-                       authenticated_orcid_identifier: 'another orcid id',
-                       first_name: 'Test',
-                       middle_name: 'Tester',
+  let(:contributor2) { double 'contributor', id: 2,
+                       first_name: 'Jerry',
+                       middle_name: 'Test',
                        last_name: 'McTester'
   }
   subject(:work) { OrcidWork.new(authorship) }
@@ -50,64 +43,78 @@ describe OrcidWork do
     context "when the given authorship has external ids" do
       before { allow(publication).to receive(:issn).and_return('12345') }
       before { allow(publication).to receive(:doi).and_return('https://doi.org') }
-      before { allow(publication).to receive(:open_access_url).and_return('https://scholarsphere.org') }
-      before { allow(publication).to receive(:authorships).and_return([authorship]) }
+      before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
+      before { allow(publication).to receive(:contributors).and_return([]) }
 
       it "returns a JSON representation of an ORCID work that includes external ids" do
-        expect(work.to_json).to eq ({"title":
-                                         {"title":"Test Title",
-                                          "subtitle":"Secondary Test Title"},
-                                     "journal-title":"Test Journal",
-                                     "short-description":"Test Abstract",
-                                     "type":"journal-article",
-                                     "publication-date":
-                                         {"year":date.year,
-                                          "month":date.month,
-                                          "day":date.day},
-                                     "url":"https://scholarsphere.org",
-                                     "external-ids":
-                                         {"external-id":
-                                              [{"external-id-type":"issn",
-                                                "external-id-value":"12345",
-                                                "external-id-relationship":"part-of"},
-                                               {"external-id-type":"doi",
-                                                "external-id-value":"https://doi.org",
-                                                "external-id-relationship":"self"},
-                                               {"external-id-type":"uri",
-                                                "external-id-value":"https://scholarsphere.org",
-                                                "external-id-relationship":"self"}]
-                                         }
+        expect(work.to_json).to eq ({
+            "title": {
+                "title":"Test Title",
+                "subtitle":"Secondary Test Title"
+            },
+            "journal-title":"Test Journal",
+            "short-description":"Test Abstract",
+            "type":"journal-article",
+            "publication-date":{
+                "year":date.year,
+                "month":date.month,
+                "day":date.day
+            },
+            "external-ids":{
+                "external-id":[
+                    {
+                        "external-id-type":"uri",
+                        "external-id-value":"https://scholarsphere.org",
+                        "external-id-relationship":"self"
+                    },
+                    {
+                        "external-id-type":"doi",
+                        "external-id-value":"https://doi.org",
+                        "external-id-relationship":"self"
+                    }
+                ]
+            }
         }.to_json)
       end
     end
 
     context "when the given authorship's publication has multiple authorships" do
-      before { allow(publication).to receive(:authorships).and_return([authorship, authorship2]) }
+      before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
+      before { allow(publication).to receive(:contributors).and_return([contributor1, contributor2]) }
 
       it "returns a JSON representation of an ORCID work that includes contributors" do
-        expect(work.to_json).to eq ({"title":
-                                         {"title":"Test Title",
-                                          "subtitle":"Secondary Test Title"},
-                                     "journal-title":"Test Journal",
-                                     "short-description":"Test Abstract",
-                                     "type":"journal-article",
-                                     "publication-date":
-                                         {"year":date.year,
-                                          "month":date.month,
-                                          "day":date.day},
-                                     "url":"https://url.org",
-                                     "external-ids":
-                                         {"external-id":
-                                              [{"external-id-type":"uri",
-                                                "external-id-value":"https://url.org",
-                                                "external-id-relationship":"self"}]
-                                         },
-                                     "contributors":
-                                         {"contributor":
-                                              [{"contributor-orcid":
-                                                    {"path":"another orcid id"},
-                                                "credit-name":"Test Tester McTester"}]
-                                         }
+        expect(work.to_json).to eq ({
+            "title": {
+                    "title":"Test Title",
+                    "subtitle":"Secondary Test Title"
+                },
+            "journal-title":"Test Journal",
+            "short-description":"Test Abstract",
+            "type":"journal-article",
+            "publication-date": {
+                    "year":date.year,
+                    "month":date.month,
+                    "day":date.day
+                },
+            "external-ids": {
+                    "external-id": [
+                        {
+                            "external-id-type":"uri",
+                            "external-id-value":"https://scholarsphere.org",
+                            "external-id-relationship":"self"
+                        }
+                    ]
+            },
+            "contributors": {
+                    "contributor": [
+                        {
+                            "credit-name":"Terry Test McTester"
+                        },
+                        {
+                            "credit-name":"Jerry Test McTester"
+                        }
+                    ]
+                }
         }.to_json)
       end
     end

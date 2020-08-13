@@ -450,7 +450,7 @@ class Publication < ApplicationRecord
   end
 
   def orcid_allowed?
-    doi.present? || url.present? || open_access_url.present?
+    doi.present? || url.present? || preferred_open_access_url.present?
   end
 
   def merge!(publications_to_merge)
