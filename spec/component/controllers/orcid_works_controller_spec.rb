@@ -8,7 +8,7 @@ describe OrcidWorksController, type: :controller do
       let(:work) { double 'ORCID work', save!: nil, location: "the_location" }
       before do
         allow(OrcidWork).to receive(:new).with(authorship).and_return(work)
-        allow(Authorship).to receive(:find).and_return(authorship)
+        allow(user).to receive_message_chain(:authorships, :find).and_return(authorship)
         authenticate_as(user)
         post :create
       end

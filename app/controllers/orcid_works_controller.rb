@@ -2,7 +2,7 @@ class OrcidWorksController < UserController
   before_action :authenticate!
 
   def create
-    authorship = Authorship.find(params[:authorship_id])
+    authorship = current_user.authorships.find(params[:authorship_id])
 
     if authorship
       if authorship.orcid_resource_identifier.present?
