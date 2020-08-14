@@ -17,7 +17,7 @@ describe OrcidWork do
                              open_access_url: nil,
                              isbn: nil,
                              issn: nil,
-                             doi: nil,
+                             doi: 'https://doi.org/10.0/1234/4567',
                              abstract: 'Test Abstract',
                              authors_et_al: false,
                              published_on: date
@@ -41,8 +41,7 @@ describe OrcidWork do
 
   describe "#to_json" do
     context "when the given authorship has external ids" do
-      before { allow(publication).to receive(:issn).and_return('12345') }
-      before { allow(publication).to receive(:doi).and_return('https://doi.org') }
+      before { allow(publication).to receive(:doi_url_path).and_return('10.0/1234/5678') }
       before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
       before { allow(publication).to receive(:contributors).and_return([]) }
 
@@ -69,7 +68,7 @@ describe OrcidWork do
                     },
                     {
                         "external-id-type":"doi",
-                        "external-id-value":"https://doi.org",
+                        "external-id-value":"10.0/1234/5678",
                         "external-id-relationship":"self"
                     }
                 ]
@@ -79,6 +78,7 @@ describe OrcidWork do
     end
 
     context "when the given authorship's publication has multiple authorships" do
+      before { allow(publication).to receive(:doi_url_path).and_return(nil) }
       before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
       before { allow(publication).to receive(:contributors).and_return([contributor1, contributor2]) }
 

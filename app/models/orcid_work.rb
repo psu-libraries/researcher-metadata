@@ -31,7 +31,7 @@ class OrcidWork < OrcidResource
       work[:"external-ids"] = { "external-id": [] } unless work[:"external-ids"].present?
       work[:"external-ids"][:"external-id"] << {
           "external-id-type": 'doi',
-          "external-id-value": publication.doi.to_s,
+          "external-id-value": doi,
           "external-id-relationship": 'self'
       }
     end
@@ -66,7 +66,7 @@ class OrcidWork < OrcidResource
   end
 
   def doi
-    publication.doi
+    publication.doi_url_path
   end
 
   def contributors
