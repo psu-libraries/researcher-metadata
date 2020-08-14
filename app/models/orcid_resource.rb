@@ -16,10 +16,15 @@ class OrcidResource
       @location = response.headers["location"]
       return true
     else
-      response_body = JSON.parse(response.to_s)
-      if response_body["error"] == "invalid_token"
-        raise InvalidToken
-      else
+      begin
+        response_body = JSON.parse(response.to_s)
+        if response_body["error"] == "invalid_token"
+          raise InvalidToken
+        else
+          raise FailedRequest
+        end
+      rescue JSON::ParserError
+        Rails.logger.error Nokogiri::XML(response.to_s).text
         raise FailedRequest
       end
     end

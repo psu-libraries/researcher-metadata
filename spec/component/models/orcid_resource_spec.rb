@@ -54,6 +54,18 @@ describe OrcidResource do
           expect { employment.save! }.to raise_error(OrcidEmployment::FailedRequest)
         end
       end
+
+      context "when the response is not in JSON format" do
+        before do
+          error_message ='<error xmlns="http://www.orcid.org"><developer-message>Message.</developer-message></error>'
+          allow(response).to receive(:to_s).and_return(error_message)
+        end
+
+        it "logs the developer message and raises a FailedRequest error" do
+          expect(Rails.logger).to receive(:error).with("Message.")
+          expect { employment.save! }.to raise_error(OrcidEmployment::FailedRequest)
+        end
+      end
     end
 
     describe "#user" do
