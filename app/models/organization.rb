@@ -10,6 +10,10 @@ class Organization < ApplicationRecord
 
   scope :visible, -> { where(visible: true) }
 
+  def all_publications
+    Publication.joins(:authorships).where(%{authorships.user_id IN (?)}, all_user_ids).distinct(:id).published_during_membership
+  end
+
   rails_admin do
     list do
       field(:id)
@@ -35,4 +39,27 @@ class Organization < ApplicationRecord
       field(:user_organization_memberships)
     end
   end
+
+  private
+
+  def descendant_ids
+    ids = ActiveRecord::Base.connection.execute(
+      %{WITH RECURSIVE org_tree AS (SELECT id, name, parent_id FROM organizations WHERE id = #{id} UNION SELECT child.id, child.name, child.parent_id FROM organizations AS child JOIN org_tree AS parent ON parent.id = child.parent_id) SELECT * FROM org_tree;}
+    ).to_a.map { |row| row['id'] }
+  end
+
+  def all_user_ids
+    User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id).pluck(:id)
+  end
+
+  def all_membership_ids
+    UserOrganizationMembership.where(%{organization_id IN (?)}, descendant_ids).distinct(:id).pluck(:id)
+  end
+
+  def earliest_descendant_membership_start
+  end
+
+  def latest_descendant_membership_end
+  end
+  
 end
