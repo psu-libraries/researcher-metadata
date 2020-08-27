@@ -11,7 +11,7 @@ class Organization < ApplicationRecord
   scope :visible, -> { where(visible: true) }
 
   def all_publications
-    Publication.joins(:authorships).where(%{authorships.user_id IN (?)}, all_user_ids).distinct(:id).published_during_membership
+    Publication.joins(users: :organizations).where(%{users.id IN (?) AND organizations.id IN (?)}, all_user_ids, descendant_ids).published_during_membership.distinct(:id)
   end
 
   rails_admin do
@@ -51,15 +51,4 @@ class Organization < ApplicationRecord
   def all_user_ids
     User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id).pluck(:id)
   end
-
-  def all_membership_ids
-    UserOrganizationMembership.where(%{organization_id IN (?)}, descendant_ids).distinct(:id).pluck(:id)
-  end
-
-  def earliest_descendant_membership_start
-  end
-
-  def latest_descendant_membership_end
-  end
-  
 end
