@@ -52,7 +52,7 @@ describe Organization, type: :model do
     end
   end
 
-    describe '#all_publications' do
+  describe '#all_publications' do
     let!(:org) { create :organization }
     let!(:other_org) { create :organization }
     let!(:child_org) { create :organization, parent: org }
