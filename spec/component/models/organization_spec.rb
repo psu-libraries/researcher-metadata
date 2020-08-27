@@ -52,69 +52,6 @@ describe Organization, type: :model do
     end
   end
 
-  describe '#publications' do
-    let!(:org) { create :organization }
-    let!(:other_org) { create :organization }
-    let!(:user_1) { create :user }
-    let!(:user_2) { create :user }
-    let!(:user_3) { create :user }
-    let!(:user_4) { create :user }
-
-    let!(:pub_1) { create :publication, visible: true, published_on: Date.new(2000, 1, 1) }
-    let!(:pub_2) { create :publication, visible: true, published_on: Date.new(2005, 1, 2) }
-    let!(:pub_3) { create :publication, visible: true, published_on: Date.new(1999, 12, 30) }
-    let!(:pub_4) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_5) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_6) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_7) { create :publication, visible: true, published_on: Date.new(2019, 1, 1) }
-    let!(:pub_8) { create :publication, visible: false, published_on: Date.new(2019, 1, 1) }
-    let!(:pub_9) { create :publication, visible: true, published_on: Date.new(1995, 1, 1) }
-
-
-    before do
-      create :authorship, user: user_1, publication: pub_1 # authored by first member during their first membership
-      create :authorship, user: user_2, publication: pub_1 # also authored by second member during their membership
-      create :authorship, user: user_1, publication: pub_2 # authored by first member after their membership
-      create :authorship, user: user_2, publication: pub_3 # authored by second member before their membership
-      create :authorship, user: user_1, publication: pub_4 # authored by first member during their first membership
-      create :authorship, user: user_2, publication: pub_5 # authored by second member during their membership
-      create :authorship, user: user_3, publication: pub_6 # authored by a non-member during their membership in another org
-      create :authorship, user: user_1, publication: pub_7 # authored by first member during their second membership
-      create :authorship, user: user_1, publication: pub_8 # authored by first member during their second membership, but invisible
-      create :authorship, user: user_4, publication: pub_9 # authored by a member during their membership in another org, and not in the given org
-
-      create :user_organization_membership,
-             user: user_1,
-             organization: org,
-             started_on: Date.new(1990, 1, 1),
-             ended_on: Date.new(2005, 1, 1)
-      create :user_organization_membership,
-             user: user_1,
-             organization: org,
-             started_on: Date.new(2015, 1, 1)
-      create :user_organization_membership,
-             user: user_2,
-             organization: org,
-             started_on: Date.new(1999, 12, 31)
-      create :user_organization_membership,
-             user: user_3,
-             organization: other_org,
-             started_on: Date.new(1980, 1, 1)
-      create :user_organization_membership,
-             user: user_4,
-             organization: other_org,
-             started_on: Date.new(1990, 1, 1),
-             ended_on: Date.new(2000, 1, 1)
-      create :user_organization_membership,
-             user: user_4,
-             organization: org,
-             started_on: Date.new(2015, 1, 1)
-    end
-    it "returns visible, unique publications by users who were members of the organization when they were published" do
-      expect(org.publications).to match_array [pub_1, pub_4, pub_5, pub_7]
-    end
-  end
-
     describe '#all_publications' do
     let!(:org) { create :organization }
     let!(:other_org) { create :organization }
