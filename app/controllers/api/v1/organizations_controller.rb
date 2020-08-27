@@ -8,7 +8,7 @@ module API::V1
 
     def publications
       org = api_token.organizations.visible.find(params[:id])
-      render json: API::V1::PublicationSerializer.new(org.publications)
+      render json: API::V1::PublicationSerializer.new(org.all_publications)
     end
 
     swagger_path '/v1/organizations' do
