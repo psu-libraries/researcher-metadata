@@ -13,6 +13,11 @@ class Organization < ApplicationRecord
     Publication.joins(users: :organizations).where(%{users.id IN (?) AND organizations.id IN (?)}, all_user_ids, descendant_ids).published_during_membership.distinct(:id)
   end
 
+  def publications
+    # A view hack for Rails Admin to get it to render some custom HTML. 
+    # See the `publications` field in the Rails Admin `show` config below.
+  end
+
   rails_admin do
     list do
       field(:id)
@@ -36,6 +41,11 @@ class Organization < ApplicationRecord
       field(:children)
       field(:users)
       field(:user_organization_memberships)
+      field(:publications) do
+        pretty_value do
+          %{<a href="#{RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: bindings[:object].id)}">View Publications</a>}.html_safe
+        end
+      end
     end
   end
 

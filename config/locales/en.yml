@@ -29,6 +29,9 @@ en:
         breadcrumb: "Open Access Settings"
         success: "Open access URL successfully updated for publication \"%{title}\"."
         error: "The requested action is not available for that record."
+      index_publications_by_organization:
+        title: "List of Publications by Organization"
+        breadcrumb: "Publications"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
