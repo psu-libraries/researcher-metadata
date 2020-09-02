@@ -1,8 +1,10 @@
 require_relative '../../app/rails_admin_actions/edit_open_access'
 require_relative '../../app/rails_admin_actions/index_publications_by_organization'
+require_relative '../../app/rails_admin_actions/export_publications_by_organization'
 
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::EditOpenAccess)
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::IndexPublicationsByOrganization)
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsByOrganization)
 
 RailsAdmin.config do |config|
 
@@ -76,6 +78,12 @@ RailsAdmin.config do |config|
       only [:Authorship]
     end
     index_publications_by_organization do
+      only [:Publication]
+      visible do
+        false
+      end
+    end
+    export_publications_by_organization do
       only [:Publication]
       visible do
         false

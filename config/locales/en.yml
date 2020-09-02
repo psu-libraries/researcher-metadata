@@ -31,7 +31,10 @@ en:
         error: "The requested action is not available for that record."
       index_publications_by_organization:
         title: "List of Publications by Organization"
-        breadcrumb: "Publications"
+        breadcrumb: "Publications by Organization"
+      export_publications_by_organization:
+        title: "Export Publications by Organization"
+        breadcrumb: "Export by Organization"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
