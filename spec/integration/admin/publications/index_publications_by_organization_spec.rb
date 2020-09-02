@@ -51,7 +51,7 @@ feature "Admin list of publications by organization", type: :feature do
     end
 
     describe "the page content" do
-      before { visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id) }
+      before { visit_index }
 
       it "shows the publication list heading" do
         expect(page).to have_content 'List of Publications by Organization'
@@ -74,7 +74,7 @@ feature "Admin list of publications by organization", type: :feature do
 
     describe "filtering the list" do
       before do
-        visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id)
+        visit_index
         fill_in 'query', with: 'Two'
         click_on 'Refresh'
       end
@@ -97,7 +97,7 @@ feature "Admin list of publications by organization", type: :feature do
         (3..26).each do |i|
           pub = create :publication, title: "Pub #{i}", published_on: Date.new(2000, 1, 1)
           create :authorship, user: user1, publication: pub
-          visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id)
+          visit_index
         end
       end
 
@@ -120,8 +120,37 @@ feature "Admin list of publications by organization", type: :feature do
       end
     end
 
+    describe "exporting found publications" do
+      before do
+        visit_index
+        click_on "Export found Publications"
+      end
+
+      it "shows the correct page for selecting export options" do
+        expect(page.current_path).to eq RailsAdmin.railtie_routes_url_helpers.export_publications_by_organization_path(model_name: :publication)
+        expect(page).to have_content "Export Publications by Organization"
+      end
+
+      describe "selecting the CSV export" do
+        before do
+          visit_index
+          click_on "Export found Publications"
+          
+          check('all', allow_label_click: true)
+          check('schema_only_id', allow_label_click: true)
+          check('schema_only_title', allow_label_click: true)
+          click_on "Export to csv"
+        end
+
+        it "produces a CSV file" do
+          expect(page.response_headers["Content-Type"]).to eq 'text/csv; charset=us-ascii; header=present'
+          expect(page.response_headers["Content-Disposition"]).to match /attachment; filename=publication.+\.csv/
+        end
+      end
+    end
+
     describe "the page layout" do
-      before { visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id) }
+      before { visit_index }
 
       it_behaves_like "a page with the admin layout"
     end
@@ -135,4 +164,8 @@ feature "Admin list of publications by organization", type: :feature do
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
   end
+end
+
+def visit_index
+  visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id)
 end
