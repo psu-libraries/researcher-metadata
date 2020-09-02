@@ -1,8 +1,9 @@
 require 'integration/integration_spec_helper'
+require 'support/poltergeist'
 require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin list of publications by organization", type: :feature do
-  context "when the current user is an admin" do
+  context "when the current user is an admin", js: true do
     before { authenticate_admin_user }
 
     let(:user1) { create :user }
@@ -63,9 +64,59 @@ feature "Admin list of publications by organization", type: :feature do
         expect(page).to have_content pub2.id
         expect(page).to have_content 'Pub Two'
 
+        expect(page).to have_content '2 publications'
+
         expect(page).not_to have_content 'Pub Three'
         expect(page).not_to have_content 'Pub Four'
         expect(page).not_to have_content 'Pub Five'
+      end
+    end
+
+    describe "filtering the list" do
+      before do
+        visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id)
+        fill_in 'query', with: 'Two'
+        click_on 'Refresh'
+      end
+
+      it "shows information about only the publication for the given organization that match the filter criteria" do
+        expect(page).to have_content pub2.id
+        expect(page).to have_content 'Pub Two'
+
+        expect(page).to have_content '1 publication'
+
+        expect(page).not_to have_content 'Pub One'
+        expect(page).not_to have_content 'Pub Three'
+        expect(page).not_to have_content 'Pub Four'
+        expect(page).not_to have_content 'Pub Five'
+      end
+    end
+
+    describe "pagination of the list" do
+      before do
+        (3..26).each do |i|
+          pub = create :publication, title: "Pub #{i}", published_on: Date.new(2000, 1, 1)
+          create :authorship, user: user1, publication: pub
+          visit RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: org.id)
+        end
+      end
+
+      it "correctly paginates the results with 25 items per page" do
+        expect(page).to have_content "26 publications"
+        expect(page).to have_content "Pub Two"
+        (3..26).each do |i|
+          expect(page).to have_content "Pub #{i}"
+        end
+        expect(page).not_to have_content "Pub One"
+
+        click_link "2"
+
+        expect(page).to have_content "26 publications"
+        expect(page).not_to have_content "Pub Two"
+        (3..26).each do |i|
+          expect(page).not_to have_content "Pub #{i}"
+        end
+        expect(page).to have_content "Pub One"
       end
     end
 
