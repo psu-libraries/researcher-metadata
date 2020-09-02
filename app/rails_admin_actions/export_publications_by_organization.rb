@@ -24,6 +24,9 @@ module RailsAdmin
               options = options.merge(filters: params[:f]) if params[:f].present?
               options = options.merge(bulk_ids: params[:bulk_ids]) if params[:bulk_ids]
               scope = Organization.find(params[:org_id]).all_publications.includes(:organizations)
+              if auth_scope = @authorization_adapter && @authorization_adapter.query(:index, model_config.abstract_model)
+                scope = scope.merge(auth_scope)
+              end
 
               @objects ||= model_config.abstract_model.all(options, scope)
               index_publications_by_organization
