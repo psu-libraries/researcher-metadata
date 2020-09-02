@@ -23,7 +23,7 @@ module RailsAdmin
               options = options.merge(query: params[:query]) if params[:query].present?
               options = options.merge(filters: params[:f]) if params[:f].present?
               options = options.merge(bulk_ids: params[:bulk_ids]) if params[:bulk_ids]
-              scope = Organization.find(params[:org_id]).all_publications.includes(:organizations).page(params[:page])
+              scope = Organization.find(params[:org_id]).all_publications.includes(:organizations)
 
               @objects ||= model_config.abstract_model.all(options, scope)
               index_publications_by_organization
