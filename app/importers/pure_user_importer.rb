@@ -53,8 +53,6 @@ class PureUserImporter
                 m.started_on = a['period']['startDate']
                 m.ended_on = a['period']['endDate']
                 m.save!
-
-                create_parent_org_membership(o, u, m)
               end
             end
           end
@@ -68,26 +66,6 @@ class PureUserImporter
   private
 
   attr_reader :filename
-
-  def create_parent_org_membership(org, user, membership)
-    parent = org.parent
-
-    if parent
-      m = UserOrganizationMembership.find_by(organization: parent,
-                                             user: user,
-                                             imported_from_pure: true,
-                                             pure_identifier: nil) || UserOrganizationMembership.new
-
-      m.organization = parent if m.new_record?
-      m.user = user if m.new_record?
-      m.imported_from_pure = true if m.new_record?
-      m.started_on = membership.started_on
-      m.ended_on = membership.ended_on
-      m.save!
-
-      create_parent_org_membership(parent, user, m)
-    end
-  end
 
   def position_title(association)
     association['jobDescription'] && association['jobDescription']['text'].detect { |text| text['locale'] == 'en_US' }['value']
