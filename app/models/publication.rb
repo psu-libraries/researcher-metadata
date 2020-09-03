@@ -269,9 +269,7 @@ class Publication < ApplicationRecord
       field(:id)
       field(:title)
       field(:secondary_title)
-      field(:organizations, :has_many_association) do
-        searchable [:id]
-      end
+      field(:organizations)
       field(:journal_title)
       field(:volume)
       field(:issue)
