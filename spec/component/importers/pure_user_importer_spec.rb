@@ -58,7 +58,6 @@ describe PureUserImporter do
 
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
-              expect(m1.imported_from_pure).to eq true
               expect(m1.primary).to eq false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
@@ -67,7 +66,6 @@ describe PureUserImporter do
 
               expect(m2.user).to eq u2
               expect(m2.organization).to eq org2
-              expect(m2.imported_from_pure).to eq true
               expect(m2.primary).to eq false
               expect(m2.position_title).to eq 'Professor'
               expect(m2.started_on).to eq Date.new(1997, 9, 1)
@@ -76,7 +74,6 @@ describe PureUserImporter do
 
               expect(m3.user).to eq u2
               expect(m3.organization).to eq org3
-              expect(m3.imported_from_pure).to eq true
               expect(m3.primary).to eq false
               expect(m3.position_title).to eq 'Senior Associate Dean'
               expect(m3.started_on).to eq Date.new(1997, 9, 1)
@@ -90,7 +87,6 @@ describe PureUserImporter do
                                                 pure_identifier: '24766061',
                                                 user: other_user,
                                                 organization: other_org,
-                                                imported_from_pure: false,
                                                 primary: true,
                                                 position_title: 'Existing Title',
                                                 started_on: Date.new(1900, 1, 1),
@@ -112,7 +108,6 @@ describe PureUserImporter do
               # This membership was created from the data in the import.
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
-              expect(m1.imported_from_pure).to eq true
               expect(m1.primary).to eq false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
@@ -122,7 +117,6 @@ describe PureUserImporter do
               # This membership was also created from the data in the import.
               expect(m2.user).to eq u2
               expect(m2.organization).to eq org2
-              expect(m2.imported_from_pure).to eq true
               expect(m2.primary).to eq false
               expect(m2.position_title).to eq 'Professor'
               expect(m2.started_on).to eq Date.new(1997, 9, 1)
@@ -134,7 +128,6 @@ describe PureUserImporter do
               # the import.
               expect(m3.user).to eq u2
               expect(m3.organization).to eq org3
-              expect(m3.imported_from_pure).to eq true
               expect(m3.primary).to eq false
               expect(m3.position_title).to eq 'Senior Associate Dean'
               expect(m3.started_on).to eq Date.new(1997, 9, 1)

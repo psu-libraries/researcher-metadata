@@ -47,7 +47,6 @@ class PureUserImporter
                 m.pure_identifier = a['pureId'] if m.new_record?
                 m.organization = o
                 m.user = u
-                m.imported_from_pure = true
                 m.primary = a['isPrimaryAssociation']
                 m.position_title = position_title(a)
                 m.started_on = a['period']['startDate']

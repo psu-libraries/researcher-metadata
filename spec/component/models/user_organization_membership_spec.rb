@@ -8,7 +8,6 @@ describe 'the user_organization_memberships table', type: :model do
   it { is_expected.to have_db_column(:user_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:organization_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:pure_identifier).of_type(:string) }
-  it { is_expected.to have_db_column(:imported_from_pure).of_type(:boolean) }
   it { is_expected.to have_db_column(:position_title).of_type(:string) }
   it { is_expected.to have_db_column(:primary).of_type(:boolean) }
   it { is_expected.to have_db_column(:started_on).of_type(:date) }

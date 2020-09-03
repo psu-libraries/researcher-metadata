@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_08_07_195118) do
+ActiveRecord::Schema.define(version: 2020_09_03_220756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -391,7 +391,6 @@ ActiveRecord::Schema.define(version: 2020_08_07_195118) do
     t.integer "user_id", null: false
     t.integer "organization_id", null: false
     t.string "pure_identifier"
-    t.boolean "imported_from_pure"
     t.string "position_title"
     t.boolean "primary"
     t.datetime "updated_by_user_at"
