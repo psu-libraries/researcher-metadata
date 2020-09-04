@@ -42,9 +42,16 @@ describe UserOrganizationMembership, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:user) }
     it { is_expected.to validate_presence_of(:organization) }
+    it { is_expected.to validate_inclusion_of(:import_source).in_array(['HR', 'Pure']).allow_nil }
   end
 
-  describe 'name' do
+  describe '.import_sources' do
+    it 'returns an array of the possible data import sources for a membership' do
+      expect(UserOrganizationMembership.import_sources).to eq ['HR', 'Pure']
+    end
+  end
+
+  describe '#name' do
     let(:u) { User.new(first_name: "Sue", last_name: "Tester") }
     let(:o) { Organization.new(name: "Science Department") }
     let(:m) { UserOrganizationMembership.new(user: u, organization: o) }
