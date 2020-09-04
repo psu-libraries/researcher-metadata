@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_04_170213) do
+ActiveRecord::Schema.define(version: 2020_09_04_171117) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -399,6 +399,8 @@ ActiveRecord::Schema.define(version: 2020_09_04_170213) do
     t.date "started_on"
     t.date "ended_on"
     t.string "orcid_resource_identifier"
+    t.string "import_source"
+    t.index ["import_source"], name: "index_user_organization_memberships_on_import_source"
     t.index ["organization_id"], name: "index_user_organization_memberships_on_organization_id"
     t.index ["source_identifier"], name: "index_user_organization_memberships_on_source_identifier"
     t.index ["user_id"], name: "index_user_organization_memberships_on_user_id"
