@@ -101,23 +101,30 @@ describe PureUserImporter do
                                                  position_title: 'Existing Title 2',
                                                  started_on: Date.new(1900, 1, 1),
                                                  ended_on: Date.new(2000, 1, 1) }
+            let!(:existing_membership3) { create :user_organization_membership,
+                                                 import_source: 'HR',
+                                                 source_identifier: nil,
+                                                 user: user2,
+                                                 organization: org2,
+                                                 primary: nil,
+                                                 position_title: 'Existing Title 3',
+                                                 started_on: Date.new(1997, 9, 1),
+                                                 ended_on: Date.new(2000, 1, 1) }                 
             let!(:user1) { create :user, webaccess_id: 'sat1' }
+            let!(:user2) { create :user, webaccess_id: 'bbt2' }
             let(:other_user) { create :user }
             let(:other_org) { create :organization }
 
             it "creates a new membership for each new association and updates the existing memberships" do
-              expect { importer.call }.to change { UserOrganizationMembership.count }.by 2
-
-              u1 = user1
-              u2 = User.find_by(webaccess_id: 'bbt2')
+              expect { importer.call }.to change { UserOrganizationMembership.count }.by 1
 
               m1 = UserOrganizationMembership.find_by(source_identifier: '21279128', import_source: 'Pure')
-              m2 = UserOrganizationMembership.find_by(source_identifier: '21309545', import_source: 'Pure')
+              m2 = existing_membership3.reload
               m3 = existing_membership1.reload
               m4 = existing_membership2.reload
 
               # This membership was created from the data in the import.
-              expect(m1.user).to eq u1
+              expect(m1.user).to eq user1
               expect(m1.organization).to eq org1
               expect(m1.primary).to eq false
               expect(m1.position_title).to eq 'Associate Professor'
@@ -125,8 +132,11 @@ describe PureUserImporter do
               expect(m1.ended_on).to eq Date.new(1990, 8, 14)
               expect(m1.updated_by_user_at).to eq nil
 
-              # This membership was also created from the data in the import.
-              expect(m2.user).to eq u2
+              # A membership with a matching user, organization, and start date had already
+              # been imported from HR data, so overwrite it with the data from Pure
+              expect(m2.import_source).to eq 'Pure'
+              expect(m2.source_identifier).to eq '21309545'
+              expect(m2.user).to eq user2
               expect(m2.organization).to eq org2
               expect(m2.primary).to eq false
               expect(m2.position_title).to eq 'Professor'
@@ -137,7 +147,7 @@ describe PureUserImporter do
               # A membership with this Pure identifier already existed with different
               # data than the data in the import, so it was updated with the data in
               # the import.
-              expect(m3.user).to eq u2
+              expect(m3.user).to eq user2
               expect(m3.organization).to eq org3
               expect(m3.primary).to eq false
               expect(m3.position_title).to eq 'Senior Associate Dean'
