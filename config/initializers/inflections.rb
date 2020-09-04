@@ -19,4 +19,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'DOI'
   inflect.acronym 'WOS'
   inflect.acronym 'URLs'
+  inflect.acronym 'HR'
 end
