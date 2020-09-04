@@ -1193,7 +1193,7 @@ describe User, type: :model do
       before { create :user_organization_membership,
                       user: user,
                       organization: org,
-                      pure_identifier: nil }
+                      import_source: nil }
       it "returns nil" do
         expect(user.organization_name).to be_nil
       end
@@ -1202,7 +1202,7 @@ describe User, type: :model do
       before { create :user_organization_membership,
                       user: user,
                       organization: org,
-                      pure_identifier: 'pure123' }
+                      import_source: 'Pure' }
       it "returns the name of the organization" do
         expect(user.organization_name).to eq 'My Org'
       end
@@ -1224,7 +1224,7 @@ describe User, type: :model do
       before { create :user_organization_membership,
                       user: user,
                       organization: org1,
-                      pure_identifier: nil }
+                      import_source: nil }
       it "returns nil" do
         expect(user.primary_organization_membership).to be_nil
       end
@@ -1233,15 +1233,15 @@ describe User, type: :model do
       let!(:membership1) { create :user_organization_membership,
                            user: user,
                            organization: org1,
-                           pure_identifier: nil }
+                           import_source: nil }
       let!(:membership2) { create :user_organization_membership,
                            user: user,
                            organization: org2,
-                           pure_identifier: 'pure123' }
+                           import_source: 'Pure' }
       let!(:membership3) { create :user_organization_membership,
                            user: user,
                            organization: org3,
-                           pure_identifier: 'pure456' }
+                           import_source: 'Pure' }
       it "returns the first record of membership in an organization from Pure" do
         expect(user.primary_organization_membership).to eq membership2
       end

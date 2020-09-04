@@ -18,7 +18,8 @@ class UserOrganizationMembership < ApplicationRecord
       field(:started_on)
       field(:ended_on)
 
-      field(:pure_identifier) { read_only true }
+      field(:import_source) { read_only true }
+      field(:source_identifier) { read_only true }
       field(:primary) { read_only true }
       field(:updated_by_user_at) { read_only true }
     end

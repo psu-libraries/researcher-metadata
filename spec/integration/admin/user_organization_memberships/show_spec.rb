@@ -7,7 +7,8 @@ feature "Admin user organization membership detail page", type: :feature do
   let!(:membership) { create :user_organization_membership,
                              user: user,
                              organization: org,
-                             pure_identifier: 'pure-abc123',
+                             import_source: 'Pure',
+                             source_identifier: 'pure-abc123',
                              position_title: 'test position',
                              started_on: Date.new(2000, 1, 1),
                              ended_on: Date.new(2010, 2, 2),
@@ -33,6 +34,10 @@ feature "Admin user organization membership detail page", type: :feature do
         expect(page).to have_link 'Test Org'
       end
 
+      it "shows the membership's import source" do
+        expect(page).to have_content 'Pure'
+      end
+      
       it "shows the membership's Pure identifier" do
         expect(page).to have_content 'pure-abc123'
       end

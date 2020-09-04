@@ -161,7 +161,7 @@ class User < ApplicationRecord
   end
 
   def primary_organization_membership
-    user_organization_memberships.where.not(pure_identifier: nil).first
+    user_organization_memberships.where(import_source: 'Pure').first
   end
 
   def orcid

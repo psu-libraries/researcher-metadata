@@ -42,9 +42,12 @@ class PureUserImporter
               o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
 
               if o
-                m = UserOrganizationMembership.find_by(pure_identifier: a['pureId']) || UserOrganizationMembership.new
+                m = UserOrganizationMembership.find_by(source_identifier: a['pureId'], import_source: 'Pure') || UserOrganizationMembership.new
 
-                m.pure_identifier = a['pureId'] if m.new_record?
+                if m.new_record?
+                  m.import_source = 'Pure'
+                  m.source_identifier = a['pureId']
+                end
                 m.organization = o
                 m.user = u
                 m.primary = a['isPrimaryAssociation']

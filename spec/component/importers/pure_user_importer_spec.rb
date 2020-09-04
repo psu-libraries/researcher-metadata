@@ -52,9 +52,9 @@ describe PureUserImporter do
               u1 = User.find_by(webaccess_id: 'sat1')
               u2 = User.find_by(webaccess_id: 'bbt2')
 
-              m1 = UserOrganizationMembership.find_by(pure_identifier: '21279128')
-              m2 = UserOrganizationMembership.find_by(pure_identifier: '21309545')
-              m3 = UserOrganizationMembership.find_by(pure_identifier: '24766061')
+              m1 = UserOrganizationMembership.find_by(source_identifier: '21279128', import_source: 'Pure')
+              m2 = UserOrganizationMembership.find_by(source_identifier: '21309545', import_source: 'Pure')
+              m3 = UserOrganizationMembership.find_by(source_identifier: '24766061', import_source: 'Pure')
 
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
@@ -83,14 +83,24 @@ describe PureUserImporter do
           end
 
           context "when organization memberships already exist for associations described in the .json file" do
-            let!(:existing_membership) { create :user_organization_membership,
-                                                pure_identifier: '24766061',
-                                                user: other_user,
-                                                organization: other_org,
-                                                primary: true,
-                                                position_title: 'Existing Title',
-                                                started_on: Date.new(1900, 1, 1),
-                                                ended_on: Date.new(2000, 1, 1) }
+            let!(:existing_membership1) { create :user_organization_membership,
+                                                 import_source: 'Pure',
+                                                 source_identifier: '24766061',
+                                                 user: other_user,
+                                                 organization: other_org,
+                                                 primary: true,
+                                                 position_title: 'Existing Title',
+                                                 started_on: Date.new(1900, 1, 1),
+                                                 ended_on: Date.new(2000, 1, 1) }
+            let!(:existing_membership2) { create :user_organization_membership,
+                                                 import_source: nil,
+                                                 source_identifier: '21279128',
+                                                 user: other_user,
+                                                 organization: other_org,
+                                                 primary: true,
+                                                 position_title: 'Existing Title 2',
+                                                 started_on: Date.new(1900, 1, 1),
+                                                 ended_on: Date.new(2000, 1, 1) }
             let!(:user1) { create :user, webaccess_id: 'sat1' }
             let(:other_user) { create :user }
             let(:other_org) { create :organization }
@@ -101,9 +111,10 @@ describe PureUserImporter do
               u1 = user1
               u2 = User.find_by(webaccess_id: 'bbt2')
 
-              m1 = UserOrganizationMembership.find_by(pure_identifier: '21279128')
-              m2 = UserOrganizationMembership.find_by(pure_identifier: '21309545')
-              m3 = existing_membership.reload
+              m1 = UserOrganizationMembership.find_by(source_identifier: '21279128', import_source: 'Pure')
+              m2 = UserOrganizationMembership.find_by(source_identifier: '21309545', import_source: 'Pure')
+              m3 = existing_membership1.reload
+              m4 = existing_membership2.reload
 
               # This membership was created from the data in the import.
               expect(m1.user).to eq u1
@@ -133,6 +144,19 @@ describe PureUserImporter do
               expect(m3.started_on).to eq Date.new(1997, 9, 1)
               expect(m3.ended_on).to eq nil
               expect(m3.updated_by_user_at).to eq nil
+
+              # This membership has the same source identifier as one of the Pure memberships
+              # that is being imported, but it does not list Pure as the import source, so it
+              # should not be updated.
+              expect(m4.import_source).to eq nil
+              expect(m4.source_identifier).to eq '21279128'
+              expect(m4.user).to eq other_user
+              expect(m4.organization).to eq other_org
+              expect(m4.primary).to eq true
+              expect(m4.position_title).to eq 'Existing Title 2'
+              expect(m4.started_on).to eq Date.new(1900, 1, 1)
+              expect(m4.ended_on).to eq Date.new(2000, 1, 1)
+              expect(m4.updated_by_user_at).to eq nil
             end
           end
         end

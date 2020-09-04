@@ -400,7 +400,8 @@ describe "editing profile preferences" do
                  position_title: "Professor",
                  started_on: Date.new(2010, 1, 1),
                  ended_on: Date.new(2015, 12, 31),
-                 pure_identifier: '123456789',
+                 import_source: 'Pure',
+                 source_identifier: '123456789',
                  orcid_resource_identifier: orcid_employment_id
 
           visit profile_bio_path

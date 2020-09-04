@@ -110,7 +110,8 @@ feature "Profile page", type: :feature do
     create :user_organization_membership,
            user: user,
            organization: org,
-           pure_identifier: 'pure123'
+           import_source: 'Pure',
+           source_identifier: 'pure123'
 
     create :researcher_fund, grant: grant1, user: user
     create :researcher_fund, grant: grant2, user: user
