@@ -7,7 +7,8 @@ describe 'the user_organization_memberships table', type: :model do
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:user_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:organization_id).of_type(:integer).with_options(null: false) }
-  it { is_expected.to have_db_column(:pure_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:source_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:import_source).of_type(:string) }
   it { is_expected.to have_db_column(:position_title).of_type(:string) }
   it { is_expected.to have_db_column(:primary).of_type(:boolean) }
   it { is_expected.to have_db_column(:started_on).of_type(:date) }
@@ -19,7 +20,8 @@ describe 'the user_organization_memberships table', type: :model do
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :organization_id }
-  it { is_expected.to have_db_index :pure_identifier }
+  it { is_expected.to have_db_index :source_identifier }
+  it { is_expected.to have_db_index :import_source }
 
   it { is_expected.to have_db_foreign_key(:user_id) }
   it { is_expected.to have_db_foreign_key(:organization_id) }

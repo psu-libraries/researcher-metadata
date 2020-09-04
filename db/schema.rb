@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_03_220756) do
+ActiveRecord::Schema.define(version: 2020_09_04_170213) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -390,7 +390,7 @@ ActiveRecord::Schema.define(version: 2020_09_03_220756) do
   create_table "user_organization_memberships", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "organization_id", null: false
-    t.string "pure_identifier"
+    t.string "source_identifier"
     t.string "position_title"
     t.boolean "primary"
     t.datetime "updated_by_user_at"
@@ -400,7 +400,7 @@ ActiveRecord::Schema.define(version: 2020_09_03_220756) do
     t.date "ended_on"
     t.string "orcid_resource_identifier"
     t.index ["organization_id"], name: "index_user_organization_memberships_on_organization_id"
-    t.index ["pure_identifier"], name: "index_user_organization_memberships_on_pure_identifier"
+    t.index ["source_identifier"], name: "index_user_organization_memberships_on_source_identifier"
     t.index ["user_id"], name: "index_user_organization_memberships_on_user_id"
   end
 
