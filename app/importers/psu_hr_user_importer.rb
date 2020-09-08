@@ -12,7 +12,7 @@ class PSUHRUserImporter < CSVImporter
               m.organization = organization(row)
               m.user = existing_user
               m.import_source = 'HR'
-              m.started_on = row[:academic_apointment_start_date]
+              m.started_on = row[:academic_appointment_start_date]
               m.save!
             end
           end
@@ -29,7 +29,7 @@ class PSUHRUserImporter < CSVImporter
             m.organization = organization(row)
             m.user = u
             m.import_source = 'HR'
-            m.started_on = row[:academic_apointment_start_date]
+            m.started_on = row[:academic_appointment_start_date]
             m.save!
           end
         end
