@@ -64,7 +64,8 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:grants).through(:research_funds) }
     it { is_expected.to have_many(:waivers).through(:authorships) }
     it { is_expected.to have_many(:non_duplicate_group_memberships).class_name(:NonDuplicatePublicationGroupMembership).inverse_of(:publication) }
-    it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships)}
+    it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships) }
+    it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
@@ -1559,6 +1560,23 @@ describe Publication, type: :model do
 
         expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
       end
+    end
+  end
+
+  describe '#all_non_duplicate_ids' do
+    let!(:pub) { create :publication }
+
+    let!(:nd1) { create :publication, id: 900000 }
+    let!(:nd2) { create :publication, id: 800000 }
+    let!(:nd3) { create :publication }
+
+    before do
+      create :non_duplicate_publication_group, publications: [pub, nd1, nd2]
+      create :non_duplicate_publication_group, publications: [pub, nd2]
+    end
+
+    it "returns the IDs of all publications that are known to not be duplicates of the publication" do
+      expect(pub.all_non_duplicate_ids).to eq [800000, 900000]
     end
   end
 end

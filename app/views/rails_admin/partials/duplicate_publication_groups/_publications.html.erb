@@ -123,6 +123,14 @@
         <% end %>
       </tr>
       <tr>
+        <td class="publication-field-label">Known Non-duplicates</td>
+        <% publications.each do |p| %>
+          <td class="publication-field" title="<%= p.all_non_duplicate_ids.join(', ') %>">
+            <%= p.all_non_duplicate_ids.join(', ') %>
+          </td>
+        <% end %>
+      </tr>
+      <tr>
         <td class="publication-field-label">Created at</td>
         <% publications.each do |p| %>
           <td class="publication-field" title="<%= p.created_at %>">

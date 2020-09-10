@@ -33,6 +33,10 @@ class Publication < ApplicationRecord
   has_many :non_duplicate_groups,
            class_name: :NonDuplicatePublicationGroup,
            through: :non_duplicate_group_memberships
+  has_many :non_duplicates,
+           through: :non_duplicate_groups,
+           class_name: :Publication,
+           source: :publications
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
@@ -449,6 +453,10 @@ class Publication < ApplicationRecord
 
   def orcid_allowed?
     doi.present? || url.present? || preferred_open_access_url.present?
+  end
+
+  def all_non_duplicate_ids
+    (non_duplicate_ids.uniq - [id]).sort
   end
 
   def merge!(publications_to_merge)
