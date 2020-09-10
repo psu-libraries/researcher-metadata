@@ -52,6 +52,38 @@ describe Organization, type: :model do
     end
   end
 
+  describe '#users' do
+    let!(:org) { create :organization }
+
+    let!(:u1) { create :user }
+    let!(:u2) { create :user }
+    let!(:u3) { create :user }
+
+    before do
+      create :user_organization_membership,
+             user: u1,
+             organization: org,
+             started_on: Date.new(2000, 1, 1),
+             ended_on: Date.new(2005, 1, 1),
+             position_title: "Old Position"
+      create :user_organization_membership,
+             user: u1,
+             organization: org,
+             started_on: Date.new(2005, 1, 2),
+             ended_on: Date.new(2010, 1, 1),
+             position_title: "New Position"
+
+      create :user_organization_membership,
+             user: u2,
+             organization: org,
+             started_on: Date.new(2020, 1, 1)
+    end
+    
+    it "returns a collection of unique users who have been members of the organization" do
+      expect(org.users).to match_array [u1, u2]
+    end
+  end
+
   describe '#all_publications' do
     let!(:org) { create :organization }
     let!(:other_org) { create :organization }

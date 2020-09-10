@@ -3,7 +3,7 @@ class Organization < ApplicationRecord
   belongs_to :owner, class_name: :User, optional: true
   has_many :children, class_name: :Organization, foreign_key: :parent_id
   has_many :user_organization_memberships, inverse_of: :organization
-  has_many :users, through: :user_organization_memberships
+  has_many :users, -> { distinct(:id) }, through: :user_organization_memberships
 
   validates :name, presence: true
 
