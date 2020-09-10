@@ -34,6 +34,9 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        publication_type: "Academic Journal Article",
                        duplicate_group: pub2_group }
 
+  let!(:nd_pub1) { create :publication }
+  let!(:nd_pub2) { create :publication }
+
   let(:pub1_group) { nil }
   let(:pub2_group) { nil }
 
@@ -68,6 +71,8 @@ feature "Admin duplicate publication group detail page", type: :feature do
     create :publication_import, publication: pub1, source: "Pure", source_identifier: "pure-xyz789"
     create :publication_import, publication: pub2, source: "Activity Insight", source_identifier: "ai-abc123"
     create :publication_import, publication: pub2, source: "Activity Insight", source_identifier: "ai-xyz789"
+
+    create :non_duplicate_publication_group, publications: [pub1, nd_pub1, nd_pub2]
   end
 
   context "when the current user is an admin" do
@@ -166,6 +171,15 @@ feature "Admin duplicate publication group detail page", type: :feature do
           expect(page).to have_content "pure-xyz789"
           expect(page).to have_content "ai-abc123"
           expect(page).to have_content "ai-xyz789"
+        end
+
+        it "show the creation times for the publications in the group" do
+          expect(page).to have_content pub1.created_at
+          expect(page).to have_content pub2.created_at
+        end
+
+        it "shows the IDs of non-duplicate publication records for the publications in the group" do
+          expect(page).to have_content "#{nd_pub1.id}, #{nd_pub2.id}"
         end
 
         it "shows the selection controls" do
