@@ -61,7 +61,7 @@ describe "editing profile preferences" do
         end
 
         it "displays a link to manage the profile" do
-          expect(page).to have_link "Manage my profile", href: edit_profile_publications_path
+          expect(page).to have_link "Manage my profile", href: profile_bio_path
         end
       end
       context "when logged in as a different user" do
