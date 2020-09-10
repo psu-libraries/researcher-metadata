@@ -122,6 +122,14 @@
           </td>
         <% end %>
       </tr>
+      <tr>
+        <td class="publication-field-label">Created at</td>
+        <% publications.each do |p| %>
+          <td class="publication-field" title="<%= p.created_at %>">
+            <%= p.created_at %>
+          </td>
+        <% end %>
+      </tr>
       <% if publications.count > 1 %>
         <tr>
           <td class="publication-field-label">Merge Target</td>

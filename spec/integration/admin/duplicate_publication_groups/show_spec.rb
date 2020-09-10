@@ -168,6 +168,10 @@ feature "Admin duplicate publication group detail page", type: :feature do
           expect(page).to have_content "ai-xyz789"
         end
 
+        it "show the creation times for the publications in the group" do
+          expect(page).to have_content pub1.created_at
+          expect(page).to have_content pub2.created_at
+        end
         it "shows the selection controls" do
           expect(page).to have_content "Select"
           expect(page).to have_content "Merge Target"
