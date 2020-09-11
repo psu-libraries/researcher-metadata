@@ -1,8 +1,12 @@
 class OAIImporter
   def call
+    puts "Loading publication records from #{repo_url} ..." unless Rails.env.test?
     load_records
+    pbar = ProgressBar.create(title: 'Importing publications', total: repo_records.count) unless Rails.env.test?
 
     repo_records.each do |rr|
+      pbar.increment unless Rails.env.test?
+
       if rr.importable?
         ActiveRecord::Base.transaction do
           existing_import = PublicationImport.find_by(source: import_source,
@@ -65,6 +69,7 @@ class OAIImporter
         end
       end
     end
+    pbar.finish unless Rails.env.test?
     nil
   end
 
