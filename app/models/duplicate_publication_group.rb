@@ -6,26 +6,30 @@ class DuplicatePublicationGroup < ApplicationRecord
                               total: Publication.count) unless Rails.env.test?
 
     Publication.find_each do |p|
-      if p.imports.count == 1 && p.imports.detect { |i| i.source == 'Activity Insight' }
-        duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL)},
-                                      "#{p.title}#{p.secondary_title}",
-                                      p.published_on.try(:year))
-                                .where.not(id: p.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: p.id))
-      else
-        duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)},
-                                      "#{p.title}#{p.secondary_title}",
-                                      p.published_on.try(:year),
-                                      p.doi)
-                                .where.not(id: p.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: p.id))
-      end
-
-      group_publications(duplicates)
+      group_duplicates_of(p)
 
       pbar.increment unless Rails.env.test?
     end
     pbar.finish unless Rails.env.test?
 
     nil
+  end
+
+  def self.group_duplicates_of(publication)
+    if publication.imports.count == 1 && publication.imports.detect { |i| i.source == 'Activity Insight' }
+      duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL)},
+                                     "#{publication.title}#{publication.secondary_title}",
+                                     publication.published_on.try(:year))
+                               .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
+    else
+      duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)},
+                                     "#{publication.title}#{publication.secondary_title}",
+                                     publication.published_on.try(:year),
+                                     publication.doi)
+                               .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
+    end
+
+    group_publications(duplicates)
   end
 
   def self.group_publications(publications)

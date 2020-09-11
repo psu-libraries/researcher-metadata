@@ -1,9 +1,10 @@
 class PSUDickinsonPublicationImporter < OAIImporter
-  def creator_type
-    PSULawSchoolOAICreator
-  end
 
   private
+
+  def record_type
+    PSULawSchoolOAIRepoRecord
+  end
 
   def import_source
     "Dickinson Law IDEAS Repo"

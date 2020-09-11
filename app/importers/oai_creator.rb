@@ -15,8 +15,8 @@ class OAICreator
     fn.strip.split(' ').first.strip if fn
   end
 
-  def user_matches
-    matching_users.one? ? matching_users : []
+  def user_match
+    matching_users.one? ? matching_users.first : nil
   end
 
   def ambiguous_user_matches

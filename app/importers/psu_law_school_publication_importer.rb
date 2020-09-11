@@ -1,10 +1,11 @@
 class PSULawSchoolPublicationImporter < OAIImporter
-  def creator_type
-    PSULawSchoolOAICreator
-  end
 
   private
 
+  def record_type
+    PSULawSchoolOAIRepoRecord
+  end
+  
   def import_source
     "Penn State Law eLibrary Repo"
   end
