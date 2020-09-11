@@ -55,12 +55,12 @@ class OAIImporter
                 a.save!
               end
             end
-          end
 
-          DuplicatePublicationGroup.group_duplicates_of(p)
+            DuplicatePublicationGroup.group_duplicates_of(p)
 
-          if p.reload.duplicate_group
-            p.update_attributes!(visible: false)
+            if p.reload.duplicate_group
+              p.update_attributes!(visible: false)
+            end
           end
         end
       end
