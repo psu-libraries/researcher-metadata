@@ -36,6 +36,7 @@ module RailsAdmin
             if request.get?
               render :export_publications_to_activity_insight
             elsif request.post?
+              byebug
               redirect_to '/'
             end
           end
