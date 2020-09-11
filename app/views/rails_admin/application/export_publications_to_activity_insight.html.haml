@@ -1,0 +1,25 @@
+- params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
+- org_name = Organization.find(params[:org_id]).name
+
+= "You have selected <strong>#{@objects.count}</strong> publications from #{org_name} to integrate with Activity Insight.".html_safe
+
+%br
+%br
+
+= "Select which system you would like to integrate with below.  It is recommended to integrate with beta before production to check for errors."
+
+= form_tag export_publications_to_activity_insight_path(params.merge(all: true)), method: 'post', class: 'form-horizontal' do
+
+  .form-group.form-actions
+    .row.integration_buttons
+      %button.btn.btn-primary{type: "submit", name: "beta"}
+        %i.icon-circle-arrow-up
+        = "Integrate with Beta"
+    .row.integration_buttons
+      %button.btn.btn-primary{type: "submit", name: "production"}
+        %i.icon-circle-arrow-up
+        = "Integrate with Production"
+    .row.integration_buttons
+      %button.btn{type: "submit", name: "_continue"}
+        %i.icon-arrow-left
+        = "Back"

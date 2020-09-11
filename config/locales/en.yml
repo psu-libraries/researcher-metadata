@@ -35,6 +35,10 @@ en:
       export_publications_by_organization:
         title: "Export Publications by Organization"
         breadcrumb: "Export by Organization"
+      export_publications_to_activity_insight:
+        link: "<i class='icon-circle-arrow-up'></i> Export to Activity Insight"
+        breadcrumb: "Export Publications to Activity Insight"
+        title: "Export Publications to Activity Insight"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
