@@ -1,0 +1,19 @@
+<metadata>
+  <oai_dc:dc xmlns:oai_dc="http://www.openarchives.org/OAI/2.0/oai_dc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.openarchives.org/OAI/2.0/oai_dc/ http://www.openarchives.org/OAI/2.0/oai_dc.xsd">
+    <dc:title>Test Law Article</dc:title>
+    <dc:creator>Testington, Allie</dc:creator>
+    <dc:creator>Testworth, Roger</dc:creator>
+    <dc:description>This is a description of the article.</dc:description>
+    <dc:date>2012-04-23T02:31:14Z</dc:date>
+    <dc:type>text</dc:type>
+    <dc:format>application/pdf</dc:format>
+    <dc:identifier>https://elibrary.law.psu.edu/abc/etc/etc</dc:identifier>
+    <dc:identifier>https://elibrary.law.psu.edu/cgi/viewcontent.cgi</dc:identifier>
+    <dc:source>Arbitration Law Review</dc:source>
+    <dc:publisher>Penn State Law eLibrary</dc:publisher>
+    <dc:subject>Rule of Law</dc:subject>
+    <dc:subject>Transnational Law</dc:subject>
+  </oai_dc:dc>
+</metadata>
