@@ -15,10 +15,6 @@ class OAIRepoRecord
     Date.parse(attribute('date'))
   end
 
-  def source
-    attribute('source')
-  end
-
   def publisher
     attribute('publisher')
   end
