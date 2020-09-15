@@ -6,7 +6,7 @@ class PSULawSchoolOAIRepoRecord < OAIRepoRecord
     [
       "Journal Articles",
       "Penn State International Law Review",
-      "Penn State Journal of Law & International Affairs",
+      "Penn State Journal of Law  International Affairs",
       "Arbitration Law Review",
       "Faculty Scholarly Works",
       "Dickinson Law Review"
