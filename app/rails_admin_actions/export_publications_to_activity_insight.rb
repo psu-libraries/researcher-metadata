@@ -36,7 +36,8 @@ module RailsAdmin
             if request.get?
               render :export_publications_to_activity_insight
             elsif request.post?
-              redirect_to '/'
+              ActivityInsightPublicationExporter.new(@objects, 'beta').export
+              redirect_to '/admin/organization'
             end
           end
         end
