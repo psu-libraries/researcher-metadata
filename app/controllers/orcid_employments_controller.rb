@@ -2,7 +2,7 @@ class OrcidEmploymentsController < UserController
   before_action :authenticate!
 
   def create
-    membership = current_user.primary_organization_membership
+    membership = current_user.user_organization_memberships.find(params[:membership_id])
 
     if membership
       if membership.orcid_resource_identifier.present?
