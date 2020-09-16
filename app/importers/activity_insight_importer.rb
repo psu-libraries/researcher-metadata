@@ -186,6 +186,12 @@ class ActivityInsightImporter
                 c.save!
               end
             end
+
+            DuplicatePublicationGroup.group_duplicates_of(pub_record)
+
+            if pub_record.reload.duplicate_group
+              pub_record.update_attributes!(visible: false)
+            end
           end
         end
 

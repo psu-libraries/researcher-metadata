@@ -22,6 +22,8 @@ describe ActivityInsightImporter do
     )
   end
   describe '#call' do
+    let!(:duplicate_pub) { create :publication, title: "First Test Publication With a Really Unique Title" }
+
     context "when the users being imported do not exist in the database" do
       it "creates new user records for each imported user" do
         expect { importer.call }.to change { User.count }.by 2
@@ -741,7 +743,7 @@ describe ActivityInsightImporter do
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
 
-          expect(p1.title).to eq 'First Test Publication'
+          expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
           expect(p1.publication_type).to eq 'Journal Article'
           expect(p1.journal_title).to eq 'Test Journal 1'
           expect(p1.publisher).to eq 'Test Publisher 1'
@@ -756,7 +758,6 @@ describe ActivityInsightImporter do
           expect(p1.abstract).to eq 'First publication abstract.'
           expect(p1.authors_et_al).to eq true
           expect(p1.published_on).to eq Date.new(2019, 1, 1)
-          expect(p1.visible).to eq true
           expect(p1.updated_by_user_at).to eq nil
           expect(p1.doi).to eq nil
 
@@ -797,6 +798,26 @@ describe ActivityInsightImporter do
           expect(p3.visible).to eq true
           expect(p3.updated_by_user_at).to eq nil
           expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+        end
+
+        it "groups duplicates of new publication records" do
+          expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                          source_identifier: '190706413568').publication
+
+          group = p1.duplicate_group
+          
+          expect(group.publications).to match_array [p1, duplicate_pub]
+        end
+
+        it "hides new publications that might be duplicates" do
+          importer.call
+
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                          source_identifier: '190706413568').publication
+
+          expect(p1.visible).to eq false
         end
 
         it "creates a new authorship record for every faculty author for each imported publication" do
@@ -925,7 +946,7 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(p1.title).to eq 'First Test Publication'
+            expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
             expect(p1.publisher).to eq 'Test Publisher 1'
@@ -940,7 +961,6 @@ describe ActivityInsightImporter do
             expect(p1.abstract).to eq 'First publication abstract.'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq nil
   
@@ -981,6 +1001,26 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          end
+
+          it "groups duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            group = p1.duplicate_group
+
+            expect(group.publications).to match_array [p1, duplicate_pub]
+          end
+
+          it "hides new publications that might be duplicates" do
+            importer.call
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            expect(p1.visible).to eq false
           end
 
           context "when an authorship already exists for the existing publication" do
@@ -1130,7 +1170,7 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(p1.title).to eq 'First Test Publication'
+            expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
             expect(p1.publisher).to eq 'Test Publisher 1'
@@ -1145,7 +1185,6 @@ describe ActivityInsightImporter do
             expect(p1.abstract).to eq 'First publication abstract.'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq nil
   
@@ -1186,6 +1225,26 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          end
+
+          it "groups duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            group = p1.duplicate_group
+            
+            expect(group.publications).to match_array [p1, duplicate_pub]
+          end
+
+          it "hides new publications that might be duplicates" do
+            importer.call
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            expect(p1.visible).to eq false
           end
 
           context "when an authorship already exists for the existing publication" do
@@ -2072,7 +2131,7 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(p1.title).to eq 'First Test Publication'
+            expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
             expect(p1.publisher).to eq 'Test Publisher 1'
@@ -2087,7 +2146,6 @@ describe ActivityInsightImporter do
             expect(p1.abstract).to eq 'First publication abstract.'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq nil
   
@@ -2128,6 +2186,26 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          end
+
+          it "groups duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            group = p1.duplicate_group
+            
+            expect(group.publications).to match_array [p1, duplicate_pub]
+          end
+
+          it "hides new publications that might be duplicates" do
+            importer.call
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            expect(p1.visible).to eq false
           end
   
           it "creates a new authorship record for every faculty author for each imported publication" do
@@ -2256,7 +2334,7 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(p1.title).to eq 'First Test Publication'
+              expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
               expect(p1.publisher).to eq 'Test Publisher 1'
@@ -2271,7 +2349,6 @@ describe ActivityInsightImporter do
               expect(p1.abstract).to eq 'First publication abstract.'
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.visible).to eq true
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq nil
     
@@ -2312,6 +2389,26 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            end
+
+            it "groups duplicates of new publication records" do
+              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              group = p1.duplicate_group
+              
+              expect(group.publications).to match_array [p1, duplicate_pub]
+            end
+
+            it "hides new publications that might be duplicates" do
+              importer.call
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              expect(p1.visible).to eq false
             end
   
             context "when an authorship already exists for the existing publication" do
@@ -2460,7 +2557,7 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(p1.title).to eq 'First Test Publication'
+              expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
               expect(p1.publisher).to eq 'Test Publisher 1'
@@ -2475,7 +2572,6 @@ describe ActivityInsightImporter do
               expect(p1.abstract).to eq 'First publication abstract.'
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.visible).to eq true
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq nil
     
@@ -2516,6 +2612,26 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            end
+
+            it "groups duplicates of new publication records" do
+              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              group = p1.duplicate_group
+              
+              expect(group.publications).to match_array [p1, duplicate_pub]
+            end
+
+            it "hides new publications that might be duplicates" do
+              importer.call
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              expect(p1.visible).to eq false
             end
   
             context "when an authorship already exists for the existing publication" do
@@ -3378,7 +3494,7 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(p1.title).to eq 'First Test Publication'
+            expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
             expect(p1.publisher).to eq 'Test Publisher 1'
@@ -3393,7 +3509,6 @@ describe ActivityInsightImporter do
             expect(p1.abstract).to eq 'First publication abstract.'
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.visible).to eq true
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq nil
   
@@ -3436,6 +3551,25 @@ describe ActivityInsightImporter do
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
           end
   
+          it "groups duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            group = p1.duplicate_group
+            
+            expect(group.publications).to match_array [p1, duplicate_pub]
+          end
+
+          it "hides new publications that might be duplicates" do
+            importer.call
+
+            p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190706413568').publication
+
+            expect(p1.visible).to eq false
+          end
           it "creates a new authorship record for every faculty author for each imported publication" do
             expect { importer.call }.to change { Authorship.count }.by 3
           end
@@ -3562,7 +3696,7 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(p1.title).to eq 'First Test Publication'
+              expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
               expect(p1.publisher).to eq 'Test Publisher 1'
@@ -3577,7 +3711,6 @@ describe ActivityInsightImporter do
               expect(p1.abstract).to eq 'First publication abstract.'
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.visible).to eq true
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq nil
     
@@ -3620,6 +3753,26 @@ describe ActivityInsightImporter do
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
             end
   
+            it "groups duplicates of new publication records" do
+              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              group = p1.duplicate_group
+              
+              expect(group.publications).to match_array [p1, duplicate_pub]
+            end
+
+            it "hides new publications that might be duplicates" do
+              importer.call
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              expect(p1.visible).to eq false
+            end
+
             context "when an authorship already exists for the existing publication" do
               let!(:existing_authorship) { create :authorship,
                                                   user: existing_user,
@@ -3766,7 +3919,7 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(p1.title).to eq 'First Test Publication'
+              expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
               expect(p1.publisher).to eq 'Test Publisher 1'
@@ -3781,7 +3934,6 @@ describe ActivityInsightImporter do
               expect(p1.abstract).to eq 'First publication abstract.'
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.visible).to eq true
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq nil
     
@@ -3822,6 +3974,26 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            end
+
+            it "groups duplicates of new publication records" do
+              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              group = p1.duplicate_group
+              
+              expect(group.publications).to match_array [p1, duplicate_pub]
+            end
+
+            it "hides new publications that might be duplicates" do
+              importer.call
+
+              p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                            source_identifier: '190706413568').publication
+
+              expect(p1.visible).to eq false
             end
   
             context "when an authorship already exists for the existing publication" do
