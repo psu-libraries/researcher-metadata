@@ -1,8 +1,7 @@
 require 'component/component_spec_helper'
 
 describe PSULawSchoolOAICreator do
-  let(:creator) { PSULawSchoolOAICreator.new(text) }
-  let(:text) { 'Tester, Sue' }
+  let(:creator) { PSULawSchoolOAICreator.new( 'Tester, Sue' ) }
 
   describe '#last_name' do
     it "returns the first word of the given text" do
