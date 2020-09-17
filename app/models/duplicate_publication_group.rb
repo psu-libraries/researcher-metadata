@@ -72,6 +72,7 @@ class DuplicatePublicationGroup < ApplicationRecord
 
     show do
       field(:id)
+      field(:created_at)
       field(:publications)
     end
   end
