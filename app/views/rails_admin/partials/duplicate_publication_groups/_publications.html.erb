@@ -133,8 +133,8 @@
       <tr>
         <td class="publication-field-label">Created at</td>
         <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.created_at %>">
-            <%= p.created_at %>
+          <td class="publication-field" title="<%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>">
+            <%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>
           </td>
         <% end %>
       </tr>

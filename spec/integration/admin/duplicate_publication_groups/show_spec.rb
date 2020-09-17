@@ -174,8 +174,8 @@ feature "Admin duplicate publication group detail page", type: :feature do
         end
 
         it "show the creation times for the publications in the group" do
-          expect(page).to have_content pub1.created_at
-          expect(page).to have_content pub2.created_at
+          expect(page).to have_content pub1.created_at.strftime('%B %-d, %Y %-H:%M')
+          expect(page).to have_content pub2.created_at.strftime('%B %-d, %Y %-H:%M')
         end
 
         it "shows the IDs of non-duplicate publication records for the publications in the group" do
