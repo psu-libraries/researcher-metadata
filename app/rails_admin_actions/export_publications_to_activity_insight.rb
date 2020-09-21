@@ -37,7 +37,8 @@ module RailsAdmin
               render :export_publications_to_activity_insight
             elsif request.post?
               ActivityInsightPublicationExporter.new(@objects, 'beta').export
-              redirect_to '/admin/organization'
+              flash[:notice] = I18n.t('admin.actions.export_publications_to_activity_insight.notice')
+              render :export_publications_to_activity_insight
             end
           end
         end

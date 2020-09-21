@@ -7,16 +7,18 @@ class ActivityInsightPublicationExporter
   end
 
   def export
+    Rails.logger.info "Export to Activity Insight started at #{DateTime.now.to_s}"
     objects.each do |object|
       response = HTTParty.post webservice_url, body: to_xml(object),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
-      puts response
+      Rails.logger.info Nokogiri::XML(response.to_s).text
     end
+    Rails.logger.info "Export to Activity Insight ended at #{DateTime.now.to_s}"
   end
 
   private
 
-  attr_accessor :objects
+  attr_accessor :objects, :target
 
   def auth
     {
@@ -26,7 +28,11 @@ class ActivityInsightPublicationExporter
   end
 
   def webservice_url
-    'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    if target == 'production'
+      'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    elsif target == 'beta'
+      'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    end
   end
 
   def to_xml(publication)
@@ -39,7 +45,7 @@ class ActivityInsightPublicationExporter
             xml.INTELLCONT {
               xml.TITLE_(publication.title, :access => "READ_ONLY")
               xml.TITLE_SECONDARY_(publication.secondary_title, :access => "READ_ONLY")
-              xml.CONTYPE_(publication.publication_type, :access => "READ_ONLY")
+              xml.CONTYPE_("Journal Article", :access => "READ_ONLY")
               xml.STATUS_(publication.status, :access => "READ_ONLY")
               xml.JOURNAL_NAME_(publication.journal_title, :access => "READ_ONLY")
               xml.VOLUME_(publication.volume, :access => "READ_ONLY")
