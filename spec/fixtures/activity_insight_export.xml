@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Data>
+  <Record username="user21">
+    <INTELLCONT>
+      <TITLE access="READ_ONLY">Test</TITLE>
+      <TITLE_SECONDARY access="READ_ONLY">Second Title</TITLE_SECONDARY>
+      <CONTYPE access="READ_ONLY">Journal Article</CONTYPE>
+      <STATUS access="READ_ONLY">Published</STATUS>
+      <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
+      <VOLUME access="READ_ONLY">1</VOLUME>
+      <DTY_PUB access="READ_ONLY">2020</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">September</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">21</DTD_PUB>
+      <ISSUE access="READ_ONLY">2</ISSUE>
+      <EDITION access="READ_ONLY">123</EDITION>
+      <ABSTRACT access="READ_ONLY">Abstract</ABSTRACT>
+      <PAGENUM access="READ_ONLY">1-2</PAGENUM>
+      <CITATION_COUNT access="READ_ONLY">3</CITATION_COUNT>
+      <AUTHORS_ETAL access="READ_ONLY">true</AUTHORS_ETAL>
+      <WEB_ADDRESS access="READ_ONLY">site.org</WEB_ADDRESS>
+      <ISBNISSN access="READ_ONLY">123-123-123</ISBNISSN>
+      <INTELLCONT_AUTH>
+        <FNAME access="READ_ONLY">first</FNAME>
+        <MNAME access="READ_ONLY"/>
+        <LNAME access="READ_ONLY"/>
+      </INTELLCONT_AUTH>
+    </INTELLCONT>
+  </Record>
+</Data>

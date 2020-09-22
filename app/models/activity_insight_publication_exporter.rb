@@ -2,7 +2,7 @@ class ActivityInsightPublicationExporter
 
   def initialize(objects, target)
     @objects = objects
-    # @target is 'beta or 'production'
+    # target should be 'beta or 'production'
     @target = target
   end
 
@@ -22,15 +22,15 @@ class ActivityInsightPublicationExporter
 
   def auth
     {
-      username: Rails.application.config_for(:activity_insight)["webservices"][:username],
-      password: Rails.application.config_for(:activity_insight)["webservices"][:password]
+      username: Rails.application.config_for(:activity_insight)[:username],
+      password: Rails.application.config_for(:activity_insight)[:password]
     }
   end
 
   def webservice_url
-    if target == 'production'
+    if target == 'beta'
       'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-    elsif target == 'beta'
+    elsif target == 'production'
       'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     end
   end
