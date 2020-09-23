@@ -8,9 +8,9 @@
       <STATUS access="READ_ONLY">Published</STATUS>
       <JOURNAL_NAME access="READ_ONLY">Journal Title</JOURNAL_NAME>
       <VOLUME access="READ_ONLY">1</VOLUME>
-      <DTY_PUB access="READ_ONLY">2020</DTY_PUB>
-      <DTM_PUB access="READ_ONLY">September</DTM_PUB>
-      <DTD_PUB access="READ_ONLY">21</DTD_PUB>
+      <DTY_PUB access="READ_ONLY">2001</DTY_PUB>
+      <DTM_PUB access="READ_ONLY">January</DTM_PUB>
+      <DTD_PUB access="READ_ONLY">1</DTD_PUB>
       <ISSUE access="READ_ONLY">2</ISSUE>
       <EDITION access="READ_ONLY">123</EDITION>
       <ABSTRACT access="READ_ONLY">Abstract</ABSTRACT>

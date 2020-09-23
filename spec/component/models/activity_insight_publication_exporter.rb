@@ -11,7 +11,7 @@ describe ActivityInsightPublicationExporter do
                       status: 'Published',
                       journal_title: 'Journal Title',
                       volume: '1',
-                      published_on: Date.yesterday,
+                      published_on: Date.parse('01/01/01'),
                       issue: '2',
                       edition: '123',
                       abstract: 'Abstract',
@@ -27,6 +27,45 @@ describe ActivityInsightPublicationExporter do
     it 'generates xml' do
       exporter_object = exporter.new([], 'beta')
       expect(exporter_object.send(:to_xml, publication)).to eq fixture('activity_insight_export.xml').read
+    end
+  end
+
+  describe '#webservice_url' do
+    let(:beta_url) do
+      'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    end
+    let(:production_url) do
+      'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+    end
+
+    context 'when target is "beta"' do
+      it 'returns beta url' do
+        exporter_object = exporter.new([], 'beta')
+        expect(exporter_object.send(:webservice_url)).to eq beta_url
+      end
+    end
+
+    context 'when target is "production"' do
+      it 'returns production url' do
+        exporter_object = exporter.new([], 'production')
+        expect(exporter_object.send(:webservice_url)).to eq production_url
+      end
+    end
+  end
+
+  describe '#export' do
+    it 'logs responses from HTTParty' do
+      exporter_object = exporter.new([publication], 'beta')
+      allow(HTTParty).to receive(:post).and_return '<?xml version="1.0" encoding="UTF-8"?>
+
+<Error>The following errors were detected:
+	<Message>Unexpected EOF in prolog
+ at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog
+ at [row,col {unknown-source}]: [1,0]</Message>
+</Error>'
+      expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+      expect_any_instance_of(Logger).to receive(:info).with(/Unexpected EOF in prolog/)
+      exporter_object.export
     end
   end
 end
