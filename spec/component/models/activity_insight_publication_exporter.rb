@@ -54,18 +54,41 @@ describe ActivityInsightPublicationExporter do
   end
 
   describe '#export' do
-    it 'logs responses from HTTParty' do
-      exporter_object = exporter.new([publication], 'beta')
-      allow(HTTParty).to receive(:post).and_return '<?xml version="1.0" encoding="UTF-8"?>
+    context 'when 200 code is returned from DM' do
+      let(:webservice_response) do
+        double 'httparty_response',
+               code: 200,
+               to_s: '<?xml version="1.0" encoding="UTF-8"?>
 
 <Error>The following errors were detected:
 	<Message>Unexpected EOF in prolog
  at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog
  at [row,col {unknown-source}]: [1,0]</Message>
 </Error>'
-      expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
-      expect_any_instance_of(Logger).to receive(:info).with(/Unexpected EOF in prolog/)
-      exporter_object.export
+      end
+
+      it 'logs DM webservice responses' do
+        exporter_object = exporter.new([publication], 'beta')
+        allow(HTTParty).to receive(:post).and_return webservice_response
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+        expect_any_instance_of(Logger).to receive(:info).with(/Unexpected EOF in prolog/)
+        exporter_object.export
+      end
+    end
+
+    context 'when non 200 code is returned from DM' do
+      let(:error_response) do
+        double 'httparty_response',
+               code: 401,
+               to_s: '<p>401 Unauthorized</p>'
+      end
+
+      it 'logs non 200 code errors' do
+        exporter_object = exporter.new([publication], 'beta')
+        allow(HTTParty).to receive(:post).and_return error_response
+        expect_any_instance_of(Logger).to receive(:error).with('401 Unauthorized')
+        exporter_object.export
+      end
     end
   end
 end

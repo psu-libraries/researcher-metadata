@@ -7,13 +7,14 @@ class ActivityInsightPublicationExporter
   end
 
   def export
-    Rails.logger.info "Export to Activity Insight started at #{DateTime.now.to_s}"
+    Rails.logger.info "Export to #{target} Activity Insight started at #{DateTime.now.to_s}"
     objects.each do |object|
       response = HTTParty.post webservice_url, body: to_xml(object),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
-      Rails.logger.info Nokogiri::XML(response.to_s).text
+      Rails.logger.info Nokogiri::XML(response.to_s).text if response.code == 200
+      Rails.logger.error Nokogiri::HTML(response.to_s).text if response.code != 200
     end
-    Rails.logger.info "Export to Activity Insight ended at #{DateTime.now.to_s}"
+    Rails.logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}"
   end
 
   private
@@ -22,8 +23,8 @@ class ActivityInsightPublicationExporter
 
   def auth
     {
-      username: Rails.application.config_for(:activity_insight)[:username],
-      password: Rails.application.config_for(:activity_insight)[:password]
+      username: Rails.application.config_for(:activity_insight)["username"],
+      password: Rails.application.config_for(:activity_insight)["password"]
     }
   end
 
