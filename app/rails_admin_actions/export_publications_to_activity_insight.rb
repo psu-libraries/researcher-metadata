@@ -34,11 +34,12 @@ module RailsAdmin
 
             @objects ||= model_config.abstract_model.all(options, scope)
             if request.get?
+              @org_name = Organization.find(params[:org_id]).name
               render :export_publications_to_activity_insight
             elsif request.post?
               ActivityInsightPublicationExporter.new(@objects, 'beta').export
               flash[:notice] = I18n.t('admin.actions.export_publications_to_activity_insight.notice')
-              render :export_publications_to_activity_insight
+              render :index_publications_by_organization
             end
           end
         end

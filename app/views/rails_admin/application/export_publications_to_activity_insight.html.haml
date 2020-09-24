@@ -1,9 +1,8 @@
 - params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token)
-- org_name = Organization.find(params[:org_id]).name
 
 .panel.panel-integration
   .row.row-integration
-    = "You have found <strong>#{@objects.count}</strong> publications from #{org_name} to integrate with Activity Insight.".html_safe
+    = "You have found <strong>#{@objects.count}</strong> publications from #{@org_name} to integrate with Activity Insight.".html_safe
 
   .row.row-integration
     = "Select which system you would like to integrate with below.  It is recommended to integrate with beta before production to check for errors."
