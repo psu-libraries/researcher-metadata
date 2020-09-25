@@ -42,5 +42,9 @@ class Authorship < ApplicationRecord
         sort_reverse false
       end
     end
+
+    edit do
+      field(:orcid_resource_identifier)
+    end
   end
 end
