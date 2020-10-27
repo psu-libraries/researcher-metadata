@@ -1,7 +1,7 @@
 require 'integration/integration_spec_helper'
 
 feature "Home page", type: :feature do
-  let(:home_content) { "Research Metadata" }
+  let(:home_content) { "Researcher Metadata" }
 
   shared_examples_for "a page with the public layout" do
 

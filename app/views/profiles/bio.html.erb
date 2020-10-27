@@ -66,12 +66,12 @@
         </p>
         <% if @user.orcid_access_token %>
           <p>
-            Your Research Metadata Database profile has been connected to your ORCID iD. You can now
+            Your Researcher Metadata Database profile has been connected to your ORCID iD. You can now
             choose to update your ORCID record using some of the profile information that is shown here.
           </p>
         <% else %>
           <p>
-            Connecting your Research Metadata Database profile to your ORCID iD will give you the option to
+            Connecting your Researcher Metadata Database profile to your ORCID iD will give you the option to
             update your ORCID record using some of your profile information that is shown here.
           </p>
           <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>

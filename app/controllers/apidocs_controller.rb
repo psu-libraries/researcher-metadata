@@ -5,9 +5,9 @@ class ApidocsController < ActionController::Base
     key :swagger, '2.0'
     info do
       key :version, '1.0.0'
-      key :title, 'PSU Research Metadata API'
+      key :title, 'Researcher Metadata Database API'
       key :description, 'An API that serves as the authority on faculty and ' \
-                        'research data at Penn State University ' \
+                        'research metadata at Penn State University ' \
                         'in the swagger-2.0 specification.'
     end
     key :basePath, '/'

@@ -9,7 +9,7 @@ feature "API documentation home page", type: :feature, js: true do
     end
 
     it "shows the home page content" do
-      expect(page).to have_content "PSU Research Metadata API"
+      expect(page).to have_content "Researcher Metadata Database API"
     end
 
     it "shows a link to the home page" do
@@ -40,7 +40,7 @@ feature "API documentation home page", type: :feature, js: true do
     before { visit 'api_docs/swagger_docs/v1' }
 
     it "shows the home page content" do
-      expect(page).to have_content "PSU Research Metadata API"
+      expect(page).to have_content "Researcher Metadata Database API"
     end
 
     it "shows a link for publications API" do
