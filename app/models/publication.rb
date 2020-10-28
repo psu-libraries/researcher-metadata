@@ -485,4 +485,12 @@ class Publication < ApplicationRecord
       update_attributes!(updated_by_user_at: Time.current)
     end
   end
+
+  def has_single_import_from_pure?
+    imports.count == 1 && imports.where(source: 'Pure').any?
+  end
+
+  def has_single_import_from_ai?
+    imports.count == 1 && imports.where(source: 'Activity Insight').any?
+  end
 end

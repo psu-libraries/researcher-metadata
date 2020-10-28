@@ -57,6 +57,41 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
   end
 
+  def self.auto_merge
+    pbar = ProgressBar.create(title: 'Auto-merging Pure and AI groups',
+                              total: count) unless Rails.env.test?
+    find_each do |g|
+      g.auto_merge
+      pbar.increment unless Rails.env.test?
+    end
+
+    pbar.finish unless Rails.env.test?
+    nil
+  end
+
+  def auto_merge
+    if publication_count == 2
+      pure_pub = publications.detect { |p| p.has_single_import_from_pure? }
+      ai_pub = publications.detect { |p| p.has_single_import_from_ai? }
+
+      if pure_pub && ai_pub
+        ActiveRecord::Base.transaction do
+          ai_pub.imports.each do |i|
+            i.update_attributes!(auto_merged: true)
+          end
+          pure_pub.merge!([ai_pub])
+          pure_pub.update_attributes!(duplicate_group: nil)
+          destroy
+        end
+        true
+      else
+        false
+      end
+    else
+      false
+    end
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

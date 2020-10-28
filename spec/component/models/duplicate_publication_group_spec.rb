@@ -939,6 +939,58 @@ describe DuplicatePublicationGroup, type: :model do
     end
   end
 
+  describe '.auto_merge' do
+    let!(:group1) { create :duplicate_publication_group }
+    let!(:group2) { create :duplicate_publication_group }
+    let!(:group3) { create :duplicate_publication_group }
+
+    let!(:group1_pub1) { create :publication, duplicate_group: group1, imports: group1_pub1_imports }
+    let!(:group1_pub2) { create :publication, duplicate_group: group1, imports: group1_pub2_imports }
+
+    let!(:group2_pub1) { create :publication, duplicate_group: group2, imports: group2_pub1_imports }
+    let!(:group2_pub2) { create :publication, duplicate_group: group2, imports: group2_pub2_imports }
+
+    let!(:group3_pub1) { create :publication, duplicate_group: group3, imports: group3_pub1_imports }
+    let!(:group3_pub2) { create :publication, duplicate_group: group3, imports: group3_pub2_imports }
+
+    let!(:group1_pub1_imports) { [group1_pub1_pure_import] }
+    let!(:group1_pub2_imports) { [group1_pub2_ai_import] }
+
+    let!(:group2_pub1_imports) { [group2_pub1_pure_import] }
+    let!(:group2_pub2_imports) { [group2_pub2_ai_import] }
+
+    let!(:group3_pub1_imports) { [group3_pub1_ai_import] }
+    let!(:group3_pub2_imports) { [group3_pub2_ai_import] }
+
+    let!(:group1_pub1_pure_import) { create(:publication_import, source: 'Pure') }
+    let!(:group1_pub2_ai_import) { create(:publication_import, source: 'Activity Insight') }
+
+    let!(:group2_pub1_pure_import) { create(:publication_import, source: 'Pure') }
+    let!(:group2_pub2_ai_import) { create(:publication_import, source: 'Activity Insight') }
+
+    let!(:group3_pub1_ai_import) { create(:publication_import, source: 'Activity Insight') }
+    let!(:group3_pub2_ai_import) { create(:publication_import, source: 'Activity Insight') }
+
+
+    it "automatically merges applicable publications in each group" do
+      DuplicatePublicationGroup.auto_merge
+
+      expect { group1.reload }.to raise_error ActiveRecord::RecordNotFound
+      expect { group2.reload }.to raise_error ActiveRecord::RecordNotFound
+      expect(group3.reload).to eq group3
+
+      expect(group1_pub1.reload.imports).to match_array [group1_pub1_pure_import, group1_pub2_ai_import]
+      expect { group1_pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+
+      expect(group2_pub1.reload.imports).to match_array [group2_pub1_pure_import, group2_pub2_ai_import]
+      expect { group2_pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+
+      expect(group3.reload.publications).to match_array [group3_pub1, group3_pub2]
+      expect(group3_pub1.reload.imports).to eq [group3_pub1_ai_import]
+      expect(group3_pub2.reload.imports).to eq [group3_pub2_ai_import]
+    end
+  end
+
   describe '#publication_count' do
     let!(:dpg) { create :duplicate_publication_group }
     before { 2.times { create :publication, duplicate_group: dpg } }
@@ -963,6 +1015,317 @@ describe DuplicatePublicationGroup, type: :model do
 
       it "returns the title of the first publication in the group" do
         expect(dpg.first_publication_title).to eq 'First Pub'
+      end
+    end
+  end
+
+  describe '#auto_merge' do
+    let!(:group) { create :duplicate_publication_group }
+    context "when the group has no publications" do
+      it "does not change the number of publications in the database" do
+        expect { group.auto_merge }.not_to change { Publication.count }
+      end
+
+      it "does not change the number of duplicate publication groups in the database" do
+        expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+      end
+
+      it "does not delete the group" do
+        group.auto_merge
+        expect { group.reload }.not_to raise_error
+      end
+
+      it "returns false" do
+        expect(group.auto_merge).to eq false
+      end
+    end
+
+    context "when the group has 1 publication" do
+      let!(:pub) { create :publication, duplicate_group: group, imports: imports }
+
+      context "when the publication has no imports" do
+        let(:imports) { [] }
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to eq [pub]
+        end
+
+        it "does not change the member publication's imports" do
+          group.auto_merge
+          expect(pub.reload.imports).to eq []
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+
+      context "when the publication has an import from Pure" do
+        let(:imports) { [pure_import] }
+        let(:pure_import) { create(:publication_import, source: 'Pure') }
+
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to eq [pub]
+        end
+
+        it "does not change the member publication's imports" do
+          group.auto_merge
+          expect(pub.reload.imports).to eq [pure_import]
+          expect(pure_import.reload.auto_merged).to eq nil
+        end
+              
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+
+      context "when the publication has an import from Activity Insight" do
+        let(:imports) { [ai_import] }
+        let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
+
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to eq [pub]
+        end
+
+        it "does not change the member publication's imports" do
+          group.auto_merge
+          expect(pub.reload.imports).to eq [ai_import]
+          expect(ai_import.reload.auto_merged).to eq nil
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+    end
+
+    context "when the group has 2 publications" do
+      let!(:pub1) { create :publication, duplicate_group: group, imports: pub1_imports }
+      let!(:pub2) { create :publication, duplicate_group: group, imports: pub2_imports }
+
+      context "when both of the publications have no imports" do
+        let(:pub1_imports) { [] }
+        let(:pub2_imports) { [] }
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to match_array [pub1, pub2]
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+
+      context "when both of the publications only have an import from Pure" do
+        let(:pub1_imports) { [pure_import1] }
+        let(:pub2_imports) { [pure_import2] }
+        let(:pure_import1) { create(:publication_import, source: 'Pure') }
+        let(:pure_import2) { create(:publication_import, source: 'Pure') }
+
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to match_array [pub1, pub2]
+        end
+
+        it "does not change the member publications' imports" do
+          group.auto_merge
+          expect(pub1.reload.imports).to eq [pure_import1]
+          expect(pure_import1.reload.auto_merged).to eq nil
+          expect(pub2.reload.imports).to eq [pure_import2]
+          expect(pure_import2.reload.auto_merged).to eq nil
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+
+      context "when both of the publications only have an import from Activity Insight" do
+        let(:pub1_imports) { [ai_import1] }
+        let(:pub2_imports) { [ai_import2] }
+        let(:ai_import1) { create(:publication_import, source: 'Activity Insight') }
+        let(:ai_import2) { create(:publication_import, source: 'Activity Insight') }
+
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to match_array [pub1, pub2]
+        end
+
+        it "does not change the member publications' imports" do
+          group.auto_merge
+          expect(pub1.reload.imports).to eq [ai_import1]
+          expect(ai_import1.reload.auto_merged).to eq nil
+          expect(pub2.reload.imports).to eq [ai_import2]
+          expect(ai_import2.reload.auto_merged).to eq nil
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
+      end
+
+      context "when one publication has only an import from Activity Insight and the other has only an import from Pure" do
+        let(:pub1_imports) { [ai_import] }
+        let(:pub2_imports) { [pure_import] }
+        let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
+        let(:pure_import) { create(:publication_import, source: 'Pure') }
+
+        it "deletes the Activity Insight publication" do
+          expect { group.auto_merge }.to change { Publication.count }.by -1
+          expect { pub1.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "deletes the group" do
+          expect { group.auto_merge }.to change { DuplicatePublicationGroup.count }.by -1
+          expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "reassigns the Activity Insight publication's import to the Pure publication" do
+          group.auto_merge
+          expect(pub2.reload.imports).to match_array [ai_import, pure_import]
+        end
+
+        it "does not mark the Pure publication's import as having been auto merged" do
+          group.auto_merge
+          expect(pure_import.reload.auto_merged).to be_nil
+        end
+
+        it "marks the Activity Insight publication's import as having been auto merged" do
+          group.auto_merge
+          expect(ai_import.reload.auto_merged).to eq true
+        end
+
+        it "returns true" do
+          expect(group.auto_merge).to eq true
+        end
+      end
+    end
+
+    context "when the group has 3 publications" do
+      let!(:pub1) { create :publication, duplicate_group: group, imports: pub1_imports }
+      let!(:pub2) { create :publication, duplicate_group: group, imports: pub2_imports }
+      let!(:pub3) { create :publication, duplicate_group: group, imports: pub3_imports }
+
+      context "when one publication has only an import from Activity Insight and another has only an import from Pure" do
+        let(:pub1_imports) { [ai_import] }
+        let(:pub2_imports) { [pure_import] }
+        let(:pub3_imports) { [ai_import2] }
+        let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
+        let(:ai_import2) { create(:publication_import, source: 'Activity Insight') }
+        let(:pure_import) { create(:publication_import, source: 'Pure') }
+
+
+        it "does not change the number of publications in the database" do
+          expect { group.auto_merge }.not_to change { Publication.count }
+        end
+
+        it "does not change the number of duplicate publication groups in the database" do
+          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        end
+
+        it "does not delete the group" do
+          group.auto_merge
+          expect { group.reload }.not_to raise_error
+        end
+
+        it "does not change the group membership" do
+          group.auto_merge
+          expect(group.reload.publications).to match_array [pub1, pub2, pub3]
+        end
+
+        it "does not change the member publications' imports" do
+          group.auto_merge
+          expect(pub1.reload.imports).to eq [ai_import]
+          expect(ai_import.reload.auto_merged).to eq nil
+          expect(pub2.reload.imports).to eq [pure_import]
+          expect(pure_import.reload.auto_merged).to eq nil
+          expect(pub3.reload.imports).to eq [ai_import2]
+          expect(ai_import2.reload.auto_merged).to eq nil
+        end
+
+        it "returns false" do
+          expect(group.auto_merge).to eq false
+        end
       end
     end
   end
