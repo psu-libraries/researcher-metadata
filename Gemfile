@@ -91,6 +91,9 @@ gem 'simple_form'
 # Harvest metadata from OAI-PMH repositories
 gem 'fieldhand', '~> 0.12'
 
+# For running async jobs
+gem 'sucker_punch'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

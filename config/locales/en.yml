@@ -36,7 +36,7 @@ en:
         title: "Export Publications by Organization"
         breadcrumb: "Export by Organization"
       export_publications_to_activity_insight:
-        notice: "Integration initiated"
+        notice: "Integration has started and is running in the background.  It may take a while for this process to complete."
         link: "<i class='icon-circle-arrow-up'></i> Export to Activity Insight"
         breadcrumb: "Export Publications to Activity Insight"
         title: "Export Publications to Activity Insight"

@@ -12,14 +12,12 @@
   .form-group.form-actions
     .row.row-integration
       %button.btn.btn-primary{type: "submit", name: "_integrate", value: "beta",
-                              :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...",
-                              :confirm => "Are you sure you want to integrate with beta?" }}
+                              :confirm => "Are you sure you want to integrate with beta?"}
         %i.icon-circle-arrow-up
         = "Integrate with Beta"
     .row.row-integration
       %button.btn.btn-primary{type: "submit", name: "_integrate", value: "production",
-                              :data => { disable_with: "<i class='fa fa-spinner fa-pulse'></i> Integrating...",
-                              :confirm => "Are you sure you want to integrate with production?" }}
+                              :confirm => "Are you sure you want to integrate with production?"}
         %i.icon-circle-arrow-up
         = "Integrate with Production"
     .row.row-integration
