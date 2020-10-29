@@ -37,7 +37,8 @@ module RailsAdmin
               @org_name = Organization.find(params[:org_id]).name
               render :export_publications_to_activity_insight
             elsif request.post?
-              AiPublicationExportJob.perform_async(@objects, 'beta')
+              object_ids = @objects.pluck(:id)
+              AiPublicationExportJob.perform_async(object_ids, params["_integrate"])
               flash[:notice] = I18n.t('admin.actions.export_publications_to_activity_insight.notice')
               render :index_publications_by_organization
             end

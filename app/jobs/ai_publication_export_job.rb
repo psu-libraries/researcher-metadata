@@ -1,8 +1,8 @@
 class AiPublicationExportJob
   include SuckerPunch::Job
 
-  def perform(publications, target)
-    # TODO: Switch 'beta' with target when ready to go to production
-    ActivityInsightPublicationExporter.new(publications, 'beta').export
+  def perform(publication_ids, target)
+    publications = Publication.find(publication_ids)
+    ActivityInsightPublicationExporter.new(publications, target).export
   end
 end

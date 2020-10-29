@@ -12,12 +12,12 @@
   .form-group.form-actions
     .row.row-integration
       %button.btn.btn-primary{type: "submit", name: "_integrate", value: "beta",
-                              :confirm => "Are you sure you want to integrate with beta?"}
+                              data: {confirm: "Are you sure you want to integrate with beta?"}}
         %i.icon-circle-arrow-up
         = "Integrate with Beta"
     .row.row-integration
       %button.btn.btn-primary{type: "submit", name: "_integrate", value: "production",
-                              :confirm => "Are you sure you want to integrate with production?"}
+                              data: {confirm: "Are you sure you want to integrate with production?"}}
         %i.icon-circle-arrow-up
         = "Integrate with Production"
     .row.row-integration
