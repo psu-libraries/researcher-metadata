@@ -19,5 +19,8 @@ module ResearcherMetadata
     # the framework and any gems in your application.
 
     config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
+
+    # Using delayed_job for async jobs
+    config.active_job.queue_adapter = :delayed_job
   end
 end

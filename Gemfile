@@ -92,7 +92,10 @@ gem 'simple_form'
 gem 'fieldhand', '~> 0.12'
 
 # For running async jobs
-gem 'sucker_punch'
+gem 'delayed_job_active_record'
+
+# For running delayed_job daemon (or other processes)
+gem 'daemons'
 
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
