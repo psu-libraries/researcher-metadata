@@ -11,6 +11,7 @@ describe "the publication_imports table", type: :model do
   it { is_expected.to have_db_column(:source_updated_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:auto_merged).of_type(:boolean) }
 
   it { is_expected.to have_db_index([:source_identifier, :source]).unique(true) }
   it { is_expected.to have_db_index(:publication_id) }
@@ -37,7 +38,13 @@ describe PublicationImport, type: :model do
 
   describe '.sources' do
     it "returns the list of valid publication import sources" do
-      expect(PublicationImport.sources).to eq ["Activity Insight", "Pure", "Web of Science"]
+      expect(PublicationImport.sources).to eq [
+        "Activity Insight",
+        "Pure",
+        "Web of Science",
+        "Penn State Law eLibrary Repo",
+        "Dickinson Law IDEAS Repo"
+      ]
     end
   end
 end

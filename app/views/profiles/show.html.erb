@@ -79,7 +79,7 @@
             <% end %>
           </div>
           <% if profile_for_current_user? %>
-            <%= link_to "Manage my profile", edit_profile_publications_path, class: 'button' %>
+            <%= link_to "Manage my profile", profile_bio_path, class: 'button' %>
           <% end %>
         </div>
         <% if @profile.research_interests %>

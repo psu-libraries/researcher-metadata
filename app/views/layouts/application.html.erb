@@ -8,6 +8,7 @@
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
     <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+    <title>Penn State University Libraries | Researcher Metadata Database</title>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark mb-4">
@@ -21,7 +22,7 @@
             <%= link_to "Admin", rails_admin_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
-            <%= link_to "Profile", edit_profile_publications_path, class: "nav-link" %>
+            <%= link_to "Profile", profile_bio_path, class: "nav-link" %>
           </li>
           <li class="nav-item">
             <%= link_to "Home", root_path, class: "nav-link" %>
@@ -56,8 +57,8 @@
         <div class="row">
           <div class="col-lg-3">
             <p>
-              <strong>Research Metadata Database</strong><br />
-              Change the way you access Penn State research metadata.
+              <strong>Researcher Metadata Database</strong><br />
+              Change the way you access Penn State researcher metadata.
             </p>
           </div>
           <div class="col-lg-6 logos">

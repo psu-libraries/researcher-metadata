@@ -61,7 +61,7 @@ describe "editing profile preferences" do
         end
 
         it "displays a link to manage the profile" do
-          expect(page).to have_link "Manage my profile", href: edit_profile_publications_path
+          expect(page).to have_link "Manage my profile", href: profile_bio_path
         end
       end
       context "when logged in as a different user" do
@@ -384,34 +384,53 @@ describe "editing profile preferences" do
 
       context "when the user doesn't belong to an organization" do
         it "does not show organization information" do
-          expect(page).not_to have_content "Organization"
+          expect(page).not_to have_content "Organizations"
         end
       end
 
-      context "when the user belongs to an organization" do
-        let(:org) { create :organization, name: "Biology" }
+      context "when the user belongs to organizations" do
+        let(:org1) { create :organization, name: "Biology" }
+        let(:org2) { create :organization, name: "Life Sciences Institute" }
         let(:employment_button_text) { "Add to my ORCID Record" }
         let(:connect_orcid_button_text) { "Connect your ORCID iD" }
         let(:orcid_employment_id) { nil }
-        before do
+
+        let!(:mem1) {
           create :user_organization_membership,
                  user: user,
-                 organization: org,
+                 organization: org1,
                  position_title: "Professor",
                  started_on: Date.new(2010, 1, 1),
                  ended_on: Date.new(2015, 12, 31),
                  import_source: 'Pure',
                  source_identifier: '123456789',
                  orcid_resource_identifier: orcid_employment_id
+        }
 
-          visit profile_bio_path
-        end
-        it "shows organization information" do
-          expect(page).to have_content "Organization"
-          expect(page).to have_content "Biology"
-          expect(page).to have_content "Professor"
-          expect(page).to have_content "2010-01-01"
-          expect(page).to have_content "2015-12-31"
+        let!(:mem2) {
+          create :user_organization_membership,
+                 user: user,
+                 organization: org2,
+                 position_title: 'Director',
+                 started_on: Date.new(2012, 1, 1),
+                 ended_on: Date.new(2015, 12, 31)
+        }
+        before { visit profile_bio_path }
+
+        it "shows information for each organization" do
+          within "#organization_membership_#{mem1.id}" do
+            expect(page).to have_content "Biology"
+            expect(page).to have_content "Professor"
+            expect(page).to have_content "2010-01-01"
+            expect(page).to have_content "2015-12-31"
+          end
+
+          within "#organization_membership_#{mem2.id}" do
+            expect(page).to have_content "Life Sciences Institute"
+            expect(page).to have_content "Director"
+            expect(page).to have_content "2012-01-01"
+            expect(page).to have_content "2015-12-31"
+          end
         end
 
         context "when the user does not have an ORCID iD" do
@@ -436,21 +455,27 @@ describe "editing profile preferences" do
                                         href: "https://orcid.org/0000-0000-1234-5678"
             end
 
-            context "when the user's primary organization membership has been added to their ORCID record" do
+            context "when the user has added an organization membership to their ORCID record" do
               let(:orcid_employment_id) { "an identifier" }
 
-              it "does not show a button to add the employment to their ORCID record" do
-                expect(page).not_to have_button employment_button_text
+              it "does not show a button to add that employment to their ORCID record" do
+                within "#organization_membership_#{mem1.id}" do
+                  expect(page).not_to have_button employment_button_text
+                end
               end
 
               it "tells the user that the information has been added" do
-                expect(page).to have_content "information has been added to your ORCID record"
+                within "#organization_membership_#{mem1.id}" do
+                  expect(page).to have_content "information has been added to your ORCID record"
+                end
               end
             end
 
-            context "when the user's primary organization membership has not been added to their ORCID record" do
+            context "when the user has not added an organization membership to their ORCID record" do
               it "shows a button to add the employment to their ORCID record" do
-                expect(page).to have_button employment_button_text
+                within "#organization_membership_#{mem1.id}" do
+                  expect(page).to have_button employment_button_text
+                end
               end
             end
           end

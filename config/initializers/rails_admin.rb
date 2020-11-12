@@ -71,7 +71,7 @@ RailsAdmin.config do |config|
     show do
     end
     edit do
-      only [:Publication, :User, :Presentation, :Performance, :APIToken]
+      only [:Authorship, :Publication, :User, :Presentation, :Performance, :APIToken]
     end
     delete do
       only [:Publication, :User, :APIToken]

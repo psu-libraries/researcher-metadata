@@ -1,6 +1,6 @@
 ![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
-# Researcher Metadata
+# Researcher Metadata Database
 
 This is the repository for a Ruby on Rails application built for Penn State University Libraries to
 gather metadata about Penn State faculty and the research that they conduct and publish. The application
@@ -97,6 +97,18 @@ Open Access Button via their web [API](https://openaccessbutton.org/api). We onl
 Open Access Button by DOI, so this import only adds data to existing publications in our database that have
 DOIs.
 
+1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
+by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open 
+Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). Dickinson maintains the 
+[IDEAS repository](https://ideas.dickinsonlaw.psu.edu/), and Penn State Law maintains the
+[Penn State Law eLibrary](https://elibrary.law.psu.edu/). Part of our reason for importing metadata from
+these sources is to facilitate onboarding the law school faculty into Activity Insight. In the future, we
+may not need to import data from these sources since new data may eventually be available via Activity Insight.
+We currently import the following types of records from these repositories:
+    - authorships
+    - contributors
+    - publications
+
 ### Obtaining New Data
 Some of our data importing involves parsing files that were exported from the data sources. By convention,
 we place those files in the `db/data/` directory within the application and give them the names that are 
@@ -187,6 +199,9 @@ them in the correct location.
 
 #### Open Access Button
 We import data directly from the Open Access Button API. There is no need to obtain any data prior to running the import.
+
+#### Penn State Law School repositories
+We import data directly from online metadata repositories. There is no need to obtain any data prior to running the import.
 
 ### Importing New Data
 Once updated data files have been obtained (if applicable), importing new data is just a matter of running

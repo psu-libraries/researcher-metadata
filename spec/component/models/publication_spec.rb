@@ -64,7 +64,8 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:grants).through(:research_funds) }
     it { is_expected.to have_many(:waivers).through(:authorships) }
     it { is_expected.to have_many(:non_duplicate_group_memberships).class_name(:NonDuplicatePublicationGroupMembership).inverse_of(:publication) }
-    it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships)}
+    it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships) }
+    it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
   end
@@ -1558,6 +1559,99 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
 
         expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
+      end
+    end
+  end
+
+  describe '#all_non_duplicate_ids' do
+    let!(:pub) { create :publication }
+
+    let!(:nd1) { create :publication, id: 900000 }
+    let!(:nd2) { create :publication, id: 800000 }
+    let!(:nd3) { create :publication }
+
+    before do
+      create :non_duplicate_publication_group, publications: [pub, nd1, nd2]
+      create :non_duplicate_publication_group, publications: [pub, nd2]
+    end
+
+    it "returns the IDs of all publications that are known to not be duplicates of the publication" do
+      expect(pub.all_non_duplicate_ids).to eq [800000, 900000]
+    end
+  end
+
+  describe "#has_single_import_from_pure?" do
+    let(:pure_import) { build :publication_import, source: "Pure" }
+    let(:other_pure_import) { build :publication_import, source: "Pure" }
+    let(:ai_import) { build :publication_import, source: "Activity Insight" }
+
+    context "when the publication has an import from Pure" do
+      let(:pub) { create :publication, imports: [pure_import] }
+
+      it "returns true" do
+        expect(pub.has_single_import_from_pure?).to eq true
+      end
+    end
+
+    context "when the publication has two imports from Pure" do
+      let(:pub) { create :publication, imports: [pure_import, other_pure_import] }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_pure?).to eq false
+      end
+    end
+
+    context "when the publication has an import from Pure and an import from another source" do
+      let(:pub) { create :publication, imports: [pure_import, ai_import] }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_pure?).to eq false
+      end
+    end
+
+    context "when the publication does not have any imports" do
+      let(:pub) { create :publication }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_pure?).to eq false
+      end
+    end
+  end
+
+  describe "#has_single_import_from_ai?" do
+    let(:ai_import) { build :publication_import, source: "Activity Insight" }
+    let(:other_ai_import) { build :publication_import, source: "Activity Insight" }
+    let(:pure_import) { build :publication_import, source: "Pure" }
+
+    context "when the publication has an import from Activity Insight" do
+      let(:pub) { create :publication, imports: [ai_import] }
+
+      it "returns true" do
+        expect(pub.has_single_import_from_ai?).to eq true
+      end
+    end
+
+    context "when the publication two imports from Activity Insight" do
+      let(:pub) { create :publication, imports: [ai_import, other_ai_import] }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_ai?).to eq false
+      end
+    end
+
+    context "when the publication has an import from Activity Insight and an import from another source" do
+      let(:pub) { create :publication, imports: [ai_import, pure_import] }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_ai?).to eq false
+      end
+    end
+
+    context "when the publication does not have any imports" do
+      let(:pub) { create :publication }
+
+      it "returns false" do
+        expect(pub.has_single_import_from_ai?).to eq false
       end
     end
   end

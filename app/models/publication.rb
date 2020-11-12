@@ -33,16 +33,14 @@ class Publication < ApplicationRecord
   has_many :non_duplicate_groups,
            class_name: :NonDuplicatePublicationGroup,
            through: :non_duplicate_group_memberships
+  has_many :non_duplicates,
+           through: :non_duplicate_groups,
+           class_name: :Publication,
+           source: :publications
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
              foreign_key: :duplicate_publication_group_id,
-             optional: true,
-             inverse_of: :publications
-
-  belongs_to :non_duplicate_group,
-             class_name: :NonDuplicatePublicationGroup,
-             foreign_key: :non_duplicate_publication_group_id,
              optional: true,
              inverse_of: :publications
 
@@ -451,6 +449,10 @@ class Publication < ApplicationRecord
     doi.present? || url.present? || preferred_open_access_url.present?
   end
 
+  def all_non_duplicate_ids
+    (non_duplicate_ids.uniq - [id]).sort
+  end
+
   def merge!(publications_to_merge)
     pubs_to_delete = publications_to_merge - [self]
     all_pubs = (publications_to_merge.to_a + [self]).uniq
@@ -482,5 +484,13 @@ class Publication < ApplicationRecord
 
       update_attributes!(updated_by_user_at: Time.current)
     end
+  end
+
+  def has_single_import_from_pure?
+    imports.count == 1 && imports.where(source: 'Pure').any?
+  end
+
+  def has_single_import_from_ai?
+    imports.count == 1 && imports.where(source: 'Activity Insight').any?
   end
 end

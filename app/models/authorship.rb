@@ -42,5 +42,12 @@ class Authorship < ApplicationRecord
         sort_reverse false
       end
     end
+
+    edit do
+      field(:user) { read_only true }
+      field(:publication) { read_only true }
+      field(:author_number) { read_only true }
+      field(:orcid_resource_identifier)
+    end
   end
 end

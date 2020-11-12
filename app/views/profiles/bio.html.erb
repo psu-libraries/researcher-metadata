@@ -13,37 +13,41 @@
       </table>
     </div>
 
-    <% if @membership %>
+    <% if @memberships.any? %>
       <div class="profile-bio-section">
-        <h5>Organization</h5>
-        <table class="table">
-          <tbody>
-            <tr>
-              <td><strong>Name:</strong></td>
-              <td><%= @membership.organization.name %></td>
-            </tr>
-            <tr>
-              <td><strong>Position:</strong></td>
-              <td><%= @membership.position_title %></td>
-            </tr>
-            <tr>
-              <td><strong>Start date:</strong></td>
-              <td><%= @membership.started_on %></td>
-            </tr>
-            <% if @membership.ended_on %>
-              <tr>
-                <td><strong>End date:</strong></td>
-                <td><%= @membership.ended_on %></td>
-              </tr>
+        <h4>Organizations</h4>
+        <% @memberships.each do |m| %>
+          <div class="profile-bio-section" id="organization_membership_<%= m.id %>">
+            <table class="table">
+              <tbody>
+                <tr>
+                  <td><strong>Name:</strong></td>
+                  <td><%= m.organization.name %></td>
+                </tr>
+                <tr>
+                  <td><strong>Position:</strong></td>
+                  <td><%= m.position_title %></td>
+                </tr>
+                <tr>
+                  <td><strong>Start date:</strong></td>
+                  <td><%= m.started_on %></td>
+                </tr>
+                <% if m.ended_on %>
+                  <tr>
+                    <td><strong>End date:</strong></td>
+                    <td><%= m.ended_on %></td>
+                  </tr>
+                <% end %>
+              </tbody>
+            </table>
+            <% if @user.orcid_access_token %>
+              <% if m.orcid_resource_identifier.present? %>
+                <sup>*</sup>This information has been added to your ORCID record.
+              <% else %>
+                <%= button_to "Add to my ORCID Record", orcid_employments_path(m), class: 'btn orcid-button', remote: false %>
+              <% end %>
             <% end %>
-          </tbody>
-        </table>
-        <% if @user.orcid_access_token %>
-          <% if @membership.orcid_resource_identifier.present? %>
-            <sup>*</sup>This information has been added to your ORCID record.
-          <% else %>
-            <%= button_to "Add to my ORCID Record", orcid_employments_path, class: 'btn orcid-button', remote: false %>
-          <% end %>
+          </div>
         <% end %>
       </div>
     <% end %>
@@ -62,12 +66,12 @@
         </p>
         <% if @user.orcid_access_token %>
           <p>
-            Your Research Metadata Database profile has been connected to your ORCID iD. You can now
+            Your Researcher Metadata Database profile has been connected to your ORCID iD. You can now
             choose to update your ORCID record using some of the profile information that is shown here.
           </p>
         <% else %>
           <p>
-            Connecting your Research Metadata Database profile to your ORCID iD will give you the option to
+            Connecting your Researcher Metadata Database profile to your ORCID iD will give you the option to
             update your ORCID record using some of your profile information that is shown here.
           </p>
           <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>

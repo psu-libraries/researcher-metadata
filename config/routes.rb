@@ -42,7 +42,7 @@ Rails.application.routes.draw do
   get 'profile/presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
   get 'profile/performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
   get 'profile/bio' => 'profiles#bio', as: :profile_bio
-  post 'profile/bio/orcid/employments' => 'orcid_employments#create', as: :orcid_employments
+  post 'profile/bio/orcid/employments/:membership_id' => 'orcid_employments#create', as: :orcid_employments
   post 'profile/bio/orcid/works' => 'orcid_works#create', as: :orcid_works
   get 'profile/publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
   patch 'profile/publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication

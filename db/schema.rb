@@ -318,6 +318,7 @@ ActiveRecord::Schema.define(version: 2020_11_11_183613) do
     t.datetime "source_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "auto_merged"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier", "source"], name: "index_publication_imports_on_source_identifier_and_source", unique: true
   end

@@ -24,7 +24,7 @@ class ProfilesController < ProfileManagementController
 
   def bio
     @user = current_user
-    @membership = current_user.primary_organization_membership
+    @memberships = current_user.user_organization_memberships
   end
 
   helper_method :profile_for_current_user?

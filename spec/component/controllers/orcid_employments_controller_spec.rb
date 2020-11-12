@@ -6,11 +6,13 @@ describe OrcidEmploymentsController, type: :controller do
     context "when the user is authenticated" do
       let!(:user) { create :user }
       let(:employment) { double 'ORCID employment', save!: nil, location: "the_location" }
+      let(:membership_collection) { double 'membership collection' }
       before do
-        allow(user).to receive(:primary_organization_membership).and_return(membership)
+        allow(user).to receive(:user_organization_memberships).and_return(membership_collection)
+        allow(membership_collection).to receive(:find).with('2').and_return(membership)
         allow(OrcidEmployment).to receive(:new).with(membership).and_return(employment)
         authenticate_as(user)
-        post :create
+        post :create, params: {membership_id: '2'}
       end
       context "when the user has a primary organization membership" do
         let(:membership) { double 'user organization membership',
@@ -52,7 +54,7 @@ describe OrcidEmploymentsController, type: :controller do
             before do
               allow(employment).to receive(:save!).and_raise(OrcidEmployment::InvalidToken)
               allow(user).to receive(:clear_orcid_access_token)
-              post :create
+              post :create, params: {membership_id: '2'}
             end
 
             it "clears the user's ORCID access token" do
@@ -67,7 +69,7 @@ describe OrcidEmploymentsController, type: :controller do
           context "when there is an error saving the employment to ORCID" do
             before do
               allow(employment).to receive(:save!).and_raise(OrcidEmployment::FailedRequest)
-              post :create
+              post :create, params: {membership_id: '2'}
             end
 
             it "sets a flash message" do
@@ -92,7 +94,7 @@ describe OrcidEmploymentsController, type: :controller do
 
     context "when the user is not authenticated" do
       it "redirects to the sign in page" do
-        post :create
+        post :create, params: {membership_id: '2'}
         expect(response).to redirect_to new_user_session_path
       end
     end

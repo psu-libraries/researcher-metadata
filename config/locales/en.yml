@@ -58,7 +58,7 @@ en:
         already_linked: "Your ORCID record is already linked to your metadata profile."
       create:
         success: "Your ORCID record was successfully linked to your metadata profile."
-        authorization_denied: "You have denied authorization for the Penn State Research Metadata Database to add data to your ORCID record on your behalf."
+        authorization_denied: "You have denied authorization for the Penn State Researcher Metadata Database to add data to your ORCID record on your behalf."
         error: "There was an error linking your ORCID record to your metadata profile."
     orcid_employments:
       create:
