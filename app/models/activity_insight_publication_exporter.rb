@@ -1,7 +1,7 @@
 class ActivityInsightPublicationExporter
 
-  def initialize(objects, target)
-    @objects = objects
+  def initialize(publications, target)
+    @publications = publications
     # target should be 'beta or 'production'
     @target = target
   end
@@ -9,7 +9,9 @@ class ActivityInsightPublicationExporter
   def export
     logger = Logger.new('log/ai_publication_export.log')
     logger.info "Export to #{target} Activity Insight started at #{DateTime.now.to_s}"
-    objects.each do |object|
+    publications.each do |publication|
+      next if publication.ai_import_identifiers.present?
+
       response = HTTParty.post webservice_url, body: to_xml(object),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
       logger.error Nokogiri::XML(response.to_s).text if response.code != 200
@@ -19,7 +21,7 @@ class ActivityInsightPublicationExporter
 
   private
 
-  attr_accessor :objects, :target
+  attr_accessor :publications, :target
 
   def auth
     {
