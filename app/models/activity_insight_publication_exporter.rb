@@ -9,13 +9,16 @@ class ActivityInsightPublicationExporter
   def export
     logger = Logger.new('log/ai_publication_export.log')
     logger.info "Export to #{target} Activity Insight started at #{DateTime.now.to_s}"
+    was_error = false
     publications.each do |publication|
       next if publication.ai_import_identifiers.present?
 
-      response = HTTParty.post webservice_url, body: to_xml(object),
+      response = HTTParty.post webservice_url, body: to_xml(publication),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
       logger.error Nokogiri::XML(response.to_s).text if response.code != 200
+      was_error = true if response.code != 200 && was_error == false
     end
+    Bugsnag.notify(I18n.t('models.activity_insight_publication_exporter.bugsnag_message')) if was_error
     logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}"
   end
 

@@ -77,3 +77,5 @@ en:
       validation_errors:
         url_format: "does not have valid format. Please enter a full URL that begins with 'http://' or 'https://'."
         url_response: "cannot be accessed."
+    activity_insight_publication_exporter:
+      bugsnag_message: "An error was detected during an export to Activity Insight.  Refer to 'log/ai_publication_export.log' for details"

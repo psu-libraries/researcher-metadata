@@ -4,8 +4,9 @@ describe ActivityInsightPublicationExporter do
   subject(:exporter) { ActivityInsightPublicationExporter }
 
   let!(:user) { FactoryBot.create :user, activity_insight_identifier: '123456' }
-  let!(:authorship) { FactoryBot.create :authorship, user: user, publication: publication }
-  let!(:publication) do
+  let!(:authorship1) { FactoryBot.create :authorship, user: user, publication: publication1 }
+  let!(:authorship2) { FactoryBot.create :authorship, user: user, publication: publication2 }
+  let!(:publication1) do
     FactoryBot.create(:publication,
                       secondary_title: 'Second Title',
                       status: 'Published',
@@ -21,12 +22,18 @@ describe ActivityInsightPublicationExporter do
                       user_submitted_open_access_url: 'site.org',
                       isbn: '123-123-123')
   end
-  let!(:contributor) { FactoryBot.create :contributor, publication: publication }
+  let!(:publication2) { FactoryBot.create(:publication) }
+  let!(:ai_import) do
+    FactoryBot.create(:publication_import, publication: publication2,
+                       source: "Activity Insight", source_identifier: 'ai_id_1')
+  end
+  let!(:contributor1) { FactoryBot.create :contributor, publication: publication1 }
+  let!(:contributor2) { FactoryBot.create :contributor, publication: publication2 }
 
   describe '#to_xml' do
     it 'generates xml' do
       exporter_object = exporter.new([], 'beta')
-      expect(exporter_object.send(:to_xml, publication)).to eq fixture('activity_insight_export.xml').read
+      expect(exporter_object.send(:to_xml, publication1)).to eq fixture('activity_insight_export.xml').read
     end
   end
 
@@ -68,10 +75,17 @@ describe ActivityInsightPublicationExporter do
       end
 
       it 'logs DM webservice responses' do
-        exporter_object = exporter.new([publication], 'beta')
+        exporter_object = exporter.new([publication1], 'beta')
         allow(HTTParty).to receive(:post).and_return response
         expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
         expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF in prolog/)
+        exporter_object.export
+      end
+
+      it 'triggers bugsnag' do
+        exporter_object = exporter.new([publication1], 'beta')
+        allow(HTTParty).to receive(:post).and_return response
+        expect(Bugsnag).to receive(:notify).with(I18n.t('models.activity_insight_publication_exporter.bugsnag_message'))
         exporter_object.export
       end
     end
@@ -84,10 +98,19 @@ describe ActivityInsightPublicationExporter do
       end
 
       it 'does not log any errors' do
-        exporter_object = exporter.new([publication], 'beta')
+        exporter_object = exporter.new([publication1], 'beta')
         allow(HTTParty).to receive(:post).and_return response
         expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
         expect_any_instance_of(Logger).not_to receive(:error)
+        expect(Bugsnag).not_to receive(:notify)
+        exporter_object.export
+      end
+    end
+
+    context 'when publication has ai_import_identifiers' do
+      it 'skips that publication' do
+        exporter_object = exporter.new([publication2], 'beta')
+        expect(HTTParty).not_to receive(:post)
         exporter_object.export
       end
     end
