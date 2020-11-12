@@ -78,7 +78,7 @@ describe ActivityInsightPublicationExporter do
         exporter_object = exporter.new([publication1], 'beta')
         allow(HTTParty).to receive(:post).and_return response
         expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
-        expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF in prolog/)
+        expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF|lication ID: #{publication1.id}/).twice
         exporter_object.export
       end
 
