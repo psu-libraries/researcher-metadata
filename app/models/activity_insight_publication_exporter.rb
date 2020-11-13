@@ -54,7 +54,11 @@ class ActivityInsightPublicationExporter
             xml.INTELLCONT {
               xml.TITLE_(publication.title, :access => "READ_ONLY")
               xml.TITLE_SECONDARY_(publication.secondary_title, :access => "READ_ONLY")
-              xml.CONTYPE_("Journal Article", :access => "READ_ONLY")
+              if publication.publication_type == 'In-house Journal Article'
+                xml.CONTYPE_("Journal Article, In House", :access => "READ_ONLY")
+              else
+                xml.CONTYPE_("Journal Article", :access => "READ_ONLY")
+              end
               if publication.status == 'Accepted/In press'
                 xml.STATUS_('Accepted', :access => "READ_ONLY")
               else
