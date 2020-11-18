@@ -9,7 +9,6 @@ $btn-info-border: #dfdfdf;
 $fg-nav-tabs-active: #777;
 
 .grouped-publications {
-  overflow-x: scroll;
 
   th.publication-field, td.publication-field {
     min-width: 325px;
@@ -20,3 +19,13 @@ $fg-nav-tabs-active: #777;
     min-width: 160px;
   }
 }
+
+.scroll-wrapper1, .scroll-wrapper2 {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.scroll-wrapper1 { height: 20px; }
+
+.scroll-top { height: 20px; }
