@@ -1,7 +1,7 @@
 require 'component/component_spec_helper'
 
 describe OpenAccessNotifier do
-  let(:notifier) { OpenAccessNotifier.new }
+  let(:notifier) { OpenAccessNotifier.new(user_collection) }
   let(:user1) { double 'user 1',
                        old_potential_open_access_publications: pubs1,
                        new_potential_open_access_publications: pubs2,
@@ -10,6 +10,7 @@ describe OpenAccessNotifier do
                        old_potential_open_access_publications: pubs3,
                        new_potential_open_access_publications: pubs4,
                        record_open_access_notification: nil }
+  let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2] }
   let(:pubs1) { [pub1] }
   let(:pubs2) { [pub2] }
   let(:pubs3) { [pub3] }
@@ -33,7 +34,6 @@ describe OpenAccessNotifier do
 
   describe '#send_notifications' do
     before do
-      allow(User).to receive(:needs_open_access_notification).and_return([user1, user2])
       allow(UserProfile).to receive(:new).with(user1).and_return profile1
       allow(UserProfile).to receive(:new).with(user2).and_return profile2
       allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_return email1
