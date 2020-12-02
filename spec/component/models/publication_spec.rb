@@ -180,9 +180,9 @@ describe Publication, type: :model do
   end
 
   describe '.subject_to_open_access_policty' do
-    let!(:pub1) { create :publication, published_on: Date.new(2019, 12, 31) }
-    let!(:pub2) { create :publication, published_on: Date.new(2020, 1, 1) }
-    let!(:pub3) { create :publication, published_on: Date.new(2020, 1, 2) }
+    let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
+    let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
     it "returns publications that were published after Penn State's open access policy went into effect" do
       expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
     end

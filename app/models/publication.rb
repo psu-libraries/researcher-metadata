@@ -1,5 +1,5 @@
 class Publication < ApplicationRecord
-  OPEN_ACCESS_POLICY_START = Date.new(2020, 1, 1)
+  OPEN_ACCESS_POLICY_START = Date.new(2020, 7, 1)
 
   class NonDuplicateMerge < ArgumentError; end
 
