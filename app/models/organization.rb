@@ -13,6 +13,10 @@ class Organization < ApplicationRecord
     Publication.joins(users: :organizations).where(%{users.id IN (?) AND organizations.id IN (?)}, all_user_ids, descendant_ids).published_during_membership.distinct(:id)
   end
 
+  def all_users
+    User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id)
+  end
+
   def publications
     # A view hack for Rails Admin to get it to render some custom HTML. 
     # See the `publications` field in the Rails Admin `show` config below.
@@ -58,6 +62,6 @@ class Organization < ApplicationRecord
   end
 
   def all_user_ids
-    User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id).pluck(:id)
+    all_users.pluck(:id)
   end
 end
