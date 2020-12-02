@@ -7,6 +7,10 @@ shared_examples_for "a profile management page" do
     expect(page).to have_link "Home", href: root_path
   end
 
+  it "shows an email support link" do
+    expect(page).to have_link "Support", href: 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support'
+  end
+
   it "shows a link to the edit profile publications page" do
     expect(page).to have_link "Publications", href: edit_profile_publications_path
   end
