@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_27_175708) do
+ActiveRecord::Schema.define(version: 2020_12_03_154002) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -176,6 +176,15 @@ ActiveRecord::Schema.define(version: 2020_10_27_175708) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["authorship_id"], name: "index_internal_publication_waivers_on_authorship_id"
+  end
+
+  create_table "journals", force: :cascade do |t|
+    t.string "pure_uuid"
+    t.text "title", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "publisher_id"
+    t.index ["publisher_id"], name: "index_journals_on_publisher_id"
   end
 
   create_table "news_feed_items", force: :cascade do |t|
@@ -353,6 +362,13 @@ ActiveRecord::Schema.define(version: 2020_10_27_175708) do
     t.index ["volume"], name: "index_publications_on_volume"
   end
 
+  create_table "publishers", force: :cascade do |t|
+    t.string "pure_uuid"
+    t.text "name", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
   create_table "research_funds", force: :cascade do |t|
     t.integer "grant_id", null: false
     t.integer "publication_id", null: false
@@ -482,6 +498,7 @@ ActiveRecord::Schema.define(version: 2020_10_27_175708) do
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
+  add_foreign_key "journals", "publishers"
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "non_duplicate_publication_group_memberships", "non_duplicate_publication_groups", name: "non_duplicate_publication_group_membership_group_id_fk", on_delete: :cascade
   add_foreign_key "non_duplicate_publication_group_memberships", "publications", name: "non_duplicate_publication_group_membership_publication_id_fk", on_delete: :cascade
