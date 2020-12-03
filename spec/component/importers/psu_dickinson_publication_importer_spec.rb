@@ -98,7 +98,7 @@ describe PSUDickinsonPublicationImporter do
       expect(pub.title).to eq 'A Penn State Law Article'
       expect(pub.abstract).to eq 'a description of the article'
       expect(pub.published_on).to eq Date.new(2020, 1, 1)
-      expect(pub.publisher).to eq 'The Publisher'
+      expect(pub.publisher_name).to eq 'The Publisher'
       expect(pub.url).to eq 'https://example.com/article'
       expect(pub.open_access_url).to eq 'https://example.com/article/download'
       expect(pub.publication_type).to eq 'Journal Article'

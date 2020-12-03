@@ -7,7 +7,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:title).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:publication_type).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:journal_title).of_type(:text) }
-  it { is_expected.to have_db_column(:publisher).of_type(:text) }
+  it { is_expected.to have_db_column(:publisher_name).of_type(:text) }
   it { is_expected.to have_db_column(:secondary_title).of_type(:text) }
   it { is_expected.to have_db_column(:status).of_type(:string) }
   it { is_expected.to have_db_column(:volume).of_type(:string) }
@@ -462,7 +462,7 @@ describe Publication, type: :model do
   end
 
   describe '#published_by' do
-    let(:pub) { Publication.new(publisher: publisher, journal_title: jt) }
+    let(:pub) { Publication.new(publisher_name: publisher, journal_title: jt) }
     context "when the publication has a journal title" do
       let(:jt) { "The Journal" }
       context "when the publication has a publisher" do

@@ -746,7 +746,7 @@ describe ActivityInsightImporter do
           expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
           expect(p1.publication_type).to eq 'Journal Article'
           expect(p1.journal_title).to eq 'Test Journal 1'
-          expect(p1.publisher).to eq 'Test Publisher 1'
+          expect(p1.publisher_name).to eq 'Test Publisher 1'
           expect(p1.secondary_title).to eq 'Subtitle 1'
           expect(p1.status).to eq 'Published'
           expect(p1.volume).to eq '9'
@@ -764,7 +764,7 @@ describe ActivityInsightImporter do
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'Professional Journal Article'
           expect(p2.journal_title).to eq 'Test Jouranl 2'
-          expect(p2.publisher).to eq nil
+          expect(p2.publisher_name).to eq nil
           expect(p2.secondary_title).to eq 'Second Pub Subtitle'
           expect(p2.status).to eq 'Published'
           expect(p2.volume).to eq '7'
@@ -783,7 +783,7 @@ describe ActivityInsightImporter do
           expect(p3.title).to eq 'Fifth Test Publication'
           expect(p3.publication_type).to eq 'Academic Journal Article'
           expect(p3.journal_title).to eq 'Some Other Journal'
-          expect(p3.publisher).to eq 'Some Other Publisher'
+          expect(p3.publisher_name).to eq 'Some Other Publisher'
           expect(p3.secondary_title).to eq nil
           expect(p3.status).to eq 'Published'
           expect(p3.volume).to eq '17'
@@ -910,7 +910,7 @@ describe ActivityInsightImporter do
                                     title: 'Existing Title',
                                     publication_type: 'Trade Journal Article',
                                     journal_title: 'Existing Journal',
-                                    publisher: 'Existing Publisher',
+                                    publisher_name: 'Existing Publisher',
                                     secondary_title: 'Existing Subtitle',
                                     status: 'Existing Status',
                                     volume: '111',
@@ -949,7 +949,7 @@ describe ActivityInsightImporter do
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
-            expect(p1.publisher).to eq 'Test Publisher 1'
+            expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '9'
@@ -967,7 +967,7 @@ describe ActivityInsightImporter do
             expect(p2.title).to eq 'Existing Title'
             expect(p2.publication_type).to eq 'Trade Journal Article'
             expect(p2.journal_title).to eq 'Existing Journal'
-            expect(p2.publisher).to eq 'Existing Publisher'
+            expect(p2.publisher_name).to eq 'Existing Publisher'
             expect(p2.secondary_title).to eq 'Existing Subtitle'
             expect(p2.status).to eq 'Existing Status'
             expect(p2.volume).to eq '111'
@@ -986,7 +986,7 @@ describe ActivityInsightImporter do
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.journal_title).to eq 'Some Other Journal'
-            expect(p3.publisher).to eq 'Some Other Publisher'
+            expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq '17'
@@ -1173,7 +1173,7 @@ describe ActivityInsightImporter do
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
-            expect(p1.publisher).to eq 'Test Publisher 1'
+            expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '9'
@@ -1191,7 +1191,7 @@ describe ActivityInsightImporter do
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher).to eq nil
+            expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.volume).to eq '7'
@@ -1210,7 +1210,7 @@ describe ActivityInsightImporter do
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.journal_title).to eq 'Some Other Journal'
-            expect(p3.publisher).to eq 'Some Other Publisher'
+            expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq '17'
@@ -2134,7 +2134,7 @@ describe ActivityInsightImporter do
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
-            expect(p1.publisher).to eq 'Test Publisher 1'
+            expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '9'
@@ -2152,7 +2152,7 @@ describe ActivityInsightImporter do
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher).to eq nil
+            expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.volume).to eq '7'
@@ -2171,7 +2171,7 @@ describe ActivityInsightImporter do
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.journal_title).to eq 'Some Other Journal'
-            expect(p3.publisher).to eq 'Some Other Publisher'
+            expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq '17'
@@ -2298,7 +2298,7 @@ describe ActivityInsightImporter do
                                       title: 'Existing Title',
                                       publication_type: 'Trade Journal Article',
                                       journal_title: 'Existing Journal',
-                                      publisher: 'Existing Publisher',
+                                      publisher_name: 'Existing Publisher',
                                       secondary_title: 'Existing Subtitle',
                                       status: 'Existing Status',
                                       volume: '111',
@@ -2337,7 +2337,7 @@ describe ActivityInsightImporter do
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
-              expect(p1.publisher).to eq 'Test Publisher 1'
+              expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p1.volume).to eq '9'
@@ -2355,7 +2355,7 @@ describe ActivityInsightImporter do
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
               expect(p2.journal_title).to eq 'Existing Journal'
-              expect(p2.publisher).to eq 'Existing Publisher'
+              expect(p2.publisher_name).to eq 'Existing Publisher'
               expect(p2.secondary_title).to eq 'Existing Subtitle'
               expect(p2.status).to eq 'Existing Status'
               expect(p2.volume).to eq '111'
@@ -2374,7 +2374,7 @@ describe ActivityInsightImporter do
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Academic Journal Article'
               expect(p3.journal_title).to eq 'Some Other Journal'
-              expect(p3.publisher).to eq 'Some Other Publisher'
+              expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
               expect(p3.volume).to eq '17'
@@ -2560,7 +2560,7 @@ describe ActivityInsightImporter do
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
-              expect(p1.publisher).to eq 'Test Publisher 1'
+              expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p1.volume).to eq '9'
@@ -2578,7 +2578,7 @@ describe ActivityInsightImporter do
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Professional Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
-              expect(p2.publisher).to eq nil
+              expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
               expect(p2.volume).to eq '7'
@@ -2597,7 +2597,7 @@ describe ActivityInsightImporter do
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Academic Journal Article'
               expect(p3.journal_title).to eq 'Some Other Journal'
-              expect(p3.publisher).to eq 'Some Other Publisher'
+              expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
               expect(p3.volume).to eq '17'
@@ -3497,7 +3497,7 @@ describe ActivityInsightImporter do
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
-            expect(p1.publisher).to eq 'Test Publisher 1'
+            expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
             expect(p1.volume).to eq '9'
@@ -3515,7 +3515,7 @@ describe ActivityInsightImporter do
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher).to eq nil
+            expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.volume).to eq '7'
@@ -3534,7 +3534,7 @@ describe ActivityInsightImporter do
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Academic Journal Article'
             expect(p3.journal_title).to eq 'Some Other Journal'
-            expect(p3.publisher).to eq 'Some Other Publisher'
+            expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
             expect(p3.volume).to eq '17'
@@ -3660,7 +3660,7 @@ describe ActivityInsightImporter do
                                       title: 'Existing Title',
                                       publication_type: 'Trade Journal Article',
                                       journal_title: 'Existing Journal',
-                                      publisher: 'Existing Publisher',
+                                      publisher_name: 'Existing Publisher',
                                       secondary_title: 'Existing Subtitle',
                                       status: 'Existing Status',
                                       volume: '111',
@@ -3699,7 +3699,7 @@ describe ActivityInsightImporter do
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
-              expect(p1.publisher).to eq 'Test Publisher 1'
+              expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p1.volume).to eq '9'
@@ -3717,7 +3717,7 @@ describe ActivityInsightImporter do
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
               expect(p2.journal_title).to eq 'Existing Journal'
-              expect(p2.publisher).to eq 'Existing Publisher'
+              expect(p2.publisher_name).to eq 'Existing Publisher'
               expect(p2.secondary_title).to eq 'Existing Subtitle'
               expect(p2.status).to eq 'Existing Status'
               expect(p2.volume).to eq '111'
@@ -3736,7 +3736,7 @@ describe ActivityInsightImporter do
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Academic Journal Article'
               expect(p3.journal_title).to eq 'Some Other Journal'
-              expect(p3.publisher).to eq 'Some Other Publisher'
+              expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
               expect(p3.volume).to eq '17'
@@ -3922,7 +3922,7 @@ describe ActivityInsightImporter do
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
-              expect(p1.publisher).to eq 'Test Publisher 1'
+              expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p1.volume).to eq '9'
@@ -3940,7 +3940,7 @@ describe ActivityInsightImporter do
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Professional Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
-              expect(p2.publisher).to eq nil
+              expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
               expect(p2.volume).to eq '7'
@@ -3959,7 +3959,7 @@ describe ActivityInsightImporter do
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Academic Journal Article'
               expect(p3.journal_title).to eq 'Some Other Journal'
-              expect(p3.publisher).to eq 'Some Other Publisher'
+              expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
               expect(p3.volume).to eq '17'

@@ -29,12 +29,12 @@ feature "Admin user detail page", type: :feature do
 
   let!(:pub1) { create :publication, title: "Bob's First Publication",
                        journal_title: "First Journal",
-                       publisher: "First Publisher",
+                       publisher_name: "First Publisher",
                        published_on: Date.new(2017, 1, 1) }
 
   let!(:pub2) { create :publication, title: "Bob's Second Publication",
                        journal_title: "Second Journal",
-                       publisher: "Second Publisher",
+                       publisher_name: "Second Publisher",
                        published_on: Date.new(2018, 1, 1),
                        duplicate_group: group }
 

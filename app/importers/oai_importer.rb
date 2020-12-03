@@ -20,7 +20,7 @@ class OAIImporter
             p.title = rr.title
             p.abstract = rr.description
             p.published_on = rr.date
-            p.publisher = rr.publisher
+            p.publisher_name = rr.publisher
             p.url = rr.url1
             p.open_access_url = rr.url2
             p.publication_type = 'Journal Article'

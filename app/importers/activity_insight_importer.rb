@@ -210,7 +210,7 @@ class ActivityInsightImporter
       title: pub.title,
       publication_type: pub.publication_type,
       journal_title: pub.journal_title,
-      publisher: pub.publisher,
+      publisher_name: pub.publisher,
       secondary_title: pub.secondary_title,
       status: pub.status,
       volume: pub.volume,

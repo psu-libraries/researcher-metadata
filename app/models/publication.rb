@@ -290,7 +290,7 @@ class Publication < ApplicationRecord
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
-      field(:publisher)
+      field(:publisher_name)
       field(:publication_type)
       field(:status)
       field(:created_at) { read_only true }
@@ -307,7 +307,6 @@ class Publication < ApplicationRecord
         end
       end
       field(:journal_title)
-      field(:publisher)
       field(:status)
       field(:volume)
       field(:issue)
@@ -335,7 +334,7 @@ class Publication < ApplicationRecord
       field(:secondary_title)
       field(:publication_type)
       field(:journal_title)
-      field(:publisher)
+      field(:publisher_name)
       field(:status)
       field(:volume)
       field(:issue)
@@ -381,7 +380,6 @@ class Publication < ApplicationRecord
         end
       end
       field(:journal_title)
-      field(:publisher)
       field(:status)
       field(:volume)
       field(:issue)
@@ -422,7 +420,7 @@ class Publication < ApplicationRecord
   end
 
   def published_by
-    journal_title.presence || publisher.presence
+    journal_title.presence || publisher_name.presence
   end
 
   def preferred_open_access_url

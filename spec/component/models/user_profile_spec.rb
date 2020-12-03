@@ -67,7 +67,7 @@ describe UserProfile do
                          total_scopus_citations: 4 }
     let!(:pub2) { create :publication, title: "Second Publication",
                          visible: true,
-                         publisher: "Test Publisher",
+                         publisher_name: "Test Publisher",
                          published_on: Date.new(2015, 1, 1) }
     let!(:pub3) { create :publication, title: "Third Publication",
                          visible: true,

@@ -154,7 +154,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub1.issue).to eq '5'
               expect(new_pub1.volume).to eq '74'
               expect(new_pub1.page_range).to eq '765-769'
-              expect(new_pub1.publisher).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
+              expect(new_pub1.publisher_name).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
               expect(new_pub1.published_on).to eq Date.new(2013, 9, 1)
               expect(new_pub1.status).to eq 'Published'
 
@@ -166,7 +166,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.issue).to eq '8'
               expect(new_pub2.volume).to eq '20'
               expect(new_pub2.page_range).to eq '201-209'
-              expect(new_pub2.publisher).to eq 'Another Publisher'
+              expect(new_pub2.publisher_name).to eq 'Another Publisher'
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
               expect(new_pub2.status).to eq 'Published'
             end
@@ -259,7 +259,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub1.issue).to eq '5'
               expect(new_pub1.volume).to eq '74'
               expect(new_pub1.page_range).to eq '765-769'
-              expect(new_pub1.publisher).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
+              expect(new_pub1.publisher_name).to eq 'ALCOHOL RES DOCUMENTATION INC CENT ALCOHOL STUD RUTGERS UNIV'
               expect(new_pub1.published_on).to eq Date.new(2013, 9, 1)
               expect(new_pub1.status).to eq 'Published'
 
@@ -271,7 +271,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.issue).to eq '8'
               expect(new_pub2.volume).to eq '20'
               expect(new_pub2.page_range).to eq '201-209'
-              expect(new_pub2.publisher).to eq 'Another Publisher'
+              expect(new_pub2.publisher_name).to eq 'Another Publisher'
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
               expect(new_pub2.status).to eq 'Published'
             end
