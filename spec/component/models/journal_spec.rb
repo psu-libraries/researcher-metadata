@@ -20,7 +20,7 @@ describe Journal, type: :model do
   it_behaves_like "an application record"
 
   describe 'associations' do
-    it { is_expected.to belong_to(:publisher).inverse_of(:journals) }
+    it { is_expected.to belong_to(:publisher).inverse_of(:journals).optional }
     it { is_expected.to have_many(:publications).inverse_of(:journal) }
   end
 end
