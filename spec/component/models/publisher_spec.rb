@@ -16,5 +16,6 @@ describe Publisher, type: :model do
 
   describe 'associations' do
     it { is_expected.to have_many(:journals).inverse_of(:publisher) }
+    it { is_expected.to have_many(:publications).through(:journals) }
   end
 end

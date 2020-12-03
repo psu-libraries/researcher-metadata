@@ -43,7 +43,10 @@ class Publication < ApplicationRecord
              foreign_key: :duplicate_publication_group_id,
              optional: true,
              inverse_of: :publications
+  belongs_to :journal, optional: true, inverse_of: :publications
 
+  has_one :publisher, through: :journal
+  
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
 
