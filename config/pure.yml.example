@@ -1,0 +1,4 @@
+development:
+  api_key: pure_api_key
+test:
+  api_key: fake_api_key
