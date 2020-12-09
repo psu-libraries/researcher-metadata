@@ -12,19 +12,15 @@ class OAIRepoRecord
   end
 
   def date
-    Date.parse(attribute('date'))
+    record.header.datestamp
   end
 
   def publisher
     attribute('publisher')
   end
 
-  def url1
-    metadata.xpath('//metadata//oai_dc:dc//dc:identifier', *namespace)[0].text
-  end
-
-  def url2
-    metadata.xpath('//metadata//oai_dc:dc//dc:identifier', *namespace)[1].try(:text)
+  def url
+    attribute('identifier')
   end
 
   def creators
@@ -35,25 +31,17 @@ class OAIRepoRecord
     record.header.identifier
   end
 
-  def any_user_matches?
-    !! creators.detect { |c| c.user_match || c.ambiguous_user_matches.any? }
+  def source
+    metadata.xpath('//metadata//oai_dc:dc//dc:source', *namespace)[0].text
   end
 
-  def importable?
-    journal_article? && any_user_matches?
+  def any_user_matches?
+    !! creators.detect { |c| c.user_match || c.ambiguous_user_matches.any? }
   end
 
   private
 
   attr_reader :record
-
-  def source
-    attribute('source')
-  end
-
-  def journal_article?
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
 
   def metadata
     Nokogiri::XML(@record.metadata)

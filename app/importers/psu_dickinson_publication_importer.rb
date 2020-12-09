@@ -13,4 +13,8 @@ class PSUDickinsonPublicationImporter < OAIImporter
   def repo_url
     'https://ideas.dickinsonlaw.psu.edu/do/oai'
   end
+
+  def set
+    'publication:fac-works'
+  end
 end

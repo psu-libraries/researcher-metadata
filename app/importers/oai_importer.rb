@@ -7,7 +7,7 @@ class OAIImporter
     repo_records.each do |rr|
       pbar.increment unless Rails.env.test?
 
-      if rr.importable?
+      if rr.any_user_matches?
         ActiveRecord::Base.transaction do
           existing_import = PublicationImport.find_by(source: import_source,
                                                       source_identifier: rr.identifier)
@@ -15,14 +15,21 @@ class OAIImporter
           # For now we don't anticipate that source data that we've already imported
           # will change, so we only need to create new records, and we don't need to
           # update existing records.
-          unless existing_import
+          if existing_import
+            # This updating of existing records is temporary. We just need to fix
+            # some incorrect data in production, and then we'll remove this.
+            p = existing_import.publication
+            p.journal_title = rr.source
+            p.publisher_name == rr.publisher
+            p.save!
+          else
             p = Publication.new
             p.title = rr.title
+            p.journal_title = rr.source
             p.abstract = rr.description
             p.published_on = rr.date
             p.publisher_name = rr.publisher
-            p.url = rr.url1
-            p.open_access_url = rr.url2
+            p.open_access_url = rr.url
             p.publication_type = 'Journal Article'
             p.status = 'Published'
             p.save!
@@ -89,13 +96,17 @@ class OAIImporter
     raise NotImplementedError.new("This method should be defined in a subclass")
   end
 
+  def set
+    raise NotImplementedError.new("This method should be defined in a subclass")
+  end
+
   def repo
     @repo ||= Fieldhand::Repository.new(repo_url)
   end
 
   def load_records
     @repo_records = []
-    repo.records.each do |r|
+    repo.records(metadata_prefix: 'dcs', set: set).each do |r|
       @repo_records.push record_type.new(r)
     end
   end

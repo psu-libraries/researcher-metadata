@@ -13,4 +13,8 @@ class PSULawSchoolPublicationImporter < OAIImporter
   def repo_url
     'https://elibrary.law.psu.edu/do/oai'
   end
+
+  def set
+    'publication:fac_works'
+  end
 end
