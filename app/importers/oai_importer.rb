@@ -15,14 +15,7 @@ class OAIImporter
           # For now we don't anticipate that source data that we've already imported
           # will change, so we only need to create new records, and we don't need to
           # update existing records.
-          if existing_import
-            # This updating of existing records is temporary. We just need to fix
-            # some incorrect data in production, and then we'll remove this.
-            p = existing_import.publication
-            p.journal_title = rr.source
-            p.publisher_name == rr.publisher
-            p.save!
-          else
+          unless existing_import
             p = Publication.new
             p.title = rr.title
             p.journal_title = rr.source
