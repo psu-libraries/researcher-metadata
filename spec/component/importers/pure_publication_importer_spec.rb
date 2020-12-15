@@ -10,6 +10,9 @@ describe PurePublicationImporter do
   let(:found_pub2) { PublicationImport.find_by(source: 'Pure', source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64') }
 
   describe '#call' do
+    let!(:duplicate_pub1) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
+    let!(:duplicate_pub2) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
+    
     context "when given a directory containing well-formed .json files of valid publication data from Pure" do
       let(:dirname) { Rails.root.join('spec', 'fixtures', 'pure_publications') }
 
@@ -44,7 +47,7 @@ describe PurePublicationImporter do
           p2 = found_pub2.publication
 
           expect(p1.title).to eq 'The First Publication'
-          expect(p2.title).to eq 'The Third Pure Publication'
+          expect(p2.title).to eq 'Third Test Publication With a Really Unique Title'
 
           expect(p1.secondary_title).to eq 'From Pure'
           expect(p2.secondary_title).to eq nil
@@ -136,6 +139,25 @@ describe PurePublicationImporter do
           expect(Authorship.find_by(publication: found_pub2.publication,
                                     user: pub3auth2,
                                     author_number: 2)).not_to be_nil
+        end
+
+        it "groups possible duplicates of new publication records" do
+          expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+          p2 = found_pub2.publication
+          group = p2.duplicate_group
+          
+          expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+        end
+
+        it "hides existing publications that might be duplicates" do
+          importer.call
+
+          p2 = found_pub2.publication
+
+          expect(p2.visible).to eq true
+          expect(duplicate_pub1.reload.visible).to eq false
+          expect(duplicate_pub2.reload.visible).to eq false
         end
       end
 
@@ -274,7 +296,7 @@ describe PurePublicationImporter do
 
             new_pub = found_pub2.publication
 
-            expect(new_pub.title).to eq 'The Third Pure Publication'
+            expect(new_pub.title).to eq 'Third Test Publication With a Really Unique Title'
             expect(new_pub.secondary_title).to eq nil
             expect(new_pub.publication_type).to eq 'Academic Journal Article'
             expect(new_pub.page_range).to eq '665-680'
@@ -288,6 +310,25 @@ describe PurePublicationImporter do
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
             expect(new_pub.doi).to be_nil
+          end
+
+          it "groups possible duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p2 = found_pub2.publication
+            group = p2.duplicate_group
+            
+            expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+          end
+
+          it "hides existing publications that might be duplicates" do
+            importer.call
+
+            p2 = found_pub2.publication
+
+            expect(p2.visible).to eq true
+            expect(duplicate_pub1.reload.visible).to eq false
+            expect(duplicate_pub2.reload.visible).to eq false
           end
         end
         
@@ -389,7 +430,7 @@ describe PurePublicationImporter do
 
             new_pub = found_pub2.publication
 
-            expect(new_pub.title).to eq 'The Third Pure Publication'
+            expect(new_pub.title).to eq 'Third Test Publication With a Really Unique Title'
             expect(new_pub.secondary_title).to eq nil
             expect(new_pub.publication_type).to eq 'Academic Journal Article'
             expect(new_pub.page_range).to eq '665-680'
@@ -403,6 +444,25 @@ describe PurePublicationImporter do
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
             expect(new_pub.visible).to eq true
             expect(new_pub.doi).to eq nil
+          end
+
+          it "groups possible duplicates of new publication records" do
+            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            p2 = found_pub2.publication
+            group = p2.duplicate_group
+            
+            expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+          end
+
+          it "hides existing publications that might be duplicates" do
+            importer.call
+
+            p2 = found_pub2.publication
+
+            expect(p2.visible).to eq true
+            expect(duplicate_pub1.reload.visible).to eq false
+            expect(duplicate_pub2.reload.visible).to eq false
           end
         end
       end
