@@ -561,7 +561,8 @@ describe User, type: :model do
     let!(:o_auth_1) { create :authorship,
                              user: user,
                              publication: other_pub_1,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create :publication,
@@ -570,7 +571,8 @@ describe User, type: :model do
     let!(:o_auth_5) { create :authorship,
                              user: user,
                              publication: other_pub_5,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of user_submitted_open_access_url
     let!(:other_pub_6) { create :publication,
@@ -579,7 +581,8 @@ describe User, type: :model do
     let!(:o_auth_6) { create :authorship,
                              user: user,
                              publication: other_pub_6,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of Scholarsphere upload timestamp on authorship
     let!(:other_pub_7) { create :publication,
@@ -588,7 +591,8 @@ describe User, type: :model do
                              user: user,
                              publication: other_pub_7,
                              confirmed: true,
-                             scholarsphere_uploaded_at: 1.day.ago }
+                             scholarsphere_uploaded_at: 1.day.ago,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
     let!(:other_pub_8) { create :publication,
@@ -596,7 +600,8 @@ describe User, type: :model do
     let!(:o_auth_8) { create :authorship,
                              user: user,
                              publication: other_pub_8,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
     let!(:another_auth_8) { create :authorship,
                                    publication: other_pub_8,
                                    scholarsphere_uploaded_at: 1.day.ago }
@@ -607,7 +612,8 @@ describe User, type: :model do
     let!(:o_auth_9) { create :authorship,
                              user: user,
                              publication: other_pub_9,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
     let!(:waiver_9) { create :internal_publication_waiver, authorship: o_auth_9 }
 
     # Filtered out due to presence of open access waiver on another authorship
@@ -616,7 +622,8 @@ describe User, type: :model do
     let!(:o_auth_10) { create :authorship,
                               user: user,
                               publication: other_pub_10,
-                              confirmed: true }
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
     let!(:another_auth_10) { create :authorship,
                                     publication: other_pub_10 }
     let!(:waiver_10) { create :internal_publication_waiver, authorship: another_auth_10 }
@@ -627,7 +634,8 @@ describe User, type: :model do
     let!(:o_auth_11) { create :authorship,
                               user: user,
                               publication: other_pub_11,
-                              confirmed: false }
+                              confirmed: false,
+                              open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to the user having never been notified about the publication before
     let!(:other_pub_12) { create :publication,
