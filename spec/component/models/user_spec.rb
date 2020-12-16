@@ -646,6 +646,16 @@ describe User, type: :model do
                               confirmed: true,
                               open_access_notification_sent_at: nil }
 
+    # Filtered out due to the publication being hidden
+    let!(:other_pub_13) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: false }
+    let!(:o_auth_13) { create :authorship,
+                              user: user,
+                              publication: other_pub_13,
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
+
     it "returns the user's recent publications that they've been notified about before that don't have any associated open access information" do
       expect(user.old_potential_open_access_publications).to match_array [potential_pub_1,
                                                                           potential_pub_2]
@@ -754,7 +764,7 @@ describe User, type: :model do
                               publication: other_pub_11,
                               confirmed: false }
 
-    # Filter out due to the user having been reminded about the publication before
+    # Filtered out due to the user having been reminded about the publication before
     let!(:other_pub_12) { create :publication,
                                  published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_12) { create :authorship,
@@ -762,6 +772,15 @@ describe User, type: :model do
                               publication: other_pub_12,
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago }
+
+    # Filtered out due to the publication being hidden
+    let!(:other_pub_13) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: false }
+    let!(:o_auth_13) { create :authorship,
+                              user: user,
+                              publication: other_pub_13,
+                              confirmed: true }
 
     it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information" do
       expect(user.new_potential_open_access_publications).to match_array [potential_pub_1,
