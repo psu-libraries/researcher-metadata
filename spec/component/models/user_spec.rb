@@ -519,6 +519,18 @@ describe User, type: :model do
     let!(:another_authorship_11) { create :authorship, publication: ou_pub_11 }
     let!(:waiver_11) { create :internal_publication_waiver, authorship: another_authorship_11 }
 
+    # Filtered out due to publication being hidden
+    let!(:other_user_12) { create :user, first_name: 'other_user_12' }
+    let!(:ou_mem_12) { create :user_organization_membership,
+                             user: other_user_12,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_12) { create :publication, published_on: Date.new(2020, 7, 1), visible: false }
+    let!(:ou_auth_12) { create :authorship,
+                              user: other_user_12,
+                              publication: ou_pub_12,
+                              confirmed: true }
+
     it "returns only users who should currently receive an email reminder about open access publications" do
       expect(User.needs_open_access_notification).to match_array [email_user_1,
                                                                   email_user_2,
