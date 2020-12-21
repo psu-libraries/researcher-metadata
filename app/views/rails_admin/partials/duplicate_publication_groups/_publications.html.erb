@@ -1,170 +1,175 @@
 <%= form_tag Rails.application.routes.url_helpers.admin_duplicate_publication_group_merge_path(@object) do %>
-  <div class="grouped-publications">
-    <table class="table table-condensed">
-      <thead>
-        <tr>
-          <th class="publication-field-label">Publication ID</th>
-          <% publications.each do |p| %>
-            <th class="publication-field"><%= p.id %></th>
-          <% end %>
-        </tr>
-      </thead>
-      <tbody>
-      <tr>
-        <td class="publication-field-label">Title</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.title %>"><%= link_to p.title, edit_path(model_name: :publication, id: p.id) %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Subtitle</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.secondary_title %>"><%= p.secondary_title %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Journal</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.journal_title %>"><%= p.journal_title %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Publisher</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.publisher %>"><%= p.publisher %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Date of Publication</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.published_on %>"><%= p.published_on %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Status</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.status %>"><%= p.status %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Volume</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.volume %>"><%= p.volume %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Issue</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.issue %>"><%= p.issue %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Edition</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.edition %>"><%= p.edition %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Pages</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.page_range %>"><%= p.page_range %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">ISSN</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.issn %>"><%= p.issn %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">DOI</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.doi %>">
-            <% if p.doi.present? %>
-              <a href="<%= p.doi %>" target="_blank"><%= p.doi %></a>
+  <div class="scroll-wrapper1">
+    <div class="scroll-top"></div>
+  </div>
+  <div class="scroll-wrapper2">
+    <div class="grouped-publications">
+      <table class="table table-condensed">
+        <thead>
+          <tr>
+            <th class="publication-field-label">Publication ID</th>
+            <% publications.each do |p| %>
+              <th class="publication-field"><%= p.id %></th>
             <% end %>
-          </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Type</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.publication_type %>"><%= p.publication_type %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Users</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.users.map { |u| u.name }.join(', ') %>">
-            <%= p.users.map { |u| link_to(u.name, show_path(model_name: :user, id: u.id)) }.join(', ').html_safe %>
-          </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Contributors</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.contributors.map { |c| c.name }.join(', ') %>"><%= p.contributors.map { |c| c.name }.join(', ') %></td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">AI IDs</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.ai_import_identifiers.join(', ') %>">
-            <%= p.ai_import_identifiers.join(', ') %>
-          </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Pure IDs</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.pure_import_identifiers.join(', ') %>">
-            <%= p.pure_import_identifiers.join(', ') %>
-          </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Known Non-duplicates</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.all_non_duplicate_ids.join(', ') %>">
-            <%= p.all_non_duplicate_ids.join(', ') %>
-          </td>
-        <% end %>
-      </tr>
-      <tr>
-        <td class="publication-field-label">Created at</td>
-        <% publications.each do |p| %>
-          <td class="publication-field" title="<%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>">
-            <%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>
-          </td>
-        <% end %>
-      </tr>
-      <% if publications.count > 1 %>
+          </tr>
+        </thead>
+        <tbody>
         <tr>
-          <td class="publication-field-label">Merge Target</td>
+          <td class="publication-field-label">Title</td>
           <% publications.each do |p| %>
-            <td class="publication-field"><%= radio_button_tag :merge_target_publication_id, p.id, false, class: 'merge-target-selector' %></td>
+            <td class="publication-field" title="<%= p.title %>"><%= link_to p.title, edit_path(model_name: :publication, id: p.id) %></td>
           <% end %>
         </tr>
         <tr>
-          <td class="publication-field-label">Select</td>
+          <td class="publication-field-label">Subtitle</td>
           <% publications.each do |p| %>
-            <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id, false, id: "selected_publication_ids_#{p.id}", class: 'publication-selector' %></td>
+            <td class="publication-field" title="<%= p.secondary_title %>"><%= p.secondary_title %></td>
           <% end %>
         </tr>
-      <% end %>
-      </tbody>
-    </table>
+        <tr>
+          <td class="publication-field-label">Journal</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.journal_title %>"><%= p.journal_title %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Publisher</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.publisher_name %>"><%= p.publisher_name %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Date of Publication</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.published_on %>"><%= p.published_on %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Status</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.status %>"><%= p.status %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Volume</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.volume %>"><%= p.volume %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Issue</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.issue %>"><%= p.issue %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Edition</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.edition %>"><%= p.edition %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Pages</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.page_range %>"><%= p.page_range %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">ISSN</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.issn %>"><%= p.issn %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">DOI</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.doi %>">
+              <% if p.doi.present? %>
+                <a href="<%= p.doi %>" target="_blank"><%= p.doi %></a>
+              <% end %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Type</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.publication_type %>"><%= p.publication_type %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Users</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.users.map { |u| u.name }.join(', ') %>">
+              <%= p.users.map { |u| link_to(u.name, show_path(model_name: :user, id: u.id)) }.join(', ').html_safe %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Contributors</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.contributors.map { |c| c.name }.join(', ') %>"><%= p.contributors.map { |c| c.name }.join(', ') %></td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">AI IDs</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.ai_import_identifiers.join(', ') %>">
+              <%= p.ai_import_identifiers.join(', ') %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Pure IDs</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.pure_import_identifiers.join(', ') %>">
+              <%= p.pure_import_identifiers.join(', ') %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Known Non-duplicates</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.all_non_duplicate_ids.join(', ') %>">
+              <%= p.all_non_duplicate_ids.join(', ') %>
+            </td>
+          <% end %>
+        </tr>
+        <tr>
+          <td class="publication-field-label">Created at</td>
+          <% publications.each do |p| %>
+            <td class="publication-field" title="<%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>">
+              <%= p.created_at.strftime('%B %-d, %Y %-H:%M') %>
+            </td>
+          <% end %>
+        </tr>
+        <% if publications.count > 1 %>
+          <tr>
+            <td class="publication-field-label">Merge Target</td>
+            <% publications.each do |p| %>
+              <td class="publication-field"><%= radio_button_tag :merge_target_publication_id, p.id, false, class: 'merge-target-selector' %></td>
+            <% end %>
+          </tr>
+          <tr>
+            <td class="publication-field-label">Select</td>
+            <% publications.each do |p| %>
+              <td class="publication-field"><%= check_box_tag 'selected_publication_ids[]', p.id, false, id: "selected_publication_ids_#{p.id}", class: 'publication-selector' %></td>
+            <% end %>
+          </tr>
+        <% end %>
+        </tbody>
+      </table>
 
-    <% if publications.count > 1 %>
-      <%= submit_tag "Merge Selected",
-                     class: 'btn btn-primary',
-                     id: 'merge-selected-button',
-                     data: {confirm: "Are you sure that you want to merge the selected publications into the chosen target publication? This cannot be undone."} %>
-      <%= submit_tag "Ignore Selected",
-                     class: 'btn btn-primary',
-                     id: 'ignore-selected-button',
-                     data: {confirm: "Are you sure that you want to permanently ignore all of the selected publications as non-duplicates of each other? This cannot be undone."} %>
-    <% end %>
+      <% if publications.count > 1 %>
+        <%= submit_tag "Merge Selected",
+                       class: 'btn btn-primary',
+                       id: 'merge-selected-button',
+                       data: {confirm: "Are you sure that you want to merge the selected publications into the chosen target publication? This cannot be undone."} %>
+        <%= submit_tag "Ignore Selected",
+                       class: 'btn btn-primary',
+                       id: 'ignore-selected-button',
+                       data: {confirm: "Are you sure that you want to permanently ignore all of the selected publications as non-duplicates of each other? This cannot be undone."} %>
+      <% end %>
+    </div>
   </div>
 <% end %>
 

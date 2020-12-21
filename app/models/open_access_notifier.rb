@@ -1,5 +1,5 @@
 class OpenAccessNotifier
-  def initialize(users = nil)
+  def initialize(users=User)
     @users = users
   end
 
@@ -23,6 +23,6 @@ class OpenAccessNotifier
   private
 
   def users
-    @users || User.needs_open_access_notification
+    @users.needs_open_access_notification
   end
 end

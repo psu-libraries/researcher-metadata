@@ -342,7 +342,7 @@ describe User, type: :model do
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:eu_pub_1) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:eu_pub_1) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:eu_auth_1) { create :authorship,
                               user: email_user_1,
                               publication: eu_pub_1,
@@ -353,7 +353,7 @@ describe User, type: :model do
                               user: email_user_2,
                               started_on: Date.new(2019, 1, 1),
                               ended_on: nil }
-    let!(:eu_pub_2) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:eu_pub_2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:eu_auth_2) { create :authorship,
                               user: email_user_2,
                               publication: eu_pub_2,
@@ -363,8 +363,8 @@ describe User, type: :model do
     let!(:eu_mem_3) { create :user_organization_membership,
                               user: email_user_3,
                               started_on: Date.new(2019, 1, 1),
-                              ended_on: Date.new(2020, 1, 2) }
-    let!(:eu_pub_3) { create :publication, published_on: Date.new(2020, 1, 1) }
+                              ended_on: Date.new(2020, 7, 2) }
+    let!(:eu_pub_3) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:eu_auth_3) { create :authorship,
                               user: email_user_3,
                               publication: eu_pub_3,
@@ -376,7 +376,7 @@ describe User, type: :model do
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
     let!(:eu_pub_4) { create :publication, 
-                             published_on: Date.new(2020, 1, 1),
+                             published_on: Date.new(2020, 7, 1),
                              open_access_url: '',
                              user_submitted_open_access_url: '' }
     let!(:eu_auth_4) { create :authorship,
@@ -390,7 +390,7 @@ describe User, type: :model do
                              user: other_user_1,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_1) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_1) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_1) { create :authorship,
                               user: other_user_1,
                               publication: ou_pub_1,
@@ -398,7 +398,7 @@ describe User, type: :model do
 
     # Filtered out due to not having an organization membership
     let!(:other_user_2) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_2' }
-    let!(:ou_pub_2) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_2) { create :authorship,
                               user: other_user_2,
                               publication: ou_pub_2,
@@ -408,9 +408,9 @@ describe User, type: :model do
     let!(:other_user_3) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_3' }
     let!(:ou_mem_3) { create :user_organization_membership,
                              user: other_user_3,
-                             started_on: Date.new(2020, 2, 1),
+                             started_on: Date.new(2020, 8, 1),
                              ended_on: nil }
-    let!(:ou_pub_3) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_3) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_3) { create :authorship,
                               user: other_user_3,
                               publication: ou_pub_3,
@@ -422,7 +422,7 @@ describe User, type: :model do
                              user: other_user_4,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_4) { create :publication, published_on: Date.new(2019, 12, 31) }
+    let!(:ou_pub_4) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:ou_auth_4) { create :authorship,
                               user: other_user_4,
                               publication: ou_pub_4,
@@ -434,7 +434,7 @@ describe User, type: :model do
                              user: other_user_5,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_5) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_5) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_5) { create :authorship,
                               user: other_user_5,
                               publication: ou_pub_5,
@@ -446,7 +446,7 @@ describe User, type: :model do
                              user: other_user_6,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_6) { create :publication, published_on: Date.new(2020, 1, 1), open_access_url: 'a_url' }
+    let!(:ou_pub_6) { create :publication, published_on: Date.new(2020, 7, 1), open_access_url: 'a_url' }
     let!(:ou_auth_6) { create :authorship,
                               user: other_user_6,
                               publication: ou_pub_6,
@@ -458,7 +458,7 @@ describe User, type: :model do
                              user: other_user_7,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_7) { create :publication, published_on: Date.new(2020, 1, 1), user_submitted_open_access_url: 'a_url' }
+    let!(:ou_pub_7) { create :publication, published_on: Date.new(2020, 7, 1), user_submitted_open_access_url: 'a_url' }
     let!(:ou_auth_7) { create :authorship,
                               user: other_user_7,
                               publication: ou_pub_7,
@@ -470,7 +470,7 @@ describe User, type: :model do
                              user: other_user_8,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_8) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_8) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_8) { create :authorship,
                               user: other_user_8,
                               publication: ou_pub_8,
@@ -483,7 +483,7 @@ describe User, type: :model do
                              user: other_user_9,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_9) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_9) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_9) { create :authorship,
                               user: other_user_9,
                               publication: ou_pub_9,
@@ -498,7 +498,7 @@ describe User, type: :model do
                               user: other_user_10,
                               started_on: Date.new(2019, 1, 1),
                               ended_on: nil }
-    let!(:ou_pub_10) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_10) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_10) { create :authorship,
                                user: other_user_10,
                                publication: ou_pub_10,
@@ -511,13 +511,25 @@ describe User, type: :model do
                               user: other_user_11,
                               started_on: Date.new(2019, 1, 1),
                               ended_on: nil }
-    let!(:ou_pub_11) { create :publication, published_on: Date.new(2020, 1, 1) }
+    let!(:ou_pub_11) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:ou_auth_11) { create :authorship,
                                user: other_user_11,
                                publication: ou_pub_11,
                                confirmed: true }
     let!(:another_authorship_11) { create :authorship, publication: ou_pub_11 }
     let!(:waiver_11) { create :internal_publication_waiver, authorship: another_authorship_11 }
+
+    # Filtered out due to publication being hidden
+    let!(:other_user_12) { create :user, first_name: 'other_user_12' }
+    let!(:ou_mem_12) { create :user_organization_membership,
+                             user: other_user_12,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_12) { create :publication, published_on: Date.new(2020, 7, 1), visible: false }
+    let!(:ou_auth_12) { create :authorship,
+                              user: other_user_12,
+                              publication: ou_pub_12,
+                              confirmed: true }
 
     it "returns only users who should currently receive an email reminder about open access publications" do
       expect(User.needs_open_access_notification).to match_array [email_user_1,
@@ -534,11 +546,11 @@ describe User, type: :model do
                                user: user,
                                organization: org,
                                started_on: Date.new(2000, 1, 1),
-                               ended_on: Date.new(2020, 2, 1) }
+                               ended_on: Date.new(2020, 8, 1) }
     
     # Publications that meet the criteria for an open access reminder
     let!(:potential_pub_1) { create :publication,
-                                    published_on: Date.new(2020, 1, 1) }
+                                    published_on: Date.new(2020, 7, 1) }
     let!(:p_auth_1) { create :authorship,
                              user: user,
                              publication: potential_pub_1,
@@ -546,7 +558,7 @@ describe User, type: :model do
                              open_access_notification_sent_at: 1.month.ago }
 
     let!(:potential_pub_2) { create :publication,
-                                    published_on: Date.new(2020, 1, 1),
+                                    published_on: Date.new(2020, 7, 1),
                                     open_access_url: '',
                                     user_submitted_open_access_url: '' }
     let!(:p_auth_2) { create :authorship,
@@ -557,86 +569,104 @@ describe User, type: :model do
 
     # Filtered out due to being published before open access policy
     let!(:other_pub_1) { create :publication,
-                                published_on: Date.new(2019, 12, 31) }
+                                published_on: Date.new(2020, 6, 30) }
     let!(:o_auth_1) { create :authorship,
                              user: user,
                              publication: other_pub_1,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create :publication,
-                                published_on: Date.new(2020, 1, 1),
+                                published_on: Date.new(2020, 7, 1),
                                 open_access_url: 'a_url' }
     let!(:o_auth_5) { create :authorship,
                              user: user,
                              publication: other_pub_5,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of user_submitted_open_access_url
     let!(:other_pub_6) { create :publication,
-                                published_on: Date.new(2020, 1, 1),
+                                published_on: Date.new(2020, 7, 1),
                                 user_submitted_open_access_url: 'a_url' }
     let!(:o_auth_6) { create :authorship,
                              user: user,
                              publication: other_pub_6,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of Scholarsphere upload timestamp on authorship
     let!(:other_pub_7) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_7) { create :authorship,
                              user: user,
                              publication: other_pub_7,
                              confirmed: true,
-                             scholarsphere_uploaded_at: 1.day.ago }
+                             scholarsphere_uploaded_at: 1.day.ago,
+                             open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
     let!(:other_pub_8) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_8) { create :authorship,
                              user: user,
                              publication: other_pub_8,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
     let!(:another_auth_8) { create :authorship,
                                    publication: other_pub_8,
                                    scholarsphere_uploaded_at: 1.day.ago }
 
     # Filtered out due to presence of open access waiver
     let!(:other_pub_9) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_9) { create :authorship,
                              user: user,
                              publication: other_pub_9,
-                             confirmed: true }
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago }
     let!(:waiver_9) { create :internal_publication_waiver, authorship: o_auth_9 }
 
     # Filtered out due to presence of open access waiver on another authorship
     let!(:other_pub_10) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_10) { create :authorship,
                               user: user,
                               publication: other_pub_10,
-                              confirmed: true }
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
     let!(:another_auth_10) { create :authorship,
                                     publication: other_pub_10 }
     let!(:waiver_10) { create :internal_publication_waiver, authorship: another_auth_10 }
 
     # Filtered out due to authorship not being confirmed
     let!(:other_pub_11) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_11) { create :authorship,
                               user: user,
                               publication: other_pub_11,
-                              confirmed: false }
+                              confirmed: false,
+                              open_access_notification_sent_at: 1.month.ago }
 
     # Filtered out due to the user having never been notified about the publication before
     let!(:other_pub_12) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_12) { create :authorship,
                               user: user,
                               publication: other_pub_12,
                               confirmed: true,
                               open_access_notification_sent_at: nil }
+
+    # Filtered out due to the publication being hidden
+    let!(:other_pub_13) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: false }
+    let!(:o_auth_13) { create :authorship,
+                              user: user,
+                              publication: other_pub_13,
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
 
     it "returns the user's recent publications that they've been notified about before that don't have any associated open access information" do
       expect(user.old_potential_open_access_publications).to match_array [potential_pub_1,
@@ -651,11 +681,11 @@ describe User, type: :model do
                                user: user,
                                organization: org,
                                started_on: Date.new(2000, 1, 1),
-                               ended_on: Date.new(2020, 2, 1) }
+                               ended_on: Date.new(2020, 8, 1) }
     
     # Publications that meet the criteria for an open access reminder
     let!(:potential_pub_1) { create :publication,
-                                    published_on: Date.new(2020, 1, 1) }
+                                    published_on: Date.new(2020, 7, 1) }
     let!(:p_auth_1) { create :authorship,
                              user: user,
                              publication: potential_pub_1,
@@ -663,7 +693,7 @@ describe User, type: :model do
                              open_access_notification_sent_at: nil }
 
     let!(:potential_pub_2) { create :publication,
-                                    published_on: Date.new(2020, 1, 1),
+                                    published_on: Date.new(2020, 7, 1),
                                     open_access_url: '',
                                     user_submitted_open_access_url: '' }
     let!(:p_auth_2) { create :authorship,
@@ -674,7 +704,7 @@ describe User, type: :model do
 
     # Filtered out due to being published before open access policy
     let!(:other_pub_1) { create :publication,
-                                published_on: Date.new(2019, 12, 31) }
+                                published_on: Date.new(2020, 6, 30) }
     let!(:o_auth_1) { create :authorship,
                              user: user,
                              publication: other_pub_1,
@@ -682,7 +712,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create :publication,
-                                published_on: Date.new(2020, 1, 1),
+                                published_on: Date.new(2020, 7, 1),
                                 open_access_url: 'a_url' }
     let!(:o_auth_5) { create :authorship,
                              user: user,
@@ -691,7 +721,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of user_submitted_open_access_url
     let!(:other_pub_6) { create :publication,
-                                published_on: Date.new(2020, 1, 1),
+                                published_on: Date.new(2020, 7, 1),
                                 user_submitted_open_access_url: 'a_url' }
     let!(:o_auth_6) { create :authorship,
                              user: user,
@@ -700,7 +730,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of Scholarsphere upload timestamp on authorship
     let!(:other_pub_7) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_7) { create :authorship,
                              user: user,
                              publication: other_pub_7,
@@ -709,7 +739,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
     let!(:other_pub_8) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_8) { create :authorship,
                              user: user,
                              publication: other_pub_8,
@@ -720,7 +750,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of open access waiver
     let!(:other_pub_9) { create :publication,
-                                published_on: Date.new(2020, 1, 1) }
+                                published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_9) { create :authorship,
                              user: user,
                              publication: other_pub_9,
@@ -729,7 +759,7 @@ describe User, type: :model do
 
     # Filtered out due to presence of open access waiver on another authorship
     let!(:other_pub_10) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_10) { create :authorship,
                               user: user,
                               publication: other_pub_10,
@@ -740,20 +770,29 @@ describe User, type: :model do
 
     # Filtered out due to authorship not being confirmed
     let!(:other_pub_11) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_11) { create :authorship,
                               user: user,
                               publication: other_pub_11,
                               confirmed: false }
 
-    # Filter out due to the user having been reminded about the publication before
+    # Filtered out due to the user having been reminded about the publication before
     let!(:other_pub_12) { create :publication,
-                                 published_on: Date.new(2020, 1, 1) }
+                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_12) { create :authorship,
                               user: user,
                               publication: other_pub_12,
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago }
+
+    # Filtered out due to the publication being hidden
+    let!(:other_pub_13) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: false }
+    let!(:o_auth_13) { create :authorship,
+                              user: user,
+                              publication: other_pub_13,
+                              confirmed: true }
 
     it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information" do
       expect(user.new_potential_open_access_publications).to match_array [potential_pub_1,

@@ -12,7 +12,7 @@ feature "Admin publication detail page", type: :feature do
   let!(:pub) { create :publication,
                       title: "Bob's Publication",
                       journal_title: "Prestigious Journal",
-                      publisher: "The Publisher",
+                      publisher_name: "The Publisher",
                       published_on: Date.new(2017, 1, 1),
                       publication_type: "Academic Journal Article",
                       status: "Published",

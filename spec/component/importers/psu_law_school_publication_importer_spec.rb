@@ -3,25 +3,27 @@ require 'component/component_spec_helper'
 describe PSULawSchoolPublicationImporter do
   let(:importer) { PSULawSchoolPublicationImporter.new }
 
-  let(:psu_law_repo) { double 'fieldhand repository for PSU Law School', records: records }
+  let(:psu_law_repo) { double 'fieldhand repository for PSU Law School' }
   let(:records) { [record1, record2, record3] }
   let(:record1) { double 'fieldhand OAI record 1' }
   let(:record2) { double 'fieldhand OAI record 2' }
   let(:record3) { double 'fieldhand OAI record 3' }
 
-  let(:r1) { double 'record 1', importable?: false }
+  let(:r1) { double 'record 1', any_user_matches?: false }
   let(:r2) { double 'record 2',
-                    importable?: true,
-                    identifier: 'existing-identifier' }
+                    any_user_matches?: true,
+                    identifier: 'existing-identifier',
+                    publisher: 'Test Publisher',
+                    source: 'Test Source' }
   let(:r3) { double 'record 3',
-                    importable?: true,
+                    any_user_matches?: true,
                     identifier: 'non-existing-identifier',
                     title: 'A Penn State Law Article',
                     description: 'a description of the article',
                     date: Date.new(2020, 1, 1),
                     publisher: 'The Publisher',
-                    url1: 'https://example.com/article',
-                    url2: 'https://example.com/article/download',
+                    source: 'The Source',
+                    url: 'https://example.com/article',
                     creators: [c1, c2] }
 
   let(:c1) { double 'creator 1',
@@ -47,6 +49,7 @@ describe PSULawSchoolPublicationImporter do
 
   before do
     allow(Fieldhand::Repository).to receive(:new).with('https://elibrary.law.psu.edu/do/oai').and_return psu_law_repo
+    allow(psu_law_repo).to receive(:records).with(metadata_prefix: 'dcs', set: 'publication:fac_works').and_return records
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record1).and_return r1
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record2).and_return r2
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record3).and_return r3
@@ -98,11 +101,11 @@ describe PSULawSchoolPublicationImporter do
       expect(pub.title).to eq 'A Penn State Law Article'
       expect(pub.abstract).to eq 'a description of the article'
       expect(pub.published_on).to eq Date.new(2020, 1, 1)
-      expect(pub.publisher).to eq 'The Publisher'
-      expect(pub.url).to eq 'https://example.com/article'
-      expect(pub.open_access_url).to eq 'https://example.com/article/download'
+      expect(pub.publisher_name).to eq 'The Publisher'
+      expect(pub.open_access_url).to eq 'https://example.com/article'
       expect(pub.publication_type).to eq 'Journal Article'
       expect(pub.status).to eq 'Published'
+      expect(pub.journal_title).to eq 'The Source'
 
       con1 = pub.contributors.find_by(first_name: 'First')
       expect(con1.last_name).to eq 'Creator'

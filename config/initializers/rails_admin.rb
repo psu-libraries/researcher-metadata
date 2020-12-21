@@ -59,7 +59,9 @@ RailsAdmin.config do |config|
             :Grant,
             :InternalPublicationWaiver,
             :ExternalPublicationWaiver,
-            :Authorship]
+            :Authorship,
+            :Journal,
+            :Publisher]
     end
     new do
       only [:Publication, :User, :APIToken]

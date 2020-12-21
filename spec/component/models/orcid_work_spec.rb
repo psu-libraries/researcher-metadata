@@ -6,7 +6,7 @@ describe OrcidWork do
                              title: 'Test Title',
                              publication_type: 'Academic Journal Article',
                              journal_title: 'Test Journal',
-                             publisher: 'Test Publisher',
+                             publisher_name: 'Test Publisher',
                              secondary_title: 'Secondary Test Title',
                              status: 'Published',
                              volume: '1',

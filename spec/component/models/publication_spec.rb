@@ -7,7 +7,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:title).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:publication_type).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:journal_title).of_type(:text) }
-  it { is_expected.to have_db_column(:publisher).of_type(:text) }
+  it { is_expected.to have_db_column(:publisher_name).of_type(:text) }
   it { is_expected.to have_db_column(:secondary_title).of_type(:text) }
   it { is_expected.to have_db_column(:status).of_type(:string) }
   it { is_expected.to have_db_column(:volume).of_type(:string) }
@@ -30,10 +30,13 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:journal_id).of_type(:integer) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
+  it { is_expected.to have_db_foreign_key(:journal_id) }
 
   it { is_expected.to have_db_index(:duplicate_publication_group_id) }
+  it { is_expected.to have_db_index(:journal_id) }
   it { is_expected.to have_db_index(:volume) }
   it { is_expected.to have_db_index(:issue) }
   it { is_expected.to have_db_index(:doi) }
@@ -68,6 +71,9 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
+    it { is_expected.to belong_to(:journal).optional.inverse_of(:publications) }
+
+    it { is_expected.to have_one(:publisher).through(:journal) }
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
@@ -180,9 +186,9 @@ describe Publication, type: :model do
   end
 
   describe '.subject_to_open_access_policty' do
-    let!(:pub1) { create :publication, published_on: Date.new(2019, 12, 31) }
-    let!(:pub2) { create :publication, published_on: Date.new(2020, 1, 1) }
-    let!(:pub3) { create :publication, published_on: Date.new(2020, 1, 2) }
+    let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
+    let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
     it "returns publications that were published after Penn State's open access policy went into effect" do
       expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
     end
@@ -462,7 +468,7 @@ describe Publication, type: :model do
   end
 
   describe '#published_by' do
-    let(:pub) { Publication.new(publisher: publisher, journal_title: jt) }
+    let(:pub) { Publication.new(publisher_name: publisher, journal_title: jt) }
     context "when the publication has a journal title" do
       let(:jt) { "The Journal" }
       context "when the publication has a publisher" do

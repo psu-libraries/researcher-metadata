@@ -1,5 +1,5 @@
 class Publication < ApplicationRecord
-  OPEN_ACCESS_POLICY_START = Date.new(2020, 1, 1)
+  OPEN_ACCESS_POLICY_START = Date.new(2020, 7, 1)
 
   class NonDuplicateMerge < ArgumentError; end
 
@@ -43,7 +43,10 @@ class Publication < ApplicationRecord
              foreign_key: :duplicate_publication_group_id,
              optional: true,
              inverse_of: :publications
+  belongs_to :journal, optional: true, inverse_of: :publications
 
+  has_one :publisher, through: :journal
+  
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
 
@@ -290,7 +293,7 @@ class Publication < ApplicationRecord
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
-      field(:publisher)
+      field(:publisher_name)
       field(:publication_type)
       field(:status)
       field(:created_at) { read_only true }
@@ -307,7 +310,6 @@ class Publication < ApplicationRecord
         end
       end
       field(:journal_title)
-      field(:publisher)
       field(:status)
       field(:volume)
       field(:issue)
@@ -335,7 +337,7 @@ class Publication < ApplicationRecord
       field(:secondary_title)
       field(:publication_type)
       field(:journal_title)
-      field(:publisher)
+      field(:publisher_name)
       field(:status)
       field(:volume)
       field(:issue)
@@ -381,7 +383,6 @@ class Publication < ApplicationRecord
         end
       end
       field(:journal_title)
-      field(:publisher)
       field(:status)
       field(:volume)
       field(:issue)
@@ -422,7 +423,7 @@ class Publication < ApplicationRecord
   end
 
   def published_by
-    journal_title.presence || publisher.presence
+    journal_title.presence || publisher_name.presence
   end
 
   def preferred_open_access_url

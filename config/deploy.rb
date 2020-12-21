@@ -25,6 +25,7 @@ set :shared, %w{
   config/secrets.yml
   config/activity_insight.yml
   config/orcid.yml
+  config/pure.yml
   db/data
 }
 

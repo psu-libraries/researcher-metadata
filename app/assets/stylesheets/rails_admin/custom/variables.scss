@@ -9,7 +9,6 @@ $btn-info-border: #dfdfdf;
 $fg-nav-tabs-active: #777;
 
 .grouped-publications {
-  overflow-x: scroll;
 
   th.publication-field, td.publication-field {
     min-width: 325px;
@@ -30,4 +29,24 @@ $fg-nav-tabs-active: #777;
   padding-top: 5px;
   padding-bottom: 25px;
   width: 100vh;
+}
+
+.scroll-wrapper1, .scroll-wrapper2 {
+  width: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+}
+
+.scroll-wrapper1 { height: 20px; }
+
+.scroll-top { height: 20px; }
+
+input.merge-target-selector {
+  width: 35px;
+  height: 35px;
+}
+
+input.publication-selector {
+  width: 35px;
+  height: 35px;
 }

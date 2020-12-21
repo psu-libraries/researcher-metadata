@@ -6,7 +6,7 @@ describe API::V1::PublicationSerializer do
                              secondary_title: 'pub 1 subtitle',
                              journal_title: 'prestegious journal',
                              publication_type: 'Journal Article',
-                             publisher: 'a publisher',
+                             publisher_name: 'a publisher',
                              status: 'published',
                              volume: '1',
                              issue: '2',

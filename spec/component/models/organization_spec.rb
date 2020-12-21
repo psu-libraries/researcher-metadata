@@ -156,4 +156,34 @@ describe Organization, type: :model do
       expect(org.all_publications).to match_array [pub_1, pub_4, pub_5, pub_7, pub_9]
     end
   end
+
+  describe "#all_users" do
+    let!(:org) { create :organization }
+    let!(:other_org) { create :organization }
+    let!(:child_org) { create :organization, parent: org }
+    let!(:child_org_child) { create :organization, parent: child_org }
+    let!(:user_1) { create :user }
+    let!(:user_2) { create :user }
+    let!(:user_3) { create :user }
+    let!(:user_4) { create :user }
+
+    before do
+      create :user_organization_membership,
+             user: user_1,
+             organization: org
+      create :user_organization_membership,
+             user: user_2,
+             organization: child_org
+      create :user_organization_membership,
+             user: user_3,
+             organization: child_org_child
+      create :user_organization_membership,
+             user: user_4,
+             organization: other_org
+    end
+
+    it "retuns the users who are members of the organization or one of its descendants" do
+      expect(org.all_users).to match_array [user_1, user_2, user_3]
+    end
+  end
 end

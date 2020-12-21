@@ -40,6 +40,13 @@ class PurePublicationImporter
               else
                 p = Publication.create!(pub_attrs(publication))
                 pi.publication = p
+
+                DuplicatePublicationGroup.group_duplicates_of(p)
+                group = p.reload.duplicate_group
+                if group
+                  other_pubs = group.publications.where.not(id: p.id)
+                  other_pubs.update_all(visible: false)
+                end
               end
 
               pi.save!

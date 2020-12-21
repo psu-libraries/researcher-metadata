@@ -66,7 +66,7 @@ class WebOfScienceFileImporter
                   p.issue = wos_pub.issue
                   p.volume = wos_pub.volume
                   p.page_range = wos_pub.page_range
-                  p.publisher = wos_pub.publisher
+                  p.publisher_name = wos_pub.publisher
                   p.published_on = wos_pub.publication_date
                   p.status = 'Published'
                   p.save!
