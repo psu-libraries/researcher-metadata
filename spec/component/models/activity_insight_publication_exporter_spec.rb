@@ -3,7 +3,7 @@ require 'component/component_spec_helper'
 describe ActivityInsightPublicationExporter do
   subject(:exporter) { ActivityInsightPublicationExporter }
 
-  let!(:user) { FactoryBot.create :user, activity_insight_identifier: '123456' }
+  let!(:user) { FactoryBot.create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
   let!(:authorship1) { FactoryBot.create :authorship, user: user, publication: publication1 }
   let!(:authorship2) { FactoryBot.create :authorship, user: user, publication: publication2 }
   let!(:publication1) do

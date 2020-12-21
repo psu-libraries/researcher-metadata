@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Data>
-  <Record username="user21">
+  <Record username="abc123">
     <INTELLCONT>
       <TITLE access="READ_ONLY">Test</TITLE>
       <TITLE_SECONDARY access="READ_ONLY">Second Title</TITLE_SECONDARY>
