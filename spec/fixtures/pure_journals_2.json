@@ -1,0 +1,580 @@
+{
+  "count": 2,
+  "pageInformation": {
+    "offset": 0,
+    "size": 1000
+  },
+  "items": [
+    {
+      "pureId": 3452038,
+      "externalId": "36823",
+      "externalIdSource": "Scopus",
+      "externallyManaged": true,
+      "uuid": "b387416f-17e0-4ee3-a030-2f15b890380d",
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-06-23T00:00:28.421+0000",
+        "modifiedBy": "root",
+        "modifiedDate": "2020-12-13T00:36:02.226+0000"
+      },
+      "type": {
+        "pureId": 910,
+        "uri": "/dk/atira/pure/journal/journaltypes/journal/journal",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Journal"
+            }
+          ]
+        }
+      },
+      "publisher": {
+        "uuid": "435826f4-a25d-4005-b9da-47d3507834ff",
+        "externalId": "5243",
+        "externalIdSource": "Scopus",
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "value": "Maik Nauka-Interperiodica Publishing"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 920,
+          "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Publisher"
+              }
+            ]
+          }
+        }
+      },
+      "workflow": {
+        "workflowStep": "approved",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Approved"
+            }
+          ]
+        }
+      },
+      "titles": [
+        {
+          "value": "Tsitologiya"
+        }
+      ],
+      "alternativeTitles": [
+        "Tsitologiia",
+        "Tsitologiia.",
+        "TSITOLOGIYA"
+      ],
+      "issns": [
+        {
+          "value": "0041-3771"
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 71931559,
+          "externalId": "36823",
+          "externalIdSource": "Scopus",
+          "value": {
+            "formatted": false,
+            "value": "36823"
+          },
+          "type": {
+            "pureId": 3442803,
+            "uri": "/dk/atira/pure/journal/journalsources/scopusid",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Scopus ID"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "keywordGroups": [
+        {
+          "pureId": 3452040,
+          "externalId": "36823",
+          "externalIdSource": "Scopus",
+          "externallyManaged": true,
+          "logicalName": "ASJCSubjectAreas",
+          "type": {
+            "uri": "/dk/atira/pure/subjectarea/asjc",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "ASJC Scopus subject areas"
+                }
+              ]
+            }
+          },
+          "keywordContainers": [
+            {
+              "pureId": 36403086,
+              "structuredKeyword": {
+                "pureId": 6339,
+                "uri": "/dk/atira/pure/subjectarea/asjc/2700/2734",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Pathology and Forensic Medicine"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "pureId": 36403087,
+              "structuredKeyword": {
+                "pureId": 6315,
+                "uri": "/dk/atira/pure/subjectarea/asjc/2700/2722",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Histology"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "scopusMetrics": [
+        {
+          "year": 1996
+        },
+        {
+          "year": 1997
+        },
+        {
+          "year": 1998
+        },
+        {
+          "year": 1999,
+          "snip": 0.052,
+          "sjr": 0.11
+        },
+        {
+          "year": 2000,
+          "snip": 0.113,
+          "sjr": 0.117
+        },
+        {
+          "year": 2001,
+          "snip": 0.036,
+          "sjr": 0.102
+        },
+        {
+          "year": 2002,
+          "snip": 0.058,
+          "sjr": 0.114
+        },
+        {
+          "year": 2003,
+          "snip": 0.204,
+          "sjr": 0.118
+        },
+        {
+          "year": 2004,
+          "snip": 0.171,
+          "sjr": 0.126
+        },
+        {
+          "year": 2005,
+          "snip": 0.418,
+          "sjr": 0.135
+        },
+        {
+          "year": 2006,
+          "sjr": 0.132
+        },
+        {
+          "year": 2007,
+          "snip": 0.197,
+          "sjr": 0.126
+        },
+        {
+          "year": 2008,
+          "snip": 0.321,
+          "sjr": 0.143
+        },
+        {
+          "year": 2009,
+          "snip": 0.158,
+          "sjr": 0.137
+        },
+        {
+          "year": 2010,
+          "snip": 0.167,
+          "sjr": 0.136
+        },
+        {
+          "year": 2011,
+          "citescore": 0.5,
+          "snip": 0.296,
+          "sjr": 0.158
+        },
+        {
+          "year": 2012,
+          "citescore": 0.4,
+          "snip": 0.212,
+          "sjr": 0.143
+        },
+        {
+          "year": 2013,
+          "citescore": 0.5,
+          "snip": 0.242,
+          "sjr": 0.149
+        },
+        {
+          "year": 2014,
+          "citescore": 0.4,
+          "snip": 0.275,
+          "sjr": 0.158
+        },
+        {
+          "year": 2015,
+          "citescore": 0.4,
+          "snip": 0.206,
+          "sjr": 0.148
+        },
+        {
+          "year": 2016,
+          "citescore": 0.5,
+          "snip": 0.304,
+          "sjr": 0.149
+        },
+        {
+          "year": 2017,
+          "citescore": 0.6,
+          "snip": 0.258,
+          "sjr": 0.151
+        },
+        {
+          "year": 2018,
+          "citescore": 0.4,
+          "snip": 0,
+          "sjr": 0.147
+        },
+        {
+          "year": 2019,
+          "citescore": 0.4,
+          "snip": 0.13,
+          "sjr": 0.116
+        },
+        {
+          "year": 2020,
+          "citescore": 0.4
+        }
+      ]
+    },
+    {
+      "pureId": 3452102,
+      "externalId": "37303",
+      "externalIdSource": "Scopus",
+      "externallyManaged": true,
+      "uuid": "68edd4d0-f54f-423c-9548-f0b7032e5b50",
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-06-23T00:00:28.863+0000",
+        "modifiedBy": "root",
+        "modifiedDate": "2020-12-13T00:13:58.540+0000"
+      },
+      "type": {
+        "pureId": 910,
+        "uri": "/dk/atira/pure/journal/journaltypes/journal/journal",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Journal"
+            }
+          ]
+        }
+      },
+      "publisher": {
+        "uuid": "24d7ee7c-7d06-4808-a3a0-8e9178f1da3f",
+        "externalId": "7054",
+        "externalIdSource": "Scopus",
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "value": "Verlag Eugen Ulmer"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 920,
+          "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Publisher"
+              }
+            ]
+          }
+        }
+      },
+      "workflow": {
+        "workflowStep": "approved",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Approved"
+            }
+          ]
+        }
+      },
+      "titles": [
+        {
+          "value": "Zuchtungskunde"
+        }
+      ],
+      "alternativeTitles": [
+        "ZUCHTUNGSKUNDE"
+      ],
+      "issns": [
+        {
+          "value": "0044-5401"
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 71988831,
+          "externalId": "37303",
+          "externalIdSource": "Scopus",
+          "value": {
+            "formatted": false,
+            "value": "37303"
+          },
+          "type": {
+            "pureId": 3442803,
+            "uri": "/dk/atira/pure/journal/journalsources/scopusid",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Scopus ID"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "keywordGroups": [
+        {
+          "pureId": 3452104,
+          "externalId": "37303",
+          "externalIdSource": "Scopus",
+          "externallyManaged": true,
+          "logicalName": "ASJCSubjectAreas",
+          "type": {
+            "uri": "/dk/atira/pure/subjectarea/asjc",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "ASJC Scopus subject areas"
+                }
+              ]
+            }
+          },
+          "keywordContainers": [
+            {
+              "pureId": 3452105,
+              "structuredKeyword": {
+                "pureId": 6619,
+                "uri": "/dk/atira/pure/subjectarea/asjc/3400/3403",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Food Animals"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "pureId": 3452106,
+              "structuredKeyword": {
+                "pureId": 5737,
+                "uri": "/dk/atira/pure/subjectarea/asjc/1100/1103",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Animal Science and Zoology"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "scopusMetrics": [
+        {
+          "year": 1996
+        },
+        {
+          "year": 1997
+        },
+        {
+          "year": 1998
+        },
+        {
+          "year": 1999,
+          "snip": 0.902,
+          "sjr": 0.329
+        },
+        {
+          "year": 2000,
+          "snip": 0.617,
+          "sjr": 0.253
+        },
+        {
+          "year": 2001,
+          "snip": 0.475,
+          "sjr": 0.262
+        },
+        {
+          "year": 2002,
+          "snip": 0.574,
+          "sjr": 0.268
+        },
+        {
+          "year": 2003,
+          "snip": 0.453,
+          "sjr": 0.228
+        },
+        {
+          "year": 2004,
+          "snip": 0.693,
+          "sjr": 0.327
+        },
+        {
+          "year": 2005,
+          "snip": 0.303,
+          "sjr": 0.208
+        },
+        {
+          "year": 2006,
+          "snip": 0.437,
+          "sjr": 0.188
+        },
+        {
+          "year": 2007,
+          "snip": 0.291,
+          "sjr": 0.164
+        },
+        {
+          "year": 2008,
+          "snip": 0.414,
+          "sjr": 0.151
+        },
+        {
+          "year": 2009,
+          "snip": 0.313,
+          "sjr": 0.202
+        },
+        {
+          "year": 2010,
+          "snip": 0.297,
+          "sjr": 0.188
+        },
+        {
+          "year": 2011,
+          "citescore": 0.5,
+          "snip": 0.405,
+          "sjr": 0.262
+        },
+        {
+          "year": 2012,
+          "citescore": 0.6,
+          "snip": 0.42,
+          "sjr": 0.228
+        },
+        {
+          "year": 2013,
+          "citescore": 0.8,
+          "snip": 0.389,
+          "sjr": 0.283
+        },
+        {
+          "year": 2014,
+          "citescore": 0.7,
+          "snip": 0.326,
+          "sjr": 0.319
+        },
+        {
+          "year": 2015,
+          "citescore": 0.6,
+          "snip": 0.297,
+          "sjr": 0.214
+        },
+        {
+          "year": 2016,
+          "citescore": 0.6,
+          "snip": 0.311,
+          "sjr": 0.203
+        },
+        {
+          "year": 2017,
+          "citescore": 0.4,
+          "snip": 0.078,
+          "sjr": 0.119
+        },
+        {
+          "year": 2018,
+          "citescore": 0.3,
+          "snip": 0.252,
+          "sjr": 0.135
+        },
+        {
+          "year": 2019,
+          "citescore": 0.5,
+          "snip": 0.337,
+          "sjr": 0.202
+        },
+        {
+          "year": 2020,
+          "citescore": 0.5
+        }
+      ]
+    }
+  ]
+}

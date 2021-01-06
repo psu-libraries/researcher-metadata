@@ -96,6 +96,11 @@ namespace :import do
     PurePublishersImporter.new.call
   end
 
+  desc 'Import Pure journals'
+  task :pure_journals => :environment do
+    PureJournalsImporter.new.call
+  end
+
   desc 'Import all data'
   task :all => :environment do
     PureOrganizationsImporter.new(
@@ -109,6 +114,7 @@ namespace :import do
     ).call
 
     PurePublishersImporter.new.call
+    PureJournalsImporter.new.call
 
     PurePublicationImporter.new(
       dirname: dirname_for(:pure_publications)
