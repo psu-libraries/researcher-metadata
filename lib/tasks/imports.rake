@@ -91,6 +91,11 @@ namespace :import do
     PSUDickinsonPublicationImporter.new.call
   end
 
+  desc 'Import Pure publishers'
+  task :pure_publishers => :environment do
+    PurePublishersImporter.new.call
+  end
+
   desc 'Import all data'
   task :all => :environment do
     PureOrganizationsImporter.new(
@@ -102,6 +107,8 @@ namespace :import do
     PureUserImporter.new(
       filename: filename_for(:pure_users)
     ).call
+
+    PurePublishersImporter.new.call
 
     PurePublicationImporter.new(
       dirname: dirname_for(:pure_publications)

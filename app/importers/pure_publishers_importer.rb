@@ -1,5 +1,7 @@
 class PurePublishersImporter < PureImporter
   def call
+    pbar = ProgressBar.create(title: 'Importing Pure publishers', total: total_pages) unless Rails.env.test?
+
     1.upto(total_pages) do |i|
       offset = (i-1) * page_size
       publishers = get_records(type: record_type, page_size: page_size, offset: offset)
@@ -10,7 +12,9 @@ class PurePublishersImporter < PureImporter
         p.name = item['name']
         p.save!
       end
+      pbar.increment unless Rails.env.test?
     end
+    pbar.finish unless Rails.env.test?
   end
 
   def page_size
