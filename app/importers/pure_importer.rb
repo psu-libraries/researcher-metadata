@@ -2,7 +2,7 @@ class PureImporter
   private
 
   def base_url
-    "https://pennstate.pure.elsevier.com/ws/api/516/"
+    "https://pennstate.pure.elsevier.com/ws/api/516"
   end
 
   def pure_api_key
