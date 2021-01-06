@@ -13,6 +13,10 @@ class PureImporter
     get_records(type: record_type, page_size: 1, offset: 0)['count']
   end
 
+  def total_pages
+    (total_records / page_size.to_f).ceil
+  end
+
   def get_records(type:, page_size:, offset:)
     JSON.parse(HTTParty.get("#{base_url}/#{type}?navigationLink=false&size=#{page_size}&offset=#{offset}",
                             headers: {"api-key" => pure_api_key,

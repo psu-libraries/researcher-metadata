@@ -21,10 +21,6 @@ class PurePublishersImporter < PureImporter
     1000
   end
 
-  def total_pages
-    (total_records / page_size.to_f).ceil
-  end
-
   def record_type
     'publishers'
   end
