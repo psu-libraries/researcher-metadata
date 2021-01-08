@@ -337,6 +337,7 @@ class Publication < ApplicationRecord
       field(:secondary_title)
       field(:publication_type)
       field(:journal_title)
+      field(:journal)
       field(:publisher_name)
       field(:status)
       field(:volume)
