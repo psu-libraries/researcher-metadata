@@ -1,0 +1,115 @@
+{
+  "count": 2,
+  "pageInformation": {
+    "offset": 0,
+    "size": 1
+  },
+  "items": [
+    {
+      "pureId": 3452034,
+      "externalId": "5243",
+      "externalIdSource": "Scopus",
+      "uuid": "435826f4-a25d-4005-b9da-47d3507834ff",
+      "name": "Maik Nauka-Interperiodica Publishing",
+      "type": {
+        "pureId": 920,
+        "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Publisher"
+            }
+          ]
+        }
+      },
+      "workflow": {
+        "workflowStep": "approved",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Approved"
+            }
+          ]
+        }
+      },
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-06-23T00:00:28.306+0000",
+        "modifiedBy": "root",
+        "modifiedDate": "2016-06-23T00:00:28.306+0000"
+      },
+      "countries": [
+        {
+          "pureId": 493,
+          "uri": "/dk/atira/pure/core/countries/ru",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Russian Federation"
+              }
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "pureId": 3452098,
+      "externalId": "7054",
+      "externalIdSource": "Scopus",
+      "uuid": "24d7ee7c-7d06-4808-a3a0-8e9178f1da3f",
+      "name": "Verlag Eugen Ulmer",
+      "type": {
+        "pureId": 920,
+        "uri": "/dk/atira/pure/publisher/publishertypes/publisher/publisher",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Publisher"
+            }
+          ]
+        }
+      },
+      "workflow": {
+        "workflowStep": "approved",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Approved"
+            }
+          ]
+        }
+      },
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2016-06-23T00:00:28.840+0000",
+        "modifiedBy": "root",
+        "modifiedDate": "2016-06-23T00:00:28.840+0000"
+      },
+      "countries": [
+        {
+          "pureId": 225,
+          "uri": "/dk/atira/pure/core/countries/de",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Germany"
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
