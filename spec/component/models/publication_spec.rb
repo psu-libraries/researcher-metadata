@@ -1226,6 +1226,10 @@ describe Publication, type: :model do
   end
 
   describe '#merge!' do
+    let!(:user1) { create :user }
+    let!(:user2) { create :user }
+    let!(:user3) { create :user }
+
     let!(:pub1) { create :publication, updated_by_user_at: nil }
     let!(:pub2) { create :publication }
     let!(:pub3) { create :publication }
@@ -1236,6 +1240,19 @@ describe Publication, type: :model do
     let!(:pub2_import2) { create :publication_import, publication: pub2 }
     let!(:pub3_import1) { create :publication_import, publication: pub3 }
 
+    before do
+      create :authorship, publication: pub1, user: user1, author_number: 1, confirmed: false, role: nil
+
+      create :authorship, publication: pub2, user: user1, author_number: 1, confirmed: true, role: 'author'
+      create :authorship, publication: pub2, user: user2, author_number: 2, confirmed: false, role: 'co-author'
+
+      create :authorship, publication: pub3, user: user3, author_number: 3, confirmed: true, role: nil
+
+      create :authorship, publication: pub4, user: user1, author_number: 1, confirmed: false, role: 'other author'
+      create :authorship, publication: pub4, user: user2, author_number: 2, confirmed: false, role: nil
+      create :authorship, publication: pub4, user: user3, author_number: 3, confirmed: true, role: nil
+    end
+  
     it "reassigns all of the imports from the given publications to the publication" do
       pub1.merge!([pub2, pub3, pub4])
 
@@ -1243,6 +1260,40 @@ describe Publication, type: :model do
                                                   pub2_import1,
                                                   pub2_import2,
                                                   pub3_import1]
+    end
+
+    it "transfers all of the authorships from all of the given publications to the publication" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.authorships.count).to eq 3
+
+      expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+      expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+    end
+
+    it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.confirmed).to eq true
+      expect(auth2.confirmed).to eq false
+      expect(auth3.confirmed).to eq true
+    end
+
+    it "transfers authorship roles" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.role).to eq 'author'
+      expect(auth2.role).to eq 'co-author'
+      expect(auth3.role).to eq nil
     end
 
     it "deletes the given publications" do
@@ -1316,6 +1367,33 @@ describe Publication, type: :model do
         
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
     end
 
     context "when one of the given publications is in a non-duplicate group" do
@@ -1348,6 +1426,40 @@ describe Publication, type: :model do
         pub1.merge!([pub2, pub3, pub4])
 
         expect(ndpg.reload.publications).to eq [pub1]
+      end
+
+      it "transfers all of the authorships from all of the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.authorships.count).to eq 3
+
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+      end
+
+      it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.confirmed).to eq true
+        expect(auth2.confirmed).to eq false
+        expect(auth3.confirmed).to eq true
+      end
+
+      it "transfers authorship roles" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.role).to eq 'author'
+        expect(auth2.role).to eq 'co-author'
+        expect(auth3.role).to eq nil
       end
     end
 
@@ -1383,6 +1495,40 @@ describe Publication, type: :model do
 
         expect(ndpg1.reload.publications).to eq [pub1]
         expect(ndpg2.reload.publications).to eq [pub1]
+      end
+
+      it "transfers all of the authorships from all of the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.authorships.count).to eq 3
+
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+      end
+
+      it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.confirmed).to eq true
+        expect(auth2.confirmed).to eq false
+        expect(auth3.confirmed).to eq true
+      end
+
+      it "transfers authorship roles" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.role).to eq 'author'
+        expect(auth2.role).to eq 'co-author'
+        expect(auth3.role).to eq nil
       end
     end
 
@@ -1428,6 +1574,33 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
 
         expect(ndpg.reload.publications).to match_array [pub2, pub4]
+      end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
       end
     end
 
@@ -1476,6 +1649,33 @@ describe Publication, type: :model do
         expect(ndpg1.reload.publications).to match_array [pub2, pub4]
         expect(ndpg2.reload.publications).to match_array [pub2, pub4]
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1521,6 +1721,33 @@ describe Publication, type: :model do
 
         expect(ndpg.reload.publications).to match_array [pub1, pub3]
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -1565,6 +1792,33 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
 
         expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
+      end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
       end
     end
   end
