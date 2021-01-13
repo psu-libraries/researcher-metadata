@@ -8,6 +8,7 @@ describe ActivityInsightPublicationExporter do
   let!(:authorship2) { FactoryBot.create :authorship, user: user, publication: publication2 }
   let!(:publication1) do
     FactoryBot.create(:publication,
+                      id: 1,
                       secondary_title: 'Second Title',
                       status: 'Published',
                       journal_title: 'Journal Title',

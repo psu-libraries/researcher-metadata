@@ -146,9 +146,17 @@ class ActivityInsightImporter
         details.publications.each do |pub|
           if pub.importable?
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
-              PublicationImport.new(source: IMPORT_SOURCE,
-                                    source_identifier: pub.activity_insight_id,
-                                    publication: Publication.create!(pub_attrs(pub)))
+                PublicationImport.new(source: IMPORT_SOURCE,
+                                      source_identifier: pub.activity_insight_id)
+
+            if !pi.persisted? && pub.rmd_id.present?
+              pub_existing = Publication.find(pub.rmd_id)
+              pub_existing.update_attributes!(pub_attrs(pub))
+              pi.publication = pub_existing
+            elsif !pi.persisted?
+              pi.publication = Publication.create!(pub_attrs(pub))
+            end
+
             pub_record = pi.publication
 
             if pi.persisted?
@@ -776,6 +784,10 @@ class ActivityInsightAPIPublication
     parsed_publication.css('INTELLCONT_AUTH').map do |a|
       ActivityInsightPublicationAuthor.new(a)
     end
+  end
+
+  def rmd_id
+    text_for('RMD_ID')
   end
 
   private
