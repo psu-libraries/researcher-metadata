@@ -10,7 +10,8 @@ class OrcidWorksController < UserController
       else
         work = OrcidWork.new(authorship)
         work.save!
-        authorship.update_attributes!(orcid_resource_identifier: work.location)
+        authorship.update_attributes!(orcid_resource_identifier: work.location,
+                                      updated_by_owner_at: Time.current)
 
         flash[:notice] = I18n.t('profile.orcid_works.create.success')
       end
