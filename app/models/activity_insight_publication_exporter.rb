@@ -11,7 +11,7 @@ class ActivityInsightPublicationExporter
     logger.info "Export to #{target} Activity Insight started at #{DateTime.now.to_s}"
     was_error = false
     publications.each do |publication|
-      next if publication.ai_import_identifiers.present?
+      next if publication.ai_import_identifiers.present? || publication.exported_to_activity_insight
 
       response = HTTParty.post webservice_url, body: to_xml(publication),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
@@ -19,6 +19,9 @@ class ActivityInsightPublicationExporter
         logger.error Nokogiri::XML(response.to_s).text
         logger.error "Publication ID: #{publication.id}"
         was_error = true unless was_error
+      else
+        publication.exported_to_activity_insight = true
+        publication.save!
       end
     end
     Bugsnag.notify(I18n.t('models.activity_insight_publication_exporter.bugsnag_message')) if was_error
@@ -59,7 +62,7 @@ class ActivityInsightPublicationExporter
               elsif publication.publication_type =~ /Journal Article/
                 xml.CONTYPE_("Journal Article", :access => "READ_ONLY")
               else
-                xml.CONTYPE_(publication.publication_type, :access => "READ_ONLY")
+                xml.CONTYPE_("Other", :access => "READ_ONLY")
               end
               if publication.status == 'Accepted/In press'
                 xml.STATUS_('Accepted', :access => "READ_ONLY")
@@ -88,6 +91,7 @@ class ActivityInsightPublicationExporter
                   xml.LNAME_(contributor.last_name, :access => "READ_ONLY")
                 }
               end
+              xml.RMD_ID(publication.id, :access => "READ_ONLY")
             }
           }
         end

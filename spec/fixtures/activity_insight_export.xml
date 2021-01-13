@@ -24,6 +24,7 @@
         <MNAME access="READ_ONLY"/>
         <LNAME access="READ_ONLY"/>
       </INTELLCONT_AUTH>
+      <RMD_ID access="READ_ONLY">1</RMD_ID>
     </INTELLCONT>
   </Record>
 </Data>

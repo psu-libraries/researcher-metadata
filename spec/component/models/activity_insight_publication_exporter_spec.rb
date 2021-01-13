@@ -23,6 +23,7 @@ describe ActivityInsightPublicationExporter do
                       isbn: '123-123-123')
   end
   let!(:publication2) { FactoryBot.create(:publication) }
+  let!(:publication3) { FactoryBot.create(:publication, exported_to_activity_insight: true) }
   let!(:ai_import) do
     FactoryBot.create(:publication_import, publication: publication2,
                        source: "Activity Insight", source_identifier: 'ai_id_1')
@@ -103,13 +104,21 @@ describe ActivityInsightPublicationExporter do
         expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
         expect_any_instance_of(Logger).not_to receive(:error)
         expect(Bugsnag).not_to receive(:notify)
-        exporter_object.export
+        expect{ exporter_object.export }.to change{ publication1.exported_to_activity_insight }.to true
       end
     end
 
     context 'when publication has ai_import_identifiers' do
       it 'skips that publication' do
         exporter_object = exporter.new([publication2], 'beta')
+        expect(HTTParty).not_to receive(:post)
+        exporter_object.export
+      end
+    end
+
+    context 'when publication.exported_to_activity_insight is true' do
+      it 'skips that publication' do
+        exporter_object = exporter.new([publication3], 'beta')
         expect(HTTParty).not_to receive(:post)
         exporter_object.export
       end
