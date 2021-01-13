@@ -148,21 +148,21 @@ class ActivityInsightImporter
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
                 PublicationImport.new(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id)
 
-            if !pi.persisted? && pub.rmd_id.present?
-              pub_existing = Publication.find(pub.rmd_id)
-              pub_existing.update_attributes!(pub_attrs(pub))
-              pi.publication = pub_existing
-            elsif !pi.persisted?
-              pi.publication = Publication.create!(pub_attrs(pub))
+            if pi.persisted?
+              pub_existing = pi.publication
+              pub_existing.update_attributes!(pub_attrs(pub)) unless pub_existing.updated_by_user_at.present?
+            else
+              if pub.rmd_id.present?
+                pub_existing = Publication.find(pub.rmd_id)
+                pub_existing.update_attributes!(pub_attrs(pub))
+                pi.publication = pub_existing
+              else
+                pi.publication = Publication.create!(pub_attrs(pub))
+              end
+              pi.save!
             end
 
             pub_record = pi.publication
-
-            if pi.persisted?
-              pub_record.update_attributes!(pub_attrs(pub)) unless pub_record.updated_by_user_at.present?
-            else
-              pi.save!
-            end
 
             unless pub_record.updated_by_user_at.present?
               pub.faculty_authors.each do |author|
