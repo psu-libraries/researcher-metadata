@@ -146,8 +146,7 @@ class ActivityInsightImporter
         details.publications.each do |pub|
           if pub.importable?
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
-                PublicationImport.new(source: IMPORT_SOURCE,
-                                      source_identifier: pub.activity_insight_id)
+                PublicationImport.new(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id)
 
             if !pi.persisted? && pub.rmd_id.present?
               pub_existing = Publication.find(pub.rmd_id)
