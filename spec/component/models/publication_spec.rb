@@ -31,6 +31,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:visible).of_type(:boolean).with_options(default: true) }
   it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:journal_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:exported_to_activity_insight).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
