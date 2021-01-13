@@ -149,11 +149,13 @@ class ActivityInsightImporter
                 PublicationImport.new(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id)
 
             if pi.persisted?
-              pub_existing = pi.publication
-              pub_existing.update_attributes!(pub_attrs(pub)) unless pub_existing.updated_by_user_at.present?
+              pub_persisting = pi.publication
+              pub_persisting.update_attributes!(pub_attrs(pub)) unless pub_persisting.updated_by_user_at.present?
             else
               if pub.rmd_id.present?
-                pub_existing = Publication.find(pub.rmd_id)
+                pub_existing = Publication.find_by(id: pub.rmd_id)
+                next if pub_existing.blank?
+
                 pub_existing.update_attributes!(pub_attrs(pub))
                 pi.publication = pub_existing
               else

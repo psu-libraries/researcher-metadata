@@ -1374,6 +1374,55 @@ describe ActivityInsightImporter do
           end
         end
       end
+
+      context 'when imported publication has an rmd_id' do
+        context 'when record in database matches the rmd_id' do
+          let!(:existing_pub) { create :publication,
+                                        id: 123,
+                                        title: 'Existing Title',
+                                        publication_type: 'Trade Journal Article',
+                                        journal_title: 'Existing Journal',
+                                        publisher_name: 'Existing Publisher',
+                                        secondary_title: 'Existing Subtitle',
+                                        status: 'Existing Status',
+                                        volume: '111',
+                                        issue: '222',
+                                        edition: '333',
+                                        page_range: '444-555',
+                                        url: 'existing_url',
+                                        issn: 'existing_ISSN',
+                                        abstract: 'Existing abstract',
+                                        authors_et_al: true,
+                                        published_on: Date.new(1980, 1, 1),
+                                        updated_by_user_at: nil,
+                                        visible: false,
+                                        doi: 'existing DOI',
+                                        exported_to_activity_insight: true }
+
+          it "creates a PublicationImport" do
+            expect { importer.call }.to change { PublicationImport.count }.by 4
+          end
+
+          it "doesn't create any Publications" do
+            expect { importer.call }.to change { Publication.count }.by 3
+          end
+
+          it 'updates the existing publication' do
+            importer.call
+            expect(existing_pub.reload.title).to eq "Import with RMD ID"
+          end
+        end
+
+        context 'when no record in database matches the rmd_id' do
+          it "doesn't create a PublicationImport" do
+            expect { importer.call }.to change { PublicationImport.count }.by 3
+          end
+
+          it "doesn't create any Publications" do
+            expect { importer.call }.to change { Publication.count }.by 3
+          end
+        end
+      end
     end
 
 
