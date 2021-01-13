@@ -17,7 +17,7 @@ describe OrcidWorksController, type: :controller do
       context "when the user has an authorship" do
         let(:authorship) { double 'authorship',
                                   orcid_resource_identifier: id,
-                                  update_attributes!: nil }
+                                  update!: nil }
         context "when the work has already been added to the user's ORCID record" do
           let(:id) { "abc123" }
 
@@ -38,8 +38,8 @@ describe OrcidWorksController, type: :controller do
           end
 
           it "updates the authorship with the identifier of the work that was created in ORCID" do
-            expect(authorship).to have_received(:update_attributes!).with(orcid_resource_identifier: 'the_location',
-                                                                          updated_by_owner_at: now)
+            expect(authorship).to have_received(:update!).with(orcid_resource_identifier: 'the_location',
+                                                               updated_by_owner_at: now)
           end
 
           it "sets a flash message" do
