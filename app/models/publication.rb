@@ -475,37 +475,34 @@ class Publication < ApplicationRecord
         i.update_attributes!(publication: self)
       end
 
-      authorships_to_transfer = pubs_to_delete.map { |p| p.authorships }.flatten
+      all_authorships = all_pubs.map { |p| p.authorships }.flatten
+      authorships_by_user = all_authorships.group_by { |a| a.user }
 
-      authorships_to_transfer.each do |a|
-        existing_authorship = authorships.find_by(user: a.user)
+      authorships_to_keep = []
 
-        orcid_id_to_keep = authorships_to_transfer.select { |att| att.user == a.user && att.orcid_resource_identifier.present?}
+      authorships_by_user.each do |user, auths|
+        existing_authorship = authorships.find_by(user: user)
+        if existing_authorship
+          authorships_to_keep << existing_authorship
+        else
+          authorship_to_keep = auths.first
+          authorship_to_keep.update!(publication: self)
+          authorships_to_keep << authorship_to_keep
+        end
+      end
+
+      authorships_to_keep.each do |atk|
+        orcid_id_to_keep = authorships_by_user[atk.user].select { |a| a.orcid_resource_identifier.present? }
           .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
           .last.try(:orcid_resource_identifier)
+        
+        role_to_keep = authorships_by_user[atk.user].detect { |a| a.role.present? }.try(:role)
 
-        if existing_authorship
-          update_authorship_attrs = {}
+        confirmed_to_keep = !!authorships_by_user[atk.user].detect { |a| a.confirmed.present? }
 
-          update_authorship_attrs.merge!(confirmed: a.confirmed) if existing_authorship.confirmed != true
-          update_authorship_attrs.merge!(role: a.role) unless existing_authorship.role.present?
-          update_authorship_attrs.merge!(orcid_resource_identifier: orcid_id_to_keep)
-
-          existing_authorship.update!(update_authorship_attrs)
-        else
-          new_authorship_attrs = {publication: self, user: a.user, author_number: a.author_number}
-
-          if authorships_to_transfer.select { |att| att.user == a.user }.detect { |att| att.confirmed == true }
-            new_authorship_attrs.merge!(confirmed: true)
-          else
-            new_authorship_attrs.merge!(confirmed: false)
-          end
-
-          new_authorship_attrs.merge!(role: a.role,
-                                      orcid_resource_identifier: orcid_id_to_keep)
-
-          Authorship.create!(new_authorship_attrs)
-        end
+        atk.update!(orcid_resource_identifier: orcid_id_to_keep,
+                    role: role_to_keep,
+                    confirmed: confirmed_to_keep)
       end
 
       pubs_to_delete.each do |p|
