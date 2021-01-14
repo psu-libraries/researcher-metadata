@@ -492,17 +492,11 @@ class Publication < ApplicationRecord
       end
 
       authorships_to_keep.each do |atk|
-        orcid_id_to_keep = authorships_by_user[atk.user].select { |a| a.orcid_resource_identifier.present? }
-          .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
-          .last.try(:orcid_resource_identifier)
-        
-        role_to_keep = authorships_by_user[atk.user].detect { |a| a.role.present? }.try(:role)
+        amp = AuthorshipMergePolicy.new(authorships_by_user[atk.user])
 
-        confirmed_to_keep = !!authorships_by_user[atk.user].detect { |a| a.confirmed.present? }
-
-        atk.update!(orcid_resource_identifier: orcid_id_to_keep,
-                    role: role_to_keep,
-                    confirmed: confirmed_to_keep)
+        atk.update!(orcid_resource_identifier: amp.orcid_resource_id_to_keep,
+                    role: amp.role_to_keep,
+                    confirmed: amp.confirmed_value_to_keep)
       end
 
       pubs_to_delete.each do |p|
