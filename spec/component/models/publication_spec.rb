@@ -1241,16 +1241,65 @@ describe Publication, type: :model do
     let!(:pub3_import1) { create :publication_import, publication: pub3 }
 
     before do
-      create :authorship, publication: pub1, user: user1, author_number: 1, confirmed: false, role: nil
+      create :authorship,
+             publication: pub1,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier',
+             updated_by_owner_at: 1.week.ago
 
-      create :authorship, publication: pub2, user: user1, author_number: 1, confirmed: true, role: 'author'
-      create :authorship, publication: pub2, user: user2, author_number: 2, confirmed: false, role: 'co-author'
+      create :authorship,
+             publication: pub2,
+             user: user1,
+             author_number: 1,
+             confirmed: true,
+             role: 'author',
+             orcid_resource_identifier: 'newer-orcid-identifier',
+             updated_by_owner_at: 1.day.ago
+      create :authorship,
+             publication: pub2,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: 'co-author',
+             orcid_resource_identifier: 'newer-orcid-identifier-2',
+             updated_by_owner_at: 1.day.ago
 
-      create :authorship, publication: pub3, user: user3, author_number: 3, confirmed: true, role: nil
+      create :authorship,
+             publication: pub3,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: 1.weeks.ago
 
-      create :authorship, publication: pub4, user: user1, author_number: 1, confirmed: false, role: 'other author'
-      create :authorship, publication: pub4, user: user2, author_number: 2, confirmed: false, role: nil
-      create :authorship, publication: pub4, user: user3, author_number: 3, confirmed: true, role: nil
+      create :authorship,
+             publication: pub4,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: 'other author',
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: 2.weeks.ago
+      create :authorship,
+             publication: pub4,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier-2',
+             updated_by_owner_at: 2.weeks.ago
+      create :authorship,
+             publication: pub4,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: 'orcid-identifier-3',
+             updated_by_owner_at: 2.weeks.ago
     end
   
     it "reassigns all of the imports from the given publications to the publication" do
@@ -1294,6 +1343,18 @@ describe Publication, type: :model do
       expect(auth1.role).to eq 'author'
       expect(auth2.role).to eq 'co-author'
       expect(auth3.role).to eq nil
+    end
+
+    it "transfers ORCiD identifiers" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+      expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+      expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
     end
 
     it "deletes the given publications" do

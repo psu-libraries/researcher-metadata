@@ -478,19 +478,31 @@ class Publication < ApplicationRecord
       authorships_to_transfer = pubs_to_delete.map { |p| p.authorships }.flatten
 
       authorships_to_transfer.each do |a|
-        if existing_authorship = authorships.find_by(user: a.user)
-          existing_authorship.update!(confirmed: a.confirmed) if existing_authorship.confirmed != true
-          existing_authorship.update!(role: a.role) unless existing_authorship.role.present?
+        existing_authorship = authorships.find_by(user: a.user)
+
+        orcid_id_to_keep = authorships_to_transfer.select { |att| att.user == a.user && att.orcid_resource_identifier.present?}
+          .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+          .last.try(:orcid_resource_identifier)
+
+        if existing_authorship
+          update_authorship_attrs = {}
+
+          update_authorship_attrs.merge!(confirmed: a.confirmed) if existing_authorship.confirmed != true
+          update_authorship_attrs.merge!(role: a.role) unless existing_authorship.role.present?
+          update_authorship_attrs.merge!(orcid_resource_identifier: orcid_id_to_keep)
+
+          existing_authorship.update!(update_authorship_attrs)
         else
           new_authorship_attrs = {publication: self, user: a.user, author_number: a.author_number}
 
           if authorships_to_transfer.select { |att| att.user == a.user }.detect { |att| att.confirmed == true }
-            new_authorship_attrs = new_authorship_attrs.merge(confirmed: true)
+            new_authorship_attrs.merge!(confirmed: true)
           else
-            new_authorship_attrs = new_authorship_attrs.merge(confirmed: false)
+            new_authorship_attrs.merge!(confirmed: false)
           end
 
-          new_authorship_attrs = new_authorship_attrs.merge(role: a.role)
+          new_authorship_attrs.merge!(role: a.role,
+                                      orcid_resource_identifier: orcid_id_to_keep)
 
           Authorship.create!(new_authorship_attrs)
         end
