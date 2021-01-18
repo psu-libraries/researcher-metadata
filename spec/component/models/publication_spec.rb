@@ -118,11 +118,16 @@ describe Publication, type: :model do
 
   describe '.publication_types' do
     it "returns the list of valid publication types" do
-      expect(Publication.publication_types).to eq ["Academic Journal Article",
-                                                   "In-house Journal Article",
-                                                   "Professional Journal Article",
-                                                   "Trade Journal Article",
-                                                   "Journal Article"]
+      expect(Publication.publication_types).to eq ["Academic Journal Article", "In-house Journal Article",
+                                                   "Professional Journal Article", "Trade Journal Article",
+                                                   "Journal Article", "Review Article", "Abstract", "Blog", "Book",
+                                                   "Chapter", "Book/Film/Article Review", "Conference Proceeding",
+                                                   "Encyclopedia/Dictionary Entry", "Extension Publication",
+                                                   "Magazine/Trade Publication", "Manuscript", "Newsletter",
+                                                   "Newspaper Article", "Comment/Debate", "Commissioned Report",
+                                                   "Digital or Visual Product", "Editorial", "Foreword/Postscript",
+                                                   "Letter", "Meeting Abstract", "Paper", "Patent", "Poster",
+                                                   "Scholarly Edition", "Short Survey", "Working Paper", "Other"]
     end
   end
 
