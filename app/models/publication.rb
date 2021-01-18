@@ -6,11 +6,15 @@ class Publication < ApplicationRecord
   include Swagger::Blocks
 
   def self.publication_types
-    ["Academic Journal Article",
-     "In-house Journal Article",
-     "Professional Journal Article",
-     "Trade Journal Article",
-     "Journal Article"]
+    [
+      "Academic Journal Article", "In-house Journal Article", "Professional Journal Article",
+      "Trade Journal Article", "Journal Article", "Review Article", "Abstract", "Blog", "Book", "Chapter",
+      "Book/Film/Article Review", "Conference Proceeding", "Encyclopedia/Dictionary Entry",
+      "Extension Publication", "Magazine/Trade Publication", "Manuscript", "Newsletter",
+      "Newspaper Article", "Comment/Debate", "Commissioned Report", "Digital or Visual Product",
+      "Editorial", "Foreword/Postscript", "Letter", "Meeting Abstract", "Paper", "Patent", "Poster",
+      "Scholarly Edition", "Short Survey", "Working Paper", "Other"
+     ]
   end
 
   has_many :authorships, inverse_of: :publication
