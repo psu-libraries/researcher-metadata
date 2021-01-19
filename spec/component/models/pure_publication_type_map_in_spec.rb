@@ -1,6 +1,6 @@
 require 'component/component_spec_helper'
 
-describe PurePublicationTypeMap do
+describe PurePublicationTypeMapIn do
   describe '#map' do
     it "converts 'Meeting Abstract' or 'Abstract' to 'Abstract'" do
       expect(described_class.map('Abstract')).to eq 'Abstract'

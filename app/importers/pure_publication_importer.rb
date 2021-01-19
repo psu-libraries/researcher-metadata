@@ -99,7 +99,7 @@ class PurePublicationImporter
     {
       title: publication['title']['value'],
       secondary_title: publication['subTitle'].try('[]', 'value'),
-      publication_type: PurePublicationTypeMap.map(publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value']),
+      publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value']),
       page_range: publication['pages'],
       volume: publication['volume'],
       issue: publication['journalNumber'],

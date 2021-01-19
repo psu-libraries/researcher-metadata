@@ -1,4 +1,4 @@
-class PurePublicationTypeMap
+class PurePublicationTypeMapIn
   def self.map(string)
     case string
     when 'Abstract', 'Meeting Abstract'
