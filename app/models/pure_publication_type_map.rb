@@ -9,13 +9,13 @@ class PurePublicationTypeMap
       'Book'
     when 'Book/Film/Article review'
       'Book/Film/Article Review'
-    when 'Chapter' || 'Chapter (peer-reviewed)'
+    when 'Chapter', 'Chapter (peer-reviewed)'
       'Chapter'
     when 'Comment/debate'
       'Comment/Debate'
     when 'Commissioned report'
-      'Commissioned report'
-    when 'Conference contribution' || 'Conference article'
+      'Commissioned Report'
+    when 'Conference contribution', 'Conference article'
       'Conference Proceeding'
     when 'Digital or Visual Products'
       'Digital or Visual Product'
@@ -29,8 +29,6 @@ class PurePublicationTypeMap
       'Letter'
     when 'Meeting Abstract'
       'Meeting Abstract'
-    when 'Other' || 'Other chapter contribution' || 'Other contribution' || 'Other report'
-      'Other'
     when 'Paper'
       'Paper'
     when 'Patent'
@@ -45,6 +43,8 @@ class PurePublicationTypeMap
       'Short Survey'
     when 'Working paper'
       'Working Paper'
+    else
+      'Other'
     end
   end
 end
