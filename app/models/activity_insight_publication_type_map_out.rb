@@ -25,8 +25,7 @@ class ActivityInsightPublicationTypeMapOut
       'Newsletter'
     when 'Newspaper Article'
       'Newspaper Article'
-    when 'Comment/Debate', 'Commissioned Report', 'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
-        'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition', 'Short Survey', 'Working Paper', 'Other'
+    else
       'Other'
     end
   end

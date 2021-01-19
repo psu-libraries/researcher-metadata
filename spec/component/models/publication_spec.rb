@@ -126,8 +126,8 @@ describe Publication, type: :model do
                                                    "Magazine/Trade Publication", "Manuscript", "Newsletter",
                                                    "Newspaper Article", "Comment/Debate", "Commissioned Report",
                                                    "Digital or Visual Product", "Editorial", "Foreword/Postscript",
-                                                   "Letter", "Meeting Abstract", "Paper", "Patent", "Poster",
-                                                   "Scholarly Edition", "Short Survey", "Working Paper", "Other"]
+                                                   "Letter", "Paper", "Patent", "Poster", "Scholarly Edition",
+                                                   "Short Survey", "Working Paper", "Other"]
     end
   end
 

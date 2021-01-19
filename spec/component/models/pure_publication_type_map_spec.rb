@@ -57,10 +57,6 @@ describe PurePublicationTypeMap do
       expect(described_class.map('Letter')).to eq 'Letter'
     end
 
-    it "keeps 'Meeting Abstract' as 'Meeting Abstract'" do
-      expect(described_class.map('Meeting Abstract')).to eq 'Meeting Abstract'
-    end
-
     it "keeps 'Paper' as 'Paper'" do
       expect(described_class.map('Paper')).to eq 'Paper'
     end
