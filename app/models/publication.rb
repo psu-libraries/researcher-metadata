@@ -12,7 +12,7 @@ class Publication < ApplicationRecord
       "Book/Film/Article Review", "Conference Proceeding", "Encyclopedia/Dictionary Entry",
       "Extension Publication", "Magazine/Trade Publication", "Manuscript", "Newsletter",
       "Newspaper Article", "Comment/Debate", "Commissioned Report", "Digital or Visual Product",
-      "Editorial", "Foreword/Postscript", "Letter", "Meeting Abstract", "Paper", "Patent", "Poster",
+      "Editorial", "Foreword/Postscript", "Letter", "Paper", "Patent", "Poster",
       "Scholarly Edition", "Short Survey", "Working Paper", "Other"
      ]
   end

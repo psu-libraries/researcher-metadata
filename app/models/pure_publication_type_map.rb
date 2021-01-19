@@ -1,7 +1,7 @@
 class PurePublicationTypeMap
   def self.map(string)
     case string
-    when 'Abstract'
+    when 'Abstract', 'Meeting Abstract'
       'Abstract'
     when 'Article'
       'Academic Journal Article'
@@ -27,8 +27,6 @@ class PurePublicationTypeMap
       'Foreword/Postscript'
     when 'Letter'
       'Letter'
-    when 'Meeting Abstract'
-      'Meeting Abstract'
     when 'Paper'
       'Paper'
     when 'Patent'
