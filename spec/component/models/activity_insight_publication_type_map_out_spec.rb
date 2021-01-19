@@ -2,10 +2,10 @@ require 'component/component_spec_helper'
 
 describe ActivityInsightPublicationTypeMapOut do
   describe '#map' do
-    it "converts 'Academic Journal Article', 'Professional Journal Article', and 'Trade Journal Article' to 'Journal Article'" do
-      expect(described_class.map('Academic Journal Article')).to eq 'Journal Article'
-      expect(described_class.map('Professional Journal Article')).to eq 'Journal Article'
-      expect(described_class.map('Trade Journal Article')).to eq 'Journal Article'
+    it "keeps 'Academic Journal Article', 'Professional Journal Article', and 'Trade Journal Article' as is" do
+      expect(described_class.map('Academic Journal Article')).to eq 'Academic Journal Article'
+      expect(described_class.map('Professional Journal Article')).to eq 'Professional Journal Article'
+      expect(described_class.map('Trade Journal Article')).to eq 'Trade Journal Article'
     end
 
     it "converts 'In-house Journal Article' to 'Journal Article, In House'" do

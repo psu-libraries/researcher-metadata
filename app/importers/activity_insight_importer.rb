@@ -208,7 +208,7 @@ class ActivityInsightImporter
   def pub_attrs(pub)
     {
       title: pub.title,
-      publication_type: pub.publication_type,
+      publication_type: ActivityInsightPublicationTypeMapIn.map(pub.publication_type),
       journal_title: pub.journal_title,
       publisher_name: pub.publisher,
       secondary_title: pub.secondary_title,
