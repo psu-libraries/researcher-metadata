@@ -23,6 +23,12 @@ class AuthorshipMergePolicy
       .last.try(:open_access_notification_sent_at)
   end
 
+  def owner_update_timestamp_to_keep
+    authorships.select { |a| a.updated_by_owner_at.present? }
+      .sort { |a, b| a.updated_by_owner_at <=> b.updated_by_owner_at }
+      .last.try(:updated_by_owner_at)
+  end
+
   private
 
   attr_reader :authorships

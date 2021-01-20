@@ -128,4 +128,33 @@ describe AuthorshipMergePolicy do
       end
     end
   end
+
+    describe '#owner_update_timestamp_to_keep' do
+    let(:authorships) { [auth1, auth2] }
+    let(:auth1) { double 'authorship 1', updated_by_owner_at: nil }
+    let(:auth2) { double 'authorship 2', updated_by_owner_at: nil }
+    
+    context "when given two authorships without owner modification timestamps" do
+      it "returns nil" do
+        expect(amp.owner_update_timestamp_to_keep).to be_nil
+      end
+    end
+
+    context "when given two authorships where only one has an owner modification timestamp" do
+      before { allow(auth2).to receive(:updated_by_owner_at).and_return Time.new(2000, 1, 1, 0, 0, 0) }
+
+      it "returns the timestamp" do
+        expect(amp.owner_update_timestamp_to_keep).to eq Time.new(2000, 1, 1, 0, 0, 0)
+      end
+    end
+
+    context "when given two authorships that each have an owner modification timestamp" do
+      before { allow(auth1).to receive(:updated_by_owner_at).and_return Time.new(2010, 1, 1, 0, 0, 0) }
+      before { allow(auth2).to receive(:updated_by_owner_at).and_return Time.new(2000, 1, 1, 0, 0, 0) }
+
+      it "returns the more recent timestamp" do
+        expect(amp.owner_update_timestamp_to_keep).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+    end
+  end
 end

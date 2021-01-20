@@ -497,7 +497,8 @@ class Publication < ApplicationRecord
         atk.update!(orcid_resource_identifier: amp.orcid_resource_id_to_keep,
                     role: amp.role_to_keep,
                     confirmed: amp.confirmed_value_to_keep,
-                    open_access_notification_sent_at: amp.oa_timestamp_to_keep)
+                    open_access_notification_sent_at: amp.oa_timestamp_to_keep,
+                    updated_by_owner_at: amp.owner_update_timestamp_to_keep)
       end
 
       pubs_to_delete.each do |p|
