@@ -40,8 +40,8 @@ describe AuthorshipMergePolicy do
       context "when the authorships have not all been updated by their owners at the same time" do
         before do
           allow(auth1).to receive(:updated_by_owner).and_return Time.new(2010, 1, 1, 0, 0, 0)
-          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2000, 1, 1, 0, 0, 0)
-          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2020, 1, 1, 0, 0, 0)
+          allow(auth2).to receive(:updated_by_owner).and_return Time.new(2000, 1, 1, 0, 0, 0)
+          allow(auth3).to receive(:updated_by_owner).and_return Time.new(2020, 1, 1, 0, 0, 0)
         end
 
         it "returns the identifier from the most recently updated authorship that has one" do
