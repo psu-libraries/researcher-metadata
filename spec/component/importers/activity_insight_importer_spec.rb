@@ -762,7 +762,7 @@ describe ActivityInsightImporter do
           expect(p1.doi).to eq nil
 
           expect(p2.title).to eq 'Second Test Publication'
-          expect(p2.publication_type).to eq 'Professional Journal Article'
+          expect(p2.publication_type).to eq 'In-house Journal Article'
           expect(p2.journal_title).to eq 'Test Jouranl 2'
           expect(p2.publisher_name).to eq nil
           expect(p2.secondary_title).to eq 'Second Pub Subtitle'
@@ -1189,7 +1189,7 @@ describe ActivityInsightImporter do
             expect(p1.doi).to eq nil
   
             expect(p2.title).to eq 'Second Test Publication'
-            expect(p2.publication_type).to eq 'Professional Journal Article'
+            expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
@@ -2150,7 +2150,7 @@ describe ActivityInsightImporter do
             expect(p1.doi).to eq nil
   
             expect(p2.title).to eq 'Second Test Publication'
-            expect(p2.publication_type).to eq 'Professional Journal Article'
+            expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
@@ -2576,7 +2576,7 @@ describe ActivityInsightImporter do
               expect(p1.doi).to eq nil
     
               expect(p2.title).to eq 'Second Test Publication'
-              expect(p2.publication_type).to eq 'Professional Journal Article'
+              expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
               expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
@@ -3513,7 +3513,7 @@ describe ActivityInsightImporter do
             expect(p1.doi).to eq nil
   
             expect(p2.title).to eq 'Second Test Publication'
-            expect(p2.publication_type).to eq 'Professional Journal Article'
+            expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
@@ -3938,7 +3938,7 @@ describe ActivityInsightImporter do
               expect(p1.doi).to eq nil
     
               expect(p2.title).to eq 'Second Test Publication'
-              expect(p2.publication_type).to eq 'Professional Journal Article'
+              expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
               expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'

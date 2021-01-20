@@ -1,8 +1,9 @@
 class ActivityInsightPublicationTypeMapIn
   def self.map(string)
+    return nil if string.blank?
+
     case string
-    when 'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
-        'Trade Journal Article', 'Journal Article', 'Abstract', 'Blog', 'Book', 'Conference Proceeding',
+    when 'Journal Article', 'Abstract', 'Blog', 'Book', 'Conference Proceeding',
         'Extension Publication', 'Magazine/Trade Publication','Manuscript', 'Newsletter', 'Newspaper Article'
       string
     when 'Journal Article, In House'

@@ -2,6 +2,11 @@ require 'component/component_spec_helper'
 
 describe PurePublicationTypeMapIn do
   describe '#map' do
+    it 'returns nil if input string is blank' do
+      expect(described_class.map(nil)).to eq nil
+      expect(described_class.map('')).to eq nil
+    end
+
     it "converts 'Meeting Abstract' or 'Abstract' to 'Abstract'" do
       expect(described_class.map('Abstract')).to eq 'Abstract'
       expect(described_class.map('Meeting Abstract')).to eq 'Abstract'
