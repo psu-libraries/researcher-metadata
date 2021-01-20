@@ -129,7 +129,7 @@ describe AuthorshipMergePolicy do
     end
   end
 
-    describe '#owner_update_timestamp_to_keep' do
+  describe '#owner_update_timestamp_to_keep' do
     let(:authorships) { [auth1, auth2] }
     let(:auth1) { double 'authorship 1', updated_by_owner_at: nil }
     let(:auth2) { double 'authorship 2', updated_by_owner_at: nil }
