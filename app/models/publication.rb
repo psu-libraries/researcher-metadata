@@ -501,7 +501,8 @@ class Publication < ApplicationRecord
                     updated_by_owner_at: amp.owner_update_timestamp_to_keep,
                     waiver: amp.waiver_to_keep,
                     visible_in_profile: amp.visibility_value_to_keep,
-                    position_in_profile: amp.position_value_to_keep)
+                    position_in_profile: amp.position_value_to_keep,
+                    scholarsphere_uploaded_at: amp.scholarsphere_timestamp_to_keep)
         amp.waivers_to_destroy.each { |w| w.destroy }
       end
 

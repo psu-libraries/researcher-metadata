@@ -307,4 +307,33 @@ describe AuthorshipMergePolicy do
       end
     end
   end
+
+  describe '#scholarsphere_timestamp_to_keep' do
+    let(:authorships) { [auth1, auth2] }
+    let(:auth1) { double 'authorship 1', scholarsphere_uploaded_at: nil }
+    let(:auth2) { double 'authorship 2', scholarsphere_uploaded_at: nil }
+    
+    context "when given two authorships without Scholarsphere upload timestamps" do
+      it "returns nil" do
+        expect(amp.scholarsphere_timestamp_to_keep).to be_nil
+      end
+    end
+
+    context "when given two authorships where only one has a Scholarsphere upload timestamp" do
+      before { allow(auth2).to receive(:scholarsphere_uploaded_at).and_return Time.new(2000, 1, 1, 0, 0, 0) }
+
+      it "returns the timestamp" do
+        expect(amp.scholarsphere_timestamp_to_keep).to eq Time.new(2000, 1, 1, 0, 0, 0)
+      end
+    end
+
+    context "when given two authorships that each have a Scholarsphere upload timestamp" do
+      before { allow(auth1).to receive(:scholarsphere_uploaded_at).and_return Time.new(2010, 1, 1, 0, 0, 0) }
+      before { allow(auth2).to receive(:scholarsphere_uploaded_at).and_return Time.new(2000, 1, 1, 0, 0, 0) }
+
+      it "returns the more recent timestamp" do
+        expect(amp.scholarsphere_timestamp_to_keep).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+    end
+  end
 end
