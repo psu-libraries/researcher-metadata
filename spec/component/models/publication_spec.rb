@@ -1257,7 +1257,8 @@ describe Publication, type: :model do
              confirmed: true,
              role: 'author',
              orcid_resource_identifier: 'newer-orcid-identifier',
-             updated_by_owner_at: 1.day.ago
+             updated_by_owner_at: 1.day.ago,
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0)
       create :authorship,
              publication: pub2,
              user: user2,
@@ -1274,7 +1275,8 @@ describe Publication, type: :model do
              confirmed: true,
              role: nil,
              orcid_resource_identifier: nil,
-             updated_by_owner_at: 1.weeks.ago
+             updated_by_owner_at: 1.weeks.ago,
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0)
 
       create :authorship,
              publication: pub4,
@@ -1299,7 +1301,9 @@ describe Publication, type: :model do
              confirmed: true,
              role: nil,
              orcid_resource_identifier: 'orcid-identifier-3',
-             updated_by_owner_at: 2.weeks.ago
+             updated_by_owner_at: 2.weeks.ago,
+             open_access_notification_sent_at: Time.new(2010, 1, 1, 0, 0, 0)
+
     end
   
     it "reassigns all of the imports from the given publications to the publication" do
@@ -1355,6 +1359,18 @@ describe Publication, type: :model do
       expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
       expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
       expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+    end
+
+    it "transfers open access notification timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+      expect(auth2.open_access_notification_sent_at).to eq nil
+      expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
     end
 
     it "deletes the given publications" do
@@ -1464,6 +1480,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in a non-duplicate group" do
@@ -1542,6 +1567,18 @@ describe Publication, type: :model do
         expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
         expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
         expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+      end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
       end
     end
 
@@ -1624,6 +1661,18 @@ describe Publication, type: :model do
         expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
         expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
       end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
     end
 
     context "when two of the given publications are in the same non-duplicate group" do
@@ -1704,6 +1753,15 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
       end
     end
 
@@ -1788,6 +1846,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1869,6 +1936,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -1949,6 +2025,15 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
       end
     end
   end

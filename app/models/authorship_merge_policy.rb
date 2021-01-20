@@ -17,6 +17,12 @@ class AuthorshipMergePolicy
     authorships.detect { |a| a.role.present? }.try(:role)
   end
 
+  def oa_timestamp_to_keep
+    authorships.select { |a| a.open_access_notification_sent_at.present? }
+      .sort { |a, b| a.open_access_notification_sent_at <=> b.open_access_notification_sent_at }
+      .last.try(:open_access_notification_sent_at)
+  end
+
   private
 
   attr_reader :authorships
