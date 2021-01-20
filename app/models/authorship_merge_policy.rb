@@ -41,6 +41,17 @@ class AuthorshipMergePolicy
     wtd.compact
   end
 
+  def visibility_value_to_keep
+    authorships.sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.visible_in_profile
+  end
+
+  def position_value_to_keep
+    authorships.select { |a| a.position_in_profile.present? }
+      .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.try(:position_in_profile)
+  end
+
   private
 
   attr_reader :authorships

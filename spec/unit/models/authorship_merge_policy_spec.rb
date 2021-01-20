@@ -251,4 +251,60 @@ describe AuthorshipMergePolicy do
       end
     end
   end
+
+  describe '#visibility_value_to_keep' do
+    let(:authorships) { [auth1, auth2, auth3] }
+    let(:auth1) { double 'authorship 1', visible_in_profile: true, updated_by_owner: Time.new(2010, 1, 1, 0, 0, 0) }
+    let(:auth2) { double 'authorship 2', visible_in_profile: false, updated_by_owner: Time.new(2020, 1, 1, 0, 0, 0) }
+    let(:auth3) { double 'authorship 3', visible_in_profile: true, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+
+    it "returns the visibility preference from the most recently updated authorhship" do
+      expect(amp.visibility_value_to_keep).to eq false
+    end
+  end
+
+  describe '#position_value_to_keep' do
+    let(:authorships) { [auth1, auth2, auth3] }
+    let(:auth1) { double 'authorship 1', position_in_profile: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth2) { double 'authorship 2', position_in_profile: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth3) { double 'authorship 3', position_in_profile: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+
+    context "when given authorships that don't have any position preference" do
+      it "returns nil" do
+        expect(amp.position_value_to_keep).to eq nil
+      end
+    end
+
+    context "when given authorships where one has a position preference" do
+      before { allow(auth2).to receive(:position_in_profile).and_return 1 }
+      it "returns the position" do
+        expect(amp.position_value_to_keep).to eq 1
+      end
+    end
+
+    context "when given authorships where two have position preferences" do
+      before do
+        allow(auth1).to receive(:position_in_profile).and_return 2
+        allow(auth2).to receive(:position_in_profile).and_return 1
+      end
+
+      context "when all of the authorships have been updated by their owners at the same time" do
+        it "returns the position from the last authorship" do
+          expect(amp.position_value_to_keep).to eq 1
+        end
+      end
+
+      context "when the authorships have not all been updated by their owners at the same time" do
+        before do
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2010, 1, 1, 0, 0, 0)
+          allow(auth2).to receive(:updated_by_owner).and_return Time.new(2000, 1, 1, 0, 0, 0)
+          allow(auth3).to receive(:updated_by_owner).and_return Time.new(2020, 1, 1, 0, 0, 0)
+        end
+
+        it "returns the position preference from the most recently updated authorship that has one" do
+          expect(amp.position_value_to_keep).to eq 2
+        end
+      end
+    end
+  end
 end
