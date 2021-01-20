@@ -498,7 +498,9 @@ class Publication < ApplicationRecord
                     role: amp.role_to_keep,
                     confirmed: amp.confirmed_value_to_keep,
                     open_access_notification_sent_at: amp.oa_timestamp_to_keep,
-                    updated_by_owner_at: amp.owner_update_timestamp_to_keep)
+                    updated_by_owner_at: amp.owner_update_timestamp_to_keep,
+                    waiver: amp.waiver_to_keep)
+        amp.waivers_to_destroy.each { |w| w.destroy }
       end
 
       pubs_to_delete.each do |p|

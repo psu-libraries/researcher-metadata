@@ -157,4 +157,98 @@ describe AuthorshipMergePolicy do
       end
     end
   end
+
+  describe "#waiver_to_keep" do
+    let(:authorships) { [auth1, auth2, auth3] }
+    let(:auth1) { double 'authorship 1', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth2) { double 'authorship 2', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth3) { double 'authorship 3', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:waiver1) { double 'waiver 1' }
+    let(:waiver2) { double 'waiver 2' }
+
+    context "when given authorships that don't have any waivers" do
+      it "returns nil" do
+        expect(amp.waiver_to_keep).to eq nil
+      end
+    end
+
+    context "when given authorships where one has a waiver" do
+      before { allow(auth2).to receive(:waiver).and_return waiver1 }
+      it "returns the identifier" do
+        expect(amp.waiver_to_keep).to eq waiver1
+      end
+    end
+
+    context "when given authorships where two have waivers" do
+      before do
+        allow(auth1).to receive(:waiver).and_return waiver1
+        allow(auth2).to receive(:waiver).and_return waiver2
+      end
+
+      context "when all of the authorships have been updated by their owners at the same time" do
+        it "returns the waiver from the last authorship" do
+          expect(amp.waiver_to_keep).to eq waiver2
+        end
+      end
+
+      context "when the authorships have not all been updated by their owners at the same time" do
+        before do
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2010, 1, 1, 0, 0, 0)
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2000, 1, 1, 0, 0, 0)
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2020, 1, 1, 0, 0, 0)
+        end
+
+        it "returns the waiver from the most recently updated authorship that has one" do
+          expect(amp.waiver_to_keep).to eq waiver1
+        end
+      end
+    end
+  end
+
+  describe "#waivers_to_destroy" do
+    let(:authorships) { [auth1, auth2, auth3] }
+    let(:auth1) { double 'authorship 1', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth2) { double 'authorship 2', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:auth3) { double 'authorship 3', waiver: nil, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
+    let(:waiver1) { double 'waiver 1' }
+    let(:waiver2) { double 'waiver 2' }
+
+    context "when given authorships that don't have any waivers" do
+      it "returns an empty array" do
+        expect(amp.waivers_to_destroy).to eq []
+      end
+    end
+
+    context "when given authorships where one has a waiver" do
+      before { allow(auth2).to receive(:waiver).and_return waiver1 }
+      it "returns an empty array" do
+        expect(amp.waivers_to_destroy).to eq []
+      end
+    end
+
+    context "when given authorships where two have waivers" do
+      before do
+        allow(auth1).to receive(:waiver).and_return waiver1
+        allow(auth2).to receive(:waiver).and_return waiver2
+      end
+
+      context "when all of the authorships have been updated by their owners at the same time" do
+        it "returns the waiver from the first authorship" do
+          expect(amp.waivers_to_destroy).to eq [waiver1]
+        end
+      end
+
+      context "when the authorships have not all been updated by their owners at the same time" do
+        before do
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2010, 1, 1, 0, 0, 0)
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2000, 1, 1, 0, 0, 0)
+          allow(auth1).to receive(:updated_by_owner).and_return Time.new(2020, 1, 1, 0, 0, 0)
+        end
+
+        it "returns all waivers except for the waiver for the most recently updated authorship" do
+          expect(amp.waivers_to_destroy).to eq [waiver2]
+        end
+      end
+    end
+  end
 end

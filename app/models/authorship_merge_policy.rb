@@ -29,6 +29,18 @@ class AuthorshipMergePolicy
       .last.try(:updated_by_owner_at)
   end
 
+  def waiver_to_keep
+    authorships.select { |a| a.waiver.present? }
+      .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.try(:waiver)
+  end
+
+  def waivers_to_destroy
+    all_waivers = authorships.map { |a| a.waiver }
+    wtd = all_waivers - [waiver_to_keep]
+    wtd.compact
+  end
+
   private
 
   attr_reader :authorships
