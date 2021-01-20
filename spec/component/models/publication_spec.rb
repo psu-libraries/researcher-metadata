@@ -1455,6 +1455,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
     end
 
     context "when one of the given publications is in a non-duplicate group" do
@@ -1521,6 +1530,18 @@ describe Publication, type: :model do
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
         expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
       end
     end
 
@@ -1590,6 +1611,18 @@ describe Publication, type: :model do
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
         expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
       end
     end
 
@@ -1662,6 +1695,15 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
     end
 
@@ -1737,6 +1779,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1809,6 +1860,15 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -1880,6 +1940,15 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
       end
     end
   end
