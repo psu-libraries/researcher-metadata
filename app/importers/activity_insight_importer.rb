@@ -208,7 +208,7 @@ class ActivityInsightImporter
   def pub_attrs(pub)
     {
       title: pub.title,
-      publication_type: ActivityInsightPublicationTypeMapIn.map(pub.publication_type),
+      publication_type: pub.publication_type,
       journal_title: pub.journal_title,
       publisher_name: pub.publisher,
       secondary_title: pub.secondary_title,
@@ -687,6 +687,8 @@ class ActivityInsightAPIPublication
       'Trade Journal Article'
     elsif cleaned_ai_type == 'journal article'
       'Journal Article'
+    else
+      ActivityInsightPublicationTypeMapIn.map(cleaned_ai_type)
     end
   end
 
@@ -695,7 +697,7 @@ class ActivityInsightAPIPublication
   end
 
   def importable?
-    !!(publication_type =~ /journal article/i) && (status == 'Published')
+    status == 'Published'
   end
 
   def activity_insight_id
@@ -787,11 +789,11 @@ class ActivityInsightAPIPublication
   end
 
   def contype
-    text_for('CONTYPE').try(:downcase)
+    text_for('CONTYPE')
   end
 
   def cleaned_ai_type
-    if contype == 'other'
+    if contype == 'Other'
       text_for('CONTYPEOTHER').try(:downcase)
     else
       contype
