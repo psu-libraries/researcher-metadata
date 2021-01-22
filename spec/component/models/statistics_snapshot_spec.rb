@@ -11,5 +11,27 @@ describe 'the statistics_snapshots table', type: :model do
 end
 
 describe StatisticsSnapshot, type: :model do
-  
+  before do
+    create :publication, open_access_url: nil, user_submitted_open_access_url: nil
+    create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil
+    create :publication, open_access_url: nil, user_submitted_open_access_url: 'url2'
+  end
+
+  describe ".record" do
+    it "creates a new statistics snapshot record" do
+      expect { StatisticsSnapshot.record }.to change { StatisticsSnapshot.count }.by 1
+    end
+
+    it "records the current total number of publications in the database" do
+      snapshot = StatisticsSnapshot.record
+
+      expect(snapshot.total_publication_count).to eq 3
+    end
+
+    it "records the current number of open access publications in the database" do
+      snapshot = StatisticsSnapshot.record
+
+      expect(snapshot.open_access_publication_count).to eq 2
+    end
+  end
 end
