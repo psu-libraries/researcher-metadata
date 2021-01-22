@@ -194,6 +194,16 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.open_access' do
+    let!(:pub1) { create :publication, open_access_url: nil, user_submitted_open_access_url: nil }
+    let!(:pub2) { create :publication, open_access_url: nil, user_submitted_open_access_url: 'user_url1' }
+    let!(:pub3) { create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil}
+    let!(:pub4) { create :publication, open_access_url: 'url2', user_submitted_open_access_url: 'user_url2' }
+    it "returns publications that have an open access URL" do
+      expect(Publication.open_access).to match_array [pub2, pub3, pub4]
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
