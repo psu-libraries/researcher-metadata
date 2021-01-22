@@ -25,7 +25,7 @@ describe FacultyNotificationsMailer, type: :model do
     end
 
     it "sends the email with the correct subject" do
-      expect(email.subject).to eq "PSU Open Access Policy Reminder"
+      expect(email.subject).to eq "Penn State Open Access Policy: Articles to Upload"
     end
 
     it "sets the correct reply-to address" do
