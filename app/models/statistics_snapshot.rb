@@ -14,7 +14,7 @@ class StatisticsSnapshot < ApplicationRecord
       field(:created_at)
       field(:total_publication_count)
       field(:open_access_publication_count)
-      field(:percent_open_access)
+      field(:percent_open_access) { label '% open access' }
     end
 
     show do
