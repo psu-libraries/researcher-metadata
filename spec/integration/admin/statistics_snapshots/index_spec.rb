@@ -28,6 +28,9 @@ feature "Admin statistics snapshots list", type: :feature do
         expect(page).to have_content 8743
         expect(page).to have_content 3765
 
+        expect(page).to have_content 26.8
+        expect(page).to have_content 43.1
+
         expect(page).to have_content "January 21, 2021 23:39"
         expect(page).to have_content "April 01, 2001 09:04"
       end

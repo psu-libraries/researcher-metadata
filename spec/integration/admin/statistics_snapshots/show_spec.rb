@@ -25,6 +25,10 @@ feature "Admin statistics snapshot detail page", type: :feature do
         expect(page).to have_content 592
       end
 
+      it "shows the percentage of publications that are open access" do
+        expect(page).to have_content 15.4
+      end
+
       it "shows the creation time of the record" do
         expect(page).to have_content "January 21, 2021 23:39"
       end

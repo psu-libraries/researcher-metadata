@@ -34,4 +34,14 @@ describe StatisticsSnapshot, type: :model do
       expect(snapshot.open_access_publication_count).to eq 2
     end
   end
+
+  describe '#percent_open_access' do
+    let(:snapshot) { build :statistics_snapshot,
+                           total_publication_count: 3,
+                           open_access_publication_count: 2 }
+
+    it "returns the percentage of publications that were open access at the time the snapshot was taken" do
+      expect(snapshot.percent_open_access).to eq 66.7
+    end
+  end
 end
