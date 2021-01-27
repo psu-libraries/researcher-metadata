@@ -29,6 +29,14 @@ class Authorship < ApplicationRecord
   def record_open_access_notification
     update_attribute(:open_access_notification_sent_at, Time.current)
   end
+
+  def updated_by_owner
+    if updated_by_owner_at
+      NullComparableTime.parse(updated_by_owner_at.to_s)
+    else
+      NullTime.new
+    end
+  end
   
   rails_admin do
     object_label_method { :description }

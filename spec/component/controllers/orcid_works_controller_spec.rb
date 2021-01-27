@@ -6,16 +6,18 @@ describe OrcidWorksController, type: :controller do
     context "when the user is authenticated" do
       let!(:user) { create :user }
       let(:work) { double 'ORCID work', save!: nil, location: "the_location" }
+      let(:now) { Time.new(2021, 1, 13, 11, 26, 0) }
       before do
         allow(OrcidWork).to receive(:new).with(authorship).and_return(work)
         allow(user).to receive_message_chain(:authorships, :find).and_return(authorship)
+        allow(Time).to receive(:current).and_return(now)
         authenticate_as(user)
         post :create
       end
       context "when the user has an authorship" do
         let(:authorship) { double 'authorship',
                                   orcid_resource_identifier: id,
-                                  update_attributes!: nil }
+                                  update!: nil }
         context "when the work has already been added to the user's ORCID record" do
           let(:id) { "abc123" }
 
@@ -36,7 +38,8 @@ describe OrcidWorksController, type: :controller do
           end
 
           it "updates the authorship with the identifier of the work that was created in ORCID" do
-            expect(authorship).to have_received(:update_attributes!).with(orcid_resource_identifier: 'the_location')
+            expect(authorship).to have_received(:update!).with(orcid_resource_identifier: 'the_location',
+                                                               updated_by_owner_at: now)
           end
 
           it "sets a flash message" do

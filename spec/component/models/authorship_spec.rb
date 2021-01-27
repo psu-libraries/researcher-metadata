@@ -16,6 +16,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:role).of_type(:string) }
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:orcid_resource_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:updated_by_owner_at).of_type(:datetime) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
@@ -70,6 +71,25 @@ describe Authorship, type: :model do
     it "saves the current time in the open access notification timestamp field" do
       a.record_open_access_notification
       expect(a.reload.open_access_notification_sent_at).to eq now
+    end
+  end
+
+  describe '#updated_by_owner' do
+    let(:a) { Authorship.new(updated_by_owner_at: timestamp) }
+
+    context "when the authorship has a value for updated_by_owner_at" do
+      let(:timestamp) { Time.new(2000, 1, 1, 0, 0, 0) }
+      it "returns a value of updated_by_owner_at that can be compared to a null time" do
+        expect(a.updated_by_owner).to eq timestamp
+        expect(a.updated_by_owner > NullTime.new).to eq true
+      end
+    end
+
+    context "when the authorship does not have a value for updated_by_owner_at" do
+      let(:timestamp) { nil }
+      it "returns a null time" do
+        expect(a.updated_by_owner).to be_a NullTime
+      end
     end
   end
 end

@@ -102,6 +102,11 @@ describe ScholarsphereUploadsController, type: :controller do
           post :create, params: {id: pub.id}
           expect(auth.reload.scholarsphere_uploaded_at).to eq now
         end
+
+        it "sets the modification timestamp on the user's authorship of the publication" do
+          post :create, params: {id: pub.id}
+          expect(auth.reload.updated_by_owner_at).to eq now
+        end
           
         it "redirects to the ScholarSphere website" do
           post :create, params: {id: pub.id}

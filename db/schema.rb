@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_03_175509) do
+ActiveRecord::Schema.define(version: 2021_01_21_232014) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2020_12_03_175509) do
     t.string "role"
     t.datetime "open_access_notification_sent_at"
     t.string "orcid_resource_identifier"
+    t.datetime "updated_by_owner_at"
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
@@ -387,6 +388,13 @@ ActiveRecord::Schema.define(version: 2020_12_03_175509) do
     t.datetime "updated_at", null: false
     t.index ["grant_id"], name: "index_researcher_funds_on_grant_id"
     t.index ["user_id"], name: "index_researcher_funds_on_user_id"
+  end
+
+  create_table "statistics_snapshots", force: :cascade do |t|
+    t.integer "total_publication_count"
+    t.integer "open_access_publication_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tags", force: :cascade do |t|
