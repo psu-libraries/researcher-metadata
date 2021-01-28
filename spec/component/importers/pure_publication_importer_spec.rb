@@ -182,7 +182,8 @@ describe PurePublicationImporter do
                                     total_scopus_citations: 1,
                                     abstract: 'existing abstract',
                                     visible: false,
-                                    doi: 'existing DOI' }
+                                    doi: doi }
+        let(:doi) { "existing DOI" }
         
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
@@ -404,25 +405,51 @@ describe PurePublicationImporter do
             expect(existing_import.reload.source_updated_at).to eq Time.parse('2018-03-14T20:47:06.357+0000')
           end
 
-          it "updates only the Scopus citation count on the existing publication" do
-            importer.call
+          context "when the existing publication already has a DOI" do
+            it "updates only the Scopus citation count on the existing publication" do
+              importer.call
 
-            existing_pub_reloaded = existing_pub.reload
+              existing_pub_reloaded = existing_pub.reload
 
-            expect(existing_pub_reloaded.title).to eq 'Existing Title'
-            expect(existing_pub_reloaded.secondary_title).to eq 'Existing Subtitle'
-            expect(existing_pub_reloaded.publication_type).to eq 'Journal Article'
-            expect(existing_pub_reloaded.page_range).to eq 'existing range'
-            expect(existing_pub_reloaded.volume).to eq 'existing volume'
-            expect(existing_pub_reloaded.issue).to eq 'existing issue'
-            expect(existing_pub_reloaded.journal_title).to eq 'Existing Journal'
-            expect(existing_pub_reloaded.issn).to eq 'existing issn'
-            expect(existing_pub_reloaded.status).to eq 'existing status'
-            expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
-            expect(existing_pub_reloaded.total_scopus_citations).to eq 2
-            expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
-            expect(existing_pub_reloaded.visible).to eq false
-            expect(existing_pub_reloaded.doi).to eq 'existing DOI'
+              expect(existing_pub_reloaded.title).to eq 'Existing Title'
+              expect(existing_pub_reloaded.secondary_title).to eq 'Existing Subtitle'
+              expect(existing_pub_reloaded.publication_type).to eq 'Journal Article'
+              expect(existing_pub_reloaded.page_range).to eq 'existing range'
+              expect(existing_pub_reloaded.volume).to eq 'existing volume'
+              expect(existing_pub_reloaded.issue).to eq 'existing issue'
+              expect(existing_pub_reloaded.journal_title).to eq 'Existing Journal'
+              expect(existing_pub_reloaded.issn).to eq 'existing issn'
+              expect(existing_pub_reloaded.status).to eq 'existing status'
+              expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
+              expect(existing_pub_reloaded.total_scopus_citations).to eq 2
+              expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
+              expect(existing_pub_reloaded.visible).to eq false
+              expect(existing_pub_reloaded.doi).to eq 'existing DOI'
+            end
+          end
+
+          context "when the existing publication does not have a DOI" do
+            let(:doi) { nil }
+            it "updates only the Scopus citation count and DOI on the existing publication" do
+              importer.call
+
+              existing_pub_reloaded = existing_pub.reload
+
+              expect(existing_pub_reloaded.title).to eq 'Existing Title'
+              expect(existing_pub_reloaded.secondary_title).to eq 'Existing Subtitle'
+              expect(existing_pub_reloaded.publication_type).to eq 'Journal Article'
+              expect(existing_pub_reloaded.page_range).to eq 'existing range'
+              expect(existing_pub_reloaded.volume).to eq 'existing volume'
+              expect(existing_pub_reloaded.issue).to eq 'existing issue'
+              expect(existing_pub_reloaded.journal_title).to eq 'Existing Journal'
+              expect(existing_pub_reloaded.issn).to eq 'existing issn'
+              expect(existing_pub_reloaded.status).to eq 'existing status'
+              expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
+              expect(existing_pub_reloaded.total_scopus_citations).to eq 2
+              expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
+              expect(existing_pub_reloaded.visible).to eq false
+              expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
+            end
           end
 
           it "creates new publications with the correct data" do
