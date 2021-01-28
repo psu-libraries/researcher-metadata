@@ -158,16 +158,19 @@ class ActivityInsightImporter
             end
 
             unless pub_record.updated_by_user_at.present?
-              pub_record.authorships.destroy_all
               pub.faculty_authors.each do |author|
                 user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
                 if user
-                  a = Authorship.new
-                  a.user = user
-                  a.publication = pub_record
-                  a.author_number = pub.contributors.index(author) + 1
-                  a.role = author.role
-                  a.save!
+                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+
+                  if authorship.new_record?
+                    authorship.user = user
+                    authorship.publication = pub_record
+                  end
+                  authorship.author_number = pub.contributors.index(author) + 1
+                  authorship.role = author.role
+
+                  authorship.save!
                 end
               end
 
