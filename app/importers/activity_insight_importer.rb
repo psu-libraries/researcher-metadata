@@ -174,6 +174,15 @@ class ActivityInsightImporter
                 end
               end
 
+              pub_record.authorships.each do |a|
+                authorship_in_import = pub.faculty_authors.detect do |fa|
+                  user = User.find_by(activity_insight_identifier: fa.activity_insight_user_id)
+                  user == a.user && pub_record == a.publication 
+                end
+                
+                a.destroy unless authorship_in_import
+              end
+
               pub_record.contributors.delete_all
               pub.contributors.each_with_index do |cont, i|
                 c = Contributor.new

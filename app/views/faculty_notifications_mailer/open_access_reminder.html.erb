@@ -1,18 +1,22 @@
 <p>Dear <%= @user.name %>,</p>
 
 <p>
-  Penn State Policy AC02: Open Access to Scholarly Articles, requires university researchers to 
-  provide the accepted manuscript version of their scholarly articles to the University Libraries
-  to be made available to the public free of charge. Researchers who cannot or do not wish to 
-  make a particular article freely available can obtain a waiver. The policy went into effect on
-  January 1, 2020 after endorsement by Faculty Senate and approval by the President’s Council.
+  Penn State Policy AC02: Open Access to Scholarly Articles, requires university researchers
+  to provide the accepted manuscript version of their scholarly articles to the University
+  Libraries to be made available to the public free of charge. Researchers who cannot or do
+  not wish to make a particular article freely available can obtain a waiver. The policy went
+  into effect on January 1, 2020 after endorsement by Faculty Senate and approval by the
+  President’s Council and <%= link_to "does not apply to some articles", "https://psu.libanswers.com/faq/279964" %>
+  with publishing agreements signed before that date.
 </p>
 
 <p>
-  We have identified one or more recent articles for which you are listed as an author that may
-  be subject to the policy. We have not found an open access version of these articles. We
-  encourage you to visit the links in the list and follow the instructions to provide your
-  accepted manuscript or obtain a waiver of the policy.
+  We have identified one or more publications published since July 1, 2020 for which you are
+  listed as an author. We have not found an open access version of these publications. For
+  items on the list that are <%= link_to "scholarly articles", "https://psu.libanswers.com/faq/279967" %>,
+  we encourage you to visit the links in the list below and follow the instructions to provide your
+  <%= link_to "accepted manuscript", "https://psu.libanswers.com/faq/279953" %> or obtain a waiver
+  of the policy.
 </p>
 
 <% if @new_publications.any? %>
@@ -41,15 +45,21 @@
 </p>
 
 <ul>
+  <li><%= link_to "How can I check the terms of my publishing agreement regarding deposit of my scholarly article in ScholarSphere?", "https://psu.libanswers.com/faq/279046" %></li>
   <li><%= link_to "I was working on an article at the time the open access policy went into effect (January 1, 2020). Does the policy apply to my article?", "https://psu.libanswers.com/faq/279964" %></li>
-  <li><%= link_to "Which version of my scholarly article should I deposit in order to comply with the open access policy?", "https://psu.libanswers.com/faq/279953" %></li>
+  <li><%= link_to "How does the open access policy work if I have coauthors?", "https://psu.libanswers.com/faq/296426" %></li>
   <li><%= link_to "What is the definition of scholarly article?", "https://psu.libanswers.com/faq/279967" %></li>
   <li><%= link_to "What is the definition of university researcher?", "https://psu.libanswers.com/faq/279966" %></li>
+  <li><%= link_to "Why should I make my work open access?", "https://psu.libanswers.com/faq/332993" %></li>
 </ul>
 
-<br/>
+<p>
+  Please don’t hesitate to follow up with us if you have any questions.
+</p>
 
 <p>
+  Sincerely,
+  <br/>
   The Office of Scholarly Communications and Copyright
   <br/>
   Penn State University Libraries

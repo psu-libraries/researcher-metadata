@@ -1023,15 +1023,24 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
           end
 
-          context "when an authorship already exists for the existing publication" do
-            let!(:existing_authorship) { create :authorship,
-                                                user: user,
-                                                publication: existing_pub,
-                                                role: 'Existing Role',
-                                                author_number: 6 }
+          context "when authorships already exist for the existing publication" do
+            let!(:existing_authorship1) { create :authorship,
+                                                 user: user,
+                                                 publication: existing_pub,
+                                                 role: 'Existing Role',
+                                                 author_number: 6 }
+            let!(:existing_authorship2) { create :authorship,
+                                                 publication: existing_pub }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+
             it "creates new authorship records for every new faculty author for each new imported publication" do
               expect { importer.call }.to change { Authorship.count }.by 2
+            end
+
+            it "doesn't delete any existing authorships" do
+              importer.call
+              expect(existing_authorship1.reload).to eq existing_authorship1
+              expect(existing_authorship2.reload).to eq existing_authorship2
             end
 
             it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -1247,15 +1256,27 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
           end
 
-          context "when an authorship already exists for the existing publication" do
-            let!(:existing_authorship) { create :authorship,
-                                                user: user,
-                                                publication: existing_pub,
-                                                role: 'Existing Role',
-                                                author_number: 6 }
+          context "when authorships already exist for the existing publication" do
+            let!(:existing_authorship1) { create :authorship,
+                                                 user: user,
+                                                 publication: existing_pub,
+                                                 role: 'Existing Role',
+                                                 author_number: 6 }
+            let!(:existing_authorship2) { create :authorship,
+                                                 publication: existing_pub,
+                                                 user: user2 }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+            let(:user2) { create :user }
+
             it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 2
+              expect { importer.call }.to change { Authorship.count }.by 1
+            end
+
+            it "deletes authorship records that are not present in the imported data" do
+              importer.call
+              expect(existing_authorship1.reload).to eq existing_authorship1
+              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
+              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
             end
 
             it "saves the correct attributes with each new authorship and updates the existing authorship" do
@@ -2411,14 +2432,23 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
             end
   
-            context "when an authorship already exists for the existing publication" do
-              let!(:existing_authorship) { create :authorship,
-                                                  user: existing_user,
-                                                  publication: existing_pub,
-                                                  role: 'Existing Role',
-                                                  author_number: 6 }
+            context "when authorhips already exist for the existing publication" do
+              let!(:existing_authorship1) { create :authorship,
+                                                   user: existing_user,
+                                                   publication: existing_pub,
+                                                   role: 'Existing Role',
+                                                   author_number: 6 }
+              let!(:existing_authorship2) { create :authorship,
+                                                   publication: existing_pub }
+
               it "creates new authorship records for every new faculty author for each new imported publication" do
                 expect { importer.call }.to change { Authorship.count }.by 2
+              end
+
+              it "does not delete any existing authorships" do
+                importer.call
+                expect(existing_authorship1.reload).to eq existing_authorship1
+                expect(existing_authorship2.reload).to eq existing_authorship2
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -2634,17 +2664,28 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
             end
   
-            context "when an authorship already exists for the existing publication" do
-              let!(:existing_authorship) { create :authorship,
-                                                  user: existing_user,
-                                                  publication: existing_pub,
-                                                  role: 'Existing Role',
-                                                  author_number: 6 }
+            context "when authorships already exist for the existing publication" do
+              let!(:existing_authorship1) { create :authorship,
+                                                   user: existing_user,
+                                                   publication: existing_pub,
+                                                   role: 'Existing Role',
+                                                   author_number: 6 }
+              let!(:existing_authorship2) { create :authorship,
+                                                   publication: existing_pub,
+                                                   user: user2 }
+              let(:user2) { create :user }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 1
               end
   
+            it "deletes authorship records that are not present in the imported data" do
+              importer.call
+              expect(existing_authorship1.reload).to eq existing_authorship1
+              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
+              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
+            end
+
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
@@ -3773,14 +3814,23 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
             end
 
-            context "when an authorship already exists for the existing publication" do
-              let!(:existing_authorship) { create :authorship,
-                                                  user: existing_user,
-                                                  publication: existing_pub,
-                                                  role: 'Existing Role',
-                                                  author_number: 6 }
+            context "when authorships already exist for the existing publication" do
+              let!(:existing_authorship1) { create :authorship,
+                                                   user: existing_user,
+                                                   publication: existing_pub,
+                                                   role: 'Existing Role',
+                                                   author_number: 6 }
+              let!(:existing_authorship2) { create :authorship,
+                                                   publication: existing_pub }
+
               it "creates new authorship records for every new faculty author for each new imported publication" do
                 expect { importer.call }.to change { Authorship.count }.by 2
+              end
+
+              it "does not delete any existing authorships" do
+                importer.call
+                expect(existing_authorship1.reload).to eq existing_authorship1
+                expect(existing_authorship2.reload).to eq existing_authorship2
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -3996,15 +4046,27 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
             end
   
-            context "when an authorship already exists for the existing publication" do
-              let!(:existing_authorship) { create :authorship,
-                                                  user: existing_user,
-                                                  publication: existing_pub,
-                                                  role: 'Existing Role',
-                                                  author_number: 6 }
+            context "when authorships exist for the existing publication" do
+              let!(:existing_authorship1) { create :authorship,
+                                                   user: existing_user,
+                                                   publication: existing_pub,
+                                                   role: 'Existing Role',
+                                                   author_number: 6 }
+              let!(:existing_authorship2) { create :authorship,
+                                                   publication: existing_pub,
+                                                   user: user2 }
+              let(:user2) { create :user }
+
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 1
               end
+
+            it "deletes authorship records that are not present in the imported data" do
+              importer.call
+              expect(existing_authorship1.reload).to eq existing_authorship1
+              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
+              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
+            end
   
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
                 importer.call
@@ -4031,7 +4093,7 @@ describe ActivityInsightImporter do
               end
             end
   
-            context "when no authorships exist for the existing publication" do
+            context "when no authorships already exist for the existing publication" do
               it "creates a new authorship record for every new faculty author for each imported publication" do
                 expect { importer.call }.to change { Authorship.count }.by 3
               end

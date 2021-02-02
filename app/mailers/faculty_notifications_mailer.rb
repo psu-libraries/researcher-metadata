@@ -4,7 +4,7 @@ class FacultyNotificationsMailer < ApplicationMailer
     @old_publications = old_publications
     @new_publications = new_publications
     mail to: @user.email,
-         subject: "PSU Open Access Policy Reminder",
+         subject: "Penn State Open Access Policy: Articles to Upload",
          from: "openaccess@psu.edu",
          reply_to: "openaccess@psu.edu"
   end

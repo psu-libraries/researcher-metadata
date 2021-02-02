@@ -64,6 +64,8 @@ class Publication < ApplicationRecord
 
   scope :subject_to_open_access_policy, -> { where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
+  scope :open_access, -> { where('open_access_url IS NOT NULL OR user_submitted_open_access_url IS NOT NULL') }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributors, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
@@ -477,6 +479,37 @@ class Publication < ApplicationRecord
 
       imports_to_reassign.each do |i|
         i.update_attributes!(publication: self)
+      end
+
+      all_authorships = all_pubs.map { |p| p.authorships }.flatten
+      authorships_by_user = all_authorships.group_by { |a| a.user }
+
+      authorships_to_keep = []
+
+      authorships_by_user.each do |user, auths|
+        existing_authorship = authorships.find_by(user: user)
+        if existing_authorship
+          authorships_to_keep << existing_authorship
+        else
+          authorship_to_keep = auths.first
+          authorship_to_keep.update!(publication: self)
+          authorships_to_keep << authorship_to_keep
+        end
+      end
+
+      authorships_to_keep.each do |atk|
+        amp = AuthorshipMergePolicy.new(authorships_by_user[atk.user])
+
+        atk.update!(orcid_resource_identifier: amp.orcid_resource_id_to_keep,
+                    role: amp.role_to_keep,
+                    confirmed: amp.confirmed_value_to_keep,
+                    open_access_notification_sent_at: amp.oa_timestamp_to_keep,
+                    updated_by_owner_at: amp.owner_update_timestamp_to_keep,
+                    waiver: amp.waiver_to_keep,
+                    visible_in_profile: amp.visibility_value_to_keep,
+                    position_in_profile: amp.position_value_to_keep,
+                    scholarsphere_uploaded_at: amp.scholarsphere_timestamp_to_keep)
+        amp.waivers_to_destroy.each { |w| w.destroy }
       end
 
       pubs_to_delete.each do |p|

@@ -199,6 +199,16 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.open_access' do
+    let!(:pub1) { create :publication, open_access_url: nil, user_submitted_open_access_url: nil }
+    let!(:pub2) { create :publication, open_access_url: nil, user_submitted_open_access_url: 'user_url1' }
+    let!(:pub3) { create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil}
+    let!(:pub4) { create :publication, open_access_url: 'url2', user_submitted_open_access_url: 'user_url2' }
+    it "returns publications that have an open access URL" do
+      expect(Publication.open_access).to match_array [pub2, pub3, pub4]
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
@@ -1231,6 +1241,10 @@ describe Publication, type: :model do
   end
 
   describe '#merge!' do
+    let!(:user1) { create :user }
+    let!(:user2) { create :user }
+    let!(:user3) { create :user }
+
     let!(:pub1) { create :publication, updated_by_user_at: nil }
     let!(:pub2) { create :publication }
     let!(:pub3) { create :publication }
@@ -1241,6 +1255,85 @@ describe Publication, type: :model do
     let!(:pub2_import2) { create :publication_import, publication: pub2 }
     let!(:pub3_import1) { create :publication_import, publication: pub3 }
 
+    let(:waiver1) { build :internal_publication_waiver }
+    let(:waiver2) { build :internal_publication_waiver }
+
+    before do
+      create :authorship,
+             publication: pub1,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier',
+             updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
+             visible_in_profile: true,
+             position_in_profile: nil,
+             scholarsphere_uploaded_at: nil
+
+      create :authorship,
+             publication: pub2,
+             user: user1,
+             author_number: 1,
+             confirmed: true,
+             role: 'author',
+             orcid_resource_identifier: 'newer-orcid-identifier',
+             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0),
+             waiver: waiver1,
+             visible_in_profile: false,
+             position_in_profile: 2,
+             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub2,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: 'co-author',
+             orcid_resource_identifier: 'newer-orcid-identifier-2',
+             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0)
+
+      create :authorship,
+             publication: pub3,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0)
+
+      create :authorship,
+             publication: pub4,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: 'other author',
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
+             waiver: waiver2,
+             position_in_profile: 1,
+             scholarsphere_uploaded_at: Time.new(2021, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub4,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier-2',
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub4,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: 'orcid-identifier-3',
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2010, 1, 1, 0, 0, 0)
+
+    end
+  
     it "reassigns all of the imports from the given publications to the publication" do
       pub1.merge!([pub2, pub3, pub4])
 
@@ -1248,6 +1341,124 @@ describe Publication, type: :model do
                                                   pub2_import1,
                                                   pub2_import2,
                                                   pub3_import1]
+    end
+
+    it "transfers all of the authorships from all of the given publications to the publication" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.authorships.count).to eq 3
+
+      expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+      expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+    end
+
+    it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.confirmed).to eq true
+      expect(auth2.confirmed).to eq false
+      expect(auth3.confirmed).to eq true
+    end
+
+    it "transfers authorship roles" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.role).to eq 'author'
+      expect(auth2.role).to eq 'co-author'
+      expect(auth3.role).to eq nil
+    end
+
+    it "transfers ORCiD identifiers" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+      expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+      expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+    end
+
+    it "transfers open access notification timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+      expect(auth2.open_access_notification_sent_at).to eq nil
+      expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+    end
+
+    it "transfers owner modification timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+      expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+      expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+    end
+
+    it "transfers waivers" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.waiver).to eq waiver1
+      expect(auth2.waiver).to eq nil
+      expect(auth3.waiver).to eq nil
+    end
+
+    it "transfers visibility" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.visible_in_profile).to eq false
+      expect(auth2.visible_in_profile).to eq true
+      expect(auth3.visible_in_profile).to eq true
+    end
+
+    it "transfers position" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.position_in_profile).to eq 2
+      expect(auth2.position_in_profile).to eq nil
+      expect(auth3.position_in_profile).to eq nil
+    end
+
+    it "transfers Scholarsphere upload timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+      expect(auth2.scholarsphere_uploaded_at).to eq nil
+      expect(auth3.scholarsphere_uploaded_at).to eq nil
     end
 
     it "deletes the given publications" do
@@ -1321,6 +1532,101 @@ describe Publication, type: :model do
         
         expect(pub1.reload.updated_by_user_at).to be_nil
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in a non-duplicate group" do
@@ -1353,6 +1659,124 @@ describe Publication, type: :model do
         pub1.merge!([pub2, pub3, pub4])
 
         expect(ndpg.reload.publications).to eq [pub1]
+      end
+
+      it "transfers all of the authorships from all of the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.authorships.count).to eq 3
+
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+      end
+
+      it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.confirmed).to eq true
+        expect(auth2.confirmed).to eq false
+        expect(auth3.confirmed).to eq true
+      end
+
+      it "transfers authorship roles" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.role).to eq 'author'
+        expect(auth2.role).to eq 'co-author'
+        expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+      end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers owner modification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers waivers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.waiver).to eq waiver1
+        expect(auth2.waiver).to eq nil
+        expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers visibility" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.visible_in_profile).to eq false
+        expect(auth2.visible_in_profile).to eq true
+        expect(auth3.visible_in_profile).to eq true
+      end
+
+      it "transfers position" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.position_in_profile).to eq 2
+        expect(auth2.position_in_profile).to eq nil
+        expect(auth3.position_in_profile).to eq nil
+      end
+
+      it "transfers Scholarsphere upload timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+        expect(auth2.scholarsphere_uploaded_at).to eq nil
+        expect(auth3.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1388,6 +1812,124 @@ describe Publication, type: :model do
 
         expect(ndpg1.reload.publications).to eq [pub1]
         expect(ndpg2.reload.publications).to eq [pub1]
+      end
+
+      it "transfers all of the authorships from all of the given publications to the publication" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.authorships.count).to eq 3
+
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user2, author_number: 2)).not_to be_nil
+        expect(pub1.authorships.find_by(user: user3, author_number: 3)).not_to be_nil
+      end
+
+      it "transfers authorship confirmation with confirmation presence winning in the event of a conflict" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.confirmed).to eq true
+        expect(auth2.confirmed).to eq false
+        expect(auth3.confirmed).to eq true
+      end
+
+      it "transfers authorship roles" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.role).to eq 'author'
+        expect(auth2.role).to eq 'co-author'
+        expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+      end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers owner modification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers waivers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.waiver).to eq waiver1
+        expect(auth2.waiver).to eq nil
+        expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers visibility" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.visible_in_profile).to eq false
+        expect(auth2.visible_in_profile).to eq true
+        expect(auth3.visible_in_profile).to eq true
+      end
+
+      it "transfers position" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.position_in_profile).to eq 2
+        expect(auth2.position_in_profile).to eq nil
+        expect(auth3.position_in_profile).to eq nil
+      end
+
+      it "transfers Scholarsphere upload timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+        expect(auth2.scholarsphere_uploaded_at).to eq nil
+        expect(auth3.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1433,6 +1975,101 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
 
         expect(ndpg.reload.publications).to match_array [pub2, pub4]
+      end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1481,6 +2118,101 @@ describe Publication, type: :model do
         expect(ndpg1.reload.publications).to match_array [pub2, pub4]
         expect(ndpg2.reload.publications).to match_array [pub2, pub4]
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1526,6 +2258,101 @@ describe Publication, type: :model do
 
         expect(ndpg.reload.publications).to match_array [pub1, pub3]
       end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -1570,6 +2397,101 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
 
         expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
+      end
+
+      it "does not transfer any authorships" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        expect(pub1.authorships.count).to eq 1
+        expect(pub1.authorships.find_by(user: user1, author_number: 1)).not_to be_nil
+      end
+
+      it "does not transfer any authorship confirmation information" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.confirmed).to eq false
+      end
+
+      it "does not transfer any authorship roles" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
     end
   end
