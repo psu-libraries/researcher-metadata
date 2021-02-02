@@ -4,7 +4,9 @@ class InternalPublicationWaiver < ApplicationRecord
   has_one :publication, through: :authorship
   has_one :external_publication_waiver, inverse_of: :internal_publication_waiver
 
-  delegate :title, :abstract, :doi, :published_by, to: :authorship, prefix: false
+  delegate :abstract, :doi, :published_by, to: :authorship, prefix: false
+  delegate :title, to: :authorship, allow_nil: true
+
   alias_method :publication_title, :title
   alias_method :journal_title, :published_by
 
@@ -37,6 +39,18 @@ class InternalPublicationWaiver < ApplicationRecord
       field(:external_publication_waiver)
       field(:created_at)
       field(:updated_at)
+    end
+
+    create do
+      field(:authorship)
+      field(:reason_for_waiver)
+    end
+
+    edit do
+      field(:authorship) { read_only true }
+      field(:reason_for_waiver)
+      field(:user)
+      field(:publication)
     end
   end
 end

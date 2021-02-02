@@ -50,5 +50,25 @@ class ExternalPublicationWaiver < ApplicationRecord
       field(:created_at)
       field(:updated_at)
     end
+
+    create do
+      field(:user)
+      field(:publication_title)
+      field(:reason_for_waiver)
+      field(:abstract)
+      field(:doi)
+      field(:journal_title)
+      field(:publisher)
+    end
+
+    edit do
+      field(:user) { read_only true }
+      field(:publication_title)
+      field(:reason_for_waiver)
+      field(:abstract)
+      field(:doi)
+      field(:journal_title)
+      field(:publisher)
+    end
   end
 end

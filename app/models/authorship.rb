@@ -1,7 +1,9 @@
 class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
-  has_one :waiver, class_name: :InternalPublicationWaiver
+  has_one :waiver, class_name: :InternalPublicationWaiver, inverse_of: :authorship
+
+  accepts_nested_attributes_for :waiver
 
   validates :user_id,
     :publication_id,
@@ -23,7 +25,7 @@ class Authorship < ApplicationRecord
   delegate :webaccess_id, to: :user, prefix: true
 
   def description
-    "Authorship ##{id}"
+    "##{id} (#{user.name} - #{publication.title})"
   end
 
   def record_open_access_notification
@@ -56,6 +58,7 @@ class Authorship < ApplicationRecord
       field(:publication) { read_only true }
       field(:author_number) { read_only true }
       field(:orcid_resource_identifier)
+      field(:waiver)
     end
   end
 end

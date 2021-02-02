@@ -129,8 +129,8 @@ feature "Admin publication detail page", type: :feature do
       end
 
       it "shows the publication's authorships" do
-        expect(page).to have_link "Authorship ##{auth1.id}"
-        expect(page).to have_link "Authorship ##{auth2.id}"
+        expect(page).to have_link "##{auth1.id} (Bob Testuser - Bob's Publication)"
+        expect(page).to have_link "##{auth2.id} (Susan Tester - Bob's Publication)"
       end
 
       it "shows the publication's users" do
