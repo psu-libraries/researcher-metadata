@@ -50,7 +50,14 @@ describe ActivityInsightAPIPublication do
           expect(pub.publication_type).to eq nil
         end
       end
-  
+
+      context "when the contypeother element in the given data contains 'journal article, academic journal'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article, academic journal' }
+        it "returns 'Academic Journal Article'" do
+          expect(pub.publication_type).to eq 'Academic Journal Article'
+        end
+      end
+
       context "when the contypeother element in the given data contains 'Journal Article, Academic Journal'" do
         let(:type_other_element) { double 'type other element', text: 'Journal Article, Academic Journal' }
         it "returns 'Academic Journal Article'" do
@@ -58,8 +65,36 @@ describe ActivityInsightAPIPublication do
         end
       end
 
+      context "when the contypeother element in the given data contains '  journal article, academic journal  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article, academic journal  ' }
+        it "returns 'Academic Journal Article'" do
+          expect(pub.publication_type).to eq 'Academic Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'journal article, in-house journal'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article, in-house journal' }
+        it "returns 'In-house Journal Article'" do
+          expect(pub.publication_type).to eq 'In-house Journal Article'
+        end
+      end
+
       context "when the contypeother element in the given data contains 'Journal Article, In-house Journal'" do
         let(:type_other_element) { double 'type other element', text: 'Journal Article, In-house Journal' }
+        it "returns 'In-house Journal Article'" do
+          expect(pub.publication_type).to eq 'In-house Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains '  journal article, in-house journal  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article, in-house journal  ' }
+        it "returns 'In-house Journal Article'" do
+          expect(pub.publication_type).to eq 'In-house Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'journal article, in-house'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article, in-house' }
         it "returns 'In-house Journal Article'" do
           expect(pub.publication_type).to eq 'In-house Journal Article'
         end
@@ -72,6 +107,20 @@ describe ActivityInsightAPIPublication do
         end
       end
 
+      context "when the contypeother element in the given data contains '  journal article, in-house  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article, in-house  ' }
+        it "returns 'In-house Journal Article'" do
+          expect(pub.publication_type).to eq 'In-house Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'journal article, professional journal'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article, professional journal' }
+        it "returns 'Professional Journal Article'" do
+          expect(pub.publication_type).to eq 'Professional Journal Article'
+        end
+      end
+
       context "when the contypeother element in the given data contains 'Journal Article, Professional Journal'" do
         let(:type_other_element) { double 'type other element', text: 'Journal Article, Professional Journal' }
         it "returns 'Professional Journal Article'" do
@@ -79,8 +128,36 @@ describe ActivityInsightAPIPublication do
         end
       end
 
+      context "when the contypeother element in the given data contains '  journal article, professional journal  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article, professional journal  ' }
+        it "returns 'Professional Journal Article'" do
+          expect(pub.publication_type).to eq 'Professional Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'journal article, public or trade journal'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article, public or trade journal' }
+        it "returns 'Trade Journal Article'" do
+          expect(pub.publication_type).to eq 'Trade Journal Article'
+        end
+      end
+
       context "when the contypeother element in the given data contains 'Journal Article, Public or Trade Journal'" do
         let(:type_other_element) { double 'type other element', text: 'Journal Article, Public or Trade Journal' }
+        it "returns 'Trade Journal Article'" do
+          expect(pub.publication_type).to eq 'Trade Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains '  journal article, public or trade journal  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article, public or trade journal  ' }
+        it "returns 'Trade Journal Article'" do
+          expect(pub.publication_type).to eq 'Trade Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'magazine or trade journal article'" do
+        let(:type_other_element) { double 'type other element', text: 'magazine or trade journal article' }
         it "returns 'Trade Journal Article'" do
           expect(pub.publication_type).to eq 'Trade Journal Article'
         end
@@ -93,6 +170,20 @@ describe ActivityInsightAPIPublication do
         end
       end
 
+      context "when the contypeother element in the given data contains '  magazine or trade journal article  '" do
+        let(:type_other_element) { double 'type other element', text: '  magazine or trade journal article  ' }
+        it "returns 'Trade Journal Article'" do
+          expect(pub.publication_type).to eq 'Trade Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'journal article'" do
+        let(:type_other_element) { double 'type other element', text: 'journal article' }
+        it "returns 'Journal Article'" do
+          expect(pub.publication_type).to eq 'Journal Article'
+        end
+      end
+
       context "when the contypeother element in the given data contains 'Journal Article'" do
         let(:type_other_element) { double 'type other element', text: 'Journal Article' }
         it "returns 'Journal Article'" do
@@ -100,9 +191,26 @@ describe ActivityInsightAPIPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains 'Book' " do
-        let(:type_other_element) { double 'type other element', text: 'Book' }
-        it "returns 'Other'" do
+      context "when the contypeother element in the given data contains '  journal article  '" do
+        let(:type_other_element) { double 'type other element', text: '  journal article  ' }
+        it "returns 'Journal Article'" do
+          expect(pub.publication_type).to eq 'Journal Article'
+        end
+      end
+
+      context "when the contypeother element in the given data contains 'Other' " do
+        let(:type_other_element) { double 'type other element', text: 'Other' }
+        it "returns Other" do
+          expect(pub.publication_type).to eq 'Other'
+        end
+      end
+    end
+
+    context "when the contype element in the given data contains 'OTHER'" do
+      let(:type_element) { double 'type element', text: 'OTHER' }
+      context "when the contypeother element in the given data is empty" do
+        let(:type_other_element) { double 'type other element', text: '' }
+        it "returns Other" do
           expect(pub.publication_type).to eq 'Other'
         end
       end
