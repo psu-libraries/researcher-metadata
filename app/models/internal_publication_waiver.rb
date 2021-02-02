@@ -21,6 +21,7 @@ class InternalPublicationWaiver < ApplicationRecord
       field(:user) do
         pretty_value { value.name }
       end
+      field(:created_at)
     end
 
     show do
@@ -34,6 +35,8 @@ class InternalPublicationWaiver < ApplicationRecord
       field(:reason_for_waiver)
       field(:authorship)
       field(:external_publication_waiver)
+      field(:created_at)
+      field(:updated_at)
     end
   end
 end
