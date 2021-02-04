@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_232014) do
+ActiveRecord::Schema.define(version: 2021_02_04_222315) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 2021_01_21_232014) do
     t.datetime "open_access_button_last_checked_at"
     t.text "user_submitted_open_access_url"
     t.integer "journal_id"
+    t.text "scholarsphere_open_access_url"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
