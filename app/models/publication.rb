@@ -292,6 +292,10 @@ class Publication < ApplicationRecord
         label 'User-submitted open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:scholarsphere_open_access_url) do
+        label 'Scholarsphere open access URL'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
@@ -318,7 +322,7 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:open_access_url) { label 'Open Access URL' }
+      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -359,6 +363,10 @@ class Publication < ApplicationRecord
         label 'User-submitted open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:scholarsphere_open_access_url) do
+        label 'Scholarsphere open access URL'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -390,7 +398,7 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
-      field(:open_access_url) { label 'Open Access URL' }
+      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:doi) { label 'DOI' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
