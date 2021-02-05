@@ -57,6 +57,12 @@ class Organization < ApplicationRecord
         end
       end
     end
+
+    export do
+      configure :user_count do
+        show
+      end
+    end
   end
 
   private
