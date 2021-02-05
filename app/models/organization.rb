@@ -17,6 +17,10 @@ class Organization < ApplicationRecord
     User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id)
   end
 
+  def user_count
+    all_users.count
+  end
+
   def publications
     # A view hack for Rails Admin to get it to render some custom HTML. 
     # See the `publications` field in the Rails Admin `show` config below.
@@ -26,6 +30,7 @@ class Organization < ApplicationRecord
     list do
       field(:id)
       field(:name)
+      field(:user_count)
       field(:visible)
       field(:pure_uuid)
       field(:pure_external_identifier)
@@ -36,6 +41,7 @@ class Organization < ApplicationRecord
     show do
       field(:id)
       field(:name)
+      field(:user_count)
       field(:visible)
       field(:pure_uuid)
       field(:pure_external_identifier)
