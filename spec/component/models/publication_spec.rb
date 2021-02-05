@@ -196,12 +196,43 @@ describe Publication, type: :model do
   end
 
   describe '.open_access' do
-    let!(:pub1) { create :publication, open_access_url: nil, user_submitted_open_access_url: nil }
-    let!(:pub2) { create :publication, open_access_url: nil, user_submitted_open_access_url: 'user_url1' }
-    let!(:pub3) { create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil}
-    let!(:pub4) { create :publication, open_access_url: 'url2', user_submitted_open_access_url: 'user_url2' }
+    let!(:pub1) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub2) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub3) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: nil}
+    let!(:pub4) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub5) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub6) { create :publication,
+                         open_access_url: '',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: '',
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: '' }
+                         
     it "returns publications that have an open access URL" do
-      expect(Publication.open_access).to match_array [pub2, pub3, pub4]
+      expect(Publication.open_access).to match_array [pub2, pub3, pub4, pub5]
     end
   end
 
