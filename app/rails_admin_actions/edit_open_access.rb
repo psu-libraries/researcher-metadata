@@ -23,7 +23,7 @@ module RailsAdmin
                 @form.open_access_url = params[:open_access_url_form][:open_access_url]
                 if @form.valid?
                   ActiveRecord::Base.transaction do
-                    @publication.update_attributes!(open_access_url: params[:open_access_url_form][:open_access_url])
+                    @publication.update_attributes!(scholarsphere_open_access_url: params[:open_access_url_form][:open_access_url])
                     @publication.authorships.each do |a|
                       a.update_attributes!(scholarsphere_uploaded_at: nil)
                     end
