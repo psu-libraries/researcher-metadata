@@ -139,14 +139,18 @@ describe API::V1::PublicationSerializer do
 
       end
 
-      it { is_expected.to include(:profile_preferences => [{user_id: u1.id,
-                                                            webaccess_id: 'abc123',
-                                                            visible_in_profile: true,
-                                                            position_in_profile: 4},
-                                                           {user_id: u2.id,
-                                                            webaccess_id: 'def456',
-                                                            visible_in_profile: false,
-                                                            position_in_profile: nil}]) }
+      it "includes profile preferences" do
+        expect(serialized_data_attributes(publication)[:profile_preferences]).to match_array(
+          [{user_id: u1.id,
+            webaccess_id: 'abc123',
+            visible_in_profile: true,
+            position_in_profile: 4},
+           {user_id: u2.id,
+            webaccess_id: 'def456',
+            visible_in_profile: false,
+            position_in_profile: nil}]
+        )
+      end
     end
   end
 end
