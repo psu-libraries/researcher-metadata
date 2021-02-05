@@ -437,7 +437,8 @@ class Publication < ApplicationRecord
   end
 
   def preferred_open_access_url
-    open_access_url.presence || user_submitted_open_access_url.presence
+    policy = PreferredOpenAccessPolicy.new(self)
+    policy.url
   end
 
   def scholarsphere_upload_pending?
