@@ -71,6 +71,9 @@ class Publication < ApplicationRecord
     if by_doi.any?
       by_doi
     else
+      # TODO:  We can make this query more accurate using postgres trigram matching
+      # on the title and sub-title in the same way that we do when we're finding 
+      # duplicate publications.
       where("title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?",
             "%#{pub.title}%",
             pub.publication_date.try(:year))
