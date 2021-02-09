@@ -9,4 +9,19 @@ namespace :email_notifications do
     psu_libraries = Organization.find_by(pure_external_identifier: 'CAMPUS-UL')
     OpenAccessNotifier.new(psu_libraries.all_users).send_notifications
   end
+
+  desc 'Send a test open access reminder email with fake data to the specified email address'
+  task :test_open_access_reminder, [:address] => :environment do |task, args|
+    test_user = OpenStruct.new({email: args[:address],
+                                name: 'Email Tester'})
+    pub1 = OpenStruct.new({title: "Example Publication One"})
+    pub2 = OpenStruct.new({title: "Example Publication Two"})
+    pub3 = OpenStruct.new({title: "Example Publication Three"})
+    old_fake_pubs = [pub1, pub2]
+    new_fake_pubs = [pub3]
+    FacultyNotificationsMailer.open_access_reminder(test_user,
+                                                    old_fake_pubs,
+                                                    new_fake_pubs).deliver_now
+    STDOUT.puts "Test open access reminder email sent to #{args[:address]}"
+  end
 end
