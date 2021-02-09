@@ -52,7 +52,10 @@ class ExternalPublicationWaiver < ApplicationRecord
     end
 
     create do
-      field(:user)
+      field(:user) do
+        inline_add false
+        inline_edit false
+      end
       field(:publication_title)
       field(:reason_for_waiver)
       field(:abstract)
