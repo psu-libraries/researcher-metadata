@@ -19,7 +19,6 @@ class PurePublicationImporter
     import_files.each do |filename|
       File.open(dirname.join(filename), 'r') do |file|
         MultiJson.load(file)['items'].each do |publication|
-
           ActiveRecord::Base.transaction do
             pi = PublicationImport.find_by(source: IMPORT_SOURCE,
                                            source_identifier: publication['uuid']) ||
@@ -102,11 +101,11 @@ class PurePublicationImporter
       title: publication['title']['value'],
       secondary_title: publication['subTitle'].try('[]', 'value'),
       publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
-                                                         .detect { |t| t['locale'] == 'en_US' }['value']),
+                                                .detect { |t| t['locale'] == 'en_US' }['value']),
       page_range: publication['pages'],
       volume: publication['volume'],
       issue: publication['journalNumber'],
-      journal_title: publication['journalAssociation']['title']['value'],
+      journal_title: journal_present?(publication) ? publication['journalAssociation']['title']['value'] : nil,
       issn: issn(publication),
       status: status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value'],
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -120,7 +119,9 @@ class PurePublicationImporter
   end
 
   def issn(publication)
-    publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
+    if journal_present?(publication)
+      publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
+    end
   end
 
   def status(publication)
@@ -150,5 +151,9 @@ class PurePublicationImporter
       end
       v.try('[]', 'doi')
     end
+  end
+
+  def journal_present?(publication)
+    publication['journalAssociation']
   end
 end
