@@ -91,6 +91,7 @@ class User < ApplicationRecord
 
   def self.needs_open_access_notification
     joins(:authorships, :publications, :user_organization_memberships).
+    where("publications.publication_type ~* 'Journal Article'").
     where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id from internal_publication_waivers))').
     where('publications.id NOT IN (SELECT publication_id from authorships WHERE scholarsphere_uploaded_at IS NOT NULL)').
     where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago).
