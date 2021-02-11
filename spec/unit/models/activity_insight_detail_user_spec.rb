@@ -328,8 +328,8 @@ describe ActivityInsightDetailUser do
 
     before do
       allow(user_data).to receive(:css).with('INTELLCONT').and_return([element1, element2])
-      allow(ActivityInsightAPIPublication).to receive(:new).with(element1).and_return(pub1)
-      allow(ActivityInsightAPIPublication).to receive(:new).with(element2).and_return(pub2)
+      allow(ActivityInsightPublication).to receive(:new).with(element1).and_return(pub1)
+      allow(ActivityInsightPublication).to receive(:new).with(element2).and_return(pub2)
     end
 
     it "returns an array of publications from the given data" do

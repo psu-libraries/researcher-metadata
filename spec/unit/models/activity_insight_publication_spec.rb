@@ -4,9 +4,9 @@ require 'active_support/core_ext'
 require_relative '../../../app/importers/activity_insight_importer'
 require_relative '../../../app/models/doi_parser'
 
-describe ActivityInsightAPIPublication do
+describe ActivityInsightPublication do
   let(:parsed_pub) { double 'parsed publication xml' }
-  let(:pub) { ActivityInsightAPIPublication.new(parsed_pub) }
+  let(:pub) { ActivityInsightPublication.new(parsed_pub) }
 
   describe '#publication_type' do
     before { allow(parsed_pub).to receive(:css).with('CONTYPE').and_return type_element }

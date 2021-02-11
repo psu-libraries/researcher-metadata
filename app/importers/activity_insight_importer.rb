@@ -378,7 +378,7 @@ class ActivityInsightDetailUser
   end
 
   def publications
-    user.css('INTELLCONT').map { |p| ActivityInsightAPIPublication.new(p) }
+    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p) }
   end
 
   private
@@ -678,7 +678,7 @@ class ActivityInsightPerformanceContributor
 end
 
 
-class ActivityInsightAPIPublication
+class ActivityInsightPublication
   def initialize(parsed_publication)
     @parsed_publication = parsed_publication
   end
