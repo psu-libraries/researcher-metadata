@@ -158,30 +158,17 @@ class ActivityInsightImporter
             end
 
             unless pub_record.updated_by_user_at.present?
-              pub.faculty_authors.each do |author|
-                user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
-                if user
-                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+              authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
 
-                  if authorship.new_record?
-                    authorship.user = user
-                    authorship.publication = pub_record
-                  end
-                  authorship.author_number = pub.contributors.index(author) + 1
-                  authorship.role = author.role
-
-                  authorship.save!
-                end
+              if authorship.new_record?
+                authorship.user = u
+                authorship.publication = pub_record
               end
 
-              pub_record.authorships.each do |a|
-                authorship_in_import = pub.faculty_authors.detect do |fa|
-                  user = User.find_by(activity_insight_identifier: fa.activity_insight_user_id)
-                  user == a.user && pub_record == a.publication 
-                end
-                
-                a.destroy unless authorship_in_import
-              end
+              authorship.author_number = pub.contributors.index(pub.faculty_author) + 1
+              authorship.role = pub.faculty_author.role
+
+              authorship.save!
 
               pub_record.contributors.delete_all
               pub.contributors.each_with_index do |cont, i|
@@ -313,6 +300,10 @@ class ActivityInsightDetailUser
     user.attribute('username').value.downcase
   end
 
+  def activity_insight_id
+    user.attribute('userId').value
+  end
+
   def alt_name
     contact_info_text_for('ALT_NAME')
   end
@@ -378,7 +369,7 @@ class ActivityInsightDetailUser
   end
 
   def publications
-    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p) }
+    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p, self) }
   end
 
   private
@@ -679,8 +670,9 @@ end
 
 
 class ActivityInsightPublication
-  def initialize(parsed_publication)
+  def initialize(parsed_publication, user)
     @parsed_publication = parsed_publication
+    @user = user
   end
 
   def publication_type
@@ -777,8 +769,8 @@ class ActivityInsightPublication
     DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
-  def faculty_authors
-    contributors.select { |c| c.activity_insight_user_id }
+  def faculty_author
+    contributors.detect { |c| c.activity_insight_user_id == user.activity_insight_id }
   end
 
   def contributors
@@ -789,7 +781,7 @@ class ActivityInsightPublication
 
   private
 
-  attr_reader :parsed_publication
+  attr_reader :parsed_publication, :user
 
   def text_for(element)
     parsed_publication.css(element).text.strip.presence

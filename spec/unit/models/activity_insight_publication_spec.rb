@@ -6,7 +6,8 @@ require_relative '../../../app/models/doi_parser'
 
 describe ActivityInsightPublication do
   let(:parsed_pub) { double 'parsed publication xml' }
-  let(:pub) { ActivityInsightPublication.new(parsed_pub) }
+  let(:pub) { ActivityInsightPublication.new(parsed_pub, user) }
+  let(:user) { double 'user', activity_insight_id: 456 }
 
   describe '#publication_type' do
     before { allow(parsed_pub).to receive(:css).with('CONTYPE').and_return type_element }
@@ -1188,7 +1189,7 @@ describe ActivityInsightPublication do
     end
   end
 
-  describe '#faculty_authors' do
+  describe '#faculty_author' do
     let(:auth_element1) { double 'XML element 1' }
     let(:auth_element2) { double 'XML element 2' }
     let(:auth_element3) { double 'XML element 3' }
@@ -1206,7 +1207,7 @@ describe ActivityInsightPublication do
     end
 
     it "returns an array of the publication's authors from the given data who have a user ID" do
-      expect(pub.faculty_authors).to eq [auth1, auth2]
+      expect(pub.faculty_author).to eq auth2
     end
   end
 

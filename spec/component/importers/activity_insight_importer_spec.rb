@@ -849,7 +849,7 @@ describe ActivityInsightImporter do
         end
 
         it "creates a new contributor record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { Contributor.count }.by 6
+          expect { importer.call }.to change { Contributor.count }.by 7
         end
 
         it "saves the correct attributes with each new contributor" do
@@ -872,6 +872,12 @@ describe ActivityInsightImporter do
                                      middle_name: nil,
                                      last_name: 'Testuser',
                                      position: 2,
+                                     role: 'Author')).not_to be_nil
+          expect(Contributor.find_by(publication: p1,
+                                     first_name: 'Emily',
+                                     middle_name: nil,
+                                     last_name: 'Testington',
+                                     position: 3,
                                      role: 'Author')).not_to be_nil
 
           expect(Contributor.find_by(publication: p2,
@@ -1029,18 +1035,10 @@ describe ActivityInsightImporter do
                                                  publication: existing_pub,
                                                  role: 'Existing Role',
                                                  author_number: 6 }
-            let!(:existing_authorship2) { create :authorship,
-                                                 publication: existing_pub }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
 
             it "creates new authorship records for every new faculty author for each new imported publication" do
               expect { importer.call }.to change { Authorship.count }.by 2
-            end
-
-            it "doesn't delete any existing authorships" do
-              importer.call
-              expect(existing_authorship1.reload).to eq existing_authorship1
-              expect(existing_authorship2.reload).to eq existing_authorship2
             end
 
             it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -1100,7 +1098,7 @@ describe ActivityInsightImporter do
           let!(:existing_cont) { create :contributor, publication: existing_pub }
 
           it "creates a new contributor record for every faculty author for each new imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 4
+            expect { importer.call }.to change { Contributor.count }.by 5
           end
           
           it "does not remove any existing contributors on the existing publication" do
@@ -1128,6 +1126,12 @@ describe ActivityInsightImporter do
                                        middle_name: nil,
                                        last_name: 'Testuser',
                                        position: 2,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Emily',
+                                       middle_name: nil,
+                                       last_name: 'Testington',
+                                       position: 3,
                                        role: 'Author')).not_to be_nil
   
             expect(Contributor.find_by(publication: p2,
@@ -1262,21 +1266,10 @@ describe ActivityInsightImporter do
                                                  publication: existing_pub,
                                                  role: 'Existing Role',
                                                  author_number: 6 }
-            let!(:existing_authorship2) { create :authorship,
-                                                 publication: existing_pub,
-                                                 user: user2 }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
-            let(:user2) { create :user }
 
             it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 1
-            end
-
-            it "deletes authorship records that are not present in the imported data" do
-              importer.call
-              expect(existing_authorship1.reload).to eq existing_authorship1
-              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
-              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
+              expect { importer.call }.to change { Authorship.count }.by 2
             end
 
             it "saves the correct attributes with each new authorship and updates the existing authorship" do
@@ -1337,7 +1330,7 @@ describe ActivityInsightImporter do
           let!(:existing_cont) { create :contributor, publication: existing_pub }
 
           it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 5
+            expect { importer.call }.to change { Contributor.count }.by 6
           end
 
           it "removes any existing contributors that are not in the new import" do
@@ -1365,6 +1358,12 @@ describe ActivityInsightImporter do
                                        middle_name: nil,
                                        last_name: 'Testuser',
                                        position: 2,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Emily',
+                                       middle_name: nil,
+                                       last_name: 'Testington',
+                                       position: 3,
                                        role: 'Author')).not_to be_nil
   
             expect(Contributor.find_by(publication: p2,
@@ -2258,7 +2257,7 @@ describe ActivityInsightImporter do
           end
   
           it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 6
+            expect { importer.call }.to change { Contributor.count }.by 7
           end
   
           it "saves the correct attributes with each new contributor" do
@@ -2281,6 +2280,12 @@ describe ActivityInsightImporter do
                                        middle_name: nil,
                                        last_name: 'Testuser',
                                        position: 2,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Emily',
+                                       middle_name: nil,
+                                       last_name: 'Testington',
+                                       position: 3,
                                        role: 'Author')).not_to be_nil
   
             expect(Contributor.find_by(publication: p2,
@@ -2438,17 +2443,9 @@ describe ActivityInsightImporter do
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
-              let!(:existing_authorship2) { create :authorship,
-                                                   publication: existing_pub }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
                 expect { importer.call }.to change { Authorship.count }.by 2
-              end
-
-              it "does not delete any existing authorships" do
-                importer.call
-                expect(existing_authorship1.reload).to eq existing_authorship1
-                expect(existing_authorship2.reload).to eq existing_authorship2
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -2508,7 +2505,7 @@ describe ActivityInsightImporter do
             let!(:existing_cont) { create :contributor, publication: existing_pub }
   
             it "creates a new contributor record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 4
+              expect { importer.call }.to change { Contributor.count }.by 5
             end
             
             it "does not remove any existing contributors on the existing publication" do
@@ -2536,6 +2533,12 @@ describe ActivityInsightImporter do
                                          middle_name: nil,
                                          last_name: 'Testuser',
                                          position: 2,
+                                         role: 'Author')).not_to be_nil
+              expect(Contributor.find_by(publication: p1,
+                                         first_name: 'Emily',
+                                         middle_name: nil,
+                                         last_name: 'Testington',
+                                         position: 3,
                                          role: 'Author')).not_to be_nil
     
               expect(Contributor.find_by(publication: p2,
@@ -2670,21 +2673,10 @@ describe ActivityInsightImporter do
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
-              let!(:existing_authorship2) { create :authorship,
-                                                   publication: existing_pub,
-                                                   user: user2 }
-              let(:user2) { create :user }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 1
+                expect { importer.call }.to change { Authorship.count }.by 2
               end
-  
-            it "deletes authorship records that are not present in the imported data" do
-              importer.call
-              expect(existing_authorship1.reload).to eq existing_authorship1
-              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
-              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
-            end
 
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
                 importer.call
@@ -2744,7 +2736,7 @@ describe ActivityInsightImporter do
             let!(:existing_cont) { create :contributor, publication: existing_pub }
   
             it "creates a new contributor record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 5
+              expect { importer.call }.to change { Contributor.count }.by 6
             end
   
             it "removes any existing contributors that are not in the new import" do
@@ -2772,6 +2764,12 @@ describe ActivityInsightImporter do
                                          middle_name: nil,
                                          last_name: 'Testuser',
                                          position: 2,
+                                         role: 'Author')).not_to be_nil
+              expect(Contributor.find_by(publication: p1,
+                                         first_name: 'Emily',
+                                         middle_name: nil,
+                                         last_name: 'Testington',
+                                         position: 3,
                                          role: 'Author')).not_to be_nil
     
               expect(Contributor.find_by(publication: p2,
@@ -3640,7 +3638,7 @@ describe ActivityInsightImporter do
           end
   
           it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 6
+            expect { importer.call }.to change { Contributor.count }.by 7
           end
   
           it "saves the correct attributes with each new contributor" do
@@ -3663,6 +3661,12 @@ describe ActivityInsightImporter do
                                        middle_name: nil,
                                        last_name: 'Testuser',
                                        position: 2,
+                                       role: 'Author')).not_to be_nil
+            expect(Contributor.find_by(publication: p1,
+                                       first_name: 'Emily',
+                                       middle_name: nil,
+                                       last_name: 'Testington',
+                                       position: 3,
                                        role: 'Author')).not_to be_nil
   
             expect(Contributor.find_by(publication: p2,
@@ -3820,17 +3824,9 @@ describe ActivityInsightImporter do
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
-              let!(:existing_authorship2) { create :authorship,
-                                                   publication: existing_pub }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
                 expect { importer.call }.to change { Authorship.count }.by 2
-              end
-
-              it "does not delete any existing authorships" do
-                importer.call
-                expect(existing_authorship1.reload).to eq existing_authorship1
-                expect(existing_authorship2.reload).to eq existing_authorship2
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -3890,7 +3886,7 @@ describe ActivityInsightImporter do
             let!(:existing_cont) { create :contributor, publication: existing_pub }
   
             it "creates a new contributor record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 4
+              expect { importer.call }.to change { Contributor.count }.by 5
             end
             
             it "does not remove any existing contributors on the existing publication" do
@@ -3918,6 +3914,12 @@ describe ActivityInsightImporter do
                                          middle_name: nil,
                                          last_name: 'Testuser',
                                          position: 2,
+                                         role: 'Author')).not_to be_nil
+              expect(Contributor.find_by(publication: p1,
+                                         first_name: 'Emily',
+                                         middle_name: nil,
+                                         last_name: 'Testington',
+                                         position: 3,
                                          role: 'Author')).not_to be_nil
     
               expect(Contributor.find_by(publication: p2,
@@ -4052,21 +4054,10 @@ describe ActivityInsightImporter do
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
-              let!(:existing_authorship2) { create :authorship,
-                                                   publication: existing_pub,
-                                                   user: user2 }
-              let(:user2) { create :user }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 1
+                expect { importer.call }.to change { Authorship.count }.by 2
               end
-
-            it "deletes authorship records that are not present in the imported data" do
-              importer.call
-              expect(existing_authorship1.reload).to eq existing_authorship1
-              expect { existing_authorship2.reload }.to raise_error ActiveRecord::RecordNotFound
-              expect(Authorship.find_by(publication: existing_pub, user: user2)).to be_nil
-            end
   
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
                 importer.call
@@ -4126,7 +4117,7 @@ describe ActivityInsightImporter do
             let!(:existing_cont) { create :contributor, publication: existing_pub }
   
             it "creates a new contributor record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 5
+              expect { importer.call }.to change { Contributor.count }.by 6
             end
   
             it "removes any existing contributors that are not in the new import" do
@@ -4154,6 +4145,12 @@ describe ActivityInsightImporter do
                                          middle_name: nil,
                                          last_name: 'Testuser',
                                          position: 2,
+                                         role: 'Author')).not_to be_nil
+              expect(Contributor.find_by(publication: p1,
+                                         first_name: 'Emily',
+                                         middle_name: nil,
+                                         last_name: 'Testington',
+                                         position: 3,
                                          role: 'Author')).not_to be_nil
     
               expect(Contributor.find_by(publication: p2,
