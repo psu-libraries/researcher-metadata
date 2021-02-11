@@ -63,7 +63,7 @@ describe ActivityInsightPublicationAuthor do
       context "when the fname element in the given data contains text" do
         let(:fname_element) { double 'first name element', text: "\n     First Name  \n   " }
         it "returns the abbreviated first name" do
-          expect(auth.first_name).to eq 'F.'
+          expect(auth.first_name).to eq 'F'
         end
       end
     end

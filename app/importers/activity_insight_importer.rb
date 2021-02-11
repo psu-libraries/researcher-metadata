@@ -817,7 +817,7 @@ class ActivityInsightPublicationAuthor
     if user_name_confirmed?
       text
     else
-      text.chars.first + '.' if text
+      text.chars.first if text
     end
   end
 
