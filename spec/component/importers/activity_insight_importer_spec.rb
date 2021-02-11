@@ -874,7 +874,7 @@ describe ActivityInsightImporter do
                                      position: 2,
                                      role: 'Author')).not_to be_nil
           expect(Contributor.find_by(publication: p1,
-                                     first_name: 'Emily',
+                                     first_name: 'E.',
                                      middle_name: nil,
                                      last_name: 'Testington',
                                      position: 3,
@@ -1128,7 +1128,7 @@ describe ActivityInsightImporter do
                                        position: 2,
                                        role: 'Author')).not_to be_nil
             expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Emily',
+                                       first_name: 'E.',
                                        middle_name: nil,
                                        last_name: 'Testington',
                                        position: 3,
@@ -1360,7 +1360,7 @@ describe ActivityInsightImporter do
                                        position: 2,
                                        role: 'Author')).not_to be_nil
             expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Emily',
+                                       first_name: 'E.',
                                        middle_name: nil,
                                        last_name: 'Testington',
                                        position: 3,
@@ -2282,7 +2282,7 @@ describe ActivityInsightImporter do
                                        position: 2,
                                        role: 'Author')).not_to be_nil
             expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Emily',
+                                       first_name: 'E.',
                                        middle_name: nil,
                                        last_name: 'Testington',
                                        position: 3,
@@ -2535,7 +2535,7 @@ describe ActivityInsightImporter do
                                          position: 2,
                                          role: 'Author')).not_to be_nil
               expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Emily',
+                                         first_name: 'E.',
                                          middle_name: nil,
                                          last_name: 'Testington',
                                          position: 3,
@@ -2766,7 +2766,7 @@ describe ActivityInsightImporter do
                                          position: 2,
                                          role: 'Author')).not_to be_nil
               expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Emily',
+                                         first_name: 'E.',
                                          middle_name: nil,
                                          last_name: 'Testington',
                                          position: 3,
@@ -3663,7 +3663,7 @@ describe ActivityInsightImporter do
                                        position: 2,
                                        role: 'Author')).not_to be_nil
             expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Emily',
+                                       first_name: 'E.',
                                        middle_name: nil,
                                        last_name: 'Testington',
                                        position: 3,
@@ -3916,7 +3916,7 @@ describe ActivityInsightImporter do
                                          position: 2,
                                          role: 'Author')).not_to be_nil
               expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Emily',
+                                         first_name: 'E.',
                                          middle_name: nil,
                                          last_name: 'Testington',
                                          position: 3,
@@ -4147,7 +4147,7 @@ describe ActivityInsightImporter do
                                          position: 2,
                                          role: 'Author')).not_to be_nil
               expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Emily',
+                                         first_name: 'E.',
                                          middle_name: nil,
                                          last_name: 'Testington',
                                          position: 3,

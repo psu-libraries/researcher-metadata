@@ -1201,9 +1201,9 @@ describe ActivityInsightPublication do
       allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
                                                                              auth_element2,
                                                                              auth_element3])
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1, user).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2, user).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3, user).and_return(auth3)
     end
 
     it "returns an array of the publication's authors from the given data who have a user ID" do
@@ -1223,9 +1223,9 @@ describe ActivityInsightPublication do
       allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
                                                                              auth_element2,
                                                                              auth_element3])
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1, user).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2, user).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3, user).and_return(auth3)
     end
 
     it "returns an array of the publication's authors from the given data" do

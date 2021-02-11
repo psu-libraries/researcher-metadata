@@ -775,7 +775,7 @@ class ActivityInsightPublication
 
   def contributors
     parsed_publication.css('INTELLCONT_AUTH').map do |a|
-      ActivityInsightPublicationAuthor.new(a)
+      ActivityInsightPublicationAuthor.new(a, user)
     end
   end
 
@@ -802,8 +802,10 @@ end
 
 
 class ActivityInsightPublicationAuthor
-  def initialize(parsed_author)
+  # initialize with user passed from publication
+  def initialize(parsed_author, imported_user)
     @parsed_author = parsed_author
+    @imported_user = imported_user
   end
 
   def activity_insight_user_id
@@ -811,7 +813,12 @@ class ActivityInsightPublicationAuthor
   end
 
   def first_name
-    text_for('FNAME')
+    text = text_for('FNAME')
+    if user_name_confirmed?
+      text
+    else
+      text.chars.first + '.' if text
+    end
   end
 
   def middle_name
@@ -836,9 +843,21 @@ class ActivityInsightPublicationAuthor
 
   private
 
-  attr_reader :parsed_author
+  attr_reader :parsed_author, :imported_user
   
   def text_for(element)
     parsed_author.css(element).text.strip.presence
+  end
+
+  def user_name_confirmed?
+    for_external_person? || for_imported_user?
+  end
+
+  def for_external_person?
+    activity_insight_user_id.blank?
+  end
+
+  def for_imported_user?
+    activity_insight_user_id == imported_user.activity_insight_id
   end
 end
