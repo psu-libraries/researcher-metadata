@@ -47,15 +47,15 @@ describe API::V1::PublicationSerializer do
       it { is_expected.to include(:published_on => nil) }
     end
 
-    context "when the publication does not have contributors" do
+    context "when the publication does not have contributor names" do
       it { is_expected.to include(:contributors => []) }
     end
 
-    context "when the publication has contributors" do
+    context "when the publication has contributor names" do
       before do
-        create :contributor, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication
-        create :contributor, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication
-        create :contributor, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication
+        create :contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication
+        create :contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication
+        create :contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication
       end
 
       subject { serialized_data_attributes(publication) }

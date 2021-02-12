@@ -848,11 +848,11 @@ describe ActivityInsightImporter do
           expect(a3.role).to eq 'Author'
         end
 
-        it "creates a new contributor record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { Contributor.count }.by 7
+        it "creates a new contributor name record for every faculty author for each imported publication" do
+          expect { importer.call }.to change { ContributorName.count }.by 7
         end
 
-        it "saves the correct attributes with each new contributor" do
+        it "saves the correct attributes with each new contributor name" do
           importer.call
           p1 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190706413568').publication
@@ -861,50 +861,50 @@ describe ActivityInsightImporter do
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
 
-          expect(Contributor.find_by(publication: p1,
-                                     first_name: 'Elizabeth',
-                                     middle_name: 'A.',
-                                     last_name: 'Testauthor',
-                                     position: 1,
-                                     role: 'Author')).not_to be_nil
-          expect(Contributor.find_by(publication: p1,
-                                     first_name: 'Sally',
-                                     middle_name: nil,
-                                     last_name: 'Testuser',
-                                     position: 2,
-                                     role: 'Author')).not_to be_nil
-          expect(Contributor.find_by(publication: p1,
-                                     first_name: 'E',
-                                     middle_name: nil,
-                                     last_name: 'Testington',
-                                     position: 3,
-                                     role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p1,
+                                         first_name: 'Elizabeth',
+                                         middle_name: 'A.',
+                                         last_name: 'Testauthor',
+                                         position: 1,
+                                         role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p1,
+                                         first_name: 'Sally',
+                                         middle_name: nil,
+                                         last_name: 'Testuser',
+                                         position: 2,
+                                         role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p1,
+                                         first_name: 'E',
+                                         middle_name: nil,
+                                         last_name: 'Testington',
+                                         position: 3,
+                                         role: 'Author')).not_to be_nil
 
-          expect(Contributor.find_by(publication: p2,
-                                     first_name: 'Sally',
-                                     middle_name: nil,
-                                     last_name: 'Testuser',
-                                     position: 1,
-                                     role: 'Primary Author')).not_to be_nil
-          expect(Contributor.find_by(publication: p2,
-                                     first_name: 'B.',
-                                     middle_name: nil,
-                                     last_name: 'Tester',
-                                     position: 2,
-                                     role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p2,
+                                         first_name: 'Sally',
+                                         middle_name: nil,
+                                         last_name: 'Testuser',
+                                         position: 1,
+                                         role: 'Primary Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p2,
+                                         first_name: 'B.',
+                                         middle_name: nil,
+                                         last_name: 'Tester',
+                                         position: 2,
+                                         role: 'Author')).not_to be_nil
 
-          expect(Contributor.find_by(publication: p3,
-                                     first_name: 'Mary',
-                                     middle_name: 'E.',
-                                     last_name: 'Paperauthor',
-                                     position: 1,
-                                     role: 'Author')).not_to be_nil
-          expect(Contributor.find_by(publication: p3,
-                                     first_name: 'Sally',
-                                     middle_name: nil,
-                                     last_name: 'Testuser',
-                                     position: 2,
-                                     role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p3,
+                                         first_name: 'Mary',
+                                         middle_name: 'E.',
+                                         last_name: 'Paperauthor',
+                                         position: 1,
+                                         role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p3,
+                                         first_name: 'Sally',
+                                         middle_name: nil,
+                                         last_name: 'Testuser',
+                                         position: 2,
+                                         role: 'Author')).not_to be_nil
         end
       end
       context "when an included publication exists in the database" do
@@ -1095,18 +1095,18 @@ describe ActivityInsightImporter do
             end
           end
 
-          let!(:existing_cont) { create :contributor, publication: existing_pub }
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
 
-          it "creates a new contributor record for every faculty author for each new imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 5
+          it "creates a new contributor name record for every faculty author for each new imported publication" do
+            expect { importer.call }.to change { ContributorName.count }.by 5
           end
           
-          it "does not remove any existing contributors on the existing publication" do
+          it "does not remove any existing contributor names on the existing publication" do
             importer.call
             expect(existing_cont.reload).not_to be_nil
           end
   
-          it "saves the correct attributes with each new contributor" do
+          it "saves the correct attributes with each new contributor name" do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -1115,50 +1115,50 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Elizabeth',
-                                       middle_name: 'A.',
-                                       last_name: 'Testauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'E',
-                                       middle_name: nil,
-                                       last_name: 'Testington',
-                                       position: 3,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Elizabeth',
+                                           middle_name: 'A.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'E',
+                                           middle_name: nil,
+                                           last_name: 'Testington',
+                                           position: 3,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 1,
-                                       role: 'Primary Author')).to be_nil
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'B.',
-                                       middle_name: nil,
-                                       last_name: 'Tester',
-                                       position: 2,
-                                       role: 'Author')).to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 1,
+                                           role: 'Primary Author')).to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'B.',
+                                           middle_name: nil,
+                                           last_name: 'Tester',
+                                           position: 2,
+                                           role: 'Author')).to be_nil
   
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Mary',
-                                       middle_name: 'E.',
-                                       last_name: 'Paperauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Mary',
+                                           middle_name: 'E.',
+                                           last_name: 'Paperauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
 
@@ -1327,18 +1327,18 @@ describe ActivityInsightImporter do
             end
           end
 
-          let!(:existing_cont) { create :contributor, publication: existing_pub }
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
 
-          it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 6
+          it "creates a new contributor name record for every faculty author for each imported publication" do
+            expect { importer.call }.to change { ContributorName.count }.by 6
           end
 
-          it "removes any existing contributors that are not in the new import" do
+          it "removes any existing contributor names that are not in the new import" do
             importer.call
             expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
           end
   
-          it "saves the correct attributes with each new contributor" do
+          it "saves the correct attributes with each new contributor name" do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -1347,50 +1347,50 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Elizabeth',
-                                       middle_name: 'A.',
-                                       last_name: 'Testauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'E',
-                                       middle_name: nil,
-                                       last_name: 'Testington',
-                                       position: 3,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Elizabeth',
+                                           middle_name: 'A.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'E',
+                                           middle_name: nil,
+                                           last_name: 'Testington',
+                                           position: 3,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 1,
-                                       role: 'Primary Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'B.',
-                                       middle_name: nil,
-                                       last_name: 'Tester',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 1,
+                                           role: 'Primary Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'B.',
+                                           middle_name: nil,
+                                           last_name: 'Tester',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Mary',
-                                       middle_name: 'E.',
-                                       last_name: 'Paperauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Mary',
+                                           middle_name: 'E.',
+                                           last_name: 'Paperauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
       end
@@ -2256,11 +2256,11 @@ describe ActivityInsightImporter do
             expect(a3.role).to eq 'Author'
           end
   
-          it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 7
+          it "creates a new contributor name record for every faculty author for each imported publication" do
+            expect { importer.call }.to change { ContributorName.count }.by 7
           end
   
-          it "saves the correct attributes with each new contributor" do
+          it "saves the correct attributes with each new contributor name" do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -2269,50 +2269,50 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Elizabeth',
-                                       middle_name: 'A.',
-                                       last_name: 'Testauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'E',
-                                       middle_name: nil,
-                                       last_name: 'Testington',
-                                       position: 3,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Elizabeth',
+                                           middle_name: 'A.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'E',
+                                           middle_name: nil,
+                                           last_name: 'Testington',
+                                           position: 3,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 1,
-                                       role: 'Primary Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'B.',
-                                       middle_name: nil,
-                                       last_name: 'Tester',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 1,
+                                           role: 'Primary Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'B.',
+                                           middle_name: nil,
+                                           last_name: 'Tester',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Mary',
-                                       middle_name: 'E.',
-                                       last_name: 'Paperauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Mary',
+                                           middle_name: 'E.',
+                                           last_name: 'Paperauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
         context "when an included publication exists in the database" do
@@ -2502,18 +2502,18 @@ describe ActivityInsightImporter do
               end
             end
   
-            let!(:existing_cont) { create :contributor, publication: existing_pub }
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
-            it "creates a new contributor record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 5
+            it "creates a new contributor name record for every faculty author for each new imported publication" do
+              expect { importer.call }.to change { ContributorName.count }.by 5
             end
             
-            it "does not remove any existing contributors on the existing publication" do
+            it "does not remove any existing contributor names on the existing publication" do
               importer.call
               expect(existing_cont.reload).not_to be_nil
             end
     
-            it "saves the correct attributes with each new contributor" do
+            it "saves the correct attributes with each new contributor name" do
               importer.call
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
@@ -2522,50 +2522,50 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Elizabeth',
-                                         middle_name: 'A.',
-                                         last_name: 'Testauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'E',
-                                         middle_name: nil,
-                                         last_name: 'Testington',
-                                         position: 3,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Elizabeth',
+                                             middle_name: 'A.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'E',
+                                             middle_name: nil,
+                                             last_name: 'Testington',
+                                             position: 3,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 1,
-                                         role: 'Primary Author')).to be_nil
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'B.',
-                                         middle_name: nil,
-                                         last_name: 'Tester',
-                                         position: 2,
-                                         role: 'Author')).to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 1,
+                                             role: 'Primary Author')).to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'B.',
+                                             middle_name: nil,
+                                             last_name: 'Tester',
+                                             position: 2,
+                                             role: 'Author')).to be_nil
     
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Mary',
-                                         middle_name: 'E.',
-                                         last_name: 'Paperauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Mary',
+                                             middle_name: 'E.',
+                                             last_name: 'Paperauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
   
@@ -2733,18 +2733,18 @@ describe ActivityInsightImporter do
               end
             end
   
-            let!(:existing_cont) { create :contributor, publication: existing_pub }
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
-            it "creates a new contributor record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 6
+            it "creates a new contributor name record for every faculty author for each imported publication" do
+              expect { importer.call }.to change { ContributorName.count }.by 6
             end
   
-            it "removes any existing contributors that are not in the new import" do
+            it "removes any existing contributor names that are not in the new import" do
               importer.call
               expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
             end
     
-            it "saves the correct attributes with each new contributor" do
+            it "saves the correct attributes with each new contributor name" do
               importer.call
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
@@ -2753,50 +2753,50 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Elizabeth',
-                                         middle_name: 'A.',
-                                         last_name: 'Testauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'E',
-                                         middle_name: nil,
-                                         last_name: 'Testington',
-                                         position: 3,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Elizabeth',
+                                             middle_name: 'A.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'E',
+                                             middle_name: nil,
+                                             last_name: 'Testington',
+                                             position: 3,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 1,
-                                         role: 'Primary Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'B.',
-                                         middle_name: nil,
-                                         last_name: 'Tester',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 1,
+                                             role: 'Primary Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'B.',
+                                             middle_name: nil,
+                                             last_name: 'Tester',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Mary',
-                                         middle_name: 'E.',
-                                         last_name: 'Paperauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Mary',
+                                             middle_name: 'E.',
+                                             last_name: 'Paperauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
         end
@@ -3637,11 +3637,11 @@ describe ActivityInsightImporter do
             expect(a3.role).to eq 'Author'
           end
   
-          it "creates a new contributor record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Contributor.count }.by 7
+          it "creates a new contributor name record for every faculty author for each imported publication" do
+            expect { importer.call }.to change { ContributorName.count }.by 7
           end
   
-          it "saves the correct attributes with each new contributor" do
+          it "saves the correct attributes with each new contributor name" do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -3650,50 +3650,50 @@ describe ActivityInsightImporter do
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
   
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Elizabeth',
-                                       middle_name: 'A.',
-                                       last_name: 'Testauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p1,
-                                       first_name: 'E',
-                                       middle_name: nil,
-                                       last_name: 'Testington',
-                                       position: 3,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Elizabeth',
+                                           middle_name: 'A.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p1,
+                                           first_name: 'E',
+                                           middle_name: nil,
+                                           last_name: 'Testington',
+                                           position: 3,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 1,
-                                       role: 'Primary Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p2,
-                                       first_name: 'B.',
-                                       middle_name: nil,
-                                       last_name: 'Tester',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 1,
+                                           role: 'Primary Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p2,
+                                           first_name: 'B.',
+                                           middle_name: nil,
+                                           last_name: 'Tester',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
   
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Mary',
-                                       middle_name: 'E.',
-                                       last_name: 'Paperauthor',
-                                       position: 1,
-                                       role: 'Author')).not_to be_nil
-            expect(Contributor.find_by(publication: p3,
-                                       first_name: 'Sally',
-                                       middle_name: nil,
-                                       last_name: 'Testuser',
-                                       position: 2,
-                                       role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Mary',
+                                           middle_name: 'E.',
+                                           last_name: 'Paperauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p3,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
         context "when an included publication exists in the database" do
@@ -3883,18 +3883,18 @@ describe ActivityInsightImporter do
               end
             end
   
-            let!(:existing_cont) { create :contributor, publication: existing_pub }
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
-            it "creates a new contributor record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 5
+            it "creates a new contributor name record for every faculty author for each new imported publication" do
+              expect { importer.call }.to change { ContributorName.count }.by 5
             end
             
-            it "does not remove any existing contributors on the existing publication" do
+            it "does not remove any existing contributor names on the existing publication" do
               importer.call
               expect(existing_cont.reload).not_to be_nil
             end
     
-            it "saves the correct attributes with each new contributor" do
+            it "saves the correct attributes with each new contributor name" do
               importer.call
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
@@ -3903,50 +3903,50 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Elizabeth',
-                                         middle_name: 'A.',
-                                         last_name: 'Testauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'E',
-                                         middle_name: nil,
-                                         last_name: 'Testington',
-                                         position: 3,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Elizabeth',
+                                             middle_name: 'A.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'E',
+                                             middle_name: nil,
+                                             last_name: 'Testington',
+                                             position: 3,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 1,
-                                         role: 'Primary Author')).to be_nil
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'B.',
-                                         middle_name: nil,
-                                         last_name: 'Tester',
-                                         position: 2,
-                                         role: 'Author')).to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 1,
+                                             role: 'Primary Author')).to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'B.',
+                                             middle_name: nil,
+                                             last_name: 'Tester',
+                                             position: 2,
+                                             role: 'Author')).to be_nil
     
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Mary',
-                                         middle_name: 'E.',
-                                         last_name: 'Paperauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Mary',
+                                             middle_name: 'E.',
+                                             last_name: 'Paperauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
   
@@ -4114,18 +4114,18 @@ describe ActivityInsightImporter do
               end
             end
   
-            let!(:existing_cont) { create :contributor, publication: existing_pub }
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
-            it "creates a new contributor record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { Contributor.count }.by 6
+            it "creates a new contributor name record for every faculty author for each imported publication" do
+              expect { importer.call }.to change { ContributorName.count }.by 6
             end
   
-            it "removes any existing contributors that are not in the new import" do
+            it "removes any existing contributor names that are not in the new import" do
               importer.call
               expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
             end
     
-            it "saves the correct attributes with each new contributor" do
+            it "saves the correct attributes with each new contributor name" do
               importer.call
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
@@ -4134,50 +4134,50 @@ describe ActivityInsightImporter do
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
     
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Elizabeth',
-                                         middle_name: 'A.',
-                                         last_name: 'Testauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p1,
-                                         first_name: 'E',
-                                         middle_name: nil,
-                                         last_name: 'Testington',
-                                         position: 3,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Elizabeth',
+                                             middle_name: 'A.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p1,
+                                             first_name: 'E',
+                                             middle_name: nil,
+                                             last_name: 'Testington',
+                                             position: 3,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 1,
-                                         role: 'Primary Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p2,
-                                         first_name: 'B.',
-                                         middle_name: nil,
-                                         last_name: 'Tester',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 1,
+                                             role: 'Primary Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p2,
+                                             first_name: 'B.',
+                                             middle_name: nil,
+                                             last_name: 'Tester',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
     
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Mary',
-                                         middle_name: 'E.',
-                                         last_name: 'Paperauthor',
-                                         position: 1,
-                                         role: 'Author')).not_to be_nil
-              expect(Contributor.find_by(publication: p3,
-                                         first_name: 'Sally',
-                                         middle_name: nil,
-                                         last_name: 'Testuser',
-                                         position: 2,
-                                         role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Mary',
+                                             middle_name: 'E.',
+                                             last_name: 'Paperauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p3,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
         end

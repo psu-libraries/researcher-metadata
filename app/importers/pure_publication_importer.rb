@@ -54,7 +54,7 @@ class PurePublicationImporter
               pi.save!
 
               unless p.updated_by_user_at.present?
-                p.contributors.delete_all
+                p.contributor_names.delete_all
 
                 authorships = publication['personAssociations'].select do |a|
                   !a['authorCollaboration'].present? &&
@@ -79,10 +79,10 @@ class PurePublicationImporter
                     end
                   end
 
-                  Contributor.create!(publication: p,
-                                      first_name: a['name']['firstName'],
-                                      last_name: a['name']['lastName'],
-                                      position: i+1)
+                  ContributorName.create!(publication: p,
+                                          first_name: a['name']['firstName'],
+                                          last_name: a['name']['lastName'],
+                                          position: i+1)
                 end
               end
             end

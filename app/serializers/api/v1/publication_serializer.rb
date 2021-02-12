@@ -18,7 +18,7 @@ module API::V1
     end
 
     attribute :contributors do |object|
-      object.contributors.map do |c|
+      object.contributor_names.map do |c|
         {first_name: c.first_name,
          middle_name: c.middle_name,
          last_name: c.last_name}

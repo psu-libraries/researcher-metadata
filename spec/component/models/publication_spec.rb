@@ -58,7 +58,7 @@ describe Publication, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships).inverse_of(:publication) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
+    it { is_expected.to have_many(:contributor_names).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:taggings).inverse_of(:publication).class_name(:PublicationTagging) }
     it { is_expected.to have_many(:tags).through(:taggings) }
@@ -78,7 +78,7 @@ describe Publication, type: :model do
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
-  it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:contributor_names).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:taggings).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
@@ -92,7 +92,7 @@ describe Publication, type: :model do
 
   describe "deleting a publication with contributors" do
     let(:p) { create :publication }
-    let!(:c) { create :contributor, publication: p}
+    let!(:c) { create :contributor_name, publication: p}
     it "also deletes the publication's authorships" do
       p.destroy
       expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -410,12 +410,12 @@ describe Publication, type: :model do
 
   describe '#contributors' do
     let(:pub) { create :publication }
-    let!(:c1) { create :contributor, position: 2, publication: pub }
-    let!(:c2) { create :contributor, position: 3, publication: pub }
-    let!(:c3) { create :contributor, position: 1, publication: pub }
+    let!(:c1) { create :contributor_name, position: 2, publication: pub }
+    let!(:c2) { create :contributor_name, position: 3, publication: pub }
+    let!(:c3) { create :contributor_name, position: 1, publication: pub }
 
     it "returns the publication's contributors in order by position" do
-      expect(pub.contributors).to eq [c3, c1, c2]
+      expect(pub.contributor_names).to eq [c3, c1, c2]
     end
   end
 

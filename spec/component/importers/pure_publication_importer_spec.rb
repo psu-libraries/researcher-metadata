@@ -25,8 +25,8 @@ describe PurePublicationImporter do
           expect { importer.call }.to change { Publication.count }.by 2 # There are 3 publications, but one is a letter
         end
 
-        it "creates a new contributor record for each author on each article" do
-          expect { importer.call }.to change { Contributor.count }.by 7
+        it "creates a new contributor name record for each author on each article" do
+          expect { importer.call }.to change { ContributorName.count }.by 7
         end
 
         it "creates a new authorship record for each author who is a Penn State user on each article" do
@@ -89,44 +89,44 @@ describe PurePublicationImporter do
           expect(p2.doi).to be nil
         end
 
-        it "saves the correct data for each contributor" do
+        it "saves the correct data for each contributor name" do
           importer.call
 
           p1 = found_pub1.publication
           p2 = found_pub2.publication
 
-          expect(p1.contributors.count).to eq 2
-          expect(p2.contributors.count).to eq 5
+          expect(p1.contributor_names.count).to eq 2
+          expect(p2.contributor_names.count).to eq 5
 
-          expect(p1.contributors.find_by(first_name: 'Firstpub R.',
-                                         middle_name: nil,
-                                         last_name: 'Firstauthor',
-                                         position: 1)).not_to be_nil
-          expect(p1.contributors.find_by(first_name: 'Firstpub',
-                                         middle_name: nil,
-                                         last_name: 'Secondauthor',
-                                         position: 2)).not_to be_nil
+          expect(p1.contributor_names.find_by(first_name: 'Firstpub R.',
+                                              middle_name: nil,
+                                              last_name: 'Firstauthor',
+                                              position: 1)).not_to be_nil
+          expect(p1.contributor_names.find_by(first_name: 'Firstpub',
+                                              middle_name: nil,
+                                              last_name: 'Secondauthor',
+                                              position: 2)).not_to be_nil
 
-          expect(p2.contributors.find_by(first_name: 'Thirdpub A.',
-                                         middle_name: nil,
-                                         last_name: 'Firstauthor',
-                                         position: 1)).not_to be_nil
-          expect(p2.contributors.find_by(first_name: 'Thirdpub',
-                                         middle_name: nil,
-                                         last_name: 'Secondauthor',
-                                         position: 2)).not_to be_nil
-          expect(p2.contributors.find_by(first_name: 'Thirdpub',
-                                         middle_name: nil,
-                                         last_name: 'Thirdauthor',
-                                         position: 3)).not_to be_nil
-          expect(p2.contributors.find_by(first_name: 'Thirdpub',
-                                         middle_name: nil,
-                                         last_name: 'Fourthauthor',
-                                         position: 4)).not_to be_nil
-          expect(p2.contributors.find_by(first_name: 'Thirdpub',
-                                         middle_name: nil,
-                                         last_name: 'Fifthauthor',
-                                         position: 5)).not_to be_nil
+          expect(p2.contributor_names.find_by(first_name: 'Thirdpub A.',
+                                              middle_name: nil,
+                                              last_name: 'Firstauthor',
+                                              position: 1)).not_to be_nil
+          expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
+                                              middle_name: nil,
+                                              last_name: 'Secondauthor',
+                                              position: 2)).not_to be_nil
+          expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
+                                              middle_name: nil,
+                                              last_name: 'Thirdauthor',
+                                              position: 3)).not_to be_nil
+          expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
+                                              middle_name: nil,
+                                              last_name: 'Fourthauthor',
+                                              position: 4)).not_to be_nil
+          expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
+                                              middle_name: nil,
+                                              last_name: 'Fifthauthor',
+                                              position: 5)).not_to be_nil
         end
 
         it "saves the correct data for each authorship" do
@@ -196,42 +196,42 @@ describe PurePublicationImporter do
             expect { importer.call }.to change { Publication.count }.by 1
           end
   
-          context "when no contributor records exist" do
-            it "creates a new contributor record for each author on each article" do
-              expect { importer.call }.to change { Contributor.count }.by 7
-              expect(existing_pub.contributors.count).to eq 2
+          context "when no contributor name records exist" do
+            it "creates a new contributor name record for each author on each article" do
+              expect { importer.call }.to change { ContributorName.count }.by 7
+              expect(existing_pub.contributor_names.count).to eq 2
 
-              expect(existing_pub.contributors.find_by(first_name: 'Firstpub R.',
-                                                       middle_name: nil,
-                                                       last_name: 'Firstauthor',
-                                                       position: 1)).not_to be_nil
-              expect(existing_pub.contributors.find_by(first_name: 'Firstpub',
-                                                       middle_name: nil,
-                                                       last_name: 'Secondauthor',
-                                                       position: 2)).not_to be_nil
+              expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
+                                                            middle_name: nil,
+                                                            last_name: 'Firstauthor',
+                                                            position: 1)).not_to be_nil
+              expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub',
+                                                            middle_name: nil,
+                                                            last_name: 'Secondauthor',
+                                                            position: 2)).not_to be_nil
             end
           end
   
-          context "when contributor records already exist for the existing publication" do
-            let!(:existing_contributor) { create :contributor,
-                                                 first_name: 'An',
-                                                 middle_name: 'Existing',
-                                                 last_name: 'Contributor',
-                                                 position: 3,
-                                                 publication: existing_pub }
+          context "when contributor name records already exist for the existing publication" do
+            let!(:existing_name) { create :contributor_name,
+                                          first_name: 'An',
+                                          middle_name: 'Existing',
+                                          last_name: 'Contributor',
+                                          position: 3,
+                                          publication: existing_pub }
 
-            it "replaces the existing contributor records with new records from the import data" do
-              expect { importer.call }.to change { Contributor.count }.by 6
-              expect(existing_pub.contributors.count).to eq 2
+            it "replaces the existing contributor name records with new records from the import data" do
+              expect { importer.call }.to change { ContributorName.count }.by 6
+              expect(existing_pub.contributor_names.count).to eq 2
 
-              expect(existing_pub.contributors.find_by(first_name: 'Firstpub R.',
-                                                       middle_name: nil,
-                                                       last_name: 'Firstauthor',
-                                                       position: 1)).not_to be_nil
-              expect(existing_pub.contributors.find_by(first_name: 'Firstpub',
-                                                       middle_name: nil,
-                                                       last_name: 'Secondauthor',
-                                                       position: 2)).not_to be_nil
+              expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
+                                                            middle_name: nil,
+                                                            last_name: 'Firstauthor',
+                                                            position: 1)).not_to be_nil
+              expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub',
+                                                            middle_name: nil,
+                                                            last_name: 'Secondauthor',
+                                                            position: 2)).not_to be_nil
             end
           end
   
@@ -344,29 +344,29 @@ describe PurePublicationImporter do
             expect { importer.call }.to change { Publication.count }.by 1
           end
 
-          context "when no contributor records exist" do
-            it "creates a new contributor record for each author on each new article only" do
-              expect { importer.call }.to change { Contributor.count }.by 5
-              expect(existing_pub.contributors.count).to eq 0
+          context "when no contributor name records exist" do
+            it "creates a new contributor name record for each author on each new article only" do
+              expect { importer.call }.to change { ContributorName.count }.by 5
+              expect(existing_pub.contributor_names.count).to eq 0
             end
           end
 
-          context "when contributor records already exist for the existing publication" do
-            let!(:existing_contributor) { create :contributor,
-                                                 first_name: 'An',
-                                                 middle_name: 'Existing',
-                                                 last_name: 'Contributor',
-                                                 position: 3,
-                                                 publication: existing_pub }
+          context "when contributor name records already exist for the existing publication" do
+            let!(:existing_name) { create :contributor_name,
+                                          first_name: 'An',
+                                          middle_name: 'Existing',
+                                          last_name: 'Contributor',
+                                          position: 3,
+                                          publication: existing_pub }
 
-            it "does not modify existing contributor records on the existing publication" do
-              expect { importer.call }.to change { Contributor.count }.by 5
-              expect(existing_pub.contributors.count).to eq 1
+            it "does not modify existing contributor name records on the existing publication" do
+              expect { importer.call }.to change { ContributorName.count }.by 5
+              expect(existing_pub.contributor_names.count).to eq 1
 
-              expect(existing_pub.contributors.find_by(first_name: 'An',
-                                                       middle_name: 'Existing',
-                                                       last_name: 'Contributor',
-                                                       position: 3)).not_to be_nil
+              expect(existing_pub.contributor_names.find_by(first_name: 'An',
+                                                            middle_name: 'Existing',
+                                                            last_name: 'Contributor',
+                                                            position: 3)).not_to be_nil
             end
           end
 

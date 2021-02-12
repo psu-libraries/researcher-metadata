@@ -18,7 +18,7 @@ class Publication < ApplicationRecord
   has_many :user_organization_memberships, through: :users
   has_many :taggings, -> { order rank: :desc }, class_name: :PublicationTagging, inverse_of: :publication
   has_many :tags, through: :taggings
-  has_many :contributors,
+  has_many :contributor_names,
            -> { order position: :asc },
            dependent: :destroy,
            inverse_of: :publication
@@ -63,7 +63,7 @@ class Publication < ApplicationRecord
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
-  accepts_nested_attributes_for :contributors, allow_destroy: true
+  accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   def self.find_by_wos_pub(pub)
@@ -337,7 +337,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:visible) { label 'Visible via API?'}
     end
 
@@ -380,7 +380,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:grants)
       field(:imports)
       field(:organizations)
@@ -414,7 +414,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:visible) { label 'Visible via API?'}
     end
   end

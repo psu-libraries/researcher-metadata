@@ -170,9 +170,9 @@ class ActivityInsightImporter
 
               authorship.save!
 
-              pub_record.contributors.delete_all
+              pub_record.contributor_names.delete_all
               pub.contributors.each_with_index do |cont, i|
-                c = Contributor.new
+                c = ContributorName.new
                 c.publication = pub_record
                 c.first_name = cont.first_name
                 c.middle_name = cont.middle_name

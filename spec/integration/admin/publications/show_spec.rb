@@ -35,12 +35,12 @@ feature "Admin publication detail page", type: :feature do
                         publication: pub,
                         user: user2 }
 
-  let!(:con1) { create :contributor,
+  let!(:con1) { create :contributor_name,
                        publication: pub,
                        first_name: "Jill",
                        last_name: "Author" }
 
-  let!(:con2) { create :contributor,
+  let!(:con2) { create :contributor_name,
                        publication: pub,
                        first_name: "Jack",
                        last_name: "Contributor" }
@@ -143,7 +143,7 @@ feature "Admin publication detail page", type: :feature do
         expect(page).to have_link "Susan Tester"
       end
 
-      it "shows the publication's contributors" do
+      it "shows the names of the publication's contributors" do
         expect(page).to have_link "Jill Author"
         expect(page).to have_link "Jack Contributor"
       end
