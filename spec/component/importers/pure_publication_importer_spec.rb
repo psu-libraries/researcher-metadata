@@ -338,6 +338,8 @@ describe PurePublicationImporter do
         
         context "when the existing publication record has been manually updated" do
           let(:updated_ts) { Time.now }
+          let!(:new_journal) { create :journal,
+                                      pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad' }
 
           it "creates a new publication import record for each new object in the .json files that is an article" do
             expect { importer.call }.to change { PublicationImport.count }.by 1
@@ -420,7 +422,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
               expect(existing_pub_reloaded.volume).to eq 'existing volume'
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
-              expect(existing_pub_reloaded.journal).to eq existing_journal
+              expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'existing status'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
@@ -444,7 +446,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
               expect(existing_pub_reloaded.volume).to eq 'existing volume'
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
-              expect(existing_pub_reloaded.journal).to eq existing_journal
+              expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'existing status'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
