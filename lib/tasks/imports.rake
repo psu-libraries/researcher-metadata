@@ -125,6 +125,11 @@ namespace :import do
 
     OpenAccessButtonPublicationImporter.new.call
   end
+
+  desc 'Import authorships from Activity Insight'
+  task :ai_authorship_patch => :environment do
+    AIAuthorshipPatchImporter.new.call
+  end
 end
 
 def filename_for(key)
