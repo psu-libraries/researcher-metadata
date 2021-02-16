@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_21_232014) do
+ActiveRecord::Schema.define(version: 2021_02_12_185439) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -79,7 +79,7 @@ ActiveRecord::Schema.define(version: 2021_01_21_232014) do
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
-  create_table "contributors", force: :cascade do |t|
+  create_table "contributor_names", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.string "first_name"
     t.string "middle_name"
@@ -88,7 +88,7 @@ ActiveRecord::Schema.define(version: 2021_01_21_232014) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role"
-    t.index ["publication_id"], name: "index_contributors_on_publication_id"
+    t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
   end
 
   create_table "duplicate_publication_groups", force: :cascade do |t|
@@ -356,6 +356,7 @@ ActiveRecord::Schema.define(version: 2021_01_21_232014) do
     t.datetime "open_access_button_last_checked_at"
     t.text "user_submitted_open_access_url"
     t.integer "journal_id"
+    t.text "scholarsphere_open_access_url"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
@@ -503,7 +504,7 @@ ActiveRecord::Schema.define(version: 2021_01_21_232014) do
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
-  add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "contributor_names", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"

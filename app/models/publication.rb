@@ -18,7 +18,7 @@ class Publication < ApplicationRecord
   has_many :user_organization_memberships, through: :users
   has_many :taggings, -> { order rank: :desc }, class_name: :PublicationTagging, inverse_of: :publication
   has_many :tags, through: :taggings
-  has_many :contributors,
+  has_many :contributor_names,
            -> { order position: :asc },
            dependent: :destroy,
            inverse_of: :publication
@@ -60,10 +60,10 @@ class Publication < ApplicationRecord
 
   scope :subject_to_open_access_policy, -> { where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
-  scope :open_access, -> { where('open_access_url IS NOT NULL OR user_submitted_open_access_url IS NOT NULL') }
+  scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
-  accepts_nested_attributes_for :contributors, allow_destroy: true
+  accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   def self.find_by_wos_pub(pub)
@@ -71,6 +71,9 @@ class Publication < ApplicationRecord
     if by_doi.any?
       by_doi
     else
+      # TODO:  We can make this query more accurate using postgres trigram matching
+      # on the title and sub-title in the same way that we do when we're finding 
+      # duplicate publications.
       where("title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?",
             "%#{pub.title}%",
             pub.publication_date.try(:year))
@@ -292,6 +295,10 @@ class Publication < ApplicationRecord
         label 'User-submitted open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:scholarsphere_open_access_url) do
+        label 'Scholarsphere open access URL'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API'}
@@ -318,7 +325,7 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:open_access_url) { label 'Open Access URL' }
+      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -330,7 +337,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:visible) { label 'Visible via API?'}
     end
 
@@ -360,6 +367,10 @@ class Publication < ApplicationRecord
         label 'User-submitted open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:scholarsphere_open_access_url) do
+        label 'Scholarsphere open access URL'
+        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -370,7 +381,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:grants)
       field(:imports)
       field(:organizations)
@@ -391,7 +402,7 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
-      field(:open_access_url) { label 'Open Access URL' }
+      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:doi) { label 'DOI' }
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
@@ -404,7 +415,7 @@ class Publication < ApplicationRecord
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
-      field(:contributors)
+      field(:contributor_names)
       field(:visible) { label 'Visible via API?'}
     end
   end
@@ -430,7 +441,8 @@ class Publication < ApplicationRecord
   end
 
   def preferred_open_access_url
-    open_access_url.presence || user_submitted_open_access_url.presence
+    policy = PreferredOpenAccessPolicy.new(self)
+    policy.url
   end
 
   def scholarsphere_upload_pending?

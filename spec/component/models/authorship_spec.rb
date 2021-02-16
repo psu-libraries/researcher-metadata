@@ -31,7 +31,7 @@ describe Authorship, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
-    it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver) }
+    it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver).inverse_of(:authorship) }
   end
 
   describe 'validations' do
@@ -56,10 +56,14 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:no_open_access_information?).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
+  it { is_expected.to accept_nested_attributes_for(:waiver) }
+
   describe "#description" do
-    let(:a) { create :authorship }
+    let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
+    let(:p) { create :publication, title: 'Example Pub' }
+    let(:a) { create :authorship, user: u, publication: p }
     it "returns a string describing the record" do
-      expect(a.description).to eq "Authorship ##{a.id}"
+      expect(a.description).to eq "##{a.id} (Bob Testerson - Example Pub)"
     end
   end
 

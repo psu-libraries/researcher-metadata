@@ -110,7 +110,7 @@ describe ScholarsphereUploadsController, type: :controller do
           
         it "redirects to the ScholarSphere website" do
           post :create, params: {id: pub.id}
-          expect(response).to redirect_to 'https://scholarsphere.psu.edu/concern/generic_works/new'
+          expect(response).to redirect_to 'https://scholarsphere.psu.edu/dashboard/form/work_versions/new'
         end
       end
     end

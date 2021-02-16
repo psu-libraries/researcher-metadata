@@ -46,17 +46,17 @@ feature "Admin duplicate publication group detail page", type: :feature do
   let(:user2) { create :user, first_name: "Test2", last_name: "User2" }
   let(:user3) { create :user, first_name: "Test3", last_name: "User3" }
 
-  let!(:con1) { create :contributor,
+  let!(:con1) { create :contributor_name,
                        first_name: "Test1",
                        last_name: "Contributor1",
                        publication: pub1,
                        position: 2 }
-  let!(:con2) { create :contributor,
+  let!(:con2) { create :contributor_name,
                        first_name: "Test2",
                        last_name: "Contributor2",
                        publication: pub1,
                        position: 1 }
-  let!(:con3) { create :contributor,
+  let!(:con3) { create :contributor_name,
                        first_name: "Test3",
                        last_name: "Contributor3",
                        publication: pub2,

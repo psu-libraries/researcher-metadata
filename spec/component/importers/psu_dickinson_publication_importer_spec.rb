@@ -68,8 +68,8 @@ describe PSUDickinsonPublicationImporter do
       expect { importer.call }.to change { Authorship.count }.by 3
     end
 
-    it "creates new contributors for records that are importable and that don't already exist" do
-      expect { importer.call }.to change { Contributor.count }.by 2
+    it "creates new contributor names for records that are importable and that don't already exist" do
+      expect { importer.call }.to change { ContributorName.count }.by 2
     end
 
     it "is idempotent in terms of creating publication imports" do
@@ -87,9 +87,9 @@ describe PSUDickinsonPublicationImporter do
       expect { importer.call }.not_to change { Authorship.count }
     end
 
-    it "is idempotent in terms of creating contributors" do
+    it "is idempotent in terms of creating contributor names" do
       importer.call
-      expect { importer.call }.not_to change { Contributor.count }
+      expect { importer.call }.not_to change { ContributorName.count }
     end
 
     it "saves the correct metadata" do
@@ -107,11 +107,11 @@ describe PSUDickinsonPublicationImporter do
       expect(pub.status).to eq 'Published'
       expect(pub.journal_title).to eq 'The Source'
 
-      con1 = pub.contributors.find_by(first_name: 'First')
+      con1 = pub.contributor_names.find_by(first_name: 'First')
       expect(con1.last_name).to eq 'Creator'
       expect(con1.position).to eq 1
 
-      con2 = pub.contributors.find_by(first_name: 'Second')
+      con2 = pub.contributor_names.find_by(first_name: 'Second')
       expect(con2.last_name).to eq 'Author'
       expect(con2.position).to eq 2
 

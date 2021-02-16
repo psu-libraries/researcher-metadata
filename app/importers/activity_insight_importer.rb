@@ -158,25 +158,21 @@ class ActivityInsightImporter
             end
 
             unless pub_record.updated_by_user_at.present?
-              pub.faculty_authors.each do |author|
-                user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
-                if user
-                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+              authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
 
-                  if authorship.new_record?
-                    authorship.user = user
-                    authorship.publication = pub_record
-                  end
-                  authorship.author_number = pub.contributors.index(author) + 1
-                  authorship.role = author.role
-
-                  authorship.save!
-                end
+              if authorship.new_record?
+                authorship.user = u
+                authorship.publication = pub_record
               end
 
-              pub_record.contributors.delete_all
+              authorship.author_number = pub.contributors.index(pub.faculty_author) + 1
+              authorship.role = pub.faculty_author.role
+
+              authorship.save!
+
+              pub_record.contributor_names.delete_all
               pub.contributors.each_with_index do |cont, i|
-                c = Contributor.new
+                c = ContributorName.new
                 c.publication = pub_record
                 c.first_name = cont.first_name
                 c.middle_name = cont.middle_name
@@ -304,6 +300,10 @@ class ActivityInsightDetailUser
     user.attribute('username').value.downcase
   end
 
+  def activity_insight_id
+    user.attribute('userId').value
+  end
+
   def alt_name
     contact_info_text_for('ALT_NAME')
   end
@@ -369,7 +369,7 @@ class ActivityInsightDetailUser
   end
 
   def publications
-    user.css('INTELLCONT').map { |p| ActivityInsightAPIPublication.new(p) }
+    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p, self) }
   end
 
   private
@@ -669,9 +669,10 @@ class ActivityInsightPerformanceContributor
 end
 
 
-class ActivityInsightAPIPublication
-  def initialize(parsed_publication)
+class ActivityInsightPublication
+  def initialize(parsed_publication, user)
     @parsed_publication = parsed_publication
+    @user = user
   end
 
   def publication_type
@@ -768,19 +769,19 @@ class ActivityInsightAPIPublication
     DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
-  def faculty_authors
-    contributors.select { |c| c.activity_insight_user_id }
+  def faculty_author
+    contributors.detect { |c| c.activity_insight_user_id == user.activity_insight_id }
   end
 
   def contributors
     parsed_publication.css('INTELLCONT_AUTH').map do |a|
-      ActivityInsightPublicationAuthor.new(a)
+      ActivityInsightPublicationAuthor.new(a, user)
     end
   end
 
   private
 
-  attr_reader :parsed_publication
+  attr_reader :parsed_publication, :user
 
   def text_for(element)
     parsed_publication.css(element).text.strip.presence
@@ -801,8 +802,10 @@ end
 
 
 class ActivityInsightPublicationAuthor
-  def initialize(parsed_author)
+  # initialize with user passed from publication
+  def initialize(parsed_author, imported_user)
     @parsed_author = parsed_author
+    @imported_user = imported_user
   end
 
   def activity_insight_user_id
@@ -810,7 +813,12 @@ class ActivityInsightPublicationAuthor
   end
 
   def first_name
-    text_for('FNAME')
+    text = text_for('FNAME')
+    if user_name_confirmed?
+      text
+    else
+      text.chars.first if text
+    end
   end
 
   def middle_name
@@ -835,9 +843,21 @@ class ActivityInsightPublicationAuthor
 
   private
 
-  attr_reader :parsed_author
+  attr_reader :parsed_author, :imported_user
   
   def text_for(element)
     parsed_author.css(element).text.strip.presence
+  end
+
+  def user_name_confirmed?
+    for_external_person? || for_imported_user?
+  end
+
+  def for_external_person?
+    activity_insight_user_id.blank?
+  end
+
+  def for_imported_user?
+    activity_insight_user_id == imported_user.activity_insight_id
   end
 end

@@ -105,9 +105,9 @@
           <% end %>
         </tr>
         <tr>
-          <td class="publication-field-label">Contributors</td>
+          <td class="publication-field-label">Contributor Names</td>
           <% publications.each do |p| %>
-            <td class="publication-field" title="<%= p.contributors.map { |c| c.name }.join(', ') %>"><%= p.contributors.map { |c| c.name }.join(', ') %></td>
+            <td class="publication-field" title="<%= p.contributor_names.map { |c| c.name }.join(', ') %>"><%= p.contributor_names.map { |c| c.name }.join(', ') %></td>
           <% end %>
         </tr>
         <tr>

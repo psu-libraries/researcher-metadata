@@ -112,7 +112,7 @@ class WebOfScienceFileImporter
                   end
 
                   wos_pub.author_names.each_with_index do |an, i|
-                    c = Contributor.new
+                    c = ContributorName.new
                     c.publication = p
                     c.first_name = an.first_name || an.first_initial
                     c.middle_name = an.middle_name || an.middle_initial

@@ -4,9 +4,10 @@ require 'active_support/core_ext'
 require_relative '../../../app/importers/activity_insight_importer'
 require_relative '../../../app/models/doi_parser'
 
-describe ActivityInsightAPIPublication do
+describe ActivityInsightPublication do
   let(:parsed_pub) { double 'parsed publication xml' }
-  let(:pub) { ActivityInsightAPIPublication.new(parsed_pub) }
+  let(:pub) { ActivityInsightPublication.new(parsed_pub, user) }
+  let(:user) { double 'user', activity_insight_id: 456 }
 
   describe '#publication_type' do
     before { allow(parsed_pub).to receive(:css).with('CONTYPE').and_return type_element }
@@ -1188,7 +1189,7 @@ describe ActivityInsightAPIPublication do
     end
   end
 
-  describe '#faculty_authors' do
+  describe '#faculty_author' do
     let(:auth_element1) { double 'XML element 1' }
     let(:auth_element2) { double 'XML element 2' }
     let(:auth_element3) { double 'XML element 3' }
@@ -1200,13 +1201,13 @@ describe ActivityInsightAPIPublication do
       allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
                                                                              auth_element2,
                                                                              auth_element3])
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1, user).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2, user).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3, user).and_return(auth3)
     end
 
     it "returns an array of the publication's authors from the given data who have a user ID" do
-      expect(pub.faculty_authors).to eq [auth1, auth2]
+      expect(pub.faculty_author).to eq auth2
     end
   end
 
@@ -1222,9 +1223,9 @@ describe ActivityInsightAPIPublication do
       allow(parsed_pub).to receive(:css).with('INTELLCONT_AUTH').and_return([auth_element1,
                                                                              auth_element2,
                                                                              auth_element3])
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1).and_return(auth1)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2).and_return(auth2)
-      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3).and_return(auth3)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element1, user).and_return(auth1)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element2, user).and_return(auth2)
+      allow(ActivityInsightPublicationAuthor).to receive(:new).with(auth_element3, user).and_return(auth3)
     end
 
     it "returns an array of the publication's authors from the given data" do
