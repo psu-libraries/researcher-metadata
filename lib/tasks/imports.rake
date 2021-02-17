@@ -130,6 +130,13 @@ namespace :import do
   task :ai_authorship_patch => :environment do
     AIAuthorshipPatchImporter.new.call
   end
+
+  desc 'Import authorships from Pure'
+  task :pure_authorship_patch => :environment do
+    PureAuthorshipPatchImporter.new(
+      dirname: dirname_for(:pure_publications)
+    ).call
+  end
 end
 
 def filename_for(key)
