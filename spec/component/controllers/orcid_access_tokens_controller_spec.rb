@@ -90,7 +90,7 @@ describe OrcidAccessTokensController, type: :controller do
             expect(user.orcid_refresh_token).to eq 'def456'
             expect(user.orcid_access_token_expires_in).to eq 20000000
             expect(user.orcid_access_token_scope).to eq '/authenticate'
-            expect(user.orcid_identifier).to eq '0000-0001-2345-6789'
+            expect(user.authenticated_orcid_identifier).to eq '0000-0001-2345-6789'
           end
   
           it "sets a flash message" do

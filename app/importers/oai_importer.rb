@@ -34,7 +34,7 @@ class OAIImporter
             i.save!
 
             rr.creators.each_with_index do |c, i|
-              con = Contributor.new
+              con = ContributorName.new
               con.publication = p
               con.first_name = c.first_name
               con.last_name = c.last_name

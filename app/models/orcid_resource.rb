@@ -47,7 +47,7 @@ class OrcidResource
   end
 
   def orcid_id
-    user.orcid_identifier
+    user.authenticated_orcid_identifier
   end
 
   private

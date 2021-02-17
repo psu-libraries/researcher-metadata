@@ -24,6 +24,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:total_scopus_citations).of_type(:integer) }
   it { is_expected.to have_db_column(:open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:user_submitted_open_access_url).of_type(:text) }
+  it { is_expected.to have_db_column(:scholarsphere_open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -57,7 +58,7 @@ describe Publication, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships).inverse_of(:publication) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
+    it { is_expected.to have_many(:contributor_names).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:taggings).inverse_of(:publication).class_name(:PublicationTagging) }
     it { is_expected.to have_many(:tags).through(:taggings) }
@@ -77,7 +78,7 @@ describe Publication, type: :model do
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
-  it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:contributor_names).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:taggings).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
@@ -91,7 +92,7 @@ describe Publication, type: :model do
 
   describe "deleting a publication with contributors" do
     let(:p) { create :publication }
-    let!(:c) { create :contributor, publication: p}
+    let!(:c) { create :contributor_name, publication: p}
     it "also deletes the publication's authorships" do
       p.destroy
       expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -200,12 +201,43 @@ describe Publication, type: :model do
   end
 
   describe '.open_access' do
-    let!(:pub1) { create :publication, open_access_url: nil, user_submitted_open_access_url: nil }
-    let!(:pub2) { create :publication, open_access_url: nil, user_submitted_open_access_url: 'user_url1' }
-    let!(:pub3) { create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil}
-    let!(:pub4) { create :publication, open_access_url: 'url2', user_submitted_open_access_url: 'user_url2' }
+    let!(:pub1) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub2) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub3) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: nil}
+    let!(:pub4) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub5) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub6) { create :publication,
+                         open_access_url: '',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: '',
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: '' }
+                         
     it "returns publications that have an open access URL" do
-      expect(Publication.open_access).to match_array [pub2, pub3, pub4]
+      expect(Publication.open_access).to match_array [pub2, pub3, pub4, pub5]
     end
   end
 
@@ -383,12 +415,12 @@ describe Publication, type: :model do
 
   describe '#contributors' do
     let(:pub) { create :publication }
-    let!(:c1) { create :contributor, position: 2, publication: pub }
-    let!(:c2) { create :contributor, position: 3, publication: pub }
-    let!(:c3) { create :contributor, position: 1, publication: pub }
+    let!(:c1) { create :contributor_name, position: 2, publication: pub }
+    let!(:c2) { create :contributor_name, position: 3, publication: pub }
+    let!(:c3) { create :contributor_name, position: 1, publication: pub }
 
     it "returns the publication's contributors in order by position" do
-      expect(pub.contributors).to eq [c3, c1, c2]
+      expect(pub.contributor_names).to eq [c3, c1, c2]
     end
   end
 
@@ -586,66 +618,12 @@ describe Publication, type: :model do
 
   describe '#preferred_open_access_url' do
     let(:pub) { Publication.new }
-    context "when the publication has an open access URL" do
-      before { pub.open_access_url = 'A URL' }
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-    end
+    let(:policy) { double 'preferred open access policy', url: 'preferred_url' }
 
-    context "when the publication's open access URL is blank" do
-      before { pub.open_access_url = '' }
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the user-submitted open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'User URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-    end
-    
-    context "when the publication does not have an open access URL" do
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the user-submitted open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'User URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
+
+    it "returns the preferred URL" do
+      expect(pub.preferred_open_access_url).to eq 'preferred_url'
     end
   end
 
@@ -694,69 +672,24 @@ describe Publication, type: :model do
     let!(:pub) { create :publication }
     let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
     let!(:auth2) { create :authorship, publication: pub }
+    let(:policy) { double 'open access policy', url: url }
+    let(:url) { nil }
+
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.no_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -764,65 +697,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -834,65 +718,16 @@ describe Publication, type: :model do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -900,65 +735,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -969,69 +755,24 @@ describe Publication, type: :model do
     let!(:pub) { create :publication }
     let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
     let!(:auth2) { create :authorship, publication: pub }
+    let(:policy) { double 'open access policy', url: url }
+    let(:url) { nil }
+
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.has_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1039,65 +780,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1109,65 +801,16 @@ describe Publication, type: :model do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1175,65 +818,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end

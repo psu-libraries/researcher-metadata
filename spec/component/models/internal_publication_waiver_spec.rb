@@ -26,7 +26,7 @@ describe InternalPublicationWaiver, type: :model do
     it { is_expected.to have_one(:external_publication_waiver) }
   end
 
-  it { is_expected.to delegate_method(:title).to(:authorship) }
+  it { is_expected.to delegate_method(:title).to(:authorship).allow_nil }
   it { is_expected.to delegate_method(:abstract).to(:authorship) }
   it { is_expected.to delegate_method(:doi).to(:authorship) }
   it { is_expected.to delegate_method(:published_by).to(:authorship) }

@@ -31,6 +31,7 @@ class ExternalPublicationWaiver < ApplicationRecord
       field(:user) do
         pretty_value { value.name }
       end
+      field(:created_at)
     end
 
     show do
@@ -46,6 +47,31 @@ class ExternalPublicationWaiver < ApplicationRecord
       end
       field(:internal_publication_waiver)
       field(:matching_publications)
+      field(:created_at)
+      field(:updated_at)
+    end
+
+    create do
+      field(:user) do
+        inline_add false
+        inline_edit false
+      end
+      field(:publication_title)
+      field(:reason_for_waiver)
+      field(:abstract)
+      field(:doi)
+      field(:journal_title)
+      field(:publisher)
+    end
+
+    edit do
+      field(:user) { read_only true }
+      field(:publication_title)
+      field(:reason_for_waiver)
+      field(:abstract)
+      field(:doi)
+      field(:journal_title)
+      field(:publisher)
     end
   end
 end

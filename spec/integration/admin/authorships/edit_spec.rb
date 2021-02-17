@@ -21,7 +21,7 @@ feature "Admin authorship edit page", type: :feature do
       before { visit rails_admin.edit_path(model_name: :authorship, id: auth.id) }
 
       it "shows the edit authorship heading" do
-        expect(page).to have_content "Edit Authorship 'Authorship ##{auth.id}'"
+        expect(page).to have_content "Edit Authorship '##{auth.id} (Bob Testuser - A Test Publication)'"
       end
 
       it "shows a link to the authorship's publication" do

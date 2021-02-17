@@ -279,6 +279,16 @@
         <ROLE>Author</ROLE>
         <PERCENT/>
       </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH id="190706413571">
+        <FACULTY_NAME>237294</FACULTY_NAME>
+        <FNAME>Emily</FNAME>
+        <MNAME/>
+        <LNAME>Testington</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
       <AUTHORS_ETAL>true</AUTHORS_ETAL>
       <PUBLISHER>Test Publisher 1</PUBLISHER>
       <PUBCTYST/>

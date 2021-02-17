@@ -64,7 +64,11 @@
             If there isn't already an open access version of your work available on the web, please
             consider uploading it to ScholarSphere.
           </p>
-          <%= button_to "Upload", scholarsphere_uploads_path, remote: false, class: 'btn btn-primary' %>
+          <%= button_to "Upload",
+                        scholarsphere_uploads_path,
+                        remote: false,
+                        class: 'btn btn-primary',
+                        data: {disable_with: "Upload"} %>
         </div>
       </div>
       <div>
