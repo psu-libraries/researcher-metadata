@@ -41,6 +41,7 @@ Rails.application.routes.draw do
   get 'profile/publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
   get 'profile/presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
   get 'profile/performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
+  get 'profile/others/edit' => 'profiles#edit_others', as: :edit_profile_others
   get 'profile/bio' => 'profiles#bio', as: :profile_bio
   post 'profile/bio/orcid/employments/:membership_id' => 'orcid_employments#create', as: :orcid_employments
   post 'profile/bio/orcid/works' => 'orcid_works#create', as: :orcid_works

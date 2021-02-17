@@ -45,7 +45,7 @@ class AuthorshipDecorator < SimpleDelegator
   end
 
   def profile_management_pub_title
-    if no_open_access_information?
+    if no_open_access_information? && is_journal_article?
       view_context.link_to title, view_context.edit_open_access_publication_path(publication)
     else
       title

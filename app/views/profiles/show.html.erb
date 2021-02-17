@@ -114,6 +114,9 @@
           <% if @profile.news_stories.any? %>
             <li class="tabs-title"><a href="#news" data-tabs-target="news">News</a></li>
           <% end %>
+          <% if @profile.others.any? %>
+            <li class="tabs-title"><a href="#others" data-tabs-target="others">Others</a></li>
+          <% end %>
         </ul>
         <div class="tabs-content" data-tabs-content="profile-tabs" id="profile-tabs-content">
           <% if @profile.has_bio_info? %>
@@ -200,6 +203,14 @@
               <h4>News</h4>
               <% @profile.news_stories.each do |s| %>
                 <p><%= s.html_safe %></p>
+              <% end %>
+            </div>
+          <% end %>
+
+          <% if @profile.others.any? %>
+            <div class="tabs-panel" id="others">
+              <% @profile.others.each do |o| %>
+                <p><%= o.html_safe %></p>
               <% end %>
             </div>
           <% end %>

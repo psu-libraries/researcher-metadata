@@ -468,6 +468,10 @@ class Publication < ApplicationRecord
     doi.present? || url.present? || preferred_open_access_url.present?
   end
 
+  def is_journal_article?
+    publication_type =~ /Journal Article/
+  end
+
   def all_non_duplicate_ids
     (non_duplicate_ids.uniq - [id]).sort
   end

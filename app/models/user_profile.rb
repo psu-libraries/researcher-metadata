@@ -46,6 +46,7 @@ class UserProfile
 
   def publication_records
     user_query.publications.
+      where("publications.publication_type ~* 'Journal Article'").
       order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
@@ -112,6 +113,24 @@ class UserProfile
     degrees.map do |d|
       "#{d.degree}, #{d.emphasis_or_major} - #{d.institution} - #{d.end_year}"
     end
+  end
+
+  def other_records
+    user_query.publications.
+      where("publications.publication_type !~* 'Journal Article'").
+      order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+  end
+
+  def others
+    authorships = other_records.where('authorships.visible_in_profile is true')
+    html_lines = []
+    Publication.publication_types.each do |pubtype|
+      authorships.where('publications.publication_type = ?', pubtype.to_s).each_with_index do |p, i|
+        html_lines << "<h4>#{pubtype.pluralize}</h4>" if i == 0
+        html_lines << AuthorshipDecorator.new(p).label
+      end
+    end
+    html_lines
   end
 
   def has_bio_info?
