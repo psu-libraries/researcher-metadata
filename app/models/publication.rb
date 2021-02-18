@@ -469,7 +469,7 @@ class Publication < ApplicationRecord
   end
 
   def is_journal_article?
-    publication_type =~ /Journal Article/
+    publication_type.include? 'Journal Article'
   end
 
   def all_non_duplicate_ids

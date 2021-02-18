@@ -2182,4 +2182,20 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#is_journal_article?' do
+    context 'when publication is a Journal Article' do
+      let!(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+      it 'returns true' do
+        expect(pub1.is_journal_article?).to eq true
+      end
+    end
+
+    context 'when publication is a Book' do
+      let!(:pub2) { FactoryBot.create :publication, publication_type: 'Book' }
+      it 'returns false' do
+        expect(pub2.is_journal_article?).to eq false
+      end
+    end
+  end
 end
