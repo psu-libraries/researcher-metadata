@@ -172,6 +172,17 @@ describe AuthorshipDecorator do
             end
           end
         end
+
+      end
+    end
+
+    context "when the given object is not a journal article" do
+      context "when the given object has a title" do
+        let(:title) { 'Test Title' }
+        before { allow(auth).to receive(:is_journal_article?).and_return false }
+        it "returns a label for the given object with the publication title" do
+          expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
+        end
       end
     end
   end
