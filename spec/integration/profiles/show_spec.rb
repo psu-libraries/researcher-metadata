@@ -36,6 +36,12 @@ feature "Profile page", type: :feature do
                        title: 'Third Publication',
                        journal_title: 'Journal 3',
                        published_on: Date.new(2013, 1, 1) }
+  let!(:pub4) { create :publication,
+                       publication_type: 'Conference Proceeding',
+                       visible: true,
+                       title: 'Fourth Publication',
+                       journal_title: 'Journal 4',
+                       published_on: Date.new(2010, 1, 1) }
   let!(:pres1) { create :presentation,
                         visible: true,
                         title: 'First Presentation',
@@ -82,6 +88,7 @@ feature "Profile page", type: :feature do
     create :authorship, user: user, publication: pub1
     create :authorship, user: user, publication: pub2
     create :authorship, user: user, publication: pub3
+    create :authorship, user: user, publication: pub4
 
     create :presentation_contribution, user: user, presentation: pres1
     create :presentation_contribution, user: user, presentation: pres2
@@ -267,6 +274,8 @@ feature "Profile page", type: :feature do
       expect(page).to have_content 'Books'
       expect(page).not_to have_content 'Letters'
       expect(page).to have_content 'Third Publication, Journal 3, 2013'
+      expect(page).to have_content 'Conference Proceedings'
+      expect(page).to have_content 'Fourth Publication, Journal 4, 2010'
     end
   end
 end

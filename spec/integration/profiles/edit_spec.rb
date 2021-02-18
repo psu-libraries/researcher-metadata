@@ -318,7 +318,7 @@ describe "editing profile preferences" do
       it_behaves_like "a profile management page"
 
       it "shows the correct heading content" do
-        expect(page).to have_content "Manage Other Profile Works"
+        expect(page).to have_content "Manage Non-Article Profile Publications"
       end
 
       context "when the user has other publications" do
@@ -330,7 +330,7 @@ describe "editing profile preferences" do
         let!(:pub_2) { create :publication,
                               publication_type: 'Chapter',
                               title: "Title 2",
-                              visible: true,
+                              visible: false,
                               published_on: Date.new(2008, 1, 1) }
         let!(:pub_3) { create :publication,
                               publication_type: 'Letter',
@@ -338,9 +338,9 @@ describe "editing profile preferences" do
                               visible: true,
                               journal_title: 'Journal 1',
                               published_on: Date.new(2008, 1, 1) }
-        let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: true }
-        let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
-        let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: true }
+        let!(:auth_1) { create :authorship, publication: pub_1, user: user }
+        let!(:auth_2) { create :authorship, publication: pub_2, user: user }
+        let!(:auth_3) { create :authorship, publication: pub_3, user: user }
 
         before { visit edit_profile_others_path }
 
