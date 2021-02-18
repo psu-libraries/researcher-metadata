@@ -21,6 +21,15 @@ feature "Admin publishers list", type: :feature do
 
         expect(page).to have_content publisher2.id
         expect(page).to have_content 'Second Publisher'
+
+        within '.table' do
+          expect(page).to have_content 'Publication count'
+        end
+      end
+
+      it "shows a link to sort the list by number of publications" do
+        expect(page).to have_link "Ordered By Publication Count",
+                                  href: rails_admin.index_path(model_name: :publisher, params: {model_name: :publisher, scope: :ordered_by_publication_count})
       end
     end
 

@@ -23,4 +23,39 @@ describe Journal, type: :model do
     it { is_expected.to belong_to(:publisher).inverse_of(:journals).optional }
     it { is_expected.to have_many(:publications).inverse_of(:journal) }
   end
+
+  describe '.ordered_by_publication_count' do
+    let!(:j1) { create :journal, title: 'a' }
+    let!(:j2) { create :journal, title: 'b' }
+    let!(:j3) { create :journal, title: 'c' }
+
+    before do
+      2.times { create :publication, journal: j2 }
+      create :publication, journal: j3
+    end
+
+    it "returns all journal records in order by the number of publications with which they're associated" do
+      expect(Journal.order(:title).ordered_by_publication_count).to eq [j2, j3, j1]
+    end
+  end
+
+  describe '.ordered_by_title' do
+    let!(:j1) { create :journal, title: 'c' }
+    let!(:j2) { create :journal, title: 'a' }
+    let!(:j3) { create :journal, title: 'b' }
+
+    it "returns all journal records in alphabetical order by name" do
+      expect(Journal.ordered_by_title).to eq [j2, j3, j1]
+    end
+  end
+
+  describe '#publication_count' do
+    let!(:journal) { create :journal }
+    before do
+      2.times { create :publication, journal: journal }
+    end
+    it "returns the number of publications that are associated with the journal" do
+      expect(journal.publication_count).to eq 2
+    end
+  end
 end
