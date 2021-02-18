@@ -510,11 +510,14 @@ describe Publication, type: :model do
   end
 
   describe '#published_by' do
-    let(:pub) { Publication.new(publisher_name: publisher, journal_title: jt) }
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', publisher_name: pn, journal_title: jt }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return policy }
+
     context "when the publication has a journal title" do
       let(:jt) { "The Journal" }
       context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
+        let(:pn) { "The Publisher" }
 
         it "returns the journal title" do
           expect(pub.published_by).to eq "The Journal"
@@ -522,15 +525,7 @@ describe Publication, type: :model do
       end
 
       context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns the journal title" do
-          expect(pub.published_by).to eq "The Journal"
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
+        let(:pn) { nil }
 
         it "returns the journal title" do
           expect(pub.published_by).to eq "The Journal"
@@ -541,7 +536,7 @@ describe Publication, type: :model do
     context "when the publication does not have a journal title" do
       let(:jt) { nil }
       context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
+        let(:pn) { "The Publisher" }
 
         it "returns the publisher" do
           expect(pub.published_by).to eq "The Publisher"
@@ -549,42 +544,7 @@ describe Publication, type: :model do
       end
 
       context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-    end
-
-    context "when the publication's journal title is blank" do
-      let(:jt) { "" }
-      context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
-
-        it "returns the publisher" do
-          expect(pub.published_by).to eq "The Publisher"
-        end
-      end
-
-      context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
+        let(:pn) { nil }
 
         it "returns nil" do
           expect(pub.published_by).to be_nil
@@ -2175,6 +2135,24 @@ describe Publication, type: :model do
       it "returns false" do
         expect(pub.has_single_import_from_ai?).to eq false
       end
+    end
+  end
+
+  describe '#preferred_journal_title' do
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', journal_title: 'preferred title' }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
+    it 'delegates to the preferred journal info policy' do
+      expect(pub.preferred_journal_title).to eq 'preferred title'
+    end
+  end
+
+  describe '#preferred_publisher_name' do
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', publisher_name: 'preferred name' }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
+    it 'delegates to the preferred journal info policy' do
+      expect(pub.preferred_publisher_name).to eq 'preferred name'
     end
   end
 end

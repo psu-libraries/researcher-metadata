@@ -20,7 +20,7 @@
                             remote: false %>
           <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
           <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
-          <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
+          <td><%= p.preferred_journal_title.present? ? p.preferred_journal_title : '' %></td>
           <td><%= p.users.map { |u| u.name }.join(', ') %>
         </tr>
       <% end %>

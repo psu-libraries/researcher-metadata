@@ -4,22 +4,9 @@ describe OrcidWork do
   let(:date) { Date.yesterday }
   let(:publication) { double 'publication',
                              title: 'Test Title',
-                             publication_type: 'Academic Journal Article',
-                             journal_title: 'Test Journal',
-                             publisher_name: 'Test Publisher',
+                             preferred_journal_title: 'Test Journal',
                              secondary_title: 'Secondary Test Title',
-                             status: 'Published',
-                             volume: '1',
-                             issue: '2',
-                             edition: '3',
-                             page_range: '4-5',
-                             url: 'https://url.org',
-                             open_access_url: nil,
-                             isbn: nil,
-                             issn: nil,
-                             doi: 'https://doi.org/10.0/1234/4567',
                              abstract: 'Test Abstract',
-                             authors_et_al: false,
                              published_on: date
   }
   let(:authorship) { double 'authorship',
