@@ -33,4 +33,13 @@ $(document).on('turbolinks:load', ->
         data: $(this).sortable('serialize')
       )
   )
+
+  $('tbody#others').sortable(
+    update: (event, ui) ->
+      $.ajax(
+        method: 'PUT',
+        url: '/authorships/sort',
+        data: $(this).sortable('serialize')
+      )
+  )
 )

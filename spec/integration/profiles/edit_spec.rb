@@ -194,7 +194,7 @@ describe "editing profile preferences" do
                               title: "Bob's Non-Open Access Publication",
                               visible: true }
         let!(:pub_6) { create :publication,
-                              title: "Bob's Pending ScholarSphere Publication",
+                              title: "Bob's Pending Scholarsphere Publication",
                               visible: true }
         let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
         let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
@@ -202,10 +202,10 @@ describe "editing profile preferences" do
         let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
         let!(:auth_5) { create :authorship, publication: pub_5, user: user, visible_in_profile: false }
         let!(:auth_6) { create :authorship,
-                                publication: pub_6,
-                                user: user,
-                                visible_in_profile: false,
-                                scholarsphere_uploaded_at: Time.current }
+                               publication: pub_6,
+                               user: user,
+                               visible_in_profile: false,
+                               scholarsphere_uploaded_at: Time.current }
         let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
 
         before { visit edit_profile_publications_path }
@@ -220,8 +220,8 @@ describe "editing profile preferences" do
           expect(page).not_to have_link "Bob's Other Open Access Publication"
           expect(page).to have_content "Bob's Non-Open Access Publication"
           expect(page).not_to have_link "Bob's Non-Open Access Publication"
-          expect(page).to have_content "Bob's Pending ScholarSphere Publication"
-          expect(page).not_to have_link "Bob's Pending ScholarSphere Publication"
+          expect(page).to have_content "Bob's Pending Scholarsphere Publication"
+          expect(page).not_to have_link "Bob's Pending Scholarsphere Publication"
         end
 
         it "shows an icon to indicate when we don't have open access information for a publication" do
@@ -299,7 +299,6 @@ describe "editing profile preferences" do
         end
       end
     end
-    
     context "when the user is not signed in" do
       before { visit edit_profile_publications_path }
 
@@ -308,6 +307,63 @@ describe "editing profile preferences" do
       end
     end
   end
+
+  feature "the profile others edit page" do
+    context "when the user is signed in" do
+      before do
+        authenticate_as(user)
+        visit edit_profile_others_path
+      end
+
+      it_behaves_like "a profile management page"
+
+      it "shows the correct heading content" do
+        expect(page).to have_content "Manage Other Profile Works"
+      end
+
+      context "when the user has other publications" do
+        let!(:pub_1) { create :publication,
+                              publication_type: 'Chapter',
+                              title: "Title 1",
+                              visible: true,
+                              published_on: Date.new(2007, 1, 1) }
+        let!(:pub_2) { create :publication,
+                              publication_type: 'Chapter',
+                              title: "Title 2",
+                              visible: true,
+                              published_on: Date.new(2008, 1, 1) }
+        let!(:pub_3) { create :publication,
+                              publication_type: 'Letter',
+                              title: "Title 1",
+                              visible: true,
+                              journal_title: 'Journal 1',
+                              published_on: Date.new(2008, 1, 1) }
+        let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: true }
+        let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
+        let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: true }
+
+        before { visit edit_profile_others_path }
+
+        it "shows descriptions of the user's visible other publications" do
+          expect(page).to have_content "Chapter"
+          expect(page).to have_content "Title 1, 2007"
+          expect(page).to_not have_content "Title 2, 2008"
+          expect(page).to have_content "Letter"
+          expect(page).to have_content "Title 1, Journal 1, 2008"
+        end
+      end
+    end
+
+    context "when the user is not signed in" do
+      before { visit edit_profile_others_path }
+
+      it "does not allow the user to visit the page" do
+        expect(page.current_path).not_to eq edit_profile_others_path
+      end
+    end
+  end
+
+
 
   feature "the profile presentations edit page" do
     context "when the user is signed in" do

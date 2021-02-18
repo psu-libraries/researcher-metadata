@@ -1,12 +1,14 @@
 <div class="manage-profile-list">
-  <h4>Manage Profile Presentations</h4>
+  <h4>Manage Non-Article Profile Publications</h4>
 
   <table class="table">
     <thead>
     <tr>
       <th></th>
       <th>Publication</th>
+      <th>Publication Type</th>
       <th>Visible in profile</th>
+      <th></th>
     </tr>
     </thead>
     <tbody id="others">
@@ -14,10 +16,14 @@
         <tr id="<%= dom_id(a) %>">
           <td><%= fa_icon 'arrows-v' %></td>
           <td class="pub-title"><%= a.profile_management_label.html_safe %></td>
+          <td><%= a.publication.publication_type.html_safe %></td>
           <td class="visibility">
             <%= form_with model: a, method: :put, class: 'visibility-control', remote: true do |f| %>
               <%= f.check_box :visible_in_profile, class: 'visibility-toggle', id: dom_id(a) %>
             <% end %>
+          </td>
+          <td>
+            <%= render partial: 'orcid_export_button', locals: { a: a } %>
           </td>
         </tr>
       <% end %>

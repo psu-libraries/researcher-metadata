@@ -30,6 +30,12 @@ feature "Profile page", type: :feature do
                        journal_title: 'Journal 2',
                        published_on: Date.new(2011, 1, 1),
                        open_access_url: "https://example.org/pubs/123.pdf" }
+  let!(:pub3) { create :publication,
+                       publication_type: 'Book',
+                       visible: true,
+                       title: 'Third Publication',
+                       journal_title: 'Journal 3',
+                       published_on: Date.new(2013, 1, 1) }
   let!(:pres1) { create :presentation,
                         visible: true,
                         title: 'First Presentation',
@@ -75,6 +81,7 @@ feature "Profile page", type: :feature do
   before do
     create :authorship, user: user, publication: pub1
     create :authorship, user: user, publication: pub2
+    create :authorship, user: user, publication: pub3
 
     create :presentation_contribution, user: user, presentation: pres1
     create :presentation_contribution, user: user, presentation: pres2
@@ -252,6 +259,14 @@ feature "Profile page", type: :feature do
       expect(page).to have_content 'Grants'
       expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
       expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
+    end
+  end
+
+  it "shows the requested user's other publications in the Others tab" do
+    within '#others' do
+      expect(page).to have_content 'Books'
+      expect(page).not_to have_content 'Letters'
+      expect(page).to have_content 'Third Publication, Journal 3, 2013'
     end
   end
 end
