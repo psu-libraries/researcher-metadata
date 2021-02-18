@@ -5,7 +5,7 @@ This user has <%= @pubs.count %> publications.
   <% @pubs.each do |p| %>
     <li>
       <%= p.title %>,
-      <%= p.journal_title %>,
+      <%= p.preferred_journal_title %>,
       <%= "#{p.published_on.year}," if p.published_on.present? %>
       <%= "#{p.volume}," if p.volume.present? %>
       <%= "#{p.edition}," if p.edition.present? %>

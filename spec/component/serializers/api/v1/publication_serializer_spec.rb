@@ -17,16 +17,19 @@ describe API::V1::PublicationSerializer do
                              abstract: 'an abstract',
                              total_scopus_citations: 1000,
                              doi: 'publication DOI',
-                             open_access_url: 'OA URL'}
+                             open_access_url: 'OA URL',
+                             journal: journal }
   let(:date) { nil }
+  let(:journal) { create :journal, title: 'test journal title', publisher: publisher }
+  let(:publisher) { create :publisher, name: 'test publisher name' }
 
   describe "data attributes" do
     subject { serialized_data_attributes(publication) }
     it { is_expected.to include(:title => 'publication 1') }
     it { is_expected.to include(:secondary_title => 'pub 1 subtitle') }
-    it { is_expected.to include(:journal_title => 'prestegious journal') }
+    it { is_expected.to include(:journal_title => 'test journal title') }
     it { is_expected.to include(:publication_type => 'Journal Article') }
-    it { is_expected.to include(:publisher => 'a publisher') }
+    it { is_expected.to include(:publisher => 'test publisher name') }
     it { is_expected.to include(:status => 'published') }
     it { is_expected.to include(:volume => '1') }
     it { is_expected.to include(:issue => '2') }

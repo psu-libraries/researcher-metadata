@@ -33,7 +33,10 @@ class PurePublicationImporter
 
               if pi.persisted?
                 if p.updated_by_user_at.present?
-                  attrs = {total_scopus_citations: publication['totalScopusCitations']}
+                  attrs = {
+                    total_scopus_citations: publication['totalScopusCitations'],
+                    journal: journal(publication)
+                  }
                   attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
                   pi.publication.update_attributes!(attrs)
                 else
@@ -107,7 +110,7 @@ class PurePublicationImporter
       page_range: publication['pages'],
       volume: publication['volume'],
       issue: publication['journalNumber'],
-      journal_title: publication['journalAssociation']['title']['value'],
+      journal: journal(publication),
       issn: issn(publication),
       status: status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value'],
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
@@ -151,5 +154,9 @@ class PurePublicationImporter
       end
       v.try('[]', 'doi')
     end
+  end
+
+  def journal(publication)
+    Journal.find_by(pure_uuid: publication['journalAssociation']['journal']['uuid'])
   end
 end
