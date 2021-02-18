@@ -12,6 +12,7 @@ describe AuthorshipDecorator do
                        scholarsphere_upload_pending?: pending,
                        open_access_waived?: waived,
                        no_open_access_information?: no_info,
+                       is_journal_article?: true,
                        publication: pub }
   let(:title) { '' }
   let(:publisher) { '' }
