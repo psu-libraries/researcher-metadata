@@ -41,7 +41,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: "https://api.openaccessbutton.org/find?id=10.094/PHI-A-2008-0129\u201302" }
 
       it "does not raise an error" do
-        expect { importer.call }.not_to raise_error URI::InvalidURIError
+        expect { importer.call }.not_to raise_error
       end
     end
 
