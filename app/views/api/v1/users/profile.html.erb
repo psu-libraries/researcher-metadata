@@ -41,6 +41,16 @@
     </ul>
   </div>
 <% end %>
+<% if @profile.other_publications.any? %>
+  <div id="md-other-publications">
+    <h3>Other Publications</h3>
+    <ul>
+      <% @profile.other_publications.each do |p| %>
+        <li><%= p.html_safe %></li>
+      <% end %>
+    </ul>
+  </div>
+<% end %>
 <% if @profile.grants.any? %>
   <div id="md-grants">
     <h3>Grants</h3>

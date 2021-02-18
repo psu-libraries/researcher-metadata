@@ -115,14 +115,14 @@ class UserProfile
     end
   end
 
-  def other_records
+  def other_publication_records
     user_query.publications.
       where("publications.publication_type !~* 'Journal Article'").
       order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
-  def others
-    authorships = other_records.where('authorships.visible_in_profile is true')
+  def other_publications
+    authorships = other_publication_records.where('authorships.visible_in_profile is true')
     html_lines = []
     Publication.publication_types.each do |pubtype|
       authorships.where('publications.publication_type = ?', pubtype.to_s).each_with_index do |p, i|

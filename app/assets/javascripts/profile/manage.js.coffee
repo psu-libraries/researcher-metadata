@@ -34,7 +34,7 @@ $(document).on('turbolinks:load', ->
       )
   )
 
-  $('tbody#others').sortable(
+  $('tbody#other_publications').sortable(
     update: (event, ui) ->
       $.ajax(
         method: 'PUT',

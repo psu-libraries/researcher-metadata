@@ -308,11 +308,11 @@ describe "editing profile preferences" do
     end
   end
 
-  feature "the profile others edit page" do
+  feature "the profile other publications edit page" do
     context "when the user is signed in" do
       before do
         authenticate_as(user)
-        visit edit_profile_others_path
+        visit edit_profile_other_publications_path
       end
 
       it_behaves_like "a profile management page"
@@ -342,7 +342,7 @@ describe "editing profile preferences" do
         let!(:auth_2) { create :authorship, publication: pub_2, user: user }
         let!(:auth_3) { create :authorship, publication: pub_3, user: user }
 
-        before { visit edit_profile_others_path }
+        before { visit edit_profile_other_publications_path }
 
         it "shows descriptions of the user's visible other publications" do
           expect(page).to have_content "Chapter"
@@ -355,10 +355,10 @@ describe "editing profile preferences" do
     end
 
     context "when the user is not signed in" do
-      before { visit edit_profile_others_path }
+      before { visit edit_profile_other_publications_path }
 
       it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq edit_profile_others_path
+        expect(page.current_path).not_to eq edit_profile_other_publications_path
       end
     end
   end

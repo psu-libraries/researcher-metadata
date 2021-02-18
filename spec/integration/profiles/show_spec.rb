@@ -270,7 +270,7 @@ feature "Profile page", type: :feature do
   end
 
   it "shows the requested user's other publications in the Others tab" do
-    within '#others' do
+    within '#other_publications' do
       expect(page).to have_content 'Books'
       expect(page).not_to have_content 'Letters'
       expect(page).to have_content 'Third Publication, Journal 3, 2013'

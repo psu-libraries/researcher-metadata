@@ -11,8 +11,8 @@
       <th></th>
     </tr>
     </thead>
-    <tbody id="others">
-      <% @user_others.each do |a| %>
+    <tbody id="other_publications">
+      <% @user_other_publications.each do |a| %>
         <tr id="<%= dom_id(a) %>">
           <td><%= fa_icon 'arrows-v' %></td>
           <td class="pub-title"><%= a.profile_management_label.html_safe %></td>

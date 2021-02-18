@@ -22,10 +22,10 @@ class ProfilesController < ProfileManagementController
       map { |p| p.user_performances.find_by(user: current_user) }
   end
 
-  def edit_others
-    authorships = UserProfile.new(current_user).other_records.
+  def edit_other_publications
+    authorships = UserProfile.new(current_user).other_publication_records.
       map { |p| p.authorships.find_by(user: current_user) }
-    @user_others = authorships.map { |a| AuthorshipDecorator.new(a, view_context) }
+    @user_other_publications = authorships.map { |a| AuthorshipDecorator.new(a, view_context) }
   end
 
   def bio
