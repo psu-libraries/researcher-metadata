@@ -32,9 +32,8 @@ class Publisher < ApplicationRecord
     end
 
     export do
-      configure :publication_count do
-        show
-      end
+      configure :publication_count do show; end
+      configure :psu_publication_count do show; end
     end
   end
 end
