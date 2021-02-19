@@ -39,6 +39,34 @@ describe Journal, type: :model do
     end
   end
 
+    describe '#psu_publication_count' do
+    let!(:journal) { create :journal }
+    let!(:pub1) { create :publication, journal: journal, published_on: Date.new(2001, 1, 1) }
+    let!(:pub2) { create :publication, journal: journal }
+    let!(:pub3) { create :publication, journal: journal, published_on: Date.new(1999, 1, 1) }
+    let!(:pub4) { create :publication, journal: journal, published_on: Date.new(2001, 1, 2) }
+    let!(:pub5) { create :publication, journal: journal, published_on: Date.new(2003, 1, 1) }
+    let!(:user) { create :user }
+    let!(:org) { create :organization }
+
+    before do
+      create :authorship, user: user, publication: pub1
+      create :authorship, user: user, publication: pub2
+      create :authorship, user: user, publication: pub3
+      create :authorship, user: user, publication: pub4
+      create :authorship, user: user, publication: pub5
+
+      create :user_organization_membership,
+             user: user,
+             organization: org,
+             started_on: Date.new(2000, 1, 1),
+             ended_on: Date.new(2002, 1, 1)
+    end
+    it "returns the number of publications associated with the publisher that were published by PSU faculty while they were PSU faculty" do
+      expect(journal.psu_publication_count).to eq 2
+    end
+  end
+
   describe '.ordered_by_title' do
     let!(:j1) { create :journal, title: 'c' }
     let!(:j2) { create :journal, title: 'a' }

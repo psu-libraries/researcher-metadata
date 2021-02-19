@@ -59,4 +59,34 @@ describe Publisher, type: :model do
       expect(publisher.publication_count).to eq 4
     end
   end
+
+  describe '#psu_publication_count' do
+    let!(:publisher) { create :publisher }
+    let!(:journal1) { create :journal, publisher: publisher }
+    let!(:journal2) { create :journal, publisher: publisher }
+    let!(:pub1) { create :publication, journal: journal1, published_on: Date.new(2001, 1, 1) }
+    let!(:pub2) { create :publication, journal: journal2 }
+    let!(:pub3) { create :publication, journal: journal2, published_on: Date.new(1999, 1, 1) }
+    let!(:pub4) { create :publication, journal: journal2, published_on: Date.new(2001, 1, 2) }
+    let!(:pub5) { create :publication, journal: journal2, published_on: Date.new(2003, 1, 1) }
+    let!(:user) { create :user }
+    let!(:org) { create :organization }
+
+    before do
+      create :authorship, user: user, publication: pub1
+      create :authorship, user: user, publication: pub2
+      create :authorship, user: user, publication: pub3
+      create :authorship, user: user, publication: pub4
+      create :authorship, user: user, publication: pub5
+
+      create :user_organization_membership,
+             user: user,
+             organization: org,
+             started_on: Date.new(2000, 1, 1),
+             ended_on: Date.new(2002, 1, 1)
+    end
+    it "returns the number of publications associated with the publisher that were published by PSU faculty while they were PSU faculty" do
+      expect(publisher.psu_publication_count).to eq 2
+    end
+  end
 end

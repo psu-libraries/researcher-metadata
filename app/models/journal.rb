@@ -9,12 +9,17 @@ class Journal < ApplicationRecord
     publications.count
   end
 
+  def psu_publication_count
+    publications.published_during_membership.count
+  end
+
   rails_admin do
     list do
       scopes [:ordered_by_title, :ordered_by_publication_count]
       field(:id)
       field(:title)
       field(:publication_count)
+      field(:psu_publication_count) { label 'PSU publication count' }
     end
 
     show do
@@ -22,6 +27,7 @@ class Journal < ApplicationRecord
       field(:pure_uuid)
       field(:publisher)
       field(:publication_count)
+      field(:psu_publication_count) { label 'PSU publication count' }
       field(:publications)
     end
 
