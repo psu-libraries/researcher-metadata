@@ -39,6 +39,12 @@ describe Journal, type: :model do
     end
   end
 
+  describe '.ordered_by_psu_publication_count' do
+    xit "returns all journal records in order by the number of their publications that were authored by PSU faculty at the University" do
+      
+    end
+  end
+
     describe '#psu_publication_count' do
     let!(:journal) { create :journal }
     let!(:pub1) { create :publication, journal: journal, published_on: Date.new(2001, 1, 1) }

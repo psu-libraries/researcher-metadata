@@ -31,6 +31,11 @@ feature "Admin journals list", type: :feature do
         expect(page).to have_link "Ordered By Publication Count",
                                   href: rails_admin.index_path(model_name: :journal, params: {model_name: :journal, scope: :ordered_by_publication_count})
       end
+
+      it "shows a link to sort the list by number of Penn State publications" do
+        expect(page).to have_link "Ordered By PSU Publication Count",
+                                  href: rails_admin.index_path(model_name: :journal, params: {model_name: :journal, scope: :ordered_by_psu_publication_count})
+      end
     end
 
     describe "the page layout" do

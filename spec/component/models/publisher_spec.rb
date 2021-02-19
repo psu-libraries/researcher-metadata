@@ -37,6 +37,12 @@ describe Publisher, type: :model do
     end
   end
 
+  describe '.ordered_by_psu_publication_count' do
+    xit "returns all publisher records in order by the number of their publications that were authored by PSU faculty at the University" do
+      
+    end
+  end
+
   describe '.ordered_by_name' do
     let!(:p1) { create :publisher, name: 'c' }
     let!(:p2) { create :publisher, name: 'a' }
