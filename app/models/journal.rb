@@ -40,8 +40,8 @@ class Journal < ApplicationRecord
     end
 
     export do
-      configure :publication_count do show; end
-      configure :psu_publication_count do show; end
+      configure(:publication_count) { show }
+      configure(:psu_publication_count) { show }
     end
   end
 end
