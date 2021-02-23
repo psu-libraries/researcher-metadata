@@ -42,14 +42,13 @@
   </div>
 <% end %>
 <% if @profile.other_publications.any? %>
-  <div id="md-other-publications">
-    <h3>Other Publications</h3>
-    <ul>
-      <% @profile.other_publications.each do |p| %>
-        <%= "#{p}".html_safe if p.include? "</h4>" %>
-        <%= "<li>#{p}</li>".html_safe if p.include? "</span>" %>
+  <div class="tabs-panel" id="other-publications">
+    <% @profile.other_publications.each do |k, v| %>
+      <h4><%= k.to_s.html_safe %></h4>
+      <% v.each do |o| %>
+        <p><%= o.html_safe %></p>
       <% end %>
-    </ul>
+    <% end %>
   </div>
 <% end %>
 <% if @profile.grants.any? %>

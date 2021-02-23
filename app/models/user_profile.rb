@@ -123,14 +123,15 @@ class UserProfile
 
   def other_publications
     authorships = other_publication_records.where('authorships.visible_in_profile is true')
-    html_lines = []
-    Publication.publication_types.each do |pubtype|
-      authorships.where('publications.publication_type = ?', pubtype.to_s).each_with_index do |p, i|
-        html_lines << "<h4>#{pubtype.pluralize}</h4>" if i == 0
-        html_lines << AuthorshipDecorator.new(p).label
-      end
-    end
-    html_lines
+    Hash[
+      Publication.publication_types.map {
+        |p| [
+          p.pluralize, authorships.where('publications.publication_type = ?', p).map {
+            |a| AuthorshipDecorator.new(a).label
+          }
+        ]
+      }
+    ].delete_if { |k, v| v.empty? }
   end
 
   def has_bio_info?

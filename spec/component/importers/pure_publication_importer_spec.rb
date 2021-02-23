@@ -77,7 +77,7 @@ describe PurePublicationImporter do
 
           expect(p1.journal).to eq nil
           expect(p2.journal).to eq journal
-          expect(p3.journal_title).to eq 'Journal of Vascular and Interventional Radiology'
+          expect(p3.journal).to eq nil
 
           expect(p1.issn).to eq '0962-1849'
           expect(p2.issn).to eq '0272-4634'

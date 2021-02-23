@@ -209,8 +209,11 @@
 
           <% if @profile.other_publications.any? %>
             <div class="tabs-panel" id="other-publications">
-              <% @profile.other_publications.each do |o| %>
-                <p><%= o.html_safe %></p>
+              <% @profile.other_publications.each do |k, v| %>
+                <h4><%= k.to_s.html_safe %></h4>
+                <% v.each do |o| %>
+                  <p><%= o.html_safe %></p>
+                <% end %>
               <% end %>
             </div>
           <% end %>

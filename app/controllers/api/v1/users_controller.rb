@@ -1067,12 +1067,22 @@ module API::V1
                   end
                 end
                 property :other_publications do
-                  key :type, :array
-                  items do
-                    key :type, :string
-                    key :example, '<span class="publication-title">My Book</span>, <span class="journal-name">Journal of Science</span>, 2012'
-                    key :description, 'A string of HTML describing non-journal publications'
+                  key :type, :object
+                  property :Books do
+                    key :type, :array
+                    items do
+                      key :type, :string
+                      key :example, '<span class="publication-title">My Book</span>, <span class="journal-name">Journal of Science</span>, 2012'
+                    end
                   end
+                  property :Letters do
+                    key :type, :array
+                    items do
+                      key :type, :string
+                      key :example, '<span class="publication-title">My Letter</span>, <span class="journal-name">Journal of Physics</span>, 2011'
+                    end
+                  end
+                  key :description, 'A JSON object containing arrays of strings of HTML describing non-journal publications'
                 end
                 property :grants do
                   key :type, :array
