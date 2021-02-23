@@ -682,6 +682,10 @@ describe 'API::V1 Users' do
         let!(:pub5) { create :publication,
                              title: "Invisible Publication",
                              visible: false }
+        let!(:pub6) { create :publication,
+                             publication_type: 'Book',
+                             title: "Book Publication",
+                             visible: true }
 
         let!(:pres1) { create :presentation,
                               name: "Presentation Two",
@@ -761,6 +765,7 @@ describe 'API::V1 Users' do
           create :authorship, user: user, publication: pub3
           create :authorship, user: user, publication: pub4
           create :authorship, user: user, publication: pub5
+          create :authorship, user: user, publication: pub6
 
           create :presentation_contribution, user: user, presentation: pres1
           create :presentation_contribution, user: user, presentation: pres2
@@ -809,6 +814,10 @@ describe 'API::V1 Users' do
                       <li><span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015</li>
                       <li><span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010</li>
                   </ul>
+                </div>
+                <div class="tabs-panel" id="other-publications">
+                    <h4>Books</h4>
+                      <p><span class="publication-title">Book Publication</span></p>
                 </div>
                 <div id="md-grants">
                   <h3>Grants</h3>
