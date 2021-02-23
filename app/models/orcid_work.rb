@@ -70,7 +70,7 @@ class OrcidWork < OrcidResource
   end
 
   def contributors
-    publication.contributors
+    publication.contributor_names
   end
 
   def published_date
