@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_02_12_185439) do
+ActiveRecord::Schema.define(version: 2021_02_23_203349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -118,6 +118,14 @@ ActiveRecord::Schema.define(version: 2021_02_12_185439) do
     t.datetime "updated_at", null: false
     t.index ["activity_insight_identifier"], name: "index_education_history_items_on_activity_insight_identifier", unique: true
     t.index ["user_id"], name: "index_education_history_items_on_user_id"
+  end
+
+  create_table "email_errors", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_email_errors_on_user_id"
   end
 
   create_table "etds", force: :cascade do |t|
@@ -506,6 +514,7 @@ ActiveRecord::Schema.define(version: 2021_02_12_185439) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributor_names", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
+  add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
