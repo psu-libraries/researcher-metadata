@@ -21,6 +21,10 @@ class Organization < ApplicationRecord
     all_users.count
   end
 
+  def oa_email_user_count
+    all_users.needs_open_access_notification.count
+  end
+
   def publications
     # A view hack for Rails Admin to get it to render some custom HTML. 
     # See the `publications` field in the Rails Admin `show` config below.
@@ -31,10 +35,11 @@ class Organization < ApplicationRecord
       field(:id)
       field(:name)
       field(:user_count)
-      field(:visible)
-      field(:pure_uuid)
+      field(:oa_email_user_count) { label 'Users needing OA email' }
       field(:pure_external_identifier)
       field(:organization_type)
+      field(:visible)
+      field(:pure_uuid)
       field(:owner)
     end
 
@@ -42,6 +47,7 @@ class Organization < ApplicationRecord
       field(:id)
       field(:name)
       field(:user_count)
+      field(:oa_email_user_count) { label 'Number of users needing open access reminder email' }
       field(:visible)
       field(:pure_uuid)
       field(:pure_external_identifier)
@@ -59,8 +65,10 @@ class Organization < ApplicationRecord
     end
 
     export do
-      configure :user_count do
+      configure(:user_count) { show }
+      configure(:oa_email_user_count) do
         show
+        label 'OA email user count'
       end
     end
   end

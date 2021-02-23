@@ -216,4 +216,10 @@ describe Organization, type: :model do
       expect(org.user_count).to eq 3
     end
   end
+
+  describe '#oa_email_user_count' do
+    xit "returns the number of users who are members of either the organization itself or one of its descendants and who need an open access reminder email" do
+      
+    end
+  end
 end

@@ -350,6 +350,7 @@ class Publication < ApplicationRecord
       field(:secondary_title)
       field(:publication_type)
       field(:journal_title)
+      field(:journal)
       field(:publisher_name)
       field(:status)
       field(:volume)
@@ -440,7 +441,7 @@ class Publication < ApplicationRecord
   end
 
   def published_by
-    journal_title.presence || publisher_name.presence
+    preferred_journal_title || preferred_publisher_name
   end
 
   def preferred_open_access_url
@@ -546,5 +547,19 @@ class Publication < ApplicationRecord
 
   def has_single_import_from_ai?
     imports.count == 1 && imports.where(source: 'Activity Insight').any?
+  end
+
+  def preferred_journal_title
+    preferred_journal_info_policy.journal_title
+  end
+
+  def preferred_publisher_name
+    preferred_journal_info_policy.publisher_name
+  end
+
+  private
+
+  def preferred_journal_info_policy
+    PreferredJournalInfoPolicy.new(self)
   end
 end

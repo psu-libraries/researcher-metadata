@@ -24,6 +24,7 @@ feature "Admin publication detail page", type: :feature do
                       doi: "https://example.doi.org/test",
                       open_access_url: "https://openaccess.org/publications/1",
                       user_submitted_open_access_url: "https://example.org/publications/2",
+                      journal: journal,
                       scholarsphere_open_access_url: "https://scholarsphere.psu.edu/resources/3",
                       published_on: Date.new(2018, 8, 1) }
 
@@ -66,6 +67,9 @@ feature "Admin publication detail page", type: :feature do
   let!(:rf2) { create :research_fund,
                       grant: grant2,
                       publication: pub }
+
+  let!(:journal) { create :journal,
+                          title: "Test Journal Record" }
 
   context "when the current user is an admin" do
     before { authenticate_admin_user }
@@ -156,6 +160,10 @@ feature "Admin publication detail page", type: :feature do
       it "shows the publication's imports" do
         expect(page).to have_link "PublicationImport ##{imp1.id}"
         expect(page).to have_link "PublicationImport ##{imp2.id}"
+      end
+
+      it "shows the publication's journal" do
+        expect(page).to have_link "Test Journal Record", href: rails_admin.show_path(model_name: :journal, id: journal.id)
       end
     end
 

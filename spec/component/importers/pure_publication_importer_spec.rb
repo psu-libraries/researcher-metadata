@@ -10,6 +10,8 @@ describe PurePublicationImporter do
   let(:found_pub2) { PublicationImport.find_by(source: 'Pure', source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64') }
   let(:found_pub3) { PublicationImport.find_by(source: 'Pure', source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0') }
 
+  let!(:journal) { create :journal,
+                          pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f' }
   describe '#call' do
     let!(:duplicate_pub1) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
     let!(:duplicate_pub2) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
@@ -73,8 +75,8 @@ describe PurePublicationImporter do
           expect(p2.issue).to eq '3'
           expect(p3.issue).to eq '5'
 
-          expect(p1.journal_title).to eq 'Applied and Preventive Psychology'
-          expect(p2.journal_title).to eq 'Journal of Vertebrate Paleontology'
+          expect(p1.journal).to eq nil
+          expect(p2.journal).to eq journal
           expect(p3.journal_title).to eq 'Journal of Vascular and Interventional Radiology'
 
           expect(p1.issn).to eq '0962-1849'
@@ -212,10 +214,10 @@ describe PurePublicationImporter do
                                     title: 'Existing Title',
                                     secondary_title: 'Existing Subtitle',
                                     publication_type: 'Journal Article',
+                                    journal: existing_journal,
                                     page_range: 'existing range',
                                     volume: 'existing volume',
                                     issue: 'existing issue',
-                                    journal_title: 'Existing Journal',
                                     issn: 'existing issn',
                                     status: 'existing status',
                                     published_on: Date.new(2018, 8, 22),
@@ -224,6 +226,7 @@ describe PurePublicationImporter do
                                     visible: false,
                                     doi: doi }
         let(:doi) { "existing DOI" }
+        let(:existing_journal) { create :journal }
         
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
@@ -327,7 +330,7 @@ describe PurePublicationImporter do
             expect(updated_pub.page_range).to eq '91-95'
             expect(updated_pub.volume).to eq '6'
             expect(updated_pub.issue).to eq '2'
-            expect(updated_pub.journal_title).to eq 'Applied and Preventive Psychology'
+            expect(updated_pub.journal).to be_nil
             expect(updated_pub.issn).to eq '0962-1849'
             expect(updated_pub.status).to eq 'Published'
             expect(updated_pub.published_on).to eq Date.new(1997, 1, 1)
@@ -348,7 +351,7 @@ describe PurePublicationImporter do
             expect(new_pub.page_range).to eq '665-680'
             expect(new_pub.volume).to eq '30'
             expect(new_pub.issue).to eq '3'
-            expect(new_pub.journal_title).to eq 'Journal of Vertebrate Paleontology'
+            expect(new_pub.journal).to eq journal
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'Published'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
@@ -380,6 +383,8 @@ describe PurePublicationImporter do
         
         context "when the existing publication record has been manually updated" do
           let(:updated_ts) { Time.now }
+          let!(:new_journal) { create :journal,
+                                      pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad' }
 
           it "creates a new publication import record for each new object in the .json files" do
             expect { importer.call }.to change { PublicationImport.count }.by 2
@@ -466,7 +471,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
               expect(existing_pub_reloaded.volume).to eq 'existing volume'
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
-              expect(existing_pub_reloaded.journal_title).to eq 'Existing Journal'
+              expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'existing status'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
@@ -490,7 +495,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
               expect(existing_pub_reloaded.volume).to eq 'existing volume'
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
-              expect(existing_pub_reloaded.journal_title).to eq 'Existing Journal'
+              expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
               expect(existing_pub_reloaded.status).to eq 'existing status'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
@@ -512,7 +517,7 @@ describe PurePublicationImporter do
             expect(new_pub.page_range).to eq '665-680'
             expect(new_pub.volume).to eq '30'
             expect(new_pub.issue).to eq '3'
-            expect(new_pub.journal_title).to eq 'Journal of Vertebrate Paleontology'
+            expect(new_pub.journal).to eq journal
             expect(new_pub.issn).to eq '0272-4634'
             expect(new_pub.status).to eq 'Published'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)

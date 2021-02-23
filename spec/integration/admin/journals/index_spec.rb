@@ -21,6 +21,20 @@ feature "Admin journals list", type: :feature do
 
         expect(page).to have_content journal2.id
         expect(page).to have_content 'Second Journal'
+
+        within '.table' do
+          expect(page).to have_content 'Publication count'
+        end
+      end
+
+      it "shows a link to sort the list by number of publications" do
+        expect(page).to have_link "Ordered By Publication Count",
+                                  href: rails_admin.index_path(model_name: :journal, params: {model_name: :journal, scope: :ordered_by_publication_count})
+      end
+
+      it "shows a link to sort the list by number of Penn State publications" do
+        expect(page).to have_link "Ordered By PSU Publication Count",
+                                  href: rails_admin.index_path(model_name: :journal, params: {model_name: :journal, scope: :ordered_by_psu_publication_count})
       end
     end
 

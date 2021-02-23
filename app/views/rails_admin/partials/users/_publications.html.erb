@@ -16,8 +16,8 @@
         <tr class="publication_row">
           <td><%= check_box_tag 'bulk_ids[]', p.id, false, id: "bulk_ids_#{p.id}" %></td>
           <td><%= p.published_on.present? ? p.published_on.year : '' %></td>
-          <td><%= p.journal_title.present? ? p.journal_title : '' %></td>
-          <td><%= p.publisher_name.present? ? p.publisher_name : '' %></td>
+          <td><%= p.preferred_journal_title.present? ? p.preferred_journal_title : '' %></td>
+          <td><%= p.preferred_publisher_name.present? ? p.preferred_publisher_name : '' %></td>
           <td><%= link_to p.title, "/admin/publication/#{p.id}" %></td>
           <td>
             <% if p.duplicate_publication_group_id.present? %>

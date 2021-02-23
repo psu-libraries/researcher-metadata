@@ -5,7 +5,7 @@ class OrcidWork < OrcidResource
         title: publication.title,
         subtitle: publication.secondary_title,
       },
-      "journal-title": publication.journal_title,
+      "journal-title": publication.preferred_journal_title,
       "short-description": publication.abstract,
       type: publication_type
     }
