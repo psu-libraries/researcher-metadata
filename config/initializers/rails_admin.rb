@@ -60,7 +60,8 @@ RailsAdmin.config do |config|
             :Authorship,
             :Journal,
             :Publisher,
-            :StatisticsSnapshot]
+            :StatisticsSnapshot,
+            :EmailError]
     end
     new do
       only [:Publication,
