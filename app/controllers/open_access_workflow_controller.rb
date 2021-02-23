@@ -7,7 +7,8 @@ class OpenAccessWorkflowController < UserController
   private
 
   def publication
-    @publication ||= current_user.publications.find(params[:id])
+    @publication ||= current_user.publications.where("publications.publication_type ~* 'Journal Article'")
+                                              .find(params[:id])
   end
 
   def raise_if_inaccessible
