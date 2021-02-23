@@ -194,6 +194,7 @@ class User < ApplicationRecord
       field(:first_name)
       field(:middle_name)
       field(:last_name)
+      field(:open_access_notification_sent_at)
       field(:penn_state_identifier) do
         label 'Penn State ID'
         visible do
