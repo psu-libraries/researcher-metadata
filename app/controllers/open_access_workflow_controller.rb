@@ -1,6 +1,6 @@
 class OpenAccessWorkflowController < UserController
   before_action :authenticate!
-  before_action :raise_if_inaccessible
+  before_action :redirect_if_inaccessible
 
   layout 'manage_profile'
 
@@ -10,9 +10,9 @@ class OpenAccessWorkflowController < UserController
     @publication ||= current_user.publications.find(params[:id])
   end
 
-  def raise_if_inaccessible
+  def redirect_if_inaccessible
     if publication.has_open_access_information?
-      raise ActiveRecord::RecordNotFound
+      redirect_to edit_open_access_publication_path(publication)
     end
   end
 end
