@@ -54,7 +54,7 @@
             <div class='form-group'>
               <%= f.input :open_access_url, label: 'Open Access URL' %>
             </div>
-            <%= f.submit 'Submit', class: 'btn btn-primary' %>
+            <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>
         <div class="action-separator">or</div>
