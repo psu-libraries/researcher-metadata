@@ -326,7 +326,6 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:doi) { label 'DOI' }
       field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
-      field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -404,7 +403,6 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:doi) { label 'DOI' }
-      field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
