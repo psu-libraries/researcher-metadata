@@ -90,7 +90,7 @@ describe Publication, type: :model do
     end
   end
 
-  describe "deleting a publication with contributors" do
+  describe "deleting a publication with contributor names" do
     let(:p) { create :publication }
     let!(:c) { create :contributor_name, publication: p}
     it "also deletes the publication's authorships" do
@@ -114,6 +114,15 @@ describe Publication, type: :model do
     it "also deletes the publication's research funds" do
       p.destroy
       expect { rf.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a publication with non-duplicate group memberships" do
+    let(:p) { create :publication }
+    let!(:ndpgm) { create :non_duplicate_publication_group_membership, publication: p }
+    it "also deletes the publication's non-duplicate publication group memberships" do
+      p.destroy
+      expect { ndpgm.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
