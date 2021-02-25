@@ -126,6 +126,15 @@ describe Publication, type: :model do
     end
   end
 
+  describe "deleting a publication with imports" do
+    let(:p) { create :publication }
+    let!(:pi) { create :publication_import, publication: p}
+    it "also deletes the publication's imports" do
+      p.destroy
+      expect { pi.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '.publication_types' do
     it "returns the list of valid publication types" do
       expect(Publication.publication_types).to eq ["Academic Journal Article",

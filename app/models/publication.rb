@@ -22,7 +22,7 @@ class Publication < ApplicationRecord
            -> { order position: :asc },
            dependent: :destroy,
            inverse_of: :publication
-  has_many :imports, class_name: :PublicationImport
+  has_many :imports, class_name: :PublicationImport, dependent: :destroy
   has_many :organizations, through: :users
   has_many :research_funds
   has_many :grants, through: :research_funds
@@ -526,7 +526,7 @@ class Publication < ApplicationRecord
           ndg.publications << self
         end
 
-        p.destroy
+        p.reload.destroy
       end
 
       update_attributes!(updated_by_user_at: Time.current)
