@@ -759,7 +759,7 @@ describe ActivityInsightImporter do
           expect(p1.authors_et_al).to eq true
           expect(p1.published_on).to eq Date.new(2019, 1, 1)
           expect(p1.updated_by_user_at).to eq nil
-          expect(p1.doi).to eq nil
+          expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -968,7 +968,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
-            expect(p1.doi).to eq nil
+            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
   
             expect(p2.title).to eq 'Existing Title'
             expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -1199,7 +1199,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
-            expect(p1.doi).to eq nil
+            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
   
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -2167,7 +2167,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
-            expect(p1.doi).to eq nil
+            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
   
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -2376,7 +2376,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
-              expect(p1.doi).to eq nil
+              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
     
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -2606,7 +2606,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
-              expect(p1.doi).to eq nil
+              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
     
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -3549,7 +3549,7 @@ describe ActivityInsightImporter do
             expect(p1.authors_et_al).to eq true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
-            expect(p1.doi).to eq nil
+            expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
   
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'Professional Journal Article'
@@ -3757,7 +3757,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
-              expect(p1.doi).to eq nil
+              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
     
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
@@ -3987,7 +3987,7 @@ describe ActivityInsightImporter do
               expect(p1.authors_et_al).to eq true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
-              expect(p1.doi).to eq nil
+              expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
     
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'Professional Journal Article'
