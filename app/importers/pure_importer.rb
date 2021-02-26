@@ -4,7 +4,7 @@ class PureImporter
   private
 
   def api_version
-    '516'
+    '520'
   end
 
   def base_url
