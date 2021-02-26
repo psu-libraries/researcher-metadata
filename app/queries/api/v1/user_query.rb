@@ -55,8 +55,9 @@ module API::V1
           end
         end
 
-        params[:limit].present? ? limit = params[:limit] : limit = 100
-        data = data.limit(limit)
+        if params[:limit].present?
+          data = data.limit(params[:limit])
+        end
 
         data
       else
