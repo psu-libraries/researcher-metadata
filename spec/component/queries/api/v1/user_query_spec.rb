@@ -65,6 +65,7 @@ describe API::V1::UserQuery do
     end
   end
 
+  #TODO:  This method needs to be tested a lot more thoroughly.
   describe '#publications' do
     let(:user) { create :user, show_all_publications: true }
 
