@@ -1,8 +1,14 @@
 class PureImporter
+  class ServiceNotFound < RuntimeError; end
+
   private
 
+  def api_version
+    '516'
+  end
+
   def base_url
-    "https://pennstate.pure.elsevier.com/ws/api/516"
+    "https://pennstate.pure.elsevier.com/ws/api/#{api_version}"
   end
 
   def pure_api_key
@@ -10,7 +16,12 @@ class PureImporter
   end
 
   def total_records
-    get_records(type: record_type, page_size: 1, offset: 0)['count']
+    response = get_records(type: record_type, page_size: 1, offset: 0)
+    if response['status'] == 404
+      raise ServiceNotFound.new("The requested Pure API endpoint was not found. The version #{api_version} may no longer be supported. Consider using a newer version.")
+    else
+      response['count']
+    end
   end
 
   def total_pages
