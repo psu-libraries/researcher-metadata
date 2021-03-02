@@ -33,11 +33,8 @@ namespace :import do
   end
 
   desc 'Import Pure Users'
-  task :pure_users, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:pure_users)
-    )
-    PureUserImporter.new(filename: args.filename).call
+  task :pure_users => :environment do
+    PureUserImporter.new.call
   end
 
   desc 'Import Pure Organizations'
@@ -101,6 +98,7 @@ namespace :import do
   desc 'Import all Pure data from API'
   task :pure => :environment do
     PureOrganizationsImporter.new.call
+    PureUserImporter.new.call
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
   end
@@ -108,13 +106,8 @@ namespace :import do
   desc 'Import all data'
   task :all => :environment do
     PureOrganizationsImporter.new.call
-
     ActivityInsightImporter.new.call
-    
-    PureUserImporter.new(
-      filename: filename_for(:pure_users)
-    ).call
-
+    PureUserImporter.new.call
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
 
@@ -144,7 +137,6 @@ end
 
 def filename_for(key)
   case key
-  when :pure_users then Rails.root.join('db/data/pure_users.json')
   when :pure_publication_tags then Rails.root.join('db/data/pure_publication_fingerprints.json')
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
