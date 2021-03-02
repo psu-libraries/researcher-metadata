@@ -43,11 +43,8 @@ namespace :import do
   end
 
   desc 'Import Pure publications'
-  task :pure_publications, [:dirname] => :environment do |_task, args|
-    args.with_defaults(
-      dirname: dirname_for(:pure_publications)
-    )
-    PurePublicationImporter.new(dirname: args.dirname).call
+  task :pure_publications => :environment do
+    PurePublicationImporter.new.call
   end
 
   desc 'Import Pure publication tags'
@@ -101,6 +98,7 @@ namespace :import do
     PureUserImporter.new.call
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
+    PurePublicationImporter.new.call
   end
 
   desc 'Import all data'
@@ -110,10 +108,7 @@ namespace :import do
     PureUserImporter.new.call
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
-
-    PurePublicationImporter.new(
-      dirname: dirname_for(:pure_publications)
-    ).call
+    PurePublicationImporter.new.call
 
     PurePublicationTagImporter.new(
       filename: filename_for(:pure_publication_tags)
@@ -145,7 +140,6 @@ end
 
 def dirname_for(key)
   case key
-  when :pure_publications then Rails.root.join('db/data/pure_publications')
   when :nsf_grants then Rails.root.join('db/data/nsf_grants')
   end
 end

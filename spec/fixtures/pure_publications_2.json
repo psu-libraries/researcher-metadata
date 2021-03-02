@@ -1,0 +1,2124 @@
+{
+  "count" : 3,
+  "pageInformation" : {
+    "offset" : 0,
+    "size" : 3
+  },
+  "items" : [ {
+    "pureId" : 9517632,
+    "externalId" : "77953800538",
+    "externalIdSource" : "Scopus",
+    "uuid" : "bfc570c3-10d8-451e-9145-c370d6f01c64",
+    "title" : {
+      "formatted" : true,
+      "value" : "Third Test Publication With a Really Unique Title"
+    },
+    "peerReview" : true,
+    "numberOfPages" : 16,
+    "managingOrganisationalUnit" : {
+      "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
+      "externalId" : "SCHOOL-CAM-BD-SCI",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "School of Science (Behrend)"
+        } ]
+      },
+      "type" : {
+        "pureId" : 855,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Department"
+          } ]
+        }
+      }
+    },
+    "confidential" : false,
+    "info" : {
+      "createdBy" : "root",
+      "createdDate" : "2017-01-10T21:31:33.124+0000",
+      "modifiedBy" : "sync_user",
+      "modifiedDate" : "2018-05-01T01:10:03.735+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/publications/bfc570c3-10d8-451e-9145-c370d6f01c64",
+      "prettyURLIdentifiers" : [ "a-freshwater-ichthyofauna-from-the-late-eocene-birket-qarun-forma" ],
+      "additionalExternalIds" : [ {
+        "value" : "77953800538",
+        "idSource" : "QABO"
+      } ]
+    },
+    "totalScopusCitations" : 32,
+    "pages" : "665-680",
+    "volume" : "30",
+    "journalAssociation" : {
+      "pureId" : 9517633,
+      "title" : {
+        "value" : "Journal of Vertebrate Paleontology"
+      },
+      "issn" : {
+        "value" : "0272-4634"
+      },
+      "journal" : {
+        "uuid" : "6bd3ad47-c2bf-44cb-9d79-85d9fe14550f",
+        "externalId" : "13941",
+        "externalIdSource" : "Scopus",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Journal of Vertebrate Paleontology"
+          } ]
+        },
+        "type" : {
+          "pureId" : 910,
+          "uri" : "/dk/atira/pure/journal/journaltypes/journal/journal",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Journal"
+            } ]
+          }
+        }
+      }
+    },
+    "journalNumber" : "3",
+    "type" : {
+      "pureId" : 4664,
+      "uri" : "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontojournal/article",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Article"
+        } ]
+      }
+    },
+    "category" : {
+      "pureId" : 6885,
+      "uri" : "/dk/atira/pure/researchoutput/category/research",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Research"
+        } ]
+      }
+    },
+    "language" : {
+      "pureId" : 9423172,
+      "uri" : "/dk/atira/pure/core/languages/en_US",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "English (US)"
+        } ]
+      }
+    },
+    "abstract" : {
+      "formatted" : true,
+      "text" : [ {
+        "locale" : "en_US",
+        "value" : "<p>This is the third abstract.</p>"
+      } ]
+    },
+    "totalNumberOfAuthors" : 5,
+    "openAccessPermission" : {
+      "pureId" : 3436171,
+      "uri" : "/dk/atira/pure/researchoutput/openaccesspermission/indeterminate",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Indeterminate"
+        } ]
+      }
+    },
+    "visibility" : {
+      "key" : "FREE",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Public - No restriction"
+        } ]
+      }
+    },
+    "workflow" : {
+      "workflowStep" : "approved",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Validated"
+        } ]
+      }
+    },
+    "publicationStatuses" : [ {
+      "pureId" : 9517632,
+      "externalId" : "77953800538",
+      "externalIdSource" : "Scopus",
+      "current" : true,
+      "publicationDate" : {
+        "year" : 2010,
+        "month" : 5,
+        "day" : 1
+      },
+      "publicationStatus" : {
+        "pureId" : 798,
+        "uri" : "/dk/atira/pure/researchoutput/status/published",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Published"
+          } ]
+        }
+      }
+    } ],
+    "personAssociations" : [ {
+      "pureId" : 80001828,
+      "externalPerson" : {
+        "uuid" : "1631034a-1640-4229-a517-e91f17e5b049",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Thirdpub A. Firstauthor"
+          } ]
+        },
+        "type" : {
+          "pureId" : 4855,
+          "uri" : "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "External person"
+            } ]
+          }
+        }
+      },
+      "name" : {
+        "firstName" : "Thirdpub A.",
+        "lastName" : "Firstauthor"
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      },
+      "externalOrganisations" : [ {
+        "uuid" : "d5fdfca2-a581-4641-a0e4-89fedbf60cb0",
+        "externalId" : "501035",
+        "externalIdSource" : "scival",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "University of Alberta"
+          } ]
+        },
+        "type" : {
+          "pureId" : 3438682,
+          "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Academic"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 80001829,
+      "person" : {
+        "uuid" : "82195bc6-c5cd-479e-b6f8-545f0f0555ba",
+        "externalId" : "TDC15",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Thirdpub Secondauthor"
+          } ]
+        }
+      },
+      "name" : {
+        "firstName" : "Thirdpub",
+        "lastName" : "Secondauthor"
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      },
+      "organisationalUnits" : [ {
+        "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
+        "externalId" : "SCHOOL-CAM-BD-SCI",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "School of Science (Behrend)"
+          } ]
+        },
+        "type" : {
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 80001831,
+      "externalPerson" : {
+        "uuid" : "2810a42a-2827-48e0-bae7-01f9c996ab97",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Thirdpub Thirdauthor"
+          } ]
+        },
+        "type" : {
+          "pureId" : 4855,
+          "uri" : "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "External person"
+            } ]
+          }
+        }
+      },
+      "name" : {
+        "firstName" : "Thirdpub",
+        "lastName" : "Thirdauthor"
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      }
+    }, {
+      "pureId" : 80001832,
+      "externalPerson" : {
+        "uuid" : "847c73a6-22c8-47e1-8433-db53204e39f5",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Thirdpub Fourthauthor"
+          } ]
+        },
+        "type" : {
+          "pureId" : 4855,
+          "uri" : "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "External person"
+            } ]
+          }
+        }
+      },
+      "name" : {
+        "firstName" : "Thirdpub",
+        "lastName" : "Fourthauthor"
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      },
+      "externalOrganisations" : [ {
+        "uuid" : "c8f56b7a-fecd-4af5-9dff-112b0eaf7883",
+        "externalId" : "508053",
+        "externalIdSource" : "scival",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Duke University"
+          } ]
+        },
+        "type" : {
+          "pureId" : 3438682,
+          "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Academic"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 80001833,
+      "externalPerson" : {
+        "uuid" : "6810486e-4dcf-4c8f-b820-ba55546693e4",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Thirdpub Fifthauthor"
+          } ]
+        },
+        "type" : {
+          "pureId" : 4855,
+          "uri" : "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "External person"
+            } ]
+          }
+        }
+      },
+      "name" : {
+        "firstName" : "Thirdpub",
+        "lastName" : "Fifthauthor"
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      },
+      "externalOrganisations" : [ {
+        "uuid" : "c8f56b7a-fecd-4af5-9dff-112b0eaf7883",
+        "externalId" : "508053",
+        "externalIdSource" : "scival",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Duke University"
+          } ]
+        },
+        "type" : {
+          "pureId" : 3438682,
+          "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Academic"
+            } ]
+          }
+        }
+      } ]
+    }, {
+      "pureId" : 84276844,
+      "authorCollaboration" : {
+        "uuid" : "f086571b-e5a1-4597-9193-df4bfd1a73bc",
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "The WISSARD Science Team"
+          } ]
+        }
+      },
+      "personRole" : {
+        "pureId" : 4891,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      }
+    } ],
+    "organisationalUnits" : [ {
+      "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
+      "externalId" : "SCHOOL-CAM-BD-SCI",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "School of Science (Behrend)"
+        } ]
+      },
+      "type" : {
+        "pureId" : 855,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Department"
+          } ]
+        }
+      }
+    } ],
+    "externalOrganisations" : [ {
+      "uuid" : "d5fdfca2-a581-4641-a0e4-89fedbf60cb0",
+      "externalId" : "501035",
+      "externalIdSource" : "scival",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "University of Alberta"
+        } ]
+      },
+      "type" : {
+        "pureId" : 3438682,
+        "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      }
+    }, {
+      "uuid" : "c8f56b7a-fecd-4af5-9dff-112b0eaf7883",
+      "externalId" : "508053",
+      "externalIdSource" : "scival",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Duke University"
+        } ]
+      },
+      "type" : {
+        "pureId" : 3438682,
+        "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      }
+    } ],
+    "electronicVersions" : [ {
+      "pureId" : 9517634,
+      "visibleOnPortalDate" : "2017-01-10T21:31:33.124+0000",
+      "doi" : "https://doi.org/10.1080/02724631003758060",
+      "accessType" : {
+        "pureId" : 20055478,
+        "uri" : "/dk/atira/pure/core/openaccesspermission/unknown",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Unknown"
+          } ]
+        }
+      },
+      "versionType" : {
+        "pureId" : 3436203,
+        "uri" : "/dk/atira/pure/researchoutput/electronicversion/versiontype/publishersversion",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Draft"
+          } ]
+        }
+      }
+    } ],
+    "additionalLinks" : [ {
+      "pureId" : 9517637,
+      "url" : "http://www.scopus.com/inward/record.url?scp=77953800538&partnerID=8YFLogxK",
+      "description" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Link to publication in Scopus"
+        } ]
+      },
+      "linkType" : {
+        "pureId" : 3436191,
+        "uri" : "/dk/atira/pure/links/researchoutput/scopuspublication",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus publication"
+          } ]
+        }
+      }
+    }, {
+      "pureId" : 9517638,
+      "url" : "http://www.scopus.com/inward/citedby.url?scp=77953800538&partnerID=8YFLogxK",
+      "description" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Link to citation list in Scopus"
+        } ]
+      },
+      "linkType" : {
+        "pureId" : 3436193,
+        "uri" : "/dk/atira/pure/links/researchoutput/scopuscitations",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus citations"
+          } ]
+        }
+      }
+    } ],
+    "keywordGroups" : [ {
+      "pureId" : 9517635,
+      "logicalName" : "ASJCSubjectAreas",
+      "type" : {
+        "uri" : "/dk/atira/pure/subjectarea/asjc",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "All Science Journal Classification (ASJC) codes"
+          } ]
+        }
+      },
+      "keywordContainers" : [ {
+        "pureId" : 9517636,
+        "structuredKeyword" : {
+          "pureId" : 6011,
+          "uri" : "/dk/atira/pure/subjectarea/asjc/1900/1911",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Palaeontology"
+            } ]
+          }
+        }
+      } ]
+    } ],
+    "scopusMetrics" : [ {
+      "value" : 0,
+      "year" : 2020
+    }, {
+      "value" : 5,
+      "year" : 2019
+    }, {
+      "value" : 1,
+      "year" : 2018
+    }, {
+      "value" : 3,
+      "year" : 2017
+    }, {
+      "value" : 7,
+      "year" : 2016
+    }, {
+      "value" : 4,
+      "year" : 2015
+    }, {
+      "value" : 3,
+      "year" : 2014
+    }, {
+      "value" : 5,
+      "year" : 2013
+    }, {
+      "value" : 3,
+      "year" : 2012
+    }, {
+      "value" : 4,
+      "year" : 2011
+    }, {
+      "value" : 2,
+      "year" : 2010
+    } ]
+  },{
+    "pureId": 9477895,
+    "externalId": "0031523976",
+    "externalIdSource": "Scopus",
+    "uuid": "e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+    "title": {
+      "formatted": true,
+      "value": "The First Publication"
+    },
+    "subTitle": {
+      "formatted": true,
+      "value": "From Pure"
+    },
+    "peerReview": true,
+    "numberOfPages": 5,
+    "managingOrganisationalUnit": {
+      "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+      "externalId": "DEPT-COL-LA-PSYCH",
+      "externalIdSource": "synchronisedOrganisation",
+      "externallyManaged": true,
+      "name": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Psychology"
+          }
+        ]
+      },
+      "type": {
+        "pureId": 855,
+        "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department"
+            }
+          ]
+        }
+      }
+    },
+    "confidential": false,
+    "info": {
+      "createdBy": "root",
+      "createdDate": "2017-01-10T21:23:16.508+0000",
+      "modifiedBy": "sync_user",
+      "modifiedDate": "2018-03-14T20:47:06.357+0000",
+      "portalUrl": "https://pennstate.pure.elsevier.com/en/publications/e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+      "prettyURLIdentifiers": [
+        "psychotherapy-integration-and-the-need-for-better-theories-of-cha"
+      ],
+      "additionalExternalIds": [
+        {
+          "value": "0031523976",
+          "idSource": "QABO"
+        }
+      ]
+    },
+    "totalScopusCitations": 2,
+    "pages": "91-95",
+    "volume": "6",
+    "journalAssociation": {
+      "pureId": 9477896,
+      "title": {
+        "value": "Applied and Preventive Psychology"
+      },
+      "issn": {
+        "value": "0962-1849"
+      },
+      "journal": {
+        "uuid": "e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad",
+        "externalId": "12023",
+        "externalIdSource": "Scopus",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "value": "Applied and Preventive Psychology"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 910,
+          "uri": "/dk/atira/pure/journal/journaltypes/journal/journal",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Journal"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "journalNumber": "2",
+    "type": {
+      "pureId": 4664,
+      "uri": "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontojournal/article",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Article"
+          }
+        ]
+      }
+    },
+    "category": {
+      "pureId": 6885,
+      "uri": "/dk/atira/pure/researchoutput/category/research",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Research"
+          }
+        ]
+      }
+    },
+    "language": {
+      "pureId": 9423172,
+      "uri": "/dk/atira/pure/core/languages/en_US",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "English (US)"
+          }
+        ]
+      }
+    },
+    "totalNumberOfAuthors": 2,
+    "openAccessPermission": {
+      "pureId": 3436171,
+      "uri": "/dk/atira/pure/researchoutput/openaccesspermission/indeterminate",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Indeterminate"
+          }
+        ]
+      }
+    },
+    "visibility": {
+      "key": "FREE",
+      "value": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Public - No restriction"
+          }
+        ]
+      }
+    },
+    "workflow": {
+      "workflowStep": "approved",
+      "value": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Validated"
+          }
+        ]
+      }
+    },
+    "publicationStatuses": [
+      {
+        "pureId": 9477895,
+        "externalId": "0031523976",
+        "externalIdSource": "Scopus",
+        "current": true,
+        "publicationDate": {
+          "year": 1997,
+          "month": 1,
+          "day": 1
+        },
+        "publicationStatus": {
+          "pureId": 798,
+          "uri": "/dk/atira/pure/researchoutput/status/published",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Published"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "personAssociations": [
+      {
+        "pureId": 52285401,
+        "person": {
+          "uuid": "5ec8ce05-0912-4d68-8633-c5618a3cf15d",
+          "externalId": "LGC3",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Firstpub Robert Firstauthor"
+              }
+            ]
+          }
+        },
+        "name": {
+          "firstName": "Firstpub R.",
+          "lastName": "Firstauthor"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "organisationalUnits": [
+          {
+            "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+            "externalId": "DEPT-COL-LA-PSYCH",
+            "externalIdSource": "synchronisedOrganisation",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Psychology"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 855,
+              "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Department"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "pureId": 52285403,
+        "externalPerson": {
+          "uuid": "a33bd846-afe5-4852-851e-7b7201af5fe5",
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Firstpub Secondauthor"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 4855,
+            "uri": "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "External person"
+                }
+              ]
+            }
+          }
+        },
+        "name": {
+          "firstName": "Firstpub",
+          "lastName": "Secondauthor"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "externalOrganisations": [
+          {
+            "uuid": "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
+            "externalId": "508225",
+            "externalIdSource": "scival",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Stony Brook University"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 3438682,
+              "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Academic"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "organisationalUnits": [
+      {
+        "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+        "externalId": "DEPT-COL-LA-PSYCH",
+        "externalIdSource": "synchronisedOrganisation",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Psychology"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 855,
+          "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Department"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "externalOrganisations": [
+      {
+        "uuid": "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
+        "externalId": "508225",
+        "externalIdSource": "scival",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Stony Brook University"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 3438682,
+          "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Academic"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "electronicVersions": [
+      {
+        "pureId": 34576018,
+        "doi": "https://doi.org/10.1016/S0962-1849(05)80014-9",
+        "accessType": {
+          "pureId": 20055478,
+          "uri": "/dk/atira/pure/core/openaccesspermission/unknown",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Unknown"
+              }
+            ]
+          }
+        },
+        "versionType": {
+          "pureId": 3436203,
+          "uri": "/dk/atira/pure/researchoutput/electronicversion/versiontype/publishersversion",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Final published version"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "additionalLinks": [
+      {
+        "pureId": 9477901,
+        "url": "http://www.scopus.com/inward/record.url?scp=0031523976&partnerID=8YFLogxK",
+        "description": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Link to publication in Scopus"
+            }
+          ]
+        },
+        "linkType": {
+          "pureId": 3436191,
+          "uri": "/dk/atira/pure/links/researchoutput/scopuspublication",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Scopus publication"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "pureId": 9477902,
+        "url": "http://www.scopus.com/inward/citedby.url?scp=0031523976&partnerID=8YFLogxK",
+        "description": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Link to citation list in Scopus"
+            }
+          ]
+        },
+        "linkType": {
+          "pureId": 3436193,
+          "uri": "/dk/atira/pure/links/researchoutput/scopuscitations",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Scopus citations"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "keywordGroups": [
+      {
+        "pureId": 34576019,
+        "logicalName": "ASJCSubjectAreas",
+        "type": {
+          "uri": "/dk/atira/pure/subjectarea/asjc",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "All Science Journal Classification (ASJC) codes"
+              }
+            ]
+          }
+        },
+        "keywordContainers": [
+          {
+            "pureId": 34576020,
+            "structuredKeyword": {
+              "pureId": 6529,
+              "uri": "/dk/atira/pure/subjectarea/asjc/3200/3202",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Applied Psychology"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "pureId": 34576021,
+            "structuredKeyword": {
+              "pureId": 6349,
+              "uri": "/dk/atira/pure/subjectarea/asjc/2700/2739",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Public Health, Environmental and Occupational Health"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "scopusMetrics": [
+      {
+        "value": 0,
+        "year": 2020
+      },
+      {
+        "value": 0,
+        "year": 2019
+      },
+      {
+        "value": 0,
+        "year": 2018
+      },
+      {
+        "value": 0,
+        "year": 2017
+      },
+      {
+        "value": 0,
+        "year": 2016
+      },
+      {
+        "value": 0,
+        "year": 2015
+      },
+      {
+        "value": 0,
+        "year": 2014
+      },
+      {
+        "value": 0,
+        "year": 2013
+      },
+      {
+        "value": 0,
+        "year": 2012
+      },
+      {
+        "value": 0,
+        "year": 2011
+      },
+      {
+        "value": 0,
+        "year": 2010
+      },
+      {
+        "value": 0,
+        "year": 2009
+      },
+      {
+        "value": 0,
+        "year": 2008
+      },
+      {
+        "value": 0,
+        "year": 2007
+      },
+      {
+        "value": 0,
+        "year": 2006
+      },
+      {
+        "value": 0,
+        "year": 2005
+      },
+      {
+        "value": 0,
+        "year": 2004
+      },
+      {
+        "value": 0,
+        "year": 2003
+      },
+      {
+        "value": 0,
+        "year": 2002
+      },
+      {
+        "value": 1,
+        "year": 2001
+      },
+      {
+        "value": 1,
+        "year": 2000
+      },
+      {
+        "value": 0,
+        "year": 1999
+      },
+      {
+        "value": 0,
+        "year": 1998
+      },
+      {
+        "value": 0,
+        "year": 1997
+      }
+    ]
+  },{
+    "pureId": 9477909,
+    "externalId": "84876918564",
+    "externalIdSource": "Scopus",
+    "uuid": "fc65cb12-5a98-477e-b2f8-e191e0aae9d0",
+    "title": {
+      "formatted": true,
+      "value": "Chronic hip pain as a presenting symptom in pelvic congestion syndrome"
+    },
+    "peerReview": true,
+    "numberOfPages": 3,
+    "managingOrganisationalUnit": {
+      "uuid": "7d3bb77e-864a-4203-a111-6e83eb7c0ba4",
+      "externalId": "DEPT-CAM-HY-RAD",
+      "externalIdSource": "synchronisedOrganisation",
+      "externallyManaged": true,
+      "name": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Department of Radiology"
+          }
+        ]
+      },
+      "type": {
+        "pureId": 855,
+        "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department"
+            }
+          ]
+        }
+      }
+    },
+    "confidential": false,
+    "info": {
+      "createdBy": "root",
+      "createdDate": "2017-01-10T21:23:16.551+0000",
+      "modifiedBy": "sync_user",
+      "modifiedDate": "2020-02-01T01:01:19.993+0000",
+      "portalUrl": "https://pennstate.pure.elsevier.com/en/publications/fc65cb12-5a98-477e-b2f8-e191e0aae9d0",
+      "prettyURLIdentifiers": [
+        "chronic-hip-pain-as-a-presenting-symptom-in-pelvic-congestion-syn"
+      ],
+      "additionalExternalIds": [
+        {
+          "value": "23622048",
+          "idSource": "PubMed"
+        },
+        {
+          "value": "84876918564",
+          "idSource": "QABO"
+        }
+      ]
+    },
+    "totalScopusCitations": 6,
+    "pages": "753-755",
+    "volume": "24",
+    "journalAssociation": {
+      "pureId": 9477910,
+      "title": {
+        "value": "Journal of Vascular and Interventional Radiology"
+      },
+      "issn": {
+        "value": "1051-0443"
+      },
+      "journal": {
+        "uuid": "dd013d45-0bc5-49e2-8623-6b9179e3b9fa",
+        "externalId": "17243",
+        "externalIdSource": "Scopus",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "value": "Journal of Vascular and Interventional Radiology"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 910,
+          "uri": "/dk/atira/pure/journal/journaltypes/journal/journal",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Journal"
+              }
+            ]
+          }
+        }
+      }
+    },
+    "journalNumber": "5",
+    "type": {
+      "pureId": 4666,
+      "uri": "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontojournal/letter",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Letter"
+          }
+        ]
+      }
+    },
+    "category": {
+      "pureId": 6885,
+      "uri": "/dk/atira/pure/researchoutput/category/research",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Research"
+          }
+        ]
+      }
+    },
+    "language": {
+      "pureId": 9423172,
+      "uri": "/dk/atira/pure/core/languages/en_US",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "English (US)"
+          }
+        ]
+      }
+    },
+    "totalNumberOfAuthors": 4,
+    "openAccessPermission": {
+      "pureId": 3436171,
+      "uri": "/dk/atira/pure/researchoutput/openaccesspermission/indeterminate",
+      "term": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Indeterminate"
+          }
+        ]
+      }
+    },
+    "visibility": {
+      "key": "FREE",
+      "value": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Public - No restriction"
+          }
+        ]
+      }
+    },
+    "workflow": {
+      "workflowStep": "approved",
+      "value": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Validated"
+          }
+        ]
+      }
+    },
+    "publicationStatuses": [
+      {
+        "pureId": 9477909,
+        "externalId": "84876918564",
+        "externalIdSource": "Scopus",
+        "current": true,
+        "publicationDate": {
+          "year": 2013,
+          "month": 5,
+          "day": 1
+        },
+        "publicationStatus": {
+          "pureId": 798,
+          "uri": "/dk/atira/pure/researchoutput/status/published",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Published"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "personAssociations": [
+      {
+        "pureId": 40866083,
+        "externalPerson": {
+          "uuid": "59570f40-d95e-4182-86ca-82ceb6eea447",
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Christina Huang"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 4855,
+            "uri": "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "External person"
+                }
+              ]
+            }
+          }
+        },
+        "name": {
+          "firstName": "Christina",
+          "lastName": "Huang"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "externalOrganisations": [
+          {
+            "uuid": "b56ea586-c213-470e-aaf4-2bfe117b7001",
+            "externalId": "508186",
+            "externalIdSource": "scival",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Pennsylvania State University"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 3438682,
+              "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Academic"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "pureId": 40866084,
+        "externalPerson": {
+          "uuid": "1a70e0d0-87ad-413b-8b3c-4bb6667d9205",
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Julia Shelkey"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 4855,
+            "uri": "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "External person"
+                }
+              ]
+            }
+          }
+        },
+        "name": {
+          "firstName": "Julia",
+          "lastName": "Shelkey"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "externalOrganisations": [
+          {
+            "uuid": "b56ea586-c213-470e-aaf4-2bfe117b7001",
+            "externalId": "508186",
+            "externalIdSource": "scival",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Pennsylvania State University"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 3438682,
+              "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Academic"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "pureId": 40866085,
+        "person": {
+          "uuid": "238d17f4-061f-40c1-9fba-aeb2a00cad82",
+          "externalId": "HXS24",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Harjit Singh"
+              }
+            ]
+          }
+        },
+        "name": {
+          "firstName": "Harjit",
+          "lastName": "Singh"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "organisationalUnits": [
+          {
+            "uuid": "7d3bb77e-864a-4203-a111-6e83eb7c0ba4",
+            "externalId": "DEPT-CAM-HY-RAD",
+            "externalIdSource": "synchronisedOrganisation",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Department of Radiology"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 855,
+              "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Department"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      },
+      {
+        "pureId": 40866087,
+        "person": {
+          "uuid": "dc40be59-e778-404c-aaed-eddb9a992cb8",
+          "externalId": "MLS340",
+          "externalIdSource": "synchronisedPerson",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Matthew Silvis"
+              }
+            ]
+          }
+        },
+        "name": {
+          "firstName": "Matthew",
+          "lastName": "Silvis"
+        },
+        "personRole": {
+          "pureId": 4891,
+          "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Author"
+              }
+            ]
+          }
+        },
+        "organisationalUnits": [
+          {
+            "uuid": "5d0476ee-69f7-4866-ad0b-420e067bb176",
+            "externalId": "DEPT-CAM-HY-FCM",
+            "externalIdSource": "synchronisedOrganisation",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Department of Family and Community Medicine"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 855,
+              "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Department"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "uuid": "71ad1706-c0ce-4315-aef4-44e093122129",
+            "externalId": "DEPT-CAM-HY-OR",
+            "externalIdSource": "synchronisedOrganisation",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Department of Orthopaedics and Rehabilitation"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 855,
+              "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Department"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "organisationalUnits": [
+      {
+        "uuid": "7d3bb77e-864a-4203-a111-6e83eb7c0ba4",
+        "externalId": "DEPT-CAM-HY-RAD",
+        "externalIdSource": "synchronisedOrganisation",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department of Radiology"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 855,
+          "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Department"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "uuid": "5d0476ee-69f7-4866-ad0b-420e067bb176",
+        "externalId": "DEPT-CAM-HY-FCM",
+        "externalIdSource": "synchronisedOrganisation",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department of Family and Community Medicine"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 855,
+          "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Department"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "uuid": "71ad1706-c0ce-4315-aef4-44e093122129",
+        "externalId": "DEPT-CAM-HY-OR",
+        "externalIdSource": "synchronisedOrganisation",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department of Orthopaedics and Rehabilitation"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 855,
+          "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Department"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "externalOrganisations": [
+      {
+        "uuid": "b56ea586-c213-470e-aaf4-2bfe117b7001",
+        "externalId": "508186",
+        "externalIdSource": "scival",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Pennsylvania State University"
+            }
+          ]
+        },
+        "type": {
+          "pureId": 3438682,
+          "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Academic"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "electronicVersions": [
+      {
+        "pureId": 9477911,
+        "visibleOnPortalDate": "2017-01-10T21:23:16.551+0000",
+        "doi": "https://doi.org/10.1016/j.jvir.2013.01.004",
+        "accessType": {
+          "pureId": 20055478,
+          "uri": "/dk/atira/pure/core/openaccesspermission/unknown",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Unknown"
+              }
+            ]
+          }
+        },
+        "versionType": {
+          "pureId": 3436203,
+          "uri": "/dk/atira/pure/researchoutput/electronicversion/versiontype/publishersversion",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Final published version"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "additionalLinks": [
+      {
+        "pureId": 9477915,
+        "url": "http://www.scopus.com/inward/record.url?scp=84876918564&partnerID=8YFLogxK",
+        "description": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Link to publication in Scopus"
+            }
+          ]
+        },
+        "linkType": {
+          "pureId": 3436191,
+          "uri": "/dk/atira/pure/links/researchoutput/scopuspublication",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Scopus publication"
+              }
+            ]
+          }
+        }
+      },
+      {
+        "pureId": 9477916,
+        "url": "http://www.scopus.com/inward/citedby.url?scp=84876918564&partnerID=8YFLogxK",
+        "description": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Link to citation list in Scopus"
+            }
+          ]
+        },
+        "linkType": {
+          "pureId": 3436193,
+          "uri": "/dk/atira/pure/links/researchoutput/scopuscitations",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Scopus citations"
+              }
+            ]
+          }
+        }
+      }
+    ],
+    "keywordGroups": [
+      {
+        "pureId": 9477912,
+        "logicalName": "ASJCSubjectAreas",
+        "type": {
+          "uri": "/dk/atira/pure/subjectarea/asjc",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "All Science Journal Classification (ASJC) codes"
+              }
+            ]
+          }
+        },
+        "keywordContainers": [
+          {
+            "pureId": 9477913,
+            "structuredKeyword": {
+              "pureId": 6353,
+              "uri": "/dk/atira/pure/subjectarea/asjc/2700/2741",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Radiology Nuclear Medicine and imaging"
+                  }
+                ]
+              }
+            }
+          },
+          {
+            "pureId": 9477914,
+            "structuredKeyword": {
+              "pureId": 6281,
+              "uri": "/dk/atira/pure/subjectarea/asjc/2700/2705",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Cardiology and Cardiovascular Medicine"
+                  }
+                ]
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "scopusMetrics": [
+      {
+        "value": 0,
+        "year": 2020
+      },
+      {
+        "value": 0,
+        "year": 2019
+      },
+      {
+        "value": 1,
+        "year": 2018
+      },
+      {
+        "value": 2,
+        "year": 2017
+      },
+      {
+        "value": 2,
+        "year": 2016
+      },
+      {
+        "value": 0,
+        "year": 2015
+      },
+      {
+        "value": 1,
+        "year": 2014
+      },
+      {
+        "value": 0,
+        "year": 2013
+      }
+    ]
+  } ]
+}
+  

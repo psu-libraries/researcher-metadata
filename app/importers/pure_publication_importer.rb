@@ -1,92 +1,81 @@
-class PurePublicationImporter
+class PurePublicationImporter < PureImporter
   IMPORT_SOURCE = 'Pure'
-  # This importer is initialized with a path to a directory containing one or more JSON
-  # files of exported "research-outputs" data from Pure
-  # (https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html#!/research45outputs/listResearchOutputs_2)
-  # The directory is assumed to only contain files of this type, and the exports should be batched
-  # such that none of the files are larger than around 20 MB for efficient parsing/importing.
-
-  attr_reader :errors
-
-  def initialize(dirname:)
-    @dirname = dirname
-    @errors = []
-  end
 
   def call
-    import_files = Dir.children(dirname)
-    pbar = ProgressBar.create(title: 'Importing Pure Publications', total: import_files.count) unless Rails.env.test?
-    import_files.each do |filename|
-      File.open(dirname.join(filename), 'r') do |file|
-        MultiJson.load(file)['items'].each do |publication|
-          if publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Article"
+    pbar = ProgressBar.create(title: 'Importing Pure research-outputs (publications)', total: total_pages) unless Rails.env.test?
 
-            ActiveRecord::Base.transaction do
-              pi = PublicationImport.find_by(source: IMPORT_SOURCE,
-                                             source_identifier: publication['uuid']) ||
-                PublicationImport.new(source: IMPORT_SOURCE,
-                                      source_identifier: publication['uuid'])
+    1.upto(total_pages) do |i|
+      offset = (i-1) * page_size
+      pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
-              p = pi.publication
+      pubs['items'].each do |publication|
+        if publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Article"
 
-              pi.source_updated_at = publication['info']['modifiedDate']
+          ActiveRecord::Base.transaction do
+            pi = PublicationImport.find_by(source: IMPORT_SOURCE,
+                                            source_identifier: publication['uuid']) ||
+              PublicationImport.new(source: IMPORT_SOURCE,
+                                    source_identifier: publication['uuid'])
 
-              if pi.persisted?
-                if p.updated_by_user_at.present?
-                  attrs = {
-                    total_scopus_citations: publication['totalScopusCitations'],
-                    journal: journal(publication)
-                  }
-                  attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
-                  pi.publication.update_attributes!(attrs)
-                else
-                  pi.publication.update_attributes!(pub_attrs(publication))
-                end
+            p = pi.publication
+
+            pi.source_updated_at = publication['info']['modifiedDate']
+
+            if pi.persisted?
+              if p.updated_by_user_at.present?
+                attrs = {
+                  total_scopus_citations: publication['totalScopusCitations'],
+                  journal: journal(publication)
+                }
+                attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
+                pi.publication.update_attributes!(attrs)
               else
-                p = Publication.create!(pub_attrs(publication))
-                pi.publication = p
+                pi.publication.update_attributes!(pub_attrs(publication))
+              end
+            else
+              p = Publication.create!(pub_attrs(publication))
+              pi.publication = p
 
-                DuplicatePublicationGroup.group_duplicates_of(p)
-                group = p.reload.duplicate_group
-                if group
-                  other_pubs = group.publications.where.not(id: p.id)
-                  other_pubs.update_all(visible: false)
-                end
+              DuplicatePublicationGroup.group_duplicates_of(p)
+              group = p.reload.duplicate_group
+              if group
+                other_pubs = group.publications.where.not(id: p.id)
+                other_pubs.update_all(visible: false)
+              end
+            end
+
+            pi.save!
+
+            unless p.updated_by_user_at.present?
+              p.contributor_names.delete_all
+
+              authorships = publication['personAssociations'].select do |a|
+                !a['authorCollaboration'].present? &&
+                  a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
               end
 
-              pi.save!
+              authorships.each_with_index do |a, i|
+                if a['person'].present?
+                  u = User.find_by(pure_uuid: a['person']['uuid'])
 
-              unless p.updated_by_user_at.present?
-                p.contributor_names.delete_all
+                  if u
+                    authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
 
-                authorships = publication['personAssociations'].select do |a|
-                  !a['authorCollaboration'].present? &&
-                    a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
-                end
-
-                authorships.each_with_index do |a, i|
-                  if a['person'].present?
-                    u = User.find_by(pure_uuid: a['person']['uuid'])
-
-                    if u # Depends on users being imported from Pure first
-                      authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
-
-                      authorship.user = u if authorship.new_record?
-                      authorship.publication = p if authorship.new_record?
-                      authorship.author_number = i+1
-                      begin
-                        authorship.save!
-                      rescue ActiveRecord::RecordInvalid => e
-                        @errors << e
-                      end
+                    authorship.user = u if authorship.new_record?
+                    authorship.publication = p if authorship.new_record?
+                    authorship.author_number = i+1
+                    begin
+                      authorship.save!
+                    rescue ActiveRecord::RecordInvalid => e
+                      @errors << e
                     end
                   end
-
-                  ContributorName.create!(publication: p,
-                                          first_name: a['name']['firstName'],
-                                          last_name: a['name']['lastName'],
-                                          position: i+1)
                 end
+
+                ContributorName.create!(publication: p,
+                                        first_name: a['name']['firstName'],
+                                        last_name: a['name']['lastName'],
+                                        position: i+1)
               end
             end
           end
@@ -95,12 +84,17 @@ class PurePublicationImporter
       pbar.increment unless Rails.env.test?
     end
     pbar.finish unless Rails.env.test?
-    nil
+  end
+
+  def page_size
+    500
+  end
+
+  def record_type
+    'research-outputs'
   end
 
   private
-
-  attr_reader :dirname
 
   def pub_attrs(publication)
     {
