@@ -1,35 +1,32 @@
-class PureOrganizationsImporter
-  def initialize(filename:)
-    @filename = filename
-    @errors = []
-  end
-
+class PureOrganizationsImporter < PureImporter
   def call
-    File.open(filename, 'r') do |file|
-      json = MultiJson.load(file)
-      pbar = ProgressBar.create(title: 'Importing Pure organizations', total: json['items'].count) unless Rails.env.test?
+    pbar = ProgressBar.create(title: 'Importing Pure organizations', total: total_pages) unless Rails.env.test?
+    1.upto(total_pages) do |i|
+      offset = (i-1) * page_size
+      organizations = get_records(type: record_type, page_size: page_size, offset: offset)
 
-      json['items'].each do |org|
-        pbar.increment unless Rails.env.test?
+      organizations['items'].each do |item|
+        o = Organization.find_by(pure_uuid: item['uuid']) || Organization.new
 
-        o = Organization.find_by(pure_uuid: org['uuid']) || Organization.new
-
-        o.pure_uuid = org['uuid'] if o.new_record?
-        o.name = extract_name(org)
-        o.pure_external_identifier = org['externalId']
-        o.organization_type = extract_organization_type(org)
+        o.pure_uuid = item['uuid'] if o.new_record?
+        o.name = extract_name(item)
+        o.pure_external_identifier = item['externalId']
+        o.organization_type = extract_organization_type(item)
         o.save!
       end
-      pbar.finish unless Rails.env.test?
+      pbar.increment unless Rails.env.test?
+    end
+    pbar.finish unless Rails.env.test?
 
-      pbar = ProgressBar.create(title: 'Importing Pure organization relationships', total: json['items'].count) unless Rails.env.test?
+    pbar = ProgressBar.create(title: 'Importing Pure organization relationships', total: total_pages) unless Rails.env.test?
+    1.upto(total_pages) do |i|
+      offset = (i-1) * page_size
+      organizations = get_records(type: record_type, page_size: page_size, offset: offset)
 
-      json['items'].each do |org|
-        pbar.increment unless Rails.env.test?
-
-        child_org = Organization.find_by(pure_uuid: org['uuid'])
-        if org['parents']
-          parent_org = Organization.find_by(pure_uuid: org['parents'].first['uuid'])
+      organizations['items'].each do |item|
+        child_org = Organization.find_by(pure_uuid: item['uuid'])
+        if item['parents']
+          parent_org = Organization.find_by(pure_uuid: item['parents'].first['uuid'])
         else
           parent_org = nil
         end
@@ -37,14 +34,20 @@ class PureOrganizationsImporter
         child_org.parent = parent_org
         child_org.save!
       end
-      pbar.finish unless Rails.env.test?
+      pbar.increment unless Rails.env.test?
     end
-    nil
+    pbar.finish unless Rails.env.test?
+  end
+
+  def page_size
+    1000
+  end
+
+  def record_type
+    'organisational-units'
   end
 
   private
-
-  attr_reader :filename
 
   def extract_name(org)
     org["name"]["text"].detect { |text| text["locale"] == "en_US" }["value"]
