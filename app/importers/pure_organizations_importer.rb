@@ -1,6 +1,6 @@
 class PureOrganizationsImporter < PureImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing Pure organizations', total: total_pages) unless Rails.env.test?
+    pbar = ProgressBar.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages) unless Rails.env.test?
     1.upto(total_pages) do |i|
       offset = (i-1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
