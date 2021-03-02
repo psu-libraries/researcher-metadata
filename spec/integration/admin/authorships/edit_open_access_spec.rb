@@ -79,7 +79,7 @@ feature "setting an open access URL", type: :feature do
           end
 
           it "shows a success message" do
-            expect(page).to have_content I18n.t('admin.actions.edit_open_access.success', pub.title)
+            expect(page).to have_content I18n.t('admin.actions.edit_open_access.success', title: pub.title)
           end
 
           it "updates the authorship's publication" do
