@@ -1,15 +1,12 @@
-class PurePublicationTagImporter
-  def initialize(filename:)
-    @filename = filename
-    @errors = []
-  end
-
+class PurePublicationTagImporter < PureImporter
   def call
-    File.open(filename, 'r') do |file|
-      json = MultiJson.load(file)
-      pbar = ProgressBar.create(title: 'Importing Pure publication tags', total: json['items'].count) unless Rails.env.test?
-      json['items'].each do |publication|
-        pbar.increment unless Rails.env.test?
+    pbar = ProgressBar.create(title: 'Importing Pure publication tags', total: total_pages) unless Rails.env.test?
+
+    1.upto(total_pages) do |i|
+      offset = (i-1) * page_size
+      pubs = get_records(type: record_type, page_size: page_size, offset: offset)
+
+      pubs['items'].each do |publication|
         pub_uuid = publication['uuid']
         pub_import = PublicationImport.find_by(source_identifier: pub_uuid)
         next unless pub_import
@@ -49,12 +46,26 @@ class PurePublicationTagImporter
           ).find_or_create_by(tag: tag)
         end
       end
-      pbar.finish unless Rails.env.test?
+      pbar.increment unless Rails.env.test?
     end
-    nil
+    pbar.finish unless Rails.env.test?
+  end
+
+  def page_size
+    500
+  end
+
+  def record_type
+    'research-outputs'
   end
 
   private
 
-  attr_reader :filename
+  def get_records(type:, page_size:, offset:)
+    JSON.parse(HTTParty.post("#{base_url}/#{record_type}",
+                             body: %{{"navigationLink": false, "size": #{page_size}, "offset": #{offset}, "renderings": ["fingerprint"]}},
+                             headers: {"api-key" => pure_api_key,
+                                       "Content-Type" => "application/json",
+                                       "Accept" => "application/json"}).to_s)
+  end
 end

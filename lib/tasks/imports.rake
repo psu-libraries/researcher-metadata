@@ -48,11 +48,8 @@ namespace :import do
   end
 
   desc 'Import Pure publication tags'
-  task :pure_publication_tags, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:pure_publication_tags)
-    )
-    PurePublicationTagImporter.new(filename: args.filename).call
+  task :pure_publication_tags => :environment do
+    PurePublicationTagImporter.new.call
   end
 
   desc 'Import ETDs'
@@ -99,6 +96,7 @@ namespace :import do
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
+    PurePublicationTagImporter.new.call
   end
 
   desc 'Import all data'
@@ -109,10 +107,7 @@ namespace :import do
     PurePublishersImporter.new.call
     PureJournalsImporter.new.call
     PurePublicationImporter.new.call
-
-    PurePublicationTagImporter.new(
-      filename: filename_for(:pure_publication_tags)
-    ).call
+    PurePublicationTagImporter.new.call
 
     ETDCSVImporter.new(
       filename: filename_for(:etds)
@@ -132,7 +127,6 @@ end
 
 def filename_for(key)
   case key
-  when :pure_publication_tags then Rails.root.join('db/data/pure_publication_fingerprints.json')
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
   end
