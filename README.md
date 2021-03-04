@@ -94,10 +94,18 @@ A cron job runs this import in production once per hour.
 
 1. **Web of Science** - We performed a one-time import of a static set of publication and grant data from
 Web of Science for publications that were published from 2013 to 2018. We obtained a copy of this data on
-a physical disk.
+a physical disk. We import the following types of records from Web of Science:
+    - authorships
+    - contributor_names
+    - grants
+    - publications
+    - research_funds
 
 1. **National Science Foundation** - We import grant data that we download from the National Science
-Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files.
+Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files. We import the
+following types of records from NSF:
+    - grants
+    - researcher_funds
 
 1. **Open Access Button** - We import URLs to the content of open access publications that are provided by
 Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
