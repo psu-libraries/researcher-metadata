@@ -63,14 +63,14 @@ required) to which we have access. We use this API for directly importing data, 
 yet scheduled to run automatically. We import the following types of records from Pure:
     - authorships
     - contributor_names
+    - journals
     - organizations
     - publications
     - publication_taggings
+    - publishers
     - tags
     - user_organization_memberships
     - users
-    - publishers
-    - journals
 
 1. **eTD** - This is a web application/database developed by the Penn State Libraries that facilitates
 the submission and archival of PhD dissertations and Masters theses in digital format by graduate students.
