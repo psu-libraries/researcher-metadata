@@ -122,7 +122,7 @@ may not need to import data from these sources since new data may eventually be 
 This import not currently scheduled to run automatically. We import the following types of records from these
 repositories:
     - authorships
-    - contributors
+    - contributor_names
     - publications
 
 ### Obtaining New Data
