@@ -45,9 +45,7 @@ class UserProfile
   end
 
   def publication_records
-    user_query.publications.
-      where("publications.publication_type ~* 'Journal Article'").
-      order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants
@@ -116,9 +114,8 @@ class UserProfile
   end
 
   def other_publication_records
-    user_query.publications.
-      where("publications.publication_type !~* 'Journal Article'").
-      order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.non_journal_article.
+               order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def other_publications
