@@ -204,6 +204,17 @@ the individual import tasks will occassionally need to be run in production. Whi
 data directly from the sources in development for QA/testing, it's much faster to establish a useful development
 database by loading a dump of the production data.
 
+### Journal Article vs. Non-Article Publications
+All publication types are imported during the publication import from Activity Insight and Pure.  Conference proceedings, 
+books, editorials, abstracts, and many others are being imported as publications along with journal articles.  A journal article 
+is defined as any publication that contains the string "Journal Article" in its publication_type.  Non-article publications 
+(which are sometimes referred to as "Other Works" in the UI and other_publicationsin the code) are defined as any publication 
+that does not have the string "Journal Article" in its publication_type.  Journal articles and non-article publications are 
+displayed in separate interfaces of the user profile interface, public profile interface, and profile API endpoint.  All 
+publications are displayed together in the publication API endpoint.  Non-article publications are not included in the 
+open access workflow.  However, they can be exported to ORCiD if they have a url.  All publications behave the same in the Admin 
+interface.
+
 ### Identifying Duplicate Publication Data
 Because we import metadata about research publications from more than one source, and because duplicate entries
 sometime exist even within the same data source, we need a means of finding multiple records in our database that
