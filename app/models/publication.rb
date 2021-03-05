@@ -26,7 +26,7 @@ class Publication < ApplicationRecord
            -> { order position: :asc },
            dependent: :destroy,
            inverse_of: :publication
-  has_many :imports, class_name: :PublicationImport
+  has_many :imports, class_name: :PublicationImport, dependent: :destroy
   has_many :organizations, through: :users
   has_many :research_funds
   has_many :grants, through: :research_funds
@@ -329,8 +329,8 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
+      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
       field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
-      field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -406,9 +406,9 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
-      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:doi) { label 'DOI' }
-      field(:url) { label 'URL' }
+      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
+      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -534,7 +534,7 @@ class Publication < ApplicationRecord
           ndg.publications << self
         end
 
-        p.destroy
+        p.reload.destroy
       end
 
       update_attributes!(updated_by_user_at: Time.current)

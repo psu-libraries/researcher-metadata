@@ -30,10 +30,10 @@ feature "Creating a publication", type: :feature do
         fill_in 'Issue', with: 'Test Issue'
         fill_in 'Edition', with: 'Test Edition'
         fill_in 'Page range', with: 'Test Range'
-        fill_in 'URL', with: 'Test URL'
         fill_in 'ISSN', with: 'Test ISSN'
         fill_in 'DOI', with: 'Test DOI'
         fill_in 'Scholarsphere Open Access URL', with: 'Test Scholarsphere URL'
+        fill_in 'User-submitted open access URL', with: 'Test OA URL'
         fill_in 'Abstract', with: 'Test Abstract'
         check 'Et al authors?'
         fill_in 'Published on', with: 'August 23, 2018'
@@ -52,10 +52,10 @@ feature "Creating a publication", type: :feature do
         expect(p.issue).to eq 'Test Issue'
         expect(p.edition).to eq 'Test Edition'
         expect(p.page_range).to eq 'Test Range'
-        expect(p.url).to eq 'Test URL'
         expect(p.issn).to eq 'Test ISSN'
         expect(p.doi).to eq 'Test DOI'
         expect(p.scholarsphere_open_access_url).to eq 'Test Scholarsphere URL'
+        expect(p.user_submitted_open_access_url).to eq 'Test OA URL'
         expect(p.abstract).to eq 'Test Abstract'
         expect(p.authors_et_al).to eq true
         expect(p.published_on).to eq Date.new(2018, 8, 23)

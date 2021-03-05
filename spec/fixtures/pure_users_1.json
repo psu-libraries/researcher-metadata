@@ -1,0 +1,174 @@
+{
+  "count" : 3,
+  "pageInformation" : {
+    "offset" : 0,
+    "size" : 1
+  },
+  "items" : [ {
+    "pureId" : 8289293,
+    "externalId" : "SAT1",
+    "externalIdSource" : "synchronisedPerson",
+    "externallyManaged" : true,
+    "uuid" : "9530a014-c29f-4081-88ae-b923dc919001",
+    "name" : {
+      "firstName" : "Susan A",
+      "lastName" : "Tester"
+    },
+    "profiled" : true,
+    "scopusHIndex" : 15,
+    "fte" : 0.0,
+    "info" : {
+      "createdBy" : "root",
+      "createdDate" : "2016-12-23T14:06:33.688+0000",
+      "modifiedBy" : "sync_user",
+      "modifiedDate" : "2019-07-22T18:35:49.484+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/persons/9530a014-c29f-4081-88ae-b923dc919001",
+      "prettyURLIdentifiers" : [ "susan-a-tester" ]
+    },
+    "visibility" : {
+      "key" : "FREE",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Public - No restriction"
+        } ]
+      }
+    },
+    "ids" : [ {
+      "pureId" : 21183542,
+      "externalId" : "autoid:SAT1-employee-SAT1",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "value" : {
+        "formatted" : false,
+        "value" : "SAT1"
+      },
+      "type" : {
+        "pureId" : 3434254,
+        "uri" : "/dk/atira/pure/person/personsources/employee",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Employee ID"
+          } ]
+        }
+      }
+    }, {
+      "pureId" : 23578976,
+      "value" : {
+        "formatted" : false,
+        "value" : "6603393977"
+      },
+      "type" : {
+        "pureId" : 3434256,
+        "uri" : "/dk/atira/pure/person/personsources/scopusauthor",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Scopus Author ID"
+          } ]
+        }
+      }
+    } ],
+    "staffOrganisationAssociations" : [ {
+      "pureId" : 21279128,
+      "externalId" : "autoid:SAT1-SCHOOL-CAM-BD-SCI-Associate Professor-academic-1984-08-14",
+      "externalIdSource" : "synchronisedPerson",
+      "externallyManaged" : true,
+      "person" : {
+        "uuid" : "9530a014-c29f-4081-88ae-b923dc919001",
+        "externalId" : "SAT1",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Susan A Tester"
+          } ]
+        }
+      },
+      "period" : {
+        "startDate" : "1984-08-14T12:00:00.000+0000",
+        "endDate" : "1990-08-14T12:00:00.000+0000"
+      },
+      "isPrimaryAssociation" : false,
+      "employmentType" : {
+        "pureId" : 4754,
+        "uri" : "/dk/atira/pure/person/employmenttypes/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "organisationalUnit" : {
+        "uuid" : "937d604c-a16a-499d-80eb-bd6f931a343c",
+        "externalId" : "SCHOOL-CAM-BD-SCI",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "School of Science (Behrend)"
+          } ]
+        },
+        "type" : {
+          "pureId" : 855,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Department"
+            } ]
+          }
+        }
+      },
+      "staffType" : {
+        "pureId" : 3434337,
+        "uri" : "/dk/atira/pure/person/personstafftype/academic",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Academic"
+          } ]
+        }
+      },
+      "jobDescription" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Associate Professor"
+        } ]
+      },
+      "emails" : [ {
+        "pureId" : 21279130,
+        "externalId" : "synchronisedPerson",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "value" : {
+          "formatted" : false,
+          "value" : "SAT1@psu.edu"
+        },
+        "type" : {
+          "pureId" : 3434321,
+          "uri" : "/dk/atira/pure/person/personemailtype/email",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Email"
+            } ]
+          }
+        }
+      } ]
+    } ]
+  } ]
+}

@@ -1,14 +1,26 @@
 require 'component/component_spec_helper'
 
 describe PureUserImporter do
-  let(:importer) { PureUserImporter.new(filename: filename) }
+  let(:importer) { PureUserImporter.new }
+  let(:http_response_1) { File.read(filename_1) }
+  let(:http_response_2) { File.read(filename_2) }
+  let(:http_error_response) { File.read(error_filename) }
+  let(:filename_1) { Rails.root.join('spec', 'fixtures', 'pure_users_1.json') }
+  let(:filename_2) { Rails.root.join('spec', 'fixtures', 'pure_users_2.json') }
+  let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
+
+  before do
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=1&offset=0',
+                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_1
+
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=100&offset=0',
+                                      headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_2
+  end
 
   describe '#call' do
-    context "when given a well-formed .json file of valid user data from Pure" do
-      let(:filename) { Rails.root.join('spec', 'fixtures', 'pure_users.json') }
-
+    context "when the API endpoint is found" do
       context "when no user records exist in the database" do
-        it "creates a new user record for each user object in the .json file" do
+        it "creates a new user record for each user object in the imported data" do
           expect { importer.call }.to change { User.count }.by 3
 
           u1 = User.find_by(webaccess_id: 'sat1')
@@ -40,13 +52,13 @@ describe PureUserImporter do
           end
         end
 
-        context "when organizations that are referenced in the .json file exist in the database" do
+        context "when organizations that are referenced in the imported data exist in the database" do
           let!(:org1) { create :organization, pure_uuid: '937d604c-a16a-499d-80eb-bd6f931a343c' }
           let!(:org2) { create :organization, pure_uuid: 'e99fcbec-818a-4b90-a04a-986d05696395' }
           let!(:org3) { create :organization, pure_uuid: '47bf26c5-18c0-45d1-8aab-9f4597321764' }
 
           context "when no organization memberships already exist" do
-            it "creates a new membership for each association described in the .json file" do
+            it "creates a new membership for each association described in the imported data" do
               expect { importer.call }.to change { UserOrganizationMembership.count }.by 3
 
               u1 = User.find_by(webaccess_id: 'sat1')
@@ -82,7 +94,7 @@ describe PureUserImporter do
             end
           end
 
-          context "when organization memberships already exist for associations described in the .json file" do
+          context "when organization memberships already exist for associations described in the imported data" do
             let!(:existing_membership1) { create :user_organization_membership,
                                                  import_source: 'Pure',
                                                  source_identifier: '24766061',
@@ -172,7 +184,7 @@ describe PureUserImporter do
         end
       end
 
-      context "when a user in the .json file already exists in the database" do
+      context "when a user in the imported data already exists in the database" do
         let!(:existing_user) { create :user,
                                       webaccess_id: 'bbt2',
                                       first_name: 'Robert',
@@ -271,6 +283,20 @@ describe PureUserImporter do
             expect(u3.scopus_h_index).to eq 2
           end
         end
+      end
+    end
+
+    context "when the API endpoint is not found" do
+      before do
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=1&offset=0',
+                                              headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=100&offset=0',
+                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+      end
+
+      it "raises an error" do
+        expect { importer.call }.to raise_error PureImporter::ServiceNotFound
       end
     end
   end

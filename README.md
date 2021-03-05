@@ -1,6 +1,6 @@
 ![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
-# Researcher Metadata Database
+# Researcher Metadata Database (RMD)
 
 This is the repository for a Ruby on Rails application built for Penn State University Libraries to
 gather metadata about Penn State faculty and the research that they conduct and publish. The application
@@ -10,20 +10,23 @@ other applications to access the data. One specific use case for the API is to p
 needed to produce the kind of profile web page for each faculty member that might be found in the faculty
 directory on a department website. The application also provides an interface for faculty users to see
 an example of what a profile page about them would look like, and a management interface for them to
-adjust some preferences with regard to how data appears in their profile.
+adjust some preferences with regard to how data appears in their profile. This interface includes features
+that allow ORCiD users to automatically send metadata from RMD to populate their ORCiD records. It also
+includes features that support Penn State's open access policy/initiative by allowing faculty users to
+submit metadata about the open access status of each of their publications.
 
 ## Data Importing and Updating
 
 For this application to be relevant and useful, it is important for the data in the production database
-to be kept relatively "clean" and current. New data will need to be imported several times per year (likely
-after the end of each semester) at a minimum. Our methods for importing new data and updating existing data
-are evolving, but we'll attempt to document the process for importing new data here until it is more
-completely automated.
+to be kept relatively "clean" and current. For some of the external data sources, the process of extracting
+data from the source and importing it into RMD has been fully automated, and the process is performed on a
+regular basis. For other sources, the process involves several manual steps, and we try to update data from
+these sources at least a couple of times per year.
 
-Broadly, the process currently consists of three steps for some of the data sources:
-1. Gather new data in the form of correctly-formatted files from each source
-1. Place the new data files in the conventional location on the production server
-1. Run the Rake task to automatically import all of the data from the new files
+The process for data that must be imported manually generally consists of three steps:
+1. Gather new data in the form of correctly-formatted file(s) from the source
+1. Place the new data file(s) in the conventional location on the production server
+1. Run the Rake task to automatically import all of the data from the new file(s)
 
 ### Data Sources
 
@@ -36,9 +39,11 @@ Below is a list of the data sources along with the types of records that are imp
 
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
-etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) for directly importing data. We import the following types of records from Activity Insight:
+etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) (API key
+required) for directly importing data. A cron job automatically runs this import in production once per day.
+We import the following types of records from Activity Insight:
     - authorships
-    - contributors
+    - contributor_names
     - education_history_items
     - performances
     - performance_screenings
@@ -53,16 +58,16 @@ researchers, their published research, and the organizations within Penn State t
 This data mostly has to do with scientific research that is published in peer-reviewed journals, so
 we don't get much data about faculty in the arts and humanities from this source as opposed to Activity
 Insight which provides data about faculty across the whole university. This application also has a
-well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) to which
-we have access. At present, we query this API to download data to files in JSON format which we then
-import into our database. This repository contains utility scripts for automatically downloading each
-type of data to the correct location for import, so the process for importing data from Pure is largely
-(but not completely) automated. We import the following types of records from Pure:
+well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) (API key
+required) to which we have access. We use this API for directly importing data, but the import is not
+yet scheduled to run automatically. We import the following types of records from Pure:
     - authorships
-    - contributors
+    - contributor_names
+    - journals
     - organizations
     - publications
     - publication_taggings
+    - publishers
     - tags
     - user_organization_memberships
     - users
@@ -71,31 +76,41 @@ type of data to the correct location for import, so the process for importing da
 the submission and archival of PhD dissertations and Masters theses in digital format by graduate students.
 Our main reason for importing metadata from this source is to be able to show the graduate student advising
 that each faculty member has done. Because the application currently has no API, we don't have a way to
-automate the importing of data. Currently, we obtain an SQL dump of the eTD database from a Penn State
-Libraries administrator. We load this dump into a local MySQL database and export several .csv files
-which we then import into our database. We import the following types of records from eTD:
+automate the importing of data. Currently, we obtain an SQL dump of the eTD database, load this dump into a
+local MySQL database and export several .csv files which we then import into our database. We import the
+following types of records from eTD:
     - committee_memberships
     - etds
     
 1. **Penn State News RSS feeds** - The Penn State News website publishes many
 [RSS feeds](https://news.psu.edu/rss-feeds), and we import news story metadata directly from several of
-them whenever a story involves a specific Penn State Faculty member. We import the following types of records
+them whenever a story involves a specific Penn State Faculty member. A cron job automatically runs this
+import in production once per hour. We import the following types of records
 from news.psu.edu:
     - news_feed_items
 
 1. **Penn State LDAP** - We import some data for existing user records from Penn State's directory of people.
+A cron job runs this import in production once per hour.
 
 1. **Web of Science** - We performed a one-time import of a static set of publication and grant data from
 Web of Science for publications that were published from 2013 to 2018. We obtained a copy of this data on
-a physical disk.
+a physical disk. We import the following types of records from Web of Science:
+    - authorships
+    - contributor_names
+    - grants
+    - publications
+    - research_funds
 
 1. **National Science Foundation** - We import grant data that we download from the National Science
-Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files.
+Foundation [website](https://nsf.gov/awardsearch/download.jsp) in the form of XML files. We import the
+following types of records from NSF:
+    - grants
+    - researcher_funds
 
 1. **Open Access Button** - We import URLs to the content of open access publications that are provided by
 Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
 Open Access Button by DOI, so this import only adds data to existing publications in our database that have
-DOIs.
+DOIs. This import is not yet scheduled to run automatically.
 
 1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
 by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open 
@@ -104,36 +119,22 @@ Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). Dickinson mainta
 [Penn State Law eLibrary](https://elibrary.law.psu.edu/). Part of our reason for importing metadata from
 these sources is to facilitate onboarding the law school faculty into Activity Insight. In the future, we
 may not need to import data from these sources since new data may eventually be available via Activity Insight.
-We currently import the following types of records from these repositories:
+This import not currently scheduled to run automatically. We import the following types of records from these
+repositories:
     - authorships
-    - contributors
+    - contributor_names
     - publications
 
 ### Obtaining New Data
-Some of our data importing involves parsing files that were exported from the data sources. By convention,
-we place those files in the `db/data/` directory within the application and give them the names that are 
-defined in `lib/tasks/imports.rake`. This directory in the repository is ignored by revision control, and
-on the application servers it is shared between application releases. Below is a description of how we obtain
-new data from each source.
- 
-#### Activity Insight
-We import data directly via Activity Insight's API. There is no need to obtain any data prior to running
-the import.
-
-#### Pure
-In the `lib/utilities/` directory in this repository, there is a utility script for downloading each type of
-data that we import from pure. The script automatically places the downloaded files in the correct locations
-to be read by our importing scripts. All that you need to do run the script and provide our Pure API key when
-prompted. It's important to note that these scripts don't automatically recover or clean up after a
-failed/incomplete download, so if a script fails for any reason, then it must be rerun until it succeeds.
-This is particularly applicable to the `download_pure_pubs` script which is very long-running and has the
-potential to be interrupted. These scripts can be run in development or directly on the application servers
-depending on where you want to import the data.
+While much of our data importing is fully automated, some of it involves parsing files that are manually 
+exported/downloaded from a data source. By convention, we place those files in the `db/data/` directory
+within the application and give them the names that are  defined in `lib/tasks/imports.rake`. This directory
+in the repository is ignored by revision control, and on the application servers it is shared between
+application releases. The data sources that involve a manual export/import process are described below.
 
 #### eTD
 The process for obtaining and preparing eTD data for import involves several steps.
-1. Obtain an SQL dump of the production database for the graduate school instance of the eTD app from a Penn
-State Libraries admin. Justin Patterson has been able to do this for us in the past.
+1. Obtain an SQL dump of the production database for the graduate school instance of the eTD app.
 1. Create a MySQL database locally and load in the eTD production dump.
 1. The production database dump contains a view called `student_submissions` that presents most of the eTD data
 that we need to import, but it's missing one column that we need. So, in our local database we need to add
@@ -185,46 +186,34 @@ directory in this project (`db/data/`) as `etds.csv`.
 again substituting the name of your local database if necessary.
 1. Again, open `committees.tsv` in Excel or Numbers and export as a UTF-8 encoded CSV file, `db/data/committees.csv`.
 
-#### Penn State News RSS feed
-We import data directly from the feeds that are published on the web. There is no need to obtain any data
-prior to running the import.
-
-#### Penn State LDAP
-We import data directly from LDAP over the internet. There is no need to obtain any data prior to running the import.
-
 #### National Science Foundation
 In the `lib/utilities/` directory in this repository, there is a utility script for automatically downloading grant
 data from the National Science Foundation website and preparing it for import by decompressing the files and placing
 them in the correct location.
 
-#### Open Access Button
-We import data directly from the Open Access Button API. There is no need to obtain any data prior to running the import.
-
-#### Penn State Law School repositories
-We import data directly from online metadata repositories. There is no need to obtain any data prior to running the import.
-
 ### Importing New Data
-Once updated data files have been obtained (if applicable), importing new data is just a matter of running
-the appropriate rake task. These tasks are all defined in `lib/tasks/imports.rake`. An individual task is defined
-for importing each type of data from each source (note, however, that there isn't necessarily a one-to-one
-correspondence between the rake tasks and the data files). We also define a single task that imports all types of
-data from all sources, `rake import:all`, but in practice it's probably better to run each import individually in
-case any of the imports fail to complete for any reason. All of these tasks are designed to be idempotent given the
-same source data. If you are using the individual tasks to import only a subset of the data and you're going to 
-be running more than one, the order in which the tasks are run is important. Some tasks create records that other
-tasks will find and use if they are present. Running the tasks in the correct order ensures that your data import
-will be complete. The correct order for running the tasks is given by the order in which their associated classes
-are called in the definition of the `import:all` task.
+Once updated data files have been obtained (if applicable) and the necessary API keys have been installed,
+importing new data is just a matter of running the appropriate rake task. These tasks are all defined in
+`lib/tasks/imports.rake`. An individual task is defined for importing each type of data from each source. We also
+define a single task that imports all types of data from all sources, `rake import:all`. In practice there's no
+need to run this task in production since much of the importing is scheduled to run automatically. This task serves
+mostly to help you import data in development, and to give you an idea of the order in which the individual imports
+should be generally be run so as to get the most complete set of data in one pass. All of these tasks are designed
+to be idempotent given the same source data and database state. For the data sources that require manual export/import,
+the individual import tasks will occassionally need to be run in production. While it's sometimes necessary to import
+data directly from the sources in development for QA/testing, it's much faster to establish a useful development
+database by loading a dump of the production data.
 
 ### Identifying Duplicate Publication Data
 Because we import metadata about research publications from more than one source, and because duplicate entries
 sometime exist even within the same data source, we need a means of finding multiple records in our database that
 represent the same publication after we have finished importing data. This helps to ensure that users don't receive
-duplicate data when they query our own API. Running the rake task `rake group_duplicate_pubs` will compare the
-publication records that exist in the database using several different attributes, and it will put any publication
-records that appear to be the same into groups. This allows admin users to review the groups and pick which record
-in the group to keep. This task is designed to be idempotent, so it can be safely run multiple times. Subsequent
-imports of the same data will then not recreate the discarded duplicates.
+duplicate data when they query our own API. There is logic built into the processes that import publication metadata
+that will search for possible duplicate publications that already exist and group them as each new publication
+record is imported. This allows admin users to later review the groups and pick which record in each group to keep
+while dicarding the rest. Subsequent imports of the same data will then not recreate the discarded duplicates. There's
+also a rake task, `rake group_duplicate_pubs`, which uses the same duplicate finding/grouping logic. Running this task
+will check every publication record in the database for possible duplicates and group them.
 
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record
@@ -254,6 +243,12 @@ deleted. Then when we reimport publications from Pure and we come to this public
 import record for Pure attached to Publication Record 2, and we won't create a new record (but may update the existing
 record). Likewise when we reimport publications from Activity Insight.
 
+Occasionally publication records that are not actually duplicates appear similar enough that they are mistakenly 
+grouped as potential duplicates by our duplicate identification process. In this situation, it's possible for admin
+users to select and group publications as a way of indicating that they have been reviewed and have been determined
+to not be duplicates even though they look similar. This will prevent the same publications from automatically being
+grouped as potential duplicates again in the future.
+
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
 exist, then the import may update the attributes of that record. However, for records that can be fully or partially
@@ -264,7 +259,7 @@ Data imports never delete whole records from our database - even if formerly pre
 data source.
 
 Importing `user` records involves some additional logic since we import user data from two sources (Pure and Activity
-Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a users data
+Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a user's data
 from Activity Insight will overwrite existing data for that user that has already been imported from Pure, but not 
 vice versa.
 
@@ -274,7 +269,7 @@ ID within the data source.
 
 ## API
 ### Gems
-This API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:
+The RMD API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:
 - **swagger-blocks**: a DSL for pure Ruby code blocks that can be turned into JSON (what we're using to generate our API file which will then be used to generate interactive documentation).
 - **apivore**: tests a rails API against its OpenAPI (Swagger) description of end-points, models, and query parameters.
 - **swagger_ui_engine**: serves up live, interactive API documentation as part of our site. Basically provides a sandbox where users can read about the enpoints and then "try them out". It builds all of this from the API file we build from swagger-blocks.
@@ -330,6 +325,43 @@ Access Accounts to also link them to their Researcher Metadata profile. This ens
 able to use the centralized access tokens, then one of those tokens will exist for every user who has linked
 their ORCID record to their Researcher Metadata profile. It also gives users one more incentive to link their
 ORCID record to their Penn State Access Account (which we want them to do regardless).
+
+## RMD and Open Access
+Penn State has adopted a [policy](https://openaccess.psu.edu/) requiring most research published by faculty
+at the University to be made freely available to the public. Part of the purpose of RMD is to support this
+policy by encouraging faculty members to comply and by helping to provide them with the means and guidance
+to do so. RMD is capable of determining (based on its own data) which faculty members have authored publications
+that are subject to the policy and that may not be in compliance, and it's capable of sending a notification by
+email to each of these faculty members with a list of the publications that may require action. This list of
+publications links back to the user interface in RMD that faculty use to manage their profile preferences. This
+interface shows a list of all of the user's publications and the open access status of each. For each publication
+that has an unknown open access status, there are several actions that a user may take in order to comply with the
+policy including:
+1. providing a URL to an open access version of their work that has already been published on the web
+1. visiting [ScholarSphere](https://scholarsphere.psu.edu/) and depositing an open access version of their work
+1. submitting a waiver if an open access version of their work cannot be published for some reason
+
+Before notifying users in this way, we attempt to obtain as much open access status information as possible so
+that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
+we have imported from various sources to query Open Access Button and attempt to obtain a URL for an existing
+open access version of the work. Currently the processes for obtaining as much data as possible beforehand and
+for sending the email notifications are triggered manually by rake tasks in the production environment. The
+task for importing data from Open Access Button is `rake import:open_access_button`, and the task for sending
+the notifications is `rake email_notifications:send_all_open_access_reminders`. As the name of the latter task
+indicates, it sends an email to *every* user who meets the criteria for receiving one. It may be more desireable
+to actually send the emails in smaller batches in some cases, which is supported by the code underlying the
+rake task. There is also a task for sending a test email containing mock data to a specific email address for the
+purposes of testing/demonstration:  `rake email_notifications:test_open_access_reminder[email@example.com]`.
+
+For each user, we record the time when they were last sent an open access reminder email, and for each publication
+we also record this time in the user's authorship record so that we know which publications we've already
+reminded the user about. The logic for determining who, out of a given set of users, should receive an email
+includes a check of this timestamp so that we never email the same person more often than once every six months
+regardless of how often we run the emailing task.
+
+If a user takes any of the possible actions to comply with the open access policy for a publication, then the
+result will be recorded in RMD, the open access status of the publication will change, and the user will no
+longer be notified about the publication.
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.

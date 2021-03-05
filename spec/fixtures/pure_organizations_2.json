@@ -1,0 +1,500 @@
+{
+  "count": 3,
+  "pageInformation": {
+    "offset": 0,
+    "size": 3
+  },
+  "items": [
+    {
+      "pureId": 8288514,
+      "externalId": "EXT-ID-1",
+      "externalIdSource": "synchronisedOrganisation",
+      "externallyManaged": true,
+      "uuid": "pure-uuid-001",
+      "period": {
+        "startDate": "1855-02-22T12:00:00.000+0000"
+      },
+      "info": {
+        "createdBy": "atira",
+        "createdDate": "2016-12-23T14:06:26.067+0000",
+        "modifiedBy": "raz5056@psu.edu",
+        "modifiedDate": "2019-07-23T18:50:11.168+0000",
+        "portalUrl": "https://pennstate.pure.elsevier.com/en/organisations/692237a4-e66a-413f-8ea9-40e0d30229c1",
+        "prettyURLIdentifiers": [
+          "penn-state-clinical-and-translational-science-institute-ctsi",
+          "penn-state-clinical-and-translational-science-institute",
+          "the-clinical-and-translational-science-institute",
+          "clinical-and-translational-science-institute"
+        ]
+      },
+      "name": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "Biology"
+          }
+        ]
+      },
+      "type": {
+        "pureId": 8288457,
+        "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Department"
+            }
+          ]
+        }
+      },
+      "visibility": {
+        "key": "FREE",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Public - No restriction"
+            }
+          ]
+        }
+      },
+      "profileInformations": [
+        {
+          "pureId": 8288520,
+          "externalId": "organisation_profile",
+          "externalIdSource": "synchronisedOrganisation",
+          "externallyManaged": true,
+          "value": {
+            "formatted": true,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "<p>Penn State Clinical and Translational Science Institute accelerates discoveries to benefit human health.</p>\n<p>It is a bridge between basic scientists and clinical researchers and promotes collaboration to discover new treatments, medical procedures and ways to diagnose disease. It helps the Penn State community move its health research more efficiently and effectively out of the science laboratories and into use by the people who need it.</p>"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 864,
+            "uri": "/dk/atira/pure/organisation/customfields/organisation_profile",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization profile"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 8288521,
+          "externalId": "organisationid:INSTITUTE-CTSI",
+          "externalIdSource": "synchronisedOrganisation",
+          "value": {
+            "formatted": false,
+            "value": "INSTITUTE-CTSI"
+          },
+          "type": {
+            "pureId": 80,
+            "uri": "/dk/atira/pure/organisation/organisationsources/organisationid",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization ID"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "addresses": [
+        {
+          "pureId": 8288516,
+          "externalId": "postal",
+          "externalIdSource": "synchronisedOrganisation",
+          "addressLines": "Penn State Clinical and Translational Science Institute\r\n500 University Dr.\r\nP.O. Box 850\r\nHershey, PA 17033",
+          "addressType": {
+            "pureId": 56,
+            "uri": "/dk/atira/pure/organisation/organisationaddresstype/postal",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Postal address"
+                }
+              ]
+            }
+          },
+          "country": {
+            "pureId": 577,
+            "uri": "/dk/atira/pure/core/countries/us",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "United States"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "webAddresses": [
+        {
+          "pureId": 63026704,
+          "value": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "https://ctsi.psu.edu"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 70,
+            "uri": "/dk/atira/pure/organisation/organisationwebaddresstype/web",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Web"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "parents": [
+        {
+          "uuid": "pure-uuid-002",
+          "externalId": "ADMIN-INSTITUTES",
+          "externalIdSource": "synchronisedOrganisation",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Interdisciplinary Institutes and Units"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 8288457,
+            "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/institute",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Interdisciplinary Research Unit"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "pureId": 8288527,
+      "externalId": "EXT-ID-2",
+      "externalIdSource": "synchronisedOrganisation",
+      "externallyManaged": true,
+      "uuid": "pure-uuid-002",
+      "period": {
+        "startDate": "1855-02-22T12:00:00.000+0000"
+      },
+      "info": {
+        "createdBy": "atira",
+        "createdDate": "2016-12-23T14:06:26.246+0000",
+        "modifiedBy": "raz5056@psu.edu",
+        "modifiedDate": "2019-07-23T18:50:17.455+0000",
+        "portalUrl": "https://pennstate.pure.elsevier.com/en/organisations/68573cdc-7eb1-4178-88f2-65095fbe4a50",
+        "prettyURLIdentifiers": [
+          "smeal-college-of-business"
+        ]
+      },
+      "name": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "College of Science"
+          }
+        ]
+      },
+      "type": {
+        "pureId": 8288437,
+        "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/college",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "College"
+            }
+          ]
+        }
+      },
+      "visibility": {
+        "key": "FREE",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Public - No restriction"
+            }
+          ]
+        }
+      },
+      "profileInformations": [
+        {
+          "pureId": 8288533,
+          "externalId": "organisation_profile",
+          "externalIdSource": "synchronisedOrganisation",
+          "externallyManaged": true,
+          "value": {
+            "formatted": true,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Research Interests"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 864,
+            "uri": "/dk/atira/pure/organisation/customfields/organisation_profile",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization profile"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 8288534,
+          "externalId": "organisationid:COLLEGE-BA",
+          "externalIdSource": "synchronisedOrganisation",
+          "value": {
+            "formatted": false,
+            "value": "COLLEGE-BA"
+          },
+          "type": {
+            "pureId": 80,
+            "uri": "/dk/atira/pure/organisation/organisationsources/organisationid",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization ID"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "addresses": [
+        {
+          "pureId": 8288529,
+          "externalId": "postal",
+          "externalIdSource": "synchronisedOrganisation",
+          "addressType": {
+            "pureId": 56,
+            "uri": "/dk/atira/pure/organisation/organisationaddresstype/postal",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Postal address"
+                }
+              ]
+            }
+          },
+          "country": {
+            "pureId": 577,
+            "uri": "/dk/atira/pure/core/countries/us",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "United States"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "parents": [
+        {}
+      ]
+    },
+    {
+      "pureId": 8288553,
+      "externalId": "EXT-ID-3",
+      "externalIdSource": "synchronisedOrganisation",
+      "externallyManaged": true,
+      "uuid": "pure-uuid-003",
+      "period": {
+        "startDate": "1855-02-22T12:00:00.000+0000"
+      },
+      "info": {
+        "createdBy": "atira",
+        "createdDate": "2016-12-23T14:06:26.434+0000",
+        "modifiedBy": "raz5056@psu.edu",
+        "modifiedDate": "2019-07-23T18:50:18.789+0000",
+        "portalUrl": "https://pennstate.pure.elsevier.com/en/organisations/f09adc6a-1843-4d41-91fc-5f5538d200a9",
+        "prettyURLIdentifiers": [
+          "college-of-nursing",
+          "nursing"
+        ]
+      },
+      "name": {
+        "formatted": false,
+        "text": [
+          {
+            "locale": "en_US",
+            "value": "College of Nursing"
+          }
+        ]
+      },
+      "type": {
+        "pureId": 8288437,
+        "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/college",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "College"
+            }
+          ]
+        }
+      },
+      "visibility": {
+        "key": "FREE",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Public - No restriction"
+            }
+          ]
+        }
+      },
+      "profileInformations": [
+        {
+          "pureId": 8288559,
+          "externalId": "organisation_profile",
+          "externalIdSource": "synchronisedOrganisation",
+          "externallyManaged": true,
+          "value": {
+            "formatted": true,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Research Interests"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 864,
+            "uri": "/dk/atira/pure/organisation/customfields/organisation_profile",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization profile"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "ids": [
+        {
+          "pureId": 8288560,
+          "externalId": "organisationid:COLLEGE-NR",
+          "externalIdSource": "synchronisedOrganisation",
+          "value": {
+            "formatted": false,
+            "value": "COLLEGE-NR"
+          },
+          "type": {
+            "pureId": 80,
+            "uri": "/dk/atira/pure/organisation/organisationsources/organisationid",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Organization ID"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "addresses": [
+        {
+          "pureId": 8288555,
+          "externalId": "postal",
+          "externalIdSource": "synchronisedOrganisation",
+          "addressType": {
+            "pureId": 56,
+            "uri": "/dk/atira/pure/organisation/organisationaddresstype/postal",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Postal address"
+                }
+              ]
+            }
+          },
+          "country": {
+            "pureId": 577,
+            "uri": "/dk/atira/pure/core/countries/us",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "United States"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "parents": [
+        {}
+      ]
+    }
+  ]
+}

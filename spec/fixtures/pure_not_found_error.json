@@ -1,0 +1,6 @@
+{
+  "type": "/error",
+  "title": "Service not found",
+  "status": 404,
+  "detail": "Requested service was not found, message was: HTTP 404 Not Found"
+}

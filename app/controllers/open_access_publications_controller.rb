@@ -1,5 +1,5 @@
 class OpenAccessPublicationsController < OpenAccessWorkflowController
-  skip_before_action :raise_if_inaccessible, only: [:edit]
+  skip_before_action :redirect_if_inaccessible, only: [:edit]
   
   def edit
     if publication.no_open_access_information?

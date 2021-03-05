@@ -768,7 +768,7 @@ class ActivityInsightPublication
   end
 
   def doi
-    DOIParser.new(url).url || DOIParser.new(issn).url
+    DOIParser.new(doi_element).url || DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
   def faculty_author
@@ -784,6 +784,10 @@ class ActivityInsightPublication
   private
 
   attr_reader :parsed_publication, :user
+
+  def doi_element
+    text_for('DOI')
+  end
 
   def text_for(element)
     parsed_publication.css(element).text.strip.presence

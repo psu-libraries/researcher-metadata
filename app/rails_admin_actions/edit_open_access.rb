@@ -28,7 +28,7 @@ module RailsAdmin
                       a.update_attributes!(scholarsphere_uploaded_at: nil)
                     end
                   end
-                  flash[:success] = I18n.t('admin.actions.edit_open_access.success', @publication.title)
+                  flash[:success] = I18n.t('admin.actions.edit_open_access.success', title: @publication.title)
                   redirect_to rails_admin.index_path(model_name: :authorship)
                 else
                   flash.now[:error] = @form.errors.full_messages.join(" ")

@@ -707,31 +707,59 @@ describe ActivityInsightPublication do
       allow(DOIParser).to receive(:new).with('a non-DOI web address').and_return unsuccessful_wa_parser
       allow(DOIParser).to receive(:new).with('a DOI ISSN/ISBN').and_return successful_issn_parser
       allow(DOIParser).to receive(:new).with('a non-DOI ISSN/ISBN').and_return unsuccessful_issn_parser
+      allow(DOIParser).to receive(:new).with('a DOI').and_return successful_doi_parser
+      allow(DOIParser).to receive(:new).with('an invalid DOI').and_return unsuccessful_doi_parser
     end
 
     let(:successful_wa_parser) { double 'DOI parser', url: 'wa DOI' }
     let(:unsuccessful_wa_parser) { double 'DOI parser', url: nil }
     let(:successful_issn_parser) { double 'DOI parser', url: 'ISSN DOI' }
     let(:unsuccessful_issn_parser) { double 'DOI parser', url: nil }
+    let(:successful_doi_parser) { double 'DOI parser', url: 'DOI' }
+    let(:unsuccessful_doi_parser) { double 'DOI parser', url: nil }
 
     let(:doi_web_address_element) { double 'DOI web address element', text: 'a DOI web address' }
     let(:non_doi_web_address_element) { double 'non-DOI web address element', text: 'a non-DOI web address' }
     let(:doi_isbnissn_element) { double 'DOI isbnissn element', text: 'a DOI ISSN/ISBN' }
     let(:non_doi_isbnissn_element) { double 'non-DOI isbnissn element', text: 'a non-DOI ISSN/ISBN' }
+    let(:doi_element) { double 'DOI element', text: 'a DOI' }
+    let(:invalid_doi_element) { double 'invalid DOI element', text: 'an invalid DOI' }
 
     context "when a DOI can be parsed out of the web_address element in the given data" do
       before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return doi_web_address_element }
       context "when a DOI can be parsed out of the isbnissn element in the given data" do
         before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return doi_isbnissn_element }
-        it "returns the DOI from the web_address element" do
-          expect(pub.doi).to eq 'wa DOI'
+        context "when a DOI can be parsed out of the DOI element in the given data" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return doi_element }
+
+          it "returns the DOI from the DOI element" do
+            expect(pub.doi).to eq 'DOI'
+          end
+        end
+        context "when a DOI cannot be parsed out of the DOI element" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return invalid_doi_element }
+
+          it "returns the DOI from the web_address element" do
+            expect(pub.doi).to eq 'wa DOI'
+          end
         end
       end
 
       context "when a DOI cannot be parsed out of the isbnissn element in the given data" do
         before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_doi_isbnissn_element }
-        it "returns the DOI from the web_address element" do
-          expect(pub.doi).to eq 'wa DOI'
+        context "when a DOI can be parsed out of the DOI element in the given data" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return doi_element }
+
+          it "returns the DOI from the DOI element" do
+            expect(pub.doi).to eq 'DOI'
+          end
+        end
+        context "when a DOI cannot be parsed out of the DOI element" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return invalid_doi_element }
+
+          it "returns the DOI from the web_address element" do
+            expect(pub.doi).to eq 'wa DOI'
+          end
         end
       end
     end
@@ -740,15 +768,37 @@ describe ActivityInsightPublication do
       before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return non_doi_web_address_element }
       context "when a DOI can be parsed out of the isbnissn element in the given data" do
         before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return doi_isbnissn_element }
-        it "returns the DOI from the isbnissn element" do
-          expect(pub.doi).to eq 'ISSN DOI'
+        context "when a DOI can be parsed out of the DOI element in the given data" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return doi_element }
+
+          it "returns the DOI from the DOI element" do
+            expect(pub.doi).to eq 'DOI'
+          end
+        end
+        context "when a DOI cannot be parsed out of the DOI element" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return invalid_doi_element }
+
+          it "returns the DOI from the isbnissn element" do
+            expect(pub.doi).to eq 'ISSN DOI'
+          end
         end
       end
 
       context "when a DOI cannot be parsed out of the isbnissn element in the given data" do
         before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_doi_isbnissn_element }
-        it "returns nil" do
-          expect(pub.doi).to eq nil
+        context "when a DOI can be parsed out of the DOI element in the given data" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return doi_element }
+
+          it "returns the DOI from the DOI element" do
+            expect(pub.doi).to eq 'DOI'
+          end
+        end
+        context "when a DOI cannot be parsed out of the DOI element" do
+          before { allow(parsed_pub).to receive(:css).with('DOI').and_return invalid_doi_element }
+
+          it "returns nil" do
+            expect(pub.doi).to eq nil
+          end
         end
       end
     end

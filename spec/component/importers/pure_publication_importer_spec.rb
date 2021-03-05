@@ -1,7 +1,14 @@
 require 'component/component_spec_helper'
 
 describe PurePublicationImporter do
-  let(:importer) { PurePublicationImporter.new(dirname: dirname) }
+  let(:importer) { PurePublicationImporter.new }
+  let(:http_response_1) { File.read(filename_1) }
+  let(:http_response_2) { File.read(filename_2) }
+  let(:http_error_response) { File.read(error_filename) }
+  let(:filename_1) { Rails.root.join('spec', 'fixtures', 'pure_publications_1.json') }
+  let(:filename_2) { Rails.root.join('spec', 'fixtures', 'pure_publications_2.json') }
+  let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
+
   let!(:pub1auth1) { create :user, pure_uuid: '5ec8ce05-0912-4d68-8633-c5618a3cf15d'}
   let!(:pub2auth4) { create :user, pure_uuid: 'dc40be59-e778-404c-aaed-eddb9a992cb8'}
   let!(:pub3auth2) { create :user, pure_uuid: '82195bc6-c5cd-479e-b6f8-545f0f0555ba'}
@@ -12,19 +19,26 @@ describe PurePublicationImporter do
 
   let!(:journal) { create :journal,
                           pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f' }
+
+  before do
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=1&offset=0',
+                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_1
+
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=500&offset=0',
+                                      headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_2
+  end
+
   describe '#call' do
     let!(:duplicate_pub1) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
     let!(:duplicate_pub2) { create :publication, title: "Third Test Publication With a Really Unique Title", visible: true }
     
-    context "when given a directory containing well-formed .json files of valid publication data from Pure" do
-      let(:dirname) { Rails.root.join('spec', 'fixtures', 'pure_publications') }
-
+    context "when the API endpoint is found" do
       context "when no publication import records exist in the database" do
-        it "creates a new publication import record for each object in the .json files" do
+        it "creates a new publication import record for each object in the imported data" do
           expect { importer.call }.to change { PublicationImport.count }.by 3
         end
 
-        it "creates a new publication record for each object in the .json files" do
+        it "creates a new publication record for each object in the imported data" do
           expect { importer.call }.to change { Publication.count }.by 3
         end
 
@@ -149,19 +163,19 @@ describe PurePublicationImporter do
                                          last_name: 'Fifthauthor',
                                          position: 5)).not_to be_nil
 
-          expect(p3.contributor_names.find_by(first_name: 'Thirdpub',
+          expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                          middle_name: nil,
                                          last_name: 'Firstauthor',
                                          position: 1)).not_to be_nil
-          expect(p3.contributor_names.find_by(first_name: 'Thirdpub',
+          expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                          middle_name: nil,
                                          last_name: 'Secondauthor',
                                          position: 2)).not_to be_nil
-          expect(p3.contributor_names.find_by(first_name: 'Thirdpub',
+          expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                          middle_name: nil,
                                          last_name: 'Thirdauthor',
                                          position: 3)).not_to be_nil
-          expect(p3.contributor_names.find_by(first_name: 'Thirdpub',
+          expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                          middle_name: nil,
                                          last_name: 'Fourthauthor',
                                          position: 4)).not_to be_nil
@@ -203,7 +217,7 @@ describe PurePublicationImporter do
         end
       end
 
-      context "when a publication record and a publication import record already exist for one of the publications in the .json files" do
+      context "when a publication record and a publication import record already exist for one of the publications in the imported data" do
         let!(:existing_import) { create :publication_import,
                                         source: 'Pure',
                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a',
@@ -231,11 +245,11 @@ describe PurePublicationImporter do
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
 
-          it "creates a new publication import record for each new object in the .json files" do
+          it "creates a new publication import record for each new object in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 2
           end
   
-          it "creates a new publication record for each new object in the .json files" do
+          it "creates a new publication record for each new object in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 2
           end
   
@@ -386,11 +400,11 @@ describe PurePublicationImporter do
           let!(:new_journal) { create :journal,
                                       pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad' }
 
-          it "creates a new publication import record for each new object in the .json files" do
+          it "creates a new publication import record for each new object in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 2
           end
 
-          it "creates a new publication record for each new object in the .json files" do
+          it "creates a new publication record for each new object in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 2
           end
 
@@ -546,6 +560,20 @@ describe PurePublicationImporter do
             expect(duplicate_pub2.reload.visible).to eq false
           end
         end
+      end
+    end
+
+    context "when the API endpoint is not found" do
+      before do
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=1&offset=0',
+                                              headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=500&offset=0',
+                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+      end
+
+      it "raises an error" do
+        expect { importer.call }.to raise_error PureImporter::ServiceNotFound
       end
     end
   end

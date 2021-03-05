@@ -54,7 +54,7 @@
             <div class='form-group'>
               <%= f.input :open_access_url, label: 'Open Access URL' %>
             </div>
-            <%= f.submit 'Submit', class: 'btn btn-primary' %>
+            <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>
         <div class="action-separator">or</div>
@@ -68,7 +68,7 @@
                         scholarsphere_uploads_path,
                         remote: false,
                         class: 'btn btn-primary',
-                        data: {disable_with: "Upload"} %>
+                        data: {disable_with: "Upload", confirm: "You are about the leave the Researcher Metadata Database site and go to https://scholarsphere.psu.edu/. This will update the open access status of your publication to indicate that a ScholarSphere upload is pending. Once you have completed the upload to ScholarSphere, there's no further action that you need to take for this publication. The new status and ScholarSphere URL for your publication will be reflected in the Researcher Metadata Database in a few days."} %>
         </div>
       </div>
       <div>
