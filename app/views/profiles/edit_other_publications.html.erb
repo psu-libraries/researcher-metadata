@@ -4,7 +4,6 @@
   <table class="table">
     <thead>
     <tr>
-      <th></th>
       <th>Publication</th>
       <th>Publication Type</th>
       <th>Visible in profile</th>
@@ -14,7 +13,6 @@
     <tbody id="other_publications">
       <% @user_other_publications.each do |a| %>
         <tr id="<%= dom_id(a) %>">
-          <td><%= fa_icon 'arrows-v' %></td>
           <td class="pub-title"><%= a.profile_management_label.html_safe %></td>
           <td><%= a.publication.publication_type.html_safe %></td>
           <td class="visibility">

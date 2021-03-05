@@ -431,7 +431,7 @@ describe Publication, type: :model do
     let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
     let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
     it 'returns publications that are journal articles' do
-      expect(Publication.journal_article).to eq [pub1, pub2, pub3]
+      expect(Publication.journal_article).to match_array [pub1, pub2, pub3]
     end
   end
 
@@ -443,7 +443,7 @@ describe Publication, type: :model do
     let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
     let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
     it 'returns publications that are not journal articles' do
-      expect(Publication.non_journal_article).to eq [pub4, pub5, pub6]
+      expect(Publication.non_journal_article).to match_array [pub4, pub5, pub6]
     end
   end
 
