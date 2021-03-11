@@ -688,6 +688,8 @@ class ActivityInsightPublication
       'Trade Journal Article'
     elsif cleaned_ai_type == 'journal article'
       'Journal Article'
+    else
+      ActivityInsightPublicationTypeMapIn.map(cleaned_ai_type)
     end
   end
 
@@ -696,7 +698,7 @@ class ActivityInsightPublication
   end
 
   def importable?
-    !!(publication_type =~ /journal article/i) && (status == 'Published')
+    status == 'Published'
   end
 
   def activity_insight_id
@@ -792,11 +794,11 @@ class ActivityInsightPublication
   end
 
   def contype
-    text_for('CONTYPE').try(:downcase)
+    text_for('CONTYPE')
   end
 
   def cleaned_ai_type
-    if contype == 'other'
+    if contype == 'Other'
       text_for('CONTYPEOTHER').try(:downcase)
     else
       contype

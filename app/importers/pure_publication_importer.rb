@@ -9,74 +9,71 @@ class PurePublicationImporter < PureImporter
       pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
       pubs['items'].each do |publication|
-        if publication['type']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Article"
 
-          ActiveRecord::Base.transaction do
-            pi = PublicationImport.find_by(source: IMPORT_SOURCE,
-                                            source_identifier: publication['uuid']) ||
-              PublicationImport.new(source: IMPORT_SOURCE,
-                                    source_identifier: publication['uuid'])
+        ActiveRecord::Base.transaction do
+          pi = PublicationImport.find_by(source: IMPORT_SOURCE,
+                                          source_identifier: publication['uuid']) ||
+            PublicationImport.new(source: IMPORT_SOURCE,
+                                  source_identifier: publication['uuid'])
 
-            p = pi.publication
+          p = pi.publication
 
-            pi.source_updated_at = publication['info']['modifiedDate']
+          pi.source_updated_at = publication['info']['modifiedDate']
 
-            if pi.persisted?
-              if p.updated_by_user_at.present?
-                attrs = {
-                  total_scopus_citations: publication['totalScopusCitations'],
-                  journal: journal(publication)
-                }
-                attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
-                pi.publication.update_attributes!(attrs)
-              else
-                pi.publication.update_attributes!(pub_attrs(publication))
-              end
+          if pi.persisted?
+            if p.updated_by_user_at.present?
+              attrs = {
+                total_scopus_citations: publication['totalScopusCitations'],
+                journal: journal_present?(publication) ? journal(publication) : nil
+              }
+              attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
+              pi.publication.update_attributes!(attrs)
             else
-              p = Publication.create!(pub_attrs(publication))
-              pi.publication = p
+              pi.publication.update_attributes!(pub_attrs(publication))
+            end
+          else
+            p = Publication.create!(pub_attrs(publication))
+            pi.publication = p
 
-              DuplicatePublicationGroup.group_duplicates_of(p)
-              group = p.reload.duplicate_group
-              if group
-                other_pubs = group.publications.where.not(id: p.id)
-                other_pubs.update_all(visible: false)
-              end
+            DuplicatePublicationGroup.group_duplicates_of(p)
+            group = p.reload.duplicate_group
+            if group
+              other_pubs = group.publications.where.not(id: p.id)
+              other_pubs.update_all(visible: false)
+            end
+          end
+
+          pi.save!
+
+          unless p.updated_by_user_at.present?
+            p.contributor_names.delete_all
+
+            authorships = publication['personAssociations'].select do |a|
+              !a['authorCollaboration'].present? &&
+                a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
             end
 
-            pi.save!
+            authorships.each_with_index do |a, i|
+              if a['person'].present?
+                u = User.find_by(pure_uuid: a['person']['uuid'])
 
-            unless p.updated_by_user_at.present?
-              p.contributor_names.delete_all
+                if u
+                  authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
 
-              authorships = publication['personAssociations'].select do |a|
-                !a['authorCollaboration'].present? &&
-                  a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
-              end
-
-              authorships.each_with_index do |a, i|
-                if a['person'].present?
-                  u = User.find_by(pure_uuid: a['person']['uuid'])
-
-                  if u
-                    authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
-
-                    authorship.user = u if authorship.new_record?
-                    authorship.publication = p if authorship.new_record?
-                    authorship.author_number = i+1
-                    begin
-                      authorship.save!
-                    rescue ActiveRecord::RecordInvalid => e
-                      @errors << e
-                    end
+                  authorship.user = u if authorship.new_record?
+                  authorship.publication = p if authorship.new_record?
+                  authorship.author_number = i+1
+                  begin
+                    authorship.save!
+                  rescue ActiveRecord::RecordInvalid => e
+                    @errors << e
                   end
                 end
-
-                ContributorName.create!(publication: p,
-                                        first_name: a['name']['firstName'],
-                                        last_name: a['name']['lastName'],
-                                        position: i+1)
               end
+              ContributorName.create!(publication: p,
+                                  first_name: a['name']['firstName'],
+                                  last_name: a['name']['lastName'],
+                                  position: i+1)
             end
           end
         end
@@ -100,12 +97,13 @@ class PurePublicationImporter < PureImporter
     {
       title: publication['title']['value'],
       secondary_title: publication['subTitle'].try('[]', 'value'),
-      publication_type: "Academic Journal Article",
+      publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
+                                                .detect { |t| t['locale'] == 'en_US' }['value']),
       page_range: publication['pages'],
       volume: publication['volume'],
       issue: publication['journalNumber'],
-      journal: journal(publication),
-      issn: issn(publication),
+      journal: journal_present?(publication) ? journal(publication) : nil,
+      issn: journal_present?(publication) ? issn(publication) : nil,
       status: status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value'],
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
@@ -151,6 +149,11 @@ class PurePublicationImporter < PureImporter
   end
 
   def journal(publication)
-    Journal.find_by(pure_uuid: publication['journalAssociation']['journal']['uuid'])
+    publication['journalAssociation']['journal'].present? ?
+        Journal.find_by(pure_uuid: publication['journalAssociation']['journal']['uuid']) : nil
+  end
+
+  def journal_present?(publication)
+    publication['journalAssociation'].present?
   end
 end

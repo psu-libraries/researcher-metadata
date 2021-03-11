@@ -7,7 +7,7 @@ class OrcidWork < OrcidResource
       },
       "journal-title": publication.preferred_journal_title,
       "short-description": publication.abstract,
-      type: 'journal-article'
+      type: publication_type
     }
 
     if published_date.present?
@@ -75,5 +75,9 @@ class OrcidWork < OrcidResource
 
   def published_date
     publication.published_on
+  end
+
+  def publication_type
+    OrcidPublicationTypeMapOut.map(publication.publication_type)
   end
 end

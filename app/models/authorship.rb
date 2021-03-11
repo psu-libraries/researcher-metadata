@@ -20,6 +20,7 @@ class Authorship < ApplicationRecord
            :scholarsphere_upload_pending?,
            :open_access_waived?,
            :no_open_access_information?,
+           :is_journal_article?,
            to: :publication,
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true

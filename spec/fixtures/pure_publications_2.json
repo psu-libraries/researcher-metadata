@@ -1533,7 +1533,7 @@
             "formatted": false,
             "text": [
               {
-                "value": "Christina Huang"
+                "value": "Nonarticlepub Firstauthor"
               }
             ]
           },
@@ -1552,8 +1552,8 @@
           }
         },
         "name": {
-          "firstName": "Christina",
-          "lastName": "Huang"
+          "firstName": "Nonarticlepub",
+          "lastName": "Firstauthor"
         },
         "personRole": {
           "pureId": 4891,
@@ -1607,7 +1607,7 @@
             "formatted": false,
             "text": [
               {
-                "value": "Julia Shelkey"
+                "value": "Nonarticlepub Secondauthor"
               }
             ]
           },
@@ -1626,8 +1626,8 @@
           }
         },
         "name": {
-          "firstName": "Julia",
-          "lastName": "Shelkey"
+          "firstName": "Nonarticlepub",
+          "lastName": "Secondauthor"
         },
         "personRole": {
           "pureId": 4891,
@@ -1684,14 +1684,14 @@
             "formatted": false,
             "text": [
               {
-                "value": "Harjit Singh"
+                "value": "Nonarticlepub Thirdauthor"
               }
             ]
           }
         },
         "name": {
-          "firstName": "Harjit",
-          "lastName": "Singh"
+          "firstName": "Nonarticlepub",
+          "lastName": "Thirdauthor"
         },
         "personRole": {
           "pureId": 4891,
@@ -1748,14 +1748,14 @@
             "formatted": false,
             "text": [
               {
-                "value": "Matthew Silvis"
+                "value": "Nonarticlepub Fourthauthor"
               }
             ]
           }
         },
         "name": {
-          "firstName": "Matthew",
-          "lastName": "Silvis"
+          "firstName": "Nonarticlepub",
+          "lastName": "Fourthauthor"
         },
         "personRole": {
           "pureId": 4891,

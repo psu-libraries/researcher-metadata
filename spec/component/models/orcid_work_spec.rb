@@ -4,6 +4,7 @@ describe OrcidWork do
   let(:date) { Date.yesterday }
   let(:publication) { double 'publication',
                              title: 'Test Title',
+                             publication_type: 'Journal Article',
                              preferred_journal_title: 'Test Journal',
                              secondary_title: 'Secondary Test Title',
                              abstract: 'Test Abstract',

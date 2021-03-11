@@ -6,11 +6,15 @@ class Publication < ApplicationRecord
   include Swagger::Blocks
 
   def self.publication_types
-    ["Academic Journal Article",
-     "In-house Journal Article",
-     "Professional Journal Article",
-     "Trade Journal Article",
-     "Journal Article"]
+    [
+      "Academic Journal Article", "In-house Journal Article", "Professional Journal Article",
+      "Trade Journal Article", "Journal Article", "Review Article", "Abstract", "Blog", "Book", "Chapter",
+      "Book/Film/Article Review", "Conference Proceeding", "Encyclopedia/Dictionary Entry",
+      "Extension Publication", "Magazine/Trade Publication", "Manuscript", "Newsletter",
+      "Newspaper Article", "Comment/Debate", "Commissioned Report", "Digital or Visual Product",
+      "Editorial", "Foreword/Postscript", "Letter", "Paper", "Patent", "Poster",
+      "Scholarly Edition", "Short Survey", "Working Paper", "Other"
+     ]
   end
 
   has_many :authorships, inverse_of: :publication
@@ -58,9 +62,13 @@ class Publication < ApplicationRecord
           where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
           distinct(:id) }
 
-  scope :subject_to_open_access_policy, -> { where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { journal_article.where("published_on >= ?", Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
+
+  scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
+
+  scope :non_journal_article, -> { where("publications.publication_type !~* 'Journal Article'") }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
@@ -463,6 +471,10 @@ class Publication < ApplicationRecord
 
   def orcid_allowed?
     doi.present? || url.present? || preferred_open_access_url.present?
+  end
+
+  def is_journal_article?
+    publication_type.include? 'Journal Article'
   end
 
   def all_non_duplicate_ids

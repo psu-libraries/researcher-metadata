@@ -137,11 +137,16 @@ describe Publication, type: :model do
 
   describe '.publication_types' do
     it "returns the list of valid publication types" do
-      expect(Publication.publication_types).to eq ["Academic Journal Article",
-                                                   "In-house Journal Article",
-                                                   "Professional Journal Article",
-                                                   "Trade Journal Article",
-                                                   "Journal Article"]
+      expect(Publication.publication_types).to eq ["Academic Journal Article", "In-house Journal Article",
+                                                   "Professional Journal Article", "Trade Journal Article",
+                                                   "Journal Article", "Review Article", "Abstract", "Blog", "Book",
+                                                   "Chapter", "Book/Film/Article Review", "Conference Proceeding",
+                                                   "Encyclopedia/Dictionary Entry", "Extension Publication",
+                                                   "Magazine/Trade Publication", "Manuscript", "Newsletter",
+                                                   "Newspaper Article", "Comment/Debate", "Commissioned Report",
+                                                   "Digital or Visual Product", "Editorial", "Foreword/Postscript",
+                                                   "Letter", "Paper", "Patent", "Poster", "Scholarly Edition",
+                                                   "Short Survey", "Working Paper", "Other"]
     end
   end
 
@@ -208,6 +213,7 @@ describe Publication, type: :model do
     let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
+    let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
     it "returns publications that were published after Penn State's open access policy went into effect" do
       expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
     end
@@ -414,6 +420,30 @@ describe Publication, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe '.journal_article' do
+    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
+    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
+    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    it 'returns publications that are journal articles' do
+      expect(Publication.journal_article).to match_array [pub1, pub2, pub3]
+    end
+  end
+
+  describe '.non_journal_article' do
+    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
+    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
+    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    it 'returns publications that are not journal articles' do
+      expect(Publication.non_journal_article).to match_array [pub4, pub5, pub6]
     end
   end
 
@@ -2152,6 +2182,22 @@ describe Publication, type: :model do
 
       it "returns false" do
         expect(pub.has_single_import_from_ai?).to eq false
+      end
+    end
+  end
+
+  describe '#is_journal_article?' do
+    context 'when publication is a Journal Article' do
+      let!(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+      it 'returns true' do
+        expect(pub1.is_journal_article?).to eq true
+      end
+    end
+
+    context 'when publication is a Book' do
+      let!(:pub2) { FactoryBot.create :publication, publication_type: 'Book' }
+      it 'returns false' do
+        expect(pub2.is_journal_article?).to eq false
       end
     end
   end
