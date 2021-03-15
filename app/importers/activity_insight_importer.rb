@@ -157,8 +157,6 @@ class ActivityInsightImporter
               pi.save!
             end
 
-            pub_record = pi.publication
-
             unless pub_record.updated_by_user_at.present?
               authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
 
