@@ -62,38 +62,44 @@ describe ScholarsphereUploadsController, type: :controller do
       end
 
       context "when given the ID for a publication that belongs to the user and has an open access URL" do
-        it "returns 404" do
-          expect { post :create, params: {id: oa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: oa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(oa_pub)
         end
       end
 
       context "when given the ID for a publication that belongs to the user and has a user-submitted open access URL" do
-        it "returns 404" do
-          expect { post :create, params: {id: uoa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: uoa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uoa_pub)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by the user" do
-        it "returns 404" do
-          expect { post :create, params: {id: uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uploaded_pub)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
-        it "returns 404" do
-          expect { post :create, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: other_uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_uploaded_pub)
         end
       end
 
       context "when given the ID for a publication for which the user has waived open access" do
-        it "returns 404" do
-          expect { post :create, params: {id: waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(waived_pub)
         end
       end
 
       context "when given the ID for a publication for which another user has waived open access" do
-        it "returns 404" do
-          expect { post :create, params: {id: other_waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create, params: {id: other_waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_waived_pub)
         end
       end
 
@@ -102,10 +108,15 @@ describe ScholarsphereUploadsController, type: :controller do
           post :create, params: {id: pub.id}
           expect(auth.reload.scholarsphere_uploaded_at).to eq now
         end
+
+        it "sets the modification timestamp on the user's authorship of the publication" do
+          post :create, params: {id: pub.id}
+          expect(auth.reload.updated_by_owner_at).to eq now
+        end
           
         it "redirects to the ScholarSphere website" do
           post :create, params: {id: pub.id}
-          expect(response).to redirect_to 'https://scholarsphere.psu.edu/concern/generic_works/new'
+          expect(response).to redirect_to 'https://scholarsphere.psu.edu/dashboard/form/work_versions/new'
         end
       end
     end

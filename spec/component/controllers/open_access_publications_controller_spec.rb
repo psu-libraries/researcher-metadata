@@ -176,38 +176,44 @@ describe OpenAccessPublicationsController, type: :controller do
       end
 
       context "when given the ID for a publication that belongs to the user and has an open access URL" do
-        it "returns 404" do
-          expect { patch :update, params: {id: oa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: oa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(oa_pub)
         end
       end
 
       context "when given the ID for a publication that belongs to the user and has a user-submitted open access URL" do
-        it "returns 404" do
-          expect { patch :update, params: {id: uoa_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: uoa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uoa_pub)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by the user" do
-        it "returns 404" do
-          expect { patch :update, params: {id: uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uploaded_pub)
         end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
-        it "returns 404" do
-          expect { patch :update, params: {id: other_uploaded_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: other_uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_uploaded_pub)
         end
       end
 
       context "when given the ID for a publication for which the user has waived open access" do
-        it "returns 404" do
-          expect { patch :update, params: {id: waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(waived_pub)
         end
       end
 
       context "when given the ID for a publication for which another user has waived open access" do
-        it "returns 404" do
-          expect { patch :update, params: {id: other_waived_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        it "redirects to the read-only view of the publication's open access status" do
+          patch :update, params: {id: other_waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_waived_pub)
         end
       end
     end

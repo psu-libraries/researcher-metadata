@@ -146,46 +146,35 @@ class ActivityInsightImporter
         details.publications.each do |pub|
           if pub.importable?
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
-                PublicationImport.new(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id)
+                PublicationImport.new(source: IMPORT_SOURCE,
+                                      source_identifier: pub.activity_insight_id,
+                                      publication: Publication.create!(pub_attrs(pub)))
+            pub_record = pi.publication
 
             if pi.persisted?
-              pub_persisting = pi.publication
-              pub_persisting.update_attributes!(pub_attrs(pub)) unless pub_persisting.updated_by_user_at.present?
+              pub_record.update_attributes!(pub_attrs(pub)) unless pub_record.updated_by_user_at.present?
             else
-              if pub.rmd_id.present?
-                pub_existing = Publication.find_by(id: pub.rmd_id)
-                next if pub_existing.blank?
-
-                pub_existing.update_attributes!(pub_attrs(pub))
-                pi.publication = pub_existing
-              else
-                pi.publication = Publication.create!(pub_attrs(pub))
-              end
               pi.save!
             end
 
             pub_record = pi.publication
 
             unless pub_record.updated_by_user_at.present?
-              pub.faculty_authors.each do |author|
-                user = User.find_by(activity_insight_identifier: author.activity_insight_user_id)
-                if user
-                  authorship = Authorship.find_by(user: user, publication: pub_record) || Authorship.new
+              authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
 
-                  if authorship.new_record?
-                    authorship.user = user
-                    authorship.publication = pub_record
-                  end
-                  authorship.author_number = pub.contributors.index(author) + 1
-                  authorship.role = author.role
-
-                  authorship.save!
-                end
+              if authorship.new_record?
+                authorship.user = u
+                authorship.publication = pub_record
               end
 
-              pub_record.contributors.delete_all
+              authorship.author_number = pub.contributors.index(pub.faculty_author) + 1
+              authorship.role = pub.faculty_author.role
+
+              authorship.save!
+
+              pub_record.contributor_names.delete_all
               pub.contributors.each_with_index do |cont, i|
-                c = Contributor.new
+                c = ContributorName.new
                 c.publication = pub_record
                 c.first_name = cont.first_name
                 c.middle_name = cont.middle_name
@@ -313,6 +302,10 @@ class ActivityInsightDetailUser
     user.attribute('username').value.downcase
   end
 
+  def activity_insight_id
+    user.attribute('userId').value
+  end
+
   def alt_name
     contact_info_text_for('ALT_NAME')
   end
@@ -378,7 +371,7 @@ class ActivityInsightDetailUser
   end
 
   def publications
-    user.css('INTELLCONT').map { |p| ActivityInsightAPIPublication.new(p) }
+    user.css('INTELLCONT').map { |p| ActivityInsightPublication.new(p, self) }
   end
 
   private
@@ -678,9 +671,10 @@ class ActivityInsightPerformanceContributor
 end
 
 
-class ActivityInsightAPIPublication
-  def initialize(parsed_publication)
+class ActivityInsightPublication
+  def initialize(parsed_publication, user)
     @parsed_publication = parsed_publication
+    @user = user
   end
 
   def publication_type
@@ -696,6 +690,8 @@ class ActivityInsightAPIPublication
       'Trade Journal Article'
     elsif cleaned_ai_type == 'journal article'
       'Journal Article'
+    else
+      ActivityInsightPublicationTypeMapIn.map(cleaned_ai_type)
     end
   end
 
@@ -704,7 +700,7 @@ class ActivityInsightAPIPublication
   end
 
   def importable?
-    !!(publication_type =~ /journal article/i) && (status == 'Published')
+    status == 'Published' && rmd_id.blank?
   end
 
   def activity_insight_id
@@ -774,16 +770,16 @@ class ActivityInsightAPIPublication
   end
 
   def doi
-    DOIParser.new(url).url || DOIParser.new(issn).url
+    DOIParser.new(doi_element).url || DOIParser.new(url).url || DOIParser.new(issn).url
   end
 
-  def faculty_authors
-    contributors.select { |c| c.activity_insight_user_id }
+  def faculty_author
+    contributors.detect { |c| c.activity_insight_user_id == user.activity_insight_id }
   end
 
   def contributors
     parsed_publication.css('INTELLCONT_AUTH').map do |a|
-      ActivityInsightPublicationAuthor.new(a)
+      ActivityInsightPublicationAuthor.new(a, user)
     end
   end
 
@@ -793,18 +789,22 @@ class ActivityInsightAPIPublication
 
   private
 
-  attr_reader :parsed_publication
+  attr_reader :parsed_publication, :user
+
+  def doi_element
+    text_for('DOI')
+  end
 
   def text_for(element)
     parsed_publication.css(element).text.strip.presence
   end
 
   def contype
-    text_for('CONTYPE').try(:downcase)
+    text_for('CONTYPE')
   end
 
   def cleaned_ai_type
-    if contype == 'other'
+    if contype == 'Other'
       text_for('CONTYPEOTHER').try(:downcase)
     else
       contype
@@ -814,8 +814,10 @@ end
 
 
 class ActivityInsightPublicationAuthor
-  def initialize(parsed_author)
+  # initialize with user passed from publication
+  def initialize(parsed_author, imported_user)
     @parsed_author = parsed_author
+    @imported_user = imported_user
   end
 
   def activity_insight_user_id
@@ -823,7 +825,12 @@ class ActivityInsightPublicationAuthor
   end
 
   def first_name
-    text_for('FNAME')
+    text = text_for('FNAME')
+    if user_name_confirmed?
+      text
+    else
+      text.chars.first if text
+    end
   end
 
   def middle_name
@@ -848,9 +855,21 @@ class ActivityInsightPublicationAuthor
 
   private
 
-  attr_reader :parsed_author
+  attr_reader :parsed_author, :imported_user
   
   def text_for(element)
     parsed_author.css(element).text.strip.presence
+  end
+
+  def user_name_confirmed?
+    for_external_person? || for_imported_user?
+  end
+
+  def for_external_person?
+    activity_insight_user_id.blank?
+  end
+
+  def for_imported_user?
+    activity_insight_user_id == imported_user.activity_insight_id
   end
 end

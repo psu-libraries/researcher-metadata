@@ -1,0 +1,29 @@
+{
+  "count": 2,
+  "pageInformation": {
+    "offset": 0,
+    "size": 2
+  },
+  "items": [
+    {
+      "uuid": "e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+      "confidential": false,
+      "renderings": [
+        {
+          "format": "fingerprint",
+          "html": "<fingerprint uuid=\"3733ae15-1f72-4500-813d-170064d946ff\"><rankedConcept><thesaurus>msh</thesaurus><term>Psychotherapy</term><conceptId>18053</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept><rankedConcept><thesaurus>other</thesaurus><term>psychotherapy</term><conceptId>12345</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept></fingerprint>"
+        }
+      ]
+    },
+    {
+      "uuid": "890420eb-eff9-4cbc-8e1b-20f68460f4eb",
+      "confidential": false,
+      "renderings": [
+        {
+          "format": "fingerprint",
+          "html": "<fingerprint uuid=\"ccace2d1-500a-4c91-ab0d-978e2f890755\"><rankedConcept><thesaurus>phy</thesaurus><term>metal spinning</term><conceptId>8883</conceptId><rank>0.5</rank><weightedRank>3.182491226237075</weightedRank><frequency>1</frequency></rankedConcept><rankedConcept><thesaurus>phy</thesaurus><term>simulation</term><conceptId>11477</conceptId><rank>0.5</rank><weightedRank>1.329480047619885</weightedRank><frequency>1</frequency></rankedConcept></fingerprint>"
+        }
+      ]
+    }
+  ]
+}

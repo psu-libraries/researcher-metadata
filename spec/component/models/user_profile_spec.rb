@@ -218,6 +218,70 @@ describe UserProfile do
     end
   end
 
+  describe '#other_publications' do
+    let!(:pub1) { create :publication, title: "First Publication",
+                         publication_type: "Letter",
+                         visible: true,
+                         journal_title: "Test Journal",
+                         published_on: Date.new(2010, 1, 1) }
+    let!(:pub2) { create :publication, title: "Second Publication",
+                         publication_type: "Book",
+                         visible: true,
+                         publisher_name: "Test Publisher",
+                         published_on: Date.new(2015, 1, 1) }
+    let!(:pub3) { create :publication, title: "Third Publication",
+                         publication_type: "Book",
+                         visible: true,
+                         publisher_name: "Test Publisher",
+                         published_on: Date.new(2016, 1, 1) }
+
+    before do
+      create :authorship, user: user, publication: pub1, position_in_profile: nil
+      create :authorship, user: user, publication: pub2, position_in_profile: 2
+      create :authorship, user: user, publication: pub3, position_in_profile: 1
+    end
+
+    it "returns a hash of arrays of strings describing the given user's non-article publications in order by position" do
+      expect(profile.other_publications).to eq({
+        "Books" => [
+            "<span class=\"publication-title\">Third Publication</span>, <span class=\"journal-name\">Test Publisher</span>, 2016",
+            "<span class=\"publication-title\">Second Publication</span>, <span class=\"journal-name\">Test Publisher</span>, 2015"
+        ],
+        "Letters" => [
+            "<span class=\"publication-title\">First Publication</span>, <span class=\"journal-name\">Test Journal</span>, 2010"
+        ]
+      })
+    end
+  end
+
+  describe '#other_publication_records' do
+    let!(:pub1) { create :publication, title: "First Publication",
+                         publication_type: "Letter",
+                         visible: true,
+                         journal_title: "Test Journal",
+                         published_on: Date.new(2010, 1, 1) }
+    let!(:pub2) { create :publication, title: "Second Publication",
+                         publication_type: "Book",
+                         visible: true,
+                         publisher_name: "Test Publisher",
+                         published_on: Date.new(2015, 1, 1) }
+    let!(:pub3) { create :publication, title: "Third Publication",
+                         publication_type: "Book",
+                         visible: true,
+                         publisher_name: "Test Publisher",
+                         published_on: Date.new(2016, 1, 1) }
+
+    before do
+      create :authorship, user: user, publication: pub1, position_in_profile: nil
+      create :authorship, user: user, publication: pub2, position_in_profile: 2
+      create :authorship, user: user, publication: pub3, position_in_profile: 1
+    end
+
+    it "returns an array of strings describing the given user's non-article publications in order by position" do
+      expect(profile.other_publication_records).to eq [pub1, pub3, pub2]
+    end
+  end
+
   describe '#grants' do
 
     context "when the user has no grants" do

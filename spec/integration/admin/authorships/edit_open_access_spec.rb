@@ -45,12 +45,12 @@ feature "setting an open access URL", type: :feature do
         describe "submitting an invalid URL" do
           before do
             visit rails_admin.edit_open_access_path(model_name: :authorship, id: auth1.id)
-            fill_in "Open Access URL", with: 'invalid'
+            fill_in "Scholarsphere Open Access URL", with: 'invalid'
             click_button "Save"
           end
 
           it "renders the form again" do
-            expect(page).to have_field "Open Access URL"
+            expect(page).to have_field "Scholarsphere Open Access URL"
           end
 
           it "shows an error message" do
@@ -58,7 +58,7 @@ feature "setting an open access URL", type: :feature do
           end
 
           it "does not update the authorship's publication" do
-            expect(pub.reload.open_access_url).to be_nil
+            expect(pub.reload.scholarsphere_open_access_url).to be_nil
           end
 
           it "does not update the ScholarSphere upload timestamps on the related publication's authorships" do
@@ -70,7 +70,7 @@ feature "setting an open access URL", type: :feature do
         describe "submitting a valid URL" do
           before do
             visit rails_admin.edit_open_access_path(model_name: :authorship, id: auth1.id)
-            fill_in "Open Access URL", with: 'https://google.com'
+            fill_in "Scholarsphere Open Access URL", with: 'https://google.com'
             click_button "Save"
           end
 
@@ -79,11 +79,11 @@ feature "setting an open access URL", type: :feature do
           end
 
           it "shows a success message" do
-            expect(page).to have_content I18n.t('admin.actions.edit_open_access.success', pub.title)
+            expect(page).to have_content I18n.t('admin.actions.edit_open_access.success', title: pub.title)
           end
 
           it "updates the authorship's publication" do
-            expect(pub.reload.open_access_url).to eq 'https://google.com'
+            expect(pub.reload.scholarsphere_open_access_url).to eq 'https://google.com'
           end
 
           it "deletes the ScholarSphere upload timestamps on the related publication's authorships" do

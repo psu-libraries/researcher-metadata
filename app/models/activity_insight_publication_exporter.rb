@@ -84,7 +84,7 @@ class ActivityInsightPublicationExporter
               xml.AUTHORS_ETAL_(publication.authors_et_al, :access => "READ_ONLY")
               xml.WEB_ADDRESS_((publication.preferred_open_access_url || publication.doi || publication.url), :access => "READ_ONLY")
               xml.ISBNISSN_((publication.isbn || publication.issn), :access => "READ_ONLY")
-              publication.contributors.each do |contributor|
+              publication.contributor_names.each do |contributor|
                 xml.INTELLCONT_AUTH {
                   xml.FNAME_(contributor.first_name, :access => "READ_ONLY")
                   xml.MNAME_(contributor.middle_name, :access => "READ_ONLY")

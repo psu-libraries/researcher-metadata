@@ -985,8 +985,8 @@ module API::V1
                 key :required, [:name, :organization_name, :title, :email, :office_location,
                                 :office_phone_number, :personal_website, :total_scopus_citations,
                                 :scopus_h_index, :pure_profile_url, :orcid_identifier, :bio,
-                                :teaching_interests, :research_interests, :publications, :grants,
-                                :presentations, :performances, :master_advising_roles,
+                                :teaching_interests, :research_interests, :publications, :other_publications,
+                                :grants, :presentations, :performances, :master_advising_roles,
                                 :phd_advising_roles, :news_stories, :education_history]
                 property :name do
                   key :type, :string
@@ -1065,6 +1065,24 @@ module API::V1
                     key :example, '<span class="publication-title">My Publication</span>, <span class="journal-name">Journal of Medicine</span>, 2010'
                     key :description, 'A string of HTML describing a journal article'
                   end
+                end
+                property :other_publications do
+                  key :type, :object
+                  property :Books do
+                    key :type, :array
+                    items do
+                      key :type, :string
+                      key :example, '<span class="publication-title">My Book</span>, <span class="journal-name">Journal of Science</span>, 2012'
+                    end
+                  end
+                  property :Letters do
+                    key :type, :array
+                    items do
+                      key :type, :string
+                      key :example, '<span class="publication-title">My Letter</span>, <span class="journal-name">Journal of Physics</span>, 2011'
+                    end
+                  end
+                  key :description, 'A JSON object containing arrays of strings of HTML describing non-journal publications'
                 end
                 property :grants do
                   key :type, :array

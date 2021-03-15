@@ -186,4 +186,40 @@ describe Organization, type: :model do
       expect(org.all_users).to match_array [user_1, user_2, user_3]
     end
   end
+
+  describe '#user_count' do
+    let!(:org) { create :organization }
+    let!(:other_org) { create :organization }
+    let!(:child_org) { create :organization, parent: org }
+    let!(:child_org_child) { create :organization, parent: child_org }
+    let!(:user_1) { create :user }
+    let!(:user_2) { create :user }
+    let!(:user_3) { create :user }
+    let!(:user_4) { create :user }
+
+    before do
+      create :user_organization_membership,
+             user: user_1,
+             organization: org
+      create :user_organization_membership,
+             user: user_2,
+             organization: child_org
+      create :user_organization_membership,
+             user: user_3,
+             organization: child_org_child
+      create :user_organization_membership,
+             user: user_4,
+             organization: other_org
+    end
+
+    it "returns the number of users who are members of either the organization itself or one of its descendants" do
+      expect(org.user_count).to eq 3
+    end
+  end
+
+  describe '#oa_email_user_count' do
+    xit "returns the number of users who are members of either the organization itself or one of its descendants and who need an open access reminder email" do
+      
+    end
+  end
 end

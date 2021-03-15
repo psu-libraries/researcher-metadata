@@ -1,0 +1,8 @@
+<% if a.user.orcid_access_token && a.publication.orcid_allowed? %>
+  <% if a.orcid_resource_identifier.present? %>
+    <sup>*</sup>This information has been added to your ORCID record.
+  <% else %>
+    <%= button_to "Add to my ORCID Record", orcid_works_path, class: 'btn orcid-button',
+                  remote: false, params: { authorship_id: a.id } %>
+  <% end %>
+<% end %>

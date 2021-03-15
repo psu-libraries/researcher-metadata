@@ -36,6 +36,12 @@ describe AuthorshipsController, type: :controller do
 
             expect(authorship.reload.visible_in_profile).to eq true
           end
+
+          it "updates the timestamp on the authorship" do
+            put :update, params: {id: authorship.id.to_s, authorship: {visible_in_profile: true}}
+
+            expect(authorship.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
+          end
         end
 
         context "when given a param that is not permitted" do
@@ -94,6 +100,17 @@ describe AuthorshipsController, type: :controller do
           expect(authorship_2.reload.position_in_profile).to eq 1
           expect(authorship_3.reload.position_in_profile).to eq 2
           expect(authorship_4.reload.position_in_profile).to eq nil
+        end
+
+        it "updates the timestamp on each authorship that was reordered" do
+          put :sort, params: {authorship: [authorship_2.id.to_s,
+                                           authorship_3.id.to_s,
+                                           authorship_1.id.to_s]}
+
+          expect(authorship_1.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
+          expect(authorship_2.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
+          expect(authorship_3.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
+          expect(authorship_4.reload.updated_by_owner_at).to eq nil
         end
       end
     end

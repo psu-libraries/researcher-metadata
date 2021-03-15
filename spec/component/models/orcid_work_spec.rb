@@ -4,22 +4,10 @@ describe OrcidWork do
   let(:date) { Date.yesterday }
   let(:publication) { double 'publication',
                              title: 'Test Title',
-                             publication_type: 'Academic Journal Article',
-                             journal_title: 'Test Journal',
-                             publisher_name: 'Test Publisher',
+                             publication_type: 'Journal Article',
+                             preferred_journal_title: 'Test Journal',
                              secondary_title: 'Secondary Test Title',
-                             status: 'Published',
-                             volume: '1',
-                             issue: '2',
-                             edition: '3',
-                             page_range: '4-5',
-                             url: 'https://url.org',
-                             open_access_url: nil,
-                             isbn: nil,
-                             issn: nil,
-                             doi: 'https://doi.org/10.0/1234/4567',
                              abstract: 'Test Abstract',
-                             authors_et_al: false,
                              published_on: date
   }
   let(:authorship) { double 'authorship',
@@ -43,7 +31,7 @@ describe OrcidWork do
     context "when the given authorship has external ids" do
       before { allow(publication).to receive(:doi_url_path).and_return('10.0/1234/5678') }
       before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
-      before { allow(publication).to receive(:contributors).and_return([]) }
+      before { allow(publication).to receive(:contributor_names).and_return([]) }
 
       it "returns a JSON representation of an ORCID work that includes external ids" do
         expect(work.to_json).to eq ({
@@ -80,7 +68,7 @@ describe OrcidWork do
     context "when the given authorship's publication has multiple authorships" do
       before { allow(publication).to receive(:doi_url_path).and_return(nil) }
       before { allow(publication).to receive(:preferred_open_access_url).and_return('https://scholarsphere.org') }
-      before { allow(publication).to receive(:contributors).and_return([contributor1, contributor2]) }
+      before { allow(publication).to receive(:contributor_names).and_return([contributor1, contributor2]) }
 
       it "returns a JSON representation of an ORCID work that includes contributors" do
         expect(work.to_json).to eq ({

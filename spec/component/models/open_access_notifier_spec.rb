@@ -42,6 +42,7 @@ describe OpenAccessNotifier do
       allow(pub2_auths).to receive(:find_by).with(user: user1).and_return auth2
       allow(pub3_auths).to receive(:find_by).with(user: user2).and_return auth3
       allow(pub4_auths).to receive(:find_by).with(user: user2).and_return auth4
+      allow(EmailError).to receive(:create!)
     end
 
     it "sends a notification email to each user that needs one" do
@@ -65,6 +66,38 @@ describe OpenAccessNotifier do
       expect(auth4).to receive(:record_open_access_notification)
 
       notifier.send_notifications
+    end
+
+    context "when an error is raised while sending an email" do
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new("The error message") }
+
+      it "sends emails that don't raise errors" do
+        expect(email2).to receive(:deliver_now)
+
+        notifier.send_notifications
+      end
+
+      it "records only the successful notifications" do
+        expect(user1).not_to receive(:record_open_access_notification)
+        expect(user2).to receive(:record_open_access_notification)
+
+        notifier.send_notifications
+      end
+
+      it "records only the successful notifications for each authorship" do
+        expect(auth1).not_to receive(:record_open_access_notification)
+        expect(auth2).not_to receive(:record_open_access_notification)
+        expect(auth3).to receive(:record_open_access_notification)
+        expect(auth4).to receive(:record_open_access_notification)
+
+        notifier.send_notifications
+      end
+
+      it "records the error" do
+        expect(EmailError).to receive(:create!).with(message: 'The error message', user: user1)
+
+        notifier.send_notifications
+      end
     end
   end
 end

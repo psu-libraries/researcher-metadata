@@ -24,6 +24,8 @@ feature "Admin publication detail page", type: :feature do
                       doi: "https://example.doi.org/test",
                       open_access_url: "https://openaccess.org/publications/1",
                       user_submitted_open_access_url: "https://example.org/publications/2",
+                      journal: journal,
+                      scholarsphere_open_access_url: "https://scholarsphere.psu.edu/resources/3",
                       published_on: Date.new(2018, 8, 1) }
 
   let!(:auth1) { create :authorship,
@@ -34,12 +36,12 @@ feature "Admin publication detail page", type: :feature do
                         publication: pub,
                         user: user2 }
 
-  let!(:con1) { create :contributor,
+  let!(:con1) { create :contributor_name,
                        publication: pub,
                        first_name: "Jill",
                        last_name: "Author" }
 
-  let!(:con2) { create :contributor,
+  let!(:con2) { create :contributor_name,
                        publication: pub,
                        first_name: "Jack",
                        last_name: "Contributor" }
@@ -65,6 +67,9 @@ feature "Admin publication detail page", type: :feature do
   let!(:rf2) { create :research_fund,
                       grant: grant2,
                       publication: pub }
+
+  let!(:journal) { create :journal,
+                          title: "Test Journal Record" }
 
   context "when the current user is an admin" do
     before { authenticate_admin_user }
@@ -123,14 +128,18 @@ feature "Admin publication detail page", type: :feature do
       it "shows a link to the publication's user-submitted open access content" do
         expect(page).to have_link "https://example.org/publications/2", href: "https://example.org/publications/2"
       end
+
+      it "shows a link to the publication's open access content in Scholarsphere" do
+        expect(page).to have_link "https://scholarsphere.psu.edu/resources/3", href: "https://scholarsphere.psu.edu/resources/3"
+      end
       
       it "shows the publication's publication date" do
         expect(page).to have_content "August 01, 2018"
       end
 
       it "shows the publication's authorships" do
-        expect(page).to have_link "Authorship ##{auth1.id}"
-        expect(page).to have_link "Authorship ##{auth2.id}"
+        expect(page).to have_link "##{auth1.id} (Bob Testuser - Bob's Publication)"
+        expect(page).to have_link "##{auth2.id} (Susan Tester - Bob's Publication)"
       end
 
       it "shows the publication's users" do
@@ -138,7 +147,7 @@ feature "Admin publication detail page", type: :feature do
         expect(page).to have_link "Susan Tester"
       end
 
-      it "shows the publication's contributors" do
+      it "shows the names of the publication's contributors" do
         expect(page).to have_link "Jill Author"
         expect(page).to have_link "Jack Contributor"
       end
@@ -151,6 +160,10 @@ feature "Admin publication detail page", type: :feature do
       it "shows the publication's imports" do
         expect(page).to have_link "PublicationImport ##{imp1.id}"
         expect(page).to have_link "PublicationImport ##{imp2.id}"
+      end
+
+      it "shows the publication's journal" do
+        expect(page).to have_link "Test Journal Record", href: rails_admin.show_path(model_name: :journal, id: journal.id)
       end
     end
 

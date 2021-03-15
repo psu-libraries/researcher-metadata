@@ -65,6 +65,30 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
+  it "shows a link to the email errors index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Email errors'
+    end
+  end
+
+  it "shows a link to the statistics snapshots index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Statistics snapshots'
+    end
+  end
+
+  it "shows a link to the publishers index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Publishers'
+    end
+  end
+
+  it "shows a link to the journals index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Journals'
+    end
+  end
+
   it "shows a link to the admin dashboard" do
     expect(page).to have_link 'Dashboard'
   end

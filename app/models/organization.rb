@@ -17,6 +17,14 @@ class Organization < ApplicationRecord
     User.joins(:user_organization_memberships).where(%{user_organization_memberships.organization_id IN (?)}, descendant_ids).distinct(:id)
   end
 
+  def user_count
+    all_users.count
+  end
+
+  def oa_email_user_count
+    all_users.needs_open_access_notification.count
+  end
+
   def publications
     # A view hack for Rails Admin to get it to render some custom HTML. 
     # See the `publications` field in the Rails Admin `show` config below.
@@ -26,16 +34,20 @@ class Organization < ApplicationRecord
     list do
       field(:id)
       field(:name)
-      field(:visible)
-      field(:pure_uuid)
+      field(:user_count)
+      field(:oa_email_user_count) { label 'Users needing OA email' }
       field(:pure_external_identifier)
       field(:organization_type)
+      field(:visible)
+      field(:pure_uuid)
       field(:owner)
     end
 
     show do
       field(:id)
       field(:name)
+      field(:user_count)
+      field(:oa_email_user_count) { label 'Number of users needing open access reminder email' }
       field(:visible)
       field(:pure_uuid)
       field(:pure_external_identifier)
@@ -49,6 +61,14 @@ class Organization < ApplicationRecord
         pretty_value do
           %{<a href="#{RailsAdmin.railtie_routes_url_helpers.index_publications_by_organization_path(model_name: :publication, org_id: bindings[:object].id)}">View Publications</a>}.html_safe
         end
+      end
+    end
+
+    export do
+      configure(:user_count) { show }
+      configure(:oa_email_user_count) do
+        show
+        label 'OA email user count'
       end
     end
   end

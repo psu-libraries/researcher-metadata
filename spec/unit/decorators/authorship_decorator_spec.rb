@@ -12,6 +12,7 @@ describe AuthorshipDecorator do
                        scholarsphere_upload_pending?: pending,
                        open_access_waived?: waived,
                        no_open_access_information?: no_info,
+                       is_journal_article?: true,
                        publication: pub }
   let(:title) { '' }
   let(:publisher) { '' }
@@ -170,6 +171,17 @@ describe AuthorshipDecorator do
               expect(ad.profile_management_label).to eq %{<span class="publication-title">the pub link</span>}
             end
           end
+        end
+
+      end
+    end
+
+    context "when the given object is not a journal article" do
+      context "when the given object has a title" do
+        let(:title) { 'Test Title' }
+        before { allow(auth).to receive(:is_journal_article?).and_return false }
+        it "returns a label for the given object with the publication title" do
+          expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
         end
       end
     end

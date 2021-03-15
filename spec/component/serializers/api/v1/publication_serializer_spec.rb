@@ -17,16 +17,19 @@ describe API::V1::PublicationSerializer do
                              abstract: 'an abstract',
                              total_scopus_citations: 1000,
                              doi: 'publication DOI',
-                             open_access_url: 'OA URL'}
+                             open_access_url: 'OA URL',
+                             journal: journal }
   let(:date) { nil }
+  let(:journal) { create :journal, title: 'test journal title', publisher: publisher }
+  let(:publisher) { create :publisher, name: 'test publisher name' }
 
   describe "data attributes" do
     subject { serialized_data_attributes(publication) }
     it { is_expected.to include(:title => 'publication 1') }
     it { is_expected.to include(:secondary_title => 'pub 1 subtitle') }
-    it { is_expected.to include(:journal_title => 'prestegious journal') }
+    it { is_expected.to include(:journal_title => 'test journal title') }
     it { is_expected.to include(:publication_type => 'Journal Article') }
-    it { is_expected.to include(:publisher => 'a publisher') }
+    it { is_expected.to include(:publisher => 'test publisher name') }
     it { is_expected.to include(:status => 'published') }
     it { is_expected.to include(:volume => '1') }
     it { is_expected.to include(:issue => '2') }
@@ -47,15 +50,15 @@ describe API::V1::PublicationSerializer do
       it { is_expected.to include(:published_on => nil) }
     end
 
-    context "when the publication does not have contributors" do
+    context "when the publication does not have contributor names" do
       it { is_expected.to include(:contributors => []) }
     end
 
-    context "when the publication has contributors" do
+    context "when the publication has contributor names" do
       before do
-        create :contributor, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication
-        create :contributor, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication
-        create :contributor, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication
+        create :contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication
+        create :contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication
+        create :contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication
       end
 
       subject { serialized_data_attributes(publication) }
@@ -139,14 +142,18 @@ describe API::V1::PublicationSerializer do
 
       end
 
-      it { is_expected.to include(:profile_preferences => [{user_id: u1.id,
-                                                            webaccess_id: 'abc123',
-                                                            visible_in_profile: true,
-                                                            position_in_profile: 4},
-                                                           {user_id: u2.id,
-                                                            webaccess_id: 'def456',
-                                                            visible_in_profile: false,
-                                                            position_in_profile: nil}]) }
+      it "includes profile preferences" do
+        expect(serialized_data_attributes(publication)[:profile_preferences]).to match_array(
+          [{user_id: u1.id,
+            webaccess_id: 'abc123',
+            visible_in_profile: true,
+            position_in_profile: 4},
+           {user_id: u2.id,
+            webaccess_id: 'def456',
+            visible_in_profile: false,
+            position_in_profile: nil}]
+        )
+      end
     end
   end
 end

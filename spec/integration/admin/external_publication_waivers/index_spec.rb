@@ -39,7 +39,6 @@ feature "Admin external publication waivers list", type: :feature do
       end
 
       it "does not show waivers that have been linked to publications" do
-        expect(page).not_to have_content waiver3.id
         expect(page).not_to have_content 'Felix Tester'
         expect(page).not_to have_content 'Publication Three'
       end

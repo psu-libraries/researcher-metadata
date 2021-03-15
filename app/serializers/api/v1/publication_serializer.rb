@@ -1,12 +1,15 @@
 module API::V1
   class PublicationSerializer
     include FastJsonapi::ObjectSerializer
-    attributes :title, :secondary_title, :journal_title, :publication_type,
-               :status, :volume, :issue, :edition, :page_range, :authors_et_al, :abstract,
-               :doi, :preferred_open_access_url
+    attributes :title, :secondary_title, :publication_type, :status, :volume, :issue,
+               :edition, :page_range, :authors_et_al, :abstract, :doi, :preferred_open_access_url
 
     attribute :publisher do |object|
-      object.publisher_name
+      object.preferred_publisher_name
+    end
+
+    attribute :journal_title do |object|
+      object.preferred_journal_title
     end
 
     attribute :published_on do |object|
@@ -18,7 +21,7 @@ module API::V1
     end
 
     attribute :contributors do |object|
-      object.contributors.map do |c|
+      object.contributor_names.map do |c|
         {first_name: c.first_name,
          middle_name: c.middle_name,
          last_name: c.last_name}

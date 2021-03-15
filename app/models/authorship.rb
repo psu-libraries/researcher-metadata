@@ -1,7 +1,9 @@
 class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
-  has_one :waiver, class_name: :InternalPublicationWaiver
+  has_one :waiver, class_name: :InternalPublicationWaiver, inverse_of: :authorship
+
+  accepts_nested_attributes_for :waiver
 
   validates :user_id,
     :publication_id,
@@ -18,16 +20,25 @@ class Authorship < ApplicationRecord
            :scholarsphere_upload_pending?,
            :open_access_waived?,
            :no_open_access_information?,
+           :is_journal_article?,
            to: :publication,
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true
 
   def description
-    "Authorship ##{id}"
+    "##{id} (#{user.name} - #{publication.title})"
   end
 
   def record_open_access_notification
     update_attribute(:open_access_notification_sent_at, Time.current)
+  end
+
+  def updated_by_owner
+    if updated_by_owner_at
+      NullComparableTime.parse(updated_by_owner_at.to_s)
+    else
+      NullTime.new
+    end
   end
   
   rails_admin do
@@ -48,6 +59,7 @@ class Authorship < ApplicationRecord
       field(:publication) { read_only true }
       field(:author_number) { read_only true }
       field(:orcid_resource_identifier)
+      field(:waiver)
     end
   end
 end

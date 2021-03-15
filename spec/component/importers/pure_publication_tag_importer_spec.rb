@@ -1,12 +1,26 @@
 require 'component/component_spec_helper'
 
 describe PurePublicationTagImporter do
-  let(:importer) { PurePublicationTagImporter.new(filename: filename) }
+  let(:importer) { PurePublicationTagImporter.new }
+  let(:http_response_1) { File.read(filename_1) }
+  let(:http_response_2) { File.read(filename_2) }
+  let(:http_error_response) { File.read(error_filename) }
+  let(:filename_1) { Rails.root.join('spec', 'fixtures', 'pure_publication_fingerprints_1.json') }
+  let(:filename_2) { Rails.root.join('spec', 'fixtures', 'pure_publication_fingerprints_2.json') }
+  let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
+
+  before do
+    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs',
+                                           body: %{{"navigationLink": false, "size": 1, "offset": 0, "renderings": ["fingerprint"]}},
+                                           headers: {"api-key" => "fake_api_key", "Content-Type" => "application/json", "Accept" => "application/json"}).and_return http_response_1
+
+    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs',
+                                           body: %{{"navigationLink": false, "size": 500, "offset": 0, "renderings": ["fingerprint"]}},
+                                           headers: {"api-key" => "fake_api_key", "Content-Type" => "application/json", "Accept" => "application/json"}).and_return http_response_2
+  end
 
   describe '#call' do
-    context "when given a well-formed .json file of publicaiton fingerprint data from Pure" do
-      let(:filename) { Rails.root.join('spec', 'fixtures', 'pure_publication_fingerprints.json') }
-
+    context "when the API endpoint is found" do
       context "when no publications in the database match the publication data being imported" do
         it "runs" do
           expect { importer.call }.not_to raise_error
@@ -129,6 +143,22 @@ describe PurePublicationTagImporter do
             end
           end
         end
+      end
+    end
+
+    context "when the API endpoint is not found" do
+      before do
+    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs',
+                                           body: %{{"navigationLink": false, "size": 1, "offset": 0, "renderings": ["fingerprint"]}},
+                                           headers: {"api-key" => "fake_api_key", "Content-Type" => "application/json", "Accept" => "application/json"}).and_return http_error_response
+
+    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs',
+                                           body: %{{"navigationLink": false, "size": 500, "offset": 0, "renderings": ["fingerprint"]}},
+                                           headers: {"api-key" => "fake_api_key", "Content-Type" => "application/json", "Accept" => "application/json"}).and_return http_error_response
+      end
+
+      it "raises an error" do
+        expect { importer.call }.to raise_error PureImporter::ServiceNotFound
       end
     end
   end

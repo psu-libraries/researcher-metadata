@@ -24,6 +24,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:total_scopus_citations).of_type(:integer) }
   it { is_expected.to have_db_column(:open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:user_submitted_open_access_url).of_type(:text) }
+  it { is_expected.to have_db_column(:scholarsphere_open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -58,7 +59,7 @@ describe Publication, type: :model do
   describe 'associations' do
     it { is_expected.to have_many(:authorships).inverse_of(:publication) }
     it { is_expected.to have_many(:users).through(:authorships) }
-    it { is_expected.to have_many(:contributors).dependent(:destroy).inverse_of(:publication) }
+    it { is_expected.to have_many(:contributor_names).dependent(:destroy).inverse_of(:publication) }
     it { is_expected.to have_many(:imports).class_name(:PublicationImport) }
     it { is_expected.to have_many(:taggings).inverse_of(:publication).class_name(:PublicationTagging) }
     it { is_expected.to have_many(:tags).through(:taggings) }
@@ -78,7 +79,7 @@ describe Publication, type: :model do
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
-  it { is_expected.to accept_nested_attributes_for(:contributors).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:contributor_names).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:taggings).allow_destroy(true) }
 
   describe "deleting a publication with authorships" do
@@ -90,9 +91,9 @@ describe Publication, type: :model do
     end
   end
 
-  describe "deleting a publication with contributors" do
+  describe "deleting a publication with contributor names" do
     let(:p) { create :publication }
-    let!(:c) { create :contributor, publication: p}
+    let!(:c) { create :contributor_name, publication: p}
     it "also deletes the publication's authorships" do
       p.destroy
       expect { c.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -117,13 +118,36 @@ describe Publication, type: :model do
     end
   end
 
+  describe "deleting a publication with non-duplicate group memberships" do
+    let(:p) { create :publication }
+    let!(:ndpgm) { create :non_duplicate_publication_group_membership, publication: p }
+    it "also deletes the publication's non-duplicate publication group memberships" do
+      p.destroy
+      expect { ndpgm.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a publication with imports" do
+    let(:p) { create :publication }
+    let!(:pi) { create :publication_import, publication: p}
+    it "also deletes the publication's imports" do
+      p.destroy
+      expect { pi.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '.publication_types' do
     it "returns the list of valid publication types" do
-      expect(Publication.publication_types).to eq ["Academic Journal Article",
-                                                   "In-house Journal Article",
-                                                   "Professional Journal Article",
-                                                   "Trade Journal Article",
-                                                   "Journal Article"]
+      expect(Publication.publication_types).to eq ["Academic Journal Article", "In-house Journal Article",
+                                                   "Professional Journal Article", "Trade Journal Article",
+                                                   "Journal Article", "Review Article", "Abstract", "Blog", "Book",
+                                                   "Chapter", "Book/Film/Article Review", "Conference Proceeding",
+                                                   "Encyclopedia/Dictionary Entry", "Extension Publication",
+                                                   "Magazine/Trade Publication", "Manuscript", "Newsletter",
+                                                   "Newspaper Article", "Comment/Debate", "Commissioned Report",
+                                                   "Digital or Visual Product", "Editorial", "Foreword/Postscript",
+                                                   "Letter", "Paper", "Patent", "Poster", "Scholarly Edition",
+                                                   "Short Survey", "Working Paper", "Other"]
     end
   end
 
@@ -190,8 +214,50 @@ describe Publication, type: :model do
     let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
+    let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
     it "returns publications that were published after Penn State's open access policy went into effect" do
       expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
+    end
+  end
+
+  describe '.open_access' do
+    let!(:pub1) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub2) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub3) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: nil}
+    let!(:pub4) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub5) { create :publication,
+                         open_access_url: 'url',
+                         user_submitted_open_access_url: 'url',
+                         scholarsphere_open_access_url: 'url'
+                         }
+    let!(:pub6) { create :publication,
+                         open_access_url: '',
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: '',
+                         scholarsphere_open_access_url: nil }
+    let!(:pub6) { create :publication,
+                         open_access_url: nil,
+                         user_submitted_open_access_url: nil,
+                         scholarsphere_open_access_url: '' }
+                         
+    it "returns publications that have an open access URL" do
+      expect(Publication.open_access).to match_array [pub2, pub3, pub4, pub5]
     end
   end
 
@@ -358,6 +424,30 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.journal_article' do
+    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
+    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
+    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    it 'returns publications that are journal articles' do
+      expect(Publication.journal_article).to match_array [pub1, pub2, pub3]
+    end
+  end
+
+  describe '.non_journal_article' do
+    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
+    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
+    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    it 'returns publications that are not journal articles' do
+      expect(Publication.non_journal_article).to match_array [pub4, pub5, pub6]
+    end
+  end
+
   describe '#confirmed_authorships' do
     let!(:pub) { create :publication }
     let!(:a1) { create :authorship, publication: pub, confirmed: false }
@@ -369,12 +459,12 @@ describe Publication, type: :model do
 
   describe '#contributors' do
     let(:pub) { create :publication }
-    let!(:c1) { create :contributor, position: 2, publication: pub }
-    let!(:c2) { create :contributor, position: 3, publication: pub }
-    let!(:c3) { create :contributor, position: 1, publication: pub }
+    let!(:c1) { create :contributor_name, position: 2, publication: pub }
+    let!(:c2) { create :contributor_name, position: 3, publication: pub }
+    let!(:c3) { create :contributor_name, position: 1, publication: pub }
 
     it "returns the publication's contributors in order by position" do
-      expect(pub.contributors).to eq [c3, c1, c2]
+      expect(pub.contributor_names).to eq [c3, c1, c2]
     end
   end
 
@@ -469,11 +559,14 @@ describe Publication, type: :model do
   end
 
   describe '#published_by' do
-    let(:pub) { Publication.new(publisher_name: publisher, journal_title: jt) }
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', publisher_name: pn, journal_title: jt }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return policy }
+
     context "when the publication has a journal title" do
       let(:jt) { "The Journal" }
       context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
+        let(:pn) { "The Publisher" }
 
         it "returns the journal title" do
           expect(pub.published_by).to eq "The Journal"
@@ -481,15 +574,7 @@ describe Publication, type: :model do
       end
 
       context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns the journal title" do
-          expect(pub.published_by).to eq "The Journal"
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
+        let(:pn) { nil }
 
         it "returns the journal title" do
           expect(pub.published_by).to eq "The Journal"
@@ -500,7 +585,7 @@ describe Publication, type: :model do
     context "when the publication does not have a journal title" do
       let(:jt) { nil }
       context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
+        let(:pn) { "The Publisher" }
 
         it "returns the publisher" do
           expect(pub.published_by).to eq "The Publisher"
@@ -508,42 +593,7 @@ describe Publication, type: :model do
       end
 
       context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-    end
-
-    context "when the publication's journal title is blank" do
-      let(:jt) { "" }
-      context "when the publication has a publisher" do
-        let(:publisher) { "The Publisher" }
-
-        it "returns the publisher" do
-          expect(pub.published_by).to eq "The Publisher"
-        end
-      end
-
-      context "when the publication does not have a publisher" do
-        let(:publisher) { nil }
-
-        it "returns nil" do
-          expect(pub.published_by).to be_nil
-        end
-      end
-
-      context "when the publication's publisher is blank" do
-        let(:publisher) { "" }
+        let(:pn) { nil }
 
         it "returns nil" do
           expect(pub.published_by).to be_nil
@@ -572,66 +622,12 @@ describe Publication, type: :model do
 
   describe '#preferred_open_access_url' do
     let(:pub) { Publication.new }
-    context "when the publication has an open access URL" do
-      before { pub.open_access_url = 'A URL' }
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns the open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'A URL'
-        end
-      end
-    end
+    let(:policy) { double 'preferred open access policy', url: 'preferred_url' }
 
-    context "when the publication's open access URL is blank" do
-      before { pub.open_access_url = '' }
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the user-submitted open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'User URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-    end
-    
-    context "when the publication does not have an open access URL" do
-      context "when the publication has a user-submitted open access URL" do
-        before { pub.user_submitted_open_access_url = 'User URL' }
-        it "returns the user-submitted open access URL" do
-          expect(pub.preferred_open_access_url).to eq 'User URL'
-        end
-      end
-      context "when the publication's user-submitted open access URL is blank" do
-        before { pub.user_submitted_open_access_url = '' }
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
-      context "when the publication does not have a user-submitted open access URL" do
-        it "returns nil" do
-          expect(pub.preferred_open_access_url).to be_nil
-        end
-      end
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
+
+    it "returns the preferred URL" do
+      expect(pub.preferred_open_access_url).to eq 'preferred_url'
     end
   end
 
@@ -680,69 +676,24 @@ describe Publication, type: :model do
     let!(:pub) { create :publication }
     let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
     let!(:auth2) { create :authorship, publication: pub }
+    let(:policy) { double 'open access policy', url: url }
+    let(:url) { nil }
+
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.no_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.no_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -750,65 +701,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -820,65 +722,16 @@ describe Publication, type: :model do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -886,65 +739,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.no_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
           end
         end
       end
@@ -955,69 +759,24 @@ describe Publication, type: :model do
     let!(:pub) { create :publication }
     let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
     let!(:auth2) { create :authorship, publication: pub }
+    let(:policy) { double 'open access policy', url: url }
+    let(:url) { nil }
+
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.has_open_access_information?).to eq false
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns false" do
-              expect(pub.has_open_access_information?).to eq false
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1025,65 +784,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1095,65 +805,16 @@ describe Publication, type: :model do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
         let(:upload_time) { nil }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1161,65 +822,16 @@ describe Publication, type: :model do
       context "when the publication has an authorship that has been uploaded to ScholarSphere" do
         let(:upload_time) { Time.current }
 
-        context "when the publication has an open access URL" do
-          before { pub.open_access_url = 'A URL' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
-    
-        context "when the publication's open access URL is blank" do
-          before { pub.open_access_url = '' }
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-        end
-        
-        context "when the publication does not have an open access URL" do
-          context "when the publication has a user-submitted open access URL" do
-            before { pub.user_submitted_open_access_url = 'User URL' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication's user-submitted open access URL is blank" do
-            before { pub.user_submitted_open_access_url = '' }
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
-          end
-          context "when the publication does not have a user-submitted open access URL" do
-            it "returns true" do
-              expect(pub.has_open_access_information?).to eq true
-            end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.has_open_access_information?).to eq true
           end
         end
       end
@@ -1241,17 +853,83 @@ describe Publication, type: :model do
     let!(:pub2_import2) { create :publication_import, publication: pub2 }
     let!(:pub3_import1) { create :publication_import, publication: pub3 }
 
+    let(:waiver1) { build :internal_publication_waiver }
+    let(:waiver2) { build :internal_publication_waiver }
+
     before do
-      create :authorship, publication: pub1, user: user1, author_number: 1, confirmed: false, role: nil
+      create :authorship,
+             publication: pub1,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier',
+             updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
+             visible_in_profile: true,
+             position_in_profile: nil,
+             scholarsphere_uploaded_at: nil
 
-      create :authorship, publication: pub2, user: user1, author_number: 1, confirmed: true, role: 'author'
-      create :authorship, publication: pub2, user: user2, author_number: 2, confirmed: false, role: 'co-author'
+      create :authorship,
+             publication: pub2,
+             user: user1,
+             author_number: 1,
+             confirmed: true,
+             role: 'author',
+             orcid_resource_identifier: 'newer-orcid-identifier',
+             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0),
+             waiver: waiver1,
+             visible_in_profile: false,
+             position_in_profile: 2,
+             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub2,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: 'co-author',
+             orcid_resource_identifier: 'newer-orcid-identifier-2',
+             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0)
 
-      create :authorship, publication: pub3, user: user3, author_number: 3, confirmed: true, role: nil
+      create :authorship,
+             publication: pub3,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0)
 
-      create :authorship, publication: pub4, user: user1, author_number: 1, confirmed: false, role: 'other author'
-      create :authorship, publication: pub4, user: user2, author_number: 2, confirmed: false, role: nil
-      create :authorship, publication: pub4, user: user3, author_number: 3, confirmed: true, role: nil
+      create :authorship,
+             publication: pub4,
+             user: user1,
+             author_number: 1,
+             confirmed: false,
+             role: 'other author',
+             orcid_resource_identifier: nil,
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
+             waiver: waiver2,
+             position_in_profile: 1,
+             scholarsphere_uploaded_at: Time.new(2021, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub4,
+             user: user2,
+             author_number: 2,
+             confirmed: false,
+             role: nil,
+             orcid_resource_identifier: 'older-orcid-identifier-2',
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0)
+      create :authorship,
+             publication: pub4,
+             user: user3,
+             author_number: 3,
+             confirmed: true,
+             role: nil,
+             orcid_resource_identifier: 'orcid-identifier-3',
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
+             open_access_notification_sent_at: Time.new(2010, 1, 1, 0, 0, 0)
+
     end
   
     it "reassigns all of the imports from the given publications to the publication" do
@@ -1295,6 +973,90 @@ describe Publication, type: :model do
       expect(auth1.role).to eq 'author'
       expect(auth2.role).to eq 'co-author'
       expect(auth3.role).to eq nil
+    end
+
+    it "transfers ORCiD identifiers" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+      expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+      expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+    end
+
+    it "transfers open access notification timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+      expect(auth2.open_access_notification_sent_at).to eq nil
+      expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+    end
+
+    it "transfers owner modification timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+      expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+      expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+    end
+
+    it "transfers waivers" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.waiver).to eq waiver1
+      expect(auth2.waiver).to eq nil
+      expect(auth3.waiver).to eq nil
+    end
+
+    it "transfers visibility" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.visible_in_profile).to eq false
+      expect(auth2.visible_in_profile).to eq true
+      expect(auth3.visible_in_profile).to eq true
+    end
+
+    it "transfers position" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.position_in_profile).to eq 2
+      expect(auth2.position_in_profile).to eq nil
+      expect(auth3.position_in_profile).to eq nil
+    end
+
+    it "transfers Scholarsphere upload timestamps" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+      expect(auth2.scholarsphere_uploaded_at).to eq nil
+      expect(auth3.scholarsphere_uploaded_at).to eq nil
     end
 
     it "deletes the given publications" do
@@ -1395,6 +1157,74 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in a non-duplicate group" do
@@ -1461,6 +1291,90 @@ describe Publication, type: :model do
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
         expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+      end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers owner modification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers waivers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.waiver).to eq waiver1
+        expect(auth2.waiver).to eq nil
+        expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers visibility" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.visible_in_profile).to eq false
+        expect(auth2.visible_in_profile).to eq true
+        expect(auth3.visible_in_profile).to eq true
+      end
+
+      it "transfers position" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.position_in_profile).to eq 2
+        expect(auth2.position_in_profile).to eq nil
+        expect(auth3.position_in_profile).to eq nil
+      end
+
+      it "transfers Scholarsphere upload timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+        expect(auth2.scholarsphere_uploaded_at).to eq nil
+        expect(auth3.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1530,6 +1444,90 @@ describe Publication, type: :model do
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
         expect(auth3.role).to eq nil
+      end
+
+      it "transfers ORCiD identifiers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.orcid_resource_identifier).to eq 'newer-orcid-identifier'
+        expect(auth2.orcid_resource_identifier).to eq 'newer-orcid-identifier-2'
+        expect(auth3.orcid_resource_identifier).to eq 'orcid-identifier-3'
+      end
+
+      it "transfers open access notification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
+        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers owner modification timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth2.updated_by_owner_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+        expect(auth3.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "transfers waivers" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.waiver).to eq waiver1
+        expect(auth2.waiver).to eq nil
+        expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers visibility" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.visible_in_profile).to eq false
+        expect(auth2.visible_in_profile).to eq true
+        expect(auth3.visible_in_profile).to eq true
+      end
+
+      it "transfers position" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.position_in_profile).to eq 2
+        expect(auth2.position_in_profile).to eq nil
+        expect(auth3.position_in_profile).to eq nil
+      end
+
+      it "transfers Scholarsphere upload timestamps" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
+        expect(auth2.scholarsphere_uploaded_at).to eq nil
+        expect(auth3.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1602,6 +1600,74 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
     end
 
@@ -1677,6 +1743,74 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1749,6 +1883,74 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
       end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -1820,6 +2022,74 @@ describe Publication, type: :model do
 
         auth1 = pub1.authorships.find_by(user: user1)
         expect(auth1.role).to be_nil
+      end
+
+      it "does not transfer any orcid identifiers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.orcid_resource_identifier).to eq 'older-orcid-identifier'
+      end
+
+      it "does not transfer any open access notification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        expect(auth1.open_access_notification_sent_at).to eq nil
+      end
+
+      it "does not transfer any owner modification timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.updated_by_owner_at).to eq Time.new(2020, 1, 1, 0, 0, 0)
+      end
+
+      it "does not transfer any waivers" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer visibility" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.visible_in_profile).to eq true
+      end
+
+      it "does not transfer position" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.position_in_profile).to eq nil
+      end
+
+      it "does not transfer Scholarsphere upload timestamps" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
     end
   end
@@ -1914,6 +2184,40 @@ describe Publication, type: :model do
       it "returns false" do
         expect(pub.has_single_import_from_ai?).to eq false
       end
+    end
+  end
+
+  describe '#is_journal_article?' do
+    context 'when publication is a Journal Article' do
+      let!(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+      it 'returns true' do
+        expect(pub1.is_journal_article?).to eq true
+      end
+    end
+
+    context 'when publication is a Book' do
+      let!(:pub2) { FactoryBot.create :publication, publication_type: 'Book' }
+      it 'returns false' do
+        expect(pub2.is_journal_article?).to eq false
+      end
+    end
+  end
+
+  describe '#preferred_journal_title' do
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', journal_title: 'preferred title' }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
+    it 'delegates to the preferred journal info policy' do
+      expect(pub.preferred_journal_title).to eq 'preferred title'
+    end
+  end
+
+  describe '#preferred_publisher_name' do
+    let(:pub) { Publication.new }
+    let(:policy) { double 'preferred journal info policy', publisher_name: 'preferred name' }
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
+    it 'delegates to the preferred journal info policy' do
+      expect(pub.preferred_publisher_name).to eq 'preferred name'
     end
   end
 end

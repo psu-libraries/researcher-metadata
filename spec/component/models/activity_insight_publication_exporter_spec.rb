@@ -29,8 +29,8 @@ describe ActivityInsightPublicationExporter do
     FactoryBot.create(:publication_import, publication: publication2,
                        source: "Activity Insight", source_identifier: 'ai_id_1')
   end
-  let!(:contributor1) { FactoryBot.create :contributor, publication: publication1 }
-  let!(:contributor2) { FactoryBot.create :contributor, publication: publication2 }
+  let!(:contributor_name1) { FactoryBot.create :contributor_name, publication: publication1 }
+  let!(:contributor_name2) { FactoryBot.create :contributor_name, publication: publication2 }
 
   describe '#to_xml' do
     it 'generates xml' do

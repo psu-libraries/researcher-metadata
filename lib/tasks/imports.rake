@@ -33,35 +33,23 @@ namespace :import do
   end
 
   desc 'Import Pure Users'
-  task :pure_users, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:pure_users)
-    )
-    PureUserImporter.new(filename: args.filename).call
+  task :pure_users => :environment do
+    PureUserImporter.new.call
   end
 
   desc 'Import Pure Organizations'
-  task :pure_organizations, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:pure_organizations)
-    )
-    PureOrganizationsImporter.new(filename: args.filename).call
+  task :pure_organizations => :environment do
+    PureOrganizationsImporter.new.call
   end
 
   desc 'Import Pure publications'
-  task :pure_publications, [:dirname] => :environment do |_task, args|
-    args.with_defaults(
-      dirname: dirname_for(:pure_publications)
-    )
-    PurePublicationImporter.new(dirname: args.dirname).call
+  task :pure_publications => :environment do
+    PurePublicationImporter.new.call
   end
 
   desc 'Import Pure publication tags'
-  task :pure_publication_tags, [:filename] => :environment do |_task, args|
-    args.with_defaults(
-      filename: filename_for(:pure_publication_tags)
-    )
-    PurePublicationTagImporter.new(filename: args.filename).call
+  task :pure_publication_tags => :environment do
+    PurePublicationTagImporter.new.call
   end
 
   desc 'Import ETDs'
@@ -91,25 +79,35 @@ namespace :import do
     PSUDickinsonPublicationImporter.new.call
   end
 
+  desc 'Import Pure publishers'
+  task :pure_publishers => :environment do
+    PurePublishersImporter.new.call
+  end
+
+  desc 'Import Pure journals'
+  task :pure_journals => :environment do
+    PureJournalsImporter.new.call
+  end
+
+  desc 'Import all Pure data from API'
+  task :pure => :environment do
+    PureOrganizationsImporter.new.call
+    PureUserImporter.new.call
+    PurePublishersImporter.new.call
+    PureJournalsImporter.new.call
+    PurePublicationImporter.new.call
+    PurePublicationTagImporter.new.call
+  end
+
   desc 'Import all data'
   task :all => :environment do
-    PureOrganizationsImporter.new(
-      filename: filename_for(:pure_organizations)
-    ).call
-
+    PureOrganizationsImporter.new.call
     ActivityInsightImporter.new.call
-    
-    PureUserImporter.new(
-      filename: filename_for(:pure_users)
-    ).call
-
-    PurePublicationImporter.new(
-      dirname: dirname_for(:pure_publications)
-    ).call
-
-    PurePublicationTagImporter.new(
-      filename: filename_for(:pure_publication_tags)
-    ).call
+    PureUserImporter.new.call
+    PurePublishersImporter.new.call
+    PureJournalsImporter.new.call
+    PurePublicationImporter.new.call
+    PurePublicationTagImporter.new.call
 
     ETDCSVImporter.new(
       filename: filename_for(:etds)
@@ -129,9 +127,6 @@ end
 
 def filename_for(key)
   case key
-  when :pure_users then Rails.root.join('db/data/pure_users.json')
-  when :pure_organizations then Rails.root.join('db/data/pure_organizations.json')
-  when :pure_publication_tags then Rails.root.join('db/data/pure_publication_fingerprints.json')
   when :etds then Rails.root.join('db/data/etds.csv')
   when :committees then Rails.root.join('db/data/committees.csv')
   end
@@ -139,7 +134,6 @@ end
 
 def dirname_for(key)
   case key
-  when :pure_publications then Rails.root.join('db/data/pure_publications')
   when :nsf_grants then Rails.root.join('db/data/nsf_grants')
   end
 end

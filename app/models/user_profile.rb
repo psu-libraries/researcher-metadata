@@ -45,8 +45,7 @@ class UserProfile
   end
 
   def publication_records
-    user_query.publications.
-      order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants
@@ -112,6 +111,24 @@ class UserProfile
     degrees.map do |d|
       "#{d.degree}, #{d.emphasis_or_major} - #{d.institution} - #{d.end_year}"
     end
+  end
+
+  def other_publication_records
+    user_query.publications.non_journal_article.
+               order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+  end
+
+  def other_publications
+    authorships = other_publication_records.where('authorships.visible_in_profile is true')
+    Hash[
+      Publication.publication_types.map {
+        |p| [
+          p.pluralize, authorships.where('publications.publication_type = ?', p).map {
+            |a| AuthorshipDecorator.new(a).label
+          }
+        ]
+      }
+    ].delete_if { |k, v| v.empty? }
   end
 
   def has_bio_info?

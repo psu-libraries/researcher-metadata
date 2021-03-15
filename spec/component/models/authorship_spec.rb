@@ -16,6 +16,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:role).of_type(:string) }
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:orcid_resource_identifier).of_type(:string) }
+  it { is_expected.to have_db_column(:updated_by_owner_at).of_type(:datetime) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
@@ -30,7 +31,7 @@ describe Authorship, type: :model do
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
-    it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver) }
+    it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver).inverse_of(:authorship) }
   end
 
   describe 'validations' do
@@ -55,10 +56,14 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:no_open_access_information?).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
+  it { is_expected.to accept_nested_attributes_for(:waiver) }
+
   describe "#description" do
-    let(:a) { create :authorship }
+    let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
+    let(:p) { create :publication, title: 'Example Pub' }
+    let(:a) { create :authorship, user: u, publication: p }
     it "returns a string describing the record" do
-      expect(a.description).to eq "Authorship ##{a.id}"
+      expect(a.description).to eq "##{a.id} (Bob Testerson - Example Pub)"
     end
   end
 
@@ -70,6 +75,25 @@ describe Authorship, type: :model do
     it "saves the current time in the open access notification timestamp field" do
       a.record_open_access_notification
       expect(a.reload.open_access_notification_sent_at).to eq now
+    end
+  end
+
+  describe '#updated_by_owner' do
+    let(:a) { Authorship.new(updated_by_owner_at: timestamp) }
+
+    context "when the authorship has a value for updated_by_owner_at" do
+      let(:timestamp) { Time.new(2000, 1, 1, 0, 0, 0) }
+      it "returns a value of updated_by_owner_at that can be compared to a null time" do
+        expect(a.updated_by_owner).to eq timestamp
+        expect(a.updated_by_owner > NullTime.new).to eq true
+      end
+    end
+
+    context "when the authorship does not have a value for updated_by_owner_at" do
+      let(:timestamp) { nil }
+      it "returns a null time" do
+        expect(a.updated_by_owner).to be_a NullTime
+      end
     end
   end
 end

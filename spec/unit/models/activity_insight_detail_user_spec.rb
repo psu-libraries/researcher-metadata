@@ -22,6 +22,14 @@ describe ActivityInsightDetailUser do
     end
   end
 
+  describe '#activity_insight_id' do
+    let(:user_id_attr) { double 'user ID attribute', value: '123456' }
+    before { allow(user_data).to receive(:attribute).with('userId').and_return(user_id_attr) }
+    it "returns the username attribute from the given data" do
+      expect(user.activity_insight_id).to eq '123456'
+    end
+  end
+
   describe '#alt_name' do
     before { allow(contact_info).to receive(:css).with('ALT_NAME').and_return(an_element) }
 
@@ -328,8 +336,8 @@ describe ActivityInsightDetailUser do
 
     before do
       allow(user_data).to receive(:css).with('INTELLCONT').and_return([element1, element2])
-      allow(ActivityInsightAPIPublication).to receive(:new).with(element1).and_return(pub1)
-      allow(ActivityInsightAPIPublication).to receive(:new).with(element2).and_return(pub2)
+      allow(ActivityInsightPublication).to receive(:new).with(element1, user).and_return(pub1)
+      allow(ActivityInsightPublication).to receive(:new).with(element2, user).and_return(pub2)
     end
 
     it "returns an array of publications from the given data" do

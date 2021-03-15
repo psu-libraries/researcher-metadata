@@ -41,7 +41,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: "https://api.openaccessbutton.org/find?id=10.094/PHI-A-2008-0129\u201302" }
 
       it "does not raise an error" do
-        expect { importer.call }.not_to raise_error URI::InvalidURIError
+        expect { importer.call }.not_to raise_error
       end
     end
 
@@ -119,14 +119,14 @@ describe OpenAccessButtonPublicationImporter do
       end
       context "when the publication was last checked in Open Access Button less than a month ago" do
         let(:last_check) { now - (30.days) }
-        it "does not update the publication's open access URL" do
+        it "updates the publication with the URL to the open access content" do
           importer.call
-          expect(pub.reload.open_access_url).to be_nil
+          expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
         end
   
-        it "does not update the publication's Open Access Button check timestamp" do
+        it "updates Open Access Button check timestamp on the publication" do
           importer.call
-          expect(pub.reload.open_access_button_last_checked_at).to eq now - 30.days
+          expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
       end
     end
@@ -200,9 +200,9 @@ describe OpenAccessButtonPublicationImporter do
           expect(pub.reload.open_access_url).to be_nil
         end
   
-        it "does not update the publication's Open Access Button check timestamp" do
+        it "updates Open Access Button check timestamp on the publication" do
           importer.call
-          expect(pub.reload.open_access_button_last_checked_at).to eq now - 30.days
+          expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
       end
     end

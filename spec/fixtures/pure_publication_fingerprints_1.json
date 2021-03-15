@@ -1,0 +1,15 @@
+{
+  "count" : 2,
+  "pageInformation" : {
+    "offset" : 0,
+    "size" : 1
+  },
+  "items" : [ {
+    "uuid" : "e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+    "confidential" : false,
+    "renderings" : [ {
+      "format" : "fingerprint",
+      "html" : "<fingerprint uuid=\"3733ae15-1f72-4500-813d-170064d946ff\"><rankedConcept><thesaurus>msh</thesaurus><term>Psychotherapy</term><conceptId>18053</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept><rankedConcept><thesaurus>other</thesaurus><term>psychotherapy</term><conceptId>12345</conceptId><rank>1.0</rank><weightedRank>6.59368514575157</weightedRank></rankedConcept></fingerprint>"
+    } ]
+  } ]
+}

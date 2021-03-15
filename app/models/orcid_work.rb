@@ -5,9 +5,9 @@ class OrcidWork < OrcidResource
         title: publication.title,
         subtitle: publication.secondary_title,
       },
-      "journal-title": publication.journal_title,
+      "journal-title": publication.preferred_journal_title,
       "short-description": publication.abstract,
-      type: 'journal-article'
+      type: publication_type
     }
 
     if published_date.present?
@@ -70,10 +70,14 @@ class OrcidWork < OrcidResource
   end
 
   def contributors
-    publication.contributors
+    publication.contributor_names
   end
 
   def published_date
     publication.published_on
+  end
+
+  def publication_type
+    OrcidPublicationTypeMapOut.map(publication.publication_type)
   end
 end

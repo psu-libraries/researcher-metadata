@@ -61,10 +61,16 @@ RailsAdmin.config do |config|
             :ExternalPublicationWaiver,
             :Authorship,
             :Journal,
-            :Publisher]
+            :Publisher,
+            :StatisticsSnapshot,
+            :EmailError]
     end
     new do
-      only [:Publication, :User, :APIToken]
+      only [:Publication,
+            :User,
+            :APIToken,
+            :ExternalPublicationWaiver,
+            :InternalPublicationWaiver]
     end
     export
     bulk_delete do
@@ -73,7 +79,14 @@ RailsAdmin.config do |config|
     show do
     end
     edit do
-      only [:Authorship, :Publication, :User, :Presentation, :Performance, :APIToken]
+      only [:Authorship,
+            :Publication,
+            :User,
+            :Presentation,
+            :Performance,
+            :APIToken,
+            :ExternalPublicationWaiver,
+            :InternalPublicationWaiver]
     end
     delete do
       only [:Publication, :User, :APIToken]

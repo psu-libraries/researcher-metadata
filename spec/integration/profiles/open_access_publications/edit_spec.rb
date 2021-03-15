@@ -11,6 +11,8 @@ describe "visiting the page to edit the open acess status of a publication" do
                      page_range: "478-483",
                      published_on: Date.new(2019, 1, 1) }
   let(:other_pub) { create :publication }
+  let(:non_article_pub) { create :publication,
+                                 publication_type: 'Book' }
   let(:oa_pub) { create :publication,
                         title: 'Open Access Publication',
                         journal_title: 'Open Access Journal',
@@ -41,6 +43,7 @@ describe "visiting the page to edit the open acess status of a publication" do
     create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
     create :authorship, user: user, publication: ss_pub, scholarsphere_uploaded_at: 1.day.ago
+    create :authorship, user: user, publication: non_article_pub
     create :internal_publication_waiver, authorship: waived_auth
     
     allow(HTTParty).to receive(:head).and_return(response)
@@ -226,6 +229,12 @@ describe "visiting the page to edit the open acess status of a publication" do
     context "when requesting a publication that does not belong to the user" do
       it "returns 404" do
         expect { visit edit_open_access_publication_path(other_pub) }.to raise_error ActiveRecord::RecordNotFound
+      end
+    end
+
+    context "when requesting a publication that is not a journal article" do
+      it "returns 404" do
+        expect { visit edit_open_access_publication_path(non_article_pub) }.to raise_error ActiveRecord::RecordNotFound
       end
     end
   end

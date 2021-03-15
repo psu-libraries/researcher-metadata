@@ -23,12 +23,12 @@ module RailsAdmin
                 @form.open_access_url = params[:open_access_url_form][:open_access_url]
                 if @form.valid?
                   ActiveRecord::Base.transaction do
-                    @publication.update_attributes!(open_access_url: params[:open_access_url_form][:open_access_url])
+                    @publication.update_attributes!(scholarsphere_open_access_url: params[:open_access_url_form][:open_access_url])
                     @publication.authorships.each do |a|
                       a.update_attributes!(scholarsphere_uploaded_at: nil)
                     end
                   end
-                  flash[:success] = I18n.t('admin.actions.edit_open_access.success', @publication.title)
+                  flash[:success] = I18n.t('admin.actions.edit_open_access.success', title: @publication.title)
                   redirect_to rails_admin.index_path(model_name: :authorship)
                 else
                   flash.now[:error] = @form.errors.full_messages.join(" ")

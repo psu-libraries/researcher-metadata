@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_01_13_135122) do
+ActiveRecord::Schema.define(version: 2021_02_23_203349) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -40,6 +40,7 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.string "role"
     t.datetime "open_access_notification_sent_at"
     t.string "orcid_resource_identifier"
+    t.datetime "updated_by_owner_at"
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end
@@ -78,7 +79,7 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
 
-  create_table "contributors", force: :cascade do |t|
+  create_table "contributor_names", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.string "first_name"
     t.string "middle_name"
@@ -87,7 +88,7 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role"
-    t.index ["publication_id"], name: "index_contributors_on_publication_id"
+    t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -132,6 +133,14 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.datetime "updated_at", null: false
     t.index ["activity_insight_identifier"], name: "index_education_history_items_on_activity_insight_identifier", unique: true
     t.index ["user_id"], name: "index_education_history_items_on_user_id"
+  end
+
+  create_table "email_errors", force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.text "message"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_email_errors_on_user_id"
   end
 
   create_table "etds", force: :cascade do |t|
@@ -371,6 +380,7 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.text "user_submitted_open_access_url"
     t.integer "journal_id"
     t.boolean "exported_to_activity_insight"
+    t.text "scholarsphere_open_access_url"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
@@ -403,6 +413,13 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
     t.datetime "updated_at", null: false
     t.index ["grant_id"], name: "index_researcher_funds_on_grant_id"
     t.index ["user_id"], name: "index_researcher_funds_on_user_id"
+  end
+
+  create_table "statistics_snapshots", force: :cascade do |t|
+    t.integer "total_publication_count"
+    t.integer "open_access_publication_count"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "tags", force: :cascade do |t|
@@ -511,8 +528,9 @@ ActiveRecord::Schema.define(version: 2021_01_13_135122) do
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
-  add_foreign_key "contributors", "publications", on_delete: :cascade
+  add_foreign_key "contributor_names", "publications", on_delete: :cascade
   add_foreign_key "education_history_items", "users", on_delete: :cascade
+  add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
