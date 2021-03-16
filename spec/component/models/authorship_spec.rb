@@ -32,6 +32,7 @@ describe Authorship, type: :model do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
     it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver).inverse_of(:authorship) }
+    it { is_expected.to have_many(:scholarsphere_file_uploads) }
   end
 
   describe 'validations' do

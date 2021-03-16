@@ -2,6 +2,7 @@ class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
   has_one :waiver, class_name: :InternalPublicationWaiver, inverse_of: :authorship
+  has_many :scholarsphere_file_uploads
 
   accepts_nested_attributes_for :waiver
 
