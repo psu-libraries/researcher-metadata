@@ -27,7 +27,6 @@ set :shared, %w{
   config/orcid.yml
   config/pure.yml
   db/data
-  tmp/pids
 }
 
 # The directory that we're deploying to on the remote host.
@@ -37,6 +36,6 @@ set :deploy_to, "/var/www/sites/metadata"
 after 'deploy:publishing', 'deploy:restart'
 namespace :deploy do
   task :restart do
-    invoke 'delayed_job:restart'
+    run "cd #{deploy_to}/current && bin/delayed_job restart RAILS_ENV=production"
   end
 end
