@@ -215,6 +215,14 @@ while dicarding the rest. Subsequent imports of the same data will then not recr
 also a rake task, `rake group_duplicate_pubs`, which uses the same duplicate finding/grouping logic. Running this task
 will check every publication record in the database for possible duplicates and group them.
 
+Whenever suspected duplicate publication records are grouped as they're being imported, those records are also
+sometimes automatically hidden so that they do not appear as duplicates in API responses, user profiles, etc. until
+the duplication can be resolved. Because the publication data that we import from Pure is relatively clean, reliable,
+and free of duplication compared to some of the other data sources, we _don't_ automatically hide publications
+that have been imported from Pure when they're added to a duplicate group, but we _do_ automatically hide such
+publications imported from less reliable sources. This allows the data from the Pure import to be available to our
+users even while possible duplication remains to be resolved.
+
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record
 for the publication itself which contains the publication's metadata, and we create a record of the import which
@@ -248,6 +256,20 @@ grouped as potential duplicates by our duplicate identification process. In this
 users to select and group publications as a way of indicating that they have been reviewed and have been determined
 to not be duplicates even though they look similar. This will prevent the same publications from automatically being
 grouped as potential duplicates again in the future.
+
+#### Auto-merging
+The task of manually inspecting possible duplicate publication records and merging them is somewhat tedious. To help
+reduce the amount of labor necessary to curate the publication metadata, we have decided that suspected duplicates can be
+automatically merged under some circumstances. Often when duplicate groups containing one publication import from
+Pure and one import from another source are merged, the Pure import is the record that is chosen to be kept, and
+the data in that record needs little or no manual curation since the data from Pure is generally accurate and complete.
+Since a large proportion of duplicate groups end up contaiing exactly one publication imported from Pure and exactly
+one publication imported from Activity Insight, we've created a process by which all such groups can be automatically
+merged at once. This process is run as a rake task, `rake auto_merge_duplicate_pubs`. We know that a very small
+percentage of publications that are automatically grouped as suspected duplicates are not actually duplicate records.
+This means that whenever we perform auto-merging, we're accepting that a small number of false-positive publication
+matches are actually being merged when they shouldn't be. We deemed the amount of labor saved by this automation
+to be worth the small amount of data that we'll lose from occasionally merging non-duplicate publications by accident.
 
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
