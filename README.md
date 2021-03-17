@@ -221,7 +221,8 @@ the duplication can be resolved. Because the publication data that we import fro
 and free of duplication compared to some of the other data sources, we _don't_ automatically hide publications
 that have been imported from Pure when they're added to a duplicate group, but we _do_ automatically hide such
 publications imported from less reliable sources. This allows the data from the Pure import to be available to our
-users even while possible duplication remains to be resolved.
+users even while possible duplication remains to be resolved. Whenever a duplicate publication group is merged,
+the resulting publication is once again automatically made visible if it had been previously hidden.
 
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record
