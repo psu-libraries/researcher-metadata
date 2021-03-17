@@ -6,6 +6,7 @@ require 'capistrano-helpers/git'        # Support for git
 require 'capistrano-helpers/shared'     # Symlink shared files after deploying
 require 'capistrano-helpers/migrations' # Run all migrations automatically
 require 'capistrano-helpers/robots'     # Keep robots out of staging and beta
+require 'delayed/recipes'               # Recipes to start bin/delayed_job
 
 # Location of the source code.
 set :repository,  'git@github.com:psu-stewardship/researcher-metadata.git'
@@ -31,3 +32,8 @@ set :shared, %w{
 
 # The directory that we're deploying to on the remote host.
 set :deploy_to, "/var/www/sites/metadata"
+
+# Delayed Job hooks
+after "deploy:stop",    "delayed_job:stop"
+after "deploy:start",   "delayed_job:start"
+after "deploy:restart", "delayed_job:restart"
