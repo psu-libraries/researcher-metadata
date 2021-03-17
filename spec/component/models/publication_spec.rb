@@ -842,7 +842,7 @@ describe Publication, type: :model do
     let!(:user2) { create :user }
     let!(:user3) { create :user }
 
-    let!(:pub1) { create :publication, updated_by_user_at: nil }
+    let!(:pub1) { create :publication, updated_by_user_at: nil, visible: visibility }
     let!(:pub2) { create :publication }
     let!(:pub3) { create :publication }
     let!(:pub4) { create :publication }
@@ -854,6 +854,8 @@ describe Publication, type: :model do
 
     let(:waiver1) { build :internal_publication_waiver }
     let(:waiver2) { build :internal_publication_waiver }
+
+    let(:visibility) { false }
 
     before do
       create :authorship,
@@ -1073,6 +1075,23 @@ describe Publication, type: :model do
     end
 
 
+    context "when the publication is not visible" do
+      it "makes the publication visible" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.visible).to eq true
+      end
+    end
+
+    context "when the publication is visible" do
+      let(:visibility) { true }
+      it "leaves the publication visible" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.visible).to eq true
+      end
+    end
+
     context "when the given publications include the publication" do
       it "reassigns all of the imports from the given publications to the publication" do
         pub1.merge!([pub1, pub2, pub3, pub4])
@@ -1095,6 +1114,23 @@ describe Publication, type: :model do
         pub1.merge!([pub1, pub2, pub3, pub4])
 
         expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
+      end
+
+      context "when the publication is not visible" do
+        it "makes the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "leaves the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
       end
     end
 
@@ -1223,6 +1259,27 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
+
+      context "when the publication is not visible" do
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue RuntimeError; end
+
+          expect(pub1.reload.visible).to eq false
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue RuntimeError; end
+
+          expect(pub1.reload.visible).to eq true
+        end
       end
     end
 
@@ -1374,6 +1431,23 @@ describe Publication, type: :model do
         expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
         expect(auth2.scholarsphere_uploaded_at).to eq nil
         expect(auth3.scholarsphere_uploaded_at).to eq nil
+      end
+
+      context "when the publication is not visible" do
+        it "makes the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "leaves the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
       end
     end
 
@@ -1528,6 +1602,23 @@ describe Publication, type: :model do
         expect(auth2.scholarsphere_uploaded_at).to eq nil
         expect(auth3.scholarsphere_uploaded_at).to eq nil
       end
+
+      context "when the publication is not visible" do
+        it "makes the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "leaves the publication visible" do
+          pub1.merge!([pub2, pub3, pub4])
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
     end
 
     context "when two of the given publications are in the same non-duplicate group" do
@@ -1667,6 +1758,27 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
+
+      context "when the publication is not visible" do
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq false
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq true
+        end
       end
     end
 
@@ -1810,6 +1922,27 @@ describe Publication, type: :model do
 
         expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
+
+      context "when the publication is not visible" do
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq false
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
     end
 
     context "when one of the given publications is in the same non-duplicate group as the publication" do
@@ -1950,6 +2083,27 @@ describe Publication, type: :model do
 
         expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
+
+      context "when the publication is not visible" do
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq false
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq true
+        end
+      end
     end
 
     context "when all of the publications are in the same non-duplicate group" do
@@ -2089,6 +2243,27 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.scholarsphere_uploaded_at).to eq nil
+      end
+
+      context "when the publication is not visible" do
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq false
+        end
+      end
+
+      context "when the publication is visible" do
+        let(:visibility) { true }
+        it "does not change the visibility" do
+          begin
+            pub1.merge!([pub2, pub3, pub4])
+          rescue Publication::NonDuplicateMerge; end
+
+          expect(pub1.reload.visible).to eq true
+        end
       end
     end
   end
