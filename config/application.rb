@@ -19,5 +19,7 @@ module ResearcherMetadata
     # the framework and any gems in your application.
 
     config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
+
+    config.x.scholarsphere = YAML.load_file(Rails.root.join('config/scholarsphere-client.yml'))
   end
 end
