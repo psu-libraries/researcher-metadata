@@ -104,19 +104,16 @@ describe ScholarsphereUploadsController, type: :controller do
       end
 
       context "when given the ID for a publication that belongs to the user and is not open access" do
-        it "sets the timestamp on the user's authorship of the publication" do
-          post :create, params: {id: pub.id}
-          expect(auth.reload.scholarsphere_uploaded_at).to eq now
-        end
-
         it "sets the modification timestamp on the user's authorship of the publication" do
-          post :create, params: {id: pub.id}
+          file = fixture_file_upload('test_file.pdf', "application/pdf")
+          post :create, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
           expect(auth.reload.updated_by_owner_at).to eq now
         end
           
-        it "redirects to the ScholarSphere website" do
-          post :create, params: {id: pub.id}
-          expect(response).to redirect_to 'https://scholarsphere.psu.edu/dashboard/form/work_versions/new'
+        it "redirects to the publication management page for the user's profile" do
+          file = fixture_file_upload('test_file.pdf', "application/pdf")
+          post :create, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
+          expect(response).to redirect_to edit_profile_publications_path
         end
       end
     end

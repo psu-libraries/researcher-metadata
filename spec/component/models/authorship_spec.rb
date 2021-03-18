@@ -58,6 +58,7 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
   it { is_expected.to accept_nested_attributes_for(:waiver) }
+  it { is_expected.to accept_nested_attributes_for(:scholarsphere_file_uploads) }
 
   describe "#description" do
     let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }

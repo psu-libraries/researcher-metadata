@@ -1,0 +1,18 @@
+<div class="nested-fields">
+  <% if f.object.new_record? %>
+    <%= link_to_remove_association f, title: 'Remove this file' do %>
+      Remove
+      <span class="sr-only">Remove this file</span>
+    <% end %>
+  <% end %>
+
+  <%= f.input :file_cache, as: :hidden %>
+
+  <% if fname = f.object.file_identifier %>
+    <div class="form-group file required file-display">
+      <%= link_to fname, f.object.file_url, target: '_blank', class: 'form-control disabled' %>
+    </div>
+  <% else %>
+    <%= f.input :file, as: :file, input_html: { class: 'form-control file' } %>
+  <% end %>
+</div>

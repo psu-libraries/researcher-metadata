@@ -84,10 +84,6 @@ describe "visiting the page to edit the open acess status of a publication" do
         expect(page).to have_content "2019"
       end
 
-      it "shows an upload button" do
-        expect(page).to have_button "Upload"
-      end
-
       it "shows a link to the open access waiver" do
         expect(page).to have_link "Waive open access obligations for this publication", href: new_internal_publication_waiver_path(pub)
       end
@@ -95,7 +91,7 @@ describe "visiting the page to edit the open acess status of a publication" do
       describe "successfully submitting the form to add an open access URL" do
         before do
           fill_in "Open Access URL", with: 'https://example.org/pubs/1.pdf'
-          click_on "Submit"
+          click_on "Submit URL"
         end
 
         it "updates the publication with the sumbitted URL" do
@@ -114,7 +110,7 @@ describe "visiting the page to edit the open acess status of a publication" do
       describe "submitting the form to add an open access URL with an error" do
         before do
           fill_in "Open Access URL", with: 'derp derp derp'
-          click_on "Submit"
+          click_on "Submit URL"
         end
 
         it "does not update the publication with the sumbitted data" do

@@ -127,6 +127,7 @@ GEM
       mini_mime (>= 0.1.3)
       ssrf_filter (~> 1.0)
     cliver (0.3.2)
+    cocoon (1.2.15)
     coffee-rails (4.2.2)
       coffee-script (>= 2.2.0)
       railties (>= 4.0.0)
@@ -436,6 +437,7 @@ DEPENDENCIES
   capybara (>= 2.15, < 4.0)
   capybara-email
   carrierwave
+  cocoon
   coffee-rails (~> 4.2)
   database_cleaner
   devise

@@ -33,3 +33,6 @@
 /config/orcid.yml
 /config/pure.yml
 /config/scholarsphere-client.yml
+
+# Ignore files uploaded through the app
+/uploads

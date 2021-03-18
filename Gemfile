@@ -88,6 +88,9 @@ gem 'multi_json'
 # HTML Form builder
 gem 'simple_form'
 
+# Build nested HTML forms
+gem 'cocoon'
+
 # Harvest metadata from OAI-PMH repositories
 gem 'fieldhand', '~> 0.12'
 

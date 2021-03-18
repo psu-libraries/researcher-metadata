@@ -5,6 +5,7 @@ class Authorship < ApplicationRecord
   has_many :scholarsphere_file_uploads
 
   accepts_nested_attributes_for :waiver
+  accepts_nested_attributes_for :scholarsphere_file_uploads
 
   validates :user_id,
     :publication_id,

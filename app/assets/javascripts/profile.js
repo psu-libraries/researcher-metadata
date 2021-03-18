@@ -18,4 +18,5 @@
 //= require activestorage
 //= require turbolinks
 //= require foundation
+//= require cocoon
 //= require_tree ./profile

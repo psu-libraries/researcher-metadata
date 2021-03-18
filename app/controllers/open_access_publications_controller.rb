@@ -4,6 +4,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def edit
     if publication.no_open_access_information?
       @form = OpenAccessURLForm.new
+      @authorship = Authorship.find_by(user: current_user, publication: publication)
+      @authorship.scholarsphere_file_uploads.build
       render :edit
     else
       render :readonly_edit
@@ -19,6 +21,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       redirect_to edit_profile_publications_path
     else
       flash[:alert] = "Validation failed:  #{@form.errors.full_messages.join(', ')}"
+      @authorship = Authorship.find_by(user: current_user, publication: publication)
+      @authorship.scholarsphere_file_uploads.build
       render 'edit'
     end
   end

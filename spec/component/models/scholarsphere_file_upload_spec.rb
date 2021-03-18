@@ -16,9 +16,26 @@ describe 'the scholarsphere_file_uploads table', type: :model do
 end
 
 describe ScholarsphereFileUpload, type: :model do
+  subject(:upload) { ScholarsphereFileUpload.new }
+
   it_behaves_like "an application record"
 
   it { is_expected.to belong_to(:authorship) }
 
   it { is_expected.to validate_presence_of(:file) }
+
+  describe "#file" do
+    it "mounts a ScholarsphereFileUploader" do
+      expect(upload.file).to be_a(ScholarsphereFileUploader)
+    end
+  end
+
+  describe '#destroy' do
+    let!(:upload) { create :scholarsphere_file_upload }
+    it 'removes the file from the filesystem' do
+      expect(File.exist?(upload.file.path)).to eq true
+      upload.destroy
+      expect(File.exist?(upload.file.path)).to eq false
+    end
+  end
 end
