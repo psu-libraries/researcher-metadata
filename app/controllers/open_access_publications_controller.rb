@@ -5,7 +5,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     if publication.no_open_access_information?
       @form = OpenAccessURLForm.new
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @authorship.scholarsphere_file_uploads.build
+      @deposit = ScholarsphereWorkDeposit.new(authorship: @authorship)
+      @deposit.file_uploads.build
       render :edit
     else
       render :readonly_edit
@@ -22,14 +23,19 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     else
       flash[:alert] = "Validation failed:  #{@form.errors.full_messages.join(', ')}"
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @authorship.scholarsphere_file_uploads.build
+      @deposit = ScholarsphereWorkDeposit.new(authorship: @authorship)
+      @deposit.file_uploads.build
       render 'edit'
     end
   end
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @authorship.update!(authorship_params.merge(updated_by_owner_at: Time.current))
+    ActiveRecord::Base.transaction do
+      @deposit = ScholarsphereWorkDeposit.create!(authorship: @authorship)
+      @deposit.update!(deposit_params)
+      @authorship.update!(updated_by_owner_at: Time.current)
+    end
     
     creators_attributes = publication.users.order('authorships.author_number ASC').map do |u|
       {
@@ -52,7 +58,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       creators_attributes: creators_attributes
     }
 
-    files = @authorship.reload.scholarsphere_file_uploads.map do |sfu|
+    files = @deposit.reload.file_uploads.map do |sfu|
       File.new(sfu.file.file.file)
     end
 
@@ -83,7 +89,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
-    flash.now[:alert] = @authorship.errors.full_messages.join(" ")
+    flash.now[:alert] = @deposit.errors.full_messages.join(" ")
     render :edit
   end
 
@@ -95,7 +101,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     params.require(:open_access_url_form).permit([:open_access_url])
   end
 
-  def authorship_params
-    params.require(:authorship).permit(scholarsphere_file_uploads_attributes: [:file, :file_cache])
+  def deposit_params
+    params.require(:scholarsphere_work_deposit).permit(file_uploads_attributes: [:file, :file_cache])
   end
 end

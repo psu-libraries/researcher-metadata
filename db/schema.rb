@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_16_165052) do
+ActiveRecord::Schema.define(version: 2021_03_19_195338) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -416,11 +416,21 @@ ActiveRecord::Schema.define(version: 2021_03_16_165052) do
   end
 
   create_table "scholarsphere_file_uploads", force: :cascade do |t|
-    t.bigint "authorship_id"
     t.string "file"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["authorship_id"], name: "index_scholarsphere_file_uploads_on_authorship_id"
+    t.integer "scholarsphere_work_deposit_id"
+    t.index ["scholarsphere_work_deposit_id"], name: "scholarsphere_file_uploads_on_deposit_id"
+  end
+
+  create_table "scholarsphere_work_deposits", force: :cascade do |t|
+    t.bigint "authorship_id"
+    t.string "status"
+    t.text "error_message"
+    t.datetime "deposited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
   end
 
   create_table "statistics_snapshots", force: :cascade do |t|
@@ -562,7 +572,8 @@ ActiveRecord::Schema.define(version: 2021_03_16_165052) do
   add_foreign_key "research_funds", "publications", name: "research_funds_publication_id_fk", on_delete: :cascade
   add_foreign_key "researcher_funds", "grants", name: "research_funds_grant_id_fk", on_delete: :cascade
   add_foreign_key "researcher_funds", "users", name: "research_funds_user_id_fk", on_delete: :cascade
-  add_foreign_key "scholarsphere_file_uploads", "authorships"
+  add_foreign_key "scholarsphere_file_uploads", "scholarsphere_work_deposits", name: "scholarsphere_file_uploads_deposit_id_fk"
+  add_foreign_key "scholarsphere_work_deposits", "authorships"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
   add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade

@@ -65,13 +65,13 @@
             consider uploading it to ScholarSphere.
           </p>
 
-          <%= simple_form_for @authorship, url: scholarsphere_deposit_path, method: :post do |f| %>
-            <%= f.simple_fields_for :scholarsphere_file_uploads do |file| %>
-              <%= render 'scholarsphere_file_upload_fields', f: file %>
+          <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
+            <%= f.simple_fields_for :file_uploads do |sfu| %>
+              <%= render 'file_upload_fields', f: sfu %>
             <% end %>
 
             <div class="cocoon-links">
-              <%= link_to_add_association 'Add Another File', f, :scholarsphere_file_uploads, association: :scholarsphere_file_uploads,
+              <%= link_to_add_association 'Add Another File', f, :file_uploads, association: :file_uploads,
                                           class: 'button-default add-button' %>
             </div>
 

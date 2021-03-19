@@ -287,13 +287,13 @@ describe OpenAccessPublicationsController, type: :controller do
       context "when given the ID for a publication that belongs to the user and is not open access" do
         it "sets the modification timestamp on the user's authorship of the publication" do
           file = fixture_file_upload('test_file.pdf', "application/pdf")
-          post :create_scholarsphere_deposit, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
+          post :create_scholarsphere_deposit, params: {id: pub.id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
           expect(auth.reload.updated_by_owner_at).to eq now
         end
           
         it "redirects to the publication management page for the user's profile" do
           file = fixture_file_upload('test_file.pdf', "application/pdf")
-          post :create_scholarsphere_deposit, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
+          post :create_scholarsphere_deposit, params: {id: pub.id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
           expect(response).to redirect_to edit_profile_publications_path
         end
       end

@@ -32,7 +32,7 @@ describe Authorship, type: :model do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
     it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver).inverse_of(:authorship) }
-    it { is_expected.to have_many(:scholarsphere_file_uploads) }
+    it { is_expected.to have_one(:scholarsphere_work_deposit) }
   end
 
   describe 'validations' do
@@ -58,7 +58,6 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
   it { is_expected.to accept_nested_attributes_for(:waiver) }
-  it { is_expected.to accept_nested_attributes_for(:scholarsphere_file_uploads) }
 
   describe "#description" do
     let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
