@@ -33,9 +33,9 @@ set :shared, %w{
 set :deploy_to, "/var/www/sites/metadata"
 
 # Delayed Job hook
-after 'deploy:publishing', 'deploy:restart'
-namespace :deploy do
+after 'deploy:restart', 'delayed_job:restart'
+namespace :delayed_job do
   task :restart do
-    run "cd #{deploy_to}/current && bin/delayed_job restart RAILS_ENV=production"
+    run "cd #{deploy_to}/current && bin/delayed_job restart"
   end
 end
