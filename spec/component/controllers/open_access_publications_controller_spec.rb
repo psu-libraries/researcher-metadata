@@ -218,4 +218,85 @@ describe OpenAccessPublicationsController, type: :controller do
       end
     end
   end
+
+    describe '#create_scholarsphere_deposit' do
+    context "when not authenticated" do
+      it "redirects to the sign in page" do
+        post :create_scholarsphere_deposit, params: {id: 1}
+
+        expect(response).to redirect_to new_user_session_path
+      end
+    end
+
+    context "when authenticated" do
+      let(:now) { Time.new 2019, 1, 1, 0, 0, 0 }
+
+      before do
+        allow(Time).to receive(:current).and_return(now)
+        authenticate_as(user)
+      end
+
+      context "when given the ID for a publication that does not belong to the user" do
+        it "returns 404" do
+          expect { post :create_scholarsphere_deposit, params: {id: other_pub.id} }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context "when given the ID for a publication that belongs to the user and has an open access URL" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: oa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(oa_pub)
+        end
+      end
+
+      context "when given the ID for a publication that belongs to the user and has a user-submitted open access URL" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: uoa_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uoa_pub)
+        end
+      end
+
+      context "when given the ID for a publication that has already been uploaded to ScholarSphere by the user" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(uploaded_pub)
+        end
+      end
+
+      context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: other_uploaded_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_uploaded_pub)
+        end
+      end
+
+      context "when given the ID for a publication for which the user has waived open access" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(waived_pub)
+        end
+      end
+
+      context "when given the ID for a publication for which another user has waived open access" do
+        it "redirects to the read-only view of the publication's open access status" do
+          post :create_scholarsphere_deposit, params: {id: other_waived_pub.id}
+          expect(response).to redirect_to edit_open_access_publication_path(other_waived_pub)
+        end
+      end
+
+      context "when given the ID for a publication that belongs to the user and is not open access" do
+        it "sets the modification timestamp on the user's authorship of the publication" do
+          file = fixture_file_upload('test_file.pdf', "application/pdf")
+          post :create_scholarsphere_deposit, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
+          expect(auth.reload.updated_by_owner_at).to eq now
+        end
+          
+        it "redirects to the publication management page for the user's profile" do
+          file = fixture_file_upload('test_file.pdf', "application/pdf")
+          post :create_scholarsphere_deposit, params: {id: pub.id, authorship: {scholarsphere_file_uploads_attributes: [file: file]}}
+          expect(response).to redirect_to edit_profile_publications_path
+        end
+      end
+    end
+  end
 end

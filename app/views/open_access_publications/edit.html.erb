@@ -65,7 +65,7 @@
             consider uploading it to ScholarSphere.
           </p>
 
-          <%= simple_form_for @authorship, url: scholarsphere_uploads_path, method: :post do |f| %>
+          <%= simple_form_for @authorship, url: scholarsphere_deposit_path, method: :post do |f| %>
             <%= f.simple_fields_for :scholarsphere_file_uploads do |file| %>
               <%= render 'scholarsphere_file_upload_fields', f: file %>
             <% end %>

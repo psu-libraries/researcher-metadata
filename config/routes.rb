@@ -47,7 +47,7 @@ Rails.application.routes.draw do
   post 'profile/bio/orcid/works' => 'orcid_works#create', as: :orcid_works
   get 'profile/publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
   patch 'profile/publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
-  post 'profile/publications/:id/open_access/scholarsphere_uploads' => 'scholarsphere_uploads#create', as: :scholarsphere_uploads
+  post 'profile/publications/:id/open_access/scholarsphere_deposit' => 'open_access_publications#create_scholarsphere_deposit', as: :scholarsphere_deposit
   get 'profile/publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver
   post 'profile/publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
   get 'profile/publications/open_access_waivers/new' => 'external_publication_waivers#new', as: :new_external_publication_waiver
