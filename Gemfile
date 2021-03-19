@@ -91,6 +91,12 @@ gem 'simple_form'
 # Harvest metadata from OAI-PMH repositories
 gem 'fieldhand', '~> 0.12'
 
+# For running async jobs
+gem 'delayed_job_active_record'
+
+# For running delayed_job daemon (or other processes)
+gem 'daemons'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri

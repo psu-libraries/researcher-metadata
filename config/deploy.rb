@@ -31,3 +31,11 @@ set :shared, %w{
 
 # The directory that we're deploying to on the remote host.
 set :deploy_to, "/var/www/sites/metadata"
+
+# Delayed Job hook
+after 'deploy:publishing', 'deploy:restart'
+namespace :deploy do
+  task :restart do
+    run "cd #{deploy_to}/current && bin/delayed_job restart RAILS_ENV=production"
+  end
+end

@@ -301,6 +301,22 @@ publications are displayed together in the publication API endpoint.  Non-articl
 open access workflow.  However, they can be exported to ORCiD if they have a url.  All publications behave the same in the Admin 
 interface.
 
+### Activity Insight Publication Export
+Admins can export publications to Activity Insight through the "Organizations" resource.  To do this, admins must go to the organizations 
+index page and view the details of a specific organization by clicking the "i" on the right side of the datatable.  Then, view the 
+organization's publications by clicking the "View Publications" link in the details.  Here, admins can filter which publications they 
+would like to export from this screen. Once filtered down to the desired publications, they should click the "Export to Activity Insight" button. 
+This button will take admins to a page that tells them how many publications they are exporting and from which 
+organization. From here, publications can either be exported to Activity Insight's beta environment for testing, or the production environment.
+
+The export job is handled in its own process via delayed_job.  The output from Activity Insight's API is written to 
+`log/ai_publication_export.log` off of the application's root directory.  Depending on how many publications are being exported, 
+the process can take awhile.
+
+Publications exported to Activity Insight store the records' `RMD_ID` in Activity Insight.  To avoid the cyclical nature of exporting and then 
+reimporting the same records, Activity Insight records with an `RMD_ID` are skipped during the RMD's Activity Insight import.  
+Once a record has been exported to Activity Insight, it is flagged so it cannot be exported again.
+
 ## API
 ### Gems
 The RMD API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:

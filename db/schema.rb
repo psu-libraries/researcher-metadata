@@ -91,6 +91,21 @@ ActiveRecord::Schema.define(version: 2021_02_23_203349) do
     t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
   end
 
+  create_table "delayed_jobs", force: :cascade do |t|
+    t.integer "priority", default: 0, null: false
+    t.integer "attempts", default: 0, null: false
+    t.text "handler", null: false
+    t.text "last_error"
+    t.datetime "run_at"
+    t.datetime "locked_at"
+    t.datetime "failed_at"
+    t.string "locked_by"
+    t.string "queue"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.index ["priority", "run_at"], name: "delayed_jobs_priority"
+  end
+
   create_table "duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -365,6 +380,7 @@ ActiveRecord::Schema.define(version: 2021_02_23_203349) do
     t.text "user_submitted_open_access_url"
     t.integer "journal_id"
     t.text "scholarsphere_open_access_url"
+    t.boolean "exported_to_activity_insight"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
