@@ -290,6 +290,10 @@ The export job is handled in its own process via delayed_job.  The output from A
 `log/ai_publication_export.log` off of the application's root directory.  Depending on how many publications are being exported, 
 the process can take awhile.
 
+Publications exported to Activity Insight store the records' `RMD_ID` in Activity Insight.  To avoid the cyclical nature of exporting and then 
+reimporting the same records, Activity Insight records with an `RMD_ID` are skipped during the RMD's Activity Insight import.  
+Once a record has been exported to Activity Insight, it is flagged so it cannot be exported again.
+
 ## API
 ### Gems
 The RMD API is intended to conform to the Swagger 2.0 specification. As such, we're leveraging several gems to simplify the API development workflow, but remain true to the Swagger/Open API standard:
