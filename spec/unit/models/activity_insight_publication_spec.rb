@@ -18,7 +18,7 @@ describe ActivityInsightPublication do
     context "when the contype element in the given data is empty" do
       let(:type_element) { double 'type element', text: '' }
       it "returns nil" do
-        expect(pub.publication_type).to eq nil
+        expect(pub.publication_type).to eq "Other"
       end
     end
 
@@ -48,7 +48,7 @@ describe ActivityInsightPublication do
       context "when the contypeother element in the given data is empty" do
         let(:type_other_element) { double 'type other element', text: '' }
         it "returns nil" do
-          expect(pub.publication_type).to eq nil
+          expect(pub.publication_type).to eq "Other"
         end
       end
 
@@ -238,19 +238,30 @@ describe ActivityInsightPublication do
 
   describe '#importable?' do
     before { allow(parsed_pub).to receive(:css).with('STATUS').and_return status_element }
+    before { allow(parsed_pub).to receive(:css).with('RMD_ID').and_return rmd_id_element }
     let(:type_other_element) { nil }
 
-    context "when the status element in the given data does not contain 'Published'" do
+    context "when the status element in the given data does not contain 'Published' and no RMD_ID is present" do
       let(:status_element) { double 'status element', text: 'Other Status' }
+      let(:rmd_id_element) { double 'rmd id element', text: '' }
       it "returns false" do
         expect(pub.importable?).to eq false
       end
     end
 
-    context "when the status element in the given data contains 'Published" do
+    context "when the status element in the given data contains 'Published' and no RMD_ID is present" do
       let(:status_element) { double 'status element', text: "Published" }
+      let(:rmd_id_element) { double 'rmd id element', text: '' }
       it "returns true" do
         expect(pub.importable?).to eq true
+      end
+    end
+
+    context "when an RMD_ID is present" do
+      let(:status_element) { double 'status element', text: "Published" }
+      let(:rmd_id_element) { double 'rmd id element', text: '123' }
+      it "returns true" do
+        expect(pub.importable?).to eq false
       end
     end
   end

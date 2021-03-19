@@ -2,11 +2,6 @@ require 'component/component_spec_helper'
 
 describe ActivityInsightPublicationTypeMapIn do
   describe '#map' do
-    it 'returns nil if input string is blank' do
-      expect(described_class.map(nil)).to eq nil
-      expect(described_class.map('')).to eq nil
-    end
-
     it "keeps 'Abstract' as 'Abstract'" do
       expect(described_class.map('Abstract')).to eq 'Abstract'
     end
@@ -64,6 +59,8 @@ describe ActivityInsightPublicationTypeMapIn do
     end
 
     it "converts any other string to 'Other'" do
+      expect(described_class.map(nil)).to eq 'Other'
+      expect(described_class.map('')).to eq 'Other'
       expect(described_class.map('Other')).to eq 'Other'
       expect(described_class.map('Some other type')).to eq 'Other'
     end

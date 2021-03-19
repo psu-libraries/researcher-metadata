@@ -725,11 +725,11 @@ describe ActivityInsightImporter do
       end
 
       context "when no included publications exist in the database" do
-        it "creates a new publication import record for every published journal article in the imported data" do
+        it "creates a new publication import record for every published publication w/o an RMD_ID in the imported data" do
           expect { importer.call }.to change { PublicationImport.count }.by 3
         end
 
-        it "creates a new publication record for every published journal article in the imported data" do
+        it "creates a new publication record for every published publication w/o an RMD_ID in the imported data" do
           expect { importer.call }.to change { Publication.count }.by 3
         end
         
@@ -781,7 +781,7 @@ describe ActivityInsightImporter do
           expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
           expect(p3.title).to eq 'Fifth Test Publication'
-          expect(p3.publication_type).to eq 'Academic Journal Article'
+          expect(p3.publication_type).to eq 'Book'
           expect(p3.journal_title).to eq 'Some Other Journal'
           expect(p3.publisher_name).to eq 'Some Other Publisher'
           expect(p3.secondary_title).to eq nil
@@ -990,7 +990,7 @@ describe ActivityInsightImporter do
             expect(p2.doi).to eq 'existing DOI'
   
             expect(p3.title).to eq 'Fifth Test Publication'
-            expect(p3.publication_type).to eq 'Academic Journal Article'
+            expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
@@ -1221,7 +1221,7 @@ describe ActivityInsightImporter do
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
   
             expect(p3.title).to eq 'Fifth Test Publication'
-            expect(p3.publication_type).to eq 'Academic Journal Article'
+            expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
@@ -1395,9 +1395,6 @@ describe ActivityInsightImporter do
         end
       end
     end
-
-
-
 
     context "when a user that is being imported already exists in the database" do
       let!(:existing_user) do
@@ -2189,7 +2186,7 @@ describe ActivityInsightImporter do
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
   
             expect(p3.title).to eq 'Fifth Test Publication'
-            expect(p3.publication_type).to eq 'Academic Journal Article'
+            expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
@@ -2398,7 +2395,7 @@ describe ActivityInsightImporter do
               expect(p2.doi).to eq 'existing DOI'
     
               expect(p3.title).to eq 'Fifth Test Publication'
-              expect(p3.publication_type).to eq 'Academic Journal Article'
+              expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
@@ -2628,7 +2625,7 @@ describe ActivityInsightImporter do
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
     
               expect(p3.title).to eq 'Fifth Test Publication'
-              expect(p3.publication_type).to eq 'Academic Journal Article'
+              expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
@@ -3571,7 +3568,7 @@ describe ActivityInsightImporter do
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
   
             expect(p3.title).to eq 'Fifth Test Publication'
-            expect(p3.publication_type).to eq 'Academic Journal Article'
+            expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
@@ -3779,7 +3776,7 @@ describe ActivityInsightImporter do
               expect(p2.doi).to eq 'existing DOI'
     
               expect(p3.title).to eq 'Fifth Test Publication'
-              expect(p3.publication_type).to eq 'Academic Journal Article'
+              expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
@@ -4009,7 +4006,7 @@ describe ActivityInsightImporter do
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
     
               expect(p3.title).to eq 'Fifth Test Publication'
-              expect(p3.publication_type).to eq 'Academic Journal Article'
+              expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil

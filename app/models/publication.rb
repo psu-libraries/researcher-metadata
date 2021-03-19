@@ -541,7 +541,7 @@ class Publication < ApplicationRecord
         p.reload.destroy
       end
 
-      update_attributes!(updated_by_user_at: Time.current)
+      update_attributes!(updated_by_user_at: Time.current, visible: true)
     end
   end
 

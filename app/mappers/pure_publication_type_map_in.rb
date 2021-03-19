@@ -1,7 +1,5 @@
 class PurePublicationTypeMapIn
   def self.map(string)
-    return nil if string.blank?
-
     case string
     when 'Book', 'Editorial', 'Letter', 'Paper', 'Patent', 'Poster', 'Review Article'
       string

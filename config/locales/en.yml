@@ -35,6 +35,11 @@ en:
       export_publications_by_organization:
         title: "Export Publications by Organization"
         breadcrumb: "Export by Organization"
+      export_publications_to_activity_insight:
+        notice: "Integration has started and is running in the background.  It may take a while for this process to complete."
+        link: "<i class='icon-circle-arrow-up'></i> Export to Activity Insight"
+        breadcrumb: "Export Publications to Activity Insight"
+        title: "Export Publications to Activity Insight"
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
@@ -72,3 +77,5 @@ en:
       validation_errors:
         url_format: "does not have valid format. Please enter a full URL that begins with 'http://' or 'https://'."
         url_response: "cannot be accessed."
+    activity_insight_publication_exporter:
+      bugsnag_message: "An error was detected during an export to Activity Insight.  Refer to 'log/ai_publication_export.log' for details"

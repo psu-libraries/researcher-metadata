@@ -1,10 +1,12 @@
 require_relative '../../app/rails_admin_actions/edit_open_access'
 require_relative '../../app/rails_admin_actions/index_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_by_organization'
+require_relative '../../app/rails_admin_actions/export_publications_to_activity_insight'
 
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::EditOpenAccess)
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::IndexPublicationsByOrganization)
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsByOrganization)
+RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsToActivityInsight)
 
 RailsAdmin.config do |config|
 
@@ -103,6 +105,8 @@ RailsAdmin.config do |config|
       visible do
         false
       end
+    end
+    export_publications_to_activity_insight do
     end
 
     toggle

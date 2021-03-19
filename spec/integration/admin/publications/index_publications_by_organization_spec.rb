@@ -149,6 +149,20 @@ feature "Admin list of publications by organization", type: :feature do
       end
     end
 
+    describe "exporting to Activity Insight" do
+      before do
+        visit_index
+        click_on "Export to Activity Insight"
+      end
+
+      it "shows the correct page/info for exporting to Activity Insight" do
+        expect(page.current_path).to eq RailsAdmin.railtie_routes_url_helpers.export_publications_to_activity_insight_path(model_name: :publication)
+        expect(page).to have_content "You have found 2 publications from test organization"
+        expect(page).to have_button "Integrate with Beta"
+        expect(page).to have_button "Integrate with Production"
+      end
+    end
+
     describe "the page layout" do
       before { visit_index }
 

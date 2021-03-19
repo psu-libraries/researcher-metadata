@@ -215,6 +215,15 @@ while dicarding the rest. Subsequent imports of the same data will then not recr
 also a rake task, `rake group_duplicate_pubs`, which uses the same duplicate finding/grouping logic. Running this task
 will check every publication record in the database for possible duplicates and group them.
 
+Whenever suspected duplicate publication records are grouped as they're being imported, those records are also
+sometimes automatically hidden so that they do not appear as duplicates in API responses, user profiles, etc. until
+the duplication can be resolved. Because the publication data that we import from Pure is relatively clean, reliable,
+and free of duplication compared to some of the other data sources, we _don't_ automatically hide publications
+that have been imported from Pure when they're added to a duplicate group, but we _do_ automatically hide such
+publications imported from less reliable sources. This allows the data from the Pure import to be available to our
+users even while possible duplication remains to be resolved. Whenever a duplicate publication group is merged,
+the resulting publication is once again automatically made visible if it had been previously hidden.
+
 ### Merging Duplicate Publication Records
 Whenever we import a new publication, we create a record in two different tables in the database. We create a record
 for the publication itself which contains the publication's metadata, and we create a record of the import which
@@ -249,6 +258,20 @@ users to select and group publications as a way of indicating that they have bee
 to not be duplicates even though they look similar. This will prevent the same publications from automatically being
 grouped as potential duplicates again in the future.
 
+#### Auto-merging
+The task of manually inspecting possible duplicate publication records and merging them is somewhat tedious. To help
+reduce the amount of labor necessary to curate the publication metadata, we have decided that suspected duplicates can be
+automatically merged under some circumstances. Often when duplicate groups containing one publication import from
+Pure and one import from another source are merged, the Pure import is the record that is chosen to be kept, and
+the data in that record needs little or no manual curation since the data from Pure is generally accurate and complete.
+Since a large proportion of duplicate groups end up contaiing exactly one publication imported from Pure and exactly
+one publication imported from Activity Insight, we've created a process by which all such groups can be automatically
+merged at once. This process is run as a rake task, `rake auto_merge_duplicate_pubs`. We know that a very small
+percentage of publications that are automatically grouped as suspected duplicates are not actually duplicate records.
+This means that whenever we perform auto-merging, we're accepting that a small number of false-positive publication
+matches are actually being merged when they shouldn't be. We deemed the amount of labor saved by this automation
+to be worth the small amount of data that we'll lose from occasionally merging non-duplicate publications by accident.
+
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
 exist, then the import may update the attributes of that record. However, for records that can be fully or partially
@@ -277,6 +300,22 @@ displayed in separate interfaces of the user profile interface, public profile i
 publications are displayed together in the publication API endpoint.  Non-article publications are not included in the 
 open access workflow.  However, they can be exported to ORCiD if they have a url.  All publications behave the same in the Admin 
 interface.
+
+### Activity Insight Publication Export
+Admins can export publications to Activity Insight through the "Organizations" resource.  To do this, admins must go to the organizations 
+index page and view the details of a specific organization by clicking the "i" on the right side of the datatable.  Then, view the 
+organization's publications by clicking the "View Publications" link in the details.  Here, admins can filter which publications they 
+would like to export from this screen. Once filtered down to the desired publications, they should click the "Export to Activity Insight" button. 
+This button will take admins to a page that tells them how many publications they are exporting and from which 
+organization. From here, publications can either be exported to Activity Insight's beta environment for testing, or the production environment.
+
+The export job is handled in its own process via delayed_job.  The output from Activity Insight's API is written to 
+`log/ai_publication_export.log` off of the application's root directory.  Depending on how many publications are being exported, 
+the process can take awhile.
+
+Publications exported to Activity Insight store the records' `RMD_ID` in Activity Insight.  To avoid the cyclical nature of exporting and then 
+reimporting the same records, Activity Insight records with an `RMD_ID` are skipped during the RMD's Activity Insight import.  
+Once a record has been exported to Activity Insight, it is flagged so it cannot be exported again.
 
 ## API
 ### Gems
