@@ -26,4 +26,6 @@ describe ScholarsphereFileUpload, type: :model do
   it { is_expected.to have_many(:file_uploads).class_name(:ScholarsphereFileUpload).dependent(:destroy) }
 
   it { is_expected.to accept_nested_attributes_for(:file_uploads) }
+
+  it { is_expected.to delegate_method(:publication).to(:authorship) }
 end
