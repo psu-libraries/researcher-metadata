@@ -5,16 +5,14 @@ class ScholarsphereDepositService
   end
 
   def create
-    creators_attributes = deposit.publication.users.order('authorships.author_number ASC').map do |u|
-      {
-        display_name: u.name,
-        actor_attributes: {
-          psu_id: u.webaccess_id,
-          surname: u.last_name,
-          given_name: u.first_name,
-          email: "#{u.webaccess_id}@psu.edu"
-        }
-      }
+    # This bit needs to change so that we provide the full list of authors and not just
+    # the Penn State people who are authors. However, we need to provide PSU access IDs
+    # for Penn State people (and ORCID IDs for those who have them), while providing only
+    # a name for non-Penn State people. To do this reliably and to get the records in the
+    # correct order, we're going to need to link User records to ContributorName records
+    # upon import.
+    creators = deposit.publication.users.order('authorships.author_number ASC').map do |u|
+      { psu_id: u.webaccess_id }
     end
 
     metadata = {
@@ -23,24 +21,18 @@ class ScholarsphereDepositService
       published_date: deposit.publication.published_on,
       work_type: 'article',
       visibility: 'open',
-      creators_attributes: creators_attributes
+      rights: 'https://creativecommons.org/licenses/by/4.0/',
+      creators: creators
     }
 
     files = deposit.file_uploads.map do |sfu|
       File.new(sfu.file.file.file)
     end
 
-    depositor = {
-      psu_id: current_user.webaccess_id,
-      surname: current_user.last_name,
-      given_name: current_user.first_name,
-      email: "#{current_user.webaccess_id}@psu.edu"
-    }
-
     ingest = Scholarsphere::Client::Ingest.new(
       metadata: metadata,
       files: files,
-      depositor: depositor
+      depositor: current_user.webaccess_id
     )
 
     response = ingest.publish
