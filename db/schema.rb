@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_19_195338) do
+ActiveRecord::Schema.define(version: 2021_03_24_160734) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -88,7 +88,9 @@ ActiveRecord::Schema.define(version: 2021_03_19_195338) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role"
+    t.bigint "user_id"
     t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
+    t.index ["user_id"], name: "index_contributor_names_on_user_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -547,6 +549,7 @@ ActiveRecord::Schema.define(version: 2021_03_19_195338) do
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributor_names", "publications", on_delete: :cascade
+  add_foreign_key "contributor_names", "users"
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"

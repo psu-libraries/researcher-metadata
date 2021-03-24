@@ -39,6 +39,7 @@ class User < ApplicationRecord
   has_many :researcher_funds, inverse_of: :user
   has_many :grants, through: :researcher_funds
   has_many :external_publication_waivers
+  has_many :contributor_names
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 

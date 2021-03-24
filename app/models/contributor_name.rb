@@ -1,5 +1,6 @@
 class ContributorName < ApplicationRecord
   belongs_to :publication, inverse_of: :contributor_names
+  belongs_to :user, inverse_of: :contributor_names, optional: true
 
   validates :publication, :position, presence: true
   validate :at_least_one_name_present
