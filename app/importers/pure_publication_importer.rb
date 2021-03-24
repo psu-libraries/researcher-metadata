@@ -71,9 +71,9 @@ class PurePublicationImporter < PureImporter
                 end
               end
               ContributorName.create!(publication: p,
-                                  first_name: a['name']['firstName'],
-                                  last_name: a['name']['lastName'],
-                                  position: i+1)
+                                      first_name: a['name']['firstName'],
+                                      last_name: a['name']['lastName'],
+                                      position: i+1)
             end
           end
         end
