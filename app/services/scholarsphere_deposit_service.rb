@@ -5,14 +5,8 @@ class ScholarsphereDepositService
   end
 
   def create
-    # This bit needs to change so that we provide the full list of authors and not just
-    # the Penn State people who are authors. However, we need to provide PSU access IDs
-    # for Penn State people (and ORCID IDs for those who have them), while providing only
-    # a name for non-Penn State people. To do this reliably and to get the records in the
-    # correct order, we're going to need to link User records to ContributorName records
-    # upon import.
-    creators = deposit.publication.users.order('authorships.author_number ASC').map do |u|
-      { psu_id: u.webaccess_id }
+    creators = deposit.publication.contributor_names.order('position ASC').map do |cn|
+      cn.to_scholarsphere_creator
     end
 
     metadata = {
