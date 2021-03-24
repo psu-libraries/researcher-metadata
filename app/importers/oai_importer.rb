@@ -39,6 +39,7 @@ class OAIImporter
               con.first_name = c.first_name
               con.last_name = c.last_name
               con.position = i + 1
+              con.user = c.user_match if c.user_match
               con.save!
 
               if c.user_match

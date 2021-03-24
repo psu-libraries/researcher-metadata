@@ -136,48 +136,59 @@ describe PurePublicationImporter do
           expect(p1.contributor_names.find_by(first_name: 'Firstpub R.',
                                               middle_name: nil,
                                               last_name: 'Firstauthor',
+                                              user: pub1auth1,
                                               position: 1)).not_to be_nil
           expect(p1.contributor_names.find_by(first_name: 'Firstpub',
                                               middle_name: nil,
                                               last_name: 'Secondauthor',
+                                              user: nil,
                                               position: 2)).not_to be_nil
 
           expect(p2.contributor_names.find_by(first_name: 'Thirdpub A.',
                                               middle_name: nil,
                                               last_name: 'Firstauthor',
+                                              user: nil,
                                               position: 1)).not_to be_nil
           expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
                                               middle_name: nil,
                                               last_name: 'Secondauthor',
+                                              user: pub3auth2,
                                               position: 2)).not_to be_nil
           expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
                                               middle_name: nil,
                                               last_name: 'Thirdauthor',
+                                              user: nil,
                                               position: 3)).not_to be_nil
           expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
                                               middle_name: nil,
                                               last_name: 'Fourthauthor',
+                                              user: nil,
                                               position: 4)).not_to be_nil
           expect(p2.contributor_names.find_by(first_name: 'Thirdpub',
                                               middle_name: nil,
                                               last_name: 'Fifthauthor',
+                                              user: nil,
                                               position: 5)).not_to be_nil
 
           expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                               middle_name: nil,
                                               last_name: 'Firstauthor',
+                                              user: nil,
                                               position: 1)).not_to be_nil
           expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                               middle_name: nil,
                                               last_name: 'Secondauthor',
+                                              user: nil,
                                               position: 2)).not_to be_nil
           expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                               middle_name: nil,
                                               last_name: 'Thirdauthor',
+                                              user: nil,
                                               position: 3)).not_to be_nil
           expect(p3.contributor_names.find_by(first_name: 'Nonarticlepub',
                                               middle_name: nil,
                                               last_name: 'Fourthauthor',
+                                              user: pub2auth4,
                                               position: 4)).not_to be_nil
         end
 
@@ -261,10 +272,12 @@ describe PurePublicationImporter do
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
                                                             middle_name: nil,
                                                             last_name: 'Firstauthor',
+                                                            user: pub1auth1,
                                                             position: 1)).not_to be_nil
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub',
                                                             middle_name: nil,
                                                             last_name: 'Secondauthor',
+                                                            user: nil,
                                                             position: 2)).not_to be_nil
             end
           end
@@ -284,10 +297,12 @@ describe PurePublicationImporter do
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
                                                             middle_name: nil,
                                                             last_name: 'Firstauthor',
+                                                            user: pub1auth1,
                                                             position: 1)).not_to be_nil
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub',
                                                             middle_name: nil,
                                                             last_name: 'Secondauthor',
+                                                            user: nil,
                                                             position: 2)).not_to be_nil
             end
           end
