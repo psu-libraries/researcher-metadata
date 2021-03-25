@@ -45,6 +45,10 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @form = OpenAccessURLForm.new
     flash.now[:alert] = @deposit.errors.full_messages.join(" ")
     render :edit
+  rescue ActionController::ParameterMissing
+    @form = OpenAccessURLForm.new
+    flash.now[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.missing_parameter_error')
+    render :edit
   end
 
   helper_method :publication

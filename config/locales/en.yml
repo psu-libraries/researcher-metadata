@@ -47,6 +47,8 @@ en:
     open_access_publications:
       update:
         success: "Thank you for taking the time to submit your open access URL. It was successfully saved."
+      create_scholarsphere_deposit:
+        missing_parameter_error: "You must submit at least one file."
     external_publication_waivers:
       create:
         success: "Your waiver has been successfully submitted."

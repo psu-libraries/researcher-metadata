@@ -219,7 +219,14 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
-    describe '#create_scholarsphere_deposit' do
+  describe '#create_scholarsphere_deposit' do
+    let(:service) { double 'scholarsphere deposit service', create: nil }
+    let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
+
+    before do
+      allow(ScholarsphereDepositService).to receive(:new).and_return(service)
+    end
+
     context "when not authenticated" do
       it "redirects to the sign in page" do
         post :create_scholarsphere_deposit, params: {id: 1}
@@ -285,16 +292,87 @@ describe OpenAccessPublicationsController, type: :controller do
       end
 
       context "when given the ID for a publication that belongs to the user and is not open access" do
+        let(:pub_id) { pub.id }
+        let(:file) { fixture_file_upload('test_file.pdf', "application/pdf") }
+
+        it "creates a new scholarsphere work deposit" do
+          expect do 
+            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+          end.to change { ScholarsphereWorkDeposit.count }.by 1
+          expect(found_deposit).not_to be_nil
+        end
+
+        it "saves the uploaded file to the new scholarsphere work deposit" do
+          post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+
+          expect(found_deposit.file_uploads.count).to eq 1
+          expect(found_deposit.file_uploads.first.file.identifier).to eq file.original_filename
+        end
+
         it "sets the modification timestamp on the user's authorship of the publication" do
-          file = fixture_file_upload('test_file.pdf', "application/pdf")
-          post :create_scholarsphere_deposit, params: {id: pub.id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+          post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
           expect(auth.reload.updated_by_owner_at).to eq now
         end
           
         it "redirects to the publication management page for the user's profile" do
-          file = fixture_file_upload('test_file.pdf', "application/pdf")
-          post :create_scholarsphere_deposit, params: {id: pub.id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+          post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
           expect(response).to redirect_to edit_profile_publications_path
+        end
+
+        context "when the work deposit record has been successfully created" do
+          let(:created_deposit) { double 'scholarsphere work deposit', reload: reloaded_deposit }
+          let(:reloaded_deposit) { double 'scholarsphere work deposit' }
+          before do
+            allow(ScholarsphereDepositService).to receive(:new).with(reloaded_deposit, user).and_return(service)
+            allow(ScholarsphereWorkDeposit).to receive(:create!).with(authorship: auth).and_return(created_deposit)
+            allow(created_deposit).to receive(:update!)
+          end
+
+          it "sends a message to the service" do
+            expect(service).to receive(:create)
+            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+          end
+        end
+
+        context "when given no scholarsphere work deposit param" do
+          it "sets an error message" do
+            post :create_scholarsphere_deposit, params: {id: pub_id}
+            expect(flash.now[:alert]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.missing_parameter_error')
+          end
+
+          it "rerenders the form" do
+            post :create_scholarsphere_deposit, params: {id: pub_id}
+            expect(response).to render_template :edit
+          end
+        end
+
+        context "when given no file param for the scholarsphere work deposit" do
+          it "does not create a new scholarsphere work deposit" do
+            expect do 
+              post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: nil]}}
+            end.not_to change { ScholarsphereWorkDeposit.count }
+          end
+
+          it "does not create any new file upload records" do
+            expect do 
+              post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: nil]}}
+            end.not_to change { ScholarsphereFileUpload.count }
+          end
+
+          it "does not set the modification timestamp on the user's authorship of the publication" do
+            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: nil]}}
+            expect(auth.reload.updated_by_owner_at).to be_nil
+          end
+
+          it "sets an error message" do
+            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: nil]}}
+            expect(flash.now[:alert]).not_to be_empty
+          end
+
+          it "rerenders the form" do
+            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: nil]}}
+            expect(response).to render_template :edit
+          end
         end
       end
     end
