@@ -38,4 +38,16 @@ describe ScholarsphereFileUpload, type: :model do
       expect(File.exist?(upload.file.path)).to eq false
     end
   end
+
+  describe '#stored_file_path' do
+    let(:uploader) { double 'uploader', file: file }
+    let(:file) { double 'file', file: path }
+    let(:path) { 'the/file/path' }
+
+    before { allow(ScholarsphereFileUploader).to receive(:new).and_return uploader }
+
+    it "returns the full path to the saved file" do
+      expect(upload.stored_file_path).to eq 'the/file/path'
+    end
+  end
 end

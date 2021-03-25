@@ -20,7 +20,7 @@ class ScholarsphereDepositService
     }
 
     files = deposit.file_uploads.map do |sfu|
-      File.new(sfu.file.file.file)
+      File.new(sfu.stored_file_path)
     end
 
     ingest = Scholarsphere::Client::Ingest.new(

@@ -8,4 +8,8 @@ class ScholarsphereFileUpload < ApplicationRecord
   validates :file, presence: true
 
   mount_uploader :file, ScholarsphereFileUploader
+
+  def stored_file_path
+    file.file.file
+  end
 end
