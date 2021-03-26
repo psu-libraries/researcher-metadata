@@ -95,7 +95,7 @@ gem 'cocoon'
 gem 'fieldhand', '~> 0.12'
 
 # ScholarSphere API HTTP client for depositing works on behalf of users
-gem 'scholarsphere-client'
+gem 'scholarsphere-client', '~> 0.3'
 
 # File uploading
 gem 'carrierwave'
