@@ -37,8 +37,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       @authorship.update!(updated_by_owner_at: Time.current)
     end
 
-    service = ScholarsphereDepositService.new(@deposit.reload, current_user)
-    service.create
+    ScholarsphereUploadJob.perform_later(@deposit.id, current_user.id)
 
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid

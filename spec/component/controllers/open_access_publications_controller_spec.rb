@@ -220,12 +220,8 @@ describe OpenAccessPublicationsController, type: :controller do
   end
 
   describe '#create_scholarsphere_deposit' do
-    let(:service) { double 'scholarsphere deposit service', create: nil }
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
-
-    before do
-      allow(ScholarsphereDepositService).to receive(:new).and_return(service)
-    end
+    before { allow(ScholarsphereUploadJob).to receive(:perform_later) }
 
     context "when not authenticated" do
       it "redirects to the sign in page" do
@@ -319,19 +315,9 @@ describe OpenAccessPublicationsController, type: :controller do
           expect(response).to redirect_to edit_profile_publications_path
         end
 
-        context "when the work deposit record has been successfully created" do
-          let(:created_deposit) { double 'scholarsphere work deposit', reload: reloaded_deposit }
-          let(:reloaded_deposit) { double 'scholarsphere work deposit' }
-          before do
-            allow(ScholarsphereDepositService).to receive(:new).with(reloaded_deposit, user).and_return(service)
-            allow(ScholarsphereWorkDeposit).to receive(:create!).with(authorship: auth).and_return(created_deposit)
-            allow(created_deposit).to receive(:update!)
-          end
-
-          it "sends a message to the service" do
-            expect(service).to receive(:create)
-            post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
-          end
+        it "schedules a job to send the publication to ScholarSphere" do
+          post :create_scholarsphere_deposit, params: {id: pub_id, scholarsphere_work_deposit: {file_uploads_attributes: [file: file]}}
+          expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
         end
 
         context "when given no scholarsphere work deposit param" do
