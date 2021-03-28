@@ -38,7 +38,8 @@ class ScholarsphereDepositService
       deposit.publication.update!(scholarsphere_open_access_url: scholarsphere_publication_uri)
     end
 
-    Rails.logger.debug response.inspect
+    logger = Logger.new('log/scholarsphere_deposit.log')
+    logger.debug response.inspect
   end
 
   private
