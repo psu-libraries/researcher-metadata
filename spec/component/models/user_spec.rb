@@ -520,7 +520,7 @@ describe User, type: :model do
     let!(:waiver_11) { create :internal_publication_waiver, authorship: another_authorship_11 }
 
     # Filtered out due to publication being hidden
-    let!(:other_user_12) { create :user, first_name: 'other_user_12' }
+    let!(:other_user_12) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_12' }
     let!(:ou_mem_12) { create :user_organization_membership,
                              user: other_user_12,
                              started_on: Date.new(2019, 1, 1),
@@ -532,7 +532,7 @@ describe User, type: :model do
                               confirmed: true }
 
     # Filtered out due to publication not being a journal article
-    let!(:other_user_13) { create :user, first_name: 'other_user_13' }
+    let!(:other_user_13) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_13' }
     let!(:ou_mem_13) { create :user_organization_membership,
                              user: other_user_13,
                              started_on: Date.new(2019, 1, 1),
@@ -541,6 +541,18 @@ describe User, type: :model do
     let!(:ou_auth_13) { create :authorship,
                               user: other_user_13,
                               publication: ou_pub_13,
+                              confirmed: true }
+
+    # Filtered out due to scholarsphere_open_access_url being present
+    let!(:other_user_14) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_14' }
+    let!(:ou_mem_14) { create :user_organization_membership,
+                              user: other_user_14,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil }
+    let!(:ou_pub_14) { create :publication, published_on: Date.new(2020, 7, 1), scholarsphere_open_access_url: 'a_url' }
+    let!(:ou_auth_14) { create :authorship,
+                              user: other_user_14,
+                              publication: ou_pub_14,
                               confirmed: true }
 
     it "returns only users who should currently receive an email reminder about open access publications" do
