@@ -454,7 +454,7 @@ class Publication < ApplicationRecord
   end
 
   def scholarsphere_upload_pending?
-    authorships.where.not(scholarsphere_uploaded_at: nil).any?
+    authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending')}).any?
   end
 
   def open_access_waived?

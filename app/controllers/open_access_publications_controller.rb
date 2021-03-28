@@ -32,7 +32,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     ActiveRecord::Base.transaction do
-      @deposit = ScholarsphereWorkDeposit.create!(authorship: @authorship)
+      @deposit = ScholarsphereWorkDeposit.create!(authorship: @authorship, status: 'Pending')
       @deposit.update!(deposit_params)
       @authorship.update!(updated_by_owner_at: Time.current)
     end

@@ -204,8 +204,8 @@ describe "editing profile preferences" do
         let!(:auth_6) { create :authorship,
                                publication: pub_6,
                                user: user,
-                               visible_in_profile: false,
-                               scholarsphere_uploaded_at: Time.current }
+                               visible_in_profile: false }
+        let!(:swd) { create :scholarsphere_work_deposit, authorship: auth_6, status: 'Pending' }
         let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
 
         before { visit edit_profile_publications_path }

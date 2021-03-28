@@ -465,7 +465,7 @@ describe User, type: :model do
                               publication: ou_pub_7,
                               confirmed: true }
 
-    # Filtered out due to scholarsphere upload timestamp being present
+    # Filtered out due to a pending ScholarSphere deposit on the user's authorship
     let!(:other_user_8) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_8' }
     let!(:ou_mem_8) { create :user_organization_membership,
                              user: other_user_8,
@@ -475,10 +475,10 @@ describe User, type: :model do
     let!(:ou_auth_8) { create :authorship,
                               user: other_user_8,
                               publication: ou_pub_8,
-                              confirmed: true,
-                              scholarsphere_uploaded_at: 1.day.ago }
+                              confirmed: true}
+    let!(:swd_8) { create :scholarsphere_work_deposit, authorship: ou_auth_8, status: 'Pending' }
 
-    # Filtered out due to scholarsphere upload timestamp being present on another authorship
+    # Filtered out due to a pending ScholarSphere deposit on another user's authorship
     let!(:other_user_9) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_9' }
     let!(:ou_mem_9) { create :user_organization_membership,
                              user: other_user_9,
@@ -490,8 +490,8 @@ describe User, type: :model do
                               publication: ou_pub_9,
                               confirmed: true }
     let!(:another_authorship_9) { create :authorship,
-                                         publication: ou_pub_9,
-                                         scholarsphere_uploaded_at: 1.day.ago }
+                                         publication: ou_pub_9 }
+    let!(:swd_9) { create :scholarsphere_work_deposit, authorship: ou_auth_9, status: 'Pending' }
 
     # Filtered out due to presence of open access waiver
     let!(:other_user_10) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_10' }
@@ -621,17 +621,17 @@ describe User, type: :model do
                              confirmed: true,
                              open_access_notification_sent_at: 1.month.ago }
 
-    # Filtered out due to presence of Scholarsphere upload timestamp on authorship
+    # Filtered out due to the user's authorship having a pending ScholarSphere deposit
     let!(:other_pub_7) { create :publication,
                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_7) { create :authorship,
                              user: user,
                              publication: other_pub_7,
                              confirmed: true,
-                             scholarsphere_uploaded_at: 1.day.ago,
                              open_access_notification_sent_at: 1.month.ago }
+    let!(:swd_7) { create :scholarsphere_work_deposit, authorship: o_auth_7, status: 'Pending' }
 
-    # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
+    # Filtered out due to another user's authorship having a pending ScholarSphere deposit
     let!(:other_pub_8) { create :publication,
                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_8) { create :authorship,
@@ -640,8 +640,8 @@ describe User, type: :model do
                              confirmed: true,
                              open_access_notification_sent_at: 1.month.ago }
     let!(:another_auth_8) { create :authorship,
-                                   publication: other_pub_8,
-                                   scholarsphere_uploaded_at: 1.day.ago }
+                                   publication: other_pub_8 }
+    let!(:swd_8) { create :scholarsphere_work_deposit, authorship: another_auth_8, status: 'Pending' }
 
     # Filtered out due to presence of open access waiver
     let!(:other_pub_9) { create :publication,
@@ -701,6 +701,16 @@ describe User, type: :model do
     let!(:o_auth_14) { create :authorship,
                               user: user,
                               publication: other_pub_14,
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
+
+    # Filtered out due to presence of scholarsphere_open_access_url
+    let!(:other_pub_15) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 scholarsphere_open_access_url: 'a_url' }
+    let!(:o_auth_15) { create :authorship,
+                              user: user,
+                              publication: other_pub_15,
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago }
 
@@ -764,14 +774,14 @@ describe User, type: :model do
                              publication: other_pub_6,
                              confirmed: true }
 
-    # Filtered out due to presence of Scholarsphere upload timestamp on authorship
+    # Filtered out due to the user's authorship having a pending ScholarSphere deposit
     let!(:other_pub_7) { create :publication,
                                 published_on: Date.new(2020, 7, 1) }
     let!(:o_auth_7) { create :authorship,
                              user: user,
                              publication: other_pub_7,
-                             confirmed: true,
-                             scholarsphere_uploaded_at: 1.day.ago }
+                             confirmed: true }
+    let!(:swd_7) { create :scholarsphere_work_deposit, authorship: o_auth_7, status: 'Pending' }
 
     # Filtered out due to presence of Scholarsphere upload timestamp on another authorship
     let!(:other_pub_8) { create :publication,
@@ -781,8 +791,8 @@ describe User, type: :model do
                              publication: other_pub_8,
                              confirmed: true }
     let!(:another_auth_8) { create :authorship,
-                                   publication: other_pub_8,
-                                   scholarsphere_uploaded_at: 1.day.ago }
+                                   publication: other_pub_8 }
+    let!(:swd_8) { create :scholarsphere_work_deposit, authorship: another_auth_8, status: 'Pending' }
 
     # Filtered out due to presence of open access waiver
     let!(:other_pub_9) { create :publication,
@@ -838,6 +848,15 @@ describe User, type: :model do
     let!(:o_auth_14) { create :authorship,
                               user: user,
                               publication: other_pub_14,
+                              confirmed: true }
+
+    # Filtered out due to presence of scholarsphere_open_access_url
+    let!(:other_pub_15) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 scholarsphere_open_access_url: 'a_url' }
+    let!(:o_auth_15) { create :authorship,
+                              user: user,
+                              publication: other_pub_15,
                               confirmed: true }
 
     it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information" do

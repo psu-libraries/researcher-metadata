@@ -38,11 +38,13 @@ describe "visiting the page to edit the open acess status of a publication" do
   let(:response) { double 'response' }
 
   let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
+  let!(:ss_deposited_auth) { create :authorship, user: user, publication: ss_pub }
+  let!(:swd) { create :scholarsphere_work_deposit, authorship: ss_deposited_auth, status: 'Pending' }
 
   before do
     create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
-    create :authorship, user: user, publication: ss_pub, scholarsphere_uploaded_at: 1.day.ago
+    
     create :authorship, user: user, publication: non_article_pub
     create :internal_publication_waiver, authorship: waived_auth
     

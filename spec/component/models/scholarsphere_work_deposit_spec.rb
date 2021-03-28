@@ -28,4 +28,12 @@ describe ScholarsphereFileUpload, type: :model do
   it { is_expected.to accept_nested_attributes_for(:file_uploads) }
 
   it { is_expected.to delegate_method(:publication).to(:authorship) }
+
+  it { is_expected.to validate_inclusion_of(:status).in_array ['Pending', 'Success', 'Failed'] }
+
+  describe '.statuses' do
+    it "returns an array of the possible statuses for the deposit" do
+      expect(ScholarsphereWorkDeposit.statuses).to eq ['Pending', 'Success', 'Failed']
+    end
+  end
 end
