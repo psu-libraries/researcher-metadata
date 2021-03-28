@@ -531,6 +531,18 @@ describe User, type: :model do
                               publication: ou_pub_12,
                               confirmed: true }
 
+    # Filtered out due to publication not being a journal article
+    let!(:other_user_13) { create :user, first_name: 'other_user_13' }
+    let!(:ou_mem_13) { create :user_organization_membership,
+                             user: other_user_13,
+                             started_on: Date.new(2019, 1, 1),
+                             ended_on: nil }
+    let!(:ou_pub_13) { create :publication, published_on: Date.new(2020, 7, 1), publication_type: 'Book' }
+    let!(:ou_auth_13) { create :authorship,
+                              user: other_user_13,
+                              publication: ou_pub_13,
+                              confirmed: true }
+
     it "returns only users who should currently receive an email reminder about open access publications" do
       expect(User.needs_open_access_notification).to match_array [email_user_1,
                                                                   email_user_2,
@@ -668,6 +680,17 @@ describe User, type: :model do
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago }
 
+    # Filtered out due to the publication not being a journal article
+    let!(:other_pub_14) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: true,
+                                 publication_type: 'Book' }
+    let!(:o_auth_14) { create :authorship,
+                              user: user,
+                              publication: other_pub_14,
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
+
     it "returns the user's recent publications that they've been notified about before that don't have any associated open access information" do
       expect(user.old_potential_open_access_publications).to match_array [potential_pub_1,
                                                                           potential_pub_2]
@@ -792,6 +815,16 @@ describe User, type: :model do
     let!(:o_auth_13) { create :authorship,
                               user: user,
                               publication: other_pub_13,
+                              confirmed: true }
+
+    # Filtered out due to the publication not being a journal article
+    let!(:other_pub_14) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 visible: true,
+                                 publication_type: 'Book' }
+    let!(:o_auth_14) { create :authorship,
+                              user: user,
+                              publication: other_pub_14,
                               confirmed: true }
 
     it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information" do
