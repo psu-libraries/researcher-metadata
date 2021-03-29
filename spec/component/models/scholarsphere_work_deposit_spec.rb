@@ -27,7 +27,7 @@ describe ScholarsphereFileUpload, type: :model do
 
   it { is_expected.to accept_nested_attributes_for(:file_uploads) }
 
-  it { is_expected.to delegate_method(:publication).to(:authorship) }
+  it { is_expected.to have_one(:publication).through(:authorship) }
 
   it { is_expected.to validate_inclusion_of(:status).in_array ['Pending', 'Success', 'Failed'] }
 
