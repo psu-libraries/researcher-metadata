@@ -35,11 +35,7 @@ class ScholarsphereDepositService
     if response.status == 200
       scholarsphere_uri = URI(Rails.application.config.x.scholarsphere['SS4_ENDPOINT'])
       scholarsphere_publication_uri = "#{scholarsphere_uri.scheme}://#{scholarsphere_uri.host}#{response_body["url"]}"
-      ActiveRecord::Base.transaction do
-        deposit.publication.update!(scholarsphere_open_access_url: scholarsphere_publication_uri)
-        deposit.update!(status: 'Success', deposited_at: Time.current)
-        deposit.file_uploads.destroy_all
-      end
+      deposit.record_success(scholarsphere_publication_uri)
     end
 
     logger = Logger.new('log/scholarsphere_deposit.log')

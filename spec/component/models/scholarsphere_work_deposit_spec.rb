@@ -36,4 +36,64 @@ describe ScholarsphereFileUpload, type: :model do
       expect(ScholarsphereWorkDeposit.statuses).to eq ['Pending', 'Success', 'Failed']
     end
   end
+
+  describe '#record_success' do
+    let!(:dep) { create :scholarsphere_work_deposit, authorship: auth }
+    let!(:auth) { create :authorship, publication: pub }
+    let!(:pub) { create :publication }
+    let(:now) { Time.new(2021, 3, 28, 22, 8, 0) }
+    let!(:upload1) { create :scholarsphere_file_upload, work_deposit: dep }
+    let!(:upload2) { create :scholarsphere_file_upload, work_deposit: dep }
+
+    before { allow(Time).to receive(:current).and_return now }
+
+    it "updates the deposit's publication with the given URL" do
+      dep.record_success('an_open_access_url')
+      expect(pub.reload.scholarsphere_open_access_url).to eq 'an_open_access_url'
+    end
+
+    it "sets the deposit's status to 'Success'" do
+      dep.record_success('an_open_access_url')
+      expect(dep.reload.status).to eq 'Success'
+    end
+
+    it "sets the deposit's deposit timestamp" do
+      dep.record_success('an_open_access_url')
+      expect(dep.reload.deposited_at).to eq now
+    end
+
+    it "delete's all of the deposit's associated file uploads" do
+      dep.record_success('an_open_access_url')
+      expect { upload1.reload }.to raise_error ActiveRecord::RecordNotFound
+      expect { upload2.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+
+    context "when an error is raised when updating the publication" do
+      before do
+        allow_any_instance_of(Publication).to receive(:update!).and_raise(RuntimeError)
+      end
+
+      it "does not set the deposit's status to 'Success'" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(dep.reload.status).not_to eq 'Success'
+      end
+
+      it "does not set the deposit's deposit timestamp" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(dep.reload.deposited_at).not_to eq now
+      end
+
+      it "does not delete all of the deposit's associated file uploads" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(upload1.reload).to eq upload1
+        expect(upload2.reload).to eq upload2
+      end
+    end
+  end
 end
