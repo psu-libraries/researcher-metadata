@@ -9,6 +9,10 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:status).of_type(:string) }
   it { is_expected.to have_db_column(:error_message).of_type(:text) }
   it { is_expected.to have_db_column(:deposited_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:title).of_type(:text) }
+  it { is_expected.to have_db_column(:description).of_type(:text) }
+  it { is_expected.to have_db_column(:published_date).of_type(:date) }
+  it { is_expected.to have_db_column(:rights).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
