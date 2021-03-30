@@ -5,26 +5,12 @@ class ScholarsphereDepositService
   end
 
   def create
-    creators = deposit.publication.contributor_names.order('position ASC').map do |cn|
-      cn.to_scholarsphere_creator
-    end
-
-    metadata = {
-      title: deposit.publication.title,
-      description: deposit.publication.abstract,
-      published_date: deposit.publication.published_on,
-      work_type: 'article',
-      visibility: 'open',
-      rights: 'https://creativecommons.org/licenses/by/4.0/',
-      creators: creators
-    }
-
     files = deposit.file_uploads.map do |sfu|
       File.new(sfu.stored_file_path)
     end
 
     ingest = Scholarsphere::Client::Ingest.new(
-      metadata: metadata,
+      metadata: deposit.metadata,
       files: files,
       depositor: current_user.webaccess_id
     )

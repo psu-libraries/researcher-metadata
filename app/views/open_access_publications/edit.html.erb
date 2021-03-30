@@ -75,6 +75,10 @@
                                           class: 'button-default add-button' %>
             </div>
 
+            <%= f.input :title, label: 'Title' %>
+            <%= f.input :description, label: 'Description' %>
+            <%= f.input :published_date, label: 'Date of publication' %>
+            <%= f.input :rights, label: 'Rights' %>
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>

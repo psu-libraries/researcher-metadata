@@ -20,7 +20,7 @@ describe ScholarsphereFileUpload, type: :model do
 
   it_behaves_like "an application record"
 
-  it { is_expected.to belong_to(:work_deposit).class_name(:ScholarsphereWorkDeposit).with_foreign_key(:scholarsphere_work_deposit_id) }
+  it { is_expected.to belong_to(:work_deposit).class_name(:ScholarsphereWorkDeposit).with_foreign_key(:scholarsphere_work_deposit_id).optional }
 
   it { is_expected.to validate_presence_of(:file) }
 

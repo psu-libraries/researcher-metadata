@@ -5,7 +5,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     if publication.no_open_access_information?
       @form = OpenAccessURLForm.new
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @deposit = ScholarsphereWorkDeposit.new(authorship: @authorship)
+      @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
       @deposit.file_uploads.build
       render :edit
     else
@@ -31,9 +31,11 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
+    extra_params = {authorship: @authorship}
+    @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
+
     ActiveRecord::Base.transaction do
-      @deposit = ScholarsphereWorkDeposit.create!(authorship: @authorship, status: 'Pending')
-      @deposit.update!(deposit_params)
+      @deposit.save!
       @authorship.update!(updated_by_owner_at: Time.current)
     end
 
@@ -42,11 +44,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
-    flash.now[:alert] = @deposit.errors.full_messages.join(" ")
-    render :edit
-  rescue ActionController::ParameterMissing
-    @form = OpenAccessURLForm.new
-    flash.now[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.missing_parameter_error')
+    flash.now[:alert] = @deposit.errors.full_messages.join(", ")
     render :edit
   end
 
@@ -59,6 +57,10 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def deposit_params
-    params.require(:scholarsphere_work_deposit).permit(file_uploads_attributes: [:file, :file_cache])
+    params.require(:scholarsphere_work_deposit).permit(:title,
+                                                       :description,
+                                                       :published_date,
+                                                       :rights,
+                                                       file_uploads_attributes: [:file, :file_cache])
   end
 end
