@@ -71,7 +71,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   end
 
   def metadata
-    {
+    base_metadata = {
       title: title,
       description: description,
       published_date: published_date,
@@ -82,6 +82,8 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         cn.to_scholarsphere_creator
       end
     }
+    base_metadata.merge!({embargoed_until: embargoed_until}) if embargoed_until.present?
+    base_metadata
   end
 
   private
@@ -93,8 +95,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   end
 
   def agreed_to_deposit_agreement
-    unless deposit_agreement
-      errors.add(:deposit_agreement, I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement'))       
+    if new_record?
+      unless deposit_agreement
+        errors.add(:deposit_agreement, I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement'))       
+      end
     end
   end
 

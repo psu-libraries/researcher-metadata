@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_03_30_172508) do
+ActiveRecord::Schema.define(version: 2021_03_31_171442) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -436,6 +436,7 @@ ActiveRecord::Schema.define(version: 2021_03_30_172508) do
     t.text "description"
     t.date "published_date"
     t.string "rights"
+    t.date "embargoed_until"
     t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
   end
 

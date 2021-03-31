@@ -13,6 +13,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:description).of_type(:text) }
   it { is_expected.to have_db_column(:published_date).of_type(:date) }
   it { is_expected.to have_db_column(:rights).of_type(:string) }
+  it { is_expected.to have_db_column(:embargoed_until).of_type(:date) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -90,24 +91,46 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe "validating the deposit agreement" do
-    context "when deposit_agreement is false" do
-      before { dep.deposit_agreement = false }
+    context "when the deposit hasn't been saved yet" do
+      let!(:dep) { build :scholarsphere_work_deposit }
+      context "when deposit_agreement is false" do
+        before { dep.deposit_agreement = false }
 
-      it "is invalid" do
-        expect(dep).not_to be_valid
+        it "is invalid" do
+          expect(dep).not_to be_valid
+        end
+
+        it "sets an error on deposit_agreement" do
+          dep.valid?
+          expect(dep.errors[:deposit_agreement]).to include I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement')
+        end
       end
 
-      it "sets an error on deposit_agreement" do
-        dep.valid?
-        expect(dep.errors[:deposit_agreement]).to include I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement')
+      context "when deposit_agreement is true" do
+        before { dep.deposit_agreement = true }
+
+        it "is valid" do
+          expect(dep).to be_valid
+        end
       end
     end
 
-    context "when deposit_agreement is true" do
-      before { dep.deposit_agreement = true }
+    context "when the deposit has already been saved" do
+      let!(:dep) { create :scholarsphere_work_deposit }
+      context "when deposit_agreement is false" do
+        before { dep.deposit_agreement = false }
 
-      it "is valid" do
-        expect(dep).to be_valid
+        it "is valid" do
+          expect(dep).to be_valid
+        end
+      end
+
+      context "when deposit_agreement is true" do
+        before { dep.deposit_agreement = true }
+
+        it "is valid" do
+          expect(dep).to be_valid
+        end
       end
     end
   end
@@ -294,6 +317,26 @@ describe ScholarsphereFileUpload, type: :model do
           {display_name: 'Another Contributor'}
         ]
       })
+    end
+
+    context "when the deposit has an embargoed_until date" do
+      before { dep.embargoed_until = Date.new(2022, 1, 1) }
+      it "includes the date in the metadata" do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          embargoed_until: Date.new(2022, 1, 1),
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {display_name: 'Test Author'},
+            {display_name: 'Another Contributor'}
+          ]
+        })
+      end
     end
   end
 end
