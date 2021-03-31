@@ -39,6 +39,8 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     ]
   end
 
+  attribute :deposit_agreement, :boolean
+
   after_initialize :set_status
 
   belongs_to :authorship
@@ -49,6 +51,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   validates :rights, inclusion: {in: rights}
   validates :title, :description, :published_date, :rights, presence: true
   validate :at_least_one_file_upload
+  validate :agreed_to_deposit_agreement
   
   accepts_nested_attributes_for :file_uploads
 
@@ -86,6 +89,12 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   def at_least_one_file_upload
     if file_uploads.blank? && status == 'Pending'
       errors[:base] << I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+    end
+  end
+
+  def agreed_to_deposit_agreement
+    unless deposit_agreement
+      errors.add(:deposit_agreement, I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement'))       
     end
   end
 

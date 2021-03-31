@@ -81,6 +81,10 @@
             <%= f.input :description, label: 'Description' %>
             <%= f.input :published_date, label: 'Date of publication' %>
             <%= f.input :rights, label: 'License', collection: ScholarsphereWorkDeposit.rights_options %>
+            <%= f.input :deposit_agreement,
+                        as: :boolean,
+                        required: true,
+                        label: "I have read and agree to #{link_to 'the deposit agreement', 'https://scholarsphere.psu.edu/agreement', target: '_blank'}.".html_safe %>
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>

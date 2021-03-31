@@ -82,3 +82,4 @@ en:
     scholarsphere_work_deposit:
       validation_errors:
         file_upload_presence: "You must provide at least one file."
+        deposit_agreement: "You must read and agree to the deposit agreement."

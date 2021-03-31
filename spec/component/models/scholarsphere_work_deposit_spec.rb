@@ -22,7 +22,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
 end
 
 describe ScholarsphereFileUpload, type: :model do
-  subject(:upload) { ScholarsphereWorkDeposit.new }
+  subject(:dep) { build :scholarsphere_work_deposit }
 
   it_behaves_like "an application record"
 
@@ -55,6 +55,22 @@ describe ScholarsphereFileUpload, type: :model do
   it { is_expected.to validate_presence_of(:published_date) }
   it { is_expected.to validate_presence_of(:rights) }
 
+  describe '#deposit_agreement=' do
+    context "when given '0'" do
+      before { dep.deposit_agreement = '0' }
+      it "sets the deposit_agreement attribute to false" do
+        expect(dep.deposit_agreement).to eq false
+      end
+    end
+
+    context "when given '1'" do
+      before { dep.deposit_agreement = '1' }
+      it "sets the deposit_agreement attribute to true" do
+        expect(dep.deposit_agreement).to eq true
+      end
+    end
+  end
+
   describe "validating file upload association" do
     let(:dep) { build :scholarsphere_work_deposit, file_uploads: [], status: status}
     context "when the deposit's status is 'Pending'" do
@@ -68,6 +84,29 @@ describe ScholarsphereFileUpload, type: :model do
     context "when the deposit's status is not 'Pending'" do
       let(:status) { 'Success' }
       it "does not validate that the deposit has at least one associated file upload" do
+        expect(dep).to be_valid
+      end
+    end
+  end
+
+  describe "validating the deposit agreement" do
+    context "when deposit_agreement is false" do
+      before { dep.deposit_agreement = false }
+
+      it "is invalid" do
+        expect(dep).not_to be_valid
+      end
+
+      it "sets an error on deposit_agreement" do
+        dep.valid?
+        expect(dep.errors[:deposit_agreement]).to include I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement')
+      end
+    end
+
+    context "when deposit_agreement is true" do
+      before { dep.deposit_agreement = true }
+
+      it "is valid" do
         expect(dep).to be_valid
       end
     end

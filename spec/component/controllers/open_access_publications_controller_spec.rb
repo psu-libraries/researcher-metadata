@@ -286,29 +286,31 @@ describe OpenAccessPublicationsController, type: :controller do
       context "when given the ID for a publication that belongs to the user and is not open access" do
         let(:pub_id) { pub.id }
         let(:file) { fixture_file_upload('test_file.pdf', "application/pdf") }
-
-        context "when given valid params" do
-          let(:valid_params) {
-            {
-              id: pub_id,
-              scholarsphere_work_deposit: {
-                title: 'test',
-                description: 'test',
-                published_date: '2021-03-30',
-                rights: 'https://creativecommons.org/licenses/by/4.0/',
-                file_uploads_attributes: [file: file]
-              }
+        let(:params) {
+          {
+            id: pub_id,
+            scholarsphere_work_deposit: {
+              title: 'test',
+              description: 'test',
+              published_date: '2021-03-30',
+              rights: 'https://creativecommons.org/licenses/by/4.0/',
+              deposit_agreement: '1',
+              file_uploads_attributes: [file: file]
             }
           }
+        }
+
+        context "when given valid params" do
+
           it "creates a new scholarsphere work deposit" do
             expect do 
-              post :create_scholarsphere_deposit, params: valid_params
+              post :create_scholarsphere_deposit, params: params
             end.to change { ScholarsphereWorkDeposit.count }.by 1
             expect(found_deposit).not_to be_nil
           end
 
           it "saves the uploaded file to the new scholarsphere work deposit" do
-            post :create_scholarsphere_deposit, params: valid_params
+            post :create_scholarsphere_deposit, params: params
 
             expect(found_deposit.file_uploads.count).to eq 1
             expect(found_deposit.status).to eq 'Pending'
@@ -316,63 +318,52 @@ describe OpenAccessPublicationsController, type: :controller do
           end
 
           it "sets the modification timestamp on the user's authorship of the publication" do
-            post :create_scholarsphere_deposit, params: valid_params
+            post :create_scholarsphere_deposit, params: params
             expect(auth.reload.updated_by_owner_at).to eq now
           end
             
           it "redirects to the publication management page for the user's profile" do
-            post :create_scholarsphere_deposit, params: valid_params
+            post :create_scholarsphere_deposit, params: params
             expect(response).to redirect_to edit_profile_publications_path
           end
 
           it "schedules a job to send the publication to ScholarSphere" do
-            post :create_scholarsphere_deposit, params: valid_params
+            post :create_scholarsphere_deposit, params: params
             expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
           end
         end
 
         context "when given no file param for the scholarsphere work deposit" do
-          let(:params_with_no_file) {
-            {
-              id: pub_id,
-              scholarsphere_work_deposit: {
-                title: 'test',
-                description: 'test',
-                published_date: '2021-03-30',
-                rights: 'test',
-                file_uploads_attributes: [file: nil]
-              }
-            }
-          }
+          let(:file) { nil }
           it "does not create a new scholarsphere work deposit" do
             expect do 
-              post :create_scholarsphere_deposit, params: params_with_no_file
+              post :create_scholarsphere_deposit, params: params
             end.not_to change { ScholarsphereWorkDeposit.count }
           end
 
           it "does not create any new file upload records" do
             expect do 
-              post :create_scholarsphere_deposit, params: params_with_no_file
+              post :create_scholarsphere_deposit, params: params
             end.not_to change { ScholarsphereFileUpload.count }
           end
 
           it "does not set the modification timestamp on the user's authorship of the publication" do
-            post :create_scholarsphere_deposit, params: params_with_no_file
+            post :create_scholarsphere_deposit, params: params
             expect(auth.reload.updated_by_owner_at).to be_nil
           end
 
           it "does not schedule a job to send the publication to ScholarSphere" do
-            post :create_scholarsphere_deposit, params: params_with_no_file
+            post :create_scholarsphere_deposit, params: params
             expect(ScholarsphereUploadJob).not_to have_received(:perform_later)
           end
 
           it "sets an error message" do
-            post :create_scholarsphere_deposit, params: params_with_no_file
+            post :create_scholarsphere_deposit, params: params
             expect(flash.now[:alert]).not_to be_empty
           end
 
           it "rerenders the form" do
-            post :create_scholarsphere_deposit, params: params_with_no_file
+            post :create_scholarsphere_deposit, params: params
             expect(response).to render_template :edit
           end
         end

@@ -6,6 +6,7 @@ FactoryBot.define do
     description { 'Test description.' }
     published_date { Date.new(2020, 1, 1) }
     rights { 'https://creativecommons.org/licenses/by/4.0/' }
+    deposit_agreement { true }
     file_uploads { [create(:scholarsphere_file_upload)] }
   end
 end
