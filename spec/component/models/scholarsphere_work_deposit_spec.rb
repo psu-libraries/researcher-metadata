@@ -244,9 +244,17 @@ describe ScholarsphereFileUpload, type: :model do
       expect { upload2.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
+    context "when the deposit is invalid" do
+      before { dep.title = nil }
+
+      it "doesn't raise an error" do
+        expect { dep.record_success('an_open_access_url') }.not_to raise_error
+      end
+    end
+
     context "when an error is raised when updating the publication" do
       before do
-        allow_any_instance_of(Publication).to receive(:update!).and_raise(RuntimeError)
+        allow_any_instance_of(Publication).to receive(:update_columns).and_raise(RuntimeError)
       end
 
       it "does not set the deposit's status to 'Success'" do
@@ -283,6 +291,14 @@ describe ScholarsphereFileUpload, type: :model do
     it "saves the given message to the deposit" do
       dep.record_failure("a message")
       expect(dep.error_message).to eq 'a message'
+    end
+
+    context "when the deposit is invalid" do
+      before { dep.title = nil }
+
+      it "doesn't raise an error" do
+        expect { dep.record_failure("a message") }.not_to raise_error
+      end
     end
   end
 

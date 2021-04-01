@@ -64,14 +64,14 @@ class ScholarsphereWorkDeposit < ApplicationRecord
 
   def record_success(url)
     ActiveRecord::Base.transaction do
-      update!(status: 'Success', deposited_at: Time.current)
+      update_columns(status: 'Success', deposited_at: Time.current)
       file_uploads.destroy_all
-      publication.update!(scholarsphere_open_access_url: url)
+      publication.update_columns(scholarsphere_open_access_url: url)
     end
   end
 
   def record_failure(message)
-    update!(status: 'Failed', error_message: message)
+    update_columns(status: 'Failed', error_message: message)
   end
 
   def metadata
