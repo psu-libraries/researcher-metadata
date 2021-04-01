@@ -79,7 +79,7 @@
 
             <%= f.input :title, label: 'Title' %>
             <%= f.input :description, label: 'Description' %>
-            <%= f.input :published_date, label: 'Date of publication' %>
+            <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year %>
             <%= f.input :rights, label: 'License', collection: ScholarsphereWorkDeposit.rights_options %>
             <%= f.input :embargoed_until,
                         label: 'Embargoed until',
