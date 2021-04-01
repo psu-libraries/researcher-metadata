@@ -70,6 +70,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     end
   end
 
+  def record_failure(message)
+    update!(status: 'Failed', error_message: message)
+  end
+
   def metadata
     base_metadata = {
       title: title,

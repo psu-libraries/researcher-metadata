@@ -273,6 +273,19 @@ describe ScholarsphereFileUpload, type: :model do
     end
   end
 
+  describe '#record_failure' do
+    let(:dep) { create :scholarsphere_work_deposit }
+    it "sets the deposit's status to 'Failed'" do
+      dep.record_failure("a message")
+      expect(dep.status).to eq 'Failed'
+    end
+
+    it "saves the given message to the deposit" do
+      dep.record_failure("a message")
+      expect(dep.error_message).to eq 'a message'
+    end
+  end
+
   describe '#metadata' do
     let!(:auth) { create :authorship, publication: pub }
     let!(:pub) { create :publication }

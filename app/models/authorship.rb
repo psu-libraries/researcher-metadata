@@ -2,7 +2,7 @@ class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
   has_one :waiver, class_name: :InternalPublicationWaiver, inverse_of: :authorship
-  has_one :scholarsphere_work_deposit
+  has_many :scholarsphere_work_deposits
 
   accepts_nested_attributes_for :waiver
 
@@ -19,6 +19,7 @@ class Authorship < ApplicationRecord
            :year,
            :preferred_open_access_url,
            :scholarsphere_upload_pending?,
+           :scholarsphere_upload_failed?,
            :open_access_waived?,
            :no_open_access_information?,
            :is_journal_article?,

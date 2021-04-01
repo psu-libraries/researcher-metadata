@@ -457,6 +457,10 @@ class Publication < ApplicationRecord
     authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending')}).any?
   end
 
+  def scholarsphere_upload_failed?
+    authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Failed')}).any?
+  end
+
   def open_access_waived?
     waivers.any?
   end

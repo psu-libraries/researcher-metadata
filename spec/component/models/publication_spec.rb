@@ -210,7 +210,7 @@ describe Publication, type: :model do
     end
   end
 
-  describe '.subject_to_open_access_policty' do
+  describe '.subject_to_open_access_policy' do
     let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
@@ -658,6 +658,37 @@ describe Publication, type: :model do
 
       it "returns false" do
         expect(pub.scholarsphere_upload_pending?).to eq false
+      end
+    end
+  end
+
+  describe "#scholarsphere_upload_failed?" do
+    let(:pub) { create :publication }
+    let(:auth) { create :authorship, publication: pub }
+
+    context "when the publication has no authorships with a failed ScholarSphere deposit" do
+      it "returns false" do
+        expect(pub.scholarsphere_upload_failed?).to eq false
+      end
+    end
+    
+    context "when the publication has an authorship with a failed ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Failed'
+      end
+
+      it "returns true" do
+        expect(pub.scholarsphere_upload_failed?).to eq true
+      end
+    end
+
+    context "when the publication has an authorship with a non-failed ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Success'
+      end
+
+      it "returns false" do
+        expect(pub.scholarsphere_upload_failed?).to eq false
       end
     end
   end

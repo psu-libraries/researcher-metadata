@@ -21,5 +21,17 @@ describe ScholarsphereUploadJob, type: :job do
       expect(service).to receive(:create)
       job.perform(deposit.id, user.id)
     end
+
+    context "when an error is raised in performing the job" do
+      before { allow(service).to receive(:create).and_raise RuntimeError.new("some unexpected error") }
+
+      it "records the error on the deposit" do
+        suppress(RuntimeError) { job.perform(deposit.id, user.id) }
+
+        dep = deposit.reload
+        expect(dep.status).to eq 'Failed'
+        expect(dep.error_message).to eq 'some unexpected error'
+      end
+    end
   end
 end

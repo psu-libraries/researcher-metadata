@@ -4,5 +4,8 @@ class ScholarsphereUploadJob < ApplicationJob
     user = User.find(user_id)
     service = ScholarsphereDepositService.new(deposit, user)
     service.create
+  rescue Exception => e
+    deposit.record_failure(e.to_s)
+    raise
   end
 end
