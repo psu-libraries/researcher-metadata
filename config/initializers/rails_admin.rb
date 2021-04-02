@@ -63,7 +63,8 @@ RailsAdmin.config do |config|
             :Journal,
             :Publisher,
             :StatisticsSnapshot,
-            :EmailError]
+            :EmailError,
+            :ScholarsphereWorkDeposit]
     end
     new do
       only [:Publication,

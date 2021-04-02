@@ -109,4 +109,13 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   def set_status
     self.status = 'Pending' if new_record?
   end
+
+  rails_admin do
+    list do
+      field(:id)
+      field(:status)
+      field(:authorship)
+      field(:title)
+    end
+  end
 end

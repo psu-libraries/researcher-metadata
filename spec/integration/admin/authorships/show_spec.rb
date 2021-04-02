@@ -14,6 +14,8 @@ feature "Admin authorship detail page", type: :feature do
                        author_number: 5,
                        scholarsphere_uploaded_at: Time.new(2020, 1, 22, 16, 8, 0, 0) }
 
+  let!(:dep) { create :scholarsphere_work_deposit, title: 'Test Deposit', authorship: auth }
+
   context "when the current user is an admin" do
     before { authenticate_admin_user }
 
@@ -34,6 +36,11 @@ feature "Admin authorship detail page", type: :feature do
 
       it "shows the authorship's author number" do
         expect(page).to have_content "5"
+      end
+
+      it "shows links to the authorship's ScholarSphere work deposits" do
+        expect(page).to have_link "Test Deposit",
+                                  href: rails_admin.show_path(model_name: :scholarsphere_work_deposit, id: dep.id)
       end
 
       it "shows the authorship's ScholarSphere upload timestamp" do

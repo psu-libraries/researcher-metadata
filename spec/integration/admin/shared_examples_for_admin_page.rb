@@ -89,6 +89,12 @@ shared_examples_for "a page with the admin layout" do
     end
   end
 
+  it "shows a link to the ScholarSphere work deposits index" do
+    within '.sidebar-nav' do
+      expect(page).to have_link 'Scholarsphere work deposits'
+    end
+  end
+
   it "shows a link to the admin dashboard" do
     expect(page).to have_link 'Dashboard'
   end
