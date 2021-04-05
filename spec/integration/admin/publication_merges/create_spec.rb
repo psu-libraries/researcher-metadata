@@ -193,29 +193,119 @@ feature "managing duplicate publication groups", type: :feature do
         click_on "Merge Selected"
       end
 
-      it "redirects back to the group" do
+      it "redirects back to the group and displays modal" do
         expect(page.current_path).to eq rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        expect(page).to have_content('Override Known Non-Duplicates?')
       end
 
-      it "shows an error message" do
-        expect(page).to have_content I18n.t('admin.publication_merges.create.non_duplicate_merge_error')
+      describe 'cancelling the merge' do
+        before do
+          click_on 'Cancel'
+        end
+
+        it 'redirects to the duplicate group edit page without merging' do
+          expect(page.current_path).to eq Rails.application.routes.url_helpers.admin_duplicate_publication_group_path(group.id)
+        end
+
+        it "doesn't delete the selected publication" do
+          expect { pub2.reload }.not_to raise_error
+        end
+
+        it "does not reassign the merged publication's imports" do
+          expect(pub1.reload.imports).to match_array [pub1_import1]
+          expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
+        end
+
+        it "doesn't change the unselected publication" do
+          expect(pub3.reload.imports).to eq [pub3_import1]
+        end
+
+        it "doesn't change the contents of the duplicate group" do
+          expect(group.reload.publications).to match_array [pub1, pub2, pub3]
+        end
       end
 
-      it "doesn't delete the selected publication" do
-        expect { pub2.reload }.not_to raise_error
+      describe 'overriding and removing the non duplicate group' do
+        before do
+          click_on 'Continue'
+        end
+
+        it "redirects back to the group" do
+          expect(page.current_path).to eq rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        end
+
+        it "shows a success message" do
+          expect(page).to have_content I18n.t('admin.publication_merges.create.merge_success')
+        end
+
+        it "deletes the merged publication" do
+          expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "reassigns the merged publication's imports" do
+          expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
+        end
+
+        it "doesn't change the unselected publication" do
+          expect(pub3.reload.imports).to eq [pub3_import1]
+        end
+
+        it "leaves the group containing the correct publications" do
+          expect(group.reload.publications).to match_array [pub1, pub3]
+        end
+
+        it "deletes the non-duplicate group" do
+          expect { ndpg.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+    end
+
+    context "choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group" do
+      let(:ndpg) { create :non_duplicate_publication_group }
+
+      before do
+        create :non_duplicate_publication_group_membership,
+               publication: pub2,
+               non_duplicate_group: ndpg
+        create :non_duplicate_publication_group_membership,
+               publication: pub3,
+               non_duplicate_group: ndpg
+
+        choose "merge_target_publication_id_#{pub1.id}"
+        check "selected_publication_ids_#{pub2.id}"
+        check "selected_publication_ids_#{pub3.id}"
+        click_on "Merge Selected"
       end
 
-      it "does not reassign the merged publication's imports" do
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-      end
+      describe 'overriding and removing the non duplicate group' do
+        before do
+          click_on 'Continue'
+        end
 
-      it "doesn't change the unselected publication" do
-        expect(pub3.reload.imports).to eq [pub3_import1]
-      end
+        it "redirects back to the group" do
+          expect(page.current_path).to eq rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        end
 
-      it "doesn't change the contents of the duplicate group" do
-        expect(group.reload.publications).to match_array [pub1, pub2, pub3]
+        it "shows a success message" do
+          expect(page).to have_content I18n.t('admin.publication_merges.create.merge_success')
+        end
+
+        it "deletes the merged publications" do
+          expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+          expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "reassigns the merged publication's imports" do
+          expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2, pub3_import1]
+        end
+
+        it "leaves the group containing the correct publications" do
+          expect(group.reload.publications).to match_array [pub1]
+        end
+
+        it "deletes the non-duplicate group" do
+          expect { ndpg.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
       end
     end
 
@@ -290,6 +380,15 @@ feature "managing duplicate publication groups", type: :feature do
       it "shows a success message" do
         expect(page).to have_content I18n.t('admin.publication_merges.create.ignore_success')
       end
+    end
+
+    context "when the publications to merge share a non duplicate group" do
+      let!(:non_duplicate_group) { FactoryBot.create :non_duplicate_publication_group }
+      before do
+        non_duplicate_group.publications << [pub1, pub2]
+      end
+
+
     end
   end
 end
