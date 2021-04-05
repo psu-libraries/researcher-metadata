@@ -40,8 +40,9 @@ Below is a list of the data sources along with the types of records that are imp
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
 etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) (API key
-required) for directly importing data. A cron job automatically runs this import in production once per day.
-We import the following types of records from Activity Insight:
+required) for directly importing data. A cron job automatically runs this import in production once per day
+beginning at around 10:00 PM, and the import usually takes around 8 hours to finish. We import the
+following types of records from Activity Insight:
     - authorships
     - contributor_names
     - education_history_items
@@ -59,8 +60,9 @@ This data mostly has to do with scientific research that is published in peer-re
 we don't get much data about faculty in the arts and humanities from this source as opposed to Activity
 Insight which provides data about faculty across the whole university. This application also has a
 well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) (API key
-required) to which we have access. We use this API for directly importing data, but the import is not
-yet scheduled to run automatically. We import the following types of records from Pure:
+required) to which we have access. We use this API for directly importing data. A cron job automatically
+runs this import in production once per week beginning at around 8:00 AM on Saturday, and the import
+may take multiple hours to finish. We import the following types of records from Pure:
     - authorships
     - contributor_names
     - journals
@@ -110,7 +112,8 @@ following types of records from NSF:
 1. **Open Access Button** - We import URLs to the content of open access publications that are provided by
 Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
 Open Access Button by DOI, so this import only adds data to existing publications in our database that have
-DOIs. This import is not yet scheduled to run automatically.
+DOIs. A cron job automatically runs this import in production once per week beginning at around 8:00 AM on
+Sunday. This import can sometimes take more than a day to finish.
 
 1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
 by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open 
@@ -190,6 +193,13 @@ again substituting the name of your local database if necessary.
 In the `lib/utilities/` directory in this repository, there is a utility script for automatically downloading grant
 data from the National Science Foundation website and preparing it for import by decompressing the files and placing
 them in the correct location.
+
+#### Web of Science
+We may be able to acquire more Web of Science data on another physical disk again in the future. In the past,
+the individual data files have been so large that disk space on the production server is a limiting factor for how
+many files we can prepare for import at one time. The general procedure has been to upload one large file to
+the server, import the data from that file, delete that file from the server, and then upload the next file
+and repeat until all of the files have been imported.
 
 ### Importing New Data
 Once updated data files have been obtained (if applicable) and the necessary API keys have been installed,

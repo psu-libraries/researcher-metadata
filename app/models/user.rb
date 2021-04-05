@@ -98,7 +98,7 @@ class User < ApplicationRecord
     where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
     where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
     where('authorships.confirmed IS TRUE').
-    where("((publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '')) AND (authorships.scholarsphere_uploaded_at IS NULL)").
+    where("(publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '') AND (publications.scholarsphere_open_access_url IS NULL OR publications.scholarsphere_open_access_url = '')").
     where('publications.visible = true').
     distinct(:id)
   end
