@@ -381,14 +381,5 @@ feature "managing duplicate publication groups", type: :feature do
         expect(page).to have_content I18n.t('admin.publication_merges.create.ignore_success')
       end
     end
-
-    context "when the publications to merge share a non duplicate group" do
-      let!(:non_duplicate_group) { FactoryBot.create :non_duplicate_publication_group }
-      before do
-        non_duplicate_group.publications << [pub1, pub2]
-      end
-
-
-    end
   end
 end
