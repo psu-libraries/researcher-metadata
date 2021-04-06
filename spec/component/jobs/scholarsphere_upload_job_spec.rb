@@ -4,7 +4,7 @@ describe ScholarsphereUploadJob, type: :job do
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
     it "enqueues a job" do
-      expect { ScholarsphereUploadJob.perform_later(1, 2) }.to have_enqueued_job
+      expect { ScholarsphereUploadJob.perform_later(1, 2) }.to have_enqueued_job.with(1, 2).on_queue("scholarsphere-uploads-#{`hostname`}".strip)
     end
   end
 
