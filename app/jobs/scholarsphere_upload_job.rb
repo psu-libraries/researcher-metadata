@@ -2,6 +2,7 @@ class ScholarsphereUploadJob < ApplicationJob
   queue_as "scholarsphere-uploads-#{`hostname`}".strip
 
   def perform(deposit_id, user_id)
+    Scholarsphere::Client.reset
     deposit = ScholarsphereWorkDeposit.find(deposit_id)
     user = User.find(user_id)
     service = ScholarsphereDepositService.new(deposit, user)
