@@ -1,0 +1,30 @@
+#!/bin/bash
+
+set -e
+
+number_of_workers=2
+
+if [[ $# -eq 1 ]] ; then
+    command=$1
+else
+    echo "Usage: background_jobs <command>"
+    echo ""
+    echo "where <command> is one of:  start, stop, restart, status"
+    exit 1
+fi
+
+if [ "$command" = "start" ] ; then
+    ./delayed_job start -n $number_of_workers
+elif [ "$command" = "restart" ] ; then
+    if ./delayed_job status -n $number_of_workers ; then
+        ./delayed_job stop -n $number_of_workers
+        ./delayed_job start -n $number_of_workers
+    fi
+elif [ "$command" = "stop" ] ; then
+    ./delayed_job stop -n $number_of_workers
+elif [ "$command" = "status" ] ; then
+    ./delayed_job status -n $number_of_workers
+else
+    echo "Unrecognized command: " $command
+    exit 1
+fi
