@@ -3,6 +3,9 @@ class ScholarsphereUploadJob < ApplicationJob
 
   def perform(deposit_id, user_id)
     Scholarsphere::Client.reset
+    logger = Logger.new('log/scholarsphere_deposit.log')
+    logger.info Scholarsphere::Client.connection.inspect
+    
     deposit = ScholarsphereWorkDeposit.find(deposit_id)
     user = User.find(user_id)
     service = ScholarsphereDepositService.new(deposit, user)

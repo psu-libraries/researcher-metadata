@@ -27,7 +27,7 @@ class ScholarsphereDepositService
     end
 
     logger = Logger.new('log/scholarsphere_deposit.log')
-    logger.debug response.inspect
+    logger.info response.inspect
   end
 
   private
