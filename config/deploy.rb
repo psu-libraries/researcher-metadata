@@ -29,6 +29,7 @@ set :shared, %w{
   config/scholarsphere-client.yml
   db/data
   uploads
+  tmp
 }
 
 # The directory that we're deploying to on the remote host.
