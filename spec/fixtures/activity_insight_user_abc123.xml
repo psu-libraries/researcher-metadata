@@ -660,5 +660,84 @@
       <RMD_ID>123</RMD_ID>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
+    <INTELLCONT id="190707482930" dmd:originalSource="WEB_OF_SCIENCE_LITE" dmd:created="2019-08-15T15:29:30" dmd:lastModifiedSource="WEB_OF_SCIENCE" dmd:wosUid="WOS:000467271400033" dmd:lastModified="2019-08-15T15:29:30" dmd:startDate="2019-01-02" dmd:endDate="2019-12-30">
+      <CONTYPE>Journal Article</CONTYPE>
+      <CONTYPEOTHER/>
+      <TITLE>Journal Article In Press</TITLE>
+      <JOURNAL_NAME>Test Journal 1</JOURNAL_NAME>
+      <TITLE_SECONDARY>Subtitle 2</TITLE_SECONDARY>
+      <STATUS>In Press</STATUS>
+      <REFEREED/>
+      <INTELLCONT_AUTH id="190706413670">
+        <FACULTY_NAME/>
+        <FNAME>Reggie</FNAME>
+        <MNAME>T.</MNAME>
+        <LNAME>Testauthor</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH id="190706413671">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <AUTHORS_ETAL>true</AUTHORS_ETAL>
+      <PUBLISHER>Test Publisher 1</PUBLISHER>
+      <PUBCTYST/>
+      <PUBCNTRY/>
+      <VOLUME>10</VOLUME>
+      <ISSUE>2</ISSUE>
+      <EDITION>15</EDITION>
+      <PAGENUM>1600-1655</PAGENUM>
+      <DOI>10.1186/s40543-020-00345-w</DOI>
+      <PUB_PAGENUM/>
+      <WEB_ADDRESS/>
+      <FORMAT/>
+      <EDITORS/>
+      <ISBNISSN>6789-4321</ISBNISSN>
+      <PMCID/>
+      <PROCEED_LOCATION/>
+      <ABSTRACT>
+        Abstract.
+      </ABSTRACT>
+      <COMMENT/>
+      <CITATION_COUNT/>
+      <CITATION_SOURCE/>
+      <DTM_CITATION/>
+      <DTD_CITATION/>
+      <DTY_CITATION/>
+      <CITATION_START/>
+      <CITATION_END/>
+      <DESC_INTERNATIONAL/>
+      <RESEARCH_PROJECT/>
+      <DTM_EXPSUB/>
+      <DTD_EXPSUB/>
+      <DTY_EXPSUB/>
+      <EXPSUB_START/>
+      <EXPSUB_END/>
+      <DTM_SUB/>
+      <DTD_SUB/>
+      <DTY_SUB/>
+      <SUB_START/>
+      <SUB_END/>
+      <DTM_ACC/>
+      <DTY_ACC/>
+      <ACC_START/>
+      <ACC_END/>
+      <DTM_PUB/>
+      <DTD_PUB/>
+      <DTY_PUB>2019</DTY_PUB>
+      <PUB_START>2019-01-02</PUB_START>
+      <PUB_END>2019-12-30</PUB_END>
+      <RMD_ID/>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </INTELLCONT>
   </Record>
 </Data>
