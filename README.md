@@ -274,7 +274,7 @@ reduce the amount of labor necessary to curate the publication metadata, we have
 automatically merged under some circumstances. Often when duplicate groups containing one publication import from
 Pure and one import from another source are merged, the Pure import is the record that is chosen to be kept, and
 the data in that record needs little or no manual curation since the data from Pure is generally accurate and complete.
-Since a large proportion of duplicate groups end up contaiing exactly one publication imported from Pure and exactly
+Since a large proportion of duplicate groups end up containing exactly one publication imported from Pure and exactly
 one publication imported from Activity Insight, we've created a process by which all such groups can be automatically
 merged at once. This process is run as a rake task, `rake auto_merge_duplicate_pubs`. We know that a very small
 percentage of publications that are automatically grouped as suspected duplicates are not actually duplicate records.
