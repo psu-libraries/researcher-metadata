@@ -256,11 +256,12 @@ user merges these two publication records, the following happens:
 1. We delete the publication record that we're not keeping.
 1. We flag the publication record that we kept as having been manually modified by an admin user because we assume that the admin has picked the record with the best data (and possibly also made corrections to the chosen data after the merge), and we don't want future imports to overwrite this manually curated data.
 
-So in the example, if we merge the duplicate publications and decide to keep Publication Record 2, then it will now
-have both import records - the one from Pure and the one from Activity Insight, and Publication Record 1 will be
-deleted. Then when we reimport publications from Pure and we come to this publication in the data, we'll find the
-import record for Pure attached to Publication Record 2, and we won't create a new record (but may update the existing
-record). Likewise when we reimport publications from Activity Insight.
+So in the example, if we merge the duplicate publications and decide to keep Publication Record 2 (originally
+imported from Pure), then Publication Record 2 will now have both import records - the one from Pure with ID
+"789" and the one from Activity Insight with ID "123" - attached to it, and Publication Record 1 (originally
+imported from Activity Insight) will be deleted. Then when we reimport publications from Activity Insight and
+we come to this publication in the source data, we'll find the import record for Activity Insight attached to
+Publication Record 2, and we won't create a new record even though Publication Record 1 has been deleted from RMD.
 
 Occasionally publication records that are not actually duplicates appear similar enough that they are mistakenly 
 grouped as potential duplicates by our duplicate identification process. In this situation, it's possible for admin
