@@ -7,12 +7,12 @@ feature "Admin statistics snapshots list", type: :feature do
 
     describe "the page content" do
       let!(:stats1) { create(:statistics_snapshot,
-                             total_publication_count: 3859,
-                             open_access_publication_count: 1035,
+                             total_article_count: 3859,
+                             open_access_article_count: 1035,
                              created_at: Time.new(2021, 1, 21, 23, 39, 0, 0)) }
       let!(:stats2) { create(:statistics_snapshot,
-                             total_publication_count: 8743,
-                             open_access_publication_count: 3765,
+                             total_article_count: 8743,
+                             open_access_article_count: 3765,
                              created_at: Time.new(2001, 4, 1, 9, 4, 0, 0)) }
 
       before { visit rails_admin.index_path(model_name: :statistics_snapshot) }

@@ -3,8 +3,8 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin statistics snapshot detail page", type: :feature do
   let!(:stats) { create :statistics_snapshot,
-                        total_publication_count: 3841,
-                        open_access_publication_count: 592,
+                        total_article_count: 3841,
+                        open_access_article_count: 592,
                         created_at: Time.new(2021, 1, 21, 23, 39, 0, 0) }
 
   context "when the current user is an admin" do
@@ -17,15 +17,15 @@ feature "Admin statistics snapshot detail page", type: :feature do
         expect(page).to have_content "Details for Statistics snapshot"
       end
 
-      it "shows the total publication count" do
+      it "shows the total article count" do
         expect(page).to have_content 3841
       end
 
-      it "shows the open access publication count" do
+      it "shows the open access article count" do
         expect(page).to have_content 592
       end
 
-      it "shows the percentage of publications that are open access" do
+      it "shows the percentage of articles that are open access" do
         expect(page).to have_content 15.4
       end
 
