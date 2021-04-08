@@ -279,6 +279,33 @@ describe ScholarsphereFileUpload, type: :model do
         expect(upload2.reload).to eq upload2
       end
     end
+
+    context "when an error is rasied deleting the deposit's associated file uploads" do
+      before do
+        allow_any_instance_of(ScholarsphereFileUpload).to receive(:destroy).and_raise (RuntimeError)
+      end
+
+      it "updates the deposit's publication with the given URL" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(pub.reload.scholarsphere_open_access_url).to eq 'an_open_access_url'
+      end
+
+      it "sets the deposit's status to 'Success'" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(dep.reload.status).to eq 'Success'
+      end
+
+      it "sets the deposit's deposit timestamp" do
+        suppress(RuntimeError) do
+          dep.record_success('an_open_access_url')
+        end
+        expect(dep.reload.deposited_at).to eq now
+      end
+    end
   end
 
   describe '#record_failure' do
