@@ -39,6 +39,6 @@ set :deploy_to, "/var/www/sites/metadata"
 after 'deploy:restart', 'delayed_job:restart'
 namespace :delayed_job do
   task :restart do
-    run "cd #{deploy_to}/current/bin && ./background_jobs restart"
+    run "cd #{deploy_to}/current/bin && sudo -u passnger RAILS_ENV=beta PATH=PATH=/opt/ruby/bin:$PATH ./background_jobs restart"
   end
 end
