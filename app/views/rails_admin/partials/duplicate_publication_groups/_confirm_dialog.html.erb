@@ -1,0 +1,35 @@
+<div class="modal fade" id="confirmModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="exampleModalLabel">Override Known Non-Duplicates?</h4>
+      </div>
+      <div class="modal-body">
+        <p>This group contains a collection of publications that have been marked as non-duplicates.
+           If you are sure you want to merge these duplicates, click "Continue".
+           If you do not want to merge these duplicates, click "Cancel". </p>
+      </div>
+      <div class="modal-footer">
+        <div class="col-sm-9">
+          <%= button_to "Cancel",
+                        Rails.application.routes.url_helpers.admin_duplicate_publication_group_path(params[:id]),
+                        method: :get,
+                        id: 'cancel-override-button',
+                        class: 'btn btn-secondary' %>
+        </div>
+        <div class="col-sm-2">
+          <%= button_to "Continue",
+                        Rails.application.routes.url_helpers.admin_duplicate_publication_group_merge_path(params[:id]),
+                        params: { commit: 'Merge Selected',
+                                  known_non_duplicate: true,
+                                  merge_target_publication_id: params[:merge_target_publication_id],
+                                  selected_publication_ids: params[:selected_publication_ids]
+                        },
+                        method: :post,
+                        id: 'merge-override-button',
+                        class: 'btn btn-primary' %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

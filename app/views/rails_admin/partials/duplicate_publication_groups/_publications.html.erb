@@ -1,3 +1,5 @@
+<%= render partial: 'rails_admin/partials/duplicate_publication_groups/confirm_dialog' if params[:render_modal] %>
+
 <%= form_tag Rails.application.routes.url_helpers.admin_duplicate_publication_group_merge_path(@object) do %>
   <div class="scroll-wrapper1">
     <div class="scroll-top"></div>
