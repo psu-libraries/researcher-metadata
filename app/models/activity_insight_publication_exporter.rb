@@ -64,11 +64,7 @@ class ActivityInsightPublicationExporter
               else
                 xml.CONTYPE_("Other", :access => "READ_ONLY")
               end
-              if publication.status == 'Accepted/In press'
-                xml.STATUS_('Accepted', :access => "READ_ONLY")
-              else
-                xml.STATUS_(publication.status, :access => "READ_ONLY")
-              end
+              xml.STATUS_(publication.status, :access => "READ_ONLY")
               xml.JOURNAL_NAME_(publication.journal_title, :access => "READ_ONLY")
               xml.VOLUME_(publication.volume, :access => "READ_ONLY")
               if publication.published_on.present?
