@@ -46,10 +46,6 @@ describe ScholarsphereFileUpload, type: :model do
       http://creativecommons.org/publicdomain/mark/1.0/
       http://creativecommons.org/publicdomain/zero/1.0/
       https://rightsstatements.org/page/InC/1.0/
-      http://www.apache.org/licenses/LICENSE-2.0
-      https://www.gnu.org/licenses/gpl.html
-      https://opensource.org/licenses/MIT
-      https://opensource.org/licenses/BSD-3-Clause
     }
   }
   it { is_expected.to validate_presence_of(:title) }
@@ -169,10 +165,6 @@ describe ScholarsphereFileUpload, type: :model do
         http://creativecommons.org/publicdomain/mark/1.0/
         http://creativecommons.org/publicdomain/zero/1.0/
         https://rightsstatements.org/page/InC/1.0/
-        http://www.apache.org/licenses/LICENSE-2.0
-        https://www.gnu.org/licenses/gpl.html
-        https://opensource.org/licenses/MIT
-        https://opensource.org/licenses/BSD-3-Clause
       }
     end
   end
@@ -188,11 +180,7 @@ describe ScholarsphereFileUpload, type: :model do
         ['Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)', 'https://creativecommons.org/licenses/by-nc-sa/4.0/'],
         ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
         ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
-        ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/'],
-        ['Apache 2.0', 'http://www.apache.org/licenses/LICENSE-2.0'],
-        ['GNU General Public License (GPLv3)', 'https://www.gnu.org/licenses/gpl.html'],
-        ['MIT License', 'https://opensource.org/licenses/MIT'],
-        ['BSD 3-Clause License', 'https://opensource.org/licenses/BSD-3-Clause']
+        ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/']
       ]
     end
   end
