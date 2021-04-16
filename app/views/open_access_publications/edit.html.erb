@@ -78,6 +78,12 @@
             </div>
 
             <%= f.input :title, label: 'Title' %>
+            <span>Creators:</span>
+            <ul>
+              <% publication.contributor_names.order('position ASC').each do |cn| %>
+                <li><%= cn.name %></li>
+              <% end %>
+            </ul>
             <%= f.input :description, label: 'Description' %>
             <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year %>
             <%= f.input :rights,
