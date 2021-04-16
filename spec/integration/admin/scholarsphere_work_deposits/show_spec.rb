@@ -11,7 +11,7 @@ feature "Admin ScholarSphere work deposit detail page", type: :feature do
                           description: 'A description',
                           published_date: Date.new(2020, 12, 20),
                           embargoed_until: Date.new(2022, 1, 1),
-                          rights: 'http://www.apache.org/licenses/LICENSE-2.0' }
+                          rights: 'https://rightsstatements.org/page/InC/1.0/' }
   let!(:auth) { create :authorship }
   let!(:upload) { create :scholarsphere_file_upload, work_deposit: deposit }
 
@@ -54,7 +54,7 @@ feature "Admin ScholarSphere work deposit detail page", type: :feature do
       end
 
       it "shows the deposit's license" do
-        expect(page).to have_content "http://www.apache.org/licenses/LICENSE-2.0"
+        expect(page).to have_content "https://rightsstatements.org/page/InC/1.0/"
       end
 
       it "shows links to the deposit's file uploads" do
