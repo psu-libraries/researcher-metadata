@@ -405,4 +405,21 @@ describe ScholarsphereFileUpload, type: :model do
       end
     end
   end
+
+  describe '#files' do
+    let(:upload1) { build :scholarsphere_file_upload }
+    let(:upload2) { build :scholarsphere_file_upload }
+    let(:file1) { double 'file' }
+    let(:file2) { double 'file' }
+    let(:dep) { ScholarsphereWorkDeposit.new(file_uploads: [upload1, upload2]) }
+
+    before do
+      allow(File).to receive(:new).with(upload1.stored_file_path).and_return file1
+      allow(File).to receive(:new).with(upload2.stored_file_path).and_return file2
+    end
+
+    it "returns a file object for each of the deposit's associated uploads" do
+      expect(dep.files).to match_array [file1, file2]
+    end
+  end
 end

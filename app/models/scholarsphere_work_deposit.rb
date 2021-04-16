@@ -84,6 +84,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     base_metadata
   end
 
+  def files
+    file_uploads.map { |fu| File.new(fu.stored_file_path) }
+  end
+
   private
 
   def at_least_one_file_upload

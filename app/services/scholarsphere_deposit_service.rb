@@ -5,13 +5,9 @@ class ScholarsphereDepositService
   end
 
   def create
-    files = deposit.file_uploads.map do |sfu|
-      File.new(sfu.stored_file_path)
-    end
-
     ingest = Scholarsphere::Client::Ingest.new(
       metadata: deposit.metadata,
-      files: files,
+      files: deposit.files,
       depositor: current_user.webaccess_id
     )
 
