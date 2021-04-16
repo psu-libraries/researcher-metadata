@@ -948,6 +948,10 @@ describe Publication, type: :model do
     let(:waiver1) { build :internal_publication_waiver }
     let(:waiver2) { build :internal_publication_waiver }
 
+    let(:deposit1) { build :scholarsphere_work_deposit }
+    let(:deposit2) { build :scholarsphere_work_deposit }
+    let(:deposit3) { build :scholarsphere_work_deposit }
+
     let(:visibility) { false }
 
     before do
@@ -961,7 +965,8 @@ describe Publication, type: :model do
              updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
              visible_in_profile: true,
              position_in_profile: nil,
-             scholarsphere_uploaded_at: nil
+             scholarsphere_uploaded_at: nil,
+             scholarsphere_work_deposits: [deposit3]
 
       create :authorship,
              publication: pub2,
@@ -975,7 +980,8 @@ describe Publication, type: :model do
              waiver: waiver1,
              visible_in_profile: false,
              position_in_profile: 2,
-             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0)
+             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0),
+             scholarsphere_work_deposits: [deposit1, deposit2]
       create :authorship,
              publication: pub2,
              user: user2,
@@ -1115,6 +1121,18 @@ describe Publication, type: :model do
       expect(auth1.waiver).to eq waiver1
       expect(auth2.waiver).to eq nil
       expect(auth3.waiver).to eq nil
+    end
+
+    it "transfers ScholarSphere deposits" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+      expect(auth2.scholarsphere_work_deposits).to eq []
+      expect(auth3.scholarsphere_work_deposits).to eq []
     end
 
     it "transfers visibility" do
@@ -1324,6 +1342,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -1488,6 +1516,18 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq waiver1
         expect(auth2.waiver).to eq nil
         expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers ScholarSphere deposits" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth2.scholarsphere_work_deposits).to eq []
+        expect(auth3.scholarsphere_work_deposits).to eq []
       end
 
       it "transfers visibility" do
@@ -1660,6 +1700,18 @@ describe Publication, type: :model do
         expect(auth3.waiver).to eq nil
       end
 
+      it "transfers ScholarSphere deposits" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth2.scholarsphere_work_deposits).to eq []
+        expect(auth3.scholarsphere_work_deposits).to eq []
+      end
+
       it "transfers visibility" do
         pub1.merge!([pub2, pub3, pub4])
 
@@ -1821,6 +1873,16 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
       end
 
       it "does not transfer visibility" do
@@ -1986,6 +2048,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -2147,6 +2219,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -2306,6 +2388,16 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
       end
 
       it "does not transfer visibility" do

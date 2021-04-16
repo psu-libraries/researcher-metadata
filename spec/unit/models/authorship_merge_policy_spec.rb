@@ -336,4 +336,18 @@ describe AuthorshipMergePolicy do
       end
     end
   end
+
+  describe '#scholarsphere_deposits_to_keep' do
+    let(:dep1) { double 'deposit' }
+    let(:dep2) { double 'deposit' }
+    let(:dep3) { double 'deposit' }
+    let(:authorships) { [auth1, auth2, auth3] }
+    let(:auth1) { double 'authorship 1', scholarsphere_work_deposits: [dep1, dep2] }
+    let(:auth2) { double 'authorship 2', scholarsphere_work_deposits: [dep3] }
+    let(:auth3) { double 'authorship 3', scholarsphere_work_deposits: [] }
+
+    it "returns all of the associated ScholarSphere work deposits from each authorship" do
+      expect(amp.scholarsphere_deposits_to_keep).to match_array [dep1, dep2, dep3]
+    end
+  end
 end
