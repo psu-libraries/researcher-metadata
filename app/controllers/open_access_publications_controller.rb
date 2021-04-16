@@ -63,6 +63,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                        :rights,
                                                        :embargoed_until,
                                                        :deposit_agreement,
+                                                       :doi,
                                                        file_uploads_attributes: [:file, :file_cache])
   end
 end

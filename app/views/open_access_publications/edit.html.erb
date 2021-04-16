@@ -84,6 +84,7 @@
                         label: 'License',
                         collection: ScholarsphereWorkDeposit.rights_options,
                         selected: 'https://rightsstatements.org/page/InC/1.0/' %>
+            <%= f.input :doi, label: 'DOI', disabled: @deposit.doi.present? ? true : false %>
             <%= f.input :embargoed_until,
                         label: 'Embargoed until',
                         include_blank: true,

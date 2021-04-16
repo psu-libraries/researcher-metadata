@@ -14,6 +14,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:published_date).of_type(:date) }
   it { is_expected.to have_db_column(:rights).of_type(:string) }
   it { is_expected.to have_db_column(:embargoed_until).of_type(:date) }
+  it { is_expected.to have_db_column(:doi).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -201,7 +202,8 @@ describe ScholarsphereFileUpload, type: :model do
     let(:pub) { create :publication,
                        title: 'a test title',
                        abstract: 'a test description',
-                       published_on: Date.new(2021, 3, 30) }
+                       published_on: Date.new(2021, 3, 30),
+                       doi: 'a/test/doi' }
 
     it "returns a new instance of a deposit populated with data from the given authorship" do
       dep = ScholarsphereWorkDeposit.new_from_authorship(auth)
@@ -210,6 +212,7 @@ describe ScholarsphereFileUpload, type: :model do
       expect(dep.title).to eq 'a test title'
       expect(dep.description).to eq 'a test description'
       expect(dep.published_date).to eq Date.new(2021, 3, 30)
+      expect(dep.doi).to eq 'a/test/doi'
     end
   end
 
@@ -385,6 +388,25 @@ describe ScholarsphereFileUpload, type: :model do
           work_type: 'article',
           visibility: 'open',
           embargoed_until: Date.new(2022, 1, 1),
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {display_name: 'Test Author'},
+            {display_name: 'Another Contributor'}
+          ]
+        })
+      end
+    end
+    context "when the deposit has a DOI" do
+      before { dep.doi = 'a/test/doi' }
+      it "includes the DOI in the metadata" do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          identifier: ['a/test/doi'],
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
             {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
