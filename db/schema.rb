@@ -442,8 +442,8 @@ ActiveRecord::Schema.define(version: 2021_04_16_153948) do
   end
 
   create_table "statistics_snapshots", force: :cascade do |t|
-    t.integer "total_publication_count"
-    t.integer "open_access_publication_count"
+    t.integer "total_article_count"
+    t.integer "open_access_article_count"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
