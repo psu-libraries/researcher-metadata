@@ -99,13 +99,26 @@ describe ActivityInsightPublicationExporter do
                to_s: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Success/>\n"
       end
 
-      it 'does not log any errors' do
-        exporter_object = exporter.new([publication1], 'beta')
-        allow(HTTParty).to receive(:post).and_return response
-        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
-        expect_any_instance_of(Logger).not_to receive(:error)
-        expect(Bugsnag).not_to receive(:notify)
-        expect{ exporter_object.export }.to change{ publication1.exported_to_activity_insight }.to true
+      context 'when exporting to beta' do
+        it 'does not log any errors and does not update #exported_to_activity_insight' do
+          exporter_object = exporter.new([publication1], 'beta')
+          allow(HTTParty).to receive(:post).and_return response
+          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+          expect_any_instance_of(Logger).not_to receive(:error)
+          expect(Bugsnag).not_to receive(:notify)
+          expect{ exporter_object.export }.not_to change{ publication1.exported_to_activity_insight }
+        end
+      end
+
+      context 'when exporting to production' do
+        it 'does not log any errors and updates #exported_to_activity_insight' do
+          exporter_object = exporter.new([publication1], 'production')
+          allow(HTTParty).to receive(:post).and_return response
+          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+          expect_any_instance_of(Logger).not_to receive(:error)
+          expect(Bugsnag).not_to receive(:notify)
+          expect{ exporter_object.export }.to change{ publication1.exported_to_activity_insight }.to true
+        end
       end
     end
 
