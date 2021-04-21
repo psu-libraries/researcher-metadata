@@ -19,7 +19,7 @@ class ActivityInsightPublicationExporter
         logger.error Nokogiri::XML(response.to_s).text
         logger.error "Publication ID: #{publication.id}"
         was_error = true unless was_error
-      else
+      elsif target == 'production'
         publication.exported_to_activity_insight = true
         publication.save!
       end
