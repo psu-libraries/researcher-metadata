@@ -10,8 +10,12 @@ class ActivityInsightPublicationExporter
     logger = Logger.new('log/ai_publication_export.log')
     logger.info "Export to #{target} Activity Insight started at #{DateTime.now.to_s}"
     was_error = false
+    not_exported_ids = []
     publications.each do |publication|
-      next if publication.ai_import_identifiers.present? || publication.exported_to_activity_insight
+      if publication.ai_import_identifiers.present? || publication.exported_to_activity_insight
+        not_exported_ids << publication.id
+        next
+      end
 
       response = HTTParty.post webservice_url, body: to_xml(publication),
                                headers: {'Content-type' => 'text/xml'}, basic_auth: auth, timeout: 180
@@ -19,13 +23,15 @@ class ActivityInsightPublicationExporter
         logger.error Nokogiri::XML(response.to_s).text
         logger.error "Publication ID: #{publication.id}"
         was_error = true unless was_error
+        not_exported_ids << publication.id
       elsif target == 'production'
         publication.exported_to_activity_insight = true
         publication.save!
       end
     end
     Bugsnag.notify(I18n.t('models.activity_insight_publication_exporter.bugsnag_message')) if was_error
-    logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}"
+    logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}\n"
+    logger.info "Publications not exported to AI: #{not_exported_ids}"
   end
 
   private
