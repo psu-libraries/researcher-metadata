@@ -47,6 +47,9 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   
   accepts_nested_attributes_for :file_uploads
 
+  delegate :title, to: :publication, prefix: true
+  delegate :scholarsphere_open_access_url, to: :publication, prefix: false
+
   def self.new_from_authorship(authorship)
     new(authorship: authorship,
         title: authorship.title,

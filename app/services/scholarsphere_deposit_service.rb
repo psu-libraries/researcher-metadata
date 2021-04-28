@@ -18,6 +18,8 @@ class ScholarsphereDepositService
 
       scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
+      profile = UserProfile.new(current_user)
+      FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
     else
       deposit.record_failure(response.body)
     end

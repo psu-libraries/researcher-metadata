@@ -53,6 +53,9 @@ describe ScholarsphereFileUpload, type: :model do
   it { is_expected.to validate_presence_of(:published_date) }
   it { is_expected.to validate_presence_of(:rights) }
 
+  it { is_expected.to delegate_method(:publication_title).to(:publication).as(:title) }
+  it { is_expected.to delegate_method(:scholarsphere_open_access_url).to(:publication) }
+
   describe '#deposit_agreement=' do
     context "when given '0'" do
       before { dep.deposit_agreement = '0' }
