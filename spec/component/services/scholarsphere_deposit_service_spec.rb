@@ -24,9 +24,12 @@ describe ScholarsphereDepositService do
   end
 
   describe '#create' do
+    before do
+      allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return "https://scholarsphere.test"
+    end
     context "when the ScholarSphere client returns a 200 response" do
       it "records the successful response with the URI that is returned" do
-        expect(deposit).to receive(:record_success).with("https://scholarsphere-qa.dsrd.libraries.psu.edu/the-url")
+        expect(deposit).to receive(:record_success).with("https://scholarsphere.test/the-url")
         service.create
       end
     end

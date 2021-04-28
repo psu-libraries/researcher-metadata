@@ -15,8 +15,8 @@ class ScholarsphereDepositService
 
     response_body = JSON.parse(response.body)
     if response.status == 200
-      scholarsphere_uri = URI(Rails.application.config.x.scholarsphere['SS4_ENDPOINT'])
-      scholarsphere_publication_uri = "#{scholarsphere_uri.scheme}://#{scholarsphere_uri.host}#{response_body["url"]}"
+
+      scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
     else
       deposit.record_failure(response.body)
