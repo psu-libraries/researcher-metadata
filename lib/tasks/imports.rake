@@ -27,6 +27,11 @@ namespace :import do
     OpenAccessButtonPublicationImporter.new.call
   end
 
+  desc 'Import ScholarSphere publication URLs'
+  task :scholarsphere => :environment do
+    ScholarsphereImporter.new.call
+  end
+
   desc 'Import PSU RSS news feed items'
   task :rss_news => :environment do
     NewsFeedItemImporter.new().call
@@ -122,6 +127,7 @@ namespace :import do
     ).call
 
     OpenAccessButtonPublicationImporter.new.call
+    ScholarsphereImporter.new.call
   end
 end
 
