@@ -1,8 +1,8 @@
 {
-  "count" : 3,
+  "count" : 4,
   "pageInformation" : {
     "offset" : 0,
-    "size" : 1
+    "size" : 2
   },
   "items" : [ {
     "pureId" : 9477895,
@@ -525,5 +525,205 @@
       "value" : 0,
       "year" : 1997
     } ]
-  } ]
+  }, {
+    "pureId" : 93827492,
+    "uuid" : "a4bu4gc2-4a4f-984c-9e61-2bf014979456e",
+    "title" : {
+      "formatted" : true,
+      "value" : "Non-Importable Publication"
+    },
+    "managingOrganisationalUnit" : {
+      "uuid" : "59c96941-0a58-484f-83b5-9aa47a816a88",
+      "externalId" : "COLLEGE-UL",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "University Libraries - University Park"
+        } ]
+      },
+      "type" : {
+        "pureId" : 8288442,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/libraries",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Libraries"
+          } ]
+        }
+      }
+    },
+    "confidential" : false,
+    "info" : {
+      "createdBy" : "ABC123@psu.edu",
+      "createdDate" : "2017-01-27T19:56:09.788+0000",
+      "modifiedBy" : "root",
+      "modifiedDate" : "2018-30-08T10:34:49.048+0000",
+      "portalUrl" : "https://pennstate.pure.elsevier.com/en/publications/a4bu4gc2-4a4f-984c-9e61-2bf014979456e",
+      "prettyURLIdentifiers" : [ "non-importable-publication" ]
+    },
+    "hostPublicationTitle" : "The Globalized Library: American Academic Libraries and International Students, Collections and Practices ",
+    "type" : {
+      "pureId" : 4599,
+      "uri" : "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontobookanthology/chapter",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Chapter"
+        } ]
+      }
+    },
+    "category" : {
+      "pureId" : 6885,
+      "uri" : "/dk/atira/pure/researchoutput/category/research",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Research"
+        } ]
+      }
+    },
+    "language" : {
+      "pureId" : 9423172,
+      "uri" : "/dk/atira/pure/core/languages/en_US",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "English (US)"
+        } ]
+      }
+    },
+    "totalNumberOfAuthors" : 1,
+    "openAccessPermission" : {
+      "pureId" : 3436173,
+      "uri" : "/dk/atira/pure/researchoutput/openaccesspermission/none",
+      "term" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "None"
+        } ]
+      }
+    },
+    "submissionYear" : 2017,
+    "visibility" : {
+      "key" : "FREE",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "Public - No restriction"
+        } ]
+      }
+    }, "workflow" : {
+      "workflowStep" : "forApproval",
+      "value" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "For validation"
+        } ]
+      }
+    },
+    "publicationStatuses" : [ {
+      "pureId" : 32756725,
+      "current" : true,
+      "publicationDate" : {
+        "year" : 2017
+      },
+      "publicationStatus" : {
+        "pureId" : 3436181,
+        "uri" : "/dk/atira/pure/researchoutput/status/submitted",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Submitted"
+          } ]
+        }
+      }
+    } ],
+    "personAssociations" : [ {
+      "pureId" : 32756727,
+      "person" : {
+        "uuid" : "313d50f3-g428-40c6-b6e0-5356f8444a1",
+        "externalId" : "ABC123",
+        "externalIdSource" : "synchronisedPerson",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "value" : "Test Person"
+          } ]
+        }
+      },
+      "name" : {
+        "firstName" : "Test",
+        "lastName" : "Person"
+      }, "personRole" : {
+        "pureId" : 1234,
+        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontobookanthology/author",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Author"
+          } ]
+        }
+      },
+      "organisationalUnits" : [ {
+        "uuid" : "59c96941-0a58-484f-83b5-9aa47a816a88",
+        "externalId" : "COLLEGE-UL",
+        "externalIdSource" : "synchronisedOrganisation",
+        "externallyManaged" : true,
+        "name" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "University Libraries - University Park"
+          } ]
+        },
+        "type" : {
+          "pureId" : 8288442,
+          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/libraries",
+          "term" : {
+            "formatted" : false,
+            "text" : [ {
+              "locale" : "en_US",
+              "value" : "Libraries"
+            } ]
+          }
+        }
+      } ]
+    } ],
+    "organisationalUnits" : [ {
+      "uuid" : "59c96941-0a58-484f-83b5-9aa47a816a88",
+      "externalId" : "COLLEGE-UL",
+      "externalIdSource" : "synchronisedOrganisation",
+      "externallyManaged" : true,
+      "name" : {
+        "formatted" : false,
+        "text" : [ {
+          "locale" : "en_US",
+          "value" : "University Libraries - University Park"
+        } ]
+      }, "type" : {
+        "pureId" : 8288442,
+        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/libraries",
+        "term" : {
+          "formatted" : false,
+          "text" : [ {
+            "locale" : "en_US",
+            "value" : "Libraries"
+          } ]
+        }
+      }
+    } ]
+  }]
 }

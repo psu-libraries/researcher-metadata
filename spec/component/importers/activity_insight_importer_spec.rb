@@ -725,11 +725,11 @@ describe ActivityInsightImporter do
       end
 
       context "when no included publications exist in the database" do
-        it "creates a new publication import record for every published publication w/o an RMD_ID in the imported data" do
+        it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
           expect { importer.call }.to change { PublicationImport.count }.by 4
         end
 
-        it "creates a new publication record for every published publication w/o an RMD_ID in the imported data" do
+        it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
           expect { importer.call }.to change { Publication.count }.by 4
         end
         
@@ -976,11 +976,11 @@ describe ActivityInsightImporter do
         context "when the existing publication has been modified by an admin user" do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
 
-          it "creates a new publication import record for every new published journal article in the imported data" do
+          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 3
           end
   
-          it "creates a new publication record for every new published journal article in the imported data" do
+          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 3
           end
           
@@ -1255,11 +1255,11 @@ describe ActivityInsightImporter do
         context "when the existing publication has not been modified by an admin user" do
           let(:timestamp) { nil }
 
-          it "creates a new publication import record for every new published journal article in the imported data" do
+          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 3
           end
   
-          it "creates a new publication record for every new published journal article in the imported data" do
+          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 3
           end
           
@@ -2268,11 +2268,11 @@ describe ActivityInsightImporter do
         end
 
         context "when no included publications exist in the database" do
-          it "creates a new publication import record for every published journal article in the imported data" do
+          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 4
           end
   
-          it "creates a new publication record for every published journal article in the imported data" do
+          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 4
           end
           
@@ -2519,11 +2519,11 @@ describe ActivityInsightImporter do
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { Publication.count }.by 3
             end
             
@@ -2797,11 +2797,11 @@ describe ActivityInsightImporter do
           context "when the existing publication has not been modified by an admin user" do
             let(:timestamp) { nil }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { Publication.count }.by 3
             end
             
@@ -3788,11 +3788,11 @@ describe ActivityInsightImporter do
         end
 
         context "when no included publications exist in the database" do
-          it "creates a new publication import record for every published journal article in the imported data" do
+          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 4
           end
   
-          it "creates a new publication record for every published journal article in the imported data" do
+          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 4
           end
           
@@ -4038,11 +4038,11 @@ describe ActivityInsightImporter do
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { Publication.count }.by 3
             end
             
@@ -4316,11 +4316,11 @@ describe ActivityInsightImporter do
           context "when the existing publication has not been modified by an admin user" do
             let(:timestamp) { nil }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
               expect { importer.call }.to change { Publication.count }.by 3
             end
             

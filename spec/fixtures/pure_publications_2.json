@@ -1,5 +1,5 @@
 {
-  "count" : 3,
+  "count" : 4,
   "pageInformation" : {
     "offset" : 0,
     "size" : 3
@@ -171,13 +171,13 @@
         "day" : 1
       },
       "publicationStatus" : {
-        "pureId" : 798,
-        "uri" : "/dk/atira/pure/researchoutput/status/published",
+        "pureId" : 796,
+        "uri" : "/dk/atira/pure/researchoutput/status/inpress",
         "term" : {
           "formatted" : false,
           "text" : [ {
             "locale" : "en_US",
-            "value" : "Published"
+            "value" : "Accepted/In press"
           } ]
         }
       }
