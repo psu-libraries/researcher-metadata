@@ -24,6 +24,8 @@ class Authorship < ApplicationRecord
            :no_open_access_information?,
            :is_journal_article?,
            :published_on,
+           :secondary_title,
+           :preferred_publisher_name,
            to: :publication,
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true

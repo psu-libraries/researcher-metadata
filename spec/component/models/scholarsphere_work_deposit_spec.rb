@@ -15,6 +15,8 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:rights).of_type(:string) }
   it { is_expected.to have_db_column(:embargoed_until).of_type(:date) }
   it { is_expected.to have_db_column(:doi).of_type(:string) }
+  it { is_expected.to have_db_column(:subtitle).of_type(:text) }
+  it { is_expected.to have_db_column(:publisher).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
@@ -194,7 +196,11 @@ describe ScholarsphereFileUpload, type: :model do
                        title: 'a test title',
                        abstract: 'a test description',
                        published_on: Date.new(2021, 3, 30),
-                       doi: 'a/test/doi' }
+                       doi: 'a/test/doi',
+                       secondary_title: 'a subtitle',
+                       journal: journal }
+    let(:publisher) { create :publisher, name: 'test publisher' }
+    let(:journal) { create :journal, publisher: publisher}
 
     it "returns a new instance of a deposit populated with data from the given authorship" do
       dep = ScholarsphereWorkDeposit.new_from_authorship(auth)
@@ -204,6 +210,8 @@ describe ScholarsphereFileUpload, type: :model do
       expect(dep.description).to eq 'a test description'
       expect(dep.published_date).to eq Date.new(2021, 3, 30)
       expect(dep.doi).to eq 'a/test/doi'
+      expect(dep.subtitle).to eq 'a subtitle'
+      expect(dep.publisher).to eq 'test publisher'
     end
   end
 
@@ -399,6 +407,44 @@ describe ScholarsphereFileUpload, type: :model do
           visibility: 'open',
           identifier: ['a/test/doi'],
           rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {display_name: 'Test Author'},
+            {display_name: 'Another Contributor'}
+          ]
+        })
+      end
+    end
+    context "when the deposit has a subtitle" do
+      before { dep.subtitle = 'test subtitle' }
+      it "includes the subtitle in the metadata" do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          subtitle: 'test subtitle',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          creators: [
+            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {display_name: 'Test Author'},
+            {display_name: 'Another Contributor'}
+          ]
+        })
+      end
+    end
+    context "when the deposit has a publisher" do
+      before { dep.publisher = 'test publisher' }
+      it "includes the publisher in the metadata" do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
+          publisher: ['test publisher'],
           creators: [
             {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},

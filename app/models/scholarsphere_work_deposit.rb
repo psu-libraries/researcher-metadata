@@ -55,7 +55,9 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         title: authorship.title,
         description: authorship.abstract,
         published_date: authorship.published_on,
-        doi: authorship.doi)
+        doi: authorship.doi,
+        subtitle: authorship.secondary_title,
+        publisher: authorship.preferred_publisher_name)
   end
 
   def record_success(url)
@@ -84,6 +86,8 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     }
     base_metadata.merge!({embargoed_until: embargoed_until}) if embargoed_until.present?
     base_metadata.merge!({identifier: [doi]}) if doi.present?
+    base_metadata.merge!({subtitle: subtitle}) if subtitle.present?
+    base_metadata.merge!({publisher: [publisher]}) if publisher.present?
     base_metadata
   end
 
