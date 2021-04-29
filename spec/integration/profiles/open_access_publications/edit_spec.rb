@@ -2,14 +2,29 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe "visiting the page to edit the open acess status of a publication" do
-  let(:user) { create :user }
+  let(:user) { create :user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author' }
   let(:pub) { create :publication,
                      title: 'Test Publication',
-                     journal_title: 'A Prestegious Journal',
+                     secondary_title: 'The Subtitle',
                      issue: "583",
                      volume: "971",
                      page_range: "478-483",
-                     published_on: Date.new(2019, 1, 1) }
+                     published_on: Date.new(2019, 3, 17),
+                     doi: 'https://doi.org/10.1109/5.771073',
+                     abstract: 'An abstract of the test publication',
+                     journal: journal }
+  let!(:auth) { create :authorship, user: user, publication: pub }
+  let!(:publisher) { create :publisher,
+                            name: 'A Publishing Company'}
+  let!(:journal) { create :journal,
+                          title: 'A Prestegious Journal',
+                          publisher: publisher }
+  let!(:name) { create :contributor_name,
+                       publication: pub,
+                       user: user,
+                       position: 1,
+                       first_name: "Bob",
+                       last_name: "Author" }
   let(:other_pub) { create :publication }
   let(:non_article_pub) { create :publication,
                                  publication_type: 'Book' }
@@ -42,7 +57,6 @@ describe "visiting the page to edit the open acess status of a publication" do
   let!(:swd) { create :scholarsphere_work_deposit, authorship: ss_deposited_auth, status: 'Pending' }
 
   before do
-    create :authorship, user: user, publication: pub
     create :authorship, user: user, publication: oa_pub
     
     create :authorship, user: user, publication: non_article_pub
@@ -126,6 +140,99 @@ describe "visiting the page to edit the open acess status of a publication" do
 
         it "shows an error message" do
           expect(page).to have_content I18n.t('models.open_access_url_form.validation_errors.url_format')
+        end
+      end
+
+      describe "viewing the form to deposit a publication in ScholarSphere" do
+        it "shows metadata from the publication and pre-fills the form fields with the correct values" do
+          within '#new_scholarsphere_work_deposit' do
+            expect(find_field('Title').value).to eq 'Test Publication'
+            expect(find_field('Subtitle').value).to eq 'The Subtitle'
+            expect(page).to have_content "Creators"
+            expect(page).to have_content "Bob Author"
+            expect(find_field('Description').value).to eq 'An abstract of the test publication'
+            expect(find_field('scholarsphere_work_deposit_published_date_1i').value).to eq '2019'
+            expect(find_field('scholarsphere_work_deposit_published_date_2i').value).to eq '3'
+            expect(find_field('scholarsphere_work_deposit_published_date_3i').value).to eq '17'
+            expect(find_field('Publisher').value).to eq 'A Publishing Company'
+            expect(find_field('DOI').value).to eq 'https://doi.org/10.1109/5.771073'
+          end
+        end
+      end
+
+      describe "changing some pre-filled values and successfully submitting the form to deposit a publication in ScholarSphere" do
+        include ActiveJob::TestHelper
+        let(:ingest) { double 'scholarsphere client ingest', publish: response }
+        let(:response) { double 'scholarsphere client response', status: status, body: response_body }
+        let(:response_body) { %{{"url": "/the-url"}} }
+        let(:status) { 200 }
+        before do
+          allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
+          allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'
+          within '#new_scholarsphere_work_deposit' do
+            perform_enqueued_jobs do
+              fill_in 'Subtitle', with: 'New Subtitle'
+              attach_file 'File', fixture('test_file.pdf')
+              select 'Public Domain Mark 1.0', from: 'License'
+              check 'I have read and agree to the deposit agreement.'
+              select Date.today.year + 1, from: 'scholarsphere_work_deposit_embargoed_until_1i'
+              select 'May', from: 'scholarsphere_work_deposit_embargoed_until_2i'
+              select '22', from: 'scholarsphere_work_deposit_embargoed_until_3i'
+              click_button 'Submit Files'
+            end
+          end
+        end
+
+        it "creates a ScholarSphere work deposit record with the correct metadata" do
+          dep = ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
+          expect(dep.authorship).to eq auth
+          expect(dep.subtitle).to eq 'New Subtitle'
+          expect(dep.status).to eq 'Success'
+          expect(dep.error_message).to be_nil
+          expect(dep.title).to eq 'Test Publication'
+          expect(dep.description).to eq 'An abstract of the test publication'
+          expect(dep.published_date).to eq Date.new(2019, 3, 17)
+          expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
+          expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
+          expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
+          expect(dep.publisher).to eq 'A Publishing Company'
+        end
+
+        it "sends a request to deposit the publication in ScholarSphere" do
+          dep = ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
+          expect(Scholarsphere::Client::Ingest).to have_received(:new) do |args|
+            expect(args).to be_a Hash
+            expect(args.keys).to match_array [:metadata, :files, :depositor]
+            expect(args[:metadata]).to eq({
+              creators: [{display_name: "Bob Author", psu_id:"xyz123"}],
+              description: "An abstract of the test publication",
+              identifier: ["https://doi.org/10.1109/5.771073"],
+              published_date: Date.new(2019, 3, 17),
+              publisher: ["A Publishing Company"],
+              rights: "http://creativecommons.org/publicdomain/mark/1.0/",
+              subtitle: "New Subtitle",
+              title: "Test Publication",
+              visibility: "open",
+              work_type: "article",
+              embargoed_until: Date.new((Date.today.year + 1), 5, 22)
+            })
+            expect(args[:depositor]).to eq 'xyz123'
+            expect(args[:files]).to be_an Array
+            expect(args[:files].length).to eq 1
+            expect(args[:files].first).to be_a File
+          end
+          expect(ingest).to have_received(:publish)
+        end
+
+        it "updates the publication with the URL returned from ScholarSphere" do
+          expect(pub.reload.scholarsphere_open_access_url).to eq 'https://scholarsphere.test/the-url'
+        end
+
+        it "notifies the user by email that the deposit was successful" do
+          open_email('xyz123@psu.edu')
+          expect(current_email.body).to match(/Robert Author/)
+          expect(current_email.body).to match(/Test Publication/)
+          expect(current_email.body).to match(/https\:\/\/scholarsphere\.test\/the-url/)
         end
       end
     end
