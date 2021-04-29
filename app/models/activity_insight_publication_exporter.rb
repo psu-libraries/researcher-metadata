@@ -30,7 +30,7 @@ class ActivityInsightPublicationExporter
       end
     end
     Bugsnag.notify(I18n.t('models.activity_insight_publication_exporter.bugsnag_message')) if was_error
-    logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}\n"
+    logger.info "Export to #{target} Activity Insight ended at #{DateTime.now.to_s}"
     logger.info "Publications not exported to AI: #{not_exported_ids}"
   end
 
