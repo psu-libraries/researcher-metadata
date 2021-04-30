@@ -176,12 +176,24 @@ describe OpenAccessPublicationsController, type: :controller do
           patch :update, params: {id: oa_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(oa_pub)
         end
+        
+        it "does not set a flash message" do
+          patch :update, params: {id: oa_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
+        end
       end
 
       context "when given the ID for a publication that belongs to the user and has a user-submitted open access URL" do
         it "redirects to the read-only view of the publication's open access status" do
           patch :update, params: {id: uoa_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(uoa_pub)
+        end
+
+        it "does not set a flash message" do
+          patch :update, params: {id: uoa_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
         end
       end
 
@@ -190,12 +202,24 @@ describe OpenAccessPublicationsController, type: :controller do
           patch :update, params: {id: uploaded_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(uploaded_pub)
         end
+
+        it "does not set a flash message" do
+          patch :update, params: {id: uploaded_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
+        end
       end
 
       context "when given the ID for a publication that has already been uploaded to ScholarSphere by another user" do
         it "redirects to the read-only view of the publication's open access status" do
           patch :update, params: {id: other_uploaded_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(other_uploaded_pub)
+        end
+
+        it "does not set a flash message" do
+          patch :update, params: {id: other_uploaded_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
         end
       end
 
@@ -204,12 +228,63 @@ describe OpenAccessPublicationsController, type: :controller do
           patch :update, params: {id: waived_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(waived_pub)
         end
+
+        it "does not set a flash message" do
+          patch :update, params: {id: waived_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
+        end
       end
 
       context "when given the ID for a publication for which another user has waived open access" do
         it "redirects to the read-only view of the publication's open access status" do
           patch :update, params: {id: other_waived_pub.id}
           expect(response).to redirect_to edit_open_access_publication_path(other_waived_pub)
+        end
+
+        it "does not set a flash message" do
+          patch :update, params: {id: other_waived_pub.id}
+          expect(flash[:notice]).to be_blank
+          expect(flash[:alert]).to be_blank
+        end
+      end
+
+      context "when given the ID for a publication that has an unknown open access status" do
+        let(:form) { double 'open access URL form',
+                            valid?: valid,
+                            open_access_url: "a_url",
+                            errors: errors }
+        let(:valid) { true }
+        let(:errors) { double 'errors', full_messages: error_messages }
+        let(:error_messages) { [] }
+        before do
+          allow(OpenAccessURLForm).to receive(:new).with(ActionController::Parameters.new({open_access_url: "a_url"}).permit([:open_access_url])).and_return(form)
+          patch :update, params: {id: pub.id, open_access_url_form: {open_access_url: "a_url"}}
+        end
+
+        context "when the given params are valid" do
+          it "updates the given publication with the given URL" do
+            expect(pub.reload.user_submitted_open_access_url).to eq "a_url"
+          end
+          it "sets a success message" do
+            expect(flash[:notice]).to eq I18n.t('profile.open_access_publications.update.success')
+          end
+          it "redirects to the profile publications list" do
+            expect(response).to redirect_to edit_profile_publications_path
+          end
+        end
+
+        context "when the given params are invalid" do
+          let(:valid) { false }
+          let(:error_messages) { ["Invalid!"] }
+
+          it "sets an error message" do
+            expect(flash[:alert]).to eq "Validation failed:  Invalid!"
+          end
+
+          it "renders the edit page again" do
+            expect(response).to render_template :edit
+          end
         end
       end
     end
