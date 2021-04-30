@@ -9,6 +9,8 @@ class ScholarsphereUploadJob < ApplicationJob
     service.create
   rescue Exception => e
     deposit.record_failure(e.to_s)
+    profile = UserProfile.new(user)
+    FacultyNotificationsMailer.scholarsphere_deposit_failure(profile, deposit).deliver_now
     raise
   end
 end

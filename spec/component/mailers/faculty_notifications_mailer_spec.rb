@@ -49,4 +49,48 @@ describe FacultyNotificationsMailer, type: :model do
       end
     end
   end
+
+  describe '#scholarsphere_deposit_failure' do
+    subject(:email) { FacultyNotificationsMailer.scholarsphere_deposit_failure(user, deposit) }
+
+    let(:deposit) { build :scholarsphere_work_deposit, publication: pub }
+    let(:pub) { build :publication,
+                      scholarsphere_open_access_url: 'https://scholarsphere.test/abc123',
+                      title: 'Open Access Test Publication' }
+    let(:user) { double 'user',
+                        email: "test123@psu.edu",
+                        name: "Test User" }
+
+    it "sends the email to the given user's email address" do
+      expect(email.to).to eq ["test123@psu.edu"]
+    end
+
+    it "sends the email from the correct address" do
+      expect(email.from).to eq ["scholarsphere@psu.edu"]
+    end
+
+    it "sends the email with the correct subject" do
+      expect(email.subject).to eq "Your publication could not be deposited in ScholarSphere"
+    end
+
+    it "sets the correct reply-to address" do
+      expect(email.reply_to).to eq ["scholarsphere@psu.edu"]
+    end
+
+    describe "the message body" do
+      let(:body) { email.body.raw_source }
+
+      it "mentions the user by name" do
+        expect(body).to match(user.name)
+      end
+
+      it "mentions the publication title" do
+        expect(body).to match("Open Access Test Publication")
+      end
+
+      it "tells the user to contact support" do
+        expect(body).to match("Researcher Metadata Database support")
+      end
+    end
+  end
 end

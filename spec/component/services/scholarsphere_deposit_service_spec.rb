@@ -47,9 +47,8 @@ describe ScholarsphereDepositService do
     context "when the ScholarSphere client returns a response that is not 200" do
       let(:status) { 500 }
 
-      it "records the failed response with the error message that is returned" do
-        expect(deposit).to receive(:record_failure).with(response_body)
-        service.create
+      it "raises an error" do
+        expect { service.create }.to raise_error ScholarsphereDepositService::DepositFailed, response_body
       end
     end
   end

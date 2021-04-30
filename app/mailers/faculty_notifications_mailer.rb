@@ -8,4 +8,13 @@ class FacultyNotificationsMailer < ApplicationMailer
          from: "openaccess@psu.edu",
          reply_to: "openaccess@psu.edu"
   end
+
+  def scholarsphere_deposit_failure(user, deposit)
+    @user = user
+    @deposit = deposit
+    mail to: @user.email,
+         subject: "Your publication could not be deposited in ScholarSphere",
+         from: "scholarsphere@psu.edu",
+         reply_to: "scholarsphere@psu.edu"
+  end
 end
