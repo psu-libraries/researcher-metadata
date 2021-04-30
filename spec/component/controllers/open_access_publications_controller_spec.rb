@@ -327,6 +327,11 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(response).to redirect_to edit_profile_publications_path
           end
 
+          it "sets a success message" do
+            post :create_scholarsphere_deposit, params: params
+            expect(flash[:alert]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+          end
+
           it "schedules a job to send the publication to ScholarSphere" do
             post :create_scholarsphere_deposit, params: params
             expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)

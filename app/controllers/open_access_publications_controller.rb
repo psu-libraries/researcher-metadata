@@ -41,6 +41,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
     ScholarsphereUploadJob.perform_later(@deposit.id, current_user.id)
 
+    flash[:alert] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
