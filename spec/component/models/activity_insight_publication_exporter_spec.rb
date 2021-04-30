@@ -79,13 +79,14 @@ describe ActivityInsightPublicationExporter do
       it 'logs DM webservice responses' do
         exporter_object = exporter.new([publication1], 'beta')
         allow(HTTParty).to receive(:post).and_return response
-        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
         expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF|lication ID: #{publication1.id}/).twice
         exporter_object.export
       end
 
       it 'triggers bugsnag' do
         exporter_object = exporter.new([publication1], 'beta')
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|#{publication1.id}/).exactly(3).times
         allow(HTTParty).to receive(:post).and_return response
         expect(Bugsnag).to receive(:notify).with(I18n.t('models.activity_insight_publication_exporter.bugsnag_message'))
         exporter_object.export
@@ -103,7 +104,7 @@ describe ActivityInsightPublicationExporter do
         it 'does not log any errors and does not update #exported_to_activity_insight' do
           exporter_object = exporter.new([publication1], 'beta')
           allow(HTTParty).to receive(:post).and_return response
-          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
           expect(Bugsnag).not_to receive(:notify)
           expect{ exporter_object.export }.not_to change{ publication1.exported_to_activity_insight }
@@ -114,7 +115,7 @@ describe ActivityInsightPublicationExporter do
         it 'does not log any errors and updates #exported_to_activity_insight' do
           exporter_object = exporter.new([publication1], 'production')
           allow(HTTParty).to receive(:post).and_return response
-          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at/).twice
+          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
           expect(Bugsnag).not_to receive(:notify)
           expect{ exporter_object.export }.to change{ publication1.exported_to_activity_insight }.to true
@@ -123,16 +124,18 @@ describe ActivityInsightPublicationExporter do
     end
 
     context 'when publication has ai_import_identifiers' do
-      it 'skips that publication' do
+      it "skips that publication and records that record's id in the logs" do
         exporter_object = exporter.new([publication2], 'beta')
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|#{publication2.id}/).exactly(3).times
         expect(HTTParty).not_to receive(:post)
         exporter_object.export
       end
     end
 
     context 'when publication.exported_to_activity_insight is true' do
-      it 'skips that publication' do
+      it "skips that publication and records that record's id in the logs" do
         exporter_object = exporter.new([publication3], 'beta')
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|#{publication3.id}/).exactly(3).times
         expect(HTTParty).not_to receive(:post)
         exporter_object.export
       end
