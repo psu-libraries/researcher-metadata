@@ -225,29 +225,29 @@ describe "editing profile preferences" do
         end
 
         it "shows an icon to indicate when we don't have open access information for a publication" do
-          within "tr#authorship_#{auth_1.id}" do
+          within "tr#authorship_row_#{auth_1.id}" do
             expect(page).to have_css '.fa-question'
           end
         end
 
         it "shows an icon to indicate when we have an open access URL for a publication" do
-          within "tr#authorship_#{auth_3.id}" do
+          within "tr#authorship_row_#{auth_3.id}" do
             expect(page).to have_css '.fa-unlock-alt'
           end
 
-          within "tr#authorship_#{auth_4.id}" do
+          within "tr#authorship_row_#{auth_4.id}" do
             expect(page).to have_css '.fa-unlock-alt'
           end
         end
 
         it "shows an icon to indicate when open access obligations have been waived for a publication" do
-          within "tr#authorship_#{auth_5.id}" do
+          within "tr#authorship_row_#{auth_5.id}" do
             expect(page).to have_css '.fa-lock'
           end
         end
 
         it "shows an icon to indicate when a publication is being added to ScholarSphere" do
-          within "tr#authorship_#{auth_6.id}" do
+          within "tr#authorship_row_#{auth_6.id}" do
             expect(page).to have_css '.fa-hourglass-half'
           end
         end

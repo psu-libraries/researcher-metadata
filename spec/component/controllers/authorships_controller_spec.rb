@@ -84,17 +84,17 @@ describe AuthorshipsController, type: :controller do
 
       context "when given an ID for an authorship that does not belong to the user" do
         it "returns 404" do
-          expect { put :sort, params: {authorship: [authorship_1.id.to_s,
-                                                    authorship_2.id.to_s,
-                                                    other_authorship.id.to_s]} }.to raise_error ActiveRecord::RecordNotFound
+          expect { put :sort, params: {authorship_row: [authorship_1.id.to_s,
+                                                        authorship_2.id.to_s,
+                                                        other_authorship.id.to_s]} }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
       context "when given IDs for authorships that do belong to the user" do
         it "updates each authorship's profile position with the order in which the ID was given" do
-          put :sort, params: {authorship: [authorship_2.id.to_s,
-                                           authorship_3.id.to_s,
-                                           authorship_1.id.to_s]}
+          put :sort, params: {authorship_row: [authorship_2.id.to_s,
+                                               authorship_3.id.to_s,
+                                               authorship_1.id.to_s]}
 
           expect(authorship_1.reload.position_in_profile).to eq 3
           expect(authorship_2.reload.position_in_profile).to eq 1
@@ -103,9 +103,9 @@ describe AuthorshipsController, type: :controller do
         end
 
         it "updates the timestamp on each authorship that was reordered" do
-          put :sort, params: {authorship: [authorship_2.id.to_s,
-                                           authorship_3.id.to_s,
-                                           authorship_1.id.to_s]}
+          put :sort, params: {authorship_row: [authorship_2.id.to_s,
+                                               authorship_3.id.to_s,
+                                               authorship_1.id.to_s]}
 
           expect(authorship_1.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
           expect(authorship_2.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
