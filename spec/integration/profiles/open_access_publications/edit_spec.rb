@@ -234,6 +234,96 @@ describe "visiting the page to edit the open acess status of a publication" do
           expect(current_email.body).to match(/Test Publication/)
           expect(current_email.body).to match(/https\:\/\/scholarsphere\.test\/the-url/)
         end
+
+        it "returns the user to their profile publication list" do
+          expect(page.current_path).to eq edit_profile_publications_path
+        end
+
+        it "shows a success message" do
+          expect(page).to have_content "Thank you"
+        end
+
+        it "shows the publication with the correct status" do
+          within "#authorship_row_#{auth.id}" do
+            expect(page).to have_css '.fa-unlock-alt'
+            expect(page).to have_content pub.title
+            expect(page).not_to have_link pub.title
+          end
+        end
+      end
+
+      describe "attempting to submit an invalid form to deposit a publication in Scholarsphere" do
+        before do
+          within '#new_scholarsphere_work_deposit' do
+            click_button 'Submit Files'
+          end
+        end
+
+        it "shows the form again" do
+          expect(page).to have_field 'Title'
+          expect(page).to have_field 'File'
+        end
+
+        it "shows an error message" do
+          expect(page).to have_content "file can't be blank"
+        end
+      end
+
+      describe "submitting a valid form with an error in the deposit process" do
+        include ActiveJob::TestHelper
+        let(:ingest) { double 'scholarsphere client ingest' }
+        before do
+          allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
+          allow(ingest).to receive(:publish).and_raise RuntimeError.new("Oh no! Failure!")
+          within '#new_scholarsphere_work_deposit' do
+            suppress(RuntimeError) do
+              perform_enqueued_jobs do
+                fill_in 'Subtitle', with: 'New Subtitle'
+                attach_file 'File', fixture('test_file.pdf')
+                select 'Public Domain Mark 1.0', from: 'License'
+                check 'I have read and agree to the deposit agreement.'
+                select Date.today.year + 1, from: 'scholarsphere_work_deposit_embargoed_until_1i'
+                select 'May', from: 'scholarsphere_work_deposit_embargoed_until_2i'
+                select '22', from: 'scholarsphere_work_deposit_embargoed_until_3i'
+                click_button 'Submit Files'
+              end
+            end
+          end
+        end
+
+        it "creates a ScholarSphere work deposit record with the correct metadata" do
+          dep = ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
+          expect(dep.authorship).to eq auth
+          expect(dep.subtitle).to eq 'New Subtitle'
+          expect(dep.status).to eq 'Failed'
+          expect(dep.error_message).to eq "Oh no! Failure!"
+          expect(dep.title).to eq 'Test Publication'
+          expect(dep.description).to eq 'An abstract of the test publication'
+          expect(dep.published_date).to eq Date.new(2019, 3, 17)
+          expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
+          expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
+          expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
+          expect(dep.publisher).to eq 'A Publishing Company'
+        end
+
+        it "shows the publication with the correct status in the profile publication list" do
+          visit edit_profile_publications_path
+          within "#authorship_row_#{auth.id}" do
+            expect(page).to have_css '.fa-exclamation-circle'
+            expect(page).to have_link pub.title
+          end
+        end
+
+        it "notifies the user by email that the deposit failed" do
+          open_email('xyz123@psu.edu')
+          expect(current_email.body).to match(/Robert Author/)
+          expect(current_email.body).to match(/Test Publication/)
+          expect(current_email.body).to match(/error occurred/)
+        end
+
+        it "does not update the publication's ScholarSphere open access URL" do
+          expect(pub.reload.scholarsphere_open_access_url).to be_nil
+        end
       end
     end
 
