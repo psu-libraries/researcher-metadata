@@ -76,5 +76,17 @@ describe OpenAccessURLForm do
         expect(form.errors[:open_access_url]).to eq [I18n.t('models.open_access_url_form.validation_errors.url_response')]
       end
     end
+
+    context "when given an open access URL that raises a TCP connection error" do
+      let(:url) { 'https://connection.bad' }
+      before do
+        allow(HTTParty).to receive(:head).with(url, follow_redirects: false).and_raise SocketError
+      end
+
+      it "sets an error on the attriute" do
+        form.valid?
+        expect(form.errors[:open_access_url]).to eq [I18n.t('models.open_access_url_form.validation_errors.url_response')]
+      end
+    end
   end
 end
