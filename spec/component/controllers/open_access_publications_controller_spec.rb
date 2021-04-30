@@ -329,7 +329,7 @@ describe OpenAccessPublicationsController, type: :controller do
 
           it "sets a success message" do
             post :create_scholarsphere_deposit, params: params
-            expect(flash[:alert]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
+            expect(flash[:notice]).to eq I18n.t('profile.open_access_publications.create_scholarsphere_deposit.success')
           end
 
           it "schedules a job to send the publication to ScholarSphere" do
