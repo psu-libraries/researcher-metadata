@@ -1,8 +1,8 @@
 {
-  "count" : 3,
+  "count" : 4,
   "pageInformation" : {
     "offset" : 0,
-    "size" : 1
+    "size" : 2
   },
   "items" : [ {
     "pureId" : 9477895,
@@ -525,5 +525,5 @@
       "value" : 0,
       "year" : 1997
     } ]
-  } ]
+  }]
 }
