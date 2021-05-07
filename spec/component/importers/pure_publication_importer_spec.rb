@@ -34,11 +34,11 @@ describe PurePublicationImporter do
     
     context "when the API endpoint is found" do
       context "when no publication import records exist in the database" do
-        it "creates a new publication import record for each object in the imported data" do
+        it "creates a new publication import record for each Published or Accepted/In press publication in the imported data" do
           expect { importer.call }.to change { PublicationImport.count }.by 3
         end
 
-        it "creates a new publication record for each object in the imported data" do
+        it "creates a new publication record for each Published or Accepted/In press publication in the imported data" do
           expect { importer.call }.to change { Publication.count }.by 3
         end
 
@@ -98,7 +98,7 @@ describe PurePublicationImporter do
           expect(p3.issn).to eq '1051-0443'
 
           expect(p1.status).to eq 'Published'
-          expect(p2.status).to eq 'Published'
+          expect(p2.status).to eq 'Accepted/In press'
           expect(p3.status).to eq 'Published'
 
           expect(p1.published_on).to eq Date.new(1997, 1, 1)
@@ -256,11 +256,11 @@ describe PurePublicationImporter do
         context "when the existing publication record has not been manually updated" do
           let(:updated_ts) { nil }
 
-          it "creates a new publication import record for each new object in the imported data" do
+          it "creates a new publication import record for each new Published or Accepted/In press publication in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 2
           end
   
-          it "creates a new publication record for each new object in the imported data" do
+          it "creates a new publication record for each new Published or Accepted/In press publication in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 2
           end
   
@@ -382,7 +382,7 @@ describe PurePublicationImporter do
             expect(new_pub.issue).to eq '3'
             expect(new_pub.journal).to eq journal
             expect(new_pub.issn).to eq '0272-4634'
-            expect(new_pub.status).to eq 'Published'
+            expect(new_pub.status).to eq 'Accepted/In press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
@@ -415,11 +415,11 @@ describe PurePublicationImporter do
           let!(:new_journal) { create :journal,
                                       pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad' }
 
-          it "creates a new publication import record for each new object in the imported data" do
+          it "creates a new publication import record for each new Published or Accepted/In press publication in the imported data" do
             expect { importer.call }.to change { PublicationImport.count }.by 2
           end
 
-          it "creates a new publication record for each new object in the imported data" do
+          it "creates a new publication record for each new Published or Accepted/In press publication in the imported data" do
             expect { importer.call }.to change { Publication.count }.by 2
           end
 
@@ -548,7 +548,7 @@ describe PurePublicationImporter do
             expect(new_pub.issue).to eq '3'
             expect(new_pub.journal).to eq journal
             expect(new_pub.issn).to eq '0272-4634'
-            expect(new_pub.status).to eq 'Published'
+            expect(new_pub.status).to eq 'Accepted/In press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'

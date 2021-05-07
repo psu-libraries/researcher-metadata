@@ -725,12 +725,12 @@ describe ActivityInsightImporter do
       end
 
       context "when no included publications exist in the database" do
-        it "creates a new publication import record for every published publication w/o an RMD_ID in the imported data" do
-          expect { importer.call }.to change { PublicationImport.count }.by 3
+        it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+          expect { importer.call }.to change { PublicationImport.count }.by 4
         end
 
-        it "creates a new publication record for every published publication w/o an RMD_ID in the imported data" do
-          expect { importer.call }.to change { Publication.count }.by 3
+        it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+          expect { importer.call }.to change { Publication.count }.by 4
         end
         
         it "saves the correct data to the new publication records" do
@@ -742,6 +742,8 @@ describe ActivityInsightImporter do
                                          source_identifier: '171620739072').publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
+          p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190707482930').publication
 
           expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
           expect(p1.publication_type).to eq 'Journal Article'
@@ -798,6 +800,25 @@ describe ActivityInsightImporter do
           expect(p3.visible).to eq true
           expect(p3.updated_by_user_at).to eq nil
           expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+          expect(p4.title).to eq 'Journal Article In Press'
+          expect(p4.publication_type).to eq 'Journal Article'
+          expect(p4.journal_title).to eq 'Test Journal 1'
+          expect(p4.publisher_name).to eq 'Test Publisher 1'
+          expect(p4.secondary_title).to eq 'Subtitle 2'
+          expect(p4.status).to eq 'In Press'
+          expect(p4.volume).to eq '10'
+          expect(p4.issue).to eq '2'
+          expect(p4.edition).to eq '15'
+          expect(p4.page_range).to eq '1600-1655'
+          expect(p4.issn).to eq '6789-4321'
+          expect(p4.url).to eq nil
+          expect(p4.abstract).to eq 'Abstract.'
+          expect(p4.authors_et_al).to eq true
+          expect(p4.published_on).to eq Date.new(2019, 1, 2)
+          expect(p4.visible).to eq true
+          expect(p4.updated_by_user_at).to eq nil
+          expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
         end
 
         it "groups duplicates of new publication records" do
@@ -821,7 +842,7 @@ describe ActivityInsightImporter do
         end
 
         it "creates a new authorship record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { Authorship.count }.by 3
+          expect { importer.call }.to change { Authorship.count }.by 4
         end
 
         it "saves the correct attributes with each new authorship" do
@@ -834,9 +855,12 @@ describe ActivityInsightImporter do
                                          source_identifier: '171620739072').publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
+          p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190707482930').publication
           a1 = Authorship.find_by(publication: p1, user: u)
           a2 = Authorship.find_by(publication: p2, user: u)
           a3 = Authorship.find_by(publication: p3, user: u)
+          a4 = Authorship.find_by(publication: p4, user: u)
 
           expect(a1.author_number).to eq 2
           expect(a1.role).to eq 'Author'
@@ -846,10 +870,13 @@ describe ActivityInsightImporter do
 
           expect(a3.author_number).to eq 2
           expect(a3.role).to eq 'Author'
+
+          expect(a4.author_number).to eq 2
+          expect(a4.role).to eq 'Author'
         end
 
         it "creates a new contributor name record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { ContributorName.count }.by 7
+          expect { importer.call }.to change { ContributorName.count }.by 9
         end
 
         it "saves the correct attributes with each new contributor name" do
@@ -860,6 +887,8 @@ describe ActivityInsightImporter do
                                          source_identifier: '171620739072').publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
+          p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190707482930').publication
 
           expect(ContributorName.find_by(publication: p1,
                                          first_name: 'Elizabeth',
@@ -905,6 +934,19 @@ describe ActivityInsightImporter do
                                          last_name: 'Testuser',
                                          position: 2,
                                          role: 'Author')).not_to be_nil
+
+          expect(ContributorName.find_by(publication: p4,
+                                         first_name: 'Reggie',
+                                         middle_name: 'T.',
+                                         last_name: 'Testauthor',
+                                         position: 1,
+                                         role: 'Author')).not_to be_nil
+          expect(ContributorName.find_by(publication: p4,
+                                         first_name: 'Sally',
+                                         middle_name: nil,
+                                         last_name: 'Testuser',
+                                         position: 2,
+                                         role: 'Author')).not_to be_nil
         end
       end
       context "when an included publication exists in the database" do
@@ -934,12 +976,12 @@ describe ActivityInsightImporter do
         context "when the existing publication has been modified by an admin user" do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
 
-          it "creates a new publication import record for every new published journal article in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 2
+          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { PublicationImport.count }.by 3
           end
   
-          it "creates a new publication record for every new published journal article in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 2
+          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { Publication.count }.by 3
           end
           
           it "saves the correct data to the new publication records and does not update the existing record" do
@@ -951,6 +993,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1007,6 +1051,25 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+            expect(p4.title).to eq 'Journal Article In Press'
+            expect(p4.publication_type).to eq 'Journal Article'
+            expect(p4.journal_title).to eq 'Test Journal 1'
+            expect(p4.publisher_name).to eq 'Test Publisher 1'
+            expect(p4.secondary_title).to eq 'Subtitle 2'
+            expect(p4.status).to eq 'In Press'
+            expect(p4.volume).to eq '10'
+            expect(p4.issue).to eq '2'
+            expect(p4.edition).to eq '15'
+            expect(p4.page_range).to eq '1600-1655'
+            expect(p4.issn).to eq '6789-4321'
+            expect(p4.url).to eq nil
+            expect(p4.abstract).to eq 'Abstract.'
+            expect(p4.authors_et_al).to eq true
+            expect(p4.published_on).to eq Date.new(2019, 1, 2)
+            expect(p4.visible).to eq true
+            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
           it "groups duplicates of new publication records" do
@@ -1038,7 +1101,7 @@ describe ActivityInsightImporter do
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
 
             it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 2
+              expect { importer.call }.to change { Authorship.count }.by 3
             end
 
             it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -1051,10 +1114,13 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
-    
+              a4 = Authorship.find_by(publication: p4, user: u)
+
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
     
@@ -1063,12 +1129,15 @@ describe ActivityInsightImporter do
     
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
+
+              expect(a4.author_number).to eq 2
+              expect(a4.role).to eq 'Author'
             end
           end
 
           context "when no authorships exist for the existing publication" do
             it "creates a new authorship record for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 2
+              expect { importer.call }.to change { Authorship.count }.by 3
             end
     
             it "saves the correct attributes with each new authorship" do
@@ -1081,10 +1150,13 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
-    
+              a4 = Authorship.find_by(publication: p4, user: u)
+
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
     
@@ -1092,13 +1164,16 @@ describe ActivityInsightImporter do
     
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
+
+              expect(a4.author_number).to eq 2
+              expect(a4.role).to eq 'Author'
             end
           end
 
           let!(:existing_cont) { create :contributor_name, publication: existing_pub }
 
           it "creates a new contributor name record for every faculty author for each new imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 5
+            expect { importer.call }.to change { ContributorName.count }.by 7
           end
           
           it "does not remove any existing contributor names on the existing publication" do
@@ -1115,6 +1190,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -1167,18 +1244,31 @@ describe ActivityInsightImporter do
                                            position: 2,
                                            user: u,
                                            role: 'Author')).not_to be_nil
+
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Reggie',
+                                           middle_name: 'T.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
 
         context "when the existing publication has not been modified by an admin user" do
           let(:timestamp) { nil }
 
-          it "creates a new publication import record for every new published journal article in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 2
+          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { PublicationImport.count }.by 3
           end
   
-          it "creates a new publication record for every new published journal article in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 2
+          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { Publication.count }.by 3
           end
           
           it "saves the correct data to the new publication records and updates the existing record" do
@@ -1190,6 +1280,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1246,6 +1338,25 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+            expect(p4.title).to eq 'Journal Article In Press'
+            expect(p4.publication_type).to eq 'Journal Article'
+            expect(p4.journal_title).to eq 'Test Journal 1'
+            expect(p4.publisher_name).to eq 'Test Publisher 1'
+            expect(p4.secondary_title).to eq 'Subtitle 2'
+            expect(p4.status).to eq 'In Press'
+            expect(p4.volume).to eq '10'
+            expect(p4.issue).to eq '2'
+            expect(p4.edition).to eq '15'
+            expect(p4.page_range).to eq '1600-1655'
+            expect(p4.issn).to eq '6789-4321'
+            expect(p4.url).to eq nil
+            expect(p4.abstract).to eq 'Abstract.'
+            expect(p4.authors_et_al).to eq true
+            expect(p4.published_on).to eq Date.new(2019, 1, 2)
+            expect(p4.visible).to eq true
+            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
           it "groups duplicates of new publication records" do
@@ -1277,7 +1388,7 @@ describe ActivityInsightImporter do
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
 
             it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 2
+              expect { importer.call }.to change { Authorship.count }.by 3
             end
 
             it "saves the correct attributes with each new authorship and updates the existing authorship" do
@@ -1290,9 +1401,12 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
+              a4 = Authorship.find_by(publication: p4, user: u)
     
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
@@ -1302,12 +1416,15 @@ describe ActivityInsightImporter do
     
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
+
+              expect(a4.author_number).to eq 2
+              expect(a4.role).to eq 'Author'
             end
           end
 
           context "when no authorships exist for the existing publication" do
             it "creates a new authorship record for every new faculty author for each imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+              expect { importer.call }.to change { Authorship.count }.by 4
             end
     
             it "saves the correct attributes with each new authorship" do
@@ -1320,9 +1437,12 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
               a1 = Authorship.find_by(publication: p1, user: u)
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
+              a4 = Authorship.find_by(publication: p4, user: u)
     
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
@@ -1332,13 +1452,16 @@ describe ActivityInsightImporter do
 
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
+
+              expect(a4.author_number).to eq 2
+              expect(a4.role).to eq 'Author'
             end
           end
 
           let!(:existing_cont) { create :contributor_name, publication: existing_pub }
 
           it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 6
+            expect { importer.call }.to change { ContributorName.count }.by 8
           end
 
           it "removes any existing contributor names that are not in the new import" do
@@ -1356,6 +1479,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -1407,6 +1532,19 @@ describe ActivityInsightImporter do
                                            last_name: 'Testuser',
                                            position: 2,
                                            user: u,
+                                           role: 'Author')).not_to be_nil
+
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Reggie',
+                                           middle_name: 'T.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
                                            role: 'Author')).not_to be_nil
           end
         end
@@ -2147,12 +2285,12 @@ describe ActivityInsightImporter do
         end
 
         context "when no included publications exist in the database" do
-          it "creates a new publication import record for every published journal article in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 3
+          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { PublicationImport.count }.by 4
           end
   
-          it "creates a new publication record for every published journal article in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 3
+          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { Publication.count }.by 4
           end
           
           it "saves the correct data to the new publication records" do
@@ -2164,6 +2302,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -2220,6 +2360,25 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+            expect(p4.title).to eq 'Journal Article In Press'
+            expect(p4.publication_type).to eq 'Journal Article'
+            expect(p4.journal_title).to eq 'Test Journal 1'
+            expect(p4.publisher_name).to eq 'Test Publisher 1'
+            expect(p4.secondary_title).to eq 'Subtitle 2'
+            expect(p4.status).to eq 'In Press'
+            expect(p4.volume).to eq '10'
+            expect(p4.issue).to eq '2'
+            expect(p4.edition).to eq '15'
+            expect(p4.page_range).to eq '1600-1655'
+            expect(p4.issn).to eq '6789-4321'
+            expect(p4.url).to eq nil
+            expect(p4.abstract).to eq 'Abstract.'
+            expect(p4.authors_et_al).to eq true
+            expect(p4.published_on).to eq Date.new(2019, 1, 2)
+            expect(p4.visible).to eq true
+            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
           it "groups duplicates of new publication records" do
@@ -2243,7 +2402,7 @@ describe ActivityInsightImporter do
           end
   
           it "creates a new authorship record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Authorship.count }.by 3
+            expect { importer.call }.to change { Authorship.count }.by 4
           end
   
           it "saves the correct attributes with each new authorship" do
@@ -2256,9 +2415,12 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
             a1 = Authorship.find_by(publication: p1, user: u)
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
+            a4 = Authorship.find_by(publication: p4, user: u)
   
             expect(a1.author_number).to eq 2
             expect(a1.role).to eq 'Author'
@@ -2268,10 +2430,13 @@ describe ActivityInsightImporter do
   
             expect(a3.author_number).to eq 2
             expect(a3.role).to eq 'Author'
+
+            expect(a4.author_number).to eq 2
+            expect(a4.role).to eq 'Author'
           end
   
           it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 7
+            expect { importer.call }.to change { ContributorName.count }.by 9
           end
   
           it "saves the correct attributes with each new contributor name" do
@@ -2282,6 +2447,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -2327,6 +2494,19 @@ describe ActivityInsightImporter do
                                            last_name: 'Testuser',
                                            position: 2,
                                            role: 'Author')).not_to be_nil
+
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Reggie',
+                                           middle_name: 'T.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
         context "when an included publication exists in the database" do
@@ -2356,12 +2536,12 @@ describe ActivityInsightImporter do
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 2
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { Publication.count }.by 3
             end
             
             it "saves the correct data to the new publication records and does not update the existing record" do
@@ -2373,6 +2553,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -2429,6 +2611,25 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+              expect(p4.title).to eq 'Journal Article In Press'
+              expect(p4.publication_type).to eq 'Journal Article'
+              expect(p4.journal_title).to eq 'Test Journal 1'
+              expect(p4.publisher_name).to eq 'Test Publisher 1'
+              expect(p4.secondary_title).to eq 'Subtitle 2'
+              expect(p4.status).to eq 'In Press'
+              expect(p4.volume).to eq '10'
+              expect(p4.issue).to eq '2'
+              expect(p4.edition).to eq '15'
+              expect(p4.page_range).to eq '1600-1655'
+              expect(p4.issn).to eq '6789-4321'
+              expect(p4.url).to eq nil
+              expect(p4.abstract).to eq 'Abstract.'
+              expect(p4.authors_et_al).to eq true
+              expect(p4.published_on).to eq Date.new(2019, 1, 2)
+              expect(p4.visible).to eq true
+              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
             it "groups duplicates of new publication records" do
@@ -2459,7 +2660,7 @@ describe ActivityInsightImporter do
                                                    author_number: 6 }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -2472,10 +2673,13 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
-      
+                a4 = Authorship.find_by(publication: p4, user: u)
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
       
@@ -2484,12 +2688,15 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             context "when no authorships exist for the existing publication" do
               it "creates a new authorship record for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
       
               it "saves the correct attributes with each new authorship" do
@@ -2502,9 +2709,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -2513,13 +2723,16 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
             it "creates a new contributor name record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 5
+              expect { importer.call }.to change { ContributorName.count }.by 7
             end
             
             it "does not remove any existing contributor names on the existing publication" do
@@ -2538,6 +2751,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -2590,18 +2805,31 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: u,
                                              role: 'Author')).not_to be_nil
+
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Reggie',
+                                             middle_name: 'T.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
   
           context "when the existing publication has not been modified by an admin user" do
             let(:timestamp) { nil }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 2
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { Publication.count }.by 3
             end
             
             it "saves the correct data to the new publication records and updates the existing record" do
@@ -2613,6 +2841,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -2669,6 +2899,25 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+              expect(p4.title).to eq 'Journal Article In Press'
+              expect(p4.publication_type).to eq 'Journal Article'
+              expect(p4.journal_title).to eq 'Test Journal 1'
+              expect(p4.publisher_name).to eq 'Test Publisher 1'
+              expect(p4.secondary_title).to eq 'Subtitle 2'
+              expect(p4.status).to eq 'In Press'
+              expect(p4.volume).to eq '10'
+              expect(p4.issue).to eq '2'
+              expect(p4.edition).to eq '15'
+              expect(p4.page_range).to eq '1600-1655'
+              expect(p4.issn).to eq '6789-4321'
+              expect(p4.url).to eq nil
+              expect(p4.abstract).to eq 'Abstract.'
+              expect(p4.authors_et_al).to eq true
+              expect(p4.published_on).to eq Date.new(2019, 1, 2)
+              expect(p4.visible).to eq true
+              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
             it "groups duplicates of new publication records" do
@@ -2699,7 +2948,7 @@ describe ActivityInsightImporter do
                                                    author_number: 6 }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
 
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
@@ -2712,9 +2961,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -2724,12 +2976,15 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             context "when no authorships exist for the existing publication" do
               it "creates a new authorship record for every new faculty author for each imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+                expect { importer.call }.to change { Authorship.count }.by 4
               end
       
               it "saves the correct attributes with each new authorship" do
@@ -2742,9 +2997,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -2754,13 +3012,16 @@ describe ActivityInsightImporter do
   
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
             it "creates a new contributor name record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 6
+              expect { importer.call }.to change { ContributorName.count }.by 8
             end
   
             it "removes any existing contributor names that are not in the new import" do
@@ -2778,6 +3039,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -2829,6 +3092,19 @@ describe ActivityInsightImporter do
                                              last_name: 'Testuser',
                                              position: 2,
                                              user: u,
+                                             role: 'Author')).not_to be_nil
+
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Reggie',
+                                             middle_name: 'T.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
                                              role: 'Author')).not_to be_nil
             end
           end
@@ -3548,12 +3824,12 @@ describe ActivityInsightImporter do
         end
 
         context "when no included publications exist in the database" do
-          it "creates a new publication import record for every published journal article in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 3
+          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { PublicationImport.count }.by 4
           end
   
-          it "creates a new publication record for every published journal article in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 3
+          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
+            expect { importer.call }.to change { Publication.count }.by 4
           end
           
           it "saves the correct data to the new publication records" do
@@ -3565,6 +3841,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -3621,6 +3899,25 @@ describe ActivityInsightImporter do
             expect(p3.visible).to eq true
             expect(p3.updated_by_user_at).to eq nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+            expect(p4.title).to eq 'Journal Article In Press'
+            expect(p4.publication_type).to eq 'Journal Article'
+            expect(p4.journal_title).to eq 'Test Journal 1'
+            expect(p4.publisher_name).to eq 'Test Publisher 1'
+            expect(p4.secondary_title).to eq 'Subtitle 2'
+            expect(p4.status).to eq 'In Press'
+            expect(p4.volume).to eq '10'
+            expect(p4.issue).to eq '2'
+            expect(p4.edition).to eq '15'
+            expect(p4.page_range).to eq '1600-1655'
+            expect(p4.issn).to eq '6789-4321'
+            expect(p4.url).to eq nil
+            expect(p4.abstract).to eq 'Abstract.'
+            expect(p4.authors_et_al).to eq true
+            expect(p4.published_on).to eq Date.new(2019, 1, 2)
+            expect(p4.visible).to eq true
+            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
   
           it "groups duplicates of new publication records" do
@@ -3643,7 +3940,7 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
           end
           it "creates a new authorship record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Authorship.count }.by 3
+            expect { importer.call }.to change { Authorship.count }.by 4
           end
   
           it "saves the correct attributes with each new authorship" do
@@ -3656,9 +3953,12 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
             a1 = Authorship.find_by(publication: p1, user: u)
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
+            a4 = Authorship.find_by(publication: p4, user: u)
   
             expect(a1.author_number).to eq 2
             expect(a1.role).to eq 'Author'
@@ -3668,10 +3968,13 @@ describe ActivityInsightImporter do
   
             expect(a3.author_number).to eq 2
             expect(a3.role).to eq 'Author'
+
+            expect(a4.author_number).to eq 2
+            expect(a4.role).to eq 'Author'
           end
   
           it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 7
+            expect { importer.call }.to change { ContributorName.count }.by 9
           end
   
           it "saves the correct attributes with each new contributor name" do
@@ -3682,6 +3985,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '171620739072').publication
             p3 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '92747188475').publication
+            p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '190707482930').publication
   
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
@@ -3727,6 +4032,19 @@ describe ActivityInsightImporter do
                                            last_name: 'Testuser',
                                            position: 2,
                                            role: 'Author')).not_to be_nil
+
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Reggie',
+                                           middle_name: 'T.',
+                                           last_name: 'Testauthor',
+                                           position: 1,
+                                           role: 'Author')).not_to be_nil
+            expect(ContributorName.find_by(publication: p4,
+                                           first_name: 'Sally',
+                                           middle_name: nil,
+                                           last_name: 'Testuser',
+                                           position: 2,
+                                           role: 'Author')).not_to be_nil
           end
         end
         context "when an included publication exists in the database" do
@@ -3756,12 +4074,12 @@ describe ActivityInsightImporter do
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 2
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { Publication.count }.by 3
             end
             
             it "saves the correct data to the new publication records and does not update the existing record" do
@@ -3773,6 +4091,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -3829,6 +4149,25 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+              expect(p4.title).to eq 'Journal Article In Press'
+              expect(p4.publication_type).to eq 'Journal Article'
+              expect(p4.journal_title).to eq 'Test Journal 1'
+              expect(p4.publisher_name).to eq 'Test Publisher 1'
+              expect(p4.secondary_title).to eq 'Subtitle 2'
+              expect(p4.status).to eq 'In Press'
+              expect(p4.volume).to eq '10'
+              expect(p4.issue).to eq '2'
+              expect(p4.edition).to eq '15'
+              expect(p4.page_range).to eq '1600-1655'
+              expect(p4.issn).to eq '6789-4321'
+              expect(p4.url).to eq nil
+              expect(p4.abstract).to eq 'Abstract.'
+              expect(p4.authors_et_al).to eq true
+              expect(p4.published_on).to eq Date.new(2019, 1, 2)
+              expect(p4.visible).to eq true
+              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
   
             it "groups duplicates of new publication records" do
@@ -3859,7 +4198,7 @@ describe ActivityInsightImporter do
                                                    author_number: 6 }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
   
               it "saves the correct attributes with each new authorship and does not update the existing authorship" do
@@ -3872,9 +4211,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -3884,12 +4226,15 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             context "when no authorships exist for the existing publication" do
               it "creates a new authorship record for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
       
               it "saves the correct attributes with each new authorship" do
@@ -3902,9 +4247,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -3913,13 +4261,16 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
             it "creates a new contributor name record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 5
+              expect { importer.call }.to change { ContributorName.count }.by 7
             end
             
             it "does not remove any existing contributor names on the existing publication" do
@@ -3937,6 +4288,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -3989,18 +4342,31 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: u,
                                              role: 'Author')).not_to be_nil
+
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Reggie',
+                                             middle_name: 'T.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
+                                             role: 'Author')).not_to be_nil
             end
           end
   
           context "when the existing publication has not been modified by an admin user" do
             let(:timestamp) { nil }
   
-            it "creates a new publication import record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { PublicationImport.count }.by 3
             end
     
-            it "creates a new publication record for every new published journal article in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 2
+            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
+              expect { importer.call }.to change { Publication.count }.by 3
             end
             
             it "saves the correct data to the new publication records and updates the existing record" do
@@ -4012,6 +4378,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
@@ -4068,6 +4436,25 @@ describe ActivityInsightImporter do
               expect(p3.visible).to eq true
               expect(p3.updated_by_user_at).to eq nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+
+              expect(p4.title).to eq 'Journal Article In Press'
+              expect(p4.publication_type).to eq 'Journal Article'
+              expect(p4.journal_title).to eq 'Test Journal 1'
+              expect(p4.publisher_name).to eq 'Test Publisher 1'
+              expect(p4.secondary_title).to eq 'Subtitle 2'
+              expect(p4.status).to eq 'In Press'
+              expect(p4.volume).to eq '10'
+              expect(p4.issue).to eq '2'
+              expect(p4.edition).to eq '15'
+              expect(p4.page_range).to eq '1600-1655'
+              expect(p4.issn).to eq '6789-4321'
+              expect(p4.url).to eq nil
+              expect(p4.abstract).to eq 'Abstract.'
+              expect(p4.authors_et_al).to eq true
+              expect(p4.published_on).to eq Date.new(2019, 1, 2)
+              expect(p4.visible).to eq true
+              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
             it "groups duplicates of new publication records" do
@@ -4098,7 +4485,7 @@ describe ActivityInsightImporter do
                                                    author_number: 6 }
 
               it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 2
+                expect { importer.call }.to change { Authorship.count }.by 3
               end
   
               it "saves the correct attributes with each new authorship and updates the existing authorship" do
@@ -4111,9 +4498,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -4123,12 +4513,15 @@ describe ActivityInsightImporter do
       
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             context "when no authorships already exist for the existing publication" do
               it "creates a new authorship record for every new faculty author for each imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+                expect { importer.call }.to change { Authorship.count }.by 4
               end
       
               it "saves the correct attributes with each new authorship" do
@@ -4141,9 +4534,12 @@ describe ActivityInsightImporter do
                                                source_identifier: '171620739072').publication
                 p3 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '92747188475').publication
+                p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                               source_identifier: '190707482930').publication
                 a1 = Authorship.find_by(publication: p1, user: u)
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
+                a4 = Authorship.find_by(publication: p4, user: u)
       
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
@@ -4153,13 +4549,16 @@ describe ActivityInsightImporter do
   
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
+
+                expect(a4.author_number).to eq 2
+                expect(a4.role).to eq 'Author'
               end
             end
   
             let!(:existing_cont) { create :contributor_name, publication: existing_pub }
   
             it "creates a new contributor name record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 6
+              expect { importer.call }.to change { ContributorName.count }.by 8
             end
   
             it "removes any existing contributor names that are not in the new import" do
@@ -4177,6 +4576,8 @@ describe ActivityInsightImporter do
                                              source_identifier: '171620739072').publication
               p3 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '92747188475').publication
+              p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                             source_identifier: '190707482930').publication
     
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
@@ -4228,6 +4629,19 @@ describe ActivityInsightImporter do
                                              last_name: 'Testuser',
                                              position: 2,
                                              user: u,
+                                             role: 'Author')).not_to be_nil
+
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Reggie',
+                                             middle_name: 'T.',
+                                             last_name: 'Testauthor',
+                                             position: 1,
+                                             role: 'Author')).not_to be_nil
+              expect(ContributorName.find_by(publication: p4,
+                                             first_name: 'Sally',
+                                             middle_name: nil,
+                                             last_name: 'Testuser',
+                                             position: 2,
                                              role: 'Author')).not_to be_nil
             end
           end

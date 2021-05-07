@@ -9,6 +9,7 @@ class PurePublicationImporter < PureImporter
       pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
       pubs['items'].each do |publication|
+        next unless importable?(publication)
 
         ActiveRecord::Base.transaction do
           pi = PublicationImport.find_by(source: IMPORT_SOURCE,
@@ -108,7 +109,7 @@ class PurePublicationImporter < PureImporter
       issue: publication['journalNumber'],
       journal: journal_present?(publication) ? journal(publication) : nil,
       issn: journal_present?(publication) ? issn(publication) : nil,
-      status: status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value'],
+      status: status_value(publication),
       published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
                              published_month(publication),
                              published_day(publication)),
@@ -125,6 +126,10 @@ class PurePublicationImporter < PureImporter
 
   def status(publication)
     publication['publicationStatuses'].detect { |s| s['current'] == true }
+  end
+
+  def status_value(publication)
+    status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value']
   end
 
   def published_month(publication)
@@ -159,5 +164,9 @@ class PurePublicationImporter < PureImporter
 
   def journal_present?(publication)
     publication['journalAssociation'].present?
+  end
+
+  def importable?(publication)
+    status_value(publication) == 'Published' || status_value(publication) == 'Accepted/In press'
   end
 end
