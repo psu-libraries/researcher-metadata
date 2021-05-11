@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_05_133643) do
+ActiveRecord::Schema.define(version: 2021_05_11_183837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -88,7 +88,9 @@ ActiveRecord::Schema.define(version: 2021_04_05_133643) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "role"
+    t.bigint "user_id"
     t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
+    t.index ["user_id"], name: "index_contributor_names_on_user_id"
   end
 
   create_table "delayed_jobs", force: :cascade do |t|
@@ -415,6 +417,32 @@ ActiveRecord::Schema.define(version: 2021_04_05_133643) do
     t.index ["user_id"], name: "index_researcher_funds_on_user_id"
   end
 
+  create_table "scholarsphere_file_uploads", force: :cascade do |t|
+    t.string "file"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.integer "scholarsphere_work_deposit_id"
+    t.index ["scholarsphere_work_deposit_id"], name: "scholarsphere_file_uploads_on_deposit_id"
+  end
+
+  create_table "scholarsphere_work_deposits", force: :cascade do |t|
+    t.bigint "authorship_id"
+    t.string "status"
+    t.text "error_message"
+    t.datetime "deposited_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "title"
+    t.text "description"
+    t.date "published_date"
+    t.string "rights"
+    t.date "embargoed_until"
+    t.string "doi"
+    t.text "subtitle"
+    t.string "publisher"
+    t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
+  end
+
   create_table "statistics_snapshots", force: :cascade do |t|
     t.integer "total_article_count"
     t.integer "open_access_article_count"
@@ -513,6 +541,8 @@ ActiveRecord::Schema.define(version: 2021_04_05_133643) do
     t.integer "orcid_access_token_expires_in"
     t.string "authenticated_orcid_identifier"
     t.datetime "open_access_notification_sent_at"
+    t.string "provider"
+    t.string "uid"
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
@@ -529,6 +559,7 @@ ActiveRecord::Schema.define(version: 2021_04_05_133643) do
   add_foreign_key "committee_memberships", "users", on_delete: :cascade
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributor_names", "publications", on_delete: :cascade
+  add_foreign_key "contributor_names", "users"
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
@@ -554,6 +585,8 @@ ActiveRecord::Schema.define(version: 2021_04_05_133643) do
   add_foreign_key "research_funds", "publications", name: "research_funds_publication_id_fk", on_delete: :cascade
   add_foreign_key "researcher_funds", "grants", name: "research_funds_grant_id_fk", on_delete: :cascade
   add_foreign_key "researcher_funds", "users", name: "research_funds_user_id_fk", on_delete: :cascade
+  add_foreign_key "scholarsphere_file_uploads", "scholarsphere_work_deposits", name: "scholarsphere_file_uploads_deposit_id_fk"
+  add_foreign_key "scholarsphere_work_deposits", "authorships"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
   add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade
