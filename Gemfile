@@ -48,6 +48,11 @@ gem 'rails_admin_toggleable'
 # Authentication framework
 gem 'devise', '~> 4.8'
 
+# Support for Penn State Azure Active Directory authentication
+gem 'omniauth', '~> 2.0'
+gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth-rails_csrf_protection', '~> 1.0'
+
 # Authorization framework
 gem 'cancancan', '~> 2.0'
 
