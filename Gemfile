@@ -46,7 +46,7 @@ gem "rails_admin", "~> 1.4"
 gem 'rails_admin_toggleable'
 
 # Authentication framework
-gem 'devise'
+gem 'devise', '~> 4.8'
 
 # Authorization framework
 gem 'cancancan', '~> 2.0'
