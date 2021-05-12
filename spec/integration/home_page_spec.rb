@@ -42,6 +42,10 @@ feature "Home page", type: :feature do
       expect(page).not_to have_link 'Admin'
     end
 
+    it "shows a sign out link" do
+      expect(page).to have_link 'Sign out', href: destroy_user_session_path
+    end
+
     it_behaves_like "a page with the public layout"
   end
 
@@ -71,6 +75,10 @@ feature "Home page", type: :feature do
       expect(page).to have_link 'Admin', href: rails_admin_path
     end
 
+    it "shows a sign out link" do
+      expect(page).to have_link 'Sign out', href: destroy_user_session_path
+    end
+
     it_behaves_like "a page with the public layout"
   end
 
@@ -95,6 +103,10 @@ feature "Home page", type: :feature do
 
     it "does not show a link to the admin interface" do
       expect(page).not_to have_link 'Admin'
+    end
+
+    it "does not show a sign out link" do
+      expect(page).not_to have_link 'Sign out'
     end
 
     it_behaves_like "a page with the public layout"
