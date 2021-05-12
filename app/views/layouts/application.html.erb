@@ -27,6 +27,13 @@
           <li class="nav-item">
             <%= link_to "Home", root_path, class: "nav-link" %>
           </li>
+          <li>
+            <% if current_user %>
+              <%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %>
+            <% else %>
+              <%= button_to "Sign in", user_azure_oauth_omniauth_authorize_path, class: "nav-link" %>
+            <% end %>
+          </li>
         </ul>
       </div>
     </nav>

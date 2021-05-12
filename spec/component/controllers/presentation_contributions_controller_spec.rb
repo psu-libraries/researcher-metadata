@@ -4,10 +4,16 @@ describe PresentationContributionsController, type: :controller do
 
   describe '#update' do
     context "when not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         put :update, params: {id: 1}
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        put :update, params: {id: 1}
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
 
@@ -21,7 +27,10 @@ describe PresentationContributionsController, type: :controller do
                                    role: 'existing role' }
       let!(:other_contribution) { create :presentation_contribution, user: other_user }
 
-      before { authenticate_as(user) }
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
 
       context "when given the ID for a presentation contribution that does not belong to the user" do
         it "returns 404" do
@@ -51,10 +60,16 @@ describe PresentationContributionsController, type: :controller do
 
   describe '#sort' do
     context "when not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         put :sort
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        put :sort
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
 
@@ -68,8 +83,11 @@ describe PresentationContributionsController, type: :controller do
       let!(:contribution_4) { create :presentation_contribution, user: user }
       let!(:other_contribution) { create :presentation_contribution, user: other_user }
 
-      before { authenticate_as(user) }
-
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+      
       context "when given no presentation contribution IDs" do
         it "returns 404" do
           expect { put :sort }.to raise_error ActiveRecord::RecordNotFound

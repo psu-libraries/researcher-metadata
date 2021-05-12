@@ -11,7 +11,8 @@ describe OrcidWorksController, type: :controller do
         allow(OrcidWork).to receive(:new).with(authorship).and_return(work)
         allow(user).to receive_message_chain(:authorships, :find).and_return(authorship)
         allow(Time).to receive(:current).and_return(now)
-        authenticate_as(user)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
         post :create
       end
       context "when the user has an authorship" do
@@ -93,9 +94,14 @@ describe OrcidWorksController, type: :controller do
     end
 
     context "when the user is not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         post :create
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        post :create
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

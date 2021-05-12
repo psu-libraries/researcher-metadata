@@ -4,10 +4,16 @@ describe ScholarsphereUploadsController, type: :controller do
 
   describe '#create' do
     context "when not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         post :create, params: {id: 1}
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        post :create, params: {id: 1}
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
 
@@ -52,7 +58,8 @@ describe ScholarsphereUploadsController, type: :controller do
                authorship: waived_auth
         create :internal_publication_waiver,
                authorship: other_waived_auth
-        authenticate_as(user)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
       end
 
       context "when given the ID for a publication that does not belong to the user" do

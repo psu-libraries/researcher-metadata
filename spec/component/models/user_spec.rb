@@ -235,6 +235,10 @@ describe User, type: :model do
     end
   end
 
+  describe '.from_omniauth' do
+    xit
+  end
+
   describe '.find_all_by_wos_pub' do
     let(:wp) { double 'Web of Science publication',
                       orcids: ['orcid123', 'orcid456', 'orcid789'],

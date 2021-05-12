@@ -11,7 +11,8 @@ describe OrcidEmploymentsController, type: :controller do
         allow(user).to receive(:user_organization_memberships).and_return(membership_collection)
         allow(membership_collection).to receive(:find).with('2').and_return(membership)
         allow(OrcidEmployment).to receive(:new).with(membership).and_return(employment)
-        authenticate_as(user)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
         post :create, params: {membership_id: '2'}
       end
       context "when the user has a primary organization membership" do
@@ -93,9 +94,14 @@ describe OrcidEmploymentsController, type: :controller do
     end
 
     context "when the user is not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         post :create, params: {membership_id: '2'}
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        post :create, params: {membership_id: '2'}
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

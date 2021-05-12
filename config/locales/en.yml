@@ -82,3 +82,6 @@ en:
         url_response: "is invalid or is unavailable at this time."
     activity_insight_publication_exporter:
       bugsnag_message: "An error was detected during an export to Activity Insight.  Refer to 'log/ai_publication_export.log' for details"
+  omniauth:
+    login_error: "There was an error while attempting to log in to your account. Please contact RMD support for assistance."
+    user_not_found: "You do not have a user account in the Researcher Metadata Database. Please contact RMD support if you believe that this is incorrect."

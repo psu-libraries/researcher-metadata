@@ -1,4 +1,6 @@
 class User < ApplicationRecord
+  class OmniauthError < RuntimeError; end
+
   include Swagger::Blocks
 
   before_validation :downcase_webaccess_id,
@@ -6,12 +8,7 @@ class User < ApplicationRecord
                     :convert_blank_pure_id_to_nil,
                     :convert_blank_ai_id_to_nil
 
-  Devise.add_module(:http_header_authenticatable,
-                    strategy: true,
-                    controller: 'user/sessions',
-                    model: 'devise/models/http_header_authenticatable')
-
-  devise :http_header_authenticatable
+  devise :omniauthable, omniauth_providers: %i[azure_oauth]
 
   validates :webaccess_id, presence: true, uniqueness: { case_sensitive: false }
   validates :activity_insight_identifier,
@@ -41,6 +38,12 @@ class User < ApplicationRecord
   has_many :external_publication_waivers
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
+
+  def self.from_omniauth(auth)
+    User.find_by!(webaccess_id: auth.uid)
+  rescue ActiveRecord::RecordNotFound
+    raise OmniauthError
+  end
 
   def self.find_all_by_wos_pub(pub)
     users = []

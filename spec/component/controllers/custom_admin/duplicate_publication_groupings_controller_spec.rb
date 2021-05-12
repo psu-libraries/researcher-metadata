@@ -4,7 +4,11 @@ describe CustomAdmin::DuplicatePublicationGroupingsController, type: :controller
   let!(:user) { create :user }
   describe '#create' do
     context "when authenticated as an admin" do
-      before { authenticate_admin_user }
+      before do
+        user = User.new(is_admin: true)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
       it "redirects to the user detail page" do
         post :create, params: { user_id: user.id }
 
@@ -13,7 +17,11 @@ describe CustomAdmin::DuplicatePublicationGroupingsController, type: :controller
     end
 
     context "when authenticated as a non-admin user" do
-      before { authenticate_user }
+      before do
+        user = User.new(is_admin: false)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
       it "redirects back to the home page with an error message" do
         post :create, params: { user_id: user.id }
 
@@ -23,10 +31,10 @@ describe CustomAdmin::DuplicatePublicationGroupingsController, type: :controller
     end
 
     context "when not authenticated" do
-      it "redirects to the admin sign in page" do
+      it "redirects to the home page" do
         post :create, params: { user_id: user.id }
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
 
       it "shows an error message" do

@@ -5,7 +5,10 @@ describe OrcidAccessTokensController, type: :controller do
   describe '#new' do
     context "when the user is authenticated" do
       let!(:user) { create :user, orcid_access_token: token }
-      before { authenticate_as(user) }
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
 
       context "when the user already has an ORCID access token" do
         let(:token) { "abc123" }
@@ -35,10 +38,16 @@ describe OrcidAccessTokensController, type: :controller do
     end
 
     context "when the user is not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         post :new
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        post :new
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end
@@ -65,7 +74,8 @@ describe OrcidAccessTokensController, type: :controller do
 
       let!(:user) { create :user }
       before do
-        authenticate_as(user)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
         post :create, params: {code: 'abc123'}
       end
       
@@ -117,10 +127,16 @@ describe OrcidAccessTokensController, type: :controller do
     end
 
     context "when the user is not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         get :create
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+
+      it "sets a flash error message" do
+        get :create
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end
