@@ -236,7 +236,22 @@ describe User, type: :model do
   end
 
   describe '.from_omniauth' do
-    xit
+    let(:auth) { double 'auth', uid: uid }
+    let!(:user) { create :user, webaccess_id: 'abc123' }
+
+    context "when given an auth object with a UID matching a user in the database" do
+      let(:uid) { 'abc123' }
+      it "returns the matching user" do
+        expect(User.from_omniauth(auth)).to eq user
+      end
+    end
+
+    context "when given an auth object with a UID that does not match a user in the database" do
+      let(:uid) { 'xyz789' }
+      it "raises an error" do
+        expect { User.from_omniauth(auth) }.to raise_error User::OmniauthError
+      end
+    end
   end
 
   describe '.find_all_by_wos_pub' do
