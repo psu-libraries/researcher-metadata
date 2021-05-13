@@ -63,9 +63,7 @@ describe Users::OmniauthCallbacksController, type: :controller do
 
         it "sends the user to an external site" do
           get :azure_oauth
-          expect(response.status).to eq 302
-          expect(response).not_to redirect_to root_path
-          expect(response).not_to redirect_to profile_bio_path
+          expect(response).to redirect_to "https://sites.psu.edu/openaccess/waiver-form/"
         end
       end
 
@@ -74,9 +72,7 @@ describe Users::OmniauthCallbacksController, type: :controller do
 
         it "sends the user to an external site" do
           get :azure_oauth
-          expect(response.status).to eq 302
-          expect(response).not_to redirect_to root_path
-          expect(response).not_to redirect_to new_external_publication_waiver_path
+          expect(response).to redirect_to "https://sites.psu.edu/openaccess/waiver-form/"
         end
       end
     end
