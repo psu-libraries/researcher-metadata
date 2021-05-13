@@ -1,6 +1,6 @@
 test:
   client_secret: test-azure-oauth-client-secret
   client_id: test-azure-oauth-client-id
-  oauth_app_url: https://login.microsoftonline.com/
+  oauth_app_url: http://example.test
   oauth_token_url: /test/oauth2/v2.0/token
   oauth_authorize_url: /test/oauth2/v2.0/authorize
