@@ -40,6 +40,13 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
   def self.from_omniauth(auth)
+    # We've added `uid` and `provider` fields to this model to support
+    # multi-provider omniauth, but in reality, we're only using one provider
+    # (Azure Active Directory), and we already have all of our users and their IDs
+    # (stored in the existing `webaccess_id` field). Additionally, at least for now,
+    # we're not provisioning new users from Azure AD. So we don't really have a need
+    # to use these new fields or to rearrange our user model to allow for other
+    # authentication providers or for provisioning.
     User.find_by!(webaccess_id: auth.uid)
   rescue ActiveRecord::RecordNotFound
     raise OmniauthError
