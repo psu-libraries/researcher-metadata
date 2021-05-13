@@ -22,4 +22,8 @@ shared_examples_for "a profile management page" do
   it "shows a link to the edit profile performances page" do
     expect(page).to have_link "Performances", href: edit_profile_performances_path
   end
+
+  it "shows a sign out link" do
+    expect(page).to have_link "Sign out", href: destroy_user_session_path
+  end
 end

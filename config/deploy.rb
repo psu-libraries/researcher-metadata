@@ -27,6 +27,7 @@ set :shared, %w{
   config/orcid.yml
   config/pure.yml
   config/scholarsphere-client.yml
+  config/azure_ad_oauth.yml
   db/data
   uploads
   tmp

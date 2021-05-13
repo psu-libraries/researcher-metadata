@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_04_29_141455) do
+ActiveRecord::Schema.define(version: 2021_05_11_183837) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -541,6 +541,8 @@ ActiveRecord::Schema.define(version: 2021_04_29_141455) do
     t.integer "orcid_access_token_expires_in"
     t.string "authenticated_orcid_identifier"
     t.datetime "open_access_notification_sent_at"
+    t.string "provider"
+    t.string "uid"
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"

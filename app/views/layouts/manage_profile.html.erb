@@ -31,6 +31,7 @@
       <li class="nav-item"><%= link_to "Home", root_path, class: 'nav-link' %></li>
       <li class="nav-item"><%= link_to "Public Profile", profile_path(webaccess_id: current_user.webaccess_id), class: 'nav-link' %></li>
       <li class="nav-item"><%= link_to "Support", 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support', target: '_blank', class: 'nav-link' %></li>
+      <li class="nav-item"><%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %></li>
     </ul>
   </nav>
   <% if flash[:alert].present? %>

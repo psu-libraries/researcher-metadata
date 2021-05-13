@@ -43,6 +43,8 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:orcid_access_token_expires_in).of_type(:integer) }
   it { is_expected.to have_db_column(:authenticated_orcid_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:uid).of_type(:string) }
+  it { is_expected.to have_db_column(:provider).of_type(:string) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
@@ -231,6 +233,25 @@ describe User, type: :model do
     it "also deletes the user's researcher_funds" do
       u.destroy
       expect { f.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe '.from_omniauth' do
+    let(:auth) { double 'auth', uid: uid }
+    let!(:user) { create :user, webaccess_id: 'abc123' }
+
+    context "when given an auth object with a UID matching a user in the database" do
+      let(:uid) { 'abc123' }
+      it "returns the matching user" do
+        expect(User.from_omniauth(auth)).to eq user
+      end
+    end
+
+    context "when given an auth object with a UID that does not match a user in the database" do
+      let(:uid) { 'xyz789' }
+      it "raises an error" do
+        expect { User.from_omniauth(auth) }.to raise_error User::OmniauthError
+      end
     end
   end
 

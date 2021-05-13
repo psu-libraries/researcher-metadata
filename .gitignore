@@ -33,6 +33,7 @@
 /config/orcid.yml
 /config/pure.yml
 /config/scholarsphere-client.yml
+/config/azure_ad_oauth.yml
 
 # Ignore files uploaded through the app
 /uploads

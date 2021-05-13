@@ -3,15 +3,15 @@ Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
   mount SwaggerUiEngine::Engine, at: "/api_docs"
 
-  devise_for :users
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_scope :user do
+    match 'sign_out', to: 'devise/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
+  end
 
   post 'admin/user/:user_id/duplicate_publication_groupings' => 'custom_admin/duplicate_publication_groupings#create', as: :admin_user_duplicate_publication_groupings
   post 'admin/duplicate_publication_group/:duplicate_publication_group_id/merge' => 'custom_admin/publication_merges#create', as: :admin_duplicate_publication_group_merge
   delete 'admin/duplicate_publication_group/:id' => 'custom_admin/duplicate_publication_groups#delete', as: :admin_duplicate_publication_group
   post 'admin/external_publication_waivers/:external_publication_waiver_id/link' => 'custom_admin/publication_waiver_links#create', as: :admin_publication_waiver_link
-
-  get '/user/sign_in' => 'user/sessions#new', as: :new_user_session
-  match '/user/sign_out', to: 'user/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
 
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources

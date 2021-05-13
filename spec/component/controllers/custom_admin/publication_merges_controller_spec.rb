@@ -7,7 +7,11 @@ describe CustomAdmin::PublicationMergesController, type: :controller do
 
   describe '#create' do
     context "when authenticated as an admin" do
-      before { authenticate_admin_user }
+      before do
+        user = User.new(is_admin: true)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
       it "redirects to the given duplicate publication group" do
         post :create, params: {duplicate_publication_group_id: group.id,
                                selected_publication_ids: [pub1.id],
@@ -18,7 +22,11 @@ describe CustomAdmin::PublicationMergesController, type: :controller do
     end
 
     context "when authenticated as a non-admin user" do
-      before { authenticate_user }
+      before do
+        user = User.new(is_admin: false)
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
       it "redirects back to the home page with an error message" do
         post :create, params: {duplicate_publication_group_id: group.id,
                                selected_publication_ids: [pub1.id],
@@ -30,12 +38,12 @@ describe CustomAdmin::PublicationMergesController, type: :controller do
     end
 
     context "when not authenticated" do
-      it "redirects to the admin sign in page" do
+      it "redirects to the home page" do
         post :create, params: {duplicate_publication_group_id: group.id,
                                selected_publication_ids: [pub1.id],
                                merge_target_publication_id: pub2.id}
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
       end
 
       it "shows an error message" do

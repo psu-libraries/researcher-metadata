@@ -4,10 +4,15 @@ describe AuthorshipsController, type: :controller do
 
   describe '#update' do
     context "when not authenticated" do
-      it "redirects to the sign in page" do
+      it "redirects to the home page" do
         put :update, params: {id: 1}
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+      it "sets a flash error message" do
+        put :update, params: {id: 1}
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
 
@@ -21,7 +26,10 @@ describe AuthorshipsController, type: :controller do
                                  author_number: 1 }
       let!(:other_authorship) { create :authorship, user: other_user }
 
-      before { authenticate_as(user) }
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
 
       context "when given the ID for an authorship that does not belong to the user" do
         it "returns 404" do
@@ -60,7 +68,12 @@ describe AuthorshipsController, type: :controller do
       it "redirects to the sign in page" do
         put :sort
 
-        expect(response).to redirect_to new_user_session_path
+        expect(response).to redirect_to root_path
+      end
+      it "sets a flash error message" do
+        put :sort
+
+        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
 
@@ -74,7 +87,10 @@ describe AuthorshipsController, type: :controller do
       let!(:authorship_4) { create :authorship, user: user }
       let!(:other_authorship) { create :authorship, user: other_user }
 
-      before { authenticate_as(user) }
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
 
       context "when given no authorship IDs" do
         it "returns 404" do
