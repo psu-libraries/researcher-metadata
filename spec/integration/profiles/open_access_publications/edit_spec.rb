@@ -14,11 +14,8 @@ describe "visiting the page to edit the open acess status of a publication" do
                      abstract: 'An abstract of the test publication',
                      journal: journal }
   let!(:auth) { create :authorship, user: user, publication: pub }
-  let!(:publisher) { create :publisher,
-                            name: 'A Publishing Company'}
   let!(:journal) { create :journal,
-                          title: 'A Prestegious Journal',
-                          publisher: publisher }
+                          title: 'A Prestegious Journal' }
   let!(:name) { create :contributor_name,
                        publication: pub,
                        user: user,
@@ -154,7 +151,7 @@ describe "visiting the page to edit the open acess status of a publication" do
             expect(find_field('scholarsphere_work_deposit_published_date_1i').value).to eq '2019'
             expect(find_field('scholarsphere_work_deposit_published_date_2i').value).to eq '3'
             expect(find_field('scholarsphere_work_deposit_published_date_3i').value).to eq '17'
-            expect(find_field('Publisher').value).to eq 'A Publishing Company'
+            expect(find_field('Journal Name').value).to eq 'A Prestegious Journal'
             expect(find_field('DOI').value).to eq 'https://doi.org/10.1109/5.771073'
           end
         end
@@ -195,7 +192,7 @@ describe "visiting the page to edit the open acess status of a publication" do
           expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
           expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
           expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
-          expect(dep.publisher).to eq 'A Publishing Company'
+          expect(dep.publisher).to eq 'A Prestegious Journal'
         end
 
         it "sends a request to deposit the publication in ScholarSphere" do
@@ -208,7 +205,7 @@ describe "visiting the page to edit the open acess status of a publication" do
               description: "An abstract of the test publication",
               identifier: ["https://doi.org/10.1109/5.771073"],
               published_date: Date.new(2019, 3, 17),
-              publisher: ["A Publishing Company"],
+              publisher: ["A Prestegious Journal"],
               rights: "http://creativecommons.org/publicdomain/mark/1.0/",
               subtitle: "New Subtitle",
               title: "Test Publication",
@@ -303,7 +300,7 @@ describe "visiting the page to edit the open acess status of a publication" do
           expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
           expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
           expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
-          expect(dep.publisher).to eq 'A Publishing Company'
+          expect(dep.publisher).to eq 'A Prestegious Journal'
         end
 
         it "shows the publication with the correct status in the profile publication list" do

@@ -57,7 +57,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         published_date: authorship.published_on,
         doi: authorship.doi,
         subtitle: authorship.secondary_title,
-        publisher: authorship.preferred_publisher_name)
+        publisher: authorship.preferred_journal_title)
   end
 
   def record_success(url)

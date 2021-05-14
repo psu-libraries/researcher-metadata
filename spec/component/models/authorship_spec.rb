@@ -59,6 +59,7 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:published_on).to(:publication) }
   it { is_expected.to delegate_method(:secondary_title).to(:publication) }
   it { is_expected.to delegate_method(:preferred_publisher_name).to(:publication) }
+  it { is_expected.to delegate_method(:preferred_journal_title).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
   it { is_expected.to accept_nested_attributes_for(:waiver) }
