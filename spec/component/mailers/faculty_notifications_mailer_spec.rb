@@ -87,10 +87,6 @@ describe FacultyNotificationsMailer, type: :model do
       it "mentions the publication title" do
         expect(body).to match("Open Access Test Publication")
       end
-
-      it "tells the user to contact support" do
-        expect(body).to match("Researcher Metadata Database support")
-      end
     end
   end
 end
