@@ -93,7 +93,8 @@
             <%= f.input :rights,
                         label: 'License',
                         collection: ScholarsphereWorkDeposit.rights_options,
-                        selected: 'https://rightsstatements.org/page/InC/1.0/' %>
+                        selected: 'https://rightsstatements.org/page/InC/1.0/',
+                        hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
             <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>
             <%= f.input :embargoed_until,
                         label: 'Embargoed until',
