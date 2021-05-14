@@ -90,12 +90,12 @@
             <%= f.input :description, label: 'Description', hint: "Include the work abstract if available. Otherwise, provide a brief summary." %>
             <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year %>
             <%= f.input :publisher, label: 'Publisher' %>
+            <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>
             <%= f.input :rights,
                         label: 'License',
                         collection: ScholarsphereWorkDeposit.rights_options,
                         selected: 'https://rightsstatements.org/page/InC/1.0/',
                         hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
-            <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>
             <%= f.input :embargoed_until,
                         label: 'Embargoed until',
                         include_blank: true,
