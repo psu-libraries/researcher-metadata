@@ -318,7 +318,7 @@ describe "visiting the page to edit the open acess status of a publication" do
           open_email('xyz123@psu.edu')
           expect(current_email.body).to match(/Robert Author/)
           expect(current_email.body).to match(/Test Publication/)
-          expect(current_email.body).to match(/error occurred/)
+          expect(current_email.body).to match(/issue uploading/)
         end
 
         it "does not update the publication's ScholarSphere open access URL" do
