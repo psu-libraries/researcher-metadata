@@ -14,7 +14,7 @@ rescue ArgumentError => e
   exit 1
 end
  
-unless `git branch` =~ /^\* master$/
+unless `git branch` =~ /^\* main$/
   puts "You must be on the master branch to bump versions"
   exit 1
 end
