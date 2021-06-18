@@ -6,7 +6,7 @@ feature "Admin ScholarSphere work deposit detail page", type: :feature do
                           authorship: auth,
                           status: 'Success',
                           error_message: 'No errors occurred.',
-                          deposited_at: Time.new(2021, 4, 2, 16, 46, 0),
+                          deposited_at: Time.new(2021, 4, 2, 16, 46, 0, "-00:00"),
                           title: 'Test Work',
                           description: 'A description',
                           published_date: Date.new(2020, 12, 20),
@@ -34,7 +34,7 @@ feature "Admin ScholarSphere work deposit detail page", type: :feature do
       end
 
       it "shows the deposit's time of deposit" do
-        expect(page).to have_content "April 02, 2021 20:46"
+        expect(page).to have_content "April 02, 2021 16:46"
       end
 
       it "shows the deposit's title" do
