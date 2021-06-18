@@ -11,6 +11,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:deposited_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:title).of_type(:text) }
   it { is_expected.to have_db_column(:description).of_type(:text) }
+  it { is_expected.to have_db_column(:publisher_statement).of_type(:text) }
   it { is_expected.to have_db_column(:published_date).of_type(:date) }
   it { is_expected.to have_db_column(:rights).of_type(:string) }
   it { is_expected.to have_db_column(:embargoed_until).of_type(:date) }
@@ -444,6 +445,25 @@ describe ScholarsphereFileUpload, type: :model do
           visibility: 'open',
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           publisher: ['test publisher'],
+          creators: [
+            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {display_name: 'Test Author'},
+            {display_name: 'Another Contributor'}
+          ]
+        })
+      end
+    end
+    context "when the deposit has a publisher statement" do
+      before { dep.publisher_statement = 'test statement' }
+      it "includes the subtitle in the metadata" do
+        expect(dep.metadata).to eq ({
+          title: 'test title',
+          description: 'test description',
+          publisher_statement: 'test statement',
+          published_date: Date.new(2021, 3, 30),
+          work_type: 'article',
+          visibility: 'open',
+          rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
             {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},

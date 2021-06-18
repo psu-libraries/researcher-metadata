@@ -88,6 +88,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     base_metadata.merge!({identifier: [doi]}) if doi.present?
     base_metadata.merge!({subtitle: subtitle}) if subtitle.present?
     base_metadata.merge!({publisher: [publisher]}) if publisher.present?
+    base_metadata.merge!({publisher_statement: publisher_statement}) if publisher_statement.present?
     base_metadata
   end
 

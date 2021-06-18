@@ -88,6 +88,7 @@
               <% end %>
             </ul>
             <%= f.input :description, label: 'Description', hint: "Include the work abstract if available. Otherwise, provide a brief summary." %>
+            <%= f.input :publisher_statement, label: 'Publisher Statement', hint: "If the original publisher requires a set statement to upload this work to ScholarSphere, include it here." %>
             <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year + 2 %>
             <%= f.input :publisher, label: 'Journal Name' %>
             <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>

@@ -148,6 +148,7 @@ describe "visiting the page to edit the open acess status of a publication" do
             expect(page).to have_content "Creators"
             expect(page).to have_content "Bob Author"
             expect(find_field('Description').value).to eq 'An abstract of the test publication'
+            expect(page).to have_field "Publisher Statement"
             expect(find_field('scholarsphere_work_deposit_published_date_1i').value).to eq '2019'
             expect(find_field('scholarsphere_work_deposit_published_date_2i').value).to eq '3'
             expect(find_field('scholarsphere_work_deposit_published_date_3i').value).to eq '17'
@@ -169,6 +170,7 @@ describe "visiting the page to edit the open acess status of a publication" do
           within '#new_scholarsphere_work_deposit' do
             perform_enqueued_jobs do
               fill_in 'Subtitle', with: 'New Subtitle'
+              fill_in 'Publisher Statement', with: 'A set statement from the publisher'
               attach_file 'File', fixture('test_file.pdf')
               select 'Public Domain Mark 1.0', from: 'License'
               check 'I have read and agree to the deposit agreement.'
@@ -188,6 +190,7 @@ describe "visiting the page to edit the open acess status of a publication" do
           expect(dep.error_message).to be_nil
           expect(dep.title).to eq 'Test Publication'
           expect(dep.description).to eq 'An abstract of the test publication'
+          expect(dep.publisher_statement).to eq 'A set statement from the publisher'
           expect(dep.published_date).to eq Date.new(2019, 3, 17)
           expect(dep.rights).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
           expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
@@ -203,6 +206,7 @@ describe "visiting the page to edit the open acess status of a publication" do
             expect(args[:metadata]).to eq({
               creators: [{display_name: "Bob Author", psu_id:"xyz123"}],
               description: "An abstract of the test publication",
+              publisher_statement: "A set statement from the publisher",
               identifier: ["https://doi.org/10.1109/5.771073"],
               published_date: Date.new(2019, 3, 17),
               publisher: ["A Prestegious Journal"],

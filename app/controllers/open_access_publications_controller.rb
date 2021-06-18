@@ -60,6 +60,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def deposit_params
     params.require(:scholarsphere_work_deposit).permit(:title,
                                                        :description,
+                                                       :publisher_statement,
                                                        :published_date,
                                                        :rights,
                                                        :embargoed_until,
