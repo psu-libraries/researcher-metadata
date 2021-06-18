@@ -405,7 +405,7 @@ GEM
     simple_form (5.0.1)
       actionpack (>= 5.0)
       activemodel (>= 5.0)
-    smarter_csv (1.2.6)
+    smarter_csv (1.2.8)
     spring (2.1.0)
     spring-commands-rspec (1.0.4)
       spring (>= 0.9.1)
