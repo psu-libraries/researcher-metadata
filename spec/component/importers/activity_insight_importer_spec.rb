@@ -1183,6 +1183,7 @@ describe ActivityInsightImporter do
   
           it "saves the correct attributes with each new contributor name" do
             importer.call
+            u = User.find_by(activity_insight_identifier: '1649499')
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1197,18 +1198,21 @@ describe ActivityInsightImporter do
                                            middle_name: 'A.',
                                            last_name: 'Testauthor',
                                            position: 1,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Sally',
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 2,
+                                           user: u,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'E',
                                            middle_name: nil,
                                            last_name: 'Testington',
                                            position: 3,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
   
             expect(ContributorName.find_by(publication: p2,
@@ -1216,12 +1220,14 @@ describe ActivityInsightImporter do
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 1,
+                                           user: u,
                                            role: 'Primary Author')).to be_nil
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'B.',
                                            middle_name: nil,
                                            last_name: 'Tester',
                                            position: 2,
+                                           user: nil,
                                            role: 'Author')).to be_nil
   
             expect(ContributorName.find_by(publication: p3,
@@ -1229,12 +1235,14 @@ describe ActivityInsightImporter do
                                            middle_name: 'E.',
                                            last_name: 'Paperauthor',
                                            position: 1,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Sally',
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 2,
+                                           user: u,
                                            role: 'Author')).not_to be_nil
 
             expect(ContributorName.find_by(publication: p4,
@@ -1463,6 +1471,8 @@ describe ActivityInsightImporter do
   
           it "saves the correct attributes with each new contributor name" do
             importer.call
+            u = User.find_by(activity_insight_identifier: '1649499')
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1477,18 +1487,21 @@ describe ActivityInsightImporter do
                                            middle_name: 'A.',
                                            last_name: 'Testauthor',
                                            position: 1,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Sally',
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 2,
+                                           user: u,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'E',
                                            middle_name: nil,
                                            last_name: 'Testington',
                                            position: 3,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
   
             expect(ContributorName.find_by(publication: p2,
@@ -1496,12 +1509,14 @@ describe ActivityInsightImporter do
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 1,
+                                           user: u,
                                            role: 'Primary Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'B.',
                                            middle_name: nil,
                                            last_name: 'Tester',
                                            position: 2,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
   
             expect(ContributorName.find_by(publication: p3,
@@ -1509,12 +1524,14 @@ describe ActivityInsightImporter do
                                            middle_name: 'E.',
                                            last_name: 'Paperauthor',
                                            position: 1,
+                                           user: nil,
                                            role: 'Author')).not_to be_nil
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Sally',
                                            middle_name: nil,
                                            last_name: 'Testuser',
                                            position: 2,
+                                           user: u,
                                            role: 'Author')).not_to be_nil
 
             expect(ContributorName.find_by(publication: p4,
@@ -2725,6 +2742,9 @@ describe ActivityInsightImporter do
     
             it "saves the correct attributes with each new contributor name" do
               importer.call
+
+              u = User.find_by(activity_insight_identifier: '1649499')
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2739,18 +2759,21 @@ describe ActivityInsightImporter do
                                              middle_name: 'A.',
                                              last_name: 'Testauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'E',
                                              middle_name: nil,
                                              last_name: 'Testington',
                                              position: 3,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p2,
@@ -2758,12 +2781,14 @@ describe ActivityInsightImporter do
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 1,
+                                             user: u,
                                              role: 'Primary Author')).to be_nil
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'B.',
                                              middle_name: nil,
                                              last_name: 'Tester',
                                              position: 2,
+                                             user: nil,
                                              role: 'Author')).to be_nil
     
               expect(ContributorName.find_by(publication: p3,
@@ -2771,12 +2796,14 @@ describe ActivityInsightImporter do
                                              middle_name: 'E.',
                                              last_name: 'Paperauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
 
               expect(ContributorName.find_by(publication: p4,
@@ -3004,6 +3031,8 @@ describe ActivityInsightImporter do
     
             it "saves the correct attributes with each new contributor name" do
               importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -3018,18 +3047,21 @@ describe ActivityInsightImporter do
                                              middle_name: 'A.',
                                              last_name: 'Testauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'E',
                                              middle_name: nil,
                                              last_name: 'Testington',
                                              position: 3,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p2,
@@ -3037,12 +3069,14 @@ describe ActivityInsightImporter do
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 1,
+                                             user: u,
                                              role: 'Primary Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'B.',
                                              middle_name: nil,
                                              last_name: 'Tester',
                                              position: 2,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p3,
@@ -3050,12 +3084,14 @@ describe ActivityInsightImporter do
                                              middle_name: 'E.',
                                              last_name: 'Paperauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
 
               expect(ContributorName.find_by(publication: p4,
@@ -4244,6 +4280,8 @@ describe ActivityInsightImporter do
     
             it "saves the correct attributes with each new contributor name" do
               importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4258,18 +4296,21 @@ describe ActivityInsightImporter do
                                              middle_name: 'A.',
                                              last_name: 'Testauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'E',
                                              middle_name: nil,
                                              last_name: 'Testington',
                                              position: 3,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p2,
@@ -4277,12 +4318,14 @@ describe ActivityInsightImporter do
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 1,
+                                             user: u,
                                              role: 'Primary Author')).to be_nil
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'B.',
                                              middle_name: nil,
                                              last_name: 'Tester',
                                              position: 2,
+                                             user: nil,
                                              role: 'Author')).to be_nil
     
               expect(ContributorName.find_by(publication: p3,
@@ -4290,12 +4333,14 @@ describe ActivityInsightImporter do
                                              middle_name: 'E.',
                                              last_name: 'Paperauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
 
               expect(ContributorName.find_by(publication: p4,
@@ -4523,6 +4568,8 @@ describe ActivityInsightImporter do
     
             it "saves the correct attributes with each new contributor name" do
               importer.call
+              u = User.find_by(activity_insight_identifier: '1649499')
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4537,18 +4584,21 @@ describe ActivityInsightImporter do
                                              middle_name: 'A.',
                                              last_name: 'Testauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'E',
                                              middle_name: nil,
                                              last_name: 'Testington',
                                              position: 3,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p2,
@@ -4556,12 +4606,14 @@ describe ActivityInsightImporter do
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 1,
+                                             user: u,
                                              role: 'Primary Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'B.',
                                              middle_name: nil,
                                              last_name: 'Tester',
                                              position: 2,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
     
               expect(ContributorName.find_by(publication: p3,
@@ -4569,12 +4621,14 @@ describe ActivityInsightImporter do
                                              middle_name: 'E.',
                                              last_name: 'Paperauthor',
                                              position: 1,
+                                             user: nil,
                                              role: 'Author')).not_to be_nil
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Sally',
                                              middle_name: nil,
                                              last_name: 'Testuser',
                                              position: 2,
+                                             user: u,
                                              role: 'Author')).not_to be_nil
 
               expect(ContributorName.find_by(publication: p4,

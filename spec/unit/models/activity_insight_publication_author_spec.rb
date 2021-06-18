@@ -186,4 +186,34 @@ describe ActivityInsightPublicationAuthor do
       end
     end
   end
+
+  describe '#for_imported_user?' do
+    before do
+      allow(parsed_auth).to receive(:css).with('FACULTY_NAME').and_return faculty_name_element
+    end
+
+    context "when the value for FACULTY_NAME matches the ID of the given user" do
+      let(:faculty_name_element) { double 'faculty name element', text: '123' }
+
+      it "returns true" do
+        expect(auth.for_imported_user?).to eq true
+      end
+    end
+
+    context "when the value for FACULTY_NAME does not match the ID of the given user" do
+      let(:faculty_name_element) { double 'faculty name element', text: '456' }
+
+      it "returns false" do
+        expect(auth.for_imported_user?).to eq false
+      end
+    end
+
+    context "when the author data has no value for FACULTY_NAME" do
+      let(:faculty_name_element) { double 'faculty name element', text: '' }
+
+      it "returns false" do
+        expect(auth.for_imported_user?).to eq false
+      end
+    end
+  end
 end

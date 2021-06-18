@@ -20,6 +20,8 @@ class AuthorshipDecorator < SimpleDelegator
     if preferred_open_access_url.blank?
       if scholarsphere_upload_pending?
         'hourglass-half'
+      elsif scholarsphere_upload_failed?
+        'exclamation-circle'
       else
         if open_access_waived?
           'lock'

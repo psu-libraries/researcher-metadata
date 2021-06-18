@@ -210,7 +210,7 @@ describe Publication, type: :model do
     end
   end
 
-  describe '.subject_to_open_access_policty' do
+  describe '.subject_to_open_access_policy' do
     let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
@@ -633,22 +633,62 @@ describe Publication, type: :model do
 
   describe "#scholarsphere_upload_pending?" do
     let(:pub) { create :publication }
+    let(:auth) { create :authorship, publication: pub }
 
-    before do
-      create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time
-    end
-
-    context "when the publication has no authorships that have been uploaded to ScholarSphere" do
-      let(:upload_time) { nil }
+    context "when the publication has no authorships with a pending ScholarSphere deposit" do
       it "returns false" do
         expect(pub.scholarsphere_upload_pending?).to eq false
       end
     end
     
-    context "when the publication has an authorship that has been uploaded to ScholarSphere" do
-      let(:upload_time) { Time.current }
+    context "when the publication has an authorship with a pending ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Pending'
+      end
+
       it "returns true" do
         expect(pub.scholarsphere_upload_pending?).to eq true
+      end
+    end
+
+    context "when the publication has an authorship with a non-pending ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Success'
+      end
+
+      it "returns false" do
+        expect(pub.scholarsphere_upload_pending?).to eq false
+      end
+    end
+  end
+
+  describe "#scholarsphere_upload_failed?" do
+    let(:pub) { create :publication }
+    let(:auth) { create :authorship, publication: pub }
+
+    context "when the publication has no authorships with a failed ScholarSphere deposit" do
+      it "returns false" do
+        expect(pub.scholarsphere_upload_failed?).to eq false
+      end
+    end
+    
+    context "when the publication has an authorship with a failed ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Failed'
+      end
+
+      it "returns true" do
+        expect(pub.scholarsphere_upload_failed?).to eq true
+      end
+    end
+
+    context "when the publication has an authorship with a non-failed ScholarSphere deposit" do
+      before do
+        create :scholarsphere_work_deposit, authorship: auth, status: 'Success'
+      end
+
+      it "returns false" do
+        expect(pub.scholarsphere_upload_failed?).to eq false
       end
     end
   end
@@ -674,16 +714,14 @@ describe Publication, type: :model do
 
   describe "#no_open_access_information?" do
     let!(:pub) { create :publication }
-    let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
+    let!(:auth1) { create :authorship, publication: pub }
     let!(:auth2) { create :authorship, publication: pub }
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
 
     before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
-      context "when the publication has no authorships that have been uploaded to ScholarSphere" do
-        let(:upload_time) { nil }
-
+      context "when the publication does not have an authorship with a pending ScholarSphere deposit" do
         context "when there is not a preferred open access URL for the publication" do
           it "returns true" do
             expect(pub.no_open_access_information?).to eq true
@@ -698,12 +736,27 @@ describe Publication, type: :model do
         end
       end
       
-      context "when the publication has an authorship that has been uploaded to ScholarSphere" do
-        let(:upload_time) { Time.current }
-
+      context "when the publication has an authorship with a pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
         context "when there is not a preferred open access URL for the publication" do
           it "returns false" do
             expect(pub.no_open_access_information?).to eq false
+          end
+        end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
+          end
+        end
+      end
+
+      context "when the publication has an authorship with a non-pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.no_open_access_information?).to eq true
           end
         end
         context "when there is a preferred open access URL for the publication" do
@@ -719,9 +772,7 @@ describe Publication, type: :model do
     context "when one of the publication's authorships has a waiver" do
       before { create :internal_publication_waiver, authorship: auth2 }
 
-      context "when the publication has no authorships that have been uploaded to ScholarSphere" do
-        let(:upload_time) { nil }
-
+      context "when the publication does not have an authorship with a pending ScholarSphere deposit" do
         context "when there is not a preferred open access URL for the publication" do
           it "returns false" do
             expect(pub.no_open_access_information?).to eq false
@@ -736,9 +787,24 @@ describe Publication, type: :model do
         end
       end
       
-      context "when the publication has an authorship that has been uploaded to ScholarSphere" do
-        let(:upload_time) { Time.current }
+      context "when the publication has an authorship with a pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
+          end
+        end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
 
+          it "returns false" do
+            expect(pub.no_open_access_information?).to eq false
+          end
+        end
+      end
+
+      context "when the publication has an authorship with a non-pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
         context "when there is not a preferred open access URL for the publication" do
           it "returns false" do
             expect(pub.no_open_access_information?).to eq false
@@ -757,7 +823,7 @@ describe Publication, type: :model do
 
   describe "#has_open_access_information?" do
     let!(:pub) { create :publication }
-    let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: upload_time }
+    let!(:auth1) { create :authorship, publication: pub }
     let!(:auth2) { create :authorship, publication: pub }
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
@@ -765,34 +831,47 @@ describe Publication, type: :model do
     before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
     context "when none of the publication's authorships have a waiver" do
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
-        let(:upload_time) { nil }
-
         context "when there is not a preferred open access URL for the publication" do
-          it "returns true" do
+          it "returns false" do
             expect(pub.has_open_access_information?).to eq false
           end
         end
         context "when there is a preferred open access URL for the publication" do
           let(:url) { 'a_url' }
 
-          it "returns false" do
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
       end
       
-      context "when the publication has an authorship that has been uploaded to ScholarSphere" do
-        let(:upload_time) { Time.current }
-
+      context "when the publication has an authorship with a pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
         context "when there is not a preferred open access URL for the publication" do
-          it "returns false" do
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
         context "when there is a preferred open access URL for the publication" do
           let(:url) { 'a_url' }
 
+          it "returns true" do
+            expect(pub.has_open_access_information?).to eq true
+          end
+        end
+      end
+
+      context "when the publication has an authorship with a non-pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        context "when there is not a preferred open access URL for the publication" do
           it "returns false" do
+            expect(pub.has_open_access_information?).to eq false
+          end
+        end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
@@ -803,34 +882,47 @@ describe Publication, type: :model do
       before { create :internal_publication_waiver, authorship: auth2 }
 
       context "when the publication has no authorships that have been uploaded to ScholarSphere" do
-        let(:upload_time) { nil }
-
         context "when there is not a preferred open access URL for the publication" do
-          it "returns false" do
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
         context "when there is a preferred open access URL for the publication" do
           let(:url) { 'a_url' }
 
-          it "returns false" do
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
       end
       
-      context "when the publication has an authorship that has been uploaded to ScholarSphere" do
-        let(:upload_time) { Time.current }
-
+      context "when the publication has an authorship with a pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
         context "when there is not a preferred open access URL for the publication" do
-          it "returns false" do
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
         context "when there is a preferred open access URL for the publication" do
           let(:url) { 'a_url' }
 
-          it "returns false" do
+          it "returns true" do
+            expect(pub.has_open_access_information?).to eq true
+          end
+        end
+      end
+
+      context "when the publication has an authorship with a non-pending ScholarSphere deposit" do
+        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        context "when there is not a preferred open access URL for the publication" do
+          it "returns true" do
+            expect(pub.has_open_access_information?).to eq true
+          end
+        end
+        context "when there is a preferred open access URL for the publication" do
+          let(:url) { 'a_url' }
+
+          it "returns true" do
             expect(pub.has_open_access_information?).to eq true
           end
         end
@@ -856,6 +948,10 @@ describe Publication, type: :model do
     let(:waiver1) { build :internal_publication_waiver }
     let(:waiver2) { build :internal_publication_waiver }
 
+    let(:deposit1) { build :scholarsphere_work_deposit }
+    let(:deposit2) { build :scholarsphere_work_deposit }
+    let(:deposit3) { build :scholarsphere_work_deposit }
+
     let(:visibility) { false }
 
     before do
@@ -869,7 +965,8 @@ describe Publication, type: :model do
              updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
              visible_in_profile: true,
              position_in_profile: nil,
-             scholarsphere_uploaded_at: nil
+             scholarsphere_uploaded_at: nil,
+             scholarsphere_work_deposits: [deposit3]
 
       create :authorship,
              publication: pub2,
@@ -883,7 +980,8 @@ describe Publication, type: :model do
              waiver: waiver1,
              visible_in_profile: false,
              position_in_profile: 2,
-             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0)
+             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0),
+             scholarsphere_work_deposits: [deposit1, deposit2]
       create :authorship,
              publication: pub2,
              user: user2,
@@ -1023,6 +1121,18 @@ describe Publication, type: :model do
       expect(auth1.waiver).to eq waiver1
       expect(auth2.waiver).to eq nil
       expect(auth3.waiver).to eq nil
+    end
+
+    it "transfers ScholarSphere deposits" do
+      pub1.merge!([pub2, pub3, pub4])
+
+      auth1 = pub1.authorships.find_by(user: user1)
+      auth2 = pub1.authorships.find_by(user: user2)
+      auth3 = pub1.authorships.find_by(user: user3)
+
+      expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+      expect(auth2.scholarsphere_work_deposits).to eq []
+      expect(auth3.scholarsphere_work_deposits).to eq []
     end
 
     it "transfers visibility" do
@@ -1232,6 +1342,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -1396,6 +1516,18 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq waiver1
         expect(auth2.waiver).to eq nil
         expect(auth3.waiver).to eq nil
+      end
+
+      it "transfers ScholarSphere deposits" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth2.scholarsphere_work_deposits).to eq []
+        expect(auth3.scholarsphere_work_deposits).to eq []
       end
 
       it "transfers visibility" do
@@ -1568,6 +1700,18 @@ describe Publication, type: :model do
         expect(auth3.waiver).to eq nil
       end
 
+      it "transfers ScholarSphere deposits" do
+        pub1.merge!([pub2, pub3, pub4])
+
+        auth1 = pub1.authorships.find_by(user: user1)
+        auth2 = pub1.authorships.find_by(user: user2)
+        auth3 = pub1.authorships.find_by(user: user3)
+
+        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth2.scholarsphere_work_deposits).to eq []
+        expect(auth3.scholarsphere_work_deposits).to eq []
+      end
+
       it "transfers visibility" do
         pub1.merge!([pub2, pub3, pub4])
 
@@ -1729,6 +1873,16 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
       end
 
       it "does not transfer visibility" do
@@ -1894,6 +2048,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -2055,6 +2219,16 @@ describe Publication, type: :model do
         expect(auth1.waiver).to eq nil
       end
 
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
+      end
+
       it "does not transfer visibility" do
         begin
           pub1.merge!([pub2, pub3, pub4])
@@ -2214,6 +2388,16 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.waiver).to eq nil
+      end
+
+      it "does not transfer any ScholarSphere deposits" do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+
+        auth1 = pub1.authorships.find_by(user: user1)
+
+        expect(auth1.scholarsphere_work_deposits).to eq [deposit3]
       end
 
       it "does not transfer visibility" do

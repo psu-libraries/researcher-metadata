@@ -179,6 +179,7 @@ class ActivityInsightImporter
                 c.last_name = cont.last_name
                 c.role = cont.role
                 c.position = i + 1
+                c.user = u if cont.for_imported_user?
                 c.save!
               end
             end
@@ -851,6 +852,10 @@ class ActivityInsightPublicationAuthor
     other.is_a?(self.class) && activity_insight_id == other.activity_insight_id
   end
 
+  def for_imported_user?
+    activity_insight_user_id == imported_user.activity_insight_id
+  end
+
   private
 
   attr_reader :parsed_author, :imported_user
@@ -865,9 +870,5 @@ class ActivityInsightPublicationAuthor
 
   def for_external_person?
     activity_insight_user_id.blank?
-  end
-
-  def for_imported_user?
-    activity_insight_user_id == imported_user.activity_insight_id
   end
 end

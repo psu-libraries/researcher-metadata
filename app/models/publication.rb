@@ -454,7 +454,11 @@ class Publication < ApplicationRecord
   end
 
   def scholarsphere_upload_pending?
-    authorships.where.not(scholarsphere_uploaded_at: nil).any?
+    authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending')}).any?
+  end
+
+  def scholarsphere_upload_failed?
+    authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Failed')}).any?
   end
 
   def open_access_waived?
@@ -529,7 +533,8 @@ class Publication < ApplicationRecord
                     waiver: amp.waiver_to_keep,
                     visible_in_profile: amp.visibility_value_to_keep,
                     position_in_profile: amp.position_value_to_keep,
-                    scholarsphere_uploaded_at: amp.scholarsphere_timestamp_to_keep)
+                    scholarsphere_uploaded_at: amp.scholarsphere_timestamp_to_keep,
+                    scholarsphere_work_deposits: amp.scholarsphere_deposits_to_keep)
         amp.waivers_to_destroy.each { |w| w.destroy }
       end
 

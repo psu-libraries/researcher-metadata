@@ -32,6 +32,7 @@ describe Authorship, type: :model do
     it { is_expected.to belong_to(:user).inverse_of(:authorships) }
     it { is_expected.to belong_to(:publication).inverse_of(:authorships) }
     it { is_expected.to have_one(:waiver).class_name(:InternalPublicationWaiver).inverse_of(:authorship) }
+    it { is_expected.to have_many(:scholarsphere_work_deposits) }
   end
 
   describe 'validations' do
@@ -52,8 +53,13 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:year).to(:publication) }
   it { is_expected.to delegate_method(:preferred_open_access_url).to(:publication) }
   it { is_expected.to delegate_method(:scholarsphere_upload_pending?).to(:publication) }
+  it { is_expected.to delegate_method(:scholarsphere_upload_failed?).to(:publication) }
   it { is_expected.to delegate_method(:open_access_waived?).to(:publication) }
   it { is_expected.to delegate_method(:no_open_access_information?).to(:publication) }
+  it { is_expected.to delegate_method(:published_on).to(:publication) }
+  it { is_expected.to delegate_method(:secondary_title).to(:publication) }
+  it { is_expected.to delegate_method(:preferred_publisher_name).to(:publication) }
+  it { is_expected.to delegate_method(:preferred_journal_title).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
 
   it { is_expected.to accept_nested_attributes_for(:waiver) }

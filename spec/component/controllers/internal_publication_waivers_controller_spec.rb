@@ -15,25 +15,21 @@ describe InternalPublicationWaiversController, type: :controller do
   let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_auth) { create :authorship, user: user, publication: waived_pub}
   let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub}
+  let!(:uploaded_auth) { create :authorship, user: user, publication: uploaded_pub }
+  let!(:other_uploaded_auth) { create :authorship, user: other_user, publication: other_uploaded_pub }
 
   before do
     create :authorship, user: user, publication: oa_pub
     create :authorship, user: user, publication: uoa_pub
     create :authorship,
            user: user,
-           publication: uploaded_pub,
-           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-    create :authorship,
-           user: user,
            publication: other_uploaded_pub
-    create :authorship,
-           user: other_user,
-           publication: other_uploaded_pub,
-           scholarsphere_uploaded_at: Time.new(2019, 12, 6, 0, 0, 0)
-
     create :authorship,
            user: user,
            publication: other_waived_pub
+
+    create :scholarsphere_work_deposit, authorship: uploaded_auth, status: 'Pending'
+    create :scholarsphere_work_deposit, authorship: other_uploaded_auth, status: 'Pending'
 
     create :internal_publication_waiver,
            authorship: waived_auth

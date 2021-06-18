@@ -110,6 +110,7 @@ describe PSUDickinsonPublicationImporter do
       con1 = pub.contributor_names.find_by(first_name: 'First')
       expect(con1.last_name).to eq 'Creator'
       expect(con1.position).to eq 1
+      expect(con1.user).to eq u1
 
       con2 = pub.contributor_names.find_by(first_name: 'Second')
       expect(con2.last_name).to eq 'Author'

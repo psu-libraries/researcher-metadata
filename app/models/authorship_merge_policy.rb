@@ -58,6 +58,10 @@ class AuthorshipMergePolicy
       .last.try(:scholarsphere_uploaded_at)
   end
 
+  def scholarsphere_deposits_to_keep
+    authorships.map { |a| a.scholarsphere_work_deposits }.flatten
+  end
+
   private
 
   attr_reader :authorships

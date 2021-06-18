@@ -71,10 +71,14 @@ class PurePublicationImporter < PureImporter
                   end
                 end
               end
-              ContributorName.create!(publication: p,
-                                  first_name: a['name']['firstName'],
-                                  last_name: a['name']['lastName'],
-                                  position: i+1)
+              contributor_name_attrs = {
+                publication: p,
+                first_name: a['name']['firstName'],
+                last_name: a['name']['lastName'],
+                position: i+1
+              }
+              contributor_name_attrs.merge!(user: u) if u
+              ContributorName.create!(contributor_name_attrs)
             end
           end
         end

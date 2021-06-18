@@ -93,8 +93,17 @@ gem 'multi_json'
 # HTML Form builder
 gem 'simple_form'
 
+# Build nested HTML forms
+gem 'cocoon'
+
 # Harvest metadata from OAI-PMH repositories
 gem 'fieldhand', '~> 0.12'
+
+# ScholarSphere API HTTP client for depositing works on behalf of users
+gem 'scholarsphere-client', '~> 0.3'
+
+# File uploading
+gem 'carrierwave'
 
 # For running async jobs
 gem 'delayed_job_active_record'
