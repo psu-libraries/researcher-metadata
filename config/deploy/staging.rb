@@ -3,6 +3,6 @@
 set :rails_env, "staging"
 
 # The hosts that we're deploying to.
-role :app, "researchweb1qa.vmhost.psu.edu"
-role :web, "researchweb1qa.vmhost.psu.edu"
-role :db,  "researchweb1qa.vmhost.psu.edu", primary: true
+role :app, "rmdweb1qa.vmhost.psu.edu"
+role :web, "rmdweb1qa.vmhost.psu.edu"
+role :db,  "rmdweb1qa.vmhost.psu.edu", primary: true
