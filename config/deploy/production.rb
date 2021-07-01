@@ -3,6 +3,6 @@
 set :rails_env, "production"
 
 # The hosts that we're deploying to.
-role :app, "researchweb1prod.vmhost.psu.edu"
-role :web, "researchweb1prod.vmhost.psu.edu"
-role :db,  "researchweb1prod.vmhost.psu.edu", primary: true
+role :app, "rmdweb1prod.vmhost.psu.edu"
+role :web, "rmdweb1prod.vmhost.psu.edu"
+role :db,  "rmdweb1prod.vmhost.psu.edu", primary: true

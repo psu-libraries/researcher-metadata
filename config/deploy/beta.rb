@@ -3,6 +3,6 @@
 set :rails_env, "beta"
 
 # The hosts that we're deploying to.
-role :app, "researchweb1stage.vmhost.psu.edu"
-role :web, "researchweb1stage.vmhost.psu.edu"
-role :db,  "researchweb1stage.vmhost.psu.edu", primary: true
+role :app, "rmdweb1stage.vmhost.psu.edu"
+role :web, "rmdweb1stage.vmhost.psu.edu"
+role :db,  "rmdweb1stage.vmhost.psu.edu", primary: true
