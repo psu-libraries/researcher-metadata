@@ -965,7 +965,6 @@ describe Publication, type: :model do
              updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
              visible_in_profile: true,
              position_in_profile: nil,
-             scholarsphere_uploaded_at: nil,
              scholarsphere_work_deposits: [deposit3]
 
       create :authorship,
@@ -980,7 +979,6 @@ describe Publication, type: :model do
              waiver: waiver1,
              visible_in_profile: false,
              position_in_profile: 2,
-             scholarsphere_uploaded_at: Time.new(2019, 1, 1, 0, 0, 0),
              scholarsphere_work_deposits: [deposit1, deposit2]
       create :authorship,
              publication: pub2,
@@ -1010,8 +1008,7 @@ describe Publication, type: :model do
              orcid_resource_identifier: nil,
              updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
              waiver: waiver2,
-             position_in_profile: 1,
-             scholarsphere_uploaded_at: Time.new(2021, 1, 1, 0, 0, 0)
+             position_in_profile: 1
       create :authorship,
              publication: pub4,
              user: user2,
@@ -1157,18 +1154,6 @@ describe Publication, type: :model do
       expect(auth1.position_in_profile).to eq 2
       expect(auth2.position_in_profile).to eq nil
       expect(auth3.position_in_profile).to eq nil
-    end
-
-    it "transfers Scholarsphere upload timestamps" do
-      pub1.merge!([pub2, pub3, pub4])
-
-      auth1 = pub1.authorships.find_by(user: user1)
-      auth2 = pub1.authorships.find_by(user: user2)
-      auth3 = pub1.authorships.find_by(user: user3)
-
-      expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
-      expect(auth2.scholarsphere_uploaded_at).to eq nil
-      expect(auth3.scholarsphere_uploaded_at).to eq nil
     end
 
     it "deletes the given publications" do
@@ -1372,16 +1357,6 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
-      it "does not transfer Scholarsphere upload timestamps" do
-        begin
-          pub1.merge!([pub2, pub3, pub4])
-        rescue RuntimeError; end
-
-        auth1 = pub1.authorships.find_by(user: user1)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq nil
-      end
-
       context "when the publication is not visible" do
         it "does not change the visibility" do
           begin
@@ -1554,18 +1529,6 @@ describe Publication, type: :model do
         expect(auth3.position_in_profile).to eq nil
       end
 
-      it "transfers Scholarsphere upload timestamps" do
-        pub1.merge!([pub2, pub3, pub4])
-
-        auth1 = pub1.authorships.find_by(user: user1)
-        auth2 = pub1.authorships.find_by(user: user2)
-        auth3 = pub1.authorships.find_by(user: user3)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
-        expect(auth2.scholarsphere_uploaded_at).to eq nil
-        expect(auth3.scholarsphere_uploaded_at).to eq nil
-      end
-
       context "when the publication is not visible" do
         it "makes the publication visible" do
           pub1.merge!([pub2, pub3, pub4])
@@ -1736,18 +1699,6 @@ describe Publication, type: :model do
         expect(auth3.position_in_profile).to eq nil
       end
 
-      it "transfers Scholarsphere upload timestamps" do
-        pub1.merge!([pub2, pub3, pub4])
-
-        auth1 = pub1.authorships.find_by(user: user1)
-        auth2 = pub1.authorships.find_by(user: user2)
-        auth3 = pub1.authorships.find_by(user: user3)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq Time.new(2021, 1, 1, 0, 0 ,0)
-        expect(auth2.scholarsphere_uploaded_at).to eq nil
-        expect(auth3.scholarsphere_uploaded_at).to eq nil
-      end
-
       context "when the publication is not visible" do
         it "makes the publication visible" do
           pub1.merge!([pub2, pub3, pub4])
@@ -1903,16 +1854,6 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to eq nil
-      end
-
-      it "does not transfer Scholarsphere upload timestamps" do
-        begin
-          pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
-
-        auth1 = pub1.authorships.find_by(user: user1)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
 
       context "when the publication is not visible" do
@@ -2078,16 +2019,6 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
-      it "does not transfer Scholarsphere upload timestamps" do
-        begin
-          pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
-
-        auth1 = pub1.authorships.find_by(user: user1)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq nil
-      end
-
       context "when the publication is not visible" do
         it "does not change the visibility" do
           begin
@@ -2249,16 +2180,6 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
-      it "does not transfer Scholarsphere upload timestamps" do
-        begin
-          pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
-
-        auth1 = pub1.authorships.find_by(user: user1)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq nil
-      end
-
       context "when the publication is not visible" do
         it "does not change the visibility" do
           begin
@@ -2418,16 +2339,6 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to eq nil
-      end
-
-      it "does not transfer Scholarsphere upload timestamps" do
-        begin
-          pub1.merge!([pub2, pub3, pub4])
-        rescue Publication::NonDuplicateMerge; end
-
-        auth1 = pub1.authorships.find_by(user: user1)
-
-        expect(auth1.scholarsphere_uploaded_at).to eq nil
       end
 
       context "when the publication is not visible" do

@@ -22,8 +22,8 @@ describe ScholarsphereImporter do
       let!(:pub) { create :publication,
                          doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
                          scholarsphere_open_access_url: url }
-      let!(:auth1) { create :authorship, publication: pub, scholarsphere_uploaded_at: Time.new(2000, 1, 1) }
-      let!(:auth2) { create :authorship, publication: pub, scholarsphere_uploaded_at: Time.new(2001, 1, 1) }
+      let!(:auth1) { create :authorship, publication: pub }
+      let!(:auth2) { create :authorship, publication: pub }
       let(:url) { '' }
 
       context "when the publication already has a ScholarSphere open access URL" do
@@ -33,24 +33,12 @@ describe ScholarsphereImporter do
           importer.call
           expect(pub.reload.scholarsphere_open_access_url).to eq 'a_url'
         end
-
-        it "does not clear the ScholarSphere upload timestamps on each of the publication's authorships" do
-          importer.call
-          expect(auth1.reload.scholarsphere_uploaded_at).to eq Time.new(2000, 1, 1)
-          expect(auth2.reload.scholarsphere_uploaded_at).to eq Time.new(2001, 1, 1)
-        end
       end
 
       context "when the publication does not already have a ScholarSphere open access URL" do
         it "updates the publication with the first ScholarSphere URL listed for the publication's DOI" do
           importer.call
           expect(pub.reload.scholarsphere_open_access_url).to eq 'https://scholarsphere.test/resources/cd1542ae-087d-4f32-b920-5a7faaab63ac'
-        end
-
-        it "clears the ScholarSphere upload timestamps on each of the publication's authorships" do
-          importer.call
-          expect(auth1.reload.scholarsphere_uploaded_at).to be_nil
-          expect(auth2.reload.scholarsphere_uploaded_at).to be_nil
         end
       end
     end
