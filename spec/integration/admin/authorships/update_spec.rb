@@ -12,8 +12,7 @@ feature "updating an authorship via the admin interface", type: :feature do
                        publication: pub,
                        user: user,
                        author_number: 5,
-                       orcid_resource_identifier: nil,
-                       scholarsphere_uploaded_at: Time.new(2020, 1, 22, 16, 8, 0, 0) }
+                       orcid_resource_identifier: nil }
 
   context "when the current user is an admin" do
     before do

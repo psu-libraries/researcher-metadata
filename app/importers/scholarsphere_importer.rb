@@ -11,14 +11,6 @@ class ScholarsphereImporter
             # URL that's listed for this publication's DOI.
             p.scholarsphere_open_access_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}/resources/#{v.first}"
             p.save!
-            # Clear any legacy upload timestamps on related authorships. Our old ScholarSphere
-            # workflow assumes that this timestamp is a temporary indicator for RMD admins and
-            # that it should be cleared as soon as a ScholarSphere URL is added to the publication.
-            # That now applies regardless of how the URL was obtained. So since we're setting the
-            # URL here, we need to also clear the timestamp. The new ScholarSphere workflow obviates
-            # this timestamp, so once the remnants of the old workflow are cleaned up, the timestamp
-            # field will be removed altogether.
-            p.authorships.update_all(scholarsphere_uploaded_at: nil)
           end
         end
       end

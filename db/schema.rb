@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_06_18_200806) do
+ActiveRecord::Schema.define(version: 2021_07_06_131119) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 2021_06_18_200806) do
     t.boolean "visible_in_profile", default: true
     t.integer "position_in_profile"
     t.boolean "confirmed", default: true
-    t.datetime "scholarsphere_uploaded_at"
     t.string "role"
     t.datetime "open_access_notification_sent_at"
     t.string "orcid_resource_identifier"

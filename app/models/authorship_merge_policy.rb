@@ -52,12 +52,6 @@ class AuthorshipMergePolicy
       .last.try(:position_in_profile)
   end
 
-  def scholarsphere_timestamp_to_keep
-    authorships.select { |a| a.scholarsphere_uploaded_at.present? }
-      .sort { |a, b| a.scholarsphere_uploaded_at <=> b.scholarsphere_uploaded_at }
-      .last.try(:scholarsphere_uploaded_at)
-  end
-
   def scholarsphere_deposits_to_keep
     authorships.map { |a| a.scholarsphere_work_deposits }.flatten
   end

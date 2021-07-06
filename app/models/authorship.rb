@@ -50,16 +50,6 @@ class Authorship < ApplicationRecord
   rails_admin do
     object_label_method { :description }
 
-    list do
-      sort_by(:scholarsphere_uploaded_at)
-      field(:id)
-      field(:publication)
-      field(:user)
-      field(:scholarsphere_uploaded_at) do
-        sort_reverse false
-      end
-    end
-
     edit do
       field(:user) { read_only true }
       field(:publication) { read_only true }
