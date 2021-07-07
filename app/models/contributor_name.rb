@@ -29,7 +29,7 @@ class ContributorName < ApplicationRecord
   end
 
   def orcid_identifier
-    user.try(:orcid_identifier)
+    user.try(:orcid)
   end
 
   def at_least_one_name_present

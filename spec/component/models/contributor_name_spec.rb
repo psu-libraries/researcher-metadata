@@ -236,7 +236,7 @@ describe ContributorName, type: :model do
     context "when the contributor names has an associated user" do
       let(:user) { User.new(webaccess_id: 'abc123', orcid_identifier: orcid) }
       context "when the user has an ORCID ID" do
-        let(:orcid) { 'orcid-id-123' }
+        let(:orcid) { 'https://orcid.org/orcid-id-123' }
         
         context "when the contributor has a first name" do
           let(:fn) { 'first' }
