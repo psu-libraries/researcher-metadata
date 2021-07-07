@@ -10,6 +10,16 @@ namespace :email_notifications do
     OpenAccessNotifier.new(psu_libraries.all_users).send_notifications
   end
 
+  desc 'Send reminder emails about potential open access publications to the first five eligible user in the given organization'
+  task :send_first_five_open_access_reminders_in_org, [:org_name] => :environment do |task, args|
+    org = Organization.find_by(pure_external_identifier: args[:org_name])
+    if org
+      OpenAccessNotifier.new(org.all_users).send_first_five_notifications
+    else
+      raise RuntimeError.new("Couldn't find an organization with Pure external identifier #{args[:org_name]}")
+    end
+  end
+
   desc 'Send a test open access reminder email with fake data to the specified email address'
   task :test_open_access_reminder, [:address] => :environment do |task, args|
     test_user = OpenStruct.new({email: args[:address],
