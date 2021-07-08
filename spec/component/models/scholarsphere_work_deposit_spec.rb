@@ -350,7 +350,7 @@ describe ScholarsphereFileUpload, type: :model do
                         last_name: 'Researcher',
                         position: 1,
                         user: user }
-    let!(:user) { create :user, webaccess_id: 'abc123', orcid_identifier: 'orcid-id-456'}
+    let!(:user) { create :user, webaccess_id: 'abc123', orcid_identifier: 'https://orcid.org/orcid-id-456'}
     let(:dep) { 
       ScholarsphereWorkDeposit.new(
         title: 'test title',
@@ -370,7 +370,7 @@ describe ScholarsphereFileUpload, type: :model do
         visibility: 'open',
         rights: 'https://creativecommons.org/licenses/by/4.0/',
         creators: [
-          {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+          {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
           {display_name: 'Test Author'},
           {display_name: 'Another Contributor'}
         ]
@@ -389,7 +389,7 @@ describe ScholarsphereFileUpload, type: :model do
           embargoed_until: Date.new(2022, 1, 1),
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
-            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},
             {display_name: 'Another Contributor'}
           ]
@@ -408,7 +408,7 @@ describe ScholarsphereFileUpload, type: :model do
           identifier: ['a/test/doi'],
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
-            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},
             {display_name: 'Another Contributor'}
           ]
@@ -427,7 +427,7 @@ describe ScholarsphereFileUpload, type: :model do
           visibility: 'open',
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
-            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},
             {display_name: 'Another Contributor'}
           ]
@@ -446,7 +446,7 @@ describe ScholarsphereFileUpload, type: :model do
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           publisher: ['test publisher'],
           creators: [
-            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},
             {display_name: 'Another Contributor'}
           ]
@@ -465,7 +465,7 @@ describe ScholarsphereFileUpload, type: :model do
           visibility: 'open',
           rights: 'https://creativecommons.org/licenses/by/4.0/',
           creators: [
-            {psu_id: 'abc123', orcid: 'orcid-id-456', display_name: 'A. Researcher'},
+            {psu_id: 'abc123', orcid: 'orcidid456', display_name: 'A. Researcher'},
             {display_name: 'Test Author'},
             {display_name: 'Another Contributor'}
           ]
