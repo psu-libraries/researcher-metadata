@@ -10,7 +10,7 @@ class Organization < ApplicationRecord
   scope :visible, -> { where(visible: true) }
 
   def all_publications
-    Publication.joins(users: :organizations).where(%{users.id IN (?) AND organizations.id IN (?)}, all_user_ids, descendant_ids).published_during_membership.distinct(:id)
+    Publication.joins(users: :organizations).where(%{organizations.id IN (?)}, descendant_ids).published_during_membership.distinct(:id)
   end
 
   def all_users

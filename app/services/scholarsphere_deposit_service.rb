@@ -7,6 +7,8 @@ class ScholarsphereDepositService
   end
 
   def create
+    logger = Logger.new('log/scholarsphere_deposit.log')
+
     ingest = Scholarsphere::Client::Ingest.new(
       metadata: deposit.metadata,
       files: deposit.files,
@@ -22,10 +24,10 @@ class ScholarsphereDepositService
       profile = UserProfile.new(current_user)
       FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
     else
+      logger.info response.inspect
       raise DepositFailed.new(response.body)
     end
 
-    logger = Logger.new('log/scholarsphere_deposit.log')
     logger.info response.inspect
   end
 

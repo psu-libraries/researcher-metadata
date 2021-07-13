@@ -4,10 +4,30 @@ namespace :email_notifications do
     OpenAccessNotifier.new.send_notifications
   end
 
-  desc 'Send reminder emails about potential open access publications only to users in the Penn State University Libraries'
+  desc 'Send reminder emails about potential open access publications only to applicable users in the Penn State University Libraries'
   task send_library_open_access_reminders: :environment do
     psu_libraries = Organization.find_by(pure_external_identifier: 'CAMPUS-UL')
     OpenAccessNotifier.new(psu_libraries.all_users).send_notifications
+  end
+
+  desc 'Send reminder emails about potential open access publications to all applicable users in the given organization'
+  task :send_all_access_reminders_for_org, [:org_name] => :environment do |task, args|
+    org = Organization.find_by(pure_external_identifier: args[:org_name])
+    if org
+      OpenAccessNotifier.new(org.all_users).send_notifications
+    else
+      raise RuntimeError.new("Couldn't find an organization with Pure external identifier #{args[:org_name]}")
+    end
+  end
+
+  desc 'Send reminder emails about potential open access publications to the first five applicable users in the given organization'
+  task :send_first_five_open_access_reminders_for_org, [:org_name] => :environment do |task, args|
+    org = Organization.find_by(pure_external_identifier: args[:org_name])
+    if org
+      OpenAccessNotifier.new(org.all_users).send_first_five_notifications
+    else
+      raise RuntimeError.new("Couldn't find an organization with Pure external identifier #{args[:org_name]}")
+    end
   end
 
   desc 'Send a test open access reminder email with fake data to the specified email address'

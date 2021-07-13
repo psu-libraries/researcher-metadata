@@ -236,7 +236,7 @@ describe ContributorName, type: :model do
     context "when the contributor names has an associated user" do
       let(:user) { User.new(webaccess_id: 'abc123', orcid_identifier: orcid) }
       context "when the user has an ORCID ID" do
-        let(:orcid) { 'orcid-id-123' }
+        let(:orcid) { 'https://orcid.org/orcid-id-123' }
         
         context "when the contributor has a first name" do
           let(:fn) { 'first' }
@@ -245,13 +245,13 @@ describe ContributorName, type: :model do
             context "when the contributor has a last name" do
               let(:ln) { 'last' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'first middle last'})
+                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle last'})
               end
             end
             context "when the contributor has no last name" do
               let(:ln) { '' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'first middle'})
+                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle'})
               end
             end
           end
@@ -260,13 +260,13 @@ describe ContributorName, type: :model do
             context "when the contributor has a last name" do
               let(:ln) { 'last' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'first last'})
+                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first last'})
               end
             end
             context "when the contributor has no last name" do
               let(:ln) { '' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'first'})
+                expect(cn.to_scholarsphere_creator).to eq({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first'})
               end
             end
           end
@@ -278,13 +278,13 @@ describe ContributorName, type: :model do
             context "when the contributor has a last name" do
               let(:ln) { 'last' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'middle last'})
+                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle last'})
               end
             end
             context "when the contributor has no last name" do
               let(:ln) { '' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'middle'})
+                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle'})
               end
             end
           end
@@ -293,7 +293,7 @@ describe ContributorName, type: :model do
             context "when the contributor has a last name" do
               let(:ln) { 'last' }
               it "returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor" do
-                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcid-id-123', display_name: 'last'})
+                expect(cn.to_scholarsphere_creator).to eq ({psu_id: 'abc123', orcid: 'orcidid123', display_name: 'last'})
               end
             end
           end
