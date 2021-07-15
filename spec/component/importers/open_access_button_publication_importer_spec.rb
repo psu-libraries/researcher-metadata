@@ -13,12 +13,12 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: nil}
 
       it "does not update the publication's open access URL" do
-        importer.call
+        importer.import_all
         expect(pub.reload.open_access_url).to be_nil
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
-        importer.call
+        importer.import_all
         expect(pub.reload.open_access_button_last_checked_at).to be_nil
       end
     end
@@ -27,12 +27,12 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: ''}
 
       it "does not update the publication's open access URL" do
-        importer.call
+        importer.import_all
         expect(pub.reload.open_access_url).to be_nil
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
-        importer.call
+        importer.import_all
         expect(pub.reload.open_access_button_last_checked_at).to be_nil
       end
     end
@@ -41,7 +41,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: "https://api.openaccessbutton.org/find?id=10.094/PHI-A-2008-0129\u201302" }
 
       it "does not raise an error" do
-        expect { importer.call }.not_to raise_error
+        expect { importer.import_all }.not_to raise_error
       end
     end
 
@@ -53,7 +53,7 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       it "does not raise an error" do
-        expect { importer.call }.not_to raise_error
+        expect { importer.import_all }.not_to raise_error
       end
     end
 
@@ -70,12 +70,12 @@ describe OpenAccessButtonPublicationImporter do
         let(:last_check) { now - (32.days) }
         context "when the publication's open access URL is nil" do
           it "updates the publication with the URL to the open access content" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -84,12 +84,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "") }
 
           it "updates the publication with the URL to the open access content" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -98,12 +98,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "existing_url") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "existing_url"
           end
     
           it "does not update the publication's Open Access Button check timestamp" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now - 32.days
           end
         end
@@ -111,24 +111,24 @@ describe OpenAccessButtonPublicationImporter do
       context "when the publication has never been checked in Open Access Button" do
         let(:last_check) { nil }
         it "updates the publication with the URL to the open access content" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
         end
 
         it "updates Open Access Button check timestamp on the publication" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
         context "when the publication already has an open access URL" do
           before { pub.update_attribute(:open_access_url, "existing_url") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "existing_url"
           end
     
           it "does not update the publication's Open Access Button check timestamp" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to be_nil
           end
         end
@@ -136,12 +136,12 @@ describe OpenAccessButtonPublicationImporter do
       context "when the publication was last checked in Open Access Button less than a month ago" do
         let(:last_check) { now - (30.days) }
         it "updates the publication with the URL to the open access content" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_url).to eq "http://openaccessexample.org/publications/pub1.pdf"
         end
   
         it "updates Open Access Button check timestamp on the publication" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
       end
@@ -160,12 +160,12 @@ describe OpenAccessButtonPublicationImporter do
         let(:last_check) { now - (32.days) }
         context "when the publication's open access URL is nil" do
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to be_nil
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -174,12 +174,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq ""
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -188,12 +188,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "existing_url") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "existing_url"
           end
     
           it "does not update the publication's Open Access Button check timestamp" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now - 32.days
           end
         end
@@ -203,12 +203,12 @@ describe OpenAccessButtonPublicationImporter do
 
         context "when the publication's open access URL is nil" do
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to be_nil
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -217,12 +217,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq ""
           end
 
           it "updates Open Access Button check timestamp on the publication" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to eq now
           end
         end
@@ -231,12 +231,12 @@ describe OpenAccessButtonPublicationImporter do
           before { pub.update_attribute(:open_access_url, "existing_url") }
 
           it "does not update the publication's open access URL" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_url).to eq "existing_url"
           end
     
           it "does not update the publication's Open Access Button check timestamp" do
-            importer.call
+            importer.import_all
             expect(pub.reload.open_access_button_last_checked_at).to be_nil
           end
         end
@@ -244,12 +244,12 @@ describe OpenAccessButtonPublicationImporter do
       context "when the publication was last checked in Open Access Button less than a month ago" do
         let(:last_check) { now - (30.days) }
         it "does not update the publication's open access URL" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_url).to be_nil
         end
   
         it "updates Open Access Button check timestamp on the publication" do
-          importer.call
+          importer.import_all
           expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
       end

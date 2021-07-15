@@ -24,7 +24,7 @@ namespace :import do
 
   desc 'Import Open Access Button publication URLs'
   task :open_access_button => :environment do
-    OpenAccessButtonPublicationImporter.new.call
+    OpenAccessButtonPublicationImporter.new.import_all
   end
 
   desc 'Import ScholarSphere publication URLs'
@@ -126,7 +126,7 @@ namespace :import do
       dirname: dirname_for(:nsf_grants)
     ).call
 
-    OpenAccessButtonPublicationImporter.new.call
+    OpenAccessButtonPublicationImporter.new.import_all
     ScholarsphereImporter.new.call
   end
 end

@@ -1,5 +1,5 @@
 class OpenAccessButtonPublicationImporter
-  def call
+  def import_all
     pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
                               total: pub_query.count) unless Rails.env.test?
 
