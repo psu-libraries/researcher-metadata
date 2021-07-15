@@ -11,7 +11,7 @@ namespace :email_notifications do
   end
 
   desc 'Send reminder emails about potential open access publications to all applicable users in the given organization'
-  task :send_all_access_reminders_for_org, [:org_name] => :environment do |task, args|
+  task :send_all_open_access_reminders_for_org, [:org_name] => :environment do |task, args|
     org = Organization.find_by(pure_external_identifier: args[:org_name])
     if org
       OpenAccessNotifier.new(org.all_users).send_notifications
