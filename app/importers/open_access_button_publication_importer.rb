@@ -1,19 +1,21 @@
 class OpenAccessButtonPublicationImporter
   def import_all
     pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
-                              total: pub_query.count) unless Rails.env.test?
+                              total: all_pubs.count) unless Rails.env.test?
 
-    pub_query.find_each do |p|
-      find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{p.doi_url_path}")
-      oab_json = JSON.parse(get_pub(find_url))
+    all_pubs.find_each do |p|
+      query_open_access_button_for(p)
+      pbar.increment unless Rails.env.test?
+    end
+    pbar.finish unless Rails.env.test?
+  end
 
-      p.open_access_url = oab_json['url'] if oab_json['url']
-      p.open_access_button_last_checked_at = Time.current
-      p.save!
+  def import_new
+    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
+                              total: new_pubs.count) unless Rails.env.test?
 
-      # Open Access Button does not enforce any rate limits for their API, but they ask
-      # that users make no more than 1 request per second.
-      sleep 1
+    new_pubs.find_each do |p|
+      query_open_access_button_for(p)
       pbar.increment unless Rails.env.test?
     end
     pbar.finish unless Rails.env.test?
@@ -21,8 +23,12 @@ class OpenAccessButtonPublicationImporter
 
   private
 
-  def pub_query
+  def all_pubs
     Publication.where.not(doi: nil).where.not(doi: '').where(%{open_access_url IS NULL OR open_access_url = ''})
+  end
+
+  def new_pubs
+    all_pubs.where(open_access_button_last_checked_at: nil)
   end
 
   def get_pub(url)
@@ -35,5 +41,18 @@ class OpenAccessButtonPublicationImporter
     else
       raise
     end
+  end
+
+  def query_open_access_button_for(publication)
+    find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{publication.doi_url_path}")
+    oab_json = JSON.parse(get_pub(find_url))
+
+    publication.open_access_url = oab_json['url'] if oab_json['url']
+    publication.open_access_button_last_checked_at = Time.current
+    publication.save!
+
+    # Open Access Button does not enforce any rate limits for their API, but they ask
+    # that users make no more than 1 request per second.
+    sleep 1
   end
 end
