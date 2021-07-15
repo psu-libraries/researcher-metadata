@@ -26,7 +26,8 @@ feature "Admin publication detail page", type: :feature do
                       user_submitted_open_access_url: "https://example.org/publications/2",
                       journal: journal,
                       scholarsphere_open_access_url: "https://scholarsphere.psu.edu/resources/3",
-                      published_on: Date.new(2018, 8, 1) }
+                      published_on: Date.new(2018, 8, 1),
+                      open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, "-00:00") }
 
   let!(:auth1) { create :authorship,
                         publication: pub,
@@ -164,6 +165,10 @@ feature "Admin publication detail page", type: :feature do
 
       it "shows the publication's journal" do
         expect(page).to have_link "Test Journal Record", href: rails_admin.show_path(model_name: :journal, id: journal.id)
+      end
+
+      it "shows when Open Access Button was last checked for the publication" do
+        expect(page).to have_content "July 15, 2021 13:15"
       end
     end
 
