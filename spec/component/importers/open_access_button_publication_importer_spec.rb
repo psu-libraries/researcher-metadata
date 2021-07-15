@@ -8,7 +8,7 @@ describe OpenAccessButtonPublicationImporter do
     allow(Time).to receive(:current).and_return(now)
   end
 
-  describe '#call' do
+  describe '#import_all' do
     context "when an existing publication does not have a DOI" do
       let!(:pub) { create :publication, doi: nil}
 
