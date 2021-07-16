@@ -2,7 +2,7 @@ require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/importers/activity_insight_importer'
-require_relative '../../../app/models/doi_parser'
+require_relative '../../../app/models/doi_sanitizer'
 require_relative '../../../app/mappers/activity_insight_publication_type_map_in.rb'
 
 describe ActivityInsightPublication do
@@ -714,20 +714,20 @@ describe ActivityInsightPublication do
 
   describe '#doi' do
     before do
-      allow(DOIParser).to receive(:new).with('a DOI web address').and_return successful_wa_parser
-      allow(DOIParser).to receive(:new).with('a non-DOI web address').and_return unsuccessful_wa_parser
-      allow(DOIParser).to receive(:new).with('a DOI ISSN/ISBN').and_return successful_issn_parser
-      allow(DOIParser).to receive(:new).with('a non-DOI ISSN/ISBN').and_return unsuccessful_issn_parser
-      allow(DOIParser).to receive(:new).with('a DOI').and_return successful_doi_parser
-      allow(DOIParser).to receive(:new).with('an invalid DOI').and_return unsuccessful_doi_parser
+      allow(DOISanitizer).to receive(:new).with('a DOI web address').and_return successful_wa_sanitizer
+      allow(DOISanitizer).to receive(:new).with('a non-DOI web address').and_return unsuccessful_wa_sanitizer
+      allow(DOISanitizer).to receive(:new).with('a DOI ISSN/ISBN').and_return successful_issn_sanitizer
+      allow(DOISanitizer).to receive(:new).with('a non-DOI ISSN/ISBN').and_return unsuccessful_issn_sanitizer
+      allow(DOISanitizer).to receive(:new).with('a DOI').and_return successful_doi_sanitizer
+      allow(DOISanitizer).to receive(:new).with('an invalid DOI').and_return unsuccessful_doi_sanitizer
     end
 
-    let(:successful_wa_parser) { double 'DOI parser', url: 'wa DOI' }
-    let(:unsuccessful_wa_parser) { double 'DOI parser', url: nil }
-    let(:successful_issn_parser) { double 'DOI parser', url: 'ISSN DOI' }
-    let(:unsuccessful_issn_parser) { double 'DOI parser', url: nil }
-    let(:successful_doi_parser) { double 'DOI parser', url: 'DOI' }
-    let(:unsuccessful_doi_parser) { double 'DOI parser', url: nil }
+    let(:successful_wa_sanitizer) { double 'DOI sanitizer', url: 'wa DOI' }
+    let(:unsuccessful_wa_sanitizer) { double 'DOI sanitizer', url: nil }
+    let(:successful_issn_sanitizer) { double 'DOI sanitizer', url: 'ISSN DOI' }
+    let(:unsuccessful_issn_sanitizer) { double 'DOI sanitizer', url: nil }
+    let(:successful_doi_sanitizer) { double 'DOI sanitizer', url: 'DOI' }
+    let(:unsuccessful_doi_sanitizer) { double 'DOI sanitizer', url: nil }
 
     let(:doi_web_address_element) { double 'DOI web address element', text: 'a DOI web address' }
     let(:non_doi_web_address_element) { double 'non-DOI web address element', text: 'a non-DOI web address' }

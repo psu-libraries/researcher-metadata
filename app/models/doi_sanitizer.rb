@@ -1,4 +1,4 @@
-class DOIParser
+class DOISanitizer
   def initialize(value)
     @value = value
   end

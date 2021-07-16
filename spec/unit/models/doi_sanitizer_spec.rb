@@ -1,9 +1,9 @@
 require 'unit/unit_spec_helper'
-require_relative '../../../app/models/doi_parser'
+require_relative '../../../app/models/doi_sanitizer'
 
-describe DOIParser do
+describe DOISanitizer do
   let(:doi_value) { nil }
-  let(:doi) { DOIParser.new(doi_value) }
+  let(:doi) { DOISanitizer.new(doi_value) }
 
   describe '#url' do
     context "given a nil value" do

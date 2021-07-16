@@ -769,7 +769,7 @@ class ActivityInsightPublication
   end
 
   def doi
-    DOIParser.new(doi_element).url || DOIParser.new(url).url || DOIParser.new(issn).url
+    DOISanitizer.new(doi_element).url || DOISanitizer.new(url).url || DOISanitizer.new(issn).url
   end
 
   def faculty_author
