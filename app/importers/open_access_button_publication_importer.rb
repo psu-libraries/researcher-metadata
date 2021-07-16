@@ -54,5 +54,8 @@ class OpenAccessButtonPublicationImporter
     # Open Access Button does not enforce any rate limits for their API, but they ask
     # that users make no more than 1 request per second.
     sleep 1
+  rescue TypeError => e
+    raise "An error occurred for publication #{publication.id}:  #{e.to_s}\n\n" +
+      "Open Access Button response:  #{oab_json.inspect}\n\n"
   end
 end
