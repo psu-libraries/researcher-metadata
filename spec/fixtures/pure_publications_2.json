@@ -1088,7 +1088,7 @@
     "electronicVersions": [
       {
         "pureId": 34576018,
-        "doi": "https://doi.org/10.1016/S0962-1849(05)80014-9",
+        "doi": "https://doi.org/10.1016/S0\u200b962-1849(05)80014-9",
         "accessType": {
           "pureId": 20055478,
           "uri": "/dk/atira/pure/core/openaccesspermission/unknown",

@@ -153,7 +153,8 @@ class PurePublicationImporter < PureImporter
           ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Final published version"
         end
       end
-      v.try('[]', 'doi')
+      raw_doi = v.try('[]', 'doi')
+      DOISanitizer.new(raw_doi).url
     end
   end
 
