@@ -53,6 +53,7 @@ class Publication < ApplicationRecord
   
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
+  validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }
 
@@ -571,5 +572,13 @@ class Publication < ApplicationRecord
 
   def preferred_journal_info_policy
     PreferredJournalInfoPolicy.new(self)
+  end
+
+  def doi_format_is_valid
+    if !doi.nil? && !doi.empty?
+      unless doi == DOISanitizer.new(doi).url
+        errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
+      end
+    end
   end
 end

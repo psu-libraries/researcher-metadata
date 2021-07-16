@@ -16,7 +16,7 @@ describe API::V1::PublicationSerializer do
                              published_on: date,
                              abstract: 'an abstract',
                              total_scopus_citations: 1000,
-                             doi: 'publication DOI',
+                             doi: 'https://doi.org/10.000/example',
                              open_access_url: 'OA URL',
                              journal: journal }
   let(:date) { nil }
@@ -38,7 +38,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:authors_et_al => true) }
     it { is_expected.to include(:abstract => 'an abstract') }
     it { is_expected.to include(:citation_count => 1000) }
-    it { is_expected.to include(:doi => 'publication DOI') }
+    it { is_expected.to include(:doi => 'https://doi.org/10.000/example') }
     it { is_expected.to include(:preferred_open_access_url => 'OA URL') }
 
     context "when the publication has a published_on date" do

@@ -21,7 +21,7 @@ feature "Admin publication detail page", type: :feature do
                       edition: "14",
                       page_range: "12-15",
                       issn: "1234-5678",
-                      doi: "https://example.doi.org/test",
+                      doi: "https://doi.org/10.000/test",
                       open_access_url: "https://openaccess.org/publications/1",
                       user_submitted_open_access_url: "https://example.org/publications/2",
                       journal: journal,
@@ -119,7 +119,7 @@ feature "Admin publication detail page", type: :feature do
       end
 
       it "shows the publication's DOI" do
-        expect(page).to have_link "https://example.doi.org/test", href: "https://example.doi.org/test"
+        expect(page).to have_link "https://doi.org/10.000/test", href: "https://doi.org/10.000/test"
       end
 
       it "shows a link to the publication's open access content" do

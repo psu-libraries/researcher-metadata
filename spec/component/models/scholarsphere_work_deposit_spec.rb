@@ -197,7 +197,7 @@ describe ScholarsphereFileUpload, type: :model do
                        title: 'a test title',
                        abstract: 'a test description',
                        published_on: Date.new(2021, 3, 30),
-                       doi: 'a/test/doi',
+                       doi: 'https://doi.org/10.000/test',
                        secondary_title: 'a subtitle',
                        journal: journal }
     let(:journal) { create :journal, title: 'test journal'}
@@ -209,7 +209,7 @@ describe ScholarsphereFileUpload, type: :model do
       expect(dep.title).to eq 'a test title'
       expect(dep.description).to eq 'a test description'
       expect(dep.published_date).to eq Date.new(2021, 3, 30)
-      expect(dep.doi).to eq 'a/test/doi'
+      expect(dep.doi).to eq 'https://doi.org/10.000/test'
       expect(dep.subtitle).to eq 'a subtitle'
       expect(dep.publisher).to eq 'test journal'
     end

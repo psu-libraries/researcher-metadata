@@ -54,6 +54,69 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:publication_type) }
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(Publication.publication_types) }
+
+    describe "validating DOI format" do
+      let(:pub) { build :publication, doi: doi }
+
+      context "when given a nil DOI" do
+        let(:doi) { nil }
+        it "passes validation" do
+          expect(pub.valid?).to eq true
+        end
+      end
+      context "when given an empty DOI" do
+        let(:doi) { "" }
+        it "passes validation" do
+          expect(pub.valid?).to eq true
+        end
+      end
+      context "when given a DOI with valid format" do
+        let(:doi) { "https://doi.org/10.0000/valid-doi" }
+        it "passes validation" do
+          expect(pub.valid?).to eq true
+        end
+      end
+      context "when given a blank DOI" do
+        let(:doi) { " " }
+        it "fails validation" do
+          expect(pub.valid?).to eq false
+        end
+        it "sets an error on the doi field" do
+          pub.valid?
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+        end
+      end
+      context "when given a DOI that is not a full URL" do
+        let(:doi) { "10.0000/valid-doi" }
+        it "fails validation" do
+          expect(pub.valid?).to eq false
+        end
+        it "sets an error on the doi field" do
+          pub.valid?
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+        end
+      end
+      context "when given an otherwise valid DOI that has extra whitespace" do
+        let(:doi) { "\thttps://doi.org/10.0000/valid-doi" }
+        it "fails validation" do
+          expect(pub.valid?).to eq false
+        end
+        it "sets an error on the doi field" do
+          pub.valid?
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+        end
+      end
+      context "when given an otherwise valid DOI that contains an illegal character" do
+        let(:doi) { "https://doi.org/10.0000/valid\u2013doi" }
+        it "fails validation" do
+          expect(pub.valid?).to eq false
+        end
+        it "sets an error on the doi field" do
+          pub.valid?
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+        end
+      end
+    end
   end
 
   describe 'associations' do
@@ -271,19 +334,19 @@ describe Publication, type: :model do
                          title: "Another Publication",
                          published_on: Date.new(2000, 1, 1) }
     let!(:pub2) { create :publication,
-                         doi: "https://doi.org/DOI123",
+                         doi: "https://doi.org/10.000/DOI123",
                          title: "Some Text Before The Title Some Text After",
                          published_on: Date.new(2000, 1, 1) }
     let!(:pub3) { create :publication,
-                         doi: "https://doi.org/DOI456",
+                         doi: "https://doi.org/10.000/DOI456",
                          title: "Some Text Before The Title Some Text After",
                          published_on: Date.new(2001, 2, 2) }
     let!(:pub4) { create :publication,
-                         doi: "https://doi.org/DOI111",
+                         doi: "https://doi.org/10.000/DOI111",
                          title: "Another Publication",
                          published_on: Date.new(2001, 2, 2) }
     let!(:pub5) { create :publication,
-                         doi: "https://doi.org/DOI222",
+                         doi: "https://doi.org/10.000/DOI222",
                          title: "Another Publication",
                          published_on: Date.new(2000, 1, 1) }
 
@@ -333,7 +396,7 @@ describe Publication, type: :model do
       end
     end
     context "when given publication data with a DOI that matches an existing publication" do
-      let(:doi) { "https://doi.org/DOI456" }
+      let(:doi) { "https://doi.org/10.000/DOI456" }
       context "when given data with a title that is a case-insensitive, partial match for an existing publication" do
         let(:title) { "THE TITLE" }
         context "when given data with no publication date" do

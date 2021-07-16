@@ -972,7 +972,7 @@ describe ActivityInsightImporter do
                                     published_on: Date.new(1980, 1, 1),
                                     updated_by_user_at: timestamp,
                                     visible: false,
-                                    doi: 'existing DOI' }
+                                    doi: 'https://doi.org/10.000/existing' }
         context "when the existing publication has been modified by an admin user" do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
 
@@ -1031,7 +1031,7 @@ describe ActivityInsightImporter do
             expect(p2.published_on).to eq Date.new(1980, 1, 1)
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
-            expect(p2.doi).to eq 'existing DOI'
+            expect(p2.doi).to eq 'https://doi.org/10.000/existing'
   
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
@@ -2532,7 +2532,7 @@ describe ActivityInsightImporter do
                                       published_on: Date.new(1980, 1, 1),
                                       updated_by_user_at: timestamp,
                                       visible: false,
-                                      doi: 'existing DOI' }
+                                      doi: 'https://doi.org/10.000/existing' }
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
@@ -2591,7 +2591,7 @@ describe ActivityInsightImporter do
               expect(p2.published_on).to eq Date.new(1980, 1, 1)
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
-              expect(p2.doi).to eq 'existing DOI'
+              expect(p2.doi).to eq 'https://doi.org/10.000/existing'
     
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
@@ -4070,7 +4070,7 @@ describe ActivityInsightImporter do
                                       published_on: Date.new(1980, 1, 1),
                                       updated_by_user_at: timestamp,
                                       visible: false,
-                                      doi: 'existing DOI' }
+                                      doi: 'https://doi.org/10.000/existing' }
           context "when the existing publication has been modified by an admin user" do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
   
@@ -4129,7 +4129,7 @@ describe ActivityInsightImporter do
               expect(p2.published_on).to eq Date.new(1980, 1, 1)
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
-              expect(p2.doi).to eq 'existing DOI'
+              expect(p2.doi).to eq 'https://doi.org/10.000/existing'
     
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'

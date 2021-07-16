@@ -9,7 +9,7 @@ describe "visiting the page to submit an open access waiver for a publication" d
   let(:pub) { create :publication,
                      title: 'Test Publication',
                      abstract: 'This is the abstract.',
-                     doi: 'https://doi.org/1234',
+                     doi: 'https://doi.org/10.000/1234',
                      journal_title: 'A Prestegious Journal',
                      issue: "583",
                      volume: "971",
@@ -50,7 +50,7 @@ describe "visiting the page to submit an open access waiver for a publication" d
         expect(page.find_field('Abstract').value).to eq "This is the abstract."
       end
       it "shows the publication's DOI" do
-        expect(page.find_field('Digital Object Identifier (DOI)').value).to eq "https://doi.org/1234"
+        expect(page.find_field('Digital Object Identifier (DOI)').value).to eq "https://doi.org/10.000/1234"
       end
       it "shows the publication's journal" do
         expect(page.find_field('Journal').value).to eq "A Prestegious Journal"

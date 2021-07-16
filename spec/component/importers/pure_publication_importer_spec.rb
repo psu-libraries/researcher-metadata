@@ -250,7 +250,7 @@ describe PurePublicationImporter do
                                     abstract: 'existing abstract',
                                     visible: false,
                                     doi: doi }
-        let(:doi) { "existing DOI" }
+        let(:doi) { "https://doi.org/10.000/existing" }
         let(:existing_journal) { create :journal }
         
         context "when the existing publication record has not been manually updated" do
@@ -507,7 +507,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
               expect(existing_pub_reloaded.visible).to eq false
-              expect(existing_pub_reloaded.doi).to eq 'existing DOI'
+              expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.000/existing'
             end
           end
 

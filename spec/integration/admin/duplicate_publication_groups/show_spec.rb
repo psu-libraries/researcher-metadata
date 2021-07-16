@@ -14,7 +14,7 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        edition: "edition1",
                        page_range: "pages1",
                        issn: "issn1",
-                       doi: "DOI1",
+                       doi: "https://doi.org/10.000/doi1",
                        publication_type: "Trade Journal Article",
                        duplicate_group: pub1_group }
 
@@ -30,7 +30,7 @@ feature "Admin duplicate publication group detail page", type: :feature do
                        edition: "edition2",
                        page_range: "pages2",
                        issn: "issn2",
-                       doi: "DOI2",
+                       doi: "https://doi.org/10.000/doi2",
                        publication_type: "Academic Journal Article",
                        duplicate_group: pub2_group }
 
@@ -146,8 +146,8 @@ feature "Admin duplicate publication group detail page", type: :feature do
         end
 
         it "shows the DOIs of the publications in the group" do
-          expect(page).to have_link "DOI1", href: "DOI1"
-          expect(page).to have_link "DOI2", href: "DOI2"
+          expect(page).to have_link "https://doi.org/10.000/doi1", href: "https://doi.org/10.000/doi1"
+          expect(page).to have_link "https://doi.org/10.000/doi2", href: "https://doi.org/10.000/doi2"
         end
 
         it "shows the types of the publications in the group" do
