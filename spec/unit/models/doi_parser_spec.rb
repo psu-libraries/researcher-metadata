@@ -77,5 +77,23 @@ describe DOIParser do
         expect(doi.url).to eq "https://doi.org/10.1038/s41598-017-15495-2"
       end
     end
+    context "given a DOI URL that has some preceeding whitespace characters" do
+      let(:doi_value) { "  \thttps://doi.org/10.1038/s41598-017-15495-2" }
+      it "returns the URL with the whitespace stripped off" do
+        expect(doi.url).to eq "https://doi.org/10.1038/s41598-017-15495-2"
+      end
+    end
+    context "given a DOI URL that contains a non-printing space character" do
+      let(:doi_value) { "https://doi.org/10.1038/s\u200b41598-017-15495-2" }
+      it "returns the URL with the non-printing space character removed" do
+        expect(doi.url).to eq "https://doi.org/10.1038/s41598-017-15495-2"
+      end
+    end
+    context "given a DOI URL that contains a non-ASCII dash character" do
+      let(:doi_value) { "https://doi.org/10.1038/s41598\u2013017-15495-2" }
+      it "returns the URL with the non-ASCII dash replaced with a hyphen" do
+        expect(doi.url).to eq "https://doi.org/10.1038/s41598-017-15495-2"
+      end
+    end
   end
 end
