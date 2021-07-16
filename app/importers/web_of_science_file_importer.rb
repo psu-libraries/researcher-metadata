@@ -59,7 +59,7 @@ class WebOfScienceFileImporter
                   p = Publication.new
                   p.title = wos_pub.title
                   p.publication_type = "Journal Article"
-                  p.doi = "https://doi.org/#{wos_pub.doi}" if wos_pub.doi
+                  p.doi = wos_pub.doi
                   p.issn = wos_pub.issn
                   p.abstract = wos_pub.abstract
                   p.journal_title = wos_pub.journal_title

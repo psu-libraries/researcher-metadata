@@ -167,9 +167,9 @@ describe WebOfSciencePublication do
       let(:xref_doi) { nil }
 
       context "when the given data has a DOI identifier element" do
-        let(:doi) { {value: "\n    10.1000/DOI123  \n   "} }
-        it "returns the value of the DOI with any whitespace removed" do
-          expect(pub.doi).to eq '10.1000/DOI123'
+        let(:doi) { {value: "\n    10.1000/DO\u200bI123  \n   "} }
+        it "returns a full, sanitized URL for the DOI" do
+          expect(pub.doi).to eq 'https://doi.org/10.1000/DOI123'
         end
       end
 
@@ -182,18 +182,18 @@ describe WebOfSciencePublication do
     end
 
     context "when the given data has an xref DOI identifier element" do
-      let(:xref_doi) { {value: " \n   10.2000/XREFDOI456  \n "}}
+      let(:xref_doi) { {value: " \n   10.2000/XR\u200bEFDOI456  \n "}}
       context "when the given data has a DOI identifier element" do
-        let(:doi) { {value: "\n    10.1000/DOI123  \n   "} }
-        it "returns the value of the DOI with any whitespace removed" do
-          expect(pub.doi).to eq '10.1000/DOI123'
+        let(:doi) { {value: "\n    10.1000/DO\u200bI123  \n   "} }
+        it "returns a full, sanitized URL for the DOI" do
+          expect(pub.doi).to eq 'https://doi.org/10.1000/DOI123'
         end
       end
 
       context "when the given data does not have a DOI identifier element" do
         let(:doi) { nil }
-        it "returns the value of the xref DOI identifier with any whitespace removed" do
-          expect(pub.doi).to eq '10.2000/XREFDOI456'
+        it "returns a full, sanitized URL for the xref DOI identifier" do
+          expect(pub.doi).to eq 'https://doi.org/10.2000/XREFDOI456'
         end
       end
     end

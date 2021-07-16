@@ -333,7 +333,7 @@ describe Publication, type: :model do
       end
     end
     context "when given publication data with a DOI that matches an existing publication" do
-      let(:doi) { "DOI456" }
+      let(:doi) { "https://doi.org/DOI456" }
       context "when given data with a title that is a case-insensitive, partial match for an existing publication" do
         let(:title) { "THE TITLE" }
         context "when given data with no publication date" do

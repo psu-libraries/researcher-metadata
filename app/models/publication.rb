@@ -75,7 +75,7 @@ class Publication < ApplicationRecord
   accepts_nested_attributes_for :taggings, allow_destroy: true
 
   def self.find_by_wos_pub(pub)
-    by_doi = where(doi: "https://doi.org/#{pub.doi}")
+    by_doi = pub.doi ? where(doi: pub.doi) : Publication.none
     if by_doi.any?
       by_doi
     else
