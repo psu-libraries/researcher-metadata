@@ -16,6 +16,13 @@ class ActivityInsightImporter
       details = ai_user_detail(aiu.raw_webaccess_id)
 
       begin
+        u.ai_office_area_code = details.office_phone_1
+        u.ai_office_phone_1 = details.office_phone_2
+        u.ai_office_phone_2 = details.office_phone_3
+        u.ai_fax_area_code = details.fax_1
+        u.ai_fax_1 = details.fax_2
+        u.ai_fax_2 = details.fax_3
+        
         if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
           u.first_name = aiu.first_name
           u.middle_name = aiu.middle_name
@@ -27,19 +34,13 @@ class ActivityInsightImporter
           u.ai_building = details.building
           u.ai_alt_name = details.alt_name
           u.ai_room_number = details.room_number
-          u.ai_office_area_code = details.office_phone_1
-          u.ai_office_phone_1 = details.office_phone_2
-          u.ai_office_phone_2 = details.office_phone_3
-          u.ai_fax_area_code = details.fax_1
-          u.ai_fax_1 = details.fax_2
-          u.ai_fax_2 = details.fax_3
           u.ai_website = details.website
           u.ai_bio = details.bio
           u.ai_teaching_interests = details.teaching_interests
           u.ai_research_interests = details.research_interests
-
-          u.save!
         end
+
+        u.save!
 
         details.education_history_items.each do |item|
           i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
