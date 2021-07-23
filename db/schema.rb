@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_06_131119) do
+ActiveRecord::Schema.define(version: 2021_07_23_143828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -524,12 +524,12 @@ ActiveRecord::Schema.define(version: 2021_07_06_131119) do
     t.string "ai_alt_name"
     t.string "ai_building"
     t.string "ai_room_number"
-    t.integer "ai_office_area_code"
-    t.integer "ai_office_phone_1"
-    t.integer "ai_office_phone_2"
-    t.integer "ai_fax_area_code"
-    t.integer "ai_fax_1"
-    t.integer "ai_fax_2"
+    t.string "ai_office_area_code"
+    t.string "ai_office_phone_1"
+    t.string "ai_office_phone_2"
+    t.string "ai_fax_area_code"
+    t.string "ai_fax_1"
+    t.string "ai_fax_2"
     t.text "ai_website"
     t.text "ai_bio"
     t.text "ai_teaching_interests"

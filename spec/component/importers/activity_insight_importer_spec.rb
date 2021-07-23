@@ -38,12 +38,12 @@ describe ActivityInsightImporter do
         expect(u1.penn_state_identifier).to eq '976567444'
         expect(u1.ai_building).to eq "Sally's Building"
         expect(u1.ai_room_number).to eq '123'
-        expect(u1.ai_office_area_code).to eq 444
-        expect(u1.ai_office_phone_1).to eq 555
-        expect(u1.ai_office_phone_2).to eq 6666
-        expect(u1.ai_fax_area_code).to eq 666
-        expect(u1.ai_fax_1).to eq 777
-        expect(u1.ai_fax_2).to eq 8888
+        expect(u1.ai_office_area_code).to eq '444'
+        expect(u1.ai_office_phone_1).to eq '555'
+        expect(u1.ai_office_phone_2).to eq '0666'
+        expect(u1.ai_fax_area_code).to eq '666'
+        expect(u1.ai_fax_1).to eq '777'
+        expect(u1.ai_fax_2).to eq '8888'
         expect(u1.ai_website).to eq 'sociology.la.psu.edu/people/abc123'
         expect(u1.ai_bio).to eq "Sally's bio"
         expect(u1.ai_teaching_interests).to eq "Sally's teaching interests"
@@ -3129,12 +3129,12 @@ describe ActivityInsightImporter do
           expect(u1.penn_state_identifier).to eq '976567444'
           expect(u1.ai_building).to eq "Sally's Building"
           expect(u1.ai_room_number).to eq '123'
-          expect(u1.ai_office_area_code).to eq 444
-          expect(u1.ai_office_phone_1).to eq 555
-          expect(u1.ai_office_phone_2).to eq 6666
-          expect(u1.ai_fax_area_code).to eq 666
-          expect(u1.ai_fax_1).to eq 777
-          expect(u1.ai_fax_2).to eq 8888
+          expect(u1.ai_office_area_code).to eq '444'
+          expect(u1.ai_office_phone_1).to eq '555'
+          expect(u1.ai_office_phone_2).to eq '0666'
+          expect(u1.ai_fax_area_code).to eq '666'
+          expect(u1.ai_fax_1).to eq '777'
+          expect(u1.ai_fax_2).to eq '8888'
           expect(u1.ai_website).to eq 'sociology.la.psu.edu/people/abc123'
           expect(u1.ai_bio).to eq "Sally's bio"
           expect(u1.ai_teaching_interests).to eq "Sally's teaching interests"

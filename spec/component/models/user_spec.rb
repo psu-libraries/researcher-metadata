@@ -26,12 +26,12 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:ai_alt_name).of_type(:string) }
   it { is_expected.to have_db_column(:ai_building).of_type(:string) }
   it { is_expected.to have_db_column(:ai_room_number).of_type(:string) }
-  it { is_expected.to have_db_column(:ai_office_area_code).of_type(:integer) }
-  it { is_expected.to have_db_column(:ai_office_phone_1).of_type(:integer) }
-  it { is_expected.to have_db_column(:ai_office_phone_2).of_type(:integer) }
-  it { is_expected.to have_db_column(:ai_fax_area_code).of_type(:integer) }
-  it { is_expected.to have_db_column(:ai_fax_1).of_type(:integer) }
-  it { is_expected.to have_db_column(:ai_fax_2).of_type(:integer) }
+  it { is_expected.to have_db_column(:ai_office_area_code).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_office_phone_1).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_office_phone_2).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_fax_area_code).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_fax_1).of_type(:string) }
+  it { is_expected.to have_db_column(:ai_fax_2).of_type(:string) }
   it { is_expected.to have_db_column(:ai_google_scholar).of_type(:text) }
   it { is_expected.to have_db_column(:ai_website).of_type(:text) }
   it { is_expected.to have_db_column(:ai_bio).of_type(:text) }
