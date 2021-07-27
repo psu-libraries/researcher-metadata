@@ -1578,12 +1578,12 @@ describe ActivityInsightImporter do
           expect(u1.penn_state_identifier).to eq '999999999'
           expect(u1.ai_building).to be_nil
           expect(u1.ai_room_number).to be_nil
-          expect(u1.ai_office_area_code).to eq '444'
-          expect(u1.ai_office_phone_1).to eq '555'
-          expect(u1.ai_office_phone_2).to eq '0666'
-          expect(u1.ai_fax_area_code).to eq '666'
-          expect(u1.ai_fax_1).to eq '777'
-          expect(u1.ai_fax_2).to eq '8888'
+          expect(u1.ai_office_area_code).to be_nil
+          expect(u1.ai_office_phone_1).to be_nil
+          expect(u1.ai_office_phone_2).to be_nil
+          expect(u1.ai_fax_area_code).to be_nil
+          expect(u1.ai_fax_1).to be_nil
+          expect(u1.ai_fax_2).to be_nil
           expect(u1.ai_website).to be_nil
           expect(u1.ai_bio).to be_nil
           expect(u1.ai_teaching_interests).to be_nil
