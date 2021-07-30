@@ -87,7 +87,7 @@ RailsAdmin.config do |config|
             :InternalPublicationWaiver]
     end
     delete do
-      only [:Publication, :User, :APIToken]
+      only [:Publication, :User, :APIToken, :ExternalPublicationWaiver]
     end
     index_publications_by_organization do
       only [:Publication]
