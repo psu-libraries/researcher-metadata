@@ -213,6 +213,11 @@ class Publication < ApplicationRecord
             key :example, 'Contributor'
             key :description, 'The last name of a person who contributed to the publication'
           end
+          property :psu_user_id do
+            key :type, [:string, :null]
+            key :example, 'abc1234'
+            key :description, 'The Penn State user ID of a person who contributed to the publication if they have one'
+          end
         end
       end
       property :tags do

@@ -22,6 +22,8 @@ describe API::V1::PublicationSerializer do
   let(:date) { nil }
   let(:journal) { create :journal, title: 'test journal title', publisher: publisher }
   let(:publisher) { create :publisher, name: 'test publisher name' }
+  let(:u1) { create :user, webaccess_id: 'abc123' }
+  let(:u2) { create :user, webaccess_id: 'xyz789' }
 
   describe "data attributes" do
     subject { serialized_data_attributes(publication) }
@@ -56,16 +58,16 @@ describe API::V1::PublicationSerializer do
 
     context "when the publication has contributor names" do
       before do
-        create :contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication
-        create :contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication
-        create :contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication
+        create :contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication, user: u1
+        create :contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication, user: u2
+        create :contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication, user: nil
       end
 
       subject { serialized_data_attributes(publication) }
 
-      it { is_expected.to include(:contributors => [{first_name: 'd', middle_name: 'e', last_name: 'f'},
-                                                    {first_name: 'a', middle_name: 'b', last_name: 'c'},
-                                                    {first_name: 'g', middle_name: 'h', last_name: 'i'}]) }
+      it { is_expected.to include(:contributors => [{first_name: 'd', middle_name: 'e', last_name: 'f', psu_user_id: 'xyz789'},
+                                                    {first_name: 'a', middle_name: 'b', last_name: 'c', psu_user_id: 'abc123'},
+                                                    {first_name: 'g', middle_name: 'h', last_name: 'i', psu_user_id: nil}]) }
     end
 
     context "when the publication does not have imports from Pure" do

@@ -37,6 +37,7 @@ describe ContributorName, type: :model do
 
   it { is_expected.to belong_to(:publication).inverse_of(:contributor_names) }
   it { is_expected.to belong_to(:user).inverse_of(:contributor_names).optional }
+  it { is_expected.to delegate_method(:webaccess_id).to(:user).allow_nil }
 
   describe "Validating that a contributor has at least one name" do
     let(:cn) { ContributorName.new(publication: create(:publication),

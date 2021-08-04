@@ -24,7 +24,8 @@ module API::V1
       object.contributor_names.map do |c|
         {first_name: c.first_name,
          middle_name: c.middle_name,
-         last_name: c.last_name}
+         last_name: c.last_name,
+         psu_user_id: c.webaccess_id}
       end
     end
 

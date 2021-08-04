@@ -5,6 +5,8 @@ class ContributorName < ApplicationRecord
   validates :publication, :position, presence: true
   validate :at_least_one_name_present
 
+  delegate :webaccess_id, to: :user, prefix: false, allow_nil: true
+
   def name
     full_name = first_name.to_s
     full_name += ' ' if first_name.present? && middle_name.present?
@@ -23,10 +25,6 @@ class ContributorName < ApplicationRecord
   end
 
   private
-
-  def webaccess_id
-    user.try(:webaccess_id)
-  end
 
   def orcid_identifier
     user.try(:orcid).try(:gsub, '-', '')
