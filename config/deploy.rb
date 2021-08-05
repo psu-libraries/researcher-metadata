@@ -34,7 +34,7 @@ set :shared, %w{
 }
 
 # The directory that we're deploying to on the remote host.
-set :deploy_to, "/var/www/sites/metadata"
+set :deploy_to, "/var/www/rmd"
 
 # Delayed Job hook
 after 'deploy:restart', 'delayed_job:restart'
