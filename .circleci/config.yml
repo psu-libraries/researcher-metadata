@@ -38,6 +38,7 @@ jobs:
       - run:
           name: Install secrets config files
           command: |
+            echo `pwd`
             mv config/activity_insight.yml.ci config/activity_insight.yml
             mv config/azure_ad_oauth.yml.ci config/azure_ad_oauth.yml
             mv config/orcid.yml.ci config/orcid.yml
