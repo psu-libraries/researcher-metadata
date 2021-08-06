@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.6.3-node
+      - image: cimg/ruby:2.6.5-node
     executor: ruby/default
     steps:
       - checkout
@@ -17,7 +17,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:2.6.3-node
+      - image: cimg/ruby:2.6.5-node
       - image: circleci/postgres:12.7
         environment:
           POSTGRES_USER: rmd_test
