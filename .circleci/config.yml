@@ -39,7 +39,7 @@ jobs:
           name: Install phantomjs
           command: |
             sudo apt-get update
-            sudo apt-get install fontconfig freetype
+            sudo apt-get install fontconfig
             sudo mkdir -p /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin
             sudo curl --output /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
             sudo chmod ugo+x /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
