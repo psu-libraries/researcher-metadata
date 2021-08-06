@@ -1,0 +1,77 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@1.0
+  node: circleci/node@2
+
+jobs:
+  build:
+    docker:
+      - image: cimg/ruby:2.6.3-node
+    executor: ruby/default
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+          cache-key: "yarn.lock"
+
+  test:
+    docker:
+      - image: cimg/ruby:2.6.3-node
+      - image: circleci/postgres:12.7
+        environment:
+          POSTGRES_USER: rmd_test
+          POSTGRES_DB: rmd_test
+          POSTGRES_PASSWORD: "password"
+    # environment variables specific to Ruby/Rails, applied to the primary container.
+    environment:
+      BUNDLE_JOBS: "3"
+      BUNDLE_RETRY: "3"
+      PGHOST: 127.0.0.1
+      PGUSER: rmd_test
+      PGPASSWORD: "password"
+      RAILS_ENV: test
+    # A series of steps to run, some are similar to those in "build".
+    steps:
+      - checkout
+      - ruby/install-deps
+      - node/install-packages:
+          pkg-manager: yarn
+          cache-key: "yarn.lock"
+      # Here we make sure that the secondary container boots
+      # up before we run operations on the database.
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run:
+          name: Database setup
+          command: bundle exec rails db:schema:load --trace
+      # Run the unit tests
+      - run:
+          name: Unit Tests
+          command: bin/rspec spec/unit
+
+      # Run the component tests
+      - run:
+          name: Component Tests
+          command: bin/rspec spec/component
+
+      # Run the request tests
+      - run:
+          name: Request Tests
+          command: bin/rspec spec/requests
+
+      # Run the integration tests
+      - run:
+          name: Integration Tests
+          command: bin/rspec spec/integration
+
+# We use workflows to orchestrate the jobs that we declared above.
+workflows:
+  version: 2
+  build_and_test:     # The name of our workflow is "build_and_test"
+    jobs:             # The list of jobs we run as part of this workflow.
+      - build         # Run build first.
+      - test:         # Then run test,
+          requires:   # Test requires that build passes for it to run.
+            - build   # Finally, run the build job.
