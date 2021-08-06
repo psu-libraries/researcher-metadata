@@ -38,11 +38,11 @@ jobs:
       - run:
           name: Install secrets config files
           command: |
-            mv /home/circleci/project/config/activity_insight.yml.ci /home/circleci/project/config/activity_insight.yml
-            mv /home/circleci/project/config/azure_ad_oauth.yml.ci /home/circleci/project/config/azure_ad_oauth.yml
-            mv /home/circleci/project/config/orcid.yml.ci /home/circleci/project/config/orcid.yml
-            mv /home/circleci/project/config/pure.yml.ci /home/circleci/project/config/pure.yml
-            mv /home/circleci/project/config/scholarsphere_client.yml.ci /home/circleci/project/config/scholarsphere_client.yml
+            mv config/activity_insight.yml.ci config/activity_insight.yml
+            mv config/azure_ad_oauth.yml.ci config/azure_ad_oauth.yml
+            mv config/orcid.yml.ci config/orcid.yml
+            mv config/pure.yml.ci config/pure.yml
+            mv config/scholarsphere-client.yml.ci config/scholarsphere-client.yml
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
