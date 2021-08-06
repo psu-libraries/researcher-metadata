@@ -20,15 +20,15 @@ jobs:
       - image: cimg/ruby:2.6.6-node
       - image: circleci/postgres:12.7
         environment:
-          POSTGRES_USER: rmd_test
-          POSTGRES_DB: rmd_test
+          POSTGRES_USER: psu_research_metadata_test
+          POSTGRES_DB: psu_research_metadata_test
           POSTGRES_PASSWORD: "password"
     # environment variables specific to Ruby/Rails, applied to the primary container.
     environment:
       BUNDLE_JOBS: "3"
       BUNDLE_RETRY: "3"
       PGHOST: 127.0.0.1
-      PGUSER: rmd_test
+      PGUSER: psu_research_metadata_test
       PGPASSWORD: "password"
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
