@@ -46,18 +46,18 @@ class PurePublicationImporter < PureImporter
 
           pi.save!
 
-          p.contributor_names.delete_all
+          unless p.updated_by_user_at.present?
+            p.contributor_names.delete_all
 
-          authorships = publication['personAssociations'].select do |a|
-            !a['authorCollaboration'].present? &&
-              a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
-          end
+            authorships = publication['personAssociations'].select do |a|
+              !a['authorCollaboration'].present? &&
+                a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
+            end
 
-          authorships.each_with_index do |a, i|
-            if a['person'].present?
-              u = User.find_by(pure_uuid: a['person']['uuid'])
+            authorships.each_with_index do |a, i|
+              if a['person'].present?
+                u = User.find_by(pure_uuid: a['person']['uuid'])
 
-              unless p.updated_by_user_at.present?
                 if u
                   authorship = Authorship.find_by(user: u, publication: p) || Authorship.new
 
@@ -71,15 +71,15 @@ class PurePublicationImporter < PureImporter
                   end
                 end
               end
+              contributor_name_attrs = {
+                publication: p,
+                first_name: a['name']['firstName'],
+                last_name: a['name']['lastName'],
+                position: i+1
+              }
+              contributor_name_attrs.merge!(user: u) if u
+              ContributorName.create!(contributor_name_attrs)
             end
-            contributor_name_attrs = {
-              publication: p,
-              first_name: a['name']['firstName'],
-              last_name: a['name']['lastName'],
-              position: i+1
-            }
-            contributor_name_attrs.merge!(user: u) if u
-            ContributorName.create!(contributor_name_attrs)
           end
         end
       end
