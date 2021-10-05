@@ -147,8 +147,8 @@ group :test do
   # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15', '< 4.0'
 
-  # PhantomJS driver for capybara
-  gem 'poltergeist'
+  gem 'selenium-webdriver'
+  gem 'webdrivers'
 
   # Clean out database between test runs
   gem 'database_cleaner'
