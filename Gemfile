@@ -69,7 +69,7 @@ gem 'swagger_ui_engine'
 gem 'rails_admin_material'
 
 # Bootstrap 4 ruby gem for Ruby on Rails
-gem 'bootstrap'
+gem 'bootstrap', '< 5.0'
 
 # jQuery for Rails
 gem 'jquery-rails'
@@ -157,7 +157,7 @@ group :test do
   gem 'launchy'
 
   # Fancy rspec matchers for rails
-  gem 'shoulda-matchers', git: "https://github.com/thoughtbot/shoulda-matchers", require: false
+  gem 'shoulda-matchers', '~> 5.0'
 
   # Test object factory
   gem 'factory_bot_rails'
