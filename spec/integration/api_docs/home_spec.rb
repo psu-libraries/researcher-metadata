@@ -1,5 +1,5 @@
 require 'integration/integration_spec_helper'
-require 'support/poltergeist'
+require 'support/webdrivers'
 
 feature "API documentation home page", type: :feature, js: true do
   context "when the user is logged in" do
