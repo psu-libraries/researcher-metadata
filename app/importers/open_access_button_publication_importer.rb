@@ -58,6 +58,7 @@ class OpenAccessButtonPublicationImporter
   rescue StandardError => e
     ImporterErrorLog::OpenAccessButtonImporterErrorLog.create!(
                                              error_type: e.class.to_s,
+                                             error_message: e.message.to_s,
                                              metadata: {
                                                publication_id: publication&.id,
                                                publication_doi_url_path: publication&.doi_url_path,

@@ -261,6 +261,7 @@ describe OpenAccessButtonPublicationImporter do
 
         log = ImporterErrorLog::OpenAccessButtonImporterErrorLog.last
         expect(log.error_type).to eq 'RuntimeError'
+        expect(log.error_message).to be_present
         expect(log.metadata["publication_id"]).to eq pub.id
         expect(log.metadata["publication_doi_url_path"]).to eq pub.doi_url_path
         expect(log.metadata["oab_json"]).to eq ''
