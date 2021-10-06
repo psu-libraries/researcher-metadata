@@ -246,6 +246,37 @@ describe OpenAccessButtonPublicationImporter do
         end
       end
     end
+
+    context "when an error is raised" do
+      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata'}
+
+      before do
+        allow(URI).to receive(:encode).and_raise(RuntimeError)
+      end
+
+      it "logs the error" do
+        expect {
+          importer.import_all
+        }.to change(ImporterErrorLog::OpenAccessButtonImporterErrorLog, :count).by(1)
+
+        log = ImporterErrorLog::OpenAccessButtonImporterErrorLog.last
+        expect(log.error_type).to eq 'RuntimeError'
+        expect(log.metadata["publication_id"]).to eq pub.id
+        expect(log.metadata["publication_doi_url_path"]).to eq pub.doi_url_path
+        expect(log.metadata["oab_json"]).to eq ''
+        expect(log.occurred_at).to be_within(5.seconds).of(Time.zone.now)
+        expect(log.stacktrace).to be_present
+      end
+
+      it "continues with the import" do
+        pub_2 = create :publication, doi: 'https://doi.org/10.000/nodata'
+
+        expect {
+          importer.import_all
+        }.to change(ImporterErrorLog::OpenAccessButtonImporterErrorLog, :count).by(2)
+      end
+
+    end
   end
 
   describe '#import_new' do
