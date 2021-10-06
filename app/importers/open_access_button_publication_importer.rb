@@ -24,7 +24,7 @@ class OpenAccessButtonPublicationImporter
   private
 
   def all_pubs
-    Publication.where.not(doi: nil).where.not(doi: '').where(%{open_access_url IS NULL OR open_access_url = ''})
+    Publication.where.not(doi: nil).where.not(doi: '')
   end
 
   def new_pubs
