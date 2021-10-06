@@ -1,0 +1,2 @@
+class ImporterErrorLog::ActivityInsightImporterErrorLog < ImporterErrorLog
+end
