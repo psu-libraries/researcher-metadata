@@ -8,7 +8,7 @@ feature "Admin open access location detail page", type: :feature do
                       license: 'cc-by-nc',
                       oa_date: Date.new(2020, 5, 3),
                       source: 'Unpaywall',
-                      source_updated_at: Time.new(2021, 10, 7, 18, 7, 0),
+                      source_updated_at: Time.new(2021, 10, 7, 18, 7, 0, "+00:00"),
                       url: 'https://nature.com/articles/testpub123',
                       landing_page_url: 'https://nature.com/articles/testpub123/info',
                       pdf_url: 'https://nature.com/articles/testpub123/pdf',
@@ -45,7 +45,7 @@ feature "Admin open access location detail page", type: :feature do
       end
 
       it "shows the location's data source update time" do
-        expect(page).to have_content "October 07, 2021 22:07"
+        expect(page).to have_content "October 07, 2021 18:07"
       end
 
       it "shows the location's url" do
