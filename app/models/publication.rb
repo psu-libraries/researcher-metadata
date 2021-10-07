@@ -68,7 +68,7 @@ class Publication < ApplicationRecord
           where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
           distinct(:id) }
 
-  scope :subject_to_open_access_policy, -> { journal_article.where("published_on >= ?", Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { journal_article.where("published_on >= ? AND status = 'Published'", Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
