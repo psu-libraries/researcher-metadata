@@ -8,6 +8,7 @@ describe 'the import_error_logs table', type: :model do
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:importer_type).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:error_type).of_type(:string).with_options(null: false) }
+  it { is_expected.to have_db_column(:error_message).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:stacktrace).of_type(:text).with_options(null: false) }
   it { is_expected.to have_db_column(:metadata).of_type(:jsonb) }
   it { is_expected.to have_db_column(:occurred_at).of_type(:datetime).with_options(null: false) }
