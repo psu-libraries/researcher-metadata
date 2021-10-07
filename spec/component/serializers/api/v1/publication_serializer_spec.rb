@@ -7,7 +7,7 @@ describe API::V1::PublicationSerializer do
                              journal_title: 'prestegious journal',
                              publication_type: 'Journal Article',
                              publisher_name: 'a publisher',
-                             status: 'published',
+                             status: 'Published',
                              volume: '1',
                              issue: '2',
                              edition: '3',
@@ -32,7 +32,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(:journal_title => 'test journal title') }
     it { is_expected.to include(:publication_type => 'Journal Article') }
     it { is_expected.to include(:publisher => 'test publisher name') }
-    it { is_expected.to include(:status => 'published') }
+    it { is_expected.to include(:status => 'Published') }
     it { is_expected.to include(:volume => '1') }
     it { is_expected.to include(:issue => '2') }
     it { is_expected.to include(:edition => '3') }

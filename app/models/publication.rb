@@ -18,7 +18,7 @@ class Publication < ApplicationRecord
   end
 
   def self.statuses
-    ['Published', 'In Press', 'Accepted/In Press']
+    ['Published', 'In Press']
   end
 
   has_many :authorships, inverse_of: :publication
@@ -55,7 +55,7 @@ class Publication < ApplicationRecord
 
   has_one :publisher, through: :journal
   
-  validates :publication_type, :title, presence: true
+  validates :publication_type, :title, :status, presence: true
   validates :publication_type, inclusion: {in: publication_types }
   validates :status, inclusion: {in: statuses }
   validate :doi_format_is_valid
@@ -92,6 +92,10 @@ class Publication < ApplicationRecord
             "%#{pub.title}%",
             pub.publication_date.try(:year))
     end
+  end
+
+  def status=(new_status)
+    write_attribute(:status, StatusMapper.map(new_status.to_s))
   end
 
   def confirmed_authorships
@@ -591,4 +595,6 @@ class Publication < ApplicationRecord
       end
     end
   end
+
+
 end
