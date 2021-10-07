@@ -17,6 +17,10 @@ class Publication < ApplicationRecord
      ]
   end
 
+  def self.open_access_statuses
+    ["gold", "hybrid", "bronze", "green", "closed"]
+  end
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -53,6 +57,7 @@ class Publication < ApplicationRecord
   
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: {in: publication_types }
+  validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }

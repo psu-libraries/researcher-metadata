@@ -33,6 +33,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:journal_id).of_type(:integer) }
   it { is_expected.to have_db_column(:exported_to_activity_insight).of_type(:boolean) }
+  it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -54,6 +55,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:publication_type) }
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(Publication.publication_types) }
+    it { is_expected.to validate_inclusion_of(:open_access_status).in_array(Publication.open_access_statuses).allow_nil }
 
     describe "validating DOI format" do
       let(:pub) { build :publication, doi: doi }
@@ -211,6 +213,12 @@ describe Publication, type: :model do
                                                    "Digital or Visual Product", "Editorial", "Foreword/Postscript",
                                                    "Letter", "Paper", "Patent", "Poster", "Scholarly Edition",
                                                    "Short Survey", "Working Paper", "Other"]
+    end
+  end
+
+  describe '.open_access_statuses' do
+    it "returns the list of valid values for open access status" do
+      expect(Publication.open_access_statuses).to eq ["gold", "hybrid", "bronze", "green", "closed"]
     end
   end
 
