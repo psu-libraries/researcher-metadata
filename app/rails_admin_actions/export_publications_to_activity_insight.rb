@@ -22,7 +22,7 @@ module RailsAdmin
           proc do
             associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
             options = {}
-            options = options.merge(include: associations) unless associations.blank?
+            options = options.merge(include: associations) if associations.present?
             options = options.merge(get_sort_hash(model_config))
             options = options.merge(query: params[:query]) if params[:query].present?
             options = options.merge(filters: params[:f]) if params[:f].present?
@@ -38,7 +38,7 @@ module RailsAdmin
               render :export_publications_to_activity_insight
             elsif request.post?
               object_ids = @objects.pluck(:id)
-              AiPublicationExportJob.new.perform(object_ids, params["_integrate"])
+              AiPublicationExportJob.new.perform(object_ids, params['_integrate'])
               flash[:notice] = I18n.t('admin.actions.export_publications_to_activity_insight.notice')
               render :index_publications_by_organization
             end

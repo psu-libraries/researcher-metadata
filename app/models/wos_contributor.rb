@@ -13,5 +13,5 @@ class WOSContributor
 
   private
 
-  attr_reader :parsed_contributor
+    attr_reader :parsed_contributor
 end

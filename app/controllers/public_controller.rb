@@ -3,7 +3,5 @@ class PublicController < ApplicationController
     @env = Rails.env
   end
 
-  def resources
-
-  end
+  def resources; end
 end

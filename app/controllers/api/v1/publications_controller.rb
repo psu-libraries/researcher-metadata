@@ -3,7 +3,7 @@ module API::V1
     include Swagger::Blocks
 
     def index
-      params[:limit].present? ? limit = params[:limit] : limit = 100
+      limit = params[:limit].presence || 100
       render json: API::V1::PublicationSerializer.new(api_token.publications.visible.limit(limit))
     end
 
@@ -88,7 +88,7 @@ module API::V1
                   property :identifier do
                     key :type, [:string, :null]
                     key :example, '1789352'
-                    key :description, "A code identifying the grant that is unique to the awarding agency"
+                    key :description, 'A code identifying the grant that is unique to the awarding agency'
                   end
                 end
               end
@@ -164,7 +164,7 @@ module API::V1
         key :operationId, 'findPublications'
         key :produces, [
           'application/json',
-          'text/html',
+          'text/html'
         ]
         key :tags, [
           'publication'

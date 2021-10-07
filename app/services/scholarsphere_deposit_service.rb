@@ -17,7 +17,7 @@ class ScholarsphereDepositService
 
     response = ingest.publish
     response_body = JSON.parse(response.body)
-    
+
     if response.status == 200
       scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
@@ -33,5 +33,5 @@ class ScholarsphereDepositService
 
   private
 
-  attr_reader :deposit, :current_user
+    attr_reader :deposit, :current_user
 end

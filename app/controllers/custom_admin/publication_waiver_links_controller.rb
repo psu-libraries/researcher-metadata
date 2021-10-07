@@ -2,7 +2,7 @@ class CustomAdmin::PublicationWaiverLinksController < RailsAdmin::ApplicationCon
   def create
     ext_waiver = ExternalPublicationWaiver.find(params[:external_publication_waiver_id])
     pub = Publication.find(params[:publication_id])
-    
+
     auth = pub.authorships.find_by(user: ext_waiver.user)
 
     if auth

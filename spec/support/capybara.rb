@@ -5,5 +5,5 @@ require 'capybara/dsl'
 Capybara.save_path = Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../../tmp'))
 
 RSpec.configure do |config|
- config.include(Capybara::DSL)
+  config.include(Capybara::DSL)
 end

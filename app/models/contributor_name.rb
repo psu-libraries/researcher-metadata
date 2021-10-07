@@ -18,21 +18,21 @@ class ContributorName < ApplicationRecord
 
   def to_scholarsphere_creator
     ss_attrs = {}
-    ss_attrs.merge!(psu_id: webaccess_id) if webaccess_id
-    ss_attrs.merge!(orcid: orcid_identifier) if orcid_identifier
-    ss_attrs.merge!(display_name: name) if name.present?
+    ss_attrs[:psu_id] = webaccess_id if webaccess_id
+    ss_attrs[:orcid] = orcid_identifier if orcid_identifier
+    ss_attrs[:display_name] = name if name.present?
     ss_attrs.presence
   end
 
   private
 
-  def orcid_identifier
-    user.try(:orcid).try(:gsub, '-', '')
-  end
-
-  def at_least_one_name_present
-    unless first_name.present? || middle_name.present? || last_name.present?
-      errors[:base] << "At least one name must be present."
+    def orcid_identifier
+      user.try(:orcid).try(:gsub, '-', '')
     end
-  end
+
+    def at_least_one_name_present
+      unless first_name.present? || middle_name.present? || last_name.present?
+        errors[:base] << 'At least one name must be present.'
+      end
+    end
 end

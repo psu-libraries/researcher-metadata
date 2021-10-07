@@ -16,7 +16,7 @@ describe 'the email_errors table', type: :model do
 end
 
 describe EmailError, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to belong_to(:user) }
 end

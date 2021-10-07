@@ -20,7 +20,7 @@ end
 describe ResearcherFund, type: :model do
   subject(:grant) { ResearcherFund.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to belong_to(:grant).inverse_of(:researcher_funds) }
   it { is_expected.to belong_to(:user).inverse_of(:researcher_funds) }

@@ -45,21 +45,21 @@ describe OpenAccessNotifier do
       allow(EmailError).to receive(:create!)
     end
 
-    it "sends a notification email to each user that needs one" do
+    it 'sends a notification email to each user that needs one' do
       expect(email1).to receive(:deliver_now)
       expect(email2).to receive(:deliver_now)
 
       notifier.send_notifications
     end
 
-    it "records the notification for each user" do
+    it 'records the notification for each user' do
       expect(user1).to receive(:record_open_access_notification)
       expect(user2).to receive(:record_open_access_notification)
 
       notifier.send_notifications
     end
 
-    it "records the notification for each authorship" do
+    it 'records the notification for each authorship' do
       expect(auth1).to receive(:record_open_access_notification)
       expect(auth2).to receive(:record_open_access_notification)
       expect(auth3).to receive(:record_open_access_notification)
@@ -68,8 +68,8 @@ describe OpenAccessNotifier do
       notifier.send_notifications
     end
 
-    context "when an error is raised while sending an email" do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new("The error message") }
+    context 'when an error is raised while sending an email' do
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new('The error message') }
 
       it "sends emails that don't raise errors" do
         expect(email1).not_to receive(:deliver_now)
@@ -78,14 +78,14 @@ describe OpenAccessNotifier do
         notifier.send_notifications
       end
 
-      it "records only the successful notifications" do
+      it 'records only the successful notifications' do
         expect(user1).not_to receive(:record_open_access_notification)
         expect(user2).to receive(:record_open_access_notification)
 
         notifier.send_notifications
       end
 
-      it "records only the successful notifications for each authorship" do
+      it 'records only the successful notifications for each authorship' do
         expect(auth1).not_to receive(:record_open_access_notification)
         expect(auth2).not_to receive(:record_open_access_notification)
         expect(auth3).to receive(:record_open_access_notification)
@@ -94,7 +94,7 @@ describe OpenAccessNotifier do
         notifier.send_notifications
       end
 
-      it "records the error" do
+      it 'records the error' do
         expect(EmailError).to receive(:create!).with(message: 'The error message', user: user1)
 
         notifier.send_notifications
@@ -165,7 +165,7 @@ describe OpenAccessNotifier do
       allow(EmailError).to receive(:create!)
     end
 
-    it "sends a notification email to each of the first five users that need one" do
+    it 'sends a notification email to each of the first five users that need one' do
       expect(email1).to receive(:deliver_now)
       expect(email2).to receive(:deliver_now)
       expect(email3).to receive(:deliver_now)
@@ -176,7 +176,7 @@ describe OpenAccessNotifier do
       notifier.send_first_five_notifications
     end
 
-    it "records the notification for each of the first five users" do
+    it 'records the notification for each of the first five users' do
       expect(user1).to receive(:record_open_access_notification)
       expect(user2).to receive(:record_open_access_notification)
       expect(user3).to receive(:record_open_access_notification)
@@ -187,7 +187,7 @@ describe OpenAccessNotifier do
       notifier.send_first_five_notifications
     end
 
-    it "records the notification for each authorship for the first five users" do
+    it 'records the notification for each authorship for the first five users' do
       expect(auth1).to receive(:record_open_access_notification)
       expect(auth2).to receive(:record_open_access_notification)
       expect(auth3).to receive(:record_open_access_notification)
@@ -204,8 +204,8 @@ describe OpenAccessNotifier do
       notifier.send_first_five_notifications
     end
 
-    context "when an error is raised while sending an email" do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new("The error message") }
+    context 'when an error is raised while sending an email' do
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new('The error message') }
 
       it "sends emails that don't raise errors for the first five users that need one" do
         expect(email1).not_to receive(:deliver_now)
@@ -218,7 +218,7 @@ describe OpenAccessNotifier do
         notifier.send_first_five_notifications
       end
 
-      it "records only the successful notifications for each of the first five users" do
+      it 'records only the successful notifications for each of the first five users' do
         expect(user1).not_to receive(:record_open_access_notification)
         expect(user2).to receive(:record_open_access_notification)
         expect(user3).to receive(:record_open_access_notification)
@@ -229,7 +229,7 @@ describe OpenAccessNotifier do
         notifier.send_first_five_notifications
       end
 
-      it "records only the successful notifications for each authorship for the first five users" do
+      it 'records only the successful notifications for each authorship for the first five users' do
         expect(auth1).not_to receive(:record_open_access_notification)
         expect(auth2).not_to receive(:record_open_access_notification)
         expect(auth3).to receive(:record_open_access_notification)
@@ -246,7 +246,7 @@ describe OpenAccessNotifier do
         notifier.send_first_five_notifications
       end
 
-      it "records the error" do
+      it 'records the error' do
         expect(EmailError).to receive(:create!).with(message: 'The error message', user: user1)
 
         notifier.send_first_five_notifications

@@ -18,7 +18,7 @@ module RailsAdmin
 
               associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
               options = {}
-              options = options.merge(include: associations) unless associations.blank?
+              options = options.merge(include: associations) if associations.present?
               options = options.merge(get_sort_hash(model_config))
               options = options.merge(query: params[:query]) if params[:query].present?
               options = options.merge(filters: params[:f]) if params[:f].present?

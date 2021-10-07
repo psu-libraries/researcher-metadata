@@ -23,7 +23,7 @@ describe 'the presentation_contributions table', type: :model do
 end
 
 describe PresentationContribution, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:presentation_contributions) }

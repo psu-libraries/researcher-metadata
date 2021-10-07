@@ -3,7 +3,7 @@ class PureJournalsImporter < PureImporter
     pbar = ProgressBar.create(title: 'Importing Pure journals', total: total_pages) unless Rails.env.test?
 
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       journals = get_records(type: record_type, page_size: page_size, offset: offset)
 
       journals['items'].each do |item|

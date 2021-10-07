@@ -14,7 +14,7 @@ class WebOfScienceFileImporter
           wos_pub = WebOfSciencePublication.new(Nokogiri::XML(node.outer_xml).at('REC'))
           if wos_pub.importable?
 
-            existing_pubs = Publication.find_by_wos_pub(wos_pub)
+            existing_pubs = Publication.find_by(wos_pub: wos_pub)
 
             if existing_pubs.any?
               wos_pub.grants.each do |g|
@@ -24,7 +24,7 @@ class WebOfScienceFileImporter
                       existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
                       matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
 
-                      if ! existing_grant && ! matching_grant
+                      if !existing_grant && !matching_grant
                         grant = Grant.new
                         grant.wos_agency_name = g.wos_agency
                         grant.agency_name = g.agency
@@ -58,7 +58,7 @@ class WebOfScienceFileImporter
                 ActiveRecord::Base.transaction do
                   p = Publication.new
                   p.title = wos_pub.title
-                  p.publication_type = "Journal Article"
+                  p.publication_type = 'Journal Article'
                   p.doi = wos_pub.doi
                   p.issn = wos_pub.issn
                   p.abstract = wos_pub.abstract
@@ -73,7 +73,7 @@ class WebOfScienceFileImporter
 
                   pi = PublicationImport.new
                   pi.publication = p
-                  pi.source = "Web of Science"
+                  pi.source = 'Web of Science'
                   pi.source_identifier = wos_pub.wos_id
                   pi.save!
 
@@ -82,7 +82,7 @@ class WebOfScienceFileImporter
                       g.ids.each do |id|
                         existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
                         matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
-                        
+
                         grant = existing_grant || matching_grant || Grant.new
 
                         if grant.new_record?
@@ -134,5 +134,5 @@ class WebOfScienceFileImporter
 
   private
 
-  attr_reader :dirname
+    attr_reader :dirname
 end

@@ -2,8 +2,10 @@ class DuplicatePublicationGroup < ApplicationRecord
   has_many :publications, inverse_of: :duplicate_group
 
   def self.group_duplicates
-    pbar = ProgressBar.create(title: 'Grouping duplicate publications',
-                              total: Publication.count) unless Rails.env.test?
+    unless Rails.env.test?
+      pbar = ProgressBar.create(title: 'Grouping duplicate publications',
+                                total: Publication.count)
+    end
 
     Publication.find_each do |p|
       group_duplicates_of(p)
@@ -20,13 +22,13 @@ class DuplicatePublicationGroup < ApplicationRecord
       duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL)},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year))
-                               .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
+        .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
     else
       duplicates = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year),
                                      publication.doi)
-                               .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
+        .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map { |m| m.publication_id } }.flatten).or(Publication.where(id: publication.id))
     end
 
     group_publications(duplicates)
@@ -42,7 +44,7 @@ class DuplicatePublicationGroup < ApplicationRecord
       ActiveRecord::Base.transaction do
         if group_to_remain
           publications.each do |p|
-            p.update_attributes!(duplicate_group: group_to_remain) unless p.duplicate_group.present?
+            p.update_attributes!(duplicate_group: group_to_remain) if p.duplicate_group.blank?
           end
           pubs_to_regroup.each do |p|
             p.update_attributes!(duplicate_group: group_to_remain)
@@ -58,8 +60,10 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def self.auto_merge
-    pbar = ProgressBar.create(title: 'Auto-merging Pure and AI groups',
-                              total: count) unless Rails.env.test?
+    unless Rails.env.test?
+      pbar = ProgressBar.create(title: 'Auto-merging Pure and AI groups',
+                                total: count)
+    end
     find_each do |g|
       g.auto_merge
       pbar.increment unless Rails.env.test?
@@ -95,7 +99,7 @@ class DuplicatePublicationGroup < ApplicationRecord
   rails_admin do
     configure :publications do
       pretty_value do
-        bindings[:view].render :partial => "rails_admin/partials/duplicate_publication_groups/publications.html.erb", :locals => { :publications => value }
+        bindings[:view].render partial: 'rails_admin/partials/duplicate_publication_groups/publications.html.erb', locals: { publications: value }
       end
     end
 

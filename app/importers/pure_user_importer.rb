@@ -3,7 +3,7 @@ class PureUserImporter < PureImporter
     pbar = ProgressBar.create(title: 'Importing Pure persons (users)', total: total_pages) unless Rails.env.test?
 
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       persons = get_records(type: record_type, page_size: page_size, offset: offset)
 
       persons['items'].each do |item|
@@ -71,7 +71,7 @@ class PureUserImporter < PureImporter
 
   private
 
-  def position_title(association)
-    association['jobDescription'] && association['jobDescription']['text'].detect { |text| text['locale'] == 'en_US' }['value']
-  end
+    def position_title(association)
+      association['jobDescription'] && association['jobDescription']['text'].detect { |text| text['locale'] == 'en_US' }['value']
+    end
 end

@@ -5,15 +5,15 @@ class ScholarsphereWorkDeposit < ApplicationRecord
 
   def self.rights
     %w{
-        https://creativecommons.org/licenses/by/4.0/
-        https://creativecommons.org/licenses/by-sa/4.0/
-        https://creativecommons.org/licenses/by-nc/4.0/
-        https://creativecommons.org/licenses/by-nd/4.0/
-        https://creativecommons.org/licenses/by-nc-nd/4.0/
-        https://creativecommons.org/licenses/by-nc-sa/4.0/
-        http://creativecommons.org/publicdomain/mark/1.0/
-        http://creativecommons.org/publicdomain/zero/1.0/
-        https://rightsstatements.org/page/InC/1.0/
+      https://creativecommons.org/licenses/by/4.0/
+      https://creativecommons.org/licenses/by-sa/4.0/
+      https://creativecommons.org/licenses/by-nc/4.0/
+      https://creativecommons.org/licenses/by-nd/4.0/
+      https://creativecommons.org/licenses/by-nc-nd/4.0/
+      https://creativecommons.org/licenses/by-nc-sa/4.0/
+      http://creativecommons.org/publicdomain/mark/1.0/
+      http://creativecommons.org/publicdomain/zero/1.0/
+      https://rightsstatements.org/page/InC/1.0/
     }
   end
 
@@ -39,12 +39,12 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   has_many :file_uploads, class_name: :ScholarsphereFileUpload, dependent: :destroy
   has_one :publication, through: :authorship
 
-  validates :status, inclusion: {in: statuses}
-  validates :rights, inclusion: {in: rights}
+  validates :status, inclusion: { in: statuses }
+  validates :rights, inclusion: { in: rights }
   validates :title, :description, :published_date, :rights, presence: true
   validate :at_least_one_file_upload
   validate :agreed_to_deposit_agreement
-  
+
   accepts_nested_attributes_for :file_uploads
 
   delegate :title, to: :publication, prefix: true
@@ -84,11 +84,11 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         cn.to_scholarsphere_creator
       end
     }
-    base_metadata.merge!({embargoed_until: embargoed_until}) if embargoed_until.present?
-    base_metadata.merge!({identifier: [doi]}) if doi.present?
-    base_metadata.merge!({subtitle: subtitle}) if subtitle.present?
-    base_metadata.merge!({publisher: [publisher]}) if publisher.present?
-    base_metadata.merge!({publisher_statement: publisher_statement}) if publisher_statement.present?
+    base_metadata[:embargoed_until] = embargoed_until if embargoed_until.present?
+    base_metadata[:identifier] = [doi] if doi.present?
+    base_metadata[:subtitle] = subtitle if subtitle.present?
+    base_metadata[:publisher] = [publisher] if publisher.present?
+    base_metadata[:publisher_statement] = publisher_statement if publisher_statement.present?
     base_metadata
   end
 
@@ -98,30 +98,30 @@ class ScholarsphereWorkDeposit < ApplicationRecord
 
   private
 
-  def at_least_one_file_upload
-    if file_uploads.blank? && status == 'Pending'
-      errors[:base] << I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
-    end
-  end
-
-  def agreed_to_deposit_agreement
-    if new_record?
-      unless deposit_agreement
-        errors.add(:deposit_agreement, I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement'))       
+    def at_least_one_file_upload
+      if file_uploads.blank? && status == 'Pending'
+        errors[:base] << I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
       end
     end
-  end
 
-  def set_status
-    self.status = 'Pending' if new_record?
-  end
-
-  rails_admin do
-    list do
-      field(:id)
-      field(:status)
-      field(:authorship)
-      field(:title)
+    def agreed_to_deposit_agreement
+      if new_record?
+        unless deposit_agreement
+          errors.add(:deposit_agreement, I18n.t('models.scholarsphere_work_deposit.validation_errors.deposit_agreement'))
+        end
+      end
     end
-  end
+
+    def set_status
+      self.status = 'Pending' if new_record?
+    end
+
+    rails_admin do
+      list do
+        field(:id)
+        field(:status)
+        field(:authorship)
+        field(:title)
+      end
+    end
 end

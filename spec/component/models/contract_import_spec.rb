@@ -1,7 +1,8 @@
 require 'component/component_spec_helper'
-  
-describe "the contract_imports table", type: :model do
+
+describe 'the contract_imports table', type: :model do
   subject { ContractImport.new }
+
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:contract_id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:activity_insight_id).of_type(:integer).with_options(null: false) }

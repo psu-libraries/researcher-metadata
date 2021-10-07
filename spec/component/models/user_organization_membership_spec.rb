@@ -30,7 +30,7 @@ end
 describe UserOrganizationMembership, type: :model do
   subject { UserOrganizationMembership.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to delegate_method(:organization_name).to(:organization).as(:name) }
 
@@ -52,12 +52,12 @@ describe UserOrganizationMembership, type: :model do
   end
 
   describe '#name' do
-    let(:u) { User.new(first_name: "Sue", last_name: "Tester") }
-    let(:o) { Organization.new(name: "Science Department") }
+    let(:u) { User.new(first_name: 'Sue', last_name: 'Tester') }
+    let(:o) { Organization.new(name: 'Science Department') }
     let(:m) { UserOrganizationMembership.new(user: u, organization: o) }
 
-    it "returns a string with the name of the user and the name of the organization" do
-      expect(m.name).to eq "Sue Tester - Science Department"
+    it 'returns a string with the name of the user and the name of the organization' do
+      expect(m.name).to eq 'Sue Tester - Science Department'
     end
   end
 end

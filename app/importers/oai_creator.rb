@@ -25,11 +25,11 @@ class OAICreator
 
   private
 
-  def user_scope
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
+    def user_scope
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
 
-  def matching_users
-    user_scope.where(first_name: first_name, last_name: last_name).distinct(:id)
-  end
+    def matching_users
+      user_scope.where(first_name: first_name, last_name: last_name).distinct(:id)
+    end
 end

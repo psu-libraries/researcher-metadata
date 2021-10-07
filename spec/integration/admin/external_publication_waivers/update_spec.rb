@@ -1,7 +1,7 @@
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-feature "updating an external publication waiver via the admin interface", type: :feature do
+describe 'updating an external publication waiver via the admin interface', type: :feature do
   let!(:waiver) { create :external_publication_waiver,
                          user: user,
                          publication_title: 'Test Pub',
@@ -12,19 +12,19 @@ feature "updating an external publication waiver via the admin interface", type:
                          publisher: 'A Publisher' }
   let!(:user) { create :user, first_name: 'Emily', last_name: 'Tester' }
 
-  context "when the current user is an admin" do
+  context 'when the current user is an admin' do
     before do
       authenticate_admin_user
       visit rails_admin.edit_path(model_name: :external_publication_waiver, id: waiver.id)
     end
 
-    describe "viewing the edit page" do
-      it "shows a link to the user who requested the waiver" do
+    describe 'viewing the edit page' do
+      it 'shows a link to the user who requested the waiver' do
         expect(page).to have_link 'Emily Tester', href: rails_admin.show_path(model_name: :user, id: user.id)
       end
     end
 
-    describe "submitting the form with new data to update the waiver record" do
+    describe 'submitting the form with new data to update the waiver record' do
       before do
         fill_in 'Publication title', with: 'New Pub'
         fill_in 'Reason for waiver', with: 'new reason'
@@ -61,11 +61,12 @@ feature "updating an external publication waiver via the admin interface", type:
     end
   end
 
-  context "when the current user is not an admin" do
+  context 'when the current user is not an admin' do
     before { authenticate_user }
-    it "redirects back to the home page with an error message" do
+
+    it 'redirects back to the home page with an error message' do
       visit rails_admin.edit_path(model_name: :external_publication_waiver, id: waiver.id)
-      expect(page.current_path).to eq root_path
+      expect(page).to have_current_path root_path, ignore_query: true
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
   end

@@ -1,5 +1,5 @@
 require 'component/component_spec_helper'
-  
+
 describe 'the user_contracts table', type: :model do
   subject { UserContract.new }
 
@@ -21,9 +21,10 @@ describe UserContract, type: :model do
     it { is_expected.to belong_to(:contract).inverse_of(:user_contracts) }
   end
 
-  describe "deleting a contract with user_contracts" do
+  describe 'deleting a contract with user_contracts' do
     let(:c) { create :contract }
-    let!(:uc) { create :user_contract, contract: c}
+    let!(:uc) { create :user_contract, contract: c }
+
     it "also deletes the publication's authorships" do
       c.destroy
       expect { uc.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -34,8 +35,9 @@ describe UserContract, type: :model do
     it { is_expected.to validate_presence_of(:user_id) }
     it { is_expected.to validate_presence_of(:contract_id) }
 
-    context "given otherwise valid data" do
+    context 'given otherwise valid data' do
       subject { UserContract.new(user: create(:user), contract: create(:contract)) }
+
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:contract_id) }
     end
   end

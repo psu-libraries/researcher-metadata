@@ -18,7 +18,7 @@ describe 'the publication_taggings table', type: :model do
 end
 
 describe PublicationTagging, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:tag).inverse_of(:publication_taggings) }
@@ -31,8 +31,9 @@ describe PublicationTagging, type: :model do
     it { is_expected.to validate_presence_of(:tag_id) }
     it { is_expected.to validate_presence_of(:publication_id) }
 
-    context "given otherwise valid data" do
+    context 'given otherwise valid data' do
       subject { PublicationTagging.new(tag: create(:tag), publication: create(:publication)) }
+
       it { is_expected.to validate_uniqueness_of(:publication_id).scoped_to(:tag_id) }
     end
   end

@@ -18,7 +18,7 @@ class AuthorshipsController < ApplicationController
 
   private
 
-  def authorship_params
-    params.require(:authorship).permit(:visible_in_profile)
-  end
+    def authorship_params
+      params.require(:authorship).permit(:visible_in_profile)
+    end
 end

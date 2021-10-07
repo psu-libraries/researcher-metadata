@@ -1,7 +1,7 @@
 # To create this custom action we started out with the existing Rails Admin `index` action and
 # modified it so that we could list records from a custom scope. We also had to pull in some
 # of the private helper code from `RailsAdmin::MainController` to maintain the same functionality
-# that we'd have with the default Rails Admin index action. 
+# that we'd have with the default Rails Admin index action.
 
 module RailsAdmin
   module Config
@@ -32,7 +32,7 @@ module RailsAdmin
           proc do
             associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.collect { |f| f.association.name }
             options = {}
-            options = options.merge(include: associations) unless associations.blank?
+            options = options.merge(include: associations) if associations.present?
             options = options.merge(get_sort_hash(model_config))
             options = options.merge(query: params[:query]) if params[:query].present?
             options = options.merge(filters: params[:f]) if params[:f].present?
@@ -63,7 +63,7 @@ module RailsAdmin
                   if params[:compact]
                     primary_key_method = @association ? @association.associated_primary_key : @model_config.abstract_model.primary_key
                     label_method = @model_config.object_label_method
-                    @objects.collect { |o| {id: o.send(primary_key_method).to_s, label: o.send(label_method).to_s} }
+                    @objects.collect { |o| { id: o.send(primary_key_method).to_s, label: o.send(label_method).to_s } }
                   else
                     @objects.to_json(@schema)
                   end

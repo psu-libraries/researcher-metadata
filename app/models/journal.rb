@@ -4,12 +4,12 @@ class Journal < ApplicationRecord
 
   scope :ordered_by_publication_count, -> { unscope(:order).left_outer_joins(:publications).group('journals.id').order(Arel.sql('COUNT(publications.id) DESC')) }
   scope :ordered_by_psu_publication_count, -> {
-    unscope(:order).
-      left_outer_joins(publications: [:user_organization_memberships]).
-      group('journals.id').
-      where('publications.visible IS TRUE').
-      where('publications.published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
-      order(Arel.sql('COUNT(DISTINCT publications.id) DESC'))
+    unscope(:order)
+      .left_outer_joins(publications: [:user_organization_memberships])
+      .group('journals.id')
+      .where('publications.visible IS TRUE')
+      .where('publications.published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
+      .order(Arel.sql('COUNT(DISTINCT publications.id) DESC'))
   }
   scope :ordered_by_title, -> { order(:title) }
 

@@ -67,7 +67,7 @@ FactoryBot.define do
     end
 
     factory :user_with_organization_memberships do
-      after(:create) do |user, evaluator|
+      after(:create) do |user, _evaluator|
         create_list(:user_organization_membership, 3, user: user)
       end
     end

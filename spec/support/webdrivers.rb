@@ -46,4 +46,3 @@ Capybara.register_driver :rmd_chrome_headless do |app|
 
   Capybara::Selenium::Driver.new(app, **Hash[:browser => :chrome, options_key => browser_options])
 end
-

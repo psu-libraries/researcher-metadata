@@ -4,11 +4,11 @@ class ProfileManagementController < UserController
 
   private
 
-  def resolve_layout
-    if action_name == 'show'
-      'profile'
-    else
-      'manage_profile'
+    def resolve_layout
+      if action_name == 'show'
+        'profile'
+      else
+        'manage_profile'
+      end
     end
-  end
 end

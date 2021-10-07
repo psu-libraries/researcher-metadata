@@ -9,8 +9,8 @@ class OrcidAPIClient
   def post
     request = {
       headers: {
-        "Content-type" => "application/vnd.orcid+json",
-        "Authorization" => "Bearer #{resource.access_token}"
+        'Content-type' => 'application/vnd.orcid+json',
+        'Authorization' => "Bearer #{resource.access_token}"
       },
       body: resource.to_json
     }
@@ -20,5 +20,5 @@ class OrcidAPIClient
 
   private
 
-  attr_reader :resource
+    attr_reader :resource
 end

@@ -3,7 +3,7 @@ def fixture(name)
 end
 
 def fixture_file_open(filename)
-    File.open(fixture filename)
+  File.open(fixture(filename))
 end
 
 def fixture_file_upload(filename, mime_type)
@@ -13,7 +13,7 @@ end
 def store_fixture_file(uploader, filename)
   uploader.store!(
     File.open(
-      fixture filename
+      fixture(filename)
     )
   )
 end

@@ -7,7 +7,7 @@ class UserOrganizationMembership < ApplicationRecord
   belongs_to :organization, inverse_of: :user_organization_memberships
 
   validates :user, :organization, presence: true
-  validates :import_source, inclusion: {in: import_sources, allow_nil: true}
+  validates :import_source, inclusion: { in: import_sources, allow_nil: true }
 
   delegate :name, to: :organization, prefix: true
 

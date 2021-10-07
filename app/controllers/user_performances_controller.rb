@@ -17,7 +17,7 @@ class UserPerformancesController < ApplicationController
 
   private
 
-  def up_params
-    params.require(:user_performance).permit(:visible_in_profile)
-  end
+    def up_params
+      params.require(:user_performance).permit(:visible_in_profile)
+    end
 end

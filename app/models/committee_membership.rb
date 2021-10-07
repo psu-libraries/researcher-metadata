@@ -8,8 +8,8 @@ class CommitteeMembership < ApplicationRecord
             :role,
             presence: true
 
-  validates :etd_id, uniqueness: {scope: [:user_id, :role]}
-  validates :user_id, uniqueness: {scope: [:etd_id, :role]}
+  validates :etd_id, uniqueness: { scope: [:user_id, :role] }
+  validates :user_id, uniqueness: { scope: [:etd_id, :role] }
 
   def <=>(other)
     role_ranking <=> other.role_ranking
@@ -17,15 +17,15 @@ class CommitteeMembership < ApplicationRecord
 
   protected
 
-  def role_ranking
-    rank_list = {
-      'Dissertation Advisor' => 5,
-      'Committee Chair' => 4,
-      'Committee Member' => 3,
-      'Outside Member' => 2,
-      'Special Member' => 1
-    }
+    def role_ranking
+      rank_list = {
+        'Dissertation Advisor' => 5,
+        'Committee Chair' => 4,
+        'Committee Member' => 3,
+        'Outside Member' => 2,
+        'Special Member' => 1
+      }
 
-    rank_list[role]
-  end
+      rank_list[role]
+    end
 end

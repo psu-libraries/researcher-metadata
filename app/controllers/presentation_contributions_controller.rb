@@ -17,7 +17,7 @@ class PresentationContributionsController < ApplicationController
 
   private
 
-  def contribution_params
-    params.require(:presentation_contribution).permit(:visible_in_profile)
-  end
+    def contribution_params
+      params.require(:presentation_contribution).permit(:visible_in_profile)
+    end
 end

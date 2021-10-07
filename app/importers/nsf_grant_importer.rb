@@ -25,7 +25,7 @@ class NSFGrantImporter
           g.agency_name = nsf_grant.agency_name
           g.save!
 
-          users = User.find_by_nsf_grant(nsf_grant)
+          users = User.find_by(nsf_grant: nsf_grant)
           users.each do |u|
             unless ResearcherFund.find_by(user: u, grant: g)
               rf = ResearcherFund.new
@@ -43,5 +43,5 @@ class NSFGrantImporter
 
   private
 
-  attr_reader :dirname
+    attr_reader :dirname
 end

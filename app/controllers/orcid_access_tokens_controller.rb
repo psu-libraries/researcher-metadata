@@ -35,7 +35,7 @@ class OrcidAccessTokensController < UserController
 
   private
 
-  def oauth_client
-    @oauth_client ||= OrcidOauthClient.new
-  end
+    def oauth_client
+      @oauth_client ||= OrcidOauthClient.new
+    end
 end

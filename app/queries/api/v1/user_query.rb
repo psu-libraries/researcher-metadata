@@ -1,13 +1,12 @@
 module API::V1
   class UserQuery
-
     def initialize(user)
       @user = user
     end
 
     attr_reader :user
 
-    def presentations(params={})
+    def presentations(_params = {})
       user.presentations.visible
     end
 
@@ -15,19 +14,19 @@ module API::V1
       user.grants
     end
 
-    def news_feed_items(params={})
+    def news_feed_items(_params = {})
       user.news_feed_items
     end
 
-    def performances(params={})
+    def performances(_params = {})
       user.performances.visible
     end
 
-    def etds(params={})
+    def etds(_params = {})
       user.etds
     end
 
-    def publications(params={})
+    def publications(params = {})
       if user.show_all_publications
         if params[:start_year] && params[:end_year]
           starts_on = Date.new(params[:start_year].to_i)

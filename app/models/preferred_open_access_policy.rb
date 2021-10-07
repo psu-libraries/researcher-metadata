@@ -11,5 +11,5 @@ class PreferredOpenAccessPolicy
 
   private
 
-  attr_reader :publication
+    attr_reader :publication
 end

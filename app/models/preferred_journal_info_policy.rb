@@ -13,5 +13,5 @@ class PreferredJournalInfoPolicy
 
   private
 
-  attr_reader :publication
+    attr_reader :publication
 end

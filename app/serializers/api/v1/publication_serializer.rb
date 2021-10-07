@@ -22,17 +22,17 @@ module API::V1
 
     attribute :contributors do |object|
       object.contributor_names.map do |c|
-        {first_name: c.first_name,
-         middle_name: c.middle_name,
-         last_name: c.last_name,
-         psu_user_id: c.webaccess_id}
+        { first_name: c.first_name,
+          middle_name: c.middle_name,
+          last_name: c.last_name,
+          psu_user_id: c.webaccess_id }
       end
     end
 
     attribute :tags do |object|
       object.taggings.order(rank: :desc).map do |t|
-        {name: t.name,
-         rank: t.rank}
+        { name: t.name,
+          rank: t.rank }
       end
     end
 
@@ -46,10 +46,10 @@ module API::V1
 
     attribute :profile_preferences do |object|
       object.confirmed_authorships.map do |a|
-        {user_id: a.user_id,
-         webaccess_id: a.user_webaccess_id,
-         visible_in_profile: a.visible_in_profile,
-         position_in_profile: a.position_in_profile}
+        { user_id: a.user_id,
+          webaccess_id: a.user_webaccess_id,
+          visible_in_profile: a.visible_in_profile,
+          position_in_profile: a.position_in_profile }
       end
     end
   end

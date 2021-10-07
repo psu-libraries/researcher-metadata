@@ -19,7 +19,7 @@ class InternalPublicationWaiversController < OpenAccessWorkflowController
 
   private
 
-  def waiver_params
-    params.require(:internal_publication_waiver).permit([:reason_for_waiver])
-  end
+    def waiver_params
+      params.require(:internal_publication_waiver).permit([:reason_for_waiver])
+    end
 end

@@ -1,7 +1,7 @@
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-feature "Admin performance detail page", type: :feature do
+describe 'Admin performance detail page', type: :feature do
   let!(:user1) { create(:user,
                         first_name: 'Bob',
                         last_name: 'Testuser') }
@@ -11,13 +11,13 @@ feature "Admin performance detail page", type: :feature do
 
   let!(:performance) { create :performance,
                               title: "Bob's Performance",
-                              performance_type: "Film - Documentary",
-                              sponsor: "Penn State",
-                              description: "This is a performance.",
-                              group_name: "Penn State Performing Group",
-                              location: "State College",
-                              delivery_type: "Invitation",
-                              scope: "Local",
+                              performance_type: 'Film - Documentary',
+                              sponsor: 'Penn State',
+                              description: 'This is a performance.',
+                              group_name: 'Penn State Performing Group',
+                              location: 'State College',
+                              delivery_type: 'Invitation',
+                              scope: 'Local',
                               start_on: Date.new(2018, 9, 24),
                               end_on: Date.new(2018, 9, 25) }
 
@@ -35,13 +35,13 @@ feature "Admin performance detail page", type: :feature do
   let!(:performance_screening2) { create :performance_screening,
                                          performance: performance }
 
-  context "when the current user is an admin" do
+  context 'when the current user is an admin' do
     before { authenticate_admin_user }
 
-    describe "the page content" do
+    describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :performance, id: performance.id) }
 
-      it "shows the performance detail heading" do
+      it 'shows the performance detail heading' do
         expect(page).to have_content "Details for Performance 'Bob's Performance'"
       end
 
@@ -50,35 +50,35 @@ feature "Admin performance detail page", type: :feature do
       end
 
       it "shows the performance's performance type" do
-        expect(page).to have_content "Film - Documentary"
+        expect(page).to have_content 'Film - Documentary'
       end
 
       it "shows the performance's sponsor" do
-        expect(page).to have_content "Penn State"
+        expect(page).to have_content 'Penn State'
       end
 
       it "shows the performance's description" do
-        expect(page).to have_content "This is a performance."
+        expect(page).to have_content 'This is a performance.'
       end
 
       it "shows the performance's group name" do
-        expect(page).to have_content "Penn State Performing Group"
+        expect(page).to have_content 'Penn State Performing Group'
       end
 
       it "shows the performance's location" do
-        expect(page).to have_content "State College"
+        expect(page).to have_content 'State College'
       end
 
       it "shows the performance's delivery type" do
-        expect(page).to have_content "Invitation"
+        expect(page).to have_content 'Invitation'
       end
 
       it "shows the performance's start on date" do
-        expect(page).to have_content "September 24, 2018"
-      end 
+        expect(page).to have_content 'September 24, 2018'
+      end
 
       it "shows the performance's end on date" do
-        expect(page).to have_content "September 25, 2018"
+        expect(page).to have_content 'September 25, 2018'
       end
 
       it "shows the performance's user_performances" do
@@ -87,23 +87,24 @@ feature "Admin performance detail page", type: :feature do
       end
 
       it "shows the performance's performance screenings" do
-        expect(page).to have_link "#{performance_screening1.name}"
-        expect(page).to have_link "#{performance_screening2.name}"
+        expect(page).to have_link performance_screening1.name.to_s
+        expect(page).to have_link performance_screening2.name.to_s
       end
     end
 
-    describe "the page layout" do
+    describe 'the page layout' do
       before { visit rails_admin.show_path(model_name: :performance, id: performance.id) }
 
-      it_behaves_like "a page with the admin layout"
+      it_behaves_like 'a page with the admin layout'
     end
   end
 
-  context "when the current user is not an admin" do
+  context 'when the current user is not an admin' do
     before { authenticate_user }
-    it "redirects back to the home page with an error message" do
+
+    it 'redirects back to the home page with an error message' do
       visit rails_admin.show_path(model_name: :performance, id: performance.id)
-      expect(page.current_path).to eq root_path
+      expect(page).to have_current_path root_path, ignore_query: true
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
   end

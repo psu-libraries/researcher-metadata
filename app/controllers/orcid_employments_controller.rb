@@ -15,7 +15,6 @@ class OrcidEmploymentsController < UserController
         flash[:notice] = I18n.t('profile.orcid_employments.create.success')
       end
     end
-    
   rescue OrcidEmployment::InvalidToken
     current_user.clear_orcid_access_token
     flash[:alert] = I18n.t('profile.orcid_employments.create.account_not_linked')

@@ -16,16 +16,16 @@ class WebOfSciencePublication
   end
 
   def doi
-    raw_doi = parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="doi"]').
-      first.try(:[], :value).try(:strip) ||
-      parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="xref_doi"]').
-      first.try(:[], :value).try(:strip)
+    raw_doi = parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="doi"]')
+      .first.try(:[], :value).try(:strip) ||
+      parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="xref_doi"]')
+        .first.try(:[], :value).try(:strip)
     DOISanitizer.new(raw_doi).url
   end
 
   def issn
-    parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="issn"]').
-      first.try(:[], :value).try(:strip)
+    parsed_pub.css('dynamic_data > cluster_related > identifiers > identifier[type="issn"]')
+      .first.try(:[], :value).try(:strip)
   end
 
   def abstract
@@ -80,23 +80,25 @@ class WebOfSciencePublication
 
   private
 
-  attr_reader :parsed_pub
+    attr_reader :parsed_pub
 
-  def article?
-    parsed_pub.css('doctypes > doctype').map { |dt| dt.text }.include?("Article")
-  end
+    def article?
+      parsed_pub.css('doctypes > doctype').map { |dt| dt.text }.include?('Article')
+    end
 
-  def penn_state?
-    !!parsed_pub.css('addresses').
-      detect { |a| a.css('address_name > address_spec > organizations').
-        detect { |o| o.text =~ /Penn State Univ/ } }
-  end
+    def penn_state?
+      !!parsed_pub.css('addresses')
+        .detect do |a|
+        a.css('address_name > address_spec > organizations')
+          .detect { |o| o.text =~ /Penn State Univ/ }
+      end
+    end
 
-  def not_imported?
-    ! PublicationImport.find_by(source: 'Web of Science', source_identifier: wos_id)
-  end
+    def not_imported?
+      !PublicationImport.find_by(source: 'Web of Science', source_identifier: wos_id)
+    end
 
-  def pub_info
-    parsed_pub.css('pub_info')
-  end
+    def pub_info
+      parsed_pub.css('pub_info')
+    end
 end

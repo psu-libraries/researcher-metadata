@@ -15,12 +15,12 @@ class NSFGrant
 
   def start_date
     date = text_for_element('AwardEffectiveDate')
-    Date.strptime(date, "%m/%d/%Y") if date
+    Date.strptime(date, '%m/%d/%Y') if date
   end
 
   def end_date
     date = text_for_element('AwardExpirationDate')
-    Date.strptime(date, "%m/%d/%Y") if date
+    Date.strptime(date, '%m/%d/%Y') if date
   end
 
   def abstract
@@ -36,7 +36,7 @@ class NSFGrant
   end
 
   def agency_name
-    "National Science Foundation"
+    'National Science Foundation'
   end
 
   def investigators
@@ -47,9 +47,9 @@ class NSFGrant
 
   private
 
-  attr_reader :parsed_grant
+    attr_reader :parsed_grant
 
-  def text_for_element(element)
-    parsed_grant.css(element).text.strip.presence
-  end
+    def text_for_element(element)
+      parsed_grant.css(element).text.strip.presence
+    end
 end

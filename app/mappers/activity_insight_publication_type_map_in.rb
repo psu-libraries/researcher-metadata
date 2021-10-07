@@ -2,7 +2,7 @@ class ActivityInsightPublicationTypeMapIn
   def self.map(string)
     case string
     when 'Journal Article', 'Abstract', 'Blog', 'Book', 'Conference Proceeding',
-        'Extension Publication', 'Magazine/Trade Publication','Manuscript', 'Newsletter', 'Newspaper Article'
+        'Extension Publication', 'Magazine/Trade Publication', 'Manuscript', 'Newsletter', 'Newspaper Article'
       string
     when 'Journal Article, In House'
       'In-house Journal Article'

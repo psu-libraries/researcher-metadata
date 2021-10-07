@@ -1,16 +1,16 @@
 namespace :import do
   desc 'Import all Activity Insight data from API'
-  task :activity_insight => :environment do
+  task activity_insight: :environment do
     ActivityInsightImporter.new.call
   end
 
   desc 'Import Web of Science data from local files'
-  task :web_of_science => :environment do
-    if Rails.env.development?
-      dirname = Pathname.new('/Volumes/WA_ext_HD/web_of_science_data/import')
-    else
-      dirname = Rails.root.join('db/data/wos')
-    end
+  task web_of_science: :environment do
+    dirname = if Rails.env.development?
+                Pathname.new('/Volumes/WA_ext_HD/web_of_science_data/import')
+              else
+                Rails.root.join('db/data/wos')
+              end
     WebOfScienceFileImporter.new(dirname: dirname).call
   end
 
@@ -23,42 +23,42 @@ namespace :import do
   end
 
   desc 'Import Open Access Button publication URLs'
-  task :open_access_button => :environment do
+  task open_access_button: :environment do
     OpenAccessButtonPublicationImporter.new.import_all
   end
 
   desc 'Import Open Access Button publication URLs for publications that have been checked before'
-  task :new_open_access_button => :environment do
+  task new_open_access_button: :environment do
     OpenAccessButtonPublicationImporter.new.import_new
   end
 
   desc 'Import ScholarSphere publication URLs'
-  task :scholarsphere => :environment do
+  task scholarsphere: :environment do
     ScholarsphereImporter.new.call
   end
 
   desc 'Import PSU RSS news feed items'
-  task :rss_news => :environment do
-    NewsFeedItemImporter.new().call
+  task rss_news: :environment do
+    NewsFeedItemImporter.new.call
   end
 
   desc 'Import Pure Users'
-  task :pure_users => :environment do
+  task pure_users: :environment do
     PureUserImporter.new.call
   end
 
   desc 'Import Pure Organizations'
-  task :pure_organizations => :environment do
+  task pure_organizations: :environment do
     PureOrganizationsImporter.new.call
   end
 
   desc 'Import Pure publications'
-  task :pure_publications => :environment do
+  task pure_publications: :environment do
     PurePublicationImporter.new.call
   end
 
   desc 'Import Pure publication tags'
-  task :pure_publication_tags => :environment do
+  task pure_publication_tags: :environment do
     PurePublicationTagImporter.new.call
   end
 
@@ -79,28 +79,28 @@ namespace :import do
   end
 
   desc 'Import user data from LDAP'
-  task :ldap => :environment do
+  task ldap: :environment do
     LDAPImporter.new.call
   end
 
   desc 'Import publication data from Penn State Law School OAI repositories'
-  task :law_school_publications => :environment do
+  task law_school_publications: :environment do
     PSULawSchoolPublicationImporter.new.call
     PSUDickinsonPublicationImporter.new.call
   end
 
   desc 'Import Pure publishers'
-  task :pure_publishers => :environment do
+  task pure_publishers: :environment do
     PurePublishersImporter.new.call
   end
 
   desc 'Import Pure journals'
-  task :pure_journals => :environment do
+  task pure_journals: :environment do
     PureJournalsImporter.new.call
   end
 
   desc 'Import all Pure data from API'
-  task :pure => :environment do
+  task pure: :environment do
     PureOrganizationsImporter.new.call
     PureUserImporter.new.call
     PurePublishersImporter.new.call
@@ -110,7 +110,7 @@ namespace :import do
   end
 
   desc 'Import all data'
-  task :all => :environment do
+  task all: :environment do
     PureOrganizationsImporter.new.call
     ActivityInsightImporter.new.call
     PureUserImporter.new.call

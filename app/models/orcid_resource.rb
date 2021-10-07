@@ -13,12 +13,12 @@ class OrcidResource
     response = client.post
 
     if response.code == 201
-      @location = response.headers["location"]
-      return true
+      @location = response.headers['location']
+      true
     else
       begin
         response_body = JSON.parse(response.to_s)
-        if response_body["error"] == "invalid_token"
+        if response_body['error'] == 'invalid_token'
           raise InvalidToken
         else
           raise FailedRequest
@@ -30,7 +30,7 @@ class OrcidResource
     end
   end
 
-  def to_json
+  def to_json(*_args)
     # Defined in subclass
   end
 
@@ -52,5 +52,5 @@ class OrcidResource
 
   private
 
-  attr_reader :model
+    attr_reader :model
 end

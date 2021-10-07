@@ -1,5 +1,5 @@
 require 'component/component_spec_helper'
-  
+
 describe 'the statistics_snapshots table', type: :model do
   subject { StatisticsSnapshot.new }
 
@@ -18,18 +18,18 @@ describe StatisticsSnapshot, type: :model do
     create :publication, open_access_url: nil, user_submitted_open_access_url: 'url3', publication_type: 'Book'
   end
 
-  describe ".record" do
-    it "creates a new statistics snapshot record" do
-      expect { StatisticsSnapshot.record }.to change { StatisticsSnapshot.count }.by 1
+  describe '.record' do
+    it 'creates a new statistics snapshot record' do
+      expect { StatisticsSnapshot.record }.to change(StatisticsSnapshot, :count).by 1
     end
 
-    it "records the current total number of articles in the database" do
+    it 'records the current total number of articles in the database' do
       snapshot = StatisticsSnapshot.record
 
       expect(snapshot.total_article_count).to eq 3
     end
 
-    it "records the current number of open access articles in the database" do
+    it 'records the current number of open access articles in the database' do
       snapshot = StatisticsSnapshot.record
 
       expect(snapshot.open_access_article_count).to eq 2
@@ -41,7 +41,7 @@ describe StatisticsSnapshot, type: :model do
                            total_article_count: 3,
                            open_access_article_count: 2 }
 
-    it "returns the percentage of articles that were open access at the time the snapshot was taken" do
+    it 'returns the percentage of articles that were open access at the time the snapshot was taken' do
       expect(snapshot.percent_open_access).to eq 66.7
     end
   end

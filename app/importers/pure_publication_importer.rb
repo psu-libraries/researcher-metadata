@@ -1,11 +1,11 @@
 class PurePublicationImporter < PureImporter
-  IMPORT_SOURCE = 'Pure'
+  IMPORT_SOURCE = 'Pure'.freeze
 
   def call
     pbar = ProgressBar.create(title: 'Importing Pure research-outputs (publications)', total: total_pages) unless Rails.env.test?
 
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
       pubs['items'].each do |publication|
@@ -13,7 +13,7 @@ class PurePublicationImporter < PureImporter
 
         ActiveRecord::Base.transaction do
           pi = PublicationImport.find_by(source: IMPORT_SOURCE,
-                                          source_identifier: publication['uuid']) ||
+                                         source_identifier: publication['uuid']) ||
             PublicationImport.new(source: IMPORT_SOURCE,
                                   source_identifier: publication['uuid'])
 
@@ -27,7 +27,7 @@ class PurePublicationImporter < PureImporter
                 total_scopus_citations: publication['totalScopusCitations'],
                 journal: journal_present?(publication) ? journal(publication) : nil
               }
-              attrs = attrs.merge(doi: doi(publication)) unless p.doi.present?
+              attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update_attributes!(attrs)
             else
               pi.publication.update_attributes!(pub_attrs(publication))
@@ -46,11 +46,11 @@ class PurePublicationImporter < PureImporter
 
           pi.save!
 
-          unless p.updated_by_user_at.present?
+          if p.updated_by_user_at.blank?
             p.contributor_names.delete_all
 
             authorships = publication['personAssociations'].select do |a|
-              !a['authorCollaboration'].present? &&
+              a['authorCollaboration'].blank? &&
                 a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
             end
 
@@ -63,7 +63,7 @@ class PurePublicationImporter < PureImporter
 
                   authorship.user = u if authorship.new_record?
                   authorship.publication = p if authorship.new_record?
-                  authorship.author_number = i+1
+                  authorship.author_number = i + 1
                   begin
                     authorship.save!
                   rescue ActiveRecord::RecordInvalid => e
@@ -75,9 +75,9 @@ class PurePublicationImporter < PureImporter
                 publication: p,
                 first_name: a['name']['firstName'],
                 last_name: a['name']['lastName'],
-                position: i+1
+                position: i + 1
               }
-              contributor_name_attrs.merge!(user: u) if u
+              contributor_name_attrs[:user] = u if u
               ContributorName.create!(contributor_name_attrs)
             end
           end
@@ -98,76 +98,77 @@ class PurePublicationImporter < PureImporter
 
   private
 
-  def pub_attrs(publication)
-    {
-      title: publication['title']['value'],
-      secondary_title: publication['subTitle'].try('[]', 'value'),
-      publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
-                                                .detect { |t| t['locale'] == 'en_US' }['value']),
-      page_range: publication['pages'],
-      volume: publication['volume'],
-      issue: publication['journalNumber'],
-      journal: journal_present?(publication) ? journal(publication) : nil,
-      issn: journal_present?(publication) ? issn(publication) : nil,
-      status: status_value(publication),
-      published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
-                             published_month(publication),
-                             published_day(publication)),
-      total_scopus_citations: publication['totalScopusCitations'],
-      abstract: abstract(publication),
-      visible: true,
-      doi: doi(publication)
-    }
-  end
-
-  def issn(publication)
-    publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
-  end
-
-  def status(publication)
-    publication['publicationStatuses'].detect { |s| s['current'] == true }
-  end
-
-  def status_value(publication)
-    status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US'}['value']
-  end
-
-  def published_month(publication)
-    status(publication)['publicationDate']['month'].present? ? status(publication)['publicationDate']['month'].to_i : 1
-  end
-
-  def published_day(publication)
-    status(publication)['publicationDate']['day'].present? ? status(publication)['publicationDate']['day'].to_i : 1
-  end
-
-  def abstract(publication)
-    if publication['abstract']
-      publication['abstract']['text'].detect { |t| t['locale'] == 'en_US'}['value']
+    def pub_attrs(publication)
+      {
+        title: publication['title']['value'],
+        secondary_title: publication['subTitle'].try('[]', 'value'),
+        publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
+                                                  .detect { |t| t['locale'] == 'en_US' }['value']),
+        page_range: publication['pages'],
+        volume: publication['volume'],
+        issue: publication['journalNumber'],
+        journal: journal_present?(publication) ? journal(publication) : nil,
+        issn: journal_present?(publication) ? issn(publication) : nil,
+        status: status_value(publication),
+        published_on: Date.new(status(publication)['publicationDate']['year'].to_i,
+                               published_month(publication),
+                               published_day(publication)),
+        total_scopus_citations: publication['totalScopusCitations'],
+        abstract: abstract(publication),
+        visible: true,
+        doi: doi(publication)
+      }
     end
-  end
 
-  def doi(publication)
-    if publication['electronicVersions']
-      v = publication['electronicVersions'].detect do |ev|
-        if ev['versionType']
-          ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == "Final published version"
-        end
+    def issn(publication)
+      publication['journalAssociation']['issn'].present? ? publication['journalAssociation']['issn']['value'] : nil
+    end
+
+    def status(publication)
+      publication['publicationStatuses'].detect { |s| s['current'] == true }
+    end
+
+    def status_value(publication)
+      status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value']
+    end
+
+    def published_month(publication)
+      status(publication)['publicationDate']['month'].present? ? status(publication)['publicationDate']['month'].to_i : 1
+    end
+
+    def published_day(publication)
+      status(publication)['publicationDate']['day'].present? ? status(publication)['publicationDate']['day'].to_i : 1
+    end
+
+    def abstract(publication)
+      if publication['abstract']
+        publication['abstract']['text'].detect { |t| t['locale'] == 'en_US' }['value']
       end
-      raw_doi = v.try('[]', 'doi')
-      DOISanitizer.new(raw_doi).url
     end
-  end
 
-  def journal(publication)
-    publication['journalAssociation']['journal'].present? ?
-        Journal.find_by(pure_uuid: publication['journalAssociation']['journal']['uuid']) : nil
-  end
+    def doi(publication)
+      if publication['electronicVersions']
+        v = publication['electronicVersions'].detect do |ev|
+          if ev['versionType']
+            ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Final published version'
+          end
+        end
+        raw_doi = v.try('[]', 'doi')
+        DOISanitizer.new(raw_doi).url
+      end
+    end
 
-  def journal_present?(publication)
-    publication['journalAssociation'].present?
-  end
+    def journal(publication)
+      if publication['journalAssociation']['journal'].present?
+        Journal.find_by(pure_uuid: publication['journalAssociation']['journal']['uuid'])
+      end
+    end
 
-  def importable?(publication)
-    status_value(publication) == 'Published' || status_value(publication) == 'Accepted/In press'
-  end
+    def journal_present?(publication)
+      publication['journalAssociation'].present?
+    end
+
+    def importable?(publication)
+      status_value(publication) == 'Published' || status_value(publication) == 'Accepted/In press'
+    end
 end

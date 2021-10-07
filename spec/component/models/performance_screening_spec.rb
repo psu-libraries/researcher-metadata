@@ -1,5 +1,5 @@
 require 'component/component_spec_helper'
-  
+
 describe 'the performance screening table', type: :model do
   subject { PerformanceScreening.new }
 

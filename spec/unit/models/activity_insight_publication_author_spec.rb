@@ -11,16 +11,18 @@ describe ActivityInsightPublicationAuthor do
   describe '#activity_insight_user_id' do
     before { allow(parsed_auth).to receive(:css).with('FACULTY_NAME').and_return faculty_name_element }
 
-    context "when the faculty_name element in the given data is empty" do
+    context 'when the faculty_name element in the given data is empty' do
       let(:faculty_name_element) { double 'faculty name element', text: '' }
-      it "returns nil" do
+
+      it 'returns nil' do
         expect(auth.activity_insight_user_id).to be_nil
       end
     end
 
-    context "when the faculty_name element in the given data contains text" do
+    context 'when the faculty_name element in the given data contains text' do
       let(:faculty_name_element) { double 'faculty name element', text: "\n     123456  \n   " }
-      it "returns the text with surrounding whitespace removed" do
+
+      it 'returns the text with surrounding whitespace removed' do
         expect(auth.activity_insight_user_id).to eq '123456'
       end
     end
@@ -32,55 +34,61 @@ describe ActivityInsightPublicationAuthor do
       allow(parsed_auth).to receive(:css).with('FNAME').and_return fname_element
     end
 
-    context "when the value for FACULTY_NAME matches the ID of the given user" do
+    context 'when the value for FACULTY_NAME matches the ID of the given user' do
       let(:faculty_name_element) { double 'faculty name element', text: '123' }
 
-      context "when the fname element in the given data is empty" do
+      context 'when the fname element in the given data is empty' do
         let(:fname_element) { double 'first name element', text: '' }
-        it "returns nil" do
+
+        it 'returns nil' do
           expect(auth.first_name).to be_nil
         end
       end
 
-      context "when the fname element in the given data contains text" do
+      context 'when the fname element in the given data contains text' do
         let(:fname_element) { double 'first name element', text: "\n     First Name  \n   " }
-        it "returns the text with surrounding whitespace removed" do
+
+        it 'returns the text with surrounding whitespace removed' do
           expect(auth.first_name).to eq 'First Name'
         end
       end
     end
 
-    context "when the value for FACULTY_NAME does not match the ID of the given user" do
+    context 'when the value for FACULTY_NAME does not match the ID of the given user' do
       let(:faculty_name_element) { double 'faculty name element', text: '456' }
 
-      context "when the fname element in the given data is empty" do
+      context 'when the fname element in the given data is empty' do
         let(:fname_element) { double 'first name element', text: '' }
-        it "returns nil" do
+
+        it 'returns nil' do
           expect(auth.first_name).to be_nil
         end
       end
 
-      context "when the fname element in the given data contains text" do
+      context 'when the fname element in the given data contains text' do
         let(:fname_element) { double 'first name element', text: "\n     First Name  \n   " }
-        it "returns the abbreviated first name" do
+
+        it 'returns the abbreviated first name' do
           expect(auth.first_name).to eq 'F'
         end
       end
     end
 
-    context "when the author data has no value for FACULTY_NAME" do
+    context 'when the author data has no value for FACULTY_NAME' do
       let(:faculty_name_element) { double 'faculty name element', text: '' }
 
-      context "when the fname element in the given data is empty" do
+      context 'when the fname element in the given data is empty' do
         let(:fname_element) { double 'first name element', text: '' }
-        it "returns nil" do
+
+        it 'returns nil' do
           expect(auth.first_name).to be_nil
         end
       end
 
-      context "when the fname element in the given data contains text" do
+      context 'when the fname element in the given data contains text' do
         let(:fname_element) { double 'first name element', text: "\n     First Name  \n   " }
-        it "returns the text with surrounding whitespace removed" do
+
+        it 'returns the text with surrounding whitespace removed' do
           expect(auth.first_name).to eq 'First Name'
         end
       end
@@ -90,16 +98,18 @@ describe ActivityInsightPublicationAuthor do
   describe '#middle_name' do
     before { allow(parsed_auth).to receive(:css).with('MNAME').and_return mname_element }
 
-    context "when the mname element in the given data is empty" do
+    context 'when the mname element in the given data is empty' do
       let(:mname_element) { double 'middle name element', text: '' }
-      it "returns nil" do
+
+      it 'returns nil' do
         expect(auth.middle_name).to be_nil
       end
     end
 
-    context "when the mname element in the given data contains text" do
+    context 'when the mname element in the given data contains text' do
       let(:mname_element) { double 'middle name element', text: "\n     Middle Name  \n   " }
-      it "returns the text with surrounding whitespace removed" do
+
+      it 'returns the text with surrounding whitespace removed' do
         expect(auth.middle_name).to eq 'Middle Name'
       end
     end
@@ -108,16 +118,18 @@ describe ActivityInsightPublicationAuthor do
   describe '#last_name' do
     before { allow(parsed_auth).to receive(:css).with('LNAME').and_return lname_element }
 
-    context "when the lname element in the given data is empty" do
+    context 'when the lname element in the given data is empty' do
       let(:lname_element) { double 'last name element', text: '' }
-      it "returns nil" do
+
+      it 'returns nil' do
         expect(auth.last_name).to be_nil
       end
     end
 
-    context "when the lname element in the given data contains text" do
+    context 'when the lname element in the given data contains text' do
       let(:lname_element) { double 'last name element', text: "\n     Last Name  \n   " }
-      it "returns the text with surrounding whitespace removed" do
+
+      it 'returns the text with surrounding whitespace removed' do
         expect(auth.last_name).to eq 'Last Name'
       end
     end
@@ -126,25 +138,29 @@ describe ActivityInsightPublicationAuthor do
   describe '#role' do
     before { allow(parsed_auth).to receive(:css).with('ROLE').and_return role_element }
 
-    context "when the role element in the given data is empty" do
+    context 'when the role element in the given data is empty' do
       let(:role_element) { double 'role element', text: '' }
-      it "returns nil" do
+
+      it 'returns nil' do
         expect(auth.role).to be_nil
       end
     end
 
-    context "when the role element in the given data contains text" do
+    context 'when the role element in the given data contains text' do
       let(:role_element) { double 'role element', text: "\n     Role  \n   " }
-      it "returns the text with surrounding whitespace removed" do
+
+      it 'returns the text with surrounding whitespace removed' do
         expect(auth.role).to eq 'Role'
       end
     end
   end
 
   describe '#activity_insight_id' do
-    let(:id_attr) { double 'id attribute', value: '10'}
+    let(:id_attr) { double 'id attribute', value: '10' }
+
     before { allow(parsed_auth).to receive(:attribute).with('id').and_return(id_attr) }
-    it "returns the id attribute from the given element" do
+
+    it 'returns the id attribute from the given element' do
       expect(auth.activity_insight_id).to eq '10'
     end
   end
@@ -152,36 +168,43 @@ describe ActivityInsightPublicationAuthor do
   describe '#==' do
     let(:id_attr) { double 'id attribute', value: '10' }
     let(:other_parsed_auth) { double 'other parsed publication author xml' }
+
     before { allow(parsed_auth).to receive(:attribute).with('id').and_return(id_attr) }
-    
-    context "when given an author with the same activity insight ID" do
+
+    context 'when given an author with the same activity insight ID' do
       let(:other) { ActivityInsightPublicationAuthor.new(other_parsed_auth, double('user')) }
       let(:other_id_attr) { double 'id attribute', value: '10' }
+
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }
-      it "returns true" do
+
+      it 'returns true' do
         expect(auth == other).to eq true
       end
     end
 
-    context "when given an author with a different activity insight ID" do
+    context 'when given an author with a different activity insight ID' do
       let(:other) { ActivityInsightPublicationAuthor.new(other_parsed_auth, double('user')) }
       let(:other_id_attr) { double 'id attribute', value: '9' }
+
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }
-      it "returns false" do
+
+      it 'returns false' do
         expect(auth == other).to eq false
       end
     end
 
-    context "when given different kind of object with the same activity insight ID" do
+    context 'when given different kind of object with the same activity insight ID' do
       let(:other) { double 'some object', activity_insight_id: '10' }
-      it "returns false" do
+
+      it 'returns false' do
         expect(auth == other).to eq false
       end
     end
 
-    context "when given different kind of object with a different activity insight ID" do
+    context 'when given different kind of object with a different activity insight ID' do
       let(:other) { double 'some object', activity_insight_id: '9' }
-      it "returns false" do
+
+      it 'returns false' do
         expect(auth == other).to eq false
       end
     end
@@ -192,26 +215,26 @@ describe ActivityInsightPublicationAuthor do
       allow(parsed_auth).to receive(:css).with('FACULTY_NAME').and_return faculty_name_element
     end
 
-    context "when the value for FACULTY_NAME matches the ID of the given user" do
+    context 'when the value for FACULTY_NAME matches the ID of the given user' do
       let(:faculty_name_element) { double 'faculty name element', text: '123' }
 
-      it "returns true" do
+      it 'returns true' do
         expect(auth.for_imported_user?).to eq true
       end
     end
 
-    context "when the value for FACULTY_NAME does not match the ID of the given user" do
+    context 'when the value for FACULTY_NAME does not match the ID of the given user' do
       let(:faculty_name_element) { double 'faculty name element', text: '456' }
 
-      it "returns false" do
+      it 'returns false' do
         expect(auth.for_imported_user?).to eq false
       end
     end
 
-    context "when the author data has no value for FACULTY_NAME" do
+    context 'when the author data has no value for FACULTY_NAME' do
       let(:faculty_name_element) { double 'faculty name element', text: '' }
 
-      it "returns false" do
+      it 'returns false' do
         expect(auth.for_imported_user?).to eq false
       end
     end

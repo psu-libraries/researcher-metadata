@@ -34,7 +34,7 @@ end
 describe EducationHistoryItem, type: :model do
   subject(:item) { EducationHistoryItem.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to validate_presence_of(:user) }
 

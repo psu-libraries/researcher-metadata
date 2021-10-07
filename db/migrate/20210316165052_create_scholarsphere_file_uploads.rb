@@ -4,6 +4,6 @@ class CreateScholarsphereFileUploads < ActiveRecord::Migration[5.2]
       t.references :authorship, foreign_key: true
       t.string :file
       t.timestamps null: false
-    end    
+    end
   end
 end

@@ -76,32 +76,32 @@ class OAIImporter
 
   private
 
-  attr_reader :repo_records
+    attr_reader :repo_records
 
-  def repo_url
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def import_source
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def record_type
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def set
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def repo
-    @repo ||= Fieldhand::Repository.new(repo_url)
-  end
-
-  def load_records
-    @repo_records = []
-    repo.records(metadata_prefix: 'dcs', set: set).each do |r|
-      @repo_records.push record_type.new(r)
+    def repo_url
+      raise NotImplementedError.new('This method should be defined in a subclass')
     end
-  end
+
+    def import_source
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def record_type
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def set
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def repo
+      @repo ||= Fieldhand::Repository.new(repo_url)
+    end
+
+    def load_records
+      @repo_records = []
+      repo.records(metadata_prefix: 'dcs', set: set).each do |r|
+        @repo_records.push record_type.new(r)
+      end
+    end
 end

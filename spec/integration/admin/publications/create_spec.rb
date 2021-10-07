@@ -1,25 +1,25 @@
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-feature "Creating a publication", type: :feature do
-  context "when the current user is an admin" do
+describe 'Creating a publication', type: :feature do
+  context 'when the current user is an admin' do
     before do
       authenticate_admin_user
       visit rails_admin.new_path(model_name: :publication)
     end
 
-    describe "visiting the form to create a new publication" do
-      it_behaves_like "a page with the admin layout"
-      it "show the correct content" do
-        expect(page).to have_content "New Publication"
+    describe 'visiting the form to create a new publication' do
+      it_behaves_like 'a page with the admin layout'
+      it 'show the correct content' do
+        expect(page).to have_content 'New Publication'
       end
 
-      it "does not allow the total Scopus citations to be set" do
-        expect(page).not_to have_field "Total scopus citations"
+      it 'does not allow the total Scopus citations to be set' do
+        expect(page).not_to have_field 'Total scopus citations'
       end
     end
 
-    describe "submitting the form to create a new publication" do
+    describe 'submitting the form to create a new publication' do
       before do
         fill_in 'Title', with: 'Test Publication'
         fill_in 'Secondary title', with: 'Test Subtitle'
@@ -42,7 +42,7 @@ feature "Creating a publication", type: :feature do
         click_button 'Save'
       end
 
-      it "creates a new publication record in the database with the provided data" do
+      it 'creates a new publication record in the database with the provided data' do
         p = Publication.find_by(title: 'Test Publication')
         expect(p.secondary_title).to eq 'Test Subtitle'
         expect(p.publication_type).to eq 'Journal Article'
@@ -62,18 +62,19 @@ feature "Creating a publication", type: :feature do
         expect(p.visible).to eq true
       end
 
-      it "it marks the new publication as having been manually edited" do
+      it 'marks the new publication as having been manually edited' do
         p = Publication.find_by(title: 'Test Publication')
         expect(p.updated_by_user_at).not_to be_nil
       end
     end
   end
 
-  context "when the current user is not an admin" do
+  context 'when the current user is not an admin' do
     before { authenticate_user }
-    it "redirects back to the home page with an error message" do
+
+    it 'redirects back to the home page with an error message' do
       visit rails_admin.new_path(model_name: :publication)
-      expect(page.current_path).to eq root_path
+      expect(page).to have_current_path root_path, ignore_query: true
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end
   end

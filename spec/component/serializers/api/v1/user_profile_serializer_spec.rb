@@ -17,7 +17,7 @@ describe API::V1::UserProfileSerializer do
                          teaching_interests: 'test teaching interests',
                          research_interests: 'test research interests',
                          publications: ['pub1', 'pub2'],
-                         other_publications: { "Letters" => ['letter1', 'letter2'], "Books" => ['book1'] },
+                         other_publications: { 'Letters' => ['letter1', 'letter2'], 'Books' => ['book1'] },
                          grants: ['grant1', 'grant2'],
                          presentations: ['presentation1', 'presentation2'],
                          performances: ['performance1', 'performance2'],
@@ -27,8 +27,9 @@ describe API::V1::UserProfileSerializer do
                          education_history: ['history1', 'history2'],
                          orcid_identifier: 'orcid' }
 
-  describe "data attributes" do
+  describe 'data attributes' do
     subject { serialized_data_attributes(profile) }
+
     it { is_expected.to include(name: 'test name') }
     it { is_expected.to include(organization_name: 'test org') }
     it { is_expected.to include(title: 'test title') }
@@ -44,7 +45,7 @@ describe API::V1::UserProfileSerializer do
     it { is_expected.to include(research_interests: 'test research interests') }
     it { is_expected.to include(bio: 'test bio') }
     it { is_expected.to include(publications: ['pub1', 'pub2']) }
-    it { is_expected.to include(other_publications: { "Letters" => ['letter1', 'letter2'], "Books" => ['book1'] }) }
+    it { is_expected.to include(other_publications: { 'Letters' => ['letter1', 'letter2'], 'Books' => ['book1'] }) }
     it { is_expected.to include(grants: ['grant1', 'grant2']) }
     it { is_expected.to include(presentations: ['presentation1', 'presentation2']) }
     it { is_expected.to include(performances: ['performance1', 'performance2']) }

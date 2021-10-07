@@ -2,7 +2,7 @@ class PureOrganizationsImporter < PureImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages) unless Rails.env.test?
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
 
       organizations['items'].each do |item|
@@ -20,16 +20,14 @@ class PureOrganizationsImporter < PureImporter
 
     pbar = ProgressBar.create(title: 'Importing Pure organization relationships', total: total_pages) unless Rails.env.test?
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
 
       organizations['items'].each do |item|
         child_org = Organization.find_by(pure_uuid: item['uuid'])
-        if item['parents']
-          parent_org = Organization.find_by(pure_uuid: item['parents'].first['uuid'])
-        else
-          parent_org = nil
-        end
+        parent_org = if item['parents']
+                       Organization.find_by(pure_uuid: item['parents'].first['uuid'])
+                     end
 
         child_org.parent = parent_org
         child_org.save!
@@ -49,11 +47,11 @@ class PureOrganizationsImporter < PureImporter
 
   private
 
-  def extract_name(org)
-    org["name"]["text"].detect { |text| text["locale"] == "en_US" }["value"]
-  end
+    def extract_name(org)
+      org['name']['text'].detect { |text| text['locale'] == 'en_US' }['value']
+    end
 
-  def extract_organization_type(org)
-    org["type"]["term"]["text"].detect { |text| text["locale"] == "en_US" }["value"]
-  end
+    def extract_organization_type(org)
+      org['type']['term']['text'].detect { |text| text['locale'] == 'en_US' }['value']
+    end
 end

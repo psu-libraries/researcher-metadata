@@ -1,6 +1,6 @@
 class UserPerformance < ApplicationRecord
-  belongs_to :user, :inverse_of => :user_performances
-  belongs_to :performance, :inverse_of => :user_performances
+  belongs_to :user, inverse_of: :user_performances
+  belongs_to :performance, inverse_of: :user_performances
 
   validates :user_id, :performance_id, :activity_insight_id, presence: true
   validates :activity_insight_id, uniqueness: true

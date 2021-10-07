@@ -20,7 +20,7 @@ end
 describe NonDuplicatePublicationGroupMembership, type: :model do
   subject { NonDuplicatePublicationGroupMembership.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:non_duplicate_group_memberships) }

@@ -13,16 +13,16 @@ class NSFInvestigator
 
   def psu_email_name
     email_address = text_for_element('EmailAddress')
-    if /@psu.edu/i.match email_address
+    if /@psu.edu/i.match? email_address
       email_address.split('@').first
     end
   end
-    
+
   private
 
-  def text_for_element(element)
-    parsed_investigator.css(element).text.strip.presence
-  end
+    def text_for_element(element)
+      parsed_investigator.css(element).text.strip.presence
+    end
 
-  attr_reader :parsed_investigator
+    attr_reader :parsed_investigator
 end

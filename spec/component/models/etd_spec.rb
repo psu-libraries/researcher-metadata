@@ -23,7 +23,7 @@ describe 'the etds table', type: :model do
 end
 
 describe ETD, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
@@ -37,7 +37,7 @@ describe ETD, type: :model do
     it { is_expected.to validate_presence_of(:access_level) }
     it { is_expected.to validate_inclusion_of(:submission_type).in_array(ETD.submission_types) }
 
-    context "given an otherwise valid record" do
+    context 'given an otherwise valid record' do
       subject {
         ETD.new(
           title: 'bucks dissertation',
@@ -51,6 +51,7 @@ describe ETD, type: :model do
           access_level: 'Open Access'
         )
       }
+
       it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
       it { is_expected.to validate_uniqueness_of(:external_identifier) }
     end
@@ -63,9 +64,10 @@ describe ETD, type: :model do
 
   it { is_expected.to accept_nested_attributes_for(:committee_memberships).allow_destroy(true) }
 
-  describe "deleting a etd with committee_memberships" do
+  describe 'deleting a etd with committee_memberships' do
     let(:etd) { create :etd }
-    let!(:cm) { create :committee_membership, etd: etd}
+    let!(:cm) { create :committee_membership, etd: etd }
+
     it "also deletes the etd's committee_memberships" do
       etd.destroy
       expect { cm.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -73,15 +75,16 @@ describe ETD, type: :model do
   end
 
   describe '.submission_types' do
-    it "returns the list of valid etd sbmission types" do
-      expect(ETD.submission_types).to eq ["Dissertation", "Master Thesis"]
+    it 'returns the list of valid etd sbmission types' do
+      expect(ETD.submission_types).to eq ['Dissertation', 'Master Thesis']
     end
   end
 
   describe '#author_full_name' do
-    let(:etd) { ETD.new(author_first_name: "Sally", author_last_name: "Testauthor")}
-    it "returns the first and last name of the author of the ETD" do
-      expect(etd.author_full_name).to eq "Sally Testauthor"
+    let(:etd) { ETD.new(author_first_name: 'Sally', author_last_name: 'Testauthor') }
+
+    it 'returns the first and last name of the author of the ETD' do
+      expect(etd.author_full_name).to eq 'Sally Testauthor'
     end
   end
 end

@@ -24,7 +24,7 @@ describe 'the organizations table', type: :model do
 end
 
 describe Organization, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to validate_presence_of(:name) }
 
@@ -34,9 +34,10 @@ describe Organization, type: :model do
   it { is_expected.to have_many(:user_organization_memberships).inverse_of(:organization) }
   it { is_expected.to have_many(:users).through(:user_organization_memberships) }
 
-  describe "deleting an organization with user memberships" do
+  describe 'deleting an organization with user memberships' do
     let(:o) { create :organization }
-    let!(:m) { create :user_organization_membership, organization: o}
+    let!(:m) { create :user_organization_membership, organization: o }
+
     it "also deletes the organization's user memberships" do
       o.destroy
       expect { m.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -47,7 +48,7 @@ describe Organization, type: :model do
     let!(:org1) { create :organization, visible: false }
     let!(:org2) { create :organization, visible: true }
 
-    it "returns a collection of the visible organizations" do
+    it 'returns a collection of the visible organizations' do
       expect(Organization.visible).to eq [org2]
     end
   end
@@ -65,21 +66,21 @@ describe Organization, type: :model do
              organization: org,
              started_on: Date.new(2000, 1, 1),
              ended_on: Date.new(2005, 1, 1),
-             position_title: "Old Position"
+             position_title: 'Old Position'
       create :user_organization_membership,
              user: u1,
              organization: org,
              started_on: Date.new(2005, 1, 2),
              ended_on: Date.new(2010, 1, 1),
-             position_title: "New Position"
+             position_title: 'New Position'
 
       create :user_organization_membership,
              user: u2,
              organization: org,
              started_on: Date.new(2020, 1, 1)
     end
-    
-    it "returns a collection of unique users who have been members of the organization" do
+
+    it 'returns a collection of unique users who have been members of the organization' do
       expect(org.users).to match_array [u1, u2]
     end
   end
@@ -118,7 +119,6 @@ describe Organization, type: :model do
       create :authorship, user: user_1, publication: pub_8 # authored by first member during their second membership, but invisible
       create :authorship, user: user_4, publication: pub_9 # authored by a member of a descendent organization during their membership
       create :authorship, user: user_5, publication: pub_10 # authored by a member during their membership in another org, and not in the given org
-      
 
       create :user_organization_membership,
              user: user_1,
@@ -152,12 +152,12 @@ describe Organization, type: :model do
              started_on: Date.new(2015, 1, 1)
     end
 
-    it "returns visible, unique publications by users who were members of the organization or one of its descendants when they were published" do
+    it 'returns visible, unique publications by users who were members of the organization or one of its descendants when they were published' do
       expect(org.all_publications).to match_array [pub_1, pub_4, pub_5, pub_7, pub_9]
     end
   end
 
-  describe "#all_users" do
+  describe '#all_users' do
     let!(:org) { create :organization }
     let!(:other_org) { create :organization }
     let!(:child_org) { create :organization, parent: org }
@@ -182,7 +182,7 @@ describe Organization, type: :model do
              organization: other_org
     end
 
-    it "retuns the users who are members of the organization or one of its descendants" do
+    it 'retuns the users who are members of the organization or one of its descendants' do
       expect(org.all_users).to match_array [user_1, user_2, user_3]
     end
   end
@@ -212,14 +212,13 @@ describe Organization, type: :model do
              organization: other_org
     end
 
-    it "returns the number of users who are members of either the organization itself or one of its descendants" do
+    it 'returns the number of users who are members of either the organization itself or one of its descendants' do
       expect(org.user_count).to eq 3
     end
   end
 
   describe '#oa_email_user_count' do
-    xit "returns the number of users who are members of either the organization itself or one of its descendants and who need an open access reminder email" do
-      
+    xit 'returns the number of users who are members of either the organization itself or one of its descendants and who need an open access reminder email' do
     end
   end
 end

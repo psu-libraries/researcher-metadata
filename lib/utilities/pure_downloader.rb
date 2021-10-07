@@ -42,7 +42,7 @@ class PureDownloader
     total_pages = (total_pubs / page_size.to_f).ceil
 
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       pubs = `curl -X GET --header 'Accept: application/json' --header 'api-key: #{api_key}' 'https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=#{page_size}&offset=#{offset}'`
       download_file = pure_pub_dir.join("pure_publications_#{i}.json")
       File.open(download_file, 'w') do |f|
@@ -87,16 +87,16 @@ class PureDownloader
 
   private
 
-  attr_reader :api_key
+    attr_reader :api_key
 
-  def get_api_key
-    print "Enter Pure API key:  "
-    @api_key = STDIN.noecho(&:gets).chomp
+    def get_api_key
+      print 'Enter Pure API key:  '
+      @api_key = STDIN.noecho(&:gets).chomp
 
-    puts "\n"
-  end
+      puts "\n"
+    end
 
-  def root_dir
-    Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
-  end
+    def root_dir
+      Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
+    end
 end

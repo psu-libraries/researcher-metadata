@@ -11,17 +11,17 @@ describe PureUserImporter do
 
   before do
     allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=1&offset=0',
-                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_1
+                                          headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
     allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=100&offset=0',
-                                      headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_response_2
+                                          headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
   end
 
   describe '#call' do
-    context "when the API endpoint is found" do
-      context "when no user records exist in the database" do
-        it "creates a new user record for each user object in the imported data" do
-          expect { importer.call }.to change { User.count }.by 3
+    context 'when the API endpoint is found' do
+      context 'when no user records exist in the database' do
+        it 'creates a new user record for each user object in the imported data' do
+          expect { importer.call }.to change(User, :count).by 3
 
           u1 = User.find_by(webaccess_id: 'sat1')
           u2 = User.find_by(webaccess_id: 'bbt2')
@@ -46,20 +46,20 @@ describe PureUserImporter do
           expect(u3.scopus_h_index).to eq 2
         end
 
-        context "when no organizations exist in the database" do
-          it "does not create any new organization memberships" do
-            expect { importer.call }.not_to change { UserOrganizationMembership.count }
+        context 'when no organizations exist in the database' do
+          it 'does not create any new organization memberships' do
+            expect { importer.call }.not_to change(UserOrganizationMembership, :count)
           end
         end
 
-        context "when organizations that are referenced in the imported data exist in the database" do
+        context 'when organizations that are referenced in the imported data exist in the database' do
           let!(:org1) { create :organization, pure_uuid: '937d604c-a16a-499d-80eb-bd6f931a343c' }
           let!(:org2) { create :organization, pure_uuid: 'e99fcbec-818a-4b90-a04a-986d05696395' }
           let!(:org3) { create :organization, pure_uuid: '47bf26c5-18c0-45d1-8aab-9f4597321764' }
 
-          context "when no organization memberships already exist" do
-            it "creates a new membership for each association described in the imported data" do
-              expect { importer.call }.to change { UserOrganizationMembership.count }.by 3
+          context 'when no organization memberships already exist' do
+            it 'creates a new membership for each association described in the imported data' do
+              expect { importer.call }.to change(UserOrganizationMembership, :count).by 3
 
               u1 = User.find_by(webaccess_id: 'sat1')
               u2 = User.find_by(webaccess_id: 'bbt2')
@@ -94,7 +94,7 @@ describe PureUserImporter do
             end
           end
 
-          context "when organization memberships already exist for associations described in the imported data" do
+          context 'when organization memberships already exist for associations described in the imported data' do
             let!(:existing_membership1) { create :user_organization_membership,
                                                  import_source: 'Pure',
                                                  source_identifier: '24766061',
@@ -121,14 +121,14 @@ describe PureUserImporter do
                                                  primary: nil,
                                                  position_title: 'Existing Title 3',
                                                  started_on: Date.new(1997, 9, 1),
-                                                 ended_on: Date.new(2000, 1, 1) }                 
+                                                 ended_on: Date.new(2000, 1, 1) }
             let!(:user1) { create :user, webaccess_id: 'sat1' }
             let!(:user2) { create :user, webaccess_id: 'bbt2' }
             let(:other_user) { create :user }
             let(:other_org) { create :organization }
 
-            it "creates a new membership for each new association and updates the existing memberships" do
-              expect { importer.call }.to change { UserOrganizationMembership.count }.by 1
+            it 'creates a new membership for each new association and updates the existing memberships' do
+              expect { importer.call }.to change(UserOrganizationMembership, :count).by 1
 
               m1 = UserOrganizationMembership.find_by(source_identifier: '21279128', import_source: 'Pure')
               m2 = existing_membership3.reload
@@ -184,7 +184,7 @@ describe PureUserImporter do
         end
       end
 
-      context "when a user in the imported data already exists in the database" do
+      context 'when a user in the imported data already exists in the database' do
         let!(:existing_user) { create :user,
                                       webaccess_id: 'bbt2',
                                       first_name: 'Robert',
@@ -198,10 +198,11 @@ describe PureUserImporter do
         let(:ai_id) { nil }
         let(:timestamp) { nil }
 
-        context "when the existing user has been updated by a human" do
+        context 'when the existing user has been updated by a human' do
           let(:timestamp) { Time.zone.now }
-          it "creates new records for the new users and only updates some existing user data" do
-            expect { importer.call }.to change { User.count }.by 2
+
+          it 'creates new records for the new users and only updates some existing user data' do
+            expect { importer.call }.to change(User, :count).by 2
 
             u1 = User.find_by(webaccess_id: 'sat1')
             u2 = User.find_by(webaccess_id: 'bbt2')
@@ -227,10 +228,11 @@ describe PureUserImporter do
           end
         end
 
-        context "when the existing user has been imported from Activity Insight" do
+        context 'when the existing user has been imported from Activity Insight' do
           let(:ai_id) { '12345678' }
-          it "creates new records for the new users and only updates some existing user data" do
-            expect { importer.call }.to change { User.count }.by 2
+
+          it 'creates new records for the new users and only updates some existing user data' do
+            expect { importer.call }.to change(User, :count).by 2
 
             u1 = User.find_by(webaccess_id: 'sat1')
             u2 = User.find_by(webaccess_id: 'bbt2')
@@ -256,9 +258,9 @@ describe PureUserImporter do
           end
         end
 
-        context "when the existing user has not been updated by a human or imported from Activity Insight" do
-          it "creates new records for the new users and updates the existing user" do
-            expect { importer.call }.to change { User.count }.by 2
+        context 'when the existing user has not been updated by a human or imported from Activity Insight' do
+          it 'creates new records for the new users and updates the existing user' do
+            expect { importer.call }.to change(User, :count).by 2
 
             u1 = User.find_by(webaccess_id: 'sat1')
             u2 = User.find_by(webaccess_id: 'bbt2')
@@ -286,16 +288,16 @@ describe PureUserImporter do
       end
     end
 
-    context "when the API endpoint is not found" do
+    context 'when the API endpoint is not found' do
       before do
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=1&offset=0',
-                                              headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+                                              headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/persons?navigationLink=false&size=100&offset=0',
-                                          headers: {"api-key" => "fake_api_key", "Accept" => "application/json"}).and_return http_error_response
+                                              headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
       end
 
-      it "raises an error" do
+      it 'raises an error' do
         expect { importer.call }.to raise_error PureImporter::ServiceNotFound
       end
     end

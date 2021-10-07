@@ -1,16 +1,16 @@
 class OrcidEmployment < OrcidResource
-  def to_json
+  def to_json(*_args)
     employment = {
       organization: {
-        name: "The Pennsylvania State University",
+        name: 'The Pennsylvania State University',
         address: {
-          city: "University Park",
-          region: "Pennsylvania",
-          country: "US"
+          city: 'University Park',
+          region: 'Pennsylvania',
+          country: 'US'
         },
         "disambiguated-organization": {
-          "disambiguated-organization-identifier": "grid.29857.31",
-          "disambiguation-source": "GRID"
+          "disambiguated-organization-identifier": 'grid.29857.31',
+          "disambiguation-source": 'GRID'
         }
       },
       "department-name": membership.organization_name,
@@ -34,7 +34,7 @@ class OrcidEmployment < OrcidResource
   end
 
   def orcid_type
-    "employment"
+    'employment'
   end
 
   def membership

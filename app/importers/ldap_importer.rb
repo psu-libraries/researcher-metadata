@@ -19,7 +19,7 @@ class LDAPImporter
 
   private
 
-  def ldap
-    @ldap ||= Net::LDAP.new(host: 'dirapps.aset.psu.edu', port: 389)
-  end
+    def ldap
+      @ldap ||= Net::LDAP.new(host: 'dirapps.aset.psu.edu', port: 389)
+    end
 end

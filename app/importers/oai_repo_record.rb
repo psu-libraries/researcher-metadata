@@ -36,26 +36,26 @@ class OAIRepoRecord
   end
 
   def any_user_matches?
-    !! creators.detect { |c| c.user_match || c.ambiguous_user_matches.any? }
+    !!creators.detect { |c| c.user_match || c.ambiguous_user_matches.any? }
   end
 
   private
 
-  attr_reader :record
+    attr_reader :record
 
-  def metadata
-    Nokogiri::XML(@record.metadata)
-  end
+    def metadata
+      Nokogiri::XML(@record.metadata)
+    end
 
-  def attribute(name)
-    metadata.xpath("//metadata//oai_dc:dc//dc:#{name}", *namespace).text
-  end
+    def attribute(name)
+      metadata.xpath("//metadata//oai_dc:dc//dc:#{name}", *namespace).text
+    end
 
-  def namespace
-    ['oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/', 'dc' => 'http://purl.org/dc/elements/1.1/']
-  end
+    def namespace
+      ['oai_dc' => 'http://www.openarchives.org/OAI/2.0/oai_dc/', 'dc' => 'http://purl.org/dc/elements/1.1/']
+    end
 
-  def creator_type
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
+    def creator_type
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
 end

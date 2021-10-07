@@ -20,13 +20,13 @@ describe PSULawSchoolOAIRepoRecord do
   end
 
   describe '#title' do
-    it "returns the value of the title attribute from the given metadata object" do
+    it 'returns the value of the title attribute from the given metadata object' do
       expect(psu_rr.title).to eq 'Test Law Article'
     end
   end
 
   describe '#description' do
-    it "returns the value of the discription attribute from the given metadata object" do
+    it 'returns the value of the discription attribute from the given metadata object' do
       expect(psu_rr.description).to eq 'This is a description of the article.'
     end
   end
@@ -38,19 +38,19 @@ describe PSULawSchoolOAIRepoRecord do
   end
 
   describe '#publisher' do
-    it "returns the value of the publisher attribute from the given metadata object" do
+    it 'returns the value of the publisher attribute from the given metadata object' do
       expect(psu_rr.publisher).to eq 'The Publisher'
     end
   end
 
   describe '#url' do
-    it "returns the value of the identifier attribute from the given metadata object" do
+    it 'returns the value of the identifier attribute from the given metadata object' do
       expect(psu_rr.url).to eq 'https://elibrary.law.psu.edu/abc/etc/etc'
     end
   end
 
   describe '#creators' do
-    it "returns a creator each creator in the given metadtata" do
+    it 'returns a creator each creator in the given metadtata' do
       expect(psu_rr.creators).to eq [creator1, creator2]
     end
   end
@@ -62,26 +62,30 @@ describe PSULawSchoolOAIRepoRecord do
   end
 
   describe '#source' do
-    it "returns the value of the source attribute from the given metadata object" do
+    it 'returns the value of the source attribute from the given metadata object' do
       expect(psu_rr.source).to eq 'Article Source'
     end
   end
 
   describe '#any_user_matches?' do
-    context "when none of the creators from the given metadata match any users" do
-      it "returns false" do
+    context 'when none of the creators from the given metadata match any users' do
+      it 'returns false' do
         expect(psu_rr.any_user_matches?).to eq false
       end
     end
-    context "when one of the creators from the given metadata matches a user" do
+
+    context 'when one of the creators from the given metadata matches a user' do
       let(:um2) { double 'user' }
-      it "returns true" do
+
+      it 'returns true' do
         expect(psu_rr.any_user_matches?).to eq true
       end
     end
-    context "when one of the creators from the given metadata matches more than one user" do
+
+    context 'when one of the creators from the given metadata matches more than one user' do
       let(:aum2) { [double('user1'), double('user2')] }
-      it "returns true" do
+
+      it 'returns true' do
         expect(psu_rr.any_user_matches?).to eq true
       end
     end

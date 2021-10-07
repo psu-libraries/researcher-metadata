@@ -71,6 +71,7 @@ describe OrcidPublicationTypeMapOut do
     it "converts 'Working Paper' to 'working-paper'" do
       expect(described_class.map('Working Paper')).to eq 'working-paper'
     end
+
     it "converts any other string to 'Other'" do
       expect(described_class.map('Other')).to eq 'other'
       expect(described_class.map('Manuscript')).to eq 'other'

@@ -1,7 +1,9 @@
 class OpenAccessButtonPublicationImporter
   def import_all
-    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
-                              total: all_pubs.count) unless Rails.env.test?
+    unless Rails.env.test?
+      pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
+                                total: all_pubs.count)
+    end
 
     all_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -11,8 +13,10 @@ class OpenAccessButtonPublicationImporter
   end
 
   def import_new
-    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
-                              total: new_pubs.count) unless Rails.env.test?
+    unless Rails.env.test?
+      pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
+                                total: new_pubs.count)
+    end
 
     new_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -23,25 +27,25 @@ class OpenAccessButtonPublicationImporter
 
   private
 
-  def all_pubs
-    Publication.where.not(doi: nil).where.not(doi: '')
-  end
-
-  def new_pubs
-    all_pubs.where(open_access_button_last_checked_at: nil)
-  end
-
-  def get_pub(url)
-    attempts = 0
-    HTTParty.get(url).to_s
-  rescue Net::ReadTimeout, Net::OpenTimeout
-    if attempts <= 10
-      attempts += 1
-      retry
-    else
-      raise
+    def all_pubs
+      Publication.where.not(doi: nil).where.not(doi: '')
     end
-  end
+
+    def new_pubs
+      all_pubs.where(open_access_button_last_checked_at: nil)
+    end
+
+    def get_pub(url)
+      attempts = 0
+      HTTParty.get(url).to_s
+    rescue Net::ReadTimeout, Net::OpenTimeout
+      if attempts <= 10
+        attempts += 1
+        retry
+      else
+        raise
+      end
+    end
 
   def query_open_access_button_for(publication)
     oab_json = nil
@@ -57,15 +61,15 @@ class OpenAccessButtonPublicationImporter
     sleep 1
   rescue StandardError => e
     ImporterErrorLog::OpenAccessButtonImporterErrorLog.create!(
-                                             error_type: e.class.to_s,
-                                             error_message: e.message.to_s,
-                                             metadata: {
-                                               publication_id: publication&.id,
-                                               publication_doi_url_path: publication&.doi_url_path,
-                                               oab_json: oab_json.to_s
-                                             },
-                                             occurred_at: Time.zone.now,
-                                             stacktrace: e.backtrace.to_s
-                                            )
+      error_type: e.class.to_s,
+      error_message: e.message.to_s,
+      metadata: {
+        publication_id: publication&.id,
+        publication_doi_url_path: publication&.doi_url_path,
+        oab_json: oab_json.to_s
+      },
+      occurred_at: Time.zone.now,
+      stacktrace: e.backtrace.to_s
+    )
   end
 end
