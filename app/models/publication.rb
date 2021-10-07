@@ -381,6 +381,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:open_access_status)
       field(:open_access_url) do
         label 'Open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }

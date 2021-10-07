@@ -27,7 +27,8 @@ feature "Admin publication detail page", type: :feature do
                       journal: journal,
                       scholarsphere_open_access_url: "https://scholarsphere.psu.edu/resources/3",
                       published_on: Date.new(2018, 8, 1),
-                      open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, "-00:00") }
+                      open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, "-00:00"),
+                      open_access_status: "gold" }
 
   let!(:auth1) { create :authorship,
                         publication: pub,
@@ -138,6 +139,10 @@ feature "Admin publication detail page", type: :feature do
 
       it "shows a link to the publication's open access content in Scholarsphere" do
         expect(page).to have_link "https://scholarsphere.psu.edu/resources/3", href: "https://scholarsphere.psu.edu/resources/3"
+      end
+
+      it "shows the publication's open access status" do
+        expect(page).to have_content "gold"
       end
       
       it "shows the publication's publication date" do
