@@ -49,15 +49,15 @@ feature "Admin open access location detail page", type: :feature do
       end
 
       it "shows the location's url" do
-        expect(page).to have_content "https://nature.com/articles/testpub123"
+        expect(page).to have_link "https://nature.com/articles/testpub123", href: "https://nature.com/articles/testpub123"
       end
 
       it "shows the location's landing page url" do
-        expect(page).to have_content "https://nature.com/articles/testpub123/info"
+        expect(page).to have_link "https://nature.com/articles/testpub123/info", href: "https://nature.com/articles/testpub123/info"
       end
 
       it "shows the location's pdf url" do
-        expect(page).to have_content "https://nature.com/articles/testpub123/pdf"
+        expect(page).to have_link "https://nature.com/articles/testpub123/pdf", href: "https://nature.com/articles/testpub123/pdf"
       end
 
       it "shows the location's version" do
