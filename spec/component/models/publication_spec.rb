@@ -136,6 +136,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:non_duplicate_group_memberships).class_name(:NonDuplicatePublicationGroupMembership).inverse_of(:publication) }
     it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships) }
     it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
+    it { is_expected.to have_many(:open_access_locations).inverse_of(:publication) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
     it { is_expected.to belong_to(:journal).optional.inverse_of(:publications) }
@@ -198,6 +199,15 @@ describe Publication, type: :model do
     it "also deletes the publication's imports" do
       p.destroy
       expect { pi.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe "deleting a publication with open access locations" do
+    let(:p) { create :publication }
+    let!(:oal) { create :open_access_location, publication: p}
+    it "also deletes the publication's open access locations" do
+      p.destroy
+      expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 

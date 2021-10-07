@@ -69,6 +69,12 @@ feature "Admin publication detail page", type: :feature do
                       grant: grant2,
                       publication: pub }
 
+  let!(:oal1) { create :open_access_location,
+                       publication: pub }
+
+  let!(:oal2) { create :open_access_location,
+                       publication: pub }
+
   let!(:journal) { create :journal,
                           title: "Test Journal Record" }
 
@@ -161,6 +167,13 @@ feature "Admin publication detail page", type: :feature do
       it "shows the publication's imports" do
         expect(page).to have_link "PublicationImport ##{imp1.id}"
         expect(page).to have_link "PublicationImport ##{imp2.id}"
+      end
+
+      it "shows the publication's open access locations" do
+        expect(page).to have_link "OpenAccessLocation ##{oal1.id}",
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal1.id)
+        expect(page).to have_link "OpenAccessLocation ##{oal2.id}",
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal2.id)
       end
 
       it "shows the publication's journal" do

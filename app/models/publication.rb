@@ -45,6 +45,8 @@ class Publication < ApplicationRecord
            through: :non_duplicate_groups,
            class_name: :Publication,
            source: :publications
+  has_many :open_access_locations,
+           inverse_of: :publication
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
@@ -392,6 +394,7 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:open_access_button_last_checked_at)
+      field(:open_access_locations)
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
