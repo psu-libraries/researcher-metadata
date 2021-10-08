@@ -12,3 +12,17 @@ plugin_gems: []
 
 # Default severity of all linters.
 severity: warning
+
+linters:
+  ColorVariable:
+    exclude:
+        - app/assets/stylesheets/manage_profile.scss
+  ColorKeyword:
+    exclude:
+      - app/assets/stylesheets/manage_profile.scss
+  IdSelector:
+    exclude:
+      - app/assets/stylesheets/manage_profile.scss
+  QualifyingElement:
+    exclude:
+      - app/assets/stylesheets/rails_admin/custom/variables.scss
