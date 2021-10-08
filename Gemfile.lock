@@ -160,6 +160,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
+    docile (1.4.0)
     erb_lint (0.0.37)
       activesupport
       better_html (~> 1.0.7)
@@ -233,6 +234,7 @@ GEM
       thor (>= 0.14, < 2.0)
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
+    json (2.5.1)
     json-schema (2.8.1)
       addressable (>= 2.4)
     jwt (2.3.0)
@@ -475,6 +477,11 @@ GEM
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
+    simplecov (0.17.1)
+      docile (~> 1.1)
+      json (>= 1.8, < 3)
+      simplecov-html (~> 0.10.0)
+    simplecov-html (0.10.2)
     smart_properties (1.16.3)
     smarter_csv (1.2.8)
     spring (2.1.1)
@@ -585,6 +592,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 5.0)
   simple_form
+  simplecov (< 0.18)
   smarter_csv
   spring
   spring-commands-rspec

@@ -174,4 +174,7 @@ group :test do
 
   # Extracted test matchers for rails controllers
   gem 'rails-controller-testing'
+
+  # CodeClimate does not work with .18 or later
+  gem 'simplecov', '< 0.18', require: false
 end

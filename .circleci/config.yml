@@ -74,6 +74,18 @@ jobs:
           name: Integration Tests
           command: bin/rspec spec/integration
 
+      - run:
+          name: Upload Coverage
+          when: on_success
+          command: |
+            wget -q https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 -O cc-test-reporter
+            chmod 755 cc-test-reporter
+            export TAG=${CIRCLE_SHA1}
+            export GIT_COMMIT_SHA=$CIRCLE_SHA1
+            export GIT_BRANCH=$CIRCLE_BRANCH
+            export GIT_COMMITED_AT=$(git log -1 --date=short --pretty=format:%ct)
+            ./cc-test-reporter after-build -d
+
 # We use workflows to orchestrate the jobs that we declared above.
 workflows:
   version: 2
