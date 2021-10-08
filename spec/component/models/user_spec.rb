@@ -48,6 +48,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:uid).of_type(:string) }
   it { is_expected.to have_db_column(:provider).of_type(:string) }
+  it { is_expected.to have_db_column(:psu_identity).of_type(:jsonb) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
@@ -1518,6 +1519,44 @@ describe User, type: :model do
     it 'saves the current time in the open access notification timestamp field' do
       user.record_open_access_notification
       expect(user.reload.open_access_notification_sent_at).to eq now
+    end
+  end
+
+  describe '#update_psu_identity', :vcr do
+    context 'when the user exists at Penn State' do
+      let(:user) { create(:user, webaccess_id: 'agw13') }
+
+      it "updates the user with data from Penn State's identity management service" do
+        expect {
+          user.update_psu_identity
+        }.to change { user.psu_identity.present? }.from(false).to(true)
+      end
+    end
+
+    context 'when the user does NOT exist at Penn State' do
+      let(:user) { create(:user, webaccess_id: 'idonotexist') }
+
+      it 'does not update the record' do
+        expect {
+          user.update_psu_identity
+        }.not_to change(user, :psu_identity)
+      end
+    end
+  end
+
+  describe '#psu_identity', :vcr do
+    context 'when identity data is present' do
+      let(:user) { create(:user, webaccess_id: 'agw13') }
+
+      before { user.update_psu_identity }
+
+      it { expect(user.psu_identity).to be_a(PsuIdentity::SearchService::Person) }
+    end
+
+    context 'when identity data is not present' do
+      let(:user) { create(:user) }
+
+      it { expect(user.psu_identity).to be_nil }
     end
   end
 end
