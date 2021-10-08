@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RemoveOutsideContributorsFromPublications < ActiveRecord::Migration[5.2]
   def up
     remove_column :publications, :outside_contributors

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RenamePureIdentifierToSourceIdentifierOnUserOrganizationMemberships < ActiveRecord::Migration[5.2]
   def up
     remove_index :user_organization_memberships, :pure_identifier

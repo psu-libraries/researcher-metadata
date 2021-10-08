@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class DropNonDuplicateGroupForeignKeyFromPublications < ActiveRecord::Migration[5.2]
   def change
     remove_foreign_key :publications,

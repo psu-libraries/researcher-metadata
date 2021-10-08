@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateGrants < ActiveRecord::Migration[5.2]
   def change
     create_table :grants do |t|

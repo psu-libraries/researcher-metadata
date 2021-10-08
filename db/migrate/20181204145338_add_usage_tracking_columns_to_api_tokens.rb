@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddUsageTrackingColumnsToAPITokens < ActiveRecord::Migration[5.2]
   def change
     add_column :api_tokens, :total_requests, :integer, default: 0

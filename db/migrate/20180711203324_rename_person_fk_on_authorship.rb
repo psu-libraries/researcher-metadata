@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class RenamePersonFkOnAuthorship < ActiveRecord::Migration[5.2]
   def up
     remove_foreign_key :authorships, column: :person_id

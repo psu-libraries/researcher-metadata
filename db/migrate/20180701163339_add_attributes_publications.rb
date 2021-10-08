@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddAttributesPublications < ActiveRecord::Migration[5.2]
   def change
     add_column :publications, :activity_insight_identifier, :string

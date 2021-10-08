@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateDuplicatePublicationGroups < ActiveRecord::Migration[5.2]
   def change
     create_table :duplicate_publication_groups do |t|

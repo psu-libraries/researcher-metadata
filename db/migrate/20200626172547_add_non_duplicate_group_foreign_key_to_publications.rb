@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddNonDuplicateGroupForeignKeyToPublications < ActiveRecord::Migration[5.2]
   def change
     add_column :publications, :non_duplicate_publication_group_id, :integer

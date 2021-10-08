@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddUserForeignKeyToContributorNames < ActiveRecord::Migration[5.2]
   def change
     add_reference :contributor_names, :user, foreign_key: true
