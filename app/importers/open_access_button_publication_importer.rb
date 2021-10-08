@@ -49,29 +49,29 @@ class OpenAccessButtonPublicationImporter
       end
     end
 
-  def query_open_access_button_for(publication)
-    oab_json = nil
-    find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{publication.doi_url_path}")
-    oab_json = JSON.parse(get_pub(find_url))
+    def query_open_access_button_for(publication)
+      oab_json = nil
+      find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{publication.doi_url_path}")
+      oab_json = JSON.parse(get_pub(find_url))
 
-    publication.open_access_url = oab_json['url'] if oab_json['url']
-    publication.open_access_button_last_checked_at = Time.current
-    publication.save!
+      publication.open_access_url = oab_json['url'] if oab_json['url']
+      publication.open_access_button_last_checked_at = Time.current
+      publication.save!
 
-    # Open Access Button does not enforce any rate limits for their API, but they ask
-    # that users make no more than 1 request per second.
-    sleep 1
-  rescue StandardError => e
-    ImporterErrorLog::OpenAccessButtonImporterErrorLog.create!(
-      error_type: e.class.to_s,
-      error_message: e.message.to_s,
-      metadata: {
-        publication_id: publication&.id,
-        publication_doi_url_path: publication&.doi_url_path,
-        oab_json: oab_json.to_s
-      },
-      occurred_at: Time.zone.now,
-      stacktrace: e.backtrace.to_s
-    )
-  end
+      # Open Access Button does not enforce any rate limits for their API, but they ask
+      # that users make no more than 1 request per second.
+      sleep 1
+    rescue StandardError => e
+      ImporterErrorLog::OpenAccessButtonImporterErrorLog.create!(
+        error_type: e.class.to_s,
+        error_message: e.message.to_s,
+        metadata: {
+          publication_id: publication&.id,
+          publication_doi_url_path: publication&.doi_url_path,
+          oab_json: oab_json.to_s
+        },
+        occurred_at: Time.zone.now,
+        stacktrace: e.backtrace.to_s
+      )
+    end
 end

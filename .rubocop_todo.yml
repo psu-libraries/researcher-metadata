@@ -297,6 +297,7 @@ Rails/NotNullColumn:
     - 'db/migrate/20181003153328_add_pubdate_column_to_news_feed_items.rb'
     - 'db/migrate/20181105192424_add_activity_insight_id_to_performances.rb'
     - 'db/migrate/20181205191546_add_activity_insight_id_column_to_performance_screenings.rb'
+    - 'db/migrate/20211006183554_add_error_message_to_import_error_logs.rb'
 
 # Offense count: 14
 Rails/OutputSafety:
