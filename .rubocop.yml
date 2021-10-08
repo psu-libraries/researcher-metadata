@@ -2,3 +2,13 @@ inherit_from: .rubocop_todo.yml
 
 inherit_gem:
   niftany: niftany_rubocop.yml
+
+AllCops:
+  TargetRubyVersion: 2.6
+  Exclude:
+    - 'db/**/*'
+    - 'script/**/*'
+    - 'tmp/**/*'
+    - 'vendor/**/*'
+    - 'bin/**/*'
+    - 'node_modules/**/*'

@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChangeScholarsphereFileUploadAssociation < ActiveRecord::Migration[5.2]
   def up
     remove_foreign_key :scholarsphere_file_uploads, :authorships

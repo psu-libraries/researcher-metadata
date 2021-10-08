@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class CreateEducationHistoryItems < ActiveRecord::Migration[5.2]
   def change
     create_table :education_history_items do |t|

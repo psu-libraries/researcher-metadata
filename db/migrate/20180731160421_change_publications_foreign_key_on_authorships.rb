@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class ChangePublicationsForeignKeyOnAuthorships < ActiveRecord::Migration[5.2]
   def change
     remove_foreign_key :authorships, :publications

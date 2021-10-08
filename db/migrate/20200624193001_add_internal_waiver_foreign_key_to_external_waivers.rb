@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class AddInternalWaiverForeignKeyToExternalWaivers < ActiveRecord::Migration[5.2]
   def change
     add_column :external_publication_waivers, :internal_publication_waiver_id, :integer
