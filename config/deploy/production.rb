@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # Tell capistrano to use the production environment. This is key for running
 # the database migrations via "cap production deploy:migrations".
 set :rails_env, 'production'

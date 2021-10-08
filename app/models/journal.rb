@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Journal < ApplicationRecord
   belongs_to :publisher, inverse_of: :journals, optional: true
   has_many :publications, inverse_of: :journal

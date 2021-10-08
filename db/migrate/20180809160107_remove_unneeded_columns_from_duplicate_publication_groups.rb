@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveUnneededColumnsFromDuplicatePublicationGroups < ActiveRecord::Migration[5.2]
   def change
     remove_column :duplicate_publication_groups, :title

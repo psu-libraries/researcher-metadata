@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PSUHRUserImporter do
-  let(:importer) { PSUHRUserImporter.new(filename: filename) }
+  let(:importer) { described_class.new(filename: filename) }
 
   describe '#call' do
     let!(:dickinson) { create :organization, pure_external_identifier: 'CAMPUS-DN' }

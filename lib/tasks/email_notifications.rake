@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :email_notifications do
   desc 'Send reminder emails about potential open access publications to all applicable users'
   task send_all_open_access_reminders: :environment do
@@ -42,6 +44,6 @@ namespace :email_notifications do
     FacultyNotificationsMailer.open_access_reminder(test_user,
                                                     old_fake_pubs,
                                                     new_fake_pubs).deliver_now
-    STDOUT.puts "Test open access reminder email sent to #{args[:address]}"
+    $stdout.puts "Test open access reminder email sent to #{args[:address]}"
   end
 end

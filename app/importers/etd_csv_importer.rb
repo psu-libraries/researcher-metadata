@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ETDCSVImporter < CSVImporter
   def row_to_object(row)
     webaccess_id = row[:access_id].downcase

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InternalPublicationWaiversController < OpenAccessWorkflowController
   def new
     authorship = current_user.authorships.find_by!(publication_id: params[:id])

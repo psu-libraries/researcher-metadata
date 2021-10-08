@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -58,7 +60,7 @@ describe 'the users table', type: :model do
 end
 
 describe User, type: :model do
-  subject(:user) { User.new }
+  subject(:user) { described_class.new }
 
   it_behaves_like 'an application record'
 
@@ -91,7 +93,7 @@ describe User, type: :model do
     it { is_expected.to validate_presence_of(:webaccess_id) }
 
     context 'given an otherwise valid record' do
-      subject { User.new(webaccess_id: 'abc123') }
+      subject { described_class.new(webaccess_id: 'abc123') }
 
       it { is_expected.to validate_uniqueness_of(:webaccess_id).case_insensitive }
       it { is_expected.to validate_uniqueness_of(:activity_insight_identifier).allow_nil }
@@ -278,7 +280,7 @@ describe User, type: :model do
       let(:uid) { 'abc123' }
 
       it 'returns the matching user' do
-        expect(User.from_omniauth(auth)).to eq user
+        expect(described_class.from_omniauth(auth)).to eq user
       end
     end
 
@@ -286,7 +288,7 @@ describe User, type: :model do
       let(:uid) { 'xyz789' }
 
       it 'raises an error' do
-        expect { User.from_omniauth(auth) }.to raise_error User::OmniauthError
+        expect { described_class.from_omniauth(auth) }.to raise_error User::OmniauthError
       end
     end
   end
@@ -322,7 +324,7 @@ describe User, type: :model do
 
     context 'when no users match the given Web of Science data' do
       it 'returns an empty array' do
-        expect(User.find_all_by_wos_pub(wp)).to eq []
+        expect(described_class.find_all_by_wos_pub(wp)).to eq []
       end
     end
 
@@ -358,7 +360,7 @@ describe User, type: :model do
       end
 
       it 'returns one instance of each matching user' do
-        expect(User.find_all_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
+        expect(described_class.find_all_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
       end
     end
   end
@@ -369,7 +371,7 @@ describe User, type: :model do
 
     context 'when no users match the given Web of Science data' do
       it 'returns an empty array' do
-        expect(User.find_confirmed_by_wos_pub(wp)).to eq []
+        expect(described_class.find_confirmed_by_wos_pub(wp)).to eq []
       end
     end
 
@@ -380,7 +382,7 @@ describe User, type: :model do
       before { create :user, orcid_identifier: nil }
 
       it 'returns one instance of each matching user' do
-        expect(User.find_confirmed_by_wos_pub(wp)).to match_array [u1, u2]
+        expect(described_class.find_confirmed_by_wos_pub(wp)).to match_array [u1, u2]
       end
     end
   end
@@ -396,7 +398,7 @@ describe User, type: :model do
       let(:grant) { double 'grant', investigators: [i1, i2] }
 
       it 'returns the existing users' do
-        expect(User.find_by_nsf_grant(grant)).to match_array [u1, u2]
+        expect(described_class.find_by_nsf_grant(grant)).to match_array [u1, u2]
       end
     end
   end
@@ -622,10 +624,10 @@ describe User, type: :model do
                                confirmed: true }
 
     it 'returns only users who should currently receive an email reminder about open access publications' do
-      expect(User.needs_open_access_notification).to match_array [email_user_1,
-                                                                  email_user_2,
-                                                                  email_user_3,
-                                                                  email_user_4]
+      expect(described_class.needs_open_access_notification).to match_array [email_user_1,
+                                                                             email_user_2,
+                                                                             email_user_3,
+                                                                             email_user_4]
     end
   end
 
@@ -1064,7 +1066,7 @@ describe User, type: :model do
   end
 
   describe '#mark_as_updated_by_user' do
-    let(:user) { User.new }
+    let(:user) { described_class.new }
 
     before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
 
@@ -1075,7 +1077,7 @@ describe User, type: :model do
   end
 
   describe '#total_scopus_citations' do
-    let(:user) { User.new }
+    let(:user) { described_class.new }
 
     context 'when the user has no publications' do
       it 'returns 0' do
@@ -1117,7 +1119,7 @@ describe User, type: :model do
   end
 
   describe '#pure_profile_url' do
-    let(:user) { User.new(pure_uuid: pure_uuid) }
+    let(:user) { described_class.new(pure_uuid: pure_uuid) }
     let(:pure_uuid) { nil }
 
     context 'when the user does not have a Pure UUID' do
@@ -1144,9 +1146,9 @@ describe User, type: :model do
   end
 
   describe '#office_phone_number' do
-    let(:user) { User.new({ ai_office_area_code: p1,
-                            ai_office_phone_1: p2,
-                            ai_office_phone_2: p3 }) }
+    let(:user) { described_class.new({ ai_office_area_code: p1,
+                                       ai_office_phone_1: p2,
+                                       ai_office_phone_2: p3 }) }
     let(:p1) { nil }
     let(:p2) { nil }
     let(:p3) { nil }
@@ -1233,9 +1235,9 @@ describe User, type: :model do
   end
 
   describe '#fax_number' do
-    let(:user) { User.new({ ai_fax_area_code: f1,
-                            ai_fax_1: f2,
-                            ai_fax_2: f3 }) }
+    let(:user) { described_class.new({ ai_fax_area_code: f1,
+                                       ai_fax_1: f2,
+                                       ai_fax_2: f3 }) }
     let(:f1) { nil }
     let(:f2) { nil }
     let(:f3) { nil }
@@ -1322,8 +1324,8 @@ describe User, type: :model do
   end
 
   describe '#office_location' do
-    let(:user) { User.new({ ai_room_number: rn,
-                            ai_building: b }) }
+    let(:user) { described_class.new({ ai_room_number: rn,
+                                       ai_building: b }) }
     let(:rn) { nil }
     let(:b) { nil }
 
@@ -1468,7 +1470,7 @@ describe User, type: :model do
   end
 
   describe '#orcid' do
-    let(:user) { User.new(orcid_identifier: orcid_id) }
+    let(:user) { described_class.new(orcid_identifier: orcid_id) }
     let(:orcid_id) { nil }
 
     context 'when the user has no orcid_identifier' do

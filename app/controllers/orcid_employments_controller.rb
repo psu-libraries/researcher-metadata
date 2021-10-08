@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidEmploymentsController < UserController
   before_action :authenticate!
 
@@ -10,7 +12,7 @@ class OrcidEmploymentsController < UserController
       else
         employment = OrcidEmployment.new(membership)
         employment.save!
-        membership.update_attributes!(orcid_resource_identifier: employment.location)
+        membership.update!(orcid_resource_identifier: employment.location)
 
         flash[:notice] = I18n.t('profile.orcid_employments.create.success')
       end

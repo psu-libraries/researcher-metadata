@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OpenAccessNotifier do
-  let(:notifier) { OpenAccessNotifier.new(user_collection) }
+  let(:notifier) { described_class.new(user_collection) }
   let(:user1) { double 'user 1',
                        old_potential_open_access_publications: pubs1,
                        new_potential_open_access_publications: pubs2,

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddOpenAccessUrlToPublications < ActiveRecord::Migration[5.2]
   def change
     add_column :publications, :open_access_url, :text

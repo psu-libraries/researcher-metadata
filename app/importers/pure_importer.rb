@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PureImporter
   class ServiceNotFound < RuntimeError; end
 

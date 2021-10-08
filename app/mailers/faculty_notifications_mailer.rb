@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacultyNotificationsMailer < ApplicationMailer
   def open_access_reminder(user, old_publications, new_publications)
     @user = user

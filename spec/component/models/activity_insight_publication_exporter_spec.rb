@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ActivityInsightPublicationExporter do
-  subject(:exporter) { ActivityInsightPublicationExporter }
+  subject(:exporter) { described_class }
 
   let!(:user) { FactoryBot.create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
   let!(:authorship1) { FactoryBot.create :authorship, user: user, publication: publication1 }

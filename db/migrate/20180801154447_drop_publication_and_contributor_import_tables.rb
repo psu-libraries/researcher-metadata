@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DropPublicationAndContributorImportTables < ActiveRecord::Migration[5.2]
   def change
     remove_foreign_key :publication_imports, :publications

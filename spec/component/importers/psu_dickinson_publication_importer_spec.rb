@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PSUDickinsonPublicationImporter do
-  let(:importer) { PSUDickinsonPublicationImporter.new }
+  let(:importer) { described_class.new }
 
   let(:dickinson_law_repo) { double 'fieldhand repository for Dickinson Law' }
   let(:records) { [record1, record2, record3] }

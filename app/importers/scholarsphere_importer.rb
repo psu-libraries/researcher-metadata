@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScholarsphereImporter
   def call
     pbar = ProgressBar.create(title: 'Importing ScholarSphere publication URLs', total: ss_dois.count) unless Rails.env.test?

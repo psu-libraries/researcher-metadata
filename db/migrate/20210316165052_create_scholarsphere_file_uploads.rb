@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateScholarsphereFileUploads < ActiveRecord::Migration[5.2]
   def change
     create_table :scholarsphere_file_uploads do |t|

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacultyNotificationsMailerPreview < ActionMailer::Preview
   # Accessible from http://localhost:3000/rails/mailers/faculty_notifications_mailer/open_access_reminder
   def open_access_reminder

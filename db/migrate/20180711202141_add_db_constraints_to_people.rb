@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddDbConstraintsToPeople < ActiveRecord::Migration[5.2]
   def change
     change_column_null :people, :webaccess_id, false

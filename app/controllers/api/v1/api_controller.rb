@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API::V1
   class APIController < ActionController::API
     before_action :authenticate_request!, except: [:profile]

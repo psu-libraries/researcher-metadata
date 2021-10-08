@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -49,7 +51,7 @@ describe Organization, type: :model do
     let!(:org2) { create :organization, visible: true }
 
     it 'returns a collection of the visible organizations' do
-      expect(Organization.visible).to eq [org2]
+      expect(described_class.visible).to eq [org2]
     end
   end
 

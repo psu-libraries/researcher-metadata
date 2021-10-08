@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PublicationTagging < ApplicationRecord
   belongs_to :tag, inverse_of: :publication_taggings
   belongs_to :publication, inverse_of: :taggings

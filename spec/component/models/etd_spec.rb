@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -35,11 +37,11 @@ describe ETD, type: :model do
     it { is_expected.to validate_presence_of(:submission_type) }
     it { is_expected.to validate_presence_of(:external_identifier) }
     it { is_expected.to validate_presence_of(:access_level) }
-    it { is_expected.to validate_inclusion_of(:submission_type).in_array(ETD.submission_types) }
+    it { is_expected.to validate_inclusion_of(:submission_type).in_array(described_class.submission_types) }
 
     context 'given an otherwise valid record' do
       subject {
-        ETD.new(
+        described_class.new(
           title: 'bucks dissertation',
           webaccess_id: 'abc123',
           external_identifier: 'def123',
@@ -76,12 +78,12 @@ describe ETD, type: :model do
 
   describe '.submission_types' do
     it 'returns the list of valid etd sbmission types' do
-      expect(ETD.submission_types).to eq ['Dissertation', 'Master Thesis']
+      expect(described_class.submission_types).to eq ['Dissertation', 'Master Thesis']
     end
   end
 
   describe '#author_full_name' do
-    let(:etd) { ETD.new(author_first_name: 'Sally', author_last_name: 'Testauthor') }
+    let(:etd) { described_class.new(author_first_name: 'Sally', author_last_name: 'Testauthor') }
 
     it 'returns the first and last name of the author of the ETD' do
       expect(etd.author_full_name).to eq 'Sally Testauthor'

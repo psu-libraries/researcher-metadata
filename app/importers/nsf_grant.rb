@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class NSFGrant
   def initialize(parsed_grant)
     @parsed_grant = parsed_grant
   end
 
   def importable?
-    !!parsed_grant.css('Institution').detect do |i|
+    !!parsed_grant.css('Institution').find do |i|
       /Pennsylvania State Univ/i.match i.css('Name').text.strip
     end
   end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ResearcherFund < ApplicationRecord
   belongs_to :grant, inverse_of: :researcher_funds
   belongs_to :user, inverse_of: :researcher_funds

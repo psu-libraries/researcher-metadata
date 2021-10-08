@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OpenAccessPublicationsController < OpenAccessWorkflowController
   skip_before_action :redirect_if_inaccessible, only: [:edit]
 

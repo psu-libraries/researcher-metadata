@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LDAPImporter
   def call
     pbar = ProgressBar.create(title: 'Importing user data from LDAP', total: User.count) unless Rails.env.test?

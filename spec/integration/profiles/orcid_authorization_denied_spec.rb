@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 
 describe 'The landing page that a user sees when they deny authorization to connect to ORCID', type: :feature do

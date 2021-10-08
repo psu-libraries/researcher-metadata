@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/preferred_open_access_policy'
 
 describe PreferredOpenAccessPolicy do
-  let(:policy) { PreferredOpenAccessPolicy.new(pub) }
+  let(:policy) { described_class.new(pub) }
   let(:pub) { double 'publication',
                      scholarsphere_open_access_url: ssoau,
                      open_access_url: oau,

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PSULawSchoolOAICreator do
-  let(:creator) { PSULawSchoolOAICreator.new('Tester, Sue') }
+  let(:creator) { described_class.new('Tester, Sue') }
 
   describe '#last_name' do
     it 'returns the first word of the given text' do

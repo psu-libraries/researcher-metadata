@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateCommitteeMemberships < ActiveRecord::Migration[5.2]
   def change
     create_table :committee_memberships do |t|

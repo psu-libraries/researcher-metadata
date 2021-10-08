@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -31,45 +33,45 @@ describe CommitteeMembership, type: :model do
     it { is_expected.to validate_presence_of(:role) }
 
     context 'given otherwise valid data' do
-      subject { CommitteeMembership.new(etd: create(:etd), user: create(:user), role: 'Advisor') }
+      subject { described_class.new(etd: create(:etd), user: create(:user), role: 'Advisor') }
 
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:etd_id, :role) }
     end
   end
 
   describe '#<=>' do
-    let(:mem) { CommitteeMembership.new(role: role) }
+    let(:mem) { described_class.new(role: role) }
 
     context "when the committee membership has a role of 'Dissertation Advisor'" do
       let(:role) { 'Dissertation Advisor' }
 
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns 0' do
-          expect(mem <=> CommitteeMembership.new(role: 'Dissertation Advisor')).to eq 0
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq 0
         end
       end
 
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Chair')).to eq 1
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Committee Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Outside Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Outside Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Special Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Special Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
     end
@@ -79,31 +81,31 @@ describe CommitteeMembership, type: :model do
 
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Dissertation Advisor')).to eq -1
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns 0' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Chair')).to eq 0
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq 0
         end
       end
 
       context 'when given another committee membership with a role of Committee Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Outside Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Outside Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Special Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Special Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
     end
@@ -113,31 +115,31 @@ describe CommitteeMembership, type: :model do
 
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Dissertation Advisor')).to eq -1
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Chair')).to eq -1
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Member' do
         it 'returns 0' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Member')).to eq 0
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq 0
         end
       end
 
       context 'when given another committee membership with a role of Outside Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Outside Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq 1
         end
       end
 
       context 'when given another committee membership with a role of Special Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Special Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
     end
@@ -147,31 +149,31 @@ describe CommitteeMembership, type: :model do
 
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Dissertation Advisor')).to eq -1
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Chair')).to eq -1
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Member' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Member')).to eq -1
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Outside Member' do
         it 'returns 0' do
-          expect(mem <=> CommitteeMembership.new(role: 'Outside Member')).to eq 0
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq 0
         end
       end
 
       context 'when given another committee membership with a role of Special Member' do
         it 'returns 1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Special Member')).to eq 1
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
     end
@@ -181,31 +183,31 @@ describe CommitteeMembership, type: :model do
 
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Dissertation Advisor')).to eq -1
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Chair')).to eq -1
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Committee Member' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Committee Member')).to eq -1
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Outside Member' do
         it 'returns -1' do
-          expect(mem <=> CommitteeMembership.new(role: 'Outside Member')).to eq -1
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq -1
         end
       end
 
       context 'when given another committee membership with a role of Special Member' do
         it 'returns 0' do
-          expect(mem <=> CommitteeMembership.new(role: 'Special Member')).to eq 0
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 0
         end
       end
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def fixture(name)
   ROOT.join('spec', 'fixtures', name)
 end

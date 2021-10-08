@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 
 describe 'Resource page', type: :feature do

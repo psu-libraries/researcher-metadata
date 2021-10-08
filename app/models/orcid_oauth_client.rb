@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidOauthClient
   include HTTParty
   base_uri "https://#{'sandbox.' unless Rails.env.production?}orcid.org/oauth"

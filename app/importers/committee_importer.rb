@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CommitteeImporter < CSVImporter
   def row_to_object(row)
     if row[:email].present?

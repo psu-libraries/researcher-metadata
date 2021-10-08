@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidWorksController < UserController
   before_action :authenticate!
 

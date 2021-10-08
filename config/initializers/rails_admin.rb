@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../app/rails_admin_actions/index_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_to_activity_insight'

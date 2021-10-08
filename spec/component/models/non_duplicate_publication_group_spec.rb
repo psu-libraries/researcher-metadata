@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -10,7 +12,7 @@ describe 'the non_duplicate_publication_groups table', type: :model do
 end
 
 describe NonDuplicatePublicationGroup, type: :model do
-  subject(:ndpg) { NonDuplicatePublicationGroup.new }
+  subject(:ndpg) { described_class.new }
 
   it_behaves_like 'an application record'
 

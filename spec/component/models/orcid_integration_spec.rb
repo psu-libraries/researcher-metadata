@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OrcidAPIClient do
-  let(:client) { OrcidAPIClient.new(resource) }
+  let(:client) { described_class.new(resource) }
   # Access token and orcid id for orcidtest@pennteam.m8r.co sandbox account
   let(:resource) { double 'ORCID Resource',
                           access_token: '98768b7f-c177-4c24-9fe8-b575997e2bc7',
@@ -35,7 +37,7 @@ describe OrcidAPIClient do
             'Authorization' => "Bearer #{resource.access_token}" }
       }
     }
-    let(:employments_uri) { "#{OrcidAPIClient.base_uri}/#{resource.orcid_id}/employments" }
+    let(:employments_uri) { "#{described_class.base_uri}/#{resource.orcid_id}/employments" }
     let(:get_employments) { client.class.get(employments_uri, headers).parsed_response }
     let(:employments_hash) { Hash.from_xml(get_employments) }
     let(:json_resource) { JSON.parse(resource.to_json.gsub('-', '_')) }

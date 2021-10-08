@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -18,7 +20,7 @@ describe 'the researcher_funds table', type: :model do
 end
 
 describe ResearcherFund, type: :model do
-  subject(:grant) { ResearcherFund.new }
+  subject(:grant) { described_class.new }
 
   it_behaves_like 'an application record'
 

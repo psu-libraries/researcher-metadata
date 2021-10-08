@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OrcidWork do
-  subject(:work) { OrcidWork.new(authorship) }
+  subject(:work) { described_class.new(authorship) }
 
   let(:date) { Date.yesterday }
   let(:publication) { double 'publication',

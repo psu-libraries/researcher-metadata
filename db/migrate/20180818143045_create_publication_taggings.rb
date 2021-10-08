@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePublicationTaggings < ActiveRecord::Migration[5.2]
   def change
     create_table :publication_taggings do |t|

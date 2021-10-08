@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
@@ -117,7 +119,7 @@ describe 'Admin external publication waiver detail page', type: :feature do
           let!(:int_waiver) { create :internal_publication_waiver, authorship: auth1 }
 
           before do
-            waiver.update_attributes!(internal_publication_waiver: int_waiver)
+            waiver.update!(internal_publication_waiver: int_waiver)
             visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id)
           end
 

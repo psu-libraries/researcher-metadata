@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OpenAccessNotifier
   def initialize(users = User)
     @users = users

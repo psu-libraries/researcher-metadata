@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OpenAccessWorkflowController < UserController
   before_action :authenticate!
   before_action :redirect_if_inaccessible

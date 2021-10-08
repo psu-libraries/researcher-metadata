@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PureUserImporter do
-  let(:importer) { PureUserImporter.new }
+  let(:importer) { described_class.new }
   let(:http_response_1) { File.read(filename_1) }
   let(:http_response_2) { File.read(filename_2) }
   let(:http_error_response) { File.read(error_filename) }

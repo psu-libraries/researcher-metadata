@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserProfile
   def initialize(user)
     @user = user
@@ -154,7 +156,7 @@ class UserProfile
     def most_significant_memberships(committee_memberships)
       memberships = []
 
-      committee_memberships.sort { |m1, m2| m2.etd.year <=> m1.etd.year }.group_by { |m| m.etd }.each_value do |memberships_by_etd|
+      committee_memberships.sort { |m1, m2| m2.etd.year <=> m1.etd.year }.group_by(&:etd).each_value do |memberships_by_etd|
         most_significant_membership = memberships_by_etd.max { |x, y| x <=> y }
         memberships.push most_significant_membership
       end

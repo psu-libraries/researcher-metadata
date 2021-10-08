@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreatePerformanceScreenings < ActiveRecord::Migration[5.2]
   def change
     create_table :performance_screenings do |t|

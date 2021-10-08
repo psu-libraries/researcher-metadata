@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidPublicationTypeMapOut
   def self.map(string)
     case string

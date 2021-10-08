@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OAIRepoRecord
   def initialize(record)
     @record = record
@@ -36,7 +38,7 @@ class OAIRepoRecord
   end
 
   def any_user_matches?
-    !!creators.detect { |c| c.user_match || c.ambiguous_user_matches.any? }
+    !!creators.find { |c| c.user_match || c.ambiguous_user_matches.any? }
   end
 
   private

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -294,7 +296,7 @@ describe ScholarsphereFileUpload, type: :model do
 
     context "when an error is rasied deleting the deposit's associated file uploads" do
       before do
-        allow_any_instance_of(ScholarsphereFileUpload).to receive(:destroy).and_raise (RuntimeError)
+        allow_any_instance_of(described_class).to receive(:destroy).and_raise (RuntimeError)
       end
 
       it "updates the deposit's publication with the given URL" do

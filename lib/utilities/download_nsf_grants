@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 require 'pathname'
 require 'date'
 require 'fileutils'
 
 def nsf_data_dir
-  Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..')).join('db', 'data', 'nsf_grants')
+  Pathname.new(File.expand_path("#{File.dirname(__FILE__)}/../..")).join('db', 'data', 'nsf_grants')
 end
 
 unless Dir.exists? nsf_data_dir

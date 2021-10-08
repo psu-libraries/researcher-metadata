@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe 'the news_feed_item table', type: :model do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module RailsAdmin
   module Config
     module Actions
@@ -26,12 +28,12 @@ module RailsAdmin
 
               @object.set_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
-              @authorization_adapter && @authorization_adapter.attributes_for(:update, @abstract_model).each do |name, value|
+              @authorization_adapter&.attributes_for(:update, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
               end
               changes = @object.changes
               if @object.save
-                @auditing_adapter && @auditing_adapter.update_object(@object, @abstract_model, _current_user, changes)
+                @auditing_adapter&.update_object(@object, @abstract_model, _current_user, changes)
                 respond_to do |format|
                   format.html { redirect_to_on_success }
                   format.js { render json: { id: @object.id.to_s, label: @model_config.with(object: @object).object_label } }

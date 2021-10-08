@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module StubbedAuthenticationHelper
   # Call this method in your "before" block to be signed in as the given user
   # (pass in the entire user object, not just a username).

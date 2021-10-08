@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = 1000000000
 
 describe PureJournalsImporter do
-  let(:importer) { PureJournalsImporter.new }
+  let(:importer) { described_class.new }
   let(:found_journal_1) { Journal.find_by(pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d') }
   let(:found_journal_2) { Journal.find_by(pure_uuid: '68edd4d0-f54f-423c-9548-f0b7032e5b50') }
   let!(:publisher) { create :publisher, pure_uuid: '435826f4-a25d-4005-b9da-47d3507834ff' }

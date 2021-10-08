@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacultyConfirmationsMailer < ApplicationMailer
   def open_access_waiver_confirmation(user, waiver)
     @waiver = waiver

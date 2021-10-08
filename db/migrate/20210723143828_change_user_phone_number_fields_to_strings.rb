@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeUserPhoneNumberFieldsToStrings < ActiveRecord::Migration[5.2]
   def change
     change_column :users, :ai_office_area_code, :string

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FacultyConfirmationsMailerPreview < ActionMailer::Preview
   # Accessible from http://localhost:3000/rails/mailers/faculty_confirmations_mailer/open_access_waiver_confirmation
   def open_access_waiver_confirmation

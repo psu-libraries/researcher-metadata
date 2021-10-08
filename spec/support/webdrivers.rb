@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'webdrivers/chromedriver'
 
 # We'll use the Rack::Test driver by default, and a headless chrome driver for tests tagged with javascript.

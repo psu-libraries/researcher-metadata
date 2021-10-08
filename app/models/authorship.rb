@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships

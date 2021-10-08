@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'rss'
 require 'open-uri'
 
@@ -33,8 +35,8 @@ class NewsFeedItemImporter
     def get_access_ids_from_mailto_selector(html_doc)
       mailto_selector = '//a[starts-with(@href, "mailto:")]/@href'
       mailto_nodes = html_doc.xpath mailto_selector
-      mailto_addresses = mailto_nodes.collect { |n| n.value[7..-1] }
-      mailto_addresses.collect { |n| n[0..-9] if n.end_with?('psu.edu') }.flatten.compact
+      mailto_addresses = mailto_nodes.map { |n| n.value[7..] }
+      mailto_addresses.map { |n| n[0..-9] if n.end_with?('psu.edu') }.flatten.compact
     end
 
     def get_names_from_tag_selector(html_doc)

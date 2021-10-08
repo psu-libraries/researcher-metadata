@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OpenAccessButtonPublicationImporter
   def import_all
     unless Rails.env.test?

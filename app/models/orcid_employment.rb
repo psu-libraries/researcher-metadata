@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidEmployment < OrcidResource
   def to_json(*_args)
     employment = {

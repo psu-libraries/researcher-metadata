@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'rss'
 require 'open-uri'
 
 describe NewsFeedItemImporter do
-  subject(:importer) { NewsFeedItemImporter.new }
+  subject(:importer) { described_class.new }
 
   before do
     User.create(webaccess_id: 'abc123',
@@ -28,7 +30,7 @@ describe NewsFeedItemImporter do
 
   describe '#call' do
     it 'populates database with news feed items' do
-      allow_any_instance_of(NewsFeedItemImporter).to receive(:rss_feeds).and_return(['spec/fixtures/rss_output.xml'])
+      allow_any_instance_of(described_class).to receive(:rss_feeds).and_return(['spec/fixtures/rss_output.xml'])
       importer.call
       expect(User.find_by(webaccess_id: 'abc123').news_feed_items.first.title).to eq('Title')
       expect(User.find_by(webaccess_id: 'def456').news_feed_items.first.title).to eq('Title')

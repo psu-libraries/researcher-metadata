@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -23,7 +25,7 @@ describe 'the contributor_names_table', type: :model do
 end
 
 describe ContributorName, type: :model do
-  subject(:cn) { ContributorName.new }
+  subject(:cn) { described_class.new }
 
   let(:fn) { nil }
   let(:mn) { nil }
@@ -40,7 +42,7 @@ describe ContributorName, type: :model do
   it { is_expected.to delegate_method(:webaccess_id).to(:user).allow_nil }
 
   describe 'Validating that a contributor has at least one name' do
-    let(:cn) { ContributorName.new(publication: create(:publication),
+    let(:cn) { described_class.new(publication: create(:publication),
                                    user: user,
                                    position: 1,
                                    first_name: fn,

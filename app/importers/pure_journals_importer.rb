@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PureJournalsImporter < PureImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Pure journals', total: total_pages) unless Rails.env.test?

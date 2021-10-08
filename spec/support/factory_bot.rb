@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.configure do |config|
   # Allow direct use of .build and .create rather than having to say
   # FactoryBot.build and FactoryBot.create.

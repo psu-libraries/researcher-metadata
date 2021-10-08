@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OrcidEmployment do
-  subject(:employment) { OrcidEmployment.new(membership) }
+  subject(:employment) { described_class.new(membership) }
 
   let(:membership) { double 'user organization membership',
                             user: user,

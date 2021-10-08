@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -32,7 +34,7 @@ describe PublicationTagging, type: :model do
     it { is_expected.to validate_presence_of(:publication_id) }
 
     context 'given otherwise valid data' do
-      subject { PublicationTagging.new(tag: create(:tag), publication: create(:publication)) }
+      subject { described_class.new(tag: create(:tag), publication: create(:publication)) }
 
       it { is_expected.to validate_uniqueness_of(:publication_id).scoped_to(:tag_id) }
     end

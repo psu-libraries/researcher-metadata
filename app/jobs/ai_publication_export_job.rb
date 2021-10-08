@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AiPublicationExportJob
   def perform(publication_ids, target)
     publications = Publication.find(publication_ids)

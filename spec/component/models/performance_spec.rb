@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe 'the performance table', type: :model do
@@ -51,7 +53,7 @@ describe Performance, type: :model do
     let(:invisible_performance) { create :performance, visible: false }
 
     it 'returns the performances that are marked as visible' do
-      expect(Performance.visible).to match_array [visible_performance1, visible_performance2]
+      expect(described_class.visible).to match_array [visible_performance1, visible_performance2]
     end
   end
 end

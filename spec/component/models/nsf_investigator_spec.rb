@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe NSFInvestigator do
   let(:parsed_investigator) { double 'parsed investigator xml' }
-  let(:investigator) { NSFInvestigator.new(parsed_investigator) }
+  let(:investigator) { described_class.new(parsed_investigator) }
 
   describe '#first_name' do
     before { allow(parsed_investigator).to receive(:css).with('FirstName').and_return first_name_element }

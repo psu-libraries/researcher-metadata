@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScholarsphereDepositService
   class DepositFailed < RuntimeError; end
 

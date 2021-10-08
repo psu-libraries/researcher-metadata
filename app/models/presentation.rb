@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Presentation < ApplicationRecord
   has_many :presentation_contributions
   has_many :users, through: :presentation_contributions

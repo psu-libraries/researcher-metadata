@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -52,7 +54,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
 
-    it { is_expected.to validate_inclusion_of(:publication_type).in_array(Publication.publication_types) }
+    it { is_expected.to validate_inclusion_of(:publication_type).in_array(described_class.publication_types) }
 
     describe 'validating DOI format' do
       let(:pub) { build :publication, doi: doi }
@@ -223,16 +225,16 @@ describe Publication, type: :model do
 
   describe '.publication_types' do
     it 'returns the list of valid publication types' do
-      expect(Publication.publication_types).to eq ['Academic Journal Article', 'In-house Journal Article',
-                                                   'Professional Journal Article', 'Trade Journal Article',
-                                                   'Journal Article', 'Review Article', 'Abstract', 'Blog', 'Book',
-                                                   'Chapter', 'Book/Film/Article Review', 'Conference Proceeding',
-                                                   'Encyclopedia/Dictionary Entry', 'Extension Publication',
-                                                   'Magazine/Trade Publication', 'Manuscript', 'Newsletter',
-                                                   'Newspaper Article', 'Comment/Debate', 'Commissioned Report',
-                                                   'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
-                                                   'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition',
-                                                   'Short Survey', 'Working Paper', 'Other']
+      expect(described_class.publication_types).to eq ['Academic Journal Article', 'In-house Journal Article',
+                                                       'Professional Journal Article', 'Trade Journal Article',
+                                                       'Journal Article', 'Review Article', 'Abstract', 'Blog', 'Book',
+                                                       'Chapter', 'Book/Film/Article Review', 'Conference Proceeding',
+                                                       'Encyclopedia/Dictionary Entry', 'Extension Publication',
+                                                       'Magazine/Trade Publication', 'Manuscript', 'Newsletter',
+                                                       'Newspaper Article', 'Comment/Debate', 'Commissioned Report',
+                                                       'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
+                                                       'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition',
+                                                       'Short Survey', 'Working Paper', 'Other']
     end
   end
 
@@ -242,7 +244,7 @@ describe Publication, type: :model do
     let(:invisible_pub) { create :publication, visible: false }
 
     it 'returns the publications that are marked as visible' do
-      expect(Publication.visible).to match_array [visible_pub1, visible_pub2]
+      expect(described_class.visible).to match_array [visible_pub1, visible_pub2]
     end
   end
 
@@ -293,7 +295,7 @@ describe Publication, type: :model do
     end
 
     it 'returns visible, unique publications by users who were members of an organization when they were published' do
-      expect(Publication.published_during_membership).to match_array [pub_1, pub_4, pub_5, pub_6, pub_7]
+      expect(described_class.published_during_membership).to match_array [pub_1, pub_4, pub_5, pub_6, pub_7]
     end
   end
 
@@ -304,7 +306,7 @@ describe Publication, type: :model do
     let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
 
     it "returns publications that were published after Penn State's open access policy went into effect" do
-      expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
+      expect(described_class.subject_to_open_access_policy).to match_array [pub2, pub3]
     end
   end
 
@@ -345,7 +347,7 @@ describe Publication, type: :model do
                          scholarsphere_open_access_url: '' }
 
     it 'returns publications that have an open access URL' do
-      expect(Publication.open_access).to match_array [pub2, pub3, pub4, pub5]
+      expect(described_class.open_access).to match_array [pub2, pub3, pub4, pub5]
     end
   end
 
@@ -385,7 +387,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -393,7 +395,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication that matches by title and date' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub2]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub2]
           end
         end
 
@@ -401,7 +403,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -413,7 +415,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -421,7 +423,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -429,7 +431,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -445,7 +447,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -453,7 +455,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -461,7 +463,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -473,7 +475,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -481,7 +483,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -489,7 +491,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -505,7 +507,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -513,7 +515,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication that matches by title and date' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub2]
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq [pub2]
           end
         end
 
@@ -521,7 +523,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -533,7 +535,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -541,7 +543,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -549,7 +551,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
+            expect(described_class.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -565,7 +567,7 @@ describe Publication, type: :model do
     let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
 
     it 'returns publications that are journal articles' do
-      expect(Publication.journal_article).to match_array [pub1, pub2, pub3]
+      expect(described_class.journal_article).to match_array [pub1, pub2, pub3]
     end
   end
 
@@ -578,7 +580,7 @@ describe Publication, type: :model do
     let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
 
     it 'returns publications that are not journal articles' do
-      expect(Publication.non_journal_article).to match_array [pub4, pub5, pub6]
+      expect(described_class.non_journal_article).to match_array [pub4, pub5, pub6]
     end
   end
 
@@ -668,7 +670,7 @@ describe Publication, type: :model do
   end
 
   describe '#mark_as_updated_by_user' do
-    let(:pub) { Publication.new }
+    let(:pub) { described_class.new }
 
     before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
 
@@ -680,7 +682,7 @@ describe Publication, type: :model do
 
   describe '#year' do
     context 'when the publication does not have a published_on date' do
-      let(:pub) { Publication.new(published_on: nil) }
+      let(:pub) { described_class.new(published_on: nil) }
 
       it 'returns nil' do
         expect(pub.year).to be_nil
@@ -688,7 +690,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication has a published_on date' do
-      let(:pub) { Publication.new(published_on: Date.new(2001, 1, 2)) }
+      let(:pub) { described_class.new(published_on: Date.new(2001, 1, 2)) }
 
       it 'returns the year of the publication date' do
         expect(pub.year).to eq 2001
@@ -697,7 +699,7 @@ describe Publication, type: :model do
   end
 
   describe '#published_by' do
-    let(:pub) { Publication.new }
+    let(:pub) { described_class.new }
     let(:policy) { double 'preferred journal info policy', publisher_name: pn, journal_title: jt }
 
     before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return policy }
@@ -744,7 +746,7 @@ describe Publication, type: :model do
   end
 
   describe '#doi_url_path' do
-    let(:pub) { Publication.new(doi: doi) }
+    let(:pub) { described_class.new(doi: doi) }
 
     context "when the publication's DOI is nil" do
       let(:doi) { nil }
@@ -764,7 +766,7 @@ describe Publication, type: :model do
   end
 
   describe '#preferred_open_access_url' do
-    let(:pub) { Publication.new }
+    let(:pub) { described_class.new }
     let(:policy) { double 'preferred open access policy', url: 'preferred_url' }
 
     before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
@@ -2570,7 +2572,7 @@ describe Publication, type: :model do
   end
 
   describe '#preferred_journal_title' do
-    let(:pub) { Publication.new }
+    let(:pub) { described_class.new }
     let(:policy) { double 'preferred journal info policy', journal_title: 'preferred title' }
 
     before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
@@ -2581,7 +2583,7 @@ describe Publication, type: :model do
   end
 
   describe '#preferred_publisher_name' do
-    let(:pub) { Publication.new }
+    let(:pub) { described_class.new }
     let(:policy) { double 'preferred journal info policy', publisher_name: 'preferred name' }
 
     before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }

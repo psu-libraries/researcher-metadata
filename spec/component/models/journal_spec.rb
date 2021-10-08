@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -35,7 +37,7 @@ describe Journal, type: :model do
     end
 
     it "returns all journal records in order by the number of publications with which they're associated" do
-      expect(Journal.order(:title).ordered_by_publication_count).to eq [j2, j3, j1]
+      expect(described_class.order(:title).ordered_by_publication_count).to eq [j2, j3, j1]
     end
   end
 
@@ -79,7 +81,7 @@ describe Journal, type: :model do
     let!(:j3) { create :journal, title: 'b' }
 
     it 'returns all journal records in alphabetical order by name' do
-      expect(Journal.ordered_by_title).to eq [j2, j3, j1]
+      expect(described_class.ordered_by_title).to eq [j2, j3, j1]
     end
   end
 

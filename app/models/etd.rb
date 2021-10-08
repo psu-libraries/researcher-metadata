@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ETD < ApplicationRecord
   def self.submission_types
     [

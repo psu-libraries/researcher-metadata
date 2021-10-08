@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WOSContributor
   def initialize(parsed_contributor)
     @parsed_contributor = parsed_contributor

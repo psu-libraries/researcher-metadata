@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class ActivityInsightImporter
-  IMPORT_SOURCE = 'Activity Insight'.freeze
+  IMPORT_SOURCE = 'Activity Insight'
 
   def initialize
     @errors = []
@@ -152,7 +154,7 @@ class ActivityInsightImporter
             pub_record = pi.publication
 
             if pi.persisted?
-              pub_record.update_attributes!(pub_attrs(pub)) if pub_record.updated_by_user_at.blank?
+              pub_record.update!(pub_attrs(pub)) if pub_record.updated_by_user_at.blank?
             else
               pi.save!
             end
@@ -187,7 +189,7 @@ class ActivityInsightImporter
             DuplicatePublicationGroup.group_duplicates_of(pub_record)
 
             if pub_record.reload.duplicate_group
-              pub_record.update_attributes!(visible: false)
+              pub_record.update!(visible: false)
             end
           end
         end
@@ -668,17 +670,16 @@ class ActivityInsightPublication
   end
 
   def publication_type
-    if cleaned_ai_type == 'journal article, academic journal'
+    case cleaned_ai_type
+    when 'journal article, academic journal'
       'Academic Journal Article'
-    elsif cleaned_ai_type == 'journal article, in-house journal' ||
-        cleaned_ai_type == 'journal article, in-house'
+    when 'journal article, in-house journal', 'journal article, in-house'
       'In-house Journal Article'
-    elsif cleaned_ai_type == 'journal article, professional journal'
+    when 'journal article, professional journal'
       'Professional Journal Article'
-    elsif cleaned_ai_type == 'journal article, public or trade journal' ||
-        cleaned_ai_type == 'magazine or trade journal article'
+    when 'journal article, public or trade journal', 'magazine or trade journal article'
       'Trade Journal Article'
-    elsif cleaned_ai_type == 'journal article'
+    when 'journal article'
       'Journal Article'
     else
       ActivityInsightPublicationTypeMapIn.map(cleaned_ai_type)
@@ -764,7 +765,7 @@ class ActivityInsightPublication
   end
 
   def faculty_author
-    contributors.detect { |c| c.activity_insight_user_id == user.activity_insight_id }
+    contributors.find { |c| c.activity_insight_user_id == user.activity_insight_id }
   end
 
   def contributors

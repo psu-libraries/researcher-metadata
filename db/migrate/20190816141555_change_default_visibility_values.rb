@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeDefaultVisibilityValues < ActiveRecord::Migration[5.2]
   def change
     change_column_default :performances, :visible, from: false, to: true

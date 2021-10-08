@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe CommitteeImporter do
-  let(:importer) { CommitteeImporter.new(filename: filename) }
+  let(:importer) { described_class.new(filename: filename) }
   let!(:user_abc1) { create :user, webaccess_id: 'abc1' }
   let!(:user_abc2) { create :user, webaccess_id: 'abc2' }
 

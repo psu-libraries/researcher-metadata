@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe WebOfSciencePublication do
   let(:parsed_pub) { double 'parsed publication xml' }
-  let(:pub) { WebOfSciencePublication.new(parsed_pub) }
+  let(:pub) { described_class.new(parsed_pub) }
 
   describe '#wos_id' do
     let(:id_element) { double 'id element', text: " \n WOS:1234567 \n " }

@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/preferred_journal_info_policy'
 
 describe PreferredJournalInfoPolicy do
-  let(:policy) { PreferredJournalInfoPolicy.new(pub) }
+  let(:policy) { described_class.new(pub) }
   let(:pub) { double 'publication',
                      journal_title: title,
                      publisher_name: name,

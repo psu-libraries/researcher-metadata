@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -15,7 +17,7 @@ describe 'the internal_publication_waivers table', type: :model do
 end
 
 describe InternalPublicationWaiver, type: :model do
-  subject(:waiver) { InternalPublicationWaiver.new }
+  subject(:waiver) { described_class.new }
 
   it_behaves_like 'an application record'
 

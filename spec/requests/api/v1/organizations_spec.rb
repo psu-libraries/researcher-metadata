@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Organizations' do
@@ -36,8 +38,8 @@ describe 'API::V1 Organizations' do
       it 'returns all visible organizations that the API token has permission to view' do
         expect(json_response[:data].size).to eq(2)
 
-        expect(json_response[:data].detect { |o| o[:id] == org1.id.to_s }).not_to be_nil
-        expect(json_response[:data].detect { |o| o[:id] == org2.id.to_s }).not_to be_nil
+        expect(json_response[:data].find { |o| o[:id] == org1.id.to_s }).not_to be_nil
+        expect(json_response[:data].find { |o| o[:id] == org2.id.to_s }).not_to be_nil
       end
 
       it 'updates the usage statistics on the API token' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OAICreator
   attr_reader :text
 
@@ -7,7 +9,7 @@ class OAICreator
 
   def last_name
     ln = text.split(',')[0]
-    ln.strip if ln
+    ln&.strip
   end
 
   def first_name

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 
 describe 'Profile page', type: :feature do

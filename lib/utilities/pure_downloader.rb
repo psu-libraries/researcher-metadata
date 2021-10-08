@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'json'
 require 'pathname'
 require 'io/console'
@@ -91,12 +93,12 @@ class PureDownloader
 
     def get_api_key
       print 'Enter Pure API key:  '
-      @api_key = STDIN.noecho(&:gets).chomp
+      @api_key = $stdin.noecho(&:gets).chomp
 
       puts "\n"
     end
 
     def root_dir
-      Pathname.new(File.expand_path(File.dirname(__FILE__) + '/../..'))
+      Pathname.new(File.expand_path("#{File.dirname(__FILE__)}/../.."))
     end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WOSAuthorName
   def initialize(full_name)
     @full_name = full_name
@@ -36,6 +38,6 @@ class WOSAuthorName
     end
 
     def first_and_middle
-      full_name.split(',')[1].strip.split(' ') if full_name.split(',')[1]
+      full_name.split(',')[1]&.strip&.split(' ')
     end
 end

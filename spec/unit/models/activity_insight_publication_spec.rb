@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -7,7 +9,7 @@ require_relative '../../../app/mappers/activity_insight_publication_type_map_in'
 
 describe ActivityInsightPublication do
   let(:parsed_pub) { double 'parsed publication xml' }
-  let(:pub) { ActivityInsightPublication.new(parsed_pub, user) }
+  let(:pub) { described_class.new(parsed_pub, user) }
   let(:user) { double 'user', activity_insight_id: 456 }
 
   describe '#publication_type' do

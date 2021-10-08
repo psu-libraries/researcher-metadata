@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -25,7 +27,7 @@ describe APIToken, type: :model do
   it { is_expected.to have_many(:publications).through(:users) }
 
   describe 'creating a new token' do
-    let(:new_token) { APIToken.new }
+    let(:new_token) { described_class.new }
 
     it 'sets a value for the token that is 64 characters long' do
       new_token.save!

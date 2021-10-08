@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -6,7 +8,7 @@ require_relative '../../../app/models/wos_grant_id'
 describe WOSGrantID do
   let(:parsed_grant_id) { double 'parsed grant ID' }
   let(:grant) { double 'grant' }
-  let(:grant_id) { WOSGrantID.new(grant, parsed_grant_id) }
+  let(:grant_id) { described_class.new(grant, parsed_grant_id) }
 
   describe '#wos_value' do
     before { allow(parsed_grant_id).to receive(:text).and_return("  \n ABC123456\n  ") }

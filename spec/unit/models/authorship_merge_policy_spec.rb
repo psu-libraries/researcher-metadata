@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/authorship_merge_policy'
 
 describe AuthorshipMergePolicy do
-  let(:amp) { AuthorshipMergePolicy.new(authorships) }
+  let(:amp) { described_class.new(authorships) }
 
   describe '#orcid_resource_id_to_keep' do
     let(:authorships) { [auth1, auth2, auth3] }

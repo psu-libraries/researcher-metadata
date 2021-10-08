@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RenameTypeInPublicationsAndPublicationImports < ActiveRecord::Migration[5.2]
   def change
     rename_column :publications, :type, :publication_type

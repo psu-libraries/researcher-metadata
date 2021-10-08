@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OpenAccessURLForm do
-  let(:form) { OpenAccessURLForm.new(open_access_url: url) }
+  let(:form) { described_class.new(open_access_url: url) }
   let(:response) { double 'response' }
 
   before do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -12,7 +14,7 @@ describe 'the duplicate_publication_groups table', type: :model do
 end
 
 describe DuplicatePublicationGroup, type: :model do
-  subject(:dpg) { DuplicatePublicationGroup.new }
+  subject(:dpg) { described_class.new }
 
   it_behaves_like 'an application record'
 
@@ -286,11 +288,11 @@ describe DuplicatePublicationGroup, type: :model do
                                      publication: p17_2}
 
       it 'creates the correct number of duplicate groups' do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change(DuplicatePublicationGroup, :count).by 10
+        expect { described_class.group_duplicates }.to change(described_class, :count).by 10
       end
 
       it 'finds similar publications and groups them' do
-        DuplicatePublicationGroup.group_duplicates
+        described_class.group_duplicates
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
 
@@ -368,7 +370,7 @@ describe DuplicatePublicationGroup, type: :model do
       end
 
       it 'is idempotent' do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change(DuplicatePublicationGroup, :count).by 10
+        expect { 2.times { described_class.group_duplicates } }.to change(described_class, :count).by 10
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -419,7 +421,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       it 'groups the matching publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -446,7 +448,7 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:group) { create :duplicate_publication_group, publications: [p1, p2, p3] }
 
       it 'leaves the publications in the existing group' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
 
         expect(group.reload.publications).to match_array [p1, p2, p3]
       end
@@ -464,7 +466,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: 'https://doi.org/10.000/some-doi-987654321' }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -483,8 +485,8 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: nil }
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -503,7 +505,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: nil }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -522,7 +524,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: nil }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -541,8 +543,8 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: 'https://doi.org/10.000/some-doi-4563457245' }
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -561,7 +563,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: nil }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -569,7 +571,7 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'given the other publication' do
         it 'groups the publications' do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
@@ -591,7 +593,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: nil }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -599,7 +601,7 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'given the other publication' do
         it 'groups the publications' do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
@@ -622,8 +624,8 @@ describe DuplicatePublicationGroup, type: :model do
                            publications: [p1, p2] }
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -651,7 +653,7 @@ describe DuplicatePublicationGroup, type: :model do
                             publications: [p2, other2] }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -659,7 +661,7 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'given the other publication' do
         it 'groups the publications' do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
@@ -687,9 +689,9 @@ describe DuplicatePublicationGroup, type: :model do
                            publications: [p1, p2, p3] }
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
-        DuplicatePublicationGroup.group_duplicates_of(p3)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p3)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -717,7 +719,7 @@ describe DuplicatePublicationGroup, type: :model do
                            publications: [p1, p3] }
 
       it 'only groups the two that are not in the same non-duplicate group' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -742,8 +744,8 @@ describe DuplicatePublicationGroup, type: :model do
                             publications: [p1, p2] }
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -777,7 +779,7 @@ describe DuplicatePublicationGroup, type: :model do
                             publications: [p3, p4] }
 
       it 'groups only the publications that are not in the same non-duplicate group' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to be_nil
@@ -798,7 +800,7 @@ describe DuplicatePublicationGroup, type: :model do
                          doi: '' }
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -821,7 +823,7 @@ describe DuplicatePublicationGroup, type: :model do
                                   publication: p2}
 
       it 'groups the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -848,8 +850,8 @@ describe DuplicatePublicationGroup, type: :model do
                                   publication: p2}
 
       it 'does not group the publications' do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -862,13 +864,13 @@ describe DuplicatePublicationGroup, type: :model do
 
     context 'when given no publications' do
       it 'does not create any new duplicate publication groups' do
-        expect { DuplicatePublicationGroup.group_publications([]) }.not_to change(DuplicatePublicationGroup, :count)
+        expect { described_class.group_publications([]) }.not_to change(described_class, :count)
       end
     end
 
     context 'when given one publication' do
       it 'does not create any new duplicate publication groups' do
-        expect { DuplicatePublicationGroup.group_publications([pub1]) }.not_to change(DuplicatePublicationGroup, :count)
+        expect { described_class.group_publications([pub1]) }.not_to change(described_class, :count)
       end
     end
 
@@ -885,11 +887,11 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'when none of the publications belong to a duplicate group' do
         it 'creates a new duplicate group' do
-          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, pub3]) }.to change(DuplicatePublicationGroup, :count).by 1
+          expect { described_class.group_publications([pub1, pub2, pub3]) }.to change(described_class, :count).by 1
         end
 
         it 'adds each given publication to the group' do
-          DuplicatePublicationGroup.group_publications([pub1, pub2, pub3])
+          described_class.group_publications([pub1, pub2, pub3])
 
           new_group = pub1.reload.duplicate_group
 
@@ -899,11 +901,11 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'when one of the publications already belongs to a duplicate group' do
         it 'does not create any new duplicate publication groups' do
-          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1]) }.not_to change(DuplicatePublicationGroup, :count)
+          expect { described_class.group_publications([pub1, pub2, grouped_pub1]) }.not_to change(described_class, :count)
         end
 
         it 'adds all of the given publications to the existing group' do
-          DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1])
+          described_class.group_publications([pub1, pub2, grouped_pub1])
 
           expect(existing_group1.reload.publications).to match_array [pub1, pub2, grouped_pub1, grouped_pub2]
         end
@@ -911,11 +913,11 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'when two of the given publications already belong to the same duplicate group' do
         it 'does not create any new duplicate publication groups' do
-          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2]) }.not_to change(DuplicatePublicationGroup, :count)
+          expect { described_class.group_publications([pub2, grouped_pub1, grouped_pub2]) }.not_to change(described_class, :count)
         end
 
         it 'adds all of the given publications to the existing group' do
-          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2])
+          described_class.group_publications([pub2, grouped_pub1, grouped_pub2])
 
           expect(existing_group1.reload.publications).to match_array [pub2, grouped_pub1, grouped_pub2]
         end
@@ -923,11 +925,11 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'when two of the given publications already belong to different duplicate groups' do
         it 'removes one of the existing duplicate groups' do
-          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3]) }.to change(DuplicatePublicationGroup, :count).by -1
+          expect { described_class.group_publications([pub2, grouped_pub1, grouped_pub3]) }.to change(described_class, :count).by -1
         end
 
         it 'adds all of the given publications and the other members of their groups to the remaining existing group' do
-          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3])
+          described_class.group_publications([pub2, grouped_pub1, grouped_pub3])
 
           remaining_group = grouped_pub1.reload.duplicate_group || grouped_pub3.reload.duplicate_group
 
@@ -974,7 +976,7 @@ describe DuplicatePublicationGroup, type: :model do
     let!(:group3_pub2_ai_import) { create(:publication_import, source: 'Activity Insight') }
 
     it 'automatically merges applicable publications in each group' do
-      DuplicatePublicationGroup.auto_merge
+      described_class.auto_merge
 
       expect { group1.reload }.to raise_error ActiveRecord::RecordNotFound
       expect { group2.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -1032,7 +1034,7 @@ describe DuplicatePublicationGroup, type: :model do
       end
 
       it 'does not change the number of duplicate publication groups in the database' do
-        expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+        expect { group.auto_merge }.not_to change(described_class, :count)
       end
 
       it 'does not delete the group' do
@@ -1056,7 +1058,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1088,7 +1090,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1121,7 +1123,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1159,7 +1161,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1188,7 +1190,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1225,7 +1227,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do
@@ -1263,7 +1265,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'deletes the group' do
-          expect { group.auto_merge }.to change(DuplicatePublicationGroup, :count).by -1
+          expect { group.auto_merge }.to change(described_class, :count).by -1
           expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
@@ -1306,7 +1308,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not change the number of duplicate publication groups in the database' do
-          expect { group.auto_merge }.not_to change(DuplicatePublicationGroup, :count)
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
         it 'does not delete the group' do

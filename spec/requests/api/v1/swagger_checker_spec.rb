@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ContributorName < ApplicationRecord
   belongs_to :publication, inverse_of: :contributor_names
   belongs_to :user, inverse_of: :contributor_names, optional: true

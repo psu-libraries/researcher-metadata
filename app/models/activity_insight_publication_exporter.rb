@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActivityInsightPublicationExporter
   def initialize(publications, target)
     @publications = publications
@@ -45,9 +47,10 @@ class ActivityInsightPublicationExporter
     end
 
     def webservice_url
-      if target == 'beta'
+      case target
+      when 'beta'
         'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-      elsif target == 'production'
+      when 'production'
         'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
       end
     end
@@ -62,9 +65,10 @@ class ActivityInsightPublicationExporter
               xml.INTELLCONT do
                 xml.TITLE_(publication.title, access: 'READ_ONLY')
                 xml.TITLE_SECONDARY_(publication.secondary_title, access: 'READ_ONLY')
-                if publication.publication_type == 'In-house Journal Article'
+                case publication.publication_type
+                when 'In-house Journal Article'
                   xml.CONTYPE_('Journal Article, In House', access: 'READ_ONLY')
-                elsif /Journal Article/.match?(publication.publication_type)
+                when /Journal Article/
                   xml.CONTYPE_('Journal Article', access: 'READ_ONLY')
                 else
                   xml.CONTYPE_('Other', access: 'READ_ONLY')

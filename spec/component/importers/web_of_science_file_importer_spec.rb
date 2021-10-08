@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe WebOfScienceFileImporter do
-  let(:importer) { WebOfScienceFileImporter.new(dirname: dirname) }
+  let(:importer) { described_class.new(dirname: dirname) }
 
   describe '#call' do
     context 'when given an XML file of publication data from Web of Science with Penn State Journal Articles' do

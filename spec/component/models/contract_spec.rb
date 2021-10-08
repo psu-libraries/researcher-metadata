@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe 'the contracts table', type: :model do
@@ -60,7 +62,7 @@ describe Contract, type: :model do
     let(:invisible_contract) { create :contract, visible: false }
 
     it 'returns the contracts that are marked as visible' do
-      expect(Contract.visible).to match_array [visible_contract1, visible_contract2]
+      expect(described_class.visible).to match_array [visible_contract1, visible_contract2]
     end
   end
 end

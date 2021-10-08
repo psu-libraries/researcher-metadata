@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/capistrano'            # Use bundler on remote server
 require 'capistrano/ext/multistage'     # Support for multiple deploy targets
 require 'capistrano-helpers/branch'     # Ask user what tag to deploy

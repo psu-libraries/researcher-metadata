@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 require 'support/webdrivers'
 require 'integration/admin/shared_examples_for_admin_page'

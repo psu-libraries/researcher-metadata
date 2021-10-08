@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPureAndActivityInsightIdsToPublications < ActiveRecord::Migration[5.2]
   def change
     add_column :publications, :pure_uuid, :string

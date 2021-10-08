@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateNewsFeedItems < ActiveRecord::Migration[5.2]
   def change
     create_table :news_feed_items do |t|

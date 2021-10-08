@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ScholarsphereImporter do
-  let(:importer) { ScholarsphereImporter.new }
+  let(:importer) { described_class.new }
 
   describe '#call' do
     let(:response) { double 'HTTParty response', body: json_data }

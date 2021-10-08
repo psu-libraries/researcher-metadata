@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 shared_examples_for 'a page with the admin layout' do
   it 'shows a link to the duplicate publication groups index' do
     within '.sidebar-nav' do

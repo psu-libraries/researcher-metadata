@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'cancan/matchers'
 
 describe Ability do
-  subject { Ability.new(user) }
+  subject { described_class.new(user) }
 
   context 'when given an admin user' do
     let(:user) { create :user, is_admin: true }

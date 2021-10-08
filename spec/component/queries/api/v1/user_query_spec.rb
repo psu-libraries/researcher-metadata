@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe API::V1::UserQuery do
   let(:user) { create :user, show_all_contracts: show_all_contracts }
   let(:show_all_contracts) { true }
-  let(:uq) { API::V1::UserQuery.new(user) }
+  let(:uq) { described_class.new(user) }
 
   describe '#presentations' do
     context 'when the given user has no presentations' do

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CustomAdmin::PublicationWaiverLinksController < RailsAdmin::ApplicationController
   def create
     ext_waiver = ExternalPublicationWaiver.find(params[:external_publication_waiver_id])

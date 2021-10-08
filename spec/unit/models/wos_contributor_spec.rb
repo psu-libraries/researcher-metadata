@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -6,7 +8,7 @@ require_relative '../../../app/models/wos_author_name'
 
 describe WOSContributor do
   let(:parsed_contributor) { double 'parsed contributor' }
-  let(:wc) { WOSContributor.new(parsed_contributor) }
+  let(:wc) { described_class.new(parsed_contributor) }
 
   describe '#name' do
     let(:full_name) { double 'full name element', text: 'Full Name' }

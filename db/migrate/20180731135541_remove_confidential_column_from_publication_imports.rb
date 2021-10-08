@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class RemoveConfidentialColumnFromPublicationImports < ActiveRecord::Migration[5.2]
   def up
     remove_column :publication_imports, :confidential

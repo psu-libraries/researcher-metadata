@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Grant < ApplicationRecord
   def self.agency_names
     ['National Science Foundation']

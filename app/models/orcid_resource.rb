@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidResource
   class InvalidToken < RuntimeError; end
   class FailedRequest < RuntimeError; end

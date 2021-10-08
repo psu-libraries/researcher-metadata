@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require_relative '../../../app/models/null_time'
 require_relative '../../../app/models/null_comparable_time'
@@ -14,7 +16,7 @@ describe NullTime do
 
     context 'when given a null time' do
       it 'returns 1' do
-        expect(nct.<=>(NullTime.new)).to eq 1
+        expect(nct.<=>(described_class.new)).to eq 1
       end
     end
   end

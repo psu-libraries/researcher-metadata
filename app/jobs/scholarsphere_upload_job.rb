@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScholarsphereUploadJob < ApplicationJob
   queue_as "scholarsphere-uploads-#{`hostname`}".strip
 

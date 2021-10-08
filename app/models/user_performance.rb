@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserPerformance < ApplicationRecord
   belongs_to :user, inverse_of: :user_performances
   belongs_to :performance, inverse_of: :user_performances

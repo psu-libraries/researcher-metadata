@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PurePublicationTagImporter < PureImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Pure publication tags', total: total_pages) unless Rails.env.test?
@@ -20,7 +22,7 @@ class PurePublicationTagImporter < PureImporter
         # We don't care about the high-level categories, just the
         # terms.
         # Pure outputs fingerprints as XML within the publication JSON
-        fingerprint_xml = publication['renderings'].detect { |r| r['format'] == 'fingerprint' }['html']
+        fingerprint_xml = publication['renderings'].find { |r| r['format'] == 'fingerprint' }['html']
         # We need to parse these xml fingerprints
         f = Nokogiri::XML(fingerprint_xml)
         f.xpath('fingerprint').xpath('rankedConcept').each do |rc|

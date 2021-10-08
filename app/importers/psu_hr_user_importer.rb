@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PSUHRUserImporter < CSVImporter
   def row_to_object(row)
     if row[:accessid]

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_db_foreign_key do |expected|
   match do |_actual|
     foreign_key_exists? && correct_name?

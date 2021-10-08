@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScholarsphereWorkDeposit < ApplicationRecord
   def self.statuses
     ['Pending', 'Success', 'Failed']
@@ -80,9 +82,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
       work_type: 'article',
       visibility: 'open',
       rights: rights,
-      creators: publication.contributor_names.order('position ASC').map do |cn|
-        cn.to_scholarsphere_creator
-      end
+      creators: publication.contributor_names.order('position ASC').map(&:to_scholarsphere_creator)
     }
     base_metadata[:embargoed_until] = embargoed_until if embargoed_until.present?
     base_metadata[:identifier] = [doi] if doi.present?

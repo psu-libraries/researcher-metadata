@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OAIImporter
   def call
     puts "Loading publication records from #{repo_url} ..." unless Rails.env.test?
@@ -64,7 +66,7 @@ class OAIImporter
             DuplicatePublicationGroup.group_duplicates_of(p)
 
             if p.reload.duplicate_group
-              p.update_attributes!(visible: false)
+              p.update!(visible: false)
             end
           end
         end

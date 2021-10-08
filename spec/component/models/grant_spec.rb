@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -24,7 +26,7 @@ describe 'the grants table', type: :model do
 end
 
 describe Grant, type: :model do
-  subject(:grant) { Grant.new }
+  subject(:grant) { described_class.new }
 
   it_behaves_like 'an application record'
 
@@ -37,12 +39,12 @@ describe Grant, type: :model do
 
   describe '.agency_names' do
     it 'returns the list of possible canonical agency names for a grant' do
-      expect(Grant.agency_names).to eq ['National Science Foundation']
+      expect(described_class.agency_names).to eq ['National Science Foundation']
     end
   end
 
   describe '#name' do
-    let(:grant) { Grant.new(wos_identifier: wos_id, identifier: id, title: title) }
+    let(:grant) { described_class.new(wos_identifier: wos_id, identifier: id, title: title) }
 
     context 'when the grant has a title' do
       let(:title) { 'Example Grant' }
@@ -310,7 +312,7 @@ describe Grant, type: :model do
   end
 
   describe '#agency' do
-    let(:grant) { Grant.new(wos_agency_name: wos_an, agency_name: an) }
+    let(:grant) { described_class.new(wos_agency_name: wos_an, agency_name: an) }
 
     context 'when the grant has a canonical agency name' do
       let(:an) { 'Canonical Name' }

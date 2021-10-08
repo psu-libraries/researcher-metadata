@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 class PurePublicationImporter < PureImporter
-  IMPORT_SOURCE = 'Pure'.freeze
+  IMPORT_SOURCE = 'Pure'
 
   def call
     pbar = ProgressBar.create(title: 'Importing Pure research-outputs (publications)', total: total_pages) unless Rails.env.test?
@@ -28,9 +30,9 @@ class PurePublicationImporter < PureImporter
                 journal: journal_present?(publication) ? journal(publication) : nil
               }
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
-              pi.publication.update_attributes!(attrs)
+              pi.publication.update!(attrs)
             else
-              pi.publication.update_attributes!(pub_attrs(publication))
+              pi.publication.update!(pub_attrs(publication))
             end
           else
             p = Publication.create!(pub_attrs(publication))
@@ -51,7 +53,7 @@ class PurePublicationImporter < PureImporter
 
             authorships = publication['personAssociations'].select do |a|
               a['authorCollaboration'].blank? &&
-                a['personRole']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Author'
+                a['personRole']['term']['text'].find { |t| t['locale'] == 'en_US' }['value'] == 'Author'
             end
 
             authorships.each_with_index do |a, i|
@@ -103,7 +105,7 @@ class PurePublicationImporter < PureImporter
         title: publication['title']['value'],
         secondary_title: publication['subTitle'].try('[]', 'value'),
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
-                                                  .detect { |t| t['locale'] == 'en_US' }['value']),
+                                                  .find { |t| t['locale'] == 'en_US' }['value']),
         page_range: publication['pages'],
         volume: publication['volume'],
         issue: publication['journalNumber'],
@@ -125,11 +127,11 @@ class PurePublicationImporter < PureImporter
     end
 
     def status(publication)
-      publication['publicationStatuses'].detect { |s| s['current'] == true }
+      publication['publicationStatuses'].find { |s| s['current'] == true }
     end
 
     def status_value(publication)
-      status(publication)['publicationStatus']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value']
+      status(publication)['publicationStatus']['term']['text'].find { |t| t['locale'] == 'en_US' }['value']
     end
 
     def published_month(publication)
@@ -142,15 +144,15 @@ class PurePublicationImporter < PureImporter
 
     def abstract(publication)
       if publication['abstract']
-        publication['abstract']['text'].detect { |t| t['locale'] == 'en_US' }['value']
+        publication['abstract']['text'].find { |t| t['locale'] == 'en_US' }['value']
       end
     end
 
     def doi(publication)
       if publication['electronicVersions']
-        v = publication['electronicVersions'].detect do |ev|
+        v = publication['electronicVersions'].find do |ev|
           if ev['versionType']
-            ev['versionType']['term']['text'].detect { |t| t['locale'] == 'en_US' }['value'] == 'Final published version'
+            ev['versionType']['term']['text'].find { |t| t['locale'] == 'en_US' }['value'] == 'Final published version'
           end
         end
         raw_doi = v.try('[]', 'doi')

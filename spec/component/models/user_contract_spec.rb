@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe 'the user_contracts table', type: :model do
@@ -36,7 +38,7 @@ describe UserContract, type: :model do
     it { is_expected.to validate_presence_of(:contract_id) }
 
     context 'given otherwise valid data' do
-      subject { UserContract.new(user: create(:user), contract: create(:contract)) }
+      subject { described_class.new(user: create(:user), contract: create(:contract)) }
 
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:contract_id) }
     end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -7,7 +9,7 @@ describe ActivityInsightDetailUser do
   let(:user_data) { double 'parsed user data' }
   let(:parsed_user) { double 'parsed user' }
   let(:contact_info) { double 'parsed contact info' }
-  let(:user) { ActivityInsightDetailUser.new(parsed_user) }
+  let(:user) { described_class.new(parsed_user) }
 
   before do
     allow(parsed_user).to receive(:css).with('Data Record').and_return(user_data)

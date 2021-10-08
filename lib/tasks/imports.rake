@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :import do
   desc 'Import all Activity Insight data from API'
   task activity_insight: :environment do

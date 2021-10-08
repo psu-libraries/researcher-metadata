@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -5,7 +7,7 @@ require_relative '../../../app/importers/activity_insight_importer'
 
 describe ActivityInsightListUser do
   let(:parsed_user) { double 'parsed user xml' }
-  let(:user) { ActivityInsightListUser.new(parsed_user) }
+  let(:user) { described_class.new(parsed_user) }
 
   describe '#raw_webaccess_id' do
     let(:username_attr) { double 'username attribute', value: 'ABC123' }

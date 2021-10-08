@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PureOrganizationsImporter < PureImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages) unless Rails.env.test?
@@ -48,10 +50,10 @@ class PureOrganizationsImporter < PureImporter
   private
 
     def extract_name(org)
-      org['name']['text'].detect { |text| text['locale'] == 'en_US' }['value']
+      org['name']['text'].find { |text| text['locale'] == 'en_US' }['value']
     end
 
     def extract_organization_type(org)
-      org['type']['term']['text'].detect { |text| text['locale'] == 'en_US' }['value']
+      org['type']['term']['text'].find { |text| text['locale'] == 'en_US' }['value']
     end
 end

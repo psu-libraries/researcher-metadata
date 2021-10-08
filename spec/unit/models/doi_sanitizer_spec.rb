@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require_relative '../../../app/models/doi_sanitizer'
 
 describe DOISanitizer do
   let(:doi_value) { nil }
-  let(:doi) { DOISanitizer.new(doi_value) }
+  let(:doi) { described_class.new(doi_value) }
 
   describe '#url' do
     context 'given a nil value' do

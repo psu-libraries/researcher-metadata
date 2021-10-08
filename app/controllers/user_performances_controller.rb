@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class UserPerformancesController < ApplicationController
   before_action :authenticate_user!
 
   def update
     up = current_user.user_performances.find(params[:id])
-    up.update_attributes!(up_params)
+    up.update!(up_params)
   end
 
   def sort

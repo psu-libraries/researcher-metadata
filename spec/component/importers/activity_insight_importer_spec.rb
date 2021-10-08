@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ActivityInsightImporter do
-  let(:importer) { ActivityInsightImporter.new }
+  let(:importer) { described_class.new }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',

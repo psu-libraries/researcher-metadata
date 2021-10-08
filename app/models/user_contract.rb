@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserContract < ApplicationRecord
   belongs_to :user, inverse_of: :user_contracts
   belongs_to :contract, inverse_of: :user_contracts

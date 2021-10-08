@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   class OmniauthError < RuntimeError; end
 
@@ -117,13 +119,13 @@ class User < ApplicationRecord
   def old_potential_open_access_publications
     potential_open_access_publications
       .where.not('authorships.open_access_notification_sent_at' => nil)
-      .select { |p| p.no_open_access_information? }
+      .select(&:no_open_access_information?)
   end
 
   def new_potential_open_access_publications
     potential_open_access_publications
       .where(authorships: { open_access_notification_sent_at: nil })
-      .select { |p| p.no_open_access_information? }
+      .select(&:no_open_access_information?)
   end
 
   def confirmed_publications

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExternalPublicationWaiversController < ProfileManagementController
   def new
     @waiver = current_user.external_publication_waivers.build

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -14,7 +16,7 @@ describe 'the tags_table', type: :model do
 end
 
 describe Tag, type: :model do
-  subject(:tag) { Tag.new }
+  subject(:tag) { described_class.new }
 
   it_behaves_like 'an application record'
 
@@ -27,7 +29,7 @@ describe Tag, type: :model do
     it { is_expected.to validate_presence_of :name }
 
     context 'given an otherwise valid record' do
-      subject { Tag.new(name: 'abc') }
+      subject { described_class.new(name: 'abc') }
 
       it { is_expected.to validate_uniqueness_of(:name).case_insensitive }
     end

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ETDCSVImporter do
-  let(:importer) { ETDCSVImporter.new(filename: filename) }
+  let(:importer) { described_class.new(filename: filename) }
 
   describe '#call' do
     context 'when given a well-formed .csv file of valid etd data' do

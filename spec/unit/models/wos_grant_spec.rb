@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -6,7 +8,7 @@ require_relative '../../../app/models/wos_grant_id'
 
 describe WOSGrant do
   let(:parsed_grant) { double 'parsed_grant' }
-  let(:grant) { WOSGrant.new(parsed_grant) }
+  let(:grant) { described_class.new(parsed_grant) }
 
   describe '#wos_agency' do
     before { allow(parsed_grant).to receive(:css).with('grant_agency').and_return(agency_element) }

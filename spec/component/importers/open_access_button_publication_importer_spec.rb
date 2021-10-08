@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OpenAccessButtonPublicationImporter do
-  let(:importer) { OpenAccessButtonPublicationImporter.new }
+  let(:importer) { described_class.new }
 
   let(:now) { Time.new(2019, 11, 13, 0, 0, 0) }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidWork < OrcidResource
   def to_json(*_args)
     work = {

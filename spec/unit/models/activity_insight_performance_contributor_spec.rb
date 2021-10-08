@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -5,7 +7,7 @@ require_relative '../../../app/importers/activity_insight_importer'
 
 describe ActivityInsightPerformanceContributor do
   let(:parsed_contributor) { double 'parsed contributor xml' }
-  let(:contributor) { ActivityInsightPerformanceContributor.new(parsed_contributor) }
+  let(:contributor) { described_class.new(parsed_contributor) }
 
   describe '#activity_insight_id' do
     let(:id_attr) { double 'id attribute', value: '8' }

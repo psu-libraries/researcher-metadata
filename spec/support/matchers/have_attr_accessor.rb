@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_attr_accessor do |attribute_name|
   match do |model|
     model.respond_to?(attribute_name) &&

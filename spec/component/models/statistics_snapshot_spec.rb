@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe 'the statistics_snapshots table', type: :model do
@@ -20,17 +22,17 @@ describe StatisticsSnapshot, type: :model do
 
   describe '.record' do
     it 'creates a new statistics snapshot record' do
-      expect { StatisticsSnapshot.record }.to change(StatisticsSnapshot, :count).by 1
+      expect { described_class.record }.to change(described_class, :count).by 1
     end
 
     it 'records the current total number of articles in the database' do
-      snapshot = StatisticsSnapshot.record
+      snapshot = described_class.record
 
       expect(snapshot.total_article_count).to eq 3
     end
 
     it 'records the current number of open access articles in the database' do
-      snapshot = StatisticsSnapshot.record
+      snapshot = described_class.record
 
       expect(snapshot.open_access_article_count).to eq 2
     end

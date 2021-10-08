@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthorshipMergePolicy
   def initialize(authorships)
     @authorships = authorships
@@ -10,11 +12,11 @@ class AuthorshipMergePolicy
   end
 
   def confirmed_value_to_keep
-    !!authorships.detect { |a| a.confirmed.present? }
+    !!authorships.find { |a| a.confirmed.present? }
   end
 
   def role_to_keep
-    authorships.detect { |a| a.role.present? }.try(:role)
+    authorships.find { |a| a.role.present? }.try(:role)
   end
 
   def oa_timestamp_to_keep
@@ -36,7 +38,7 @@ class AuthorshipMergePolicy
   end
 
   def waivers_to_destroy
-    all_waivers = authorships.map { |a| a.waiver }
+    all_waivers = authorships.map(&:waiver)
     wtd = all_waivers - [waiver_to_keep]
     wtd.compact
   end
@@ -53,7 +55,7 @@ class AuthorshipMergePolicy
   end
 
   def scholarsphere_deposits_to_keep
-    authorships.map { |a| a.scholarsphere_work_deposits }.flatten
+    authorships.map(&:scholarsphere_work_deposits).flatten
   end
 
   private

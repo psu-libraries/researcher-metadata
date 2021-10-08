@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProfilesController < ProfileManagementController
   skip_before_action :authenticate!, only: [:show]
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 namespace :swagger_api_docs do
   desc 'Generate Swagger API Docs JSON'
   task :generate_json_file, [:version] => :environment do |_task, args|

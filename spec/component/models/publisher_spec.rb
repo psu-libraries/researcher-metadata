@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -33,7 +35,7 @@ describe Publisher, type: :model do
     end
 
     it "returns all publisher records in order by the number of publications with which they're associated" do
-      expect(Publisher.order(:name).ordered_by_publication_count).to eq [p2, p3, p1]
+      expect(described_class.order(:name).ordered_by_publication_count).to eq [p2, p3, p1]
     end
   end
 
@@ -48,7 +50,7 @@ describe Publisher, type: :model do
     let!(:p3) { create :publisher, name: 'b' }
 
     it 'returns all publisher records in alphabetical order by name' do
-      expect(Publisher.ordered_by_name).to eq [p2, p3, p1]
+      expect(described_class.ordered_by_name).to eq [p2, p3, p1]
     end
   end
 

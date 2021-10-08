@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndexesForActivityInsightIdentifiers < ActiveRecord::Migration[5.2]
   def change
     add_index :people, :activity_insight_identifier

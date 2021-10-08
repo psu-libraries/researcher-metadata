@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe NSFGrant do
   let(:parsed_grant) { double 'parsed grant xml' }
-  let(:grant) { NSFGrant.new(parsed_grant) }
+  let(:grant) { described_class.new(parsed_grant) }
 
   describe '#importable?' do
     context 'when the given data lists no institutions' do

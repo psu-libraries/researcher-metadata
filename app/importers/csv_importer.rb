@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CSVImporter
   class ParseError < RuntimeError; end
 
@@ -50,7 +52,7 @@ class CSVImporter
   end
 
   def fatal_errors_encountered?
-    fatal_errors.length > 0
+    fatal_errors.length.positive?
   end
 
   private

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'requests/requests_spec_helper'
 
 describe 'API::V1 Publications' do
@@ -185,8 +187,8 @@ describe 'API::V1 Publications' do
 
         it 'returns the grants for the given publication' do
           expect(json_response[:data].size).to eq(2)
-          expect(json_response[:data].detect { |grant| grant[:id] == g1.id.to_s && grant[:type] == 'grant' }).not_to be_nil
-          expect(json_response[:data].detect { |grant| grant[:id] == g2.id.to_s && grant[:type] == 'grant' }).not_to be_nil
+          expect(json_response[:data].find { |grant| grant[:id] == g1.id.to_s && grant[:type] == 'grant' }).not_to be_nil
+          expect(json_response[:data].find { |grant| grant[:id] == g2.id.to_s && grant[:type] == 'grant' }).not_to be_nil
         end
 
         it 'updates the usage statistics on the API token' do

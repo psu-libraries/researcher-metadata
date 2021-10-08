@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ProfileManagementController < UserController
   layout :resolve_layout
   before_action :authenticate!

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DOISanitizer
   def initialize(value)
     @value = value

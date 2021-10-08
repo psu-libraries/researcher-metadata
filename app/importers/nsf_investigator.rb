@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NSFInvestigator
   def initialize(parsed_investigator)
     @parsed_investigator = parsed_investigator

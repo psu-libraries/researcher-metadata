@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateExternalPublicationWaivers < ActiveRecord::Migration[5.2]
   def change
     create_table :external_publication_waivers do |t|

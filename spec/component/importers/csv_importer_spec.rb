@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 class SpecifiedImporter < CSVImporter
@@ -27,17 +29,17 @@ describe CSVImporter do
 
   describe '#initialize' do
     it 'accepts a filename parameter' do
-      importer = CSVImporter.new(filename: filename)
+      importer = described_class.new(filename: filename)
       expect(importer.filename).to eq filename
     end
 
     it 'ensures the given file exists' do
-      expect { CSVImporter.new(filename: 'does/not/exist') }.to raise_error Errno::ENOENT
+      expect { described_class.new(filename: 'does/not/exist') }.to raise_error Errno::ENOENT
     end
 
     context 'for an empty file' do
       let(:empty_file) { fixture('error_unreadable') }
-      let(:csv_importer) { CSVImporter.new(filename: empty_file) }
+      let(:csv_importer) { described_class.new(filename: empty_file) }
       let(:called_importer) { csv_importer.call }
 
       before { FileUtils.touch empty_file }
@@ -58,7 +60,7 @@ describe CSVImporter do
 
     context 'for a file with one line' do
       let(:file_with_no_records) { fixture('file_with_no_records.csv') }
-      let(:csv_importer) { CSVImporter.new(filename: file_with_no_records) }
+      let(:csv_importer) { described_class.new(filename: file_with_no_records) }
       let(:called_importer) { csv_importer.call }
 
       it 'raises a an error' do
@@ -75,13 +77,13 @@ describe CSVImporter do
 
   it 'forces subclasses to define #row_to_object' do
     expect {
-      CSVImporter.new(filename: filename).send(:row_to_object, [])
+      described_class.new(filename: filename).send(:row_to_object, [])
     }.to raise_error(NotImplementedError)
   end
 
   it 'forces subclasses to define #bulk_import' do
     expect {
-      CSVImporter.new(filename: filename).send(:bulk_import, [])
+      described_class.new(filename: filename).send(:bulk_import, [])
     }.to raise_error(NotImplementedError)
   end
 

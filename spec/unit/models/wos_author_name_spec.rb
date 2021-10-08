@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require_relative '../../../app/models/wos_author_name'
 
 describe WOSAuthorName do
   let(:name) { double 'name' }
-  let(:wos_name) { WOSAuthorName.new(name) }
+  let(:wos_name) { described_class.new(name) }
 
   describe '#first_name' do
     context 'given only one name' do

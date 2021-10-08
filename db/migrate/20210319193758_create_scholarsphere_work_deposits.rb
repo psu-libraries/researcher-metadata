@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateScholarsphereWorkDeposits < ActiveRecord::Migration[5.2]
   def change
     create_table :scholarsphere_work_deposits do |t|

@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe FacultyNotificationsMailer, type: :model do
   describe '#open_access_reminder' do
-    subject(:email) { FacultyNotificationsMailer.open_access_reminder(user, old_publications, new_publications) }
+    subject(:email) { described_class.open_access_reminder(user, old_publications, new_publications) }
 
     let(:user) { double 'user',
                         email: 'test123@psu.edu',
@@ -51,7 +53,7 @@ describe FacultyNotificationsMailer, type: :model do
   end
 
   describe '#scholarsphere_deposit_failure' do
-    subject(:email) { FacultyNotificationsMailer.scholarsphere_deposit_failure(user, deposit) }
+    subject(:email) { described_class.scholarsphere_deposit_failure(user, deposit) }
 
     let(:deposit) { build :scholarsphere_work_deposit, publication: pub }
     let(:pub) { build :publication,

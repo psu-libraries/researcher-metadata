@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -42,12 +44,12 @@ describe ExternalPublicationWaiver, type: :model do
     let(:int_waiver) { create :internal_publication_waiver }
 
     it 'returns external publication waivers that are not associated with an internal publication waiver' do
-      expect(ExternalPublicationWaiver.not_linked).to eq [w1]
+      expect(described_class.not_linked).to eq [w1]
     end
   end
 
   describe '#title' do
-    let(:waiver) { ExternalPublicationWaiver.new(publication_title: 'The Title') }
+    let(:waiver) { described_class.new(publication_title: 'The Title') }
 
     it 'returns the value for publication title' do
       expect(waiver.title).to eq 'The Title'
@@ -55,7 +57,7 @@ describe ExternalPublicationWaiver, type: :model do
   end
 
   describe '#matching_publications' do
-    let(:waiver) { ExternalPublicationWaiver.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
+    let(:waiver) { described_class.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
     let!(:pub1) { create :publication, title: 'A test publication with a long, distinct title of some sort' }
     let!(:pub2) { create :publication, title: 'Another publication', secondary_title: 'with a longer, distinct title of some sort' }
     let!(:pub3) { create :publication, title: 'Some Other Publication' }
@@ -68,7 +70,7 @@ describe ExternalPublicationWaiver, type: :model do
   end
 
   describe '#has_matching_publications' do
-    let(:waiver) { ExternalPublicationWaiver.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
+    let(:waiver) { described_class.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
 
     context 'when there is a publication with a title that closely matches the title in the waiver' do
       let!(:pub) { create :publication, title: 'A test publication with a long, distinct title of some sort' }

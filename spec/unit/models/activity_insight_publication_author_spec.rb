@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -5,7 +7,7 @@ require_relative '../../../app/importers/activity_insight_importer'
 
 describe ActivityInsightPublicationAuthor do
   let(:parsed_auth) { double 'parsed publication author xml' }
-  let(:auth) { ActivityInsightPublicationAuthor.new(parsed_auth, user) }
+  let(:auth) { described_class.new(parsed_auth, user) }
   let(:user) { double 'user', activity_insight_id: '123' }
 
   describe '#activity_insight_user_id' do
@@ -172,7 +174,7 @@ describe ActivityInsightPublicationAuthor do
     before { allow(parsed_auth).to receive(:attribute).with('id').and_return(id_attr) }
 
     context 'when given an author with the same activity insight ID' do
-      let(:other) { ActivityInsightPublicationAuthor.new(other_parsed_auth, double('user')) }
+      let(:other) { described_class.new(other_parsed_auth, double('user')) }
       let(:other_id_attr) { double 'id attribute', value: '10' }
 
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }
@@ -183,7 +185,7 @@ describe ActivityInsightPublicationAuthor do
     end
 
     context 'when given an author with a different activity insight ID' do
-      let(:other) { ActivityInsightPublicationAuthor.new(other_parsed_auth, double('user')) }
+      let(:other) { described_class.new(other_parsed_auth, double('user')) }
       let(:other_id_attr) { double 'id attribute', value: '9' }
 
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }

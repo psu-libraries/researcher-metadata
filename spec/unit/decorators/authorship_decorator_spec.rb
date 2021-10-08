@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
@@ -25,7 +27,7 @@ describe AuthorshipDecorator do
   let(:no_info) { true }
   let(:pub) { double 'publication' }
   let(:context) { double 'view context' }
-  let(:ad) { AuthorshipDecorator.new(auth, context) }
+  let(:ad) { described_class.new(auth, context) }
 
   before do
     allow(context).to receive(:edit_open_access_publication_path).with(pub).and_return 'the pub path'

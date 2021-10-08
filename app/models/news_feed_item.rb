@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NewsFeedItem < ApplicationRecord
   belongs_to :user
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe FacultyConfirmationsMailer, type: :model do
@@ -6,7 +8,7 @@ describe FacultyConfirmationsMailer, type: :model do
                       name: 'Test User' }
 
   describe '#open_access_waiver_confirmation' do
-    subject(:email) { FacultyConfirmationsMailer.open_access_waiver_confirmation(user, waiver) }
+    subject(:email) { described_class.open_access_waiver_confirmation(user, waiver) }
 
     let(:waiver) { build :external_publication_waiver,
                          publication_title: 'Test Pub',
@@ -62,7 +64,7 @@ describe FacultyConfirmationsMailer, type: :model do
   end
 
   describe '#scholarsphere_deposit_confirmation' do
-    subject(:email) { FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(user, deposit) }
+    subject(:email) { described_class.scholarsphere_deposit_confirmation(user, deposit) }
 
     let(:deposit) { build :scholarsphere_work_deposit, publication: pub }
     let(:pub) { build :publication,

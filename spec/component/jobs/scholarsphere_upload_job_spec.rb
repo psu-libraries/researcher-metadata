@@ -1,16 +1,18 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ScholarsphereUploadJob, type: :job do
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
     it 'enqueues a job' do
-      expect { ScholarsphereUploadJob.perform_later(1, 2) }.to have_enqueued_job.with(1, 2).on_queue("scholarsphere-uploads-#{`hostname`}".strip)
+      expect { described_class.perform_later(1, 2) }.to have_enqueued_job.with(1, 2).on_queue("scholarsphere-uploads-#{`hostname`}".strip)
     end
   end
 
   describe '#perform' do
     ActiveJob::Base.queue_adapter = :test
-    let(:job) { ScholarsphereUploadJob.new }
+    let(:job) { described_class.new }
     let(:user) { create :user }
     let(:deposit) { create :scholarsphere_work_deposit }
     let(:service) { double 'scholarsphere deposit service' }

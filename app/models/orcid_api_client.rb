@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidAPIClient
   include HTTParty
   base_uri "https://api.#{'sandbox.' unless Rails.env.production?}orcid.org/v3.0"

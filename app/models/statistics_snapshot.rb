@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class StatisticsSnapshot < ApplicationRecord
   def self.record
     create(total_article_count: Publication.journal_article.count,

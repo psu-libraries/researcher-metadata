@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe UserProfile do
-  subject(:profile) { UserProfile.new(user) }
+  subject(:profile) { described_class.new(user) }
 
   let!(:user) { create :user,
                        webaccess_id: 'abc123',

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -40,7 +42,7 @@ describe Authorship, type: :model do
     it { is_expected.to validate_presence_of(:author_number) }
 
     context 'given otherwise valid data' do
-      subject { Authorship.new(user: create(:user), publication: create(:publication)) }
+      subject { described_class.new(user: create(:user), publication: create(:publication)) }
 
       it { is_expected.to validate_uniqueness_of(:user_id).scoped_to(:publication_id) }
     end
@@ -87,7 +89,7 @@ describe Authorship, type: :model do
   end
 
   describe '#updated_by_owner' do
-    let(:a) { Authorship.new(updated_by_owner_at: timestamp) }
+    let(:a) { described_class.new(updated_by_owner_at: timestamp) }
 
     context 'when the authorship has a value for updated_by_owner_at' do
       let(:timestamp) { Time.new(2000, 1, 1, 0, 0, 0) }

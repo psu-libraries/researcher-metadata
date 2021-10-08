@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Performance < ApplicationRecord
   has_many :user_performances, inverse_of: :performance, dependent: :destroy
   has_many :users, through: :user_performances

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangeColumnNamesForStatisticSnapshots < ActiveRecord::Migration[5.2]
   def self.up
     rename_column :statistics_snapshots, :total_publication_count, :total_article_count

@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PSULawSchoolPublicationImporter do
-  let(:importer) { PSULawSchoolPublicationImporter.new }
+  let(:importer) { described_class.new }
 
   let(:psu_law_repo) { double 'fieldhand repository for PSU Law School' }
   let(:records) { [record1, record2, record3] }

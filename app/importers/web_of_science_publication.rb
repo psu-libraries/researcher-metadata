@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WebOfSciencePublication
   def initialize(parsed_pub)
     @parsed_pub = parsed_pub
@@ -75,7 +77,7 @@ class WebOfSciencePublication
   end
 
   def orcids
-    contributors.map { |c| c.orcid }.compact
+    contributors.map(&:orcid).compact
   end
 
   private
@@ -83,14 +85,14 @@ class WebOfSciencePublication
     attr_reader :parsed_pub
 
     def article?
-      parsed_pub.css('doctypes > doctype').map { |dt| dt.text }.include?('Article')
+      parsed_pub.css('doctypes > doctype').map(&:text).include?('Article')
     end
 
     def penn_state?
       !!parsed_pub.css('addresses')
-        .detect do |a|
+        .find do |a|
         a.css('address_name > address_spec > organizations')
-          .detect { |o| o.text =~ /Penn State Univ/ }
+          .find { |o| o.text =~ /Penn State Univ/ }
       end
     end
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthorshipDecorator < SimpleDelegator
   def initialize(authorship, view_context = nil)
     @view_context = view_context

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserOrganizationMembership < ApplicationRecord
   def self.import_sources
     ['HR', 'Pure']

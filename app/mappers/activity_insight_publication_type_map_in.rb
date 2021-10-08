@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActivityInsightPublicationTypeMapIn
   def self.map(string)
     case string

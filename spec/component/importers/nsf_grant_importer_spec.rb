@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe NSFGrantImporter do
-  let(:importer) { NSFGrantImporter.new(dirname: dirname) }
+  let(:importer) { described_class.new(dirname: dirname) }
 
   describe '#call' do
     let!(:u1) { create :user, first_name: 'Bethany', last_name: 'Testuser', webaccess_id: 'bat123' }

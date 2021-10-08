@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe LDAPImporter do
-  let(:importer) { LDAPImporter.new }
+  let(:importer) { described_class.new }
 
   let!(:user_1) { create :user, webaccess_id: 'abc1' }
   let!(:user_2) { create :user, webaccess_id: 'def2' }

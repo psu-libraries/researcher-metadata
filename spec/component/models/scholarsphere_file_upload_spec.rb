@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -16,7 +18,7 @@ describe 'the scholarsphere_file_uploads table', type: :model do
 end
 
 describe ScholarsphereFileUpload, type: :model do
-  subject(:upload) { ScholarsphereFileUpload.new }
+  subject(:upload) { described_class.new }
 
   it_behaves_like 'an application record'
 

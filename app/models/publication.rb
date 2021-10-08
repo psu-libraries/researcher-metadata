@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Publication < ApplicationRecord
   OPEN_ACCESS_POLICY_START = Date.new(2020, 7, 1)
 
@@ -439,11 +441,11 @@ class Publication < ApplicationRecord
   end
 
   def ai_import_identifiers
-    imports.where(source: 'Activity Insight').map { |i| i.source_identifier }
+    imports.where(source: 'Activity Insight').map(&:source_identifier)
   end
 
   def pure_import_identifiers
-    imports.where(source: 'Pure').map { |i| i.source_identifier }
+    imports.where(source: 'Pure').map(&:source_identifier)
   end
 
   def mark_as_updated_by_user
@@ -503,21 +505,21 @@ class Publication < ApplicationRecord
       other_pubs = all_pubs - [p]
 
       p.non_duplicate_groups.each do |ndg|
-        if other_pubs.map { |op| op.non_duplicate_groups }.flatten.include?(ndg)
+        if other_pubs.map(&:non_duplicate_groups).flatten.include?(ndg)
           raise NonDuplicateMerge
         end
       end
     end
 
     ActiveRecord::Base.transaction do
-      imports_to_reassign = pubs_to_delete.map { |p| p.imports }.flatten
+      imports_to_reassign = pubs_to_delete.map(&:imports).flatten
 
       imports_to_reassign.each do |i|
-        i.update_attributes!(publication: self)
+        i.update!(publication: self)
       end
 
-      all_authorships = all_pubs.map { |p| p.authorships }.flatten
-      authorships_by_user = all_authorships.group_by { |a| a.user }
+      all_authorships = all_pubs.map(&:authorships).flatten
+      authorships_by_user = all_authorships.group_by(&:user)
 
       authorships_to_keep = []
 
@@ -544,7 +546,7 @@ class Publication < ApplicationRecord
                     visible_in_profile: amp.visibility_value_to_keep,
                     position_in_profile: amp.position_value_to_keep,
                     scholarsphere_work_deposits: amp.scholarsphere_deposits_to_keep)
-        amp.waivers_to_destroy.each { |w| w.destroy }
+        amp.waivers_to_destroy.each(&:destroy)
       end
 
       pubs_to_delete.each do |p|
@@ -555,7 +557,7 @@ class Publication < ApplicationRecord
         p.reload.destroy
       end
 
-      update_attributes!(updated_by_user_at: Time.current, visible: true)
+      update!(updated_by_user_at: Time.current, visible: true)
     end
   end
 

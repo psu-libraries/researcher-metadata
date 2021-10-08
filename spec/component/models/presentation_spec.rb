@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -47,12 +49,12 @@ describe Presentation, type: :model do
     let(:invisible_pres) { create :presentation, visible: false }
 
     it 'returns the presentations that are marked as visible' do
-      expect(Presentation.visible).to match_array [visible_pres1, visible_pres2]
+      expect(described_class.visible).to match_array [visible_pres1, visible_pres2]
     end
   end
 
   describe '#mark_as_updated_by_user' do
-    let(:pres) { Presentation.new }
+    let(:pres) { described_class.new }
 
     before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
 
