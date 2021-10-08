@@ -5,8 +5,8 @@ class AuthorshipMergePolicy
 
   def orcid_resource_id_to_keep
     authorships.select { |a| a.orcid_resource_identifier.present? }
-      .max_by(&:updated_by_owner)
-      .try(:orcid_resource_identifier)
+      .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.try(:orcid_resource_identifier)
   end
 
   def confirmed_value_to_keep
@@ -19,20 +19,20 @@ class AuthorshipMergePolicy
 
   def oa_timestamp_to_keep
     authorships.select { |a| a.open_access_notification_sent_at.present? }
-      .max_by(&:open_access_notification_sent_at)
-      .try(:open_access_notification_sent_at)
+      .sort { |a, b| a.open_access_notification_sent_at <=> b.open_access_notification_sent_at }
+      .last.try(:open_access_notification_sent_at)
   end
 
   def owner_update_timestamp_to_keep
     authorships.select { |a| a.updated_by_owner_at.present? }
-      .max_by(&:updated_by_owner_at)
-      .try(:updated_by_owner_at)
+      .sort { |a, b| a.updated_by_owner_at <=> b.updated_by_owner_at }
+      .last.try(:updated_by_owner_at)
   end
 
   def waiver_to_keep
     authorships.select { |a| a.waiver.present? }
-      .max_by(&:updated_by_owner)
-      .try(:waiver)
+      .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.try(:waiver)
   end
 
   def waivers_to_destroy
@@ -42,14 +42,14 @@ class AuthorshipMergePolicy
   end
 
   def visibility_value_to_keep
-    authorships.max_by(&:updated_by_owner)
-      .visible_in_profile
+    authorships.sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.visible_in_profile
   end
 
   def position_value_to_keep
     authorships.select { |a| a.position_in_profile.present? }
-      .max_by(&:updated_by_owner)
-      .try(:position_in_profile)
+      .sort { |a, b| a.updated_by_owner <=> b.updated_by_owner }
+      .last.try(:position_in_profile)
   end
 
   def scholarsphere_deposits_to_keep

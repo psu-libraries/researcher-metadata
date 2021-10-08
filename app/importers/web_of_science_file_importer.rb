@@ -14,7 +14,7 @@ class WebOfScienceFileImporter
           wos_pub = WebOfSciencePublication.new(Nokogiri::XML(node.outer_xml).at('REC'))
           if wos_pub.importable?
 
-            existing_pubs = Publication.find_by(wos_pub: wos_pub)
+            existing_pubs = Publication.find_by_wos_pub(wos_pub)
 
             if existing_pubs.any?
               wos_pub.grants.each do |g|

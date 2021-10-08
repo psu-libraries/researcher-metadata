@@ -396,7 +396,7 @@ describe User, type: :model do
       let(:grant) { double 'grant', investigators: [i1, i2] }
 
       it 'returns the existing users' do
-        expect(User.find_by(nsf_grant: grant)).to match_array [u1, u2]
+        expect(User.find_by_nsf_grant(grant)).to match_array [u1, u2]
       end
     end
   end

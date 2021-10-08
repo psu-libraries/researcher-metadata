@@ -582,7 +582,7 @@ class Publication < ApplicationRecord
     end
 
     def doi_format_is_valid
-      if doi.present?
+      if !doi.nil? && !doi.empty?
         unless doi == DOISanitizer.new(doi).url
           errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
         end

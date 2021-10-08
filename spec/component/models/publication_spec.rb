@@ -385,7 +385,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -393,7 +393,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication that matches by title and date' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub2]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub2]
           end
         end
 
@@ -401,7 +401,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -413,7 +413,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -421,7 +421,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -429,7 +429,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -445,7 +445,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -453,7 +453,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -461,7 +461,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -473,7 +473,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -481,7 +481,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
 
@@ -489,7 +489,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns the publication with the matching DOI' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub3]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub3]
           end
         end
       end
@@ -505,7 +505,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -513,7 +513,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns the publication that matches by title and date' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq [pub2]
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq [pub2]
           end
         end
 
@@ -521,7 +521,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
@@ -533,7 +533,7 @@ describe Publication, type: :model do
           let(:date) { nil }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -541,7 +541,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2000, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
 
@@ -549,7 +549,7 @@ describe Publication, type: :model do
           let(:date) { Date.new(2010, 1, 1) }
 
           it 'returns an empty array' do
-            expect(Publication.find_by(wos_pub: wos_pub)).to eq []
+            expect(Publication.find_by_wos_pub(wos_pub)).to eq []
           end
         end
       end
