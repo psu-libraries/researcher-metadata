@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_07_23_143828) do
+ActiveRecord::Schema.define(version: 2021_10_06_183554) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -193,6 +193,18 @@ ActiveRecord::Schema.define(version: 2021_07_23_143828) do
     t.index ["identifier"], name: "index_grants_on_identifier"
     t.index ["wos_agency_name"], name: "index_grants_on_wos_agency_name"
     t.index ["wos_identifier"], name: "index_grants_on_wos_identifier"
+  end
+
+  create_table "importer_error_logs", force: :cascade do |t|
+    t.string "importer_type", null: false
+    t.string "error_type", null: false
+    t.text "stacktrace", null: false
+    t.datetime "occurred_at", null: false
+    t.jsonb "metadata"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.text "error_message", null: false
+    t.index ["importer_type"], name: "index_importer_error_logs_on_importer_type"
   end
 
   create_table "internal_publication_waivers", force: :cascade do |t|

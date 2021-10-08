@@ -1,5 +1,5 @@
 require 'integration/integration_spec_helper'
-require 'support/poltergeist'
+require 'support/webdrivers'
 require 'integration/admin/shared_examples_for_admin_page'
 
 feature "Admin list of publications by organization", type: :feature do
@@ -133,6 +133,8 @@ feature "Admin list of publications by organization", type: :feature do
 
       describe "selecting the CSV export" do
         before do
+          clear_downloads
+
           visit_index
           click_on "Export found Publications"
           
@@ -140,11 +142,11 @@ feature "Admin list of publications by organization", type: :feature do
           check('schema_only_id', allow_label_click: true)
           check('schema_only_title', allow_label_click: true)
           click_on "Export to csv"
+          wait_for_downloads
         end
 
         it "produces a CSV file" do
-          expect(page.response_headers["Content-Type"]).to eq 'text/csv; charset=us-ascii; header=present'
-          expect(page.response_headers["Content-Disposition"]).to match /attachment; filename=publication.+\.csv/
+          expect(download_directory.children.count).to eq(1)
         end
       end
     end

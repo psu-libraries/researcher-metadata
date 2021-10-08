@@ -17,7 +17,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:2.6.6-node
+      - image: circleci/ruby:2.6.6-node-browsers
       - image: circleci/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
@@ -35,16 +35,6 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - run:
-          name: Install phantomjs
-          command: |
-            sudo apt-get update
-            sudo apt-get install fontconfig
-            sudo mkdir -p /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin
-            sudo curl --output /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs https://s3.amazonaws.com/circle-downloads/phantomjs-2.1.1
-            sudo chmod ugo+x /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs
-            sudo ln -sf /home/ubuntu/.phantomjs/2.1.1/x86_64-linux/bin/phantomjs /usr/local/bin/phantomjs
-            phantomjs --version
       - run:
           name: Install secrets config files
           command: |

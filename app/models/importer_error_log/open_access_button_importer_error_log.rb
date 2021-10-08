@@ -1,0 +1,2 @@
+class ImporterErrorLog::OpenAccessButtonImporterErrorLog < ImporterErrorLog
+end

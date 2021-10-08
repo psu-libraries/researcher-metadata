@@ -4,7 +4,7 @@ RSpec.configure do |config|
 
   config.before(:suite) do
 
-    # Transaction-based cleanups are fast. But they won't work with poltergeist or
+    # Transaction-based cleanups are fast. But they won't work with Selenium's webdrivers
     # other multi-process situations. So beware of using them in other than completely
     # vanilla setups.
     DatabaseCleaner.strategy = :transaction
