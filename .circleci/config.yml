@@ -51,6 +51,9 @@ jobs:
       - run:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
+      - run:
+          name: Niftany
+          command: bundle exec niftany
       # Run the unit tests
       - run:
           name: Unit Tests
