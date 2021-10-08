@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class OrcidOauthClient
   include HTTParty
   base_uri "https://#{'sandbox.' unless Rails.env.production?}orcid.org/oauth"
 
   def create_token(code)
     request = {
-      headers: {"Accept" => "application/json"},
+      headers: { 'Accept' => 'application/json' },
       body: {
         client_id: orcid_config['client_id'],
         client_secret: orcid_config['client_secret'],
@@ -13,12 +15,12 @@ class OrcidOauthClient
       }
     }
 
-    self.class.post("/token", request)
+    self.class.post('/token', request)
   end
 
   private
 
-  def orcid_config
-    Rails.configuration.x.orcid
-  end
+    def orcid_config
+      Rails.configuration.x.orcid
+    end
 end

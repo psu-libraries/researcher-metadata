@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require_relative './pure_downloader.rb'
+require_relative './pure_downloader'
 
 downloader = PureDownloader.new
 
 if File.exists? downloader.fingerprint_data_file
-  print "Publication fingerprint data file already exists. Overwrite (Yn)?  "
+  print 'Publication fingerprint data file already exists. Overwrite (Yn)?  '
   overwrite = gets.chomp
 
   if overwrite == 'Y'

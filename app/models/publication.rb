@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Publication < ApplicationRecord
   OPEN_ACCESS_POLICY_START = Date.new(2020, 7, 1)
 
@@ -7,14 +9,14 @@ class Publication < ApplicationRecord
 
   def self.publication_types
     [
-      "Academic Journal Article", "In-house Journal Article", "Professional Journal Article",
-      "Trade Journal Article", "Journal Article", "Review Article", "Abstract", "Blog", "Book", "Chapter",
-      "Book/Film/Article Review", "Conference Proceeding", "Encyclopedia/Dictionary Entry",
-      "Extension Publication", "Magazine/Trade Publication", "Manuscript", "Newsletter",
-      "Newspaper Article", "Comment/Debate", "Commissioned Report", "Digital or Visual Product",
-      "Editorial", "Foreword/Postscript", "Letter", "Paper", "Patent", "Poster",
-      "Scholarly Edition", "Short Survey", "Working Paper", "Other"
-     ]
+      'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
+      'Trade Journal Article', 'Journal Article', 'Review Article', 'Abstract', 'Blog', 'Book', 'Chapter',
+      'Book/Film/Article Review', 'Conference Proceeding', 'Encyclopedia/Dictionary Entry',
+      'Extension Publication', 'Magazine/Trade Publication', 'Manuscript', 'Newsletter',
+      'Newspaper Article', 'Comment/Debate', 'Commissioned Report', 'Digital or Visual Product',
+      'Editorial', 'Foreword/Postscript', 'Letter', 'Paper', 'Patent', 'Poster',
+      'Scholarly Edition', 'Short Survey', 'Working Paper', 'Other'
+    ]
   end
 
   has_many :authorships, inverse_of: :publication
@@ -50,20 +52,22 @@ class Publication < ApplicationRecord
   belongs_to :journal, optional: true, inverse_of: :publications
 
   has_one :publisher, through: :journal
-  
+
   validates :publication_type, :title, presence: true
-  validates :publication_type, inclusion: {in: publication_types }
+  validates :publication_type, inclusion: { in: publication_types }
   validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }
 
   scope :published_during_membership,
-        -> { visible.
-          joins(:user_organization_memberships).
-          where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
-          distinct(:id) }
+        -> {
+          visible
+            .joins(:user_organization_memberships)
+            .where('published_on >= user_organization_memberships.started_on AND (published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
+            .distinct(:id)
+        }
 
-  scope :subject_to_open_access_policy, -> { journal_article.where("published_on >= ?", Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { journal_article.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
@@ -81,9 +85,9 @@ class Publication < ApplicationRecord
       by_doi
     else
       # TODO:  We can make this query more accurate using postgres trigram matching
-      # on the title and sub-title in the same way that we do when we're finding 
+      # on the title and sub-title in the same way that we do when we're finding
       # duplicate publications.
-      where("title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?",
+      where('title ILIKE ? AND EXTRACT(YEAR FROM published_on) = ?',
             "%#{pub.title}%",
             pub.publication_date.try(:year))
     end
@@ -95,7 +99,7 @@ class Publication < ApplicationRecord
 
   def doi_url_path
     d = doi
-    d.try(:gsub, "https://doi.org/", "")
+    d.try(:gsub, 'https://doi.org/', '')
   end
 
   swagger_schema :PublicationV1 do
@@ -315,7 +319,7 @@ class Publication < ApplicationRecord
       end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
-      field(:visible) { label 'Visible via API'}
+      field(:visible) { label 'Visible via API' }
       field(:publisher_name)
       field(:publication_type)
       field(:status)
@@ -353,7 +357,7 @@ class Publication < ApplicationRecord
       field(:users) { read_only true }
       field(:authorships)
       field(:contributor_names)
-      field(:visible) { label 'Visible via API?'}
+      field(:visible) { label 'Visible via API?' }
     end
 
     show do
@@ -401,7 +405,7 @@ class Publication < ApplicationRecord
       field(:grants)
       field(:imports)
       field(:organizations)
-      field(:visible) { label 'Visible via API?'}
+      field(:visible) { label 'Visible via API?' }
     end
 
     edit do
@@ -432,16 +436,16 @@ class Publication < ApplicationRecord
       field(:users) { read_only true }
       field(:authorships)
       field(:contributor_names)
-      field(:visible) { label 'Visible via API?'}
+      field(:visible) { label 'Visible via API?' }
     end
   end
 
   def ai_import_identifiers
-    imports.where(source: 'Activity Insight').map { |i| i.source_identifier }
+    imports.where(source: 'Activity Insight').map(&:source_identifier)
   end
 
   def pure_import_identifiers
-    imports.where(source: 'Pure').map { |i| i.source_identifier }
+    imports.where(source: 'Pure').map(&:source_identifier)
   end
 
   def mark_as_updated_by_user
@@ -478,7 +482,7 @@ class Publication < ApplicationRecord
   end
 
   def has_open_access_information?
-    !preferred_open_access_url.blank? || scholarsphere_upload_pending? || open_access_waived?
+    preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived?
   end
 
   def orcid_allowed?
@@ -501,21 +505,21 @@ class Publication < ApplicationRecord
       other_pubs = all_pubs - [p]
 
       p.non_duplicate_groups.each do |ndg|
-        if other_pubs.map { |op| op.non_duplicate_groups }.flatten.include?(ndg)
+        if other_pubs.map(&:non_duplicate_groups).flatten.include?(ndg)
           raise NonDuplicateMerge
         end
       end
     end
 
     ActiveRecord::Base.transaction do
-      imports_to_reassign = pubs_to_delete.map { |p| p.imports }.flatten
+      imports_to_reassign = pubs_to_delete.map(&:imports).flatten
 
       imports_to_reassign.each do |i|
-        i.update_attributes!(publication: self)
+        i.update!(publication: self)
       end
 
-      all_authorships = all_pubs.map { |p| p.authorships }.flatten
-      authorships_by_user = all_authorships.group_by { |a| a.user }
+      all_authorships = all_pubs.map(&:authorships).flatten
+      authorships_by_user = all_authorships.group_by(&:user)
 
       authorships_to_keep = []
 
@@ -542,7 +546,7 @@ class Publication < ApplicationRecord
                     visible_in_profile: amp.visibility_value_to_keep,
                     position_in_profile: amp.position_value_to_keep,
                     scholarsphere_work_deposits: amp.scholarsphere_deposits_to_keep)
-        amp.waivers_to_destroy.each { |w| w.destroy }
+        amp.waivers_to_destroy.each(&:destroy)
       end
 
       pubs_to_delete.each do |p|
@@ -553,7 +557,7 @@ class Publication < ApplicationRecord
         p.reload.destroy
       end
 
-      update_attributes!(updated_by_user_at: Time.current, visible: true)
+      update!(updated_by_user_at: Time.current, visible: true)
     end
   end
 
@@ -575,15 +579,15 @@ class Publication < ApplicationRecord
 
   private
 
-  def preferred_journal_info_policy
-    PreferredJournalInfoPolicy.new(self)
-  end
+    def preferred_journal_info_policy
+      PreferredJournalInfoPolicy.new(self)
+    end
 
-  def doi_format_is_valid
-    if !doi.nil? && !doi.empty?
-      unless doi == DOISanitizer.new(doi).url
-        errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
+    def doi_format_is_valid
+      if !doi.nil? && !doi.empty?
+        unless doi == DOISanitizer.new(doi).url
+          errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
+        end
       end
     end
-  end
 end

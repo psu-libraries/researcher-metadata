@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddIndicesToPublications < ActiveRecord::Migration[5.2]
   def up
     add_index :publications, :published_on

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OAICreator
   attr_reader :text
 
@@ -7,7 +9,7 @@ class OAICreator
 
   def last_name
     ln = text.split(',')[0]
-    ln.strip if ln
+    ln&.strip
   end
 
   def first_name
@@ -25,11 +27,11 @@ class OAICreator
 
   private
 
-  def user_scope
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
+    def user_scope
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
 
-  def matching_users
-    user_scope.where(first_name: first_name, last_name: last_name).distinct(:id)
-  end
+    def matching_users
+      user_scope.where(first_name: first_name, last_name: last_name).distinct(:id)
+    end
 end

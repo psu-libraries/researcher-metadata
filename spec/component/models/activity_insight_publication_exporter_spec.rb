@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ActivityInsightPublicationExporter do
-  subject(:exporter) { ActivityInsightPublicationExporter }
+  subject(:exporter) { described_class }
 
   let!(:user) { FactoryBot.create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
   let!(:authorship1) { FactoryBot.create :authorship, user: user, publication: publication1 }
@@ -27,7 +29,7 @@ describe ActivityInsightPublicationExporter do
   let!(:publication3) { FactoryBot.create(:publication, exported_to_activity_insight: true) }
   let!(:ai_import) do
     FactoryBot.create(:publication_import, publication: publication2,
-                       source: "Activity Insight", source_identifier: 'ai_id_1')
+                                           source: 'Activity Insight', source_identifier: 'ai_id_1')
   end
   let!(:contributor_name1) { FactoryBot.create :contributor_name, publication: publication1 }
   let!(:contributor_name2) { FactoryBot.create :contributor_name, publication: publication2 }
@@ -107,7 +109,7 @@ describe ActivityInsightPublicationExporter do
           expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
           expect(Bugsnag).not_to receive(:notify)
-          expect{ exporter_object.export }.not_to change{ publication1.exported_to_activity_insight }
+          expect { exporter_object.export }.not_to change(publication1, :exported_to_activity_insight)
         end
       end
 
@@ -118,7 +120,7 @@ describe ActivityInsightPublicationExporter do
           expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
           expect(Bugsnag).not_to receive(:notify)
-          expect{ exporter_object.export }.to change{ publication1.exported_to_activity_insight }.to true
+          expect { exporter_object.export }.to change(publication1, :exported_to_activity_insight).to true
         end
       end
     end

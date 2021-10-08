@@ -1,4 +1,4 @@
-$brand-primary: #2E2D3E;
+$brand-primary: #2e2d3e;
 $brand-info: #497295;
 $link-color: #337ab7;
 $nav-pills-active-link-hover-bg: #497295;
@@ -10,11 +10,13 @@ $fg-nav-tabs-active: #777;
 
 .grouped-publications {
 
-  th.publication-field, td.publication-field {
+  th.publication-field,
+  td.publication-field {
     min-width: 325px;
   }
 
-  th.publication-field-label, td.publication-field-label {
+  th.publication-field-label,
+  td.publication-field-label {
     font-weight: bold;
     min-width: 160px;
   }
@@ -26,15 +28,16 @@ $fg-nav-tabs-active: #777;
 }
 
 .panel-integration {
-  padding-top: 5px;
   padding-bottom: 25px;
+  padding-top: 5px;
   width: 100vh;
 }
 
-.scroll-wrapper1, .scroll-wrapper2 {
-  width: 100%;
+.scroll-wrapper1,
+.scroll-wrapper2 {
   overflow-x: scroll;
   overflow-y: hidden;
+  width: 100%;
 }
 
 .scroll-wrapper1 { height: 20px; }
@@ -42,11 +45,11 @@ $fg-nav-tabs-active: #777;
 .scroll-top { height: 20px; }
 
 input.merge-target-selector {
-  width: 35px;
   height: 35px;
+  width: 35px;
 }
 
 input.publication-selector {
-  width: 35px;
   height: 35px;
+  width: 35px;
 }

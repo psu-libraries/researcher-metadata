@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserProfile
   def initialize(user)
     @user = user
@@ -37,7 +39,7 @@ class UserProfile
   def research_interests
     user.ai_research_interests
   end
-  
+
   def publications
     publication_records.where('authorships.visible_in_profile is true').map do |pub|
       AuthorshipDecorator.new(pub).label
@@ -68,10 +70,10 @@ class UserProfile
   end
 
   def presentation_records
-    user_query.
-      presentations.
-      where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')").
-      order('presentation_contributions.position_in_profile ASC NULLS FIRST')
+    user_query
+      .presentations
+      .where("(title IS NOT NULL AND title != '') OR (name IS NOT NULL AND name != '')")
+      .order('presentation_contributions.position_in_profile ASC NULLS FIRST')
   end
 
   def performances
@@ -84,8 +86,8 @@ class UserProfile
   end
 
   def performance_records
-    user.performances.
-      order('user_performances.position_in_profile ASC NULLS FIRST, start_on DESC NULLS LAST')
+    user.performances
+      .order('user_performances.position_in_profile ASC NULLS FIRST, start_on DESC NULLS LAST')
   end
 
   def master_advising_roles
@@ -103,7 +105,7 @@ class UserProfile
   end
 
   def education_history
-    degrees = user.education_history_items.where.not(degree: [nil, "Other"],
+    degrees = user.education_history_items.where.not(degree: [nil, 'Other'],
                                                      institution: nil,
                                                      emphasis_or_major: nil,
                                                      end_year: nil).order(end_year: :desc)
@@ -114,57 +116,57 @@ class UserProfile
   end
 
   def other_publication_records
-    user_query.publications.non_journal_article.
-               order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.non_journal_article
+      .order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def other_publications
     authorships = other_publication_records.where('authorships.visible_in_profile is true')
     Hash[
-      Publication.publication_types.map {
-        |p| [
-          p.pluralize, authorships.where('publications.publication_type = ?', p).map {
-            |a| AuthorshipDecorator.new(a).label
-          }
+      Publication.publication_types.map do |p|
+        [
+          p.pluralize, authorships.where(publications: { publication_type: p }).map do |a|
+            AuthorshipDecorator.new(a).label
+          end
         ]
-      }
-    ].delete_if { |k, v| v.empty? }
+      end
+    ].delete_if { |_k, v| v.empty? }
   end
 
   def has_bio_info?
-    !! (bio || research_interests || teaching_interests || education_history.any?)
+    !!(bio || research_interests || teaching_interests || education_history.any?)
   end
 
   private
 
-  attr_reader :user
+    attr_reader :user
 
-  def user_query
-    API::V1::UserQuery.new(user)
-  end
-
-  def master_committee_memberships
-    user.committee_memberships.select { |m| m.etd.submission_type == 'Master Thesis' }
-  end
-
-  def phd_committee_memberships
-    user.committee_memberships.select { |m| m.etd.submission_type == 'Dissertation' }
-  end
-
-  def most_significant_memberships(committee_memberships)
-    memberships = []
-
-    committee_memberships.sort{ |m1, m2| m2.etd.year <=> m1.etd.year }.group_by { |m| m.etd }.each_value do |memberships_by_etd|
-      most_significant_membership = memberships_by_etd.sort { |x, y| x <=> y }.last
-      memberships.push most_significant_membership
+    def user_query
+      API::V1::UserQuery.new(user)
     end
 
-    memberships
-  end
-
-  def format_advising_roles(committee_memberships)
-    most_significant_memberships(committee_memberships).map do |m|
-      %{#{m.role} for #{m.etd.author_full_name} - <a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> #{m.etd.year}}
+    def master_committee_memberships
+      user.committee_memberships.select { |m| m.etd.submission_type == 'Master Thesis' }
     end
-  end
+
+    def phd_committee_memberships
+      user.committee_memberships.select { |m| m.etd.submission_type == 'Dissertation' }
+    end
+
+    def most_significant_memberships(committee_memberships)
+      memberships = []
+
+      committee_memberships.sort { |m1, m2| m2.etd.year <=> m1.etd.year }.group_by(&:etd).each_value do |memberships_by_etd|
+        most_significant_membership = memberships_by_etd.max { |x, y| x <=> y }
+        memberships.push most_significant_membership
+      end
+
+      memberships
+    end
+
+    def format_advising_roles(committee_memberships)
+      most_significant_memberships(committee_memberships).map do |m|
+        %{#{m.role} for #{m.etd.author_full_name} - <a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> #{m.etd.year}}
+      end
+    end
 end

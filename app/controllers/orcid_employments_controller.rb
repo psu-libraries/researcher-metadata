@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidEmploymentsController < UserController
   before_action :authenticate!
 
@@ -12,10 +14,10 @@ class OrcidEmploymentsController < UserController
         employment.save!
         membership.update_attributes!(orcid_resource_identifier: employment.location)
 
+
         flash[:notice] = I18n.t('profile.orcid_employments.create.success')
       end
     end
-    
   rescue OrcidEmployment::InvalidToken
     current_user.clear_orcid_access_token
     flash[:alert] = I18n.t('profile.orcid_employments.create.account_not_linked')

@@ -1,4 +1,6 @@
-class ApidocsController < ActionController::Base
+# frozen_string_literal: true
+
+class ApidocsController < ApplicationController
   include Swagger::Blocks
 
   swagger_root do

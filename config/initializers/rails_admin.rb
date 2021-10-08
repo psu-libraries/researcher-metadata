@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../../app/rails_admin_actions/index_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_to_activity_insight'
@@ -7,7 +9,6 @@ RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicat
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsToActivityInsight)
 
 RailsAdmin.config do |config|
-
   config.parent_controller = 'ApplicationController'
 
   ### Popular gems integration
@@ -42,7 +43,7 @@ RailsAdmin.config do |config|
 
   config.actions do
     dashboard do
-#     statistics false
+      #     statistics false
     end
     index do
       only [:Publication,

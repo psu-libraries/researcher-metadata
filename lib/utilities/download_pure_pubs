@@ -1,11 +1,12 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
-require_relative './pure_downloader.rb'
+require_relative './pure_downloader'
 
 downloader = PureDownloader.new
 
-if Dir.exists?(downloader.pure_pub_dir) && ! Dir.empty?(downloader.pure_pub_dir)
-  print "Pure publication data is already present. Overwrite (Yn)?  "
+if Dir.exists?(downloader.pure_pub_dir) && !Dir.empty?(downloader.pure_pub_dir)
+  print 'Pure publication data is already present. Overwrite (Yn)?  '
   overwrite = gets.chomp
 
   if overwrite == 'Y'

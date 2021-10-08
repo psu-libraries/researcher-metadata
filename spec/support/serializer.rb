@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 def serialized_data_attributes(object)
   serialize(object)[:data][:attributes]
 end

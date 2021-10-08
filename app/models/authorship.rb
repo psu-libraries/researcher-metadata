@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Authorship < ApplicationRecord
   belongs_to :user, inverse_of: :authorships
   belongs_to :publication, inverse_of: :authorships
@@ -7,10 +9,10 @@ class Authorship < ApplicationRecord
   accepts_nested_attributes_for :waiver
 
   validates :user_id,
-    :publication_id,
-    :author_number, presence: true
+            :publication_id,
+            :author_number, presence: true
 
-  validates :user_id, uniqueness: {scope: :publication_id}
+  validates :user_id, uniqueness: { scope: :publication_id }
 
   delegate :title,
            :abstract,
@@ -46,7 +48,7 @@ class Authorship < ApplicationRecord
       NullTime.new
     end
   end
-  
+
   rails_admin do
     object_label_method { :description }
 

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -18,9 +20,9 @@ describe 'the research_funds table', type: :model do
 end
 
 describe ResearchFund, type: :model do
-  subject(:grant) { ResearchFund.new }
+  subject(:grant) { described_class.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to belong_to(:grant).inverse_of(:research_funds) }
   it { is_expected.to belong_to(:publication).inverse_of(:research_funds) }

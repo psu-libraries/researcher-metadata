@@ -1,20 +1,23 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe API::V1::UserQuery do
   let(:user) { create :user, show_all_contracts: show_all_contracts }
   let(:show_all_contracts) { true }
-  let(:uq) { API::V1::UserQuery.new(user) }
+  let(:uq) { described_class.new(user) }
 
   describe '#presentations' do
-    context "when the given user has no presentations" do
-      it "returns an empty array" do
+    context 'when the given user has no presentations' do
+      it 'returns an empty array' do
         expect(uq.presentations({})).to eq []
       end
     end
 
-    context "when the given user has presentations" do
+    context 'when the given user has presentations' do
       let(:invis_pres) { create :presentation, visible: false }
       let(:vis_pres) { create :presentation, visible: true }
+
       before { user.presentations << [invis_pres, vis_pres] }
 
       it "returns the user's visible presentations" do
@@ -24,15 +27,16 @@ describe API::V1::UserQuery do
   end
 
   describe '#grants' do
-    context "when the given user has no grants" do
-      it "returns an empty array" do
+    context 'when the given user has no grants' do
+      it 'returns an empty array' do
         expect(uq.grants).to eq []
       end
     end
 
-    context "when the given user has grants" do
+    context 'when the given user has grants' do
       let!(:g1) { create :grant }
       let!(:g2) { create :grant }
+
       before do
         create :researcher_fund, user: user, grant: g1
         create :researcher_fund, user: user, grant: g2
@@ -45,15 +49,16 @@ describe API::V1::UserQuery do
   end
 
   describe '#performances' do
-    context "when the given user has no performances" do
-      it "returns an empty array" do
+    context 'when the given user has no performances' do
+      it 'returns an empty array' do
         expect(uq.performances({})).to eq []
       end
     end
 
-    context "when the given user has performances" do
+    context 'when the given user has performances' do
       let(:invis_perf) { create :performance, visible: false }
       let(:vis_perf) { create :performance, visible: true }
+
       before do
         create :user_performance, user: user, performance: invis_perf
         create :user_performance, user: user, performance: vis_perf
@@ -65,20 +70,22 @@ describe API::V1::UserQuery do
     end
   end
 
-  #TODO:  This method needs to be tested a lot more thoroughly.
+  # TODO:  This method needs to be tested a lot more thoroughly.
   describe '#publications' do
     let(:user) { create :user, show_all_publications: true }
 
-    context "when the user can show all publications" do
-      context "when the user has no publications" do
-        it "returns an empty array" do
+    context 'when the user can show all publications' do
+      context 'when the user has no publications' do
+        it 'returns an empty array' do
           expect(uq.publications({})).to eq []
         end
       end
-      context "when the user has publications" do
+
+      context 'when the user has publications' do
         let(:invis_pub) { create :publication, visible: false }
         let(:vis_conf_pub) { create :publication, visible: true }
         let(:vis_unconf_pub) { create :publication, visible: true }
+
         before do
           create :authorship,
                  user: user,
@@ -102,23 +109,26 @@ describe API::V1::UserQuery do
         end
       end
     end
-    context "when the user cannot show any publications" do
+
+    context 'when the user cannot show any publications' do
       let(:user) { create :user, show_all_publications: false }
 
-      context "when the user has no publications" do
-        it "returns an empty array" do
+      context 'when the user has no publications' do
+        it 'returns an empty array' do
           expect(uq.publications({})).to eq []
         end
       end
-      context "when the user has publications" do
+
+      context 'when the user has publications' do
         let(:invis_pub) { create :publication, visible: false }
         let(:vis_pub) { create :publication, visible: true }
+
         before do
           create :authorship, user: user, publication: invis_pub, author_number: 1
           create :authorship, user: user, publication: vis_pub, author_number: 1
         end
 
-        it "returns an empty array" do
+        it 'returns an empty array' do
           expect(uq.publications({})).to eq []
         end
       end

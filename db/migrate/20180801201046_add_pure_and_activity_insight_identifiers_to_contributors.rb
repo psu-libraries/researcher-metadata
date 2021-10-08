@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddPureAndActivityInsightIdentifiersToContributors < ActiveRecord::Migration[5.2]
   def change
     add_column :contributors, :pure_identifier, :string

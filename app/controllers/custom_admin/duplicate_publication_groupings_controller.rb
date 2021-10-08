@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CustomAdmin::DuplicatePublicationGroupingsController < RailsAdmin::ApplicationController
   def create
     if params[:bulk_ids].present? && params[:bulk_ids].many?

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateImporterErrorLogs < ActiveRecord::Migration[5.2]
   def change
     create_table :importer_error_logs do |t|

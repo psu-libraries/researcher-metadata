@@ -1,11 +1,13 @@
+# frozen_string_literal: true
+
 class ExternalPublicationWaiver < ApplicationRecord
   belongs_to :user, inverse_of: :external_publication_waivers
   belongs_to :internal_publication_waiver, inverse_of: :external_publication_waiver, optional: true
 
   validates :user, :publication_title, :journal_title, presence: true
 
-  scope :not_linked, ->{ where(internal_publication_waiver_id: nil) }
-  
+  scope :not_linked, -> { where(internal_publication_waiver_id: nil) }
+
   def title
     publication_title
   end
@@ -21,7 +23,7 @@ class ExternalPublicationWaiver < ApplicationRecord
   rails_admin do
     configure :matching_publications do
       pretty_value do
-        bindings[:view].render :partial => "rails_admin/partials/external_publication_waivers/matching_publications.html.erb", :locals => { :publications => value }
+        bindings[:view].render partial: 'rails_admin/partials/external_publication_waivers/matching_publications.html.erb', locals: { publications: value }
       end
     end
     list do

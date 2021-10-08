@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AddScholarsphereOpenAccessUrlToPublications < ActiveRecord::Migration[5.2]
   def change
     add_column :publications, :scholarsphere_open_access_url, :text

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class NonDuplicatePublicationGroup < ApplicationRecord
   has_many :memberships,
            class_name: :NonDuplicatePublicationGroupMembership,

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CreateResearchFunds < ActiveRecord::Migration[5.2]
   def change
     create_table :research_funds do |t|

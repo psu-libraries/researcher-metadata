@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ExternalPublicationWaiversController < ProfileManagementController
   def new
     @waiver = current_user.external_publication_waivers.build
@@ -16,12 +18,12 @@ class ExternalPublicationWaiversController < ProfileManagementController
 
   private
 
-  def waiver_params
-    params.require(:external_publication_waiver).permit([:publication_title,
-                                                         :journal_title,
-                                                         :reason_for_waiver,
-                                                         :abstract,
-                                                         :doi,
-                                                         :publisher])
-  end
+    def waiver_params
+      params.require(:external_publication_waiver).permit([:publication_title,
+                                                           :journal_title,
+                                                           :reason_for_waiver,
+                                                           :abstract,
+                                                           :doi,
+                                                           :publisher])
+    end
 end

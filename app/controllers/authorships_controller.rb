@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthorshipsController < ApplicationController
   before_action :authenticate_user!
 
@@ -18,7 +20,7 @@ class AuthorshipsController < ApplicationController
 
   private
 
-  def authorship_params
-    params.require(:authorship).permit(:visible_in_profile)
-  end
+    def authorship_params
+      params.require(:authorship).permit(:visible_in_profile)
+    end
 end

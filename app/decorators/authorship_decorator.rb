@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class AuthorshipDecorator < SimpleDelegator
   def initialize(authorship, view_context = nil)
     @view_context = view_context
@@ -36,28 +38,28 @@ class AuthorshipDecorator < SimpleDelegator
 
   private
 
-  attr_reader :view_context
+    attr_reader :view_context
 
-  def pub_title
-    if preferred_open_access_url.present?
-      %{<a href="#{preferred_open_access_url}" target="_blank">#{title}</a>}
-    else
-      title
+    def pub_title
+      if preferred_open_access_url.present?
+        %{<a href="#{preferred_open_access_url}" target="_blank">#{title}</a>}
+      else
+        title
+      end
     end
-  end
 
-  def profile_management_pub_title
-    if no_open_access_information? && is_journal_article?
-      view_context.link_to title, view_context.edit_open_access_publication_path(publication)
-    else
-      title
+    def profile_management_pub_title
+      if no_open_access_information? && is_journal_article?
+        view_context.link_to title, view_context.edit_open_access_publication_path(publication)
+      else
+        title
+      end
     end
-  end
 
-  def wrap_title(title)
-    l = %{<span class="publication-title">#{title}</span>}
-    l += %{, <span class="journal-name">#{published_by}</span>} if published_by.present?
-    l += ", #{year}" if year.present?
-    l
-  end
+    def wrap_title(title)
+      l = %{<span class="publication-title">#{title}</span>}
+      l += %{, <span class="journal-name">#{published_by}</span>} if published_by.present?
+      l += ", #{year}" if year.present?
+      l
+    end
 end

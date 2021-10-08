@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'webdrivers/chromedriver'
 
 # We'll use the Rack::Test driver by default, and a headless chrome driver for tests tagged with javascript.
@@ -46,4 +48,3 @@ Capybara.register_driver :rmd_chrome_headless do |app|
 
   Capybara::Selenium::Driver.new(app, **Hash[:browser => :chrome, options_key => browser_options])
 end
-

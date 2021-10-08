@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -41,7 +43,7 @@ gem 'activerecord-import'
 gem 'progressbar'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem "rails_admin", "~> 1.4"
+gem 'rails_admin', '~> 1.4'
 
 gem 'rails_admin_toggleable'
 
@@ -124,17 +126,19 @@ group :development, :test do
   # Automatically test your rails API against its OpenAPI (Swagger) description
   # of end-points, models, and query parameters
   gem 'apivore'
+
+  gem 'niftany'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'web-console', '>= 3.3.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Deploy to multiple environments
   gem 'capistrano-ext'

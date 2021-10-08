@@ -1,8 +1,10 @@
+# frozen_string_literal: true
+
 class CustomAdmin::PublicationWaiverLinksController < RailsAdmin::ApplicationController
   def create
     ext_waiver = ExternalPublicationWaiver.find(params[:external_publication_waiver_id])
     pub = Publication.find(params[:publication_id])
-    
+
     auth = pub.authorships.find_by(user: ext_waiver.user)
 
     if auth

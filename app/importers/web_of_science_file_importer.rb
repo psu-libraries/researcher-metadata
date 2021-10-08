@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 
 class WebOfScienceFileImporter
@@ -24,7 +26,7 @@ class WebOfScienceFileImporter
                       existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
                       matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
 
-                      if ! existing_grant && ! matching_grant
+                      if !existing_grant && !matching_grant
                         grant = Grant.new
                         grant.wos_agency_name = g.wos_agency
                         grant.agency_name = g.agency
@@ -58,7 +60,7 @@ class WebOfScienceFileImporter
                 ActiveRecord::Base.transaction do
                   p = Publication.new
                   p.title = wos_pub.title
-                  p.publication_type = "Journal Article"
+                  p.publication_type = 'Journal Article'
                   p.doi = wos_pub.doi
                   p.issn = wos_pub.issn
                   p.abstract = wos_pub.abstract
@@ -73,7 +75,7 @@ class WebOfScienceFileImporter
 
                   pi = PublicationImport.new
                   pi.publication = p
-                  pi.source = "Web of Science"
+                  pi.source = 'Web of Science'
                   pi.source_identifier = wos_pub.wos_id
                   pi.save!
 
@@ -82,7 +84,7 @@ class WebOfScienceFileImporter
                       g.ids.each do |id|
                         existing_grant = Grant.find_by(wos_agency_name: g.wos_agency, wos_identifier: id.wos_value)
                         matching_grant = Grant.find_by(agency_name: g.agency, identifier: id.value) if g.agency && id.value
-                        
+
                         grant = existing_grant || matching_grant || Grant.new
 
                         if grant.new_record?
@@ -134,5 +136,5 @@ class WebOfScienceFileImporter
 
   private
 
-  attr_reader :dirname
+    attr_reader :dirname
 end

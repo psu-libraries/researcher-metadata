@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ChangePublishedColumnTypes < ActiveRecord::Migration[5.2]
   def change
     change_column :publication_imports, :published_at, :date

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class LDAPImporter
   def call
     pbar = ProgressBar.create(title: 'Importing user data from LDAP', total: User.count) unless Rails.env.test?
@@ -19,7 +21,7 @@ class LDAPImporter
 
   private
 
-  def ldap
-    @ldap ||= Net::LDAP.new(host: 'dirapps.aset.psu.edu', port: 389)
-  end
+    def ldap
+      @ldap ||= Net::LDAP.new(host: 'dirapps.aset.psu.edu', port: 389)
+    end
 end

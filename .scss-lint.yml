@@ -1,0 +1,28 @@
+# scss-lint config file
+
+# Lint all scss files
+scss_files: "**/*.scss"
+
+# Files to exclude
+exclude: 'vendor/*'
+
+# List of gem names to load custom linters from (make sure they are already
+# installed)
+plugin_gems: []
+
+# Default severity of all linters.
+severity: warning
+
+linters:
+  ColorVariable:
+    exclude:
+        - app/assets/stylesheets/manage_profile.scss
+  ColorKeyword:
+    exclude:
+      - app/assets/stylesheets/manage_profile.scss
+  IdSelector:
+    exclude:
+      - app/assets/stylesheets/manage_profile.scss
+  QualifyingElement:
+    exclude:
+      - app/assets/stylesheets/rails_admin/custom/variables.scss

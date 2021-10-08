@@ -1,5 +1,6 @@
-class StatisticsSnapshot < ApplicationRecord
+# frozen_string_literal: true
 
+class StatisticsSnapshot < ApplicationRecord
   def self.record
     create(total_article_count: Publication.journal_article.count,
            open_access_article_count: Publication.journal_article.open_access.count)

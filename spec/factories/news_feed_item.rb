@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :news_feed_item do
     user { create :user }
@@ -7,4 +9,3 @@ FactoryBot.define do
     description { 'Test description' }
   end
 end
-

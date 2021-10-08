@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PreferredOpenAccessPolicy
   def initialize(publication)
     @publication = publication
@@ -11,5 +13,5 @@ class PreferredOpenAccessPolicy
 
   private
 
-  attr_reader :publication
+    attr_reader :publication
 end

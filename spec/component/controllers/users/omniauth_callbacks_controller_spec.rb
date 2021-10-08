@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe Users::OmniauthCallbacksController, type: :controller do
@@ -47,32 +49,31 @@ describe Users::OmniauthCallbacksController, type: :controller do
           .and_raise(User::OmniauthError)
       end
 
-      it "redirects to the home page" do
+      it 'redirects to the home page' do
         get :azure_oauth
         expect(response).to redirect_to root_path
       end
 
-      it "shows an error message" do
+      it 'shows an error message' do
         get :azure_oauth
         expect(flash[:alert]).to eq I18n.t('omniauth.user_not_found')
       end
 
-
-      context "when the user had last tried to visit the profile management interface" do
+      context 'when the user had last tried to visit the profile management interface' do
         before { session['user_return_to'] = profile_bio_path }
 
-        it "sends the user to an external site" do
+        it 'sends the user to an external site' do
           get :azure_oauth
-          expect(response).to redirect_to "https://sites.psu.edu/openaccess/waiver-form/"
+          expect(response).to redirect_to 'https://sites.psu.edu/openaccess/waiver-form/'
         end
       end
 
-      context "when the user had last tried to visit the new external publication waiver form" do
+      context 'when the user had last tried to visit the new external publication waiver form' do
         before { session['user_return_to'] = new_external_publication_waiver_path }
 
-        it "sends the user to an external site" do
+        it 'sends the user to an external site' do
           get :azure_oauth
-          expect(response).to redirect_to "https://sites.psu.edu/openaccess/waiver-form/"
+          expect(response).to redirect_to 'https://sites.psu.edu/openaccess/waiver-form/'
         end
       end
     end

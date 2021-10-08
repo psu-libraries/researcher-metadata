@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 FactoryBot.define do
   factory :scholarsphere_work_deposit do
     authorship { create :authorship }

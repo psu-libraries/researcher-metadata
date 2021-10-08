@@ -1,9 +1,10 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
 describe 'the import_error_logs table', type: :model do
   subject { ImporterErrorLog.new }
-
 
   it { is_expected.to have_db_column(:id).of_type(:integer).with_options(null: false) }
   it { is_expected.to have_db_column(:importer_type).of_type(:string).with_options(null: false) }
@@ -19,7 +20,7 @@ describe 'the import_error_logs table', type: :model do
 end
 
 describe ImporterErrorLog, type: :model do
-  describe "validations" do
+  describe 'validations' do
     it { is_expected.to validate_presence_of(:error_type) }
     it { is_expected.to validate_presence_of(:stacktrace) }
     it { is_expected.to validate_presence_of(:occurred_at) }

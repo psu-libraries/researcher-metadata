@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OAIImporter
   def call
     puts "Loading publication records from #{repo_url} ..." unless Rails.env.test?
@@ -64,7 +66,7 @@ class OAIImporter
             DuplicatePublicationGroup.group_duplicates_of(p)
 
             if p.reload.duplicate_group
-              p.update_attributes!(visible: false)
+              p.update!(visible: false)
             end
           end
         end
@@ -76,32 +78,32 @@ class OAIImporter
 
   private
 
-  attr_reader :repo_records
+    attr_reader :repo_records
 
-  def repo_url
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def import_source
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def record_type
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def set
-    raise NotImplementedError.new("This method should be defined in a subclass")
-  end
-
-  def repo
-    @repo ||= Fieldhand::Repository.new(repo_url)
-  end
-
-  def load_records
-    @repo_records = []
-    repo.records(metadata_prefix: 'dcs', set: set).each do |r|
-      @repo_records.push record_type.new(r)
+    def repo_url
+      raise NotImplementedError.new('This method should be defined in a subclass')
     end
-  end
+
+    def import_source
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def record_type
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def set
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    def repo
+      @repo ||= Fieldhand::Repository.new(repo_url)
+    end
+
+    def load_records
+      @repo_records = []
+      repo.records(metadata_prefix: 'dcs', set: set).each do |r|
+        @repo_records.push record_type.new(r)
+      end
+    end
 end

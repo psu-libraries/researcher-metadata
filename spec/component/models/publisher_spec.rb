@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -12,7 +14,7 @@ describe 'the publishers table', type: :model do
 end
 
 describe Publisher, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to have_many(:journals).inverse_of(:publisher) }
@@ -28,18 +30,17 @@ describe Publisher, type: :model do
     let!(:j2) { create :journal, publisher: p3 }
 
     before do
-      2.times { create :publication, journal: j1 }
+      create_list :publication, 2, journal: j1
       create :publication, journal: j2
     end
 
     it "returns all publisher records in order by the number of publications with which they're associated" do
-      expect(Publisher.order(:name).ordered_by_publication_count).to eq [p2, p3, p1]
+      expect(described_class.order(:name).ordered_by_publication_count).to eq [p2, p3, p1]
     end
   end
 
   describe '.ordered_by_psu_publication_count' do
-    xit "returns all publisher records in order by the number of their publications that were authored by PSU faculty at the University" do
-      
+    xit 'returns all publisher records in order by the number of their publications that were authored by PSU faculty at the University' do
     end
   end
 
@@ -48,8 +49,8 @@ describe Publisher, type: :model do
     let!(:p2) { create :publisher, name: 'a' }
     let!(:p3) { create :publisher, name: 'b' }
 
-    it "returns all publisher records in alphabetical order by name" do
-      expect(Publisher.ordered_by_name).to eq [p2, p3, p1]
+    it 'returns all publisher records in alphabetical order by name' do
+      expect(described_class.ordered_by_name).to eq [p2, p3, p1]
     end
   end
 
@@ -57,11 +58,13 @@ describe Publisher, type: :model do
     let!(:publisher) { create :publisher }
     let!(:journal1) { create :journal, publisher: publisher }
     let!(:journal2) { create :journal, publisher: publisher }
+
     before do
-      2.times { create :publication, journal: journal1 }
-      2.times { create :publication, journal: journal2 }
+      create_list :publication, 2, journal: journal1
+      create_list :publication, 2, journal: journal2
     end
-    it "returns the number of publications that are associated with the publisher" do
+
+    it 'returns the number of publications that are associated with the publisher' do
       expect(publisher.publication_count).to eq 4
     end
   end
@@ -91,7 +94,8 @@ describe Publisher, type: :model do
              started_on: Date.new(2000, 1, 1),
              ended_on: Date.new(2002, 1, 1)
     end
-    it "returns the number of publications associated with the publisher that were published by PSU faculty while they were PSU faculty" do
+
+    it 'returns the number of publications associated with the publisher that were published by PSU faculty while they were PSU faculty' do
       expect(publisher.psu_publication_count).to eq 2
     end
   end

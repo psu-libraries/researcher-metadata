@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API::V1
   class OrganizationMembershipSerializer
     include FastJsonapi::ObjectSerializer
@@ -12,12 +14,8 @@ module API::V1
 
     attributes :position_title
 
-    attribute :position_started_on do |object|
-      object.started_on
-    end
+    attribute :position_started_on, &:started_on
 
-    attribute :position_ended_on do |object|
-      object.ended_on
-    end
+    attribute :position_ended_on, &:ended_on
   end
 end

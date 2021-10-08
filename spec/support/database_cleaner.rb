@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 require 'database_cleaner'
 
 RSpec.configure do |config|
-
   config.before(:suite) do
-
     # Transaction-based cleanups are fast. But they won't work with Selenium's webdrivers
     # other multi-process situations. So beware of using them in other than completely
     # vanilla setups.
@@ -17,17 +17,15 @@ RSpec.configure do |config|
 
     # Clean up again from the lint check above.
     DatabaseCleaner.clean_with(:truncation)
-
   end
 
-  config.before(:each) do
+  config.before do
     # Begin transaction
     DatabaseCleaner.start
   end
 
-  config.after(:each) do
+  config.after do
     # Roll back transaction
     DatabaseCleaner.clean
   end
-
 end

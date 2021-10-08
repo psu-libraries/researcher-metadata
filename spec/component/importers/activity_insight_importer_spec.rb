@@ -1,32 +1,36 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ActivityInsightImporter do
-  let(:importer) { ActivityInsightImporter.new }
+  let(:importer) { described_class.new }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
-                                          basic_auth: {username: 'test',
-                                                       password: 'secret'}).and_return(
-      File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_users.xml')))
+                                          basic_auth: { username: 'test',
+                                                        password: 'secret' }).and_return(
+                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_users.xml'))
+                                                        )
 
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:ABC123',
-                                          basic_auth: {username: 'test',
-                                                       password: 'secret'}).and_return(
-      File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_abc123.xml'))
-    )
+                                          basic_auth: { username: 'test',
+                                                        password: 'secret' }).and_return(
+                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_abc123.xml'))
+                                                        )
 
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:def45',
-                                          basic_auth: {username: 'test',
-                                                       password: 'secret'}).and_return(
-      File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml'))
-    )
+                                          basic_auth: { username: 'test',
+                                                        password: 'secret' }).and_return(
+                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml'))
+                                                        )
   end
-  describe '#call' do
-    let!(:duplicate_pub) { create :publication, title: "First Test Publication With a Really Unique Title" }
 
-    context "when the users being imported do not exist in the database" do
-      it "creates new user records for each imported user" do
-        expect { importer.call }.to change { User.count }.by 2
+  describe '#call' do
+    let!(:duplicate_pub) { create :publication, title: 'First Test Publication With a Really Unique Title' }
+
+    context 'when the users being imported do not exist in the database' do
+      it 'creates new user records for each imported user' do
+        expect { importer.call }.to change(User, :count).by 2
 
         u1 = User.find_by(webaccess_id: 'abc123')
         u2 = User.find_by(webaccess_id: 'def45')
@@ -56,9 +60,9 @@ describe ActivityInsightImporter do
         expect(u2.penn_state_identifier).to eq '9293659323'
       end
 
-      context "when no included education history items exist in the database" do
-        it "creates new education history items from the imported data" do
-          expect { importer.call }.to change { EducationHistoryItem.count }.by 2
+      context 'when no included education history items exist in the database' do
+        it 'creates new education history items from the imported data' do
+          expect { importer.call }.to change(EducationHistoryItem, :count).by 2
 
           i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
           i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -97,8 +101,10 @@ describe ActivityInsightImporter do
           expect(i2.end_year).to eq 2004
         end
       end
-      context "when an included education history item exists in the database" do
+
+      context 'when an included education history item exists in the database' do
         let(:other_user) { create :user }
+
         before do
           create :education_history_item,
                  activity_insight_identifier: '70766815232',
@@ -119,8 +125,8 @@ describe ActivityInsightImporter do
                  end_year: '1995'
         end
 
-        it "creates any new items and updates the existing item" do
-          expect { importer.call }.to change { EducationHistoryItem.count }.by 1
+        it 'creates any new items and updates the existing item' do
+          expect { importer.call }.to change(EducationHistoryItem, :count).by 1
 
           i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
           i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -160,9 +166,9 @@ describe ActivityInsightImporter do
         end
       end
 
-      context "when no included presentations exist in the database" do
-        it "creates new presentations from the imported data" do
-          expect { importer.call }.to change { Presentation.count }.by 2
+      context 'when no included presentations exist in the database' do
+        it 'creates new presentations from the imported data' do
+          expect { importer.call }.to change(Presentation, :count).by 2
 
           p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
           p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -194,9 +200,9 @@ describe ActivityInsightImporter do
           expect(p2.visible).to eq true
         end
 
-        context "when no included presentation contributions exist in the database" do
-          it "creates new presentation contributions from the imported data where user IDs are present" do
-            expect { importer.call }.to change { PresentationContribution.count }.by 2
+        context 'when no included presentation contributions exist in the database' do
+          it 'creates new presentation contributions from the imported data where user IDs are present' do
+            expect { importer.call }.to change(PresentationContribution, :count).by 2
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -217,9 +223,11 @@ describe ActivityInsightImporter do
             expect(c2.position).to eq 2
           end
         end
-        context "when an included presentation contribution exists in the database" do
+
+        context 'when an included presentation contribution exists in the database' do
           let(:other_user) { create :user }
           let(:other_presentation) { create :presentation }
+
           before do
             create :presentation_contribution,
                    activity_insight_identifier: '83890556929',
@@ -227,8 +235,9 @@ describe ActivityInsightImporter do
                    presentation: other_presentation,
                    role: 'Existing Role'
           end
-          it "creates any new contributions and updates the existing contribution" do
-            expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+          it 'creates any new contributions and updates the existing contribution' do
+            expect { importer.call }.to change(PresentationContribution, :count).by 1
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -250,7 +259,8 @@ describe ActivityInsightImporter do
           end
         end
       end
-      context "when an included presentation exists in the database" do
+
+      context 'when an included presentation exists in the database' do
         before do
           create :presentation,
                  activity_insight_identifier: '83890556928',
@@ -259,15 +269,16 @@ describe ActivityInsightImporter do
                  visible: false
         end
 
-        context "when the existing presentation has been updated by an admin" do
+        context 'when the existing presentation has been updated by an admin' do
           let(:updated) { Time.zone.now }
-          it "creates any new presentations and does not update the existing presentation" do
-            expect { importer.call }.to change { Presentation.count }.by 1
+
+          it 'creates any new presentations and does not update the existing presentation' do
+            expect { importer.call }.to change(Presentation, :count).by 1
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
-            expect(p1.title).to eq "Existing Title"
+            expect(p1.title).to eq 'Existing Title'
             expect(p1.name).to be_nil
             expect(p1.organization).to be_nil
             expect(p1.location).to be_nil
@@ -294,9 +305,9 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
           end
 
-          context "when no included presentation contributions exist in the database" do
-            it "creates new presentation contributions from the imported data where user IDs are present" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 2
+          context 'when no included presentation contributions exist in the database' do
+            it 'creates new presentation contributions from the imported data where user IDs are present' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 2
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -317,9 +328,11 @@ describe ActivityInsightImporter do
               expect(c2.position).to eq 2
             end
           end
-          context "when an included presentation contribution exists in the database" do
+
+          context 'when an included presentation contribution exists in the database' do
             let(:other_user) { create :user }
             let(:other_presentation) { create :presentation }
+
             before do
               create :presentation_contribution,
                      activity_insight_identifier: '83890556929',
@@ -327,8 +340,9 @@ describe ActivityInsightImporter do
                      presentation: other_presentation,
                      role: 'Existing Role'
             end
-            it "creates any new contributions and updates the existing contribution" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+            it 'creates any new contributions and updates the existing contribution' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -351,10 +365,11 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when the existing presentation has not been updated by an admin" do
+        context 'when the existing presentation has not been updated by an admin' do
           let(:updated) { nil }
-          it "creates any new presentations and updates the existing presentation" do
-            expect { importer.call }.to change { Presentation.count }.by 1
+
+          it 'creates any new presentations and updates the existing presentation' do
+            expect { importer.call }.to change(Presentation, :count).by 1
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -386,9 +401,9 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
           end
 
-          context "when no included presentation contributions exist in the database" do
-            it "creates new presentation contributions from the imported data where user IDs are present" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 2
+          context 'when no included presentation contributions exist in the database' do
+            it 'creates new presentation contributions from the imported data where user IDs are present' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 2
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -409,9 +424,11 @@ describe ActivityInsightImporter do
               expect(c2.position).to eq 2
             end
           end
-          context "when an included presentation contribution exists in the database" do
+
+          context 'when an included presentation contribution exists in the database' do
             let(:other_user) { create :user }
             let(:other_presentation) { create :presentation }
+
             before do
               create :presentation_contribution,
                      activity_insight_identifier: '83890556929',
@@ -419,8 +436,9 @@ describe ActivityInsightImporter do
                      presentation: other_presentation,
                      role: 'Existing Role'
             end
-            it "creates any new contributions and updates the existing contribution" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+            it 'creates any new contributions and updates the existing contribution' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -444,41 +462,41 @@ describe ActivityInsightImporter do
         end
       end
 
-      context "when no included performances exist in the database" do
-        it "creates new performances from the imported data" do
-          expect { importer.call }.to change { Performance.count }.by 2
+      context 'when no included performances exist in the database' do
+        it 'creates new performances from the imported data' do
+          expect { importer.call }.to change(Performance, :count).by 2
 
           p1 = Performance.find_by(activity_insight_id: '126500763648')
           p2 = Performance.find_by(activity_insight_id: '13745734789')
 
           expect(p1.title).to eq "Sally's Documentary"
-          expect(p1.performance_type).to eq "Film - Documentary"
-          expect(p1.sponsor).to eq "Test Sponsor"
-          expect(p1.description).to eq "A description"
-          expect(p1.group_name).to eq "Test Group"
-          expect(p1.location).to eq "University Park, PA"
-          expect(p1.delivery_type).to eq "Invitation"
-          expect(p1.scope).to eq "Regional"
+          expect(p1.performance_type).to eq 'Film - Documentary'
+          expect(p1.sponsor).to eq 'Test Sponsor'
+          expect(p1.description).to eq 'A description'
+          expect(p1.group_name).to eq 'Test Group'
+          expect(p1.location).to eq 'University Park, PA'
+          expect(p1.delivery_type).to eq 'Invitation'
+          expect(p1.scope).to eq 'Regional'
           expect(p1.start_on).to eq Date.new(2009, 2, 1)
           expect(p1.end_on).to eq Date.new(2009, 8, 1)
           expect(p1.visible).to eq true
 
           expect(p2.title).to eq "Sally's Film"
-          expect(p2.performance_type).to eq "Film - Other"
-          expect(p2.sponsor).to eq "Another Sponsor"
-          expect(p2.description).to eq "Another description"
-          expect(p2.group_name).to eq "Another Group"
-          expect(p2.location).to eq "Philadelphia, PA"
+          expect(p2.performance_type).to eq 'Film - Other'
+          expect(p2.sponsor).to eq 'Another Sponsor'
+          expect(p2.description).to eq 'Another description'
+          expect(p2.group_name).to eq 'Another Group'
+          expect(p2.location).to eq 'Philadelphia, PA'
           expect(p2.delivery_type).to be_nil
-          expect(p2.scope).to eq "Local"
+          expect(p2.scope).to eq 'Local'
           expect(p2.start_on).to eq Date.new(2000, 2, 1)
           expect(p2.end_on).to eq Date.new(2000, 8, 1)
           expect(p2.visible).to eq true
         end
 
-        context "when no included user performances exist in the database" do
-          it "creates new user performances from the imported data" do
-            expect { importer.call }.to change { UserPerformance.count }.by 2
+        context 'when no included user performances exist in the database' do
+          it 'creates new user performances from the imported data' do
+            expect { importer.call }.to change(UserPerformance, :count).by 2
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -498,9 +516,10 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when an included user performance exists in the database" do
+        context 'when an included user performance exists in the database' do
           let(:other_user) { create :user }
           let(:other_performance) { create :performance }
+
           before do
             create :user_performance,
                    activity_insight_id: '126500763649',
@@ -508,8 +527,9 @@ describe ActivityInsightImporter do
                    performance: other_performance,
                    contribution: 'Existing Contribution'
           end
-          it "creates any new user performances and updates the existing user performances" do
-            expect { importer.call }.to change { UserPerformance.count }.by 1
+
+          it 'creates any new user performances and updates the existing user performances' do
+            expect { importer.call }.to change(UserPerformance, :count).by 1
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -530,7 +550,7 @@ describe ActivityInsightImporter do
         end
       end
 
-      context "when an included performance exists in the database" do
+      context 'when an included performance exists in the database' do
         before do
           create :performance,
                  activity_insight_id: '126500763648',
@@ -547,15 +567,17 @@ describe ActivityInsightImporter do
                  end_on: nil,
                  visible: false
         end
-        context "when the existing performance has been updated by an admin" do
+
+        context 'when the existing performance has been updated by an admin' do
           let(:updated) { Time.zone.now }
-          it "creates any new performances and does not update the existing performance" do
-            expect { importer.call }.to change { Performance.count }.by 1
+
+          it 'creates any new performances and does not update the existing performance' do
+            expect { importer.call }.to change(Performance, :count).by 1
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
 
-            expect(p1.title).to eq "Existing Title"
+            expect(p1.title).to eq 'Existing Title'
             expect(p1.performance_type).to be_nil
             expect(p1.sponsor).to be_nil
             expect(p1.description).to be_nil
@@ -568,22 +590,21 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's Film"
-            expect(p2.performance_type).to eq "Film - Other"
-            expect(p2.sponsor).to eq "Another Sponsor"
-            expect(p2.description).to eq "Another description"
-            expect(p2.group_name).to eq "Another Group"
-            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.performance_type).to eq 'Film - Other'
+            expect(p2.sponsor).to eq 'Another Sponsor'
+            expect(p2.description).to eq 'Another description'
+            expect(p2.group_name).to eq 'Another Group'
+            expect(p2.location).to eq 'Philadelphia, PA'
             expect(p2.delivery_type).to be_nil
-            expect(p2.scope).to eq "Local"
+            expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
             expect(p2.visible).to eq true
           end
 
-
-          context "when no included user performances exist in the database" do
-            it "creates new user performances from the imported data" do
-              expect { importer.call }.to change { UserPerformance.count }.by 2
+          context 'when no included user performances exist in the database' do
+            it 'creates new user performances from the imported data' do
+              expect { importer.call }.to change(UserPerformance, :count).by 2
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -603,9 +624,10 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when an included user performance exists in the database" do
+          context 'when an included user performance exists in the database' do
             let(:other_user) { create :user }
             let(:other_performance) { create :performance }
+
             before do
               create :user_performance,
                      activity_insight_id: '126500763649',
@@ -613,8 +635,9 @@ describe ActivityInsightImporter do
                      performance: other_performance,
                      contribution: 'Existing Contribution'
             end
-            it "creates any new user performances and updates the existing user performances" do
-              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+            it 'creates any new user performances and updates the existing user performances' do
+              expect { importer.call }.to change(UserPerformance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -635,43 +658,43 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when the existing performance has not been updated by an admin" do
+        context 'when the existing performance has not been updated by an admin' do
           let(:updated) { nil }
-          it "creates any new performances and updates the existing performance" do
-            expect { importer.call }.to change { Performance.count }.by 1
+
+          it 'creates any new performances and updates the existing performance' do
+            expect { importer.call }.to change(Performance, :count).by 1
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
 
             expect(p1.title).to eq "Sally's Documentary"
-            expect(p1.performance_type).to eq "Film - Documentary"
-            expect(p1.sponsor).to eq "Test Sponsor"
-            expect(p1.description).to eq "A description"
-            expect(p1.group_name).to eq "Test Group"
-            expect(p1.location).to eq "University Park, PA"
-            expect(p1.delivery_type).to eq "Invitation"
-            expect(p1.scope).to eq "Regional"
-            expect(p1.start_on). to eq Date.new(2009, 2, 1)
+            expect(p1.performance_type).to eq 'Film - Documentary'
+            expect(p1.sponsor).to eq 'Test Sponsor'
+            expect(p1.description).to eq 'A description'
+            expect(p1.group_name).to eq 'Test Group'
+            expect(p1.location).to eq 'University Park, PA'
+            expect(p1.delivery_type).to eq 'Invitation'
+            expect(p1.scope).to eq 'Regional'
+            expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
             expect(p1.visible).to eq false
 
             expect(p2.title).to eq "Sally's Film"
-            expect(p2.performance_type).to eq "Film - Other"
-            expect(p2.sponsor).to eq "Another Sponsor"
-            expect(p2.description).to eq "Another description"
-            expect(p2.group_name).to eq "Another Group"
-            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.performance_type).to eq 'Film - Other'
+            expect(p2.sponsor).to eq 'Another Sponsor'
+            expect(p2.description).to eq 'Another description'
+            expect(p2.group_name).to eq 'Another Group'
+            expect(p2.location).to eq 'Philadelphia, PA'
             expect(p2.delivery_type).to be_nil
-            expect(p2.scope).to eq "Local"
+            expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
             expect(p2.visible).to eq true
           end
 
-
-          context "when no included user performances exist in the database" do
-            it "creates new user performances from the imported data" do
-              expect { importer.call }.to change { UserPerformance.count }.by 2
+          context 'when no included user performances exist in the database' do
+            it 'creates new user performances from the imported data' do
+              expect { importer.call }.to change(UserPerformance, :count).by 2
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -691,9 +714,10 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when an included user performance exists in the database" do
+          context 'when an included user performance exists in the database' do
             let(:other_user) { create :user }
             let(:other_performance) { create :performance }
+
             before do
               create :user_performance,
                      activity_insight_id: '126500763649',
@@ -701,8 +725,9 @@ describe ActivityInsightImporter do
                      performance: other_performance,
                      contribution: 'Existing Contribution'
             end
-            it "creates any new user performances and updates the existing user performances" do
-              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+            it 'creates any new user performances and updates the existing user performances' do
+              expect { importer.call }.to change(UserPerformance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -724,16 +749,16 @@ describe ActivityInsightImporter do
         end
       end
 
-      context "when no included publications exist in the database" do
-        it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-          expect { importer.call }.to change { PublicationImport.count }.by 4
+      context 'when no included publications exist in the database' do
+        it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          expect { importer.call }.to change(PublicationImport, :count).by 4
         end
 
-        it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-          expect { importer.call }.to change { Publication.count }.by 4
+        it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          expect { importer.call }.to change(Publication, :count).by 4
         end
-        
-        it "saves the correct data to the new publication records" do
+
+        it 'saves the correct data to the new publication records' do
           importer.call
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -821,31 +846,31 @@ describe ActivityInsightImporter do
           expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
         end
 
-        it "groups duplicates of new publication records" do
-          expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+        it 'groups duplicates of new publication records' do
+          expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                          source_identifier: '190706413568').publication
+                                         source_identifier: '190706413568').publication
 
           group = p1.duplicate_group
-          
+
           expect(group.publications).to match_array [p1, duplicate_pub]
         end
 
-        it "hides new publications that might be duplicates" do
+        it 'hides new publications that might be duplicates' do
           importer.call
 
           p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                          source_identifier: '190706413568').publication
+                                         source_identifier: '190706413568').publication
 
           expect(p1.visible).to eq false
         end
 
-        it "creates a new authorship record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { Authorship.count }.by 4
+        it 'creates a new authorship record for every faculty author for each imported publication' do
+          expect { importer.call }.to change(Authorship, :count).by 4
         end
 
-        it "saves the correct attributes with each new authorship" do
+        it 'saves the correct attributes with each new authorship' do
           importer.call
           u = User.find_by(webaccess_id: 'abc123')
 
@@ -875,11 +900,11 @@ describe ActivityInsightImporter do
           expect(a4.role).to eq 'Author'
         end
 
-        it "creates a new contributor name record for every faculty author for each imported publication" do
-          expect { importer.call }.to change { ContributorName.count }.by 9
+        it 'creates a new contributor name record for every faculty author for each imported publication' do
+          expect { importer.call }.to change(ContributorName, :count).by 9
         end
 
-        it "saves the correct attributes with each new contributor name" do
+        it 'saves the correct attributes with each new contributor name' do
           importer.call
           p1 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190706413568').publication
@@ -949,7 +974,8 @@ describe ActivityInsightImporter do
                                          role: 'Author')).not_to be_nil
         end
       end
-      context "when an included publication exists in the database" do
+
+      context 'when an included publication exists in the database' do
         let!(:existing_import) { create :publication_import,
                                         source: 'Activity Insight',
                                         source_identifier: '171620739072',
@@ -973,20 +999,24 @@ describe ActivityInsightImporter do
                                     updated_by_user_at: timestamp,
                                     visible: false,
                                     doi: 'https://doi.org/10.000/existing' }
-        context "when the existing publication has been modified by an admin user" do
-          let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
 
-          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 3
+        context 'when the existing publication has been modified by an admin user' do
+          let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+          it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(PublicationImport, :count).by 3
           end
-  
-          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 3
+
+          it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(Publication, :count).by 3
           end
-          
-          it "saves the correct data to the new publication records and does not update the existing record" do
+
+          it 'saves the correct data to the new publication records and does not update the existing record' do
             importer.call
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -995,7 +1025,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
@@ -1013,7 +1043,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-  
+
             expect(p2.title).to eq 'Existing Title'
             expect(p2.publication_type).to eq 'Trade Journal Article'
             expect(p2.journal_title).to eq 'Existing Journal'
@@ -1032,7 +1062,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
             expect(p2.doi).to eq 'https://doi.org/10.000/existing'
-  
+
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
@@ -1072,8 +1102,8 @@ describe ActivityInsightImporter do
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
-          it "groups duplicates of new publication records" do
-            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+          it 'groups duplicates of new publication records' do
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -1083,7 +1113,7 @@ describe ActivityInsightImporter do
             expect(group.publications).to match_array [p1, duplicate_pub]
           end
 
-          it "hides new publications that might be duplicates" do
+          it 'hides new publications that might be duplicates' do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1092,7 +1122,7 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
           end
 
-          context "when authorships already exist for the existing publication" do
+          context 'when authorships already exist for the existing publication' do
             let!(:existing_authorship1) { create :authorship,
                                                  user: user,
                                                  publication: existing_pub,
@@ -1100,14 +1130,14 @@ describe ActivityInsightImporter do
                                                  author_number: 6 }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
 
-            it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+            it 'creates new authorship records for every new faculty author for each new imported publication' do
+              expect { importer.call }.to change(Authorship, :count).by 3
             end
 
-            it "saves the correct attributes with each new authorship and does not update the existing authorship" do
+            it 'saves the correct attributes with each new authorship and does not update the existing authorship' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1123,10 +1153,10 @@ describe ActivityInsightImporter do
 
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
-    
+
               expect(a2.author_number).to eq 6
               expect(a2.role).to eq 'Existing Role'
-    
+
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
 
@@ -1135,15 +1165,15 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when no authorships exist for the existing publication" do
-            it "creates a new authorship record for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+          context 'when no authorships exist for the existing publication' do
+            it 'creates a new authorship record for every new faculty author for each new imported publication' do
+              expect { importer.call }.to change(Authorship, :count).by 3
             end
-    
-            it "saves the correct attributes with each new authorship" do
+
+            it 'saves the correct attributes with each new authorship' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1159,9 +1189,9 @@ describe ActivityInsightImporter do
 
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
-    
+
               expect(a2).to eq nil
-    
+
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
 
@@ -1170,18 +1200,16 @@ describe ActivityInsightImporter do
             end
           end
 
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-
-          it "creates a new contributor name record for every faculty author for each new imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 7
+          it 'creates a new contributor name record for every faculty author for each new imported publication' do
+            expect { importer.call }.to change(ContributorName, :count).by 7
           end
-          
-          it "does not remove any existing contributor names on the existing publication" do
+
+          it 'does not remove any existing contributor names on the existing publication' do
             importer.call
             expect(existing_cont.reload).not_to be_nil
           end
-  
-          it "saves the correct attributes with each new contributor name" do
+
+          it 'saves the correct attributes with each new contributor name' do
             importer.call
             u = User.find_by(activity_insight_identifier: '1649499')
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1192,7 +1220,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
                                            middle_name: 'A.',
@@ -1214,7 +1242,7 @@ describe ActivityInsightImporter do
                                            position: 3,
                                            user: nil,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'Sally',
                                            middle_name: nil,
@@ -1229,7 +1257,7 @@ describe ActivityInsightImporter do
                                            position: 2,
                                            user: nil,
                                            role: 'Author')).to be_nil
-  
+
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Mary',
                                            middle_name: 'E.',
@@ -1260,20 +1288,23 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when the existing publication has not been modified by an admin user" do
+        context 'when the existing publication has not been modified by an admin user' do
           let(:timestamp) { nil }
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
 
-          it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 3
+          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+          it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(PublicationImport, :count).by 3
           end
-  
-          it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 3
+
+          it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(Publication, :count).by 3
           end
-          
-          it "saves the correct data to the new publication records and updates the existing record" do
+
+          it 'saves the correct data to the new publication records and updates the existing record' do
             importer.call
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1282,7 +1313,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
@@ -1300,7 +1331,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-  
+
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
@@ -1319,7 +1350,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq false
             expect(p2.updated_by_user_at).to eq nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-  
+
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
@@ -1359,18 +1390,18 @@ describe ActivityInsightImporter do
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
-          it "groups duplicates of new publication records" do
-            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+          it 'groups duplicates of new publication records' do
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
             group = p1.duplicate_group
-            
+
             expect(group.publications).to match_array [p1, duplicate_pub]
           end
 
-          it "hides new publications that might be duplicates" do
+          it 'hides new publications that might be duplicates' do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1379,7 +1410,7 @@ describe ActivityInsightImporter do
             expect(p1.visible).to eq false
           end
 
-          context "when authorships already exist for the existing publication" do
+          context 'when authorships already exist for the existing publication' do
             let!(:existing_authorship1) { create :authorship,
                                                  user: user,
                                                  publication: existing_pub,
@@ -1387,14 +1418,14 @@ describe ActivityInsightImporter do
                                                  author_number: 6 }
             let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
 
-            it "creates new authorship records for every new faculty author for each new imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+            it 'creates new authorship records for every new faculty author for each new imported publication' do
+              expect { importer.call }.to change(Authorship, :count).by 3
             end
 
-            it "saves the correct attributes with each new authorship and updates the existing authorship" do
+            it 'saves the correct attributes with each new authorship and updates the existing authorship' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1407,13 +1438,13 @@ describe ActivityInsightImporter do
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
               a4 = Authorship.find_by(publication: p4, user: u)
-    
+
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
-    
+
               expect(a2.author_number).to eq 1
               expect(a2.role).to eq 'Primary Author'
-    
+
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
 
@@ -1422,15 +1453,15 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when no authorships exist for the existing publication" do
-            it "creates a new authorship record for every new faculty author for each imported publication" do
-              expect { importer.call }.to change { Authorship.count }.by 4
+          context 'when no authorships exist for the existing publication' do
+            it 'creates a new authorship record for every new faculty author for each imported publication' do
+              expect { importer.call }.to change(Authorship, :count).by 4
             end
-    
-            it "saves the correct attributes with each new authorship" do
+
+            it 'saves the correct attributes with each new authorship' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -1443,10 +1474,10 @@ describe ActivityInsightImporter do
               a2 = Authorship.find_by(publication: p2, user: u)
               a3 = Authorship.find_by(publication: p3, user: u)
               a4 = Authorship.find_by(publication: p4, user: u)
-    
+
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
-    
+
               expect(a2.author_number).to eq 1
               expect(a2.role).to eq 'Primary Author'
 
@@ -1458,18 +1489,16 @@ describe ActivityInsightImporter do
             end
           end
 
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-
-          it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 8
+          it 'creates a new contributor name record for every faculty author for each imported publication' do
+            expect { importer.call }.to change(ContributorName, :count).by 8
           end
 
-          it "removes any existing contributor names that are not in the new import" do
+          it 'removes any existing contributor names that are not in the new import' do
             importer.call
             expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
           end
-  
-          it "saves the correct attributes with each new contributor name" do
+
+          it 'saves the correct attributes with each new contributor name' do
             importer.call
             u = User.find_by(activity_insight_identifier: '1649499')
 
@@ -1481,7 +1510,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
                                            middle_name: 'A.',
@@ -1503,7 +1532,7 @@ describe ActivityInsightImporter do
                                            position: 3,
                                            user: nil,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'Sally',
                                            middle_name: nil,
@@ -1518,7 +1547,7 @@ describe ActivityInsightImporter do
                                            position: 2,
                                            user: nil,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Mary',
                                            middle_name: 'E.',
@@ -1551,7 +1580,7 @@ describe ActivityInsightImporter do
       end
     end
 
-    context "when a user that is being imported already exists in the database" do
+    context 'when a user that is being imported already exists in the database' do
       let!(:existing_user) do
         create :user,
                webaccess_id: 'abc123',
@@ -1562,11 +1591,12 @@ describe ActivityInsightImporter do
                penn_state_identifier: '999999999',
                updated_by_user_at: updated
       end
-      context "when the existing user has been updated by an admin" do
+
+      context 'when the existing user has been updated by an admin' do
         let(:updated) { Time.zone.now }
 
-        it "creates any new users and does not update the existing user" do
-          expect { importer.call }.to change { User.count }.by 1
+        it 'creates any new users and does not update the existing user' do
+          expect { importer.call }.to change(User, :count).by 1
 
           u1 = User.find_by(webaccess_id: 'abc123')
           u2 = User.find_by(webaccess_id: 'def45')
@@ -1596,9 +1626,9 @@ describe ActivityInsightImporter do
           expect(u2.penn_state_identifier).to eq '9293659323'
         end
 
-        context "when no included education history items exist in the database" do
-          it "creates new education history items from the imported data" do
-            expect { importer.call }.to change { EducationHistoryItem.count }.by 2
+        context 'when no included education history items exist in the database' do
+          it 'creates new education history items from the imported data' do
+            expect { importer.call }.to change(EducationHistoryItem, :count).by 2
 
             i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
             i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -1637,8 +1667,10 @@ describe ActivityInsightImporter do
             expect(i2.end_year).to eq 2004
           end
         end
-        context "when an included education history item exists in the database" do
+
+        context 'when an included education history item exists in the database' do
           let(:other_user) { create :user }
+
           before do
             create :education_history_item,
                    activity_insight_identifier: '70766815232',
@@ -1659,8 +1691,8 @@ describe ActivityInsightImporter do
                    end_year: '1995'
           end
 
-          it "creates any new items and updates the existing item" do
-            expect { importer.call }.to change { EducationHistoryItem.count }.by 1
+          it 'creates any new items and updates the existing item' do
+            expect { importer.call }.to change(EducationHistoryItem, :count).by 1
 
             i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
             i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -1700,9 +1732,9 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included presentations exist in the database" do
-          it "creates new presentations from the imported data" do
-            expect { importer.call }.to change { Presentation.count }.by 2
+        context 'when no included presentations exist in the database' do
+          it 'creates new presentations from the imported data' do
+            expect { importer.call }.to change(Presentation, :count).by 2
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1734,11 +1766,10 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
           end
 
-          context "when no included presentation contributions exist in the database" do
-            context "when a user that matches the contribution exists" do
-
-              it "creates new presentation contributions from the imported data where user IDs are present" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 2
+          context 'when no included presentation contributions exist in the database' do
+            context 'when a user that matches the contribution exists' do
+              it 'creates new presentation contributions from the imported data where user IDs are present' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 2
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1760,9 +1791,11 @@ describe ActivityInsightImporter do
               end
             end
           end
-          context "when an included presentation contribution exists in the database" do
+
+          context 'when an included presentation contribution exists in the database' do
             let(:other_user) { create :user }
             let(:other_presentation) { create :presentation }
+
             before do
               create :presentation_contribution,
                      activity_insight_identifier: '83890556929',
@@ -1771,9 +1804,9 @@ describe ActivityInsightImporter do
                      role: 'Existing Role'
             end
 
-            context "when a user that matches the contribution exists" do
-              it "creates any new contributions and updates the existing contribution" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 1
+            context 'when a user that matches the contribution exists' do
+              it 'creates any new contributions and updates the existing contribution' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 1
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1796,7 +1829,8 @@ describe ActivityInsightImporter do
             end
           end
         end
-        context "when an included presentation exists in the database" do
+
+        context 'when an included presentation exists in the database' do
           before do
             create :presentation,
                    activity_insight_identifier: '83890556928',
@@ -1805,15 +1839,16 @@ describe ActivityInsightImporter do
                    visible: false
           end
 
-          context "when the existing presentation has been updated by an admin" do
+          context 'when the existing presentation has been updated by an admin' do
             let(:updated) { Time.zone.now }
-            it "creates any new presentations and does not update the existing presentation" do
-              expect { importer.call }.to change { Presentation.count }.by 1
+
+            it 'creates any new presentations and does not update the existing presentation' do
+              expect { importer.call }.to change(Presentation, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
-              expect(p1.title).to eq "Existing Title"
+              expect(p1.title).to eq 'Existing Title'
               expect(p1.name).to be_nil
               expect(p1.organization).to be_nil
               expect(p1.location).to be_nil
@@ -1840,11 +1875,10 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq true
             end
 
-            context "when no included presentation contributions exist in the database" do
-              context "when a user that matches the contribution exists" do
-
-                it "creates new presentation contributions from the imported data where user IDs are present" do
-                  expect { importer.call }.to change { PresentationContribution.count }.by 2
+            context 'when no included presentation contributions exist in the database' do
+              context 'when a user that matches the contribution exists' do
+                it 'creates new presentation contributions from the imported data where user IDs are present' do
+                  expect { importer.call }.to change(PresentationContribution, :count).by 2
 
                   p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                   p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1866,9 +1900,11 @@ describe ActivityInsightImporter do
                 end
               end
             end
-            context "when an included presentation contribution exists in the database" do
+
+            context 'when an included presentation contribution exists in the database' do
               let(:other_user) { create :user }
               let(:other_presentation) { create :presentation }
+
               before do
                 create :presentation_contribution,
                        activity_insight_identifier: '83890556929',
@@ -1876,10 +1912,10 @@ describe ActivityInsightImporter do
                        presentation: other_presentation,
                        role: 'Existing Role'
               end
-              context "when a user that matches the contribution exists" do
 
-                  it "creates any new contributions and updates the existing contribution" do
-                  expect { importer.call }.to change { PresentationContribution.count }.by 1
+              context 'when a user that matches the contribution exists' do
+                it 'creates any new contributions and updates the existing contribution' do
+                  expect { importer.call }.to change(PresentationContribution, :count).by 1
 
                   p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                   p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1903,10 +1939,11 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when the existing presentation has not been updated by an admin" do
+          context 'when the existing presentation has not been updated by an admin' do
             let(:updated) { nil }
-            it "creates any new presentations and updates the existing presentation" do
-              expect { importer.call }.to change { Presentation.count }.by 1
+
+            it 'creates any new presentations and updates the existing presentation' do
+              expect { importer.call }.to change(Presentation, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1938,9 +1975,9 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq true
             end
 
-            context "when no included presentation contributions exist in the database" do
-              it "creates new presentation contributions from the imported data where user IDs are present" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 2
+            context 'when no included presentation contributions exist in the database' do
+              it 'creates new presentation contributions from the imported data where user IDs are present' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 2
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1961,9 +1998,11 @@ describe ActivityInsightImporter do
                 expect(c2.position).to eq 2
               end
             end
-            context "when an included presentation contribution exists in the database" do
+
+            context 'when an included presentation contribution exists in the database' do
               let(:other_user) { create :user }
               let(:other_presentation) { create :presentation }
+
               before do
                 create :presentation_contribution,
                        activity_insight_identifier: '83890556929',
@@ -1971,8 +2010,9 @@ describe ActivityInsightImporter do
                        presentation: other_presentation,
                        role: 'Existing Role'
               end
-              it "creates any new contributions and updates the existing contribution" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+              it 'creates any new contributions and updates the existing contribution' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 1
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -1996,42 +2036,42 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included performances exist in the database" do
-          it "creates new performances from the imported data" do
-            expect { importer.call }.to change { Performance.count }.by 2
+        context 'when no included performances exist in the database' do
+          it 'creates new performances from the imported data' do
+            expect { importer.call }.to change(Performance, :count).by 2
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
 
             expect(p1.title).to eq "Sally's Documentary"
-            expect(p1.performance_type).to eq "Film - Documentary"
-            expect(p1.sponsor).to eq "Test Sponsor"
-            expect(p1.description).to eq "A description"
-            expect(p1.group_name).to eq "Test Group"
-            expect(p1.location).to eq "University Park, PA"
-            expect(p1.delivery_type).to eq "Invitation"
-            expect(p1.scope).to eq "Regional"
+            expect(p1.performance_type).to eq 'Film - Documentary'
+            expect(p1.sponsor).to eq 'Test Sponsor'
+            expect(p1.description).to eq 'A description'
+            expect(p1.group_name).to eq 'Test Group'
+            expect(p1.location).to eq 'University Park, PA'
+            expect(p1.delivery_type).to eq 'Invitation'
+            expect(p1.scope).to eq 'Regional'
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
             expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's Film"
-            expect(p2.performance_type).to eq "Film - Other"
-            expect(p2.sponsor).to eq "Another Sponsor"
-            expect(p2.description).to eq "Another description"
-            expect(p2.group_name).to eq "Another Group"
-            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.performance_type).to eq 'Film - Other'
+            expect(p2.sponsor).to eq 'Another Sponsor'
+            expect(p2.description).to eq 'Another description'
+            expect(p2.group_name).to eq 'Another Group'
+            expect(p2.location).to eq 'Philadelphia, PA'
             expect(p2.delivery_type).to be_nil
-            expect(p2.scope).to eq "Local"
+            expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
             expect(p2.visible).to eq true
           end
 
-          context "when no included user performances exist in the database" do
-            context "when a user that matches the contribution exists" do
-              it "creates new user performances from the imported data" do
-                expect { importer.call }.to change { UserPerformance.count }.by 2
+          context 'when no included user performances exist in the database' do
+            context 'when a user that matches the contribution exists' do
+              it 'creates new user performances from the imported data' do
+                expect { importer.call }.to change(UserPerformance, :count).by 2
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2052,9 +2092,10 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when an included user performance exists in the database" do
+          context 'when an included user performance exists in the database' do
             let(:other_user) { create :user }
             let(:other_performance) { create :performance }
+
             before do
               create :user_performance,
                      activity_insight_id: '126500763649',
@@ -2062,9 +2103,10 @@ describe ActivityInsightImporter do
                      performance: other_performance,
                      contribution: 'Existing Contribution'
             end
-            context "when a user that matches the contribution exists" do
-              it "creates any new user performances and updates the existing user performances" do
-                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+            context 'when a user that matches the contribution exists' do
+              it 'creates any new user performances and updates the existing user performances' do
+                expect { importer.call }.to change(UserPerformance, :count).by 1
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2086,7 +2128,7 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when an included performance exists in the database" do
+        context 'when an included performance exists in the database' do
           before do
             create :performance,
                    activity_insight_id: '126500763648',
@@ -2103,15 +2145,17 @@ describe ActivityInsightImporter do
                    end_on: nil,
                    visible: false
           end
-          context "when the existing performance has been updated by an admin" do
+
+          context 'when the existing performance has been updated by an admin' do
             let(:updated) { Time.zone.now }
-            it "creates any new performances and does not update the existing performance" do
-              expect { importer.call }.to change { Performance.count }.by 1
+
+            it 'creates any new performances and does not update the existing performance' do
+              expect { importer.call }.to change(Performance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
 
-              expect(p1.title).to eq "Existing Title"
+              expect(p1.title).to eq 'Existing Title'
               expect(p1.performance_type).to be_nil
               expect(p1.sponsor).to be_nil
               expect(p1.description).to be_nil
@@ -2124,23 +2168,22 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
-              expect(p2.performance_type).to eq "Film - Other"
-              expect(p2.sponsor).to eq "Another Sponsor"
-              expect(p2.description).to eq "Another description"
-              expect(p2.group_name).to eq "Another Group"
-              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.performance_type).to eq 'Film - Other'
+              expect(p2.sponsor).to eq 'Another Sponsor'
+              expect(p2.description).to eq 'Another description'
+              expect(p2.group_name).to eq 'Another Group'
+              expect(p2.location).to eq 'Philadelphia, PA'
               expect(p2.delivery_type).to be_nil
-              expect(p2.scope).to eq "Local"
+              expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
               expect(p2.visible).to eq true
             end
 
-
-            context "when no included user performances exist in the database" do
-              context "when a user that matches the contribution exists" do
-                it "creates new user performances from the imported data" do
-                  expect { importer.call }.to change { UserPerformance.count }.by 2
+            context 'when no included user performances exist in the database' do
+              context 'when a user that matches the contribution exists' do
+                it 'creates new user performances from the imported data' do
+                  expect { importer.call }.to change(UserPerformance, :count).by 2
 
                   p1 = Performance.find_by(activity_insight_id: '126500763648')
                   p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2161,9 +2204,10 @@ describe ActivityInsightImporter do
               end
             end
 
-            context "when an included user performance exists in the database" do
+            context 'when an included user performance exists in the database' do
               let(:other_user) { create :user }
               let(:other_performance) { create :performance }
+
               before do
                 create :user_performance,
                        activity_insight_id: '126500763649',
@@ -2171,9 +2215,10 @@ describe ActivityInsightImporter do
                        performance: other_performance,
                        contribution: 'Existing Contribution'
               end
-              context "when a user that matches the contribution exists" do
-                it "creates any new user performances and updates the existing user performances" do
-                  expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              context 'when a user that matches the contribution exists' do
+                it 'creates any new user performances and updates the existing user performances' do
+                  expect { importer.call }.to change(UserPerformance, :count).by 1
 
                   p1 = Performance.find_by(activity_insight_id: '126500763648')
                   p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2195,43 +2240,43 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when the existing performance has not been updated by an admin" do
+          context 'when the existing performance has not been updated by an admin' do
             let(:updated) { nil }
-            it "creates any new performances and updates the existing performance" do
-              expect { importer.call }.to change { Performance.count }.by 1
+
+            it 'creates any new performances and updates the existing performance' do
+              expect { importer.call }.to change(Performance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
 
               expect(p1.title).to eq "Sally's Documentary"
-              expect(p1.performance_type).to eq "Film - Documentary"
-              expect(p1.sponsor).to eq "Test Sponsor"
-              expect(p1.description).to eq "A description"
-              expect(p1.group_name).to eq "Test Group"
-              expect(p1.location).to eq "University Park, PA"
-              expect(p1.delivery_type).to eq "Invitation"
-              expect(p1.scope).to eq "Regional"
-              expect(p1.start_on). to eq Date.new(2009, 2, 1)
+              expect(p1.performance_type).to eq 'Film - Documentary'
+              expect(p1.sponsor).to eq 'Test Sponsor'
+              expect(p1.description).to eq 'A description'
+              expect(p1.group_name).to eq 'Test Group'
+              expect(p1.location).to eq 'University Park, PA'
+              expect(p1.delivery_type).to eq 'Invitation'
+              expect(p1.scope).to eq 'Regional'
+              expect(p1.start_on).to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
               expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
-              expect(p2.performance_type).to eq "Film - Other"
-              expect(p2.sponsor).to eq "Another Sponsor"
-              expect(p2.description).to eq "Another description"
-              expect(p2.group_name).to eq "Another Group"
-              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.performance_type).to eq 'Film - Other'
+              expect(p2.sponsor).to eq 'Another Sponsor'
+              expect(p2.description).to eq 'Another description'
+              expect(p2.group_name).to eq 'Another Group'
+              expect(p2.location).to eq 'Philadelphia, PA'
               expect(p2.delivery_type).to be_nil
-              expect(p2.scope).to eq "Local"
+              expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
               expect(p2.visible).to eq true
             end
 
-
-            context "when no included user performances exist in the database" do
-              it "creates new user performances from the imported data" do
-                expect { importer.call }.to change { UserPerformance.count }.by 2
+            context 'when no included user performances exist in the database' do
+              it 'creates new user performances from the imported data' do
+                expect { importer.call }.to change(UserPerformance, :count).by 2
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2251,9 +2296,10 @@ describe ActivityInsightImporter do
               end
             end
 
-            context "when an included user performance exists in the database" do
+            context 'when an included user performance exists in the database' do
               let(:other_user) { create :user }
               let(:other_performance) { create :performance }
+
               before do
                 create :user_performance,
                        activity_insight_id: '126500763649',
@@ -2261,8 +2307,9 @@ describe ActivityInsightImporter do
                        performance: other_performance,
                        contribution: 'Existing Contribution'
               end
-              it "creates any new user performances and updates the existing user performances" do
-                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              it 'creates any new user performances and updates the existing user performances' do
+                expect { importer.call }.to change(UserPerformance, :count).by 1
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -2284,18 +2331,18 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included publications exist in the database" do
-          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 4
+        context 'when no included publications exist in the database' do
+          it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(PublicationImport, :count).by 4
           end
-  
-          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 4
+
+          it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(Publication, :count).by 4
           end
-          
-          it "saves the correct data to the new publication records" do
+
+          it 'saves the correct data to the new publication records' do
             importer.call
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2304,7 +2351,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
@@ -2322,7 +2369,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-  
+
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
@@ -2341,7 +2388,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
             expect(p2.updated_by_user_at).to eq nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-  
+
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
@@ -2381,18 +2428,18 @@ describe ActivityInsightImporter do
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
-          it "groups duplicates of new publication records" do
-            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+          it 'groups duplicates of new publication records' do
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
             group = p1.duplicate_group
-            
+
             expect(group.publications).to match_array [p1, duplicate_pub]
           end
 
-          it "hides new publications that might be duplicates" do
+          it 'hides new publications that might be duplicates' do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2400,15 +2447,15 @@ describe ActivityInsightImporter do
 
             expect(p1.visible).to eq false
           end
-  
-          it "creates a new authorship record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Authorship.count }.by 4
+
+          it 'creates a new authorship record for every faculty author for each imported publication' do
+            expect { importer.call }.to change(Authorship, :count).by 4
           end
-  
-          it "saves the correct attributes with each new authorship" do
+
+          it 'saves the correct attributes with each new authorship' do
             importer.call
             u = User.find_by(webaccess_id: 'abc123')
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2421,25 +2468,25 @@ describe ActivityInsightImporter do
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
             a4 = Authorship.find_by(publication: p4, user: u)
-  
+
             expect(a1.author_number).to eq 2
             expect(a1.role).to eq 'Author'
-  
+
             expect(a2.author_number).to eq 1
             expect(a2.role).to eq 'Primary Author'
-  
+
             expect(a3.author_number).to eq 2
             expect(a3.role).to eq 'Author'
 
             expect(a4.author_number).to eq 2
             expect(a4.role).to eq 'Author'
           end
-  
-          it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 9
+
+          it 'creates a new contributor name record for every faculty author for each imported publication' do
+            expect { importer.call }.to change(ContributorName, :count).by 9
           end
-  
-          it "saves the correct attributes with each new contributor name" do
+
+          it 'saves the correct attributes with each new contributor name' do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -2449,7 +2496,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
                                            middle_name: 'A.',
@@ -2468,7 +2515,7 @@ describe ActivityInsightImporter do
                                            last_name: 'Testington',
                                            position: 3,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'Sally',
                                            middle_name: nil,
@@ -2481,7 +2528,7 @@ describe ActivityInsightImporter do
                                            last_name: 'Tester',
                                            position: 2,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Mary',
                                            middle_name: 'E.',
@@ -2509,7 +2556,8 @@ describe ActivityInsightImporter do
                                            role: 'Author')).not_to be_nil
           end
         end
-        context "when an included publication exists in the database" do
+
+        context 'when an included publication exists in the database' do
           let!(:existing_import) { create :publication_import,
                                           source: 'Activity Insight',
                                           source_identifier: '171620739072',
@@ -2533,20 +2581,24 @@ describe ActivityInsightImporter do
                                       updated_by_user_at: timestamp,
                                       visible: false,
                                       doi: 'https://doi.org/10.000/existing' }
-          context "when the existing publication has been modified by an admin user" do
+
+          context 'when the existing publication has been modified by an admin user' do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
-  
-            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 3
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(PublicationImport, :count).by 3
             end
-    
-            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 3
+
+            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(Publication, :count).by 3
             end
-            
-            it "saves the correct data to the new publication records and does not update the existing record" do
+
+            it 'saves the correct data to the new publication records and does not update the existing record' do
               importer.call
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2555,7 +2607,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
@@ -2573,7 +2625,7 @@ describe ActivityInsightImporter do
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-    
+
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
               expect(p2.journal_title).to eq 'Existing Journal'
@@ -2592,7 +2644,7 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
               expect(p2.doi).to eq 'https://doi.org/10.000/existing'
-    
+
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
@@ -2632,41 +2684,41 @@ describe ActivityInsightImporter do
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
-            it "groups duplicates of new publication records" do
-              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+            it 'groups duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               group = p1.duplicate_group
-              
+
               expect(group.publications).to match_array [p1, duplicate_pub]
             end
 
-            it "hides new publications that might be duplicates" do
+            it 'hides new publications that might be duplicates' do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               expect(p1.visible).to eq false
             end
-  
-            context "when authorhips already exist for the existing publication" do
+
+            context 'when authorhips already exist for the existing publication' do
               let!(:existing_authorship1) { create :authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
 
-              it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+              it 'creates new authorship records for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
-  
-              it "saves the correct attributes with each new authorship and does not update the existing authorship" do
+
+              it 'saves the correct attributes with each new authorship and does not update the existing authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2682,10 +2734,10 @@ describe ActivityInsightImporter do
 
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 6
                 expect(a2.role).to eq 'Existing Role'
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -2693,16 +2745,16 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            context "when no authorships exist for the existing publication" do
-              it "creates a new authorship record for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+
+            context 'when no authorships exist for the existing publication' do
+              it 'creates a new authorship record for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
-      
-              it "saves the correct attributes with each new authorship" do
+
+              it 'saves the correct attributes with each new authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2715,12 +2767,12 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2).to eq nil
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -2728,19 +2780,17 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-  
-            it "creates a new contributor name record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 7
+
+            it 'creates a new contributor name record for every faculty author for each new imported publication' do
+              expect { importer.call }.to change(ContributorName, :count).by 7
             end
-            
-            it "does not remove any existing contributor names on the existing publication" do
+
+            it 'does not remove any existing contributor names on the existing publication' do
               importer.call
               expect(existing_cont.reload).not_to be_nil
             end
-    
-            it "saves the correct attributes with each new contributor name" do
+
+            it 'saves the correct attributes with each new contributor name' do
               importer.call
 
               u = User.find_by(activity_insight_identifier: '1649499')
@@ -2753,7 +2803,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
                                              middle_name: 'A.',
@@ -2775,7 +2825,7 @@ describe ActivityInsightImporter do
                                              position: 3,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'Sally',
                                              middle_name: nil,
@@ -2790,7 +2840,7 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: nil,
                                              role: 'Author')).to be_nil
-    
+
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Mary',
                                              middle_name: 'E.',
@@ -2820,21 +2870,24 @@ describe ActivityInsightImporter do
                                              role: 'Author')).not_to be_nil
             end
           end
-  
-          context "when the existing publication has not been modified by an admin user" do
+
+          context 'when the existing publication has not been modified by an admin user' do
             let(:timestamp) { nil }
-  
-            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 3
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(PublicationImport, :count).by 3
             end
-    
-            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 3
+
+            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(Publication, :count).by 3
             end
-            
-            it "saves the correct data to the new publication records and updates the existing record" do
+
+            it 'saves the correct data to the new publication records and updates the existing record' do
               importer.call
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2843,7 +2896,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
@@ -2861,7 +2914,7 @@ describe ActivityInsightImporter do
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-    
+
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
@@ -2880,7 +2933,7 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq nil
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-    
+
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
@@ -2920,41 +2973,41 @@ describe ActivityInsightImporter do
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
-            it "groups duplicates of new publication records" do
-              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+            it 'groups duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               group = p1.duplicate_group
-              
+
               expect(group.publications).to match_array [p1, duplicate_pub]
             end
 
-            it "hides new publications that might be duplicates" do
+            it 'hides new publications that might be duplicates' do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               expect(p1.visible).to eq false
             end
-  
-            context "when authorships already exist for the existing publication" do
+
+            context 'when authorships already exist for the existing publication' do
               let!(:existing_authorship1) { create :authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
 
-              it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+              it 'creates new authorship records for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
 
-              it "saves the correct attributes with each new authorship and updates the existing authorship" do
+              it 'saves the correct attributes with each new authorship and updates the existing authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -2967,13 +3020,13 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 1
                 expect(a2.role).to eq 'Primary Author'
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -2981,16 +3034,16 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            context "when no authorships exist for the existing publication" do
-              it "creates a new authorship record for every new faculty author for each imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 4
+
+            context 'when no authorships exist for the existing publication' do
+              it 'creates a new authorship record for every new faculty author for each imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 4
               end
-      
-              it "saves the correct attributes with each new authorship" do
+
+              it 'saves the correct attributes with each new authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -3003,13 +3056,13 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 1
                 expect(a2.role).to eq 'Primary Author'
-  
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -3017,19 +3070,17 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-  
-            it "creates a new contributor name record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 8
+
+            it 'creates a new contributor name record for every faculty author for each imported publication' do
+              expect { importer.call }.to change(ContributorName, :count).by 8
             end
-  
-            it "removes any existing contributor names that are not in the new import" do
+
+            it 'removes any existing contributor names that are not in the new import' do
               importer.call
               expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
             end
-    
-            it "saves the correct attributes with each new contributor name" do
+
+            it 'saves the correct attributes with each new contributor name' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
 
@@ -3041,7 +3092,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
                                              middle_name: 'A.',
@@ -3063,7 +3114,7 @@ describe ActivityInsightImporter do
                                              position: 3,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'Sally',
                                              middle_name: nil,
@@ -3078,7 +3129,7 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Mary',
                                              middle_name: 'E.',
@@ -3111,13 +3162,11 @@ describe ActivityInsightImporter do
         end
       end
 
-
-
-      context "when the existing user has not been updated by an admin" do
+      context 'when the existing user has not been updated by an admin' do
         let(:updated) { nil }
 
-        it "creates any new users and updates the existing user" do
-          expect { importer.call }.to change { User.count }.by 1
+        it 'creates any new users and updates the existing user' do
+          expect { importer.call }.to change(User, :count).by 1
 
           u1 = User.find_by(webaccess_id: 'abc123')
           u2 = User.find_by(webaccess_id: 'def45')
@@ -3147,9 +3196,9 @@ describe ActivityInsightImporter do
           expect(u2.penn_state_identifier).to eq '9293659323'
         end
 
-        context "when no included education history items exist in the database" do
-          it "creates new education history items from the imported data" do
-            expect { importer.call }.to change { EducationHistoryItem.count }.by 2
+        context 'when no included education history items exist in the database' do
+          it 'creates new education history items from the imported data' do
+            expect { importer.call }.to change(EducationHistoryItem, :count).by 2
 
             i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
             i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -3188,8 +3237,10 @@ describe ActivityInsightImporter do
             expect(i2.end_year).to eq 2004
           end
         end
-        context "when an included education history item exists in the database" do
+
+        context 'when an included education history item exists in the database' do
           let(:other_user) { create :user }
+
           before do
             create :education_history_item,
                    activity_insight_identifier: '70766815232',
@@ -3210,8 +3261,8 @@ describe ActivityInsightImporter do
                    end_year: '1995'
           end
 
-          it "creates any new items and updates the existing item" do
-            expect { importer.call }.to change { EducationHistoryItem.count }.by 1
+          it 'creates any new items and updates the existing item' do
+            expect { importer.call }.to change(EducationHistoryItem, :count).by 1
 
             i1 = EducationHistoryItem.find_by(activity_insight_identifier: '70766815232')
             i2 = EducationHistoryItem.find_by(activity_insight_identifier: '72346234523')
@@ -3251,9 +3302,9 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included presentations exist in the database" do
-          it "creates new presentations from the imported data" do
-            expect { importer.call }.to change { Presentation.count }.by 2
+        context 'when no included presentations exist in the database' do
+          it 'creates new presentations from the imported data' do
+            expect { importer.call }.to change(Presentation, :count).by 2
 
             p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
             p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3285,9 +3336,9 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
           end
 
-          context "when no included presentation contributions exist in the database" do
-            it "creates new presentation contributions from the imported data where user IDs are present" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 2
+          context 'when no included presentation contributions exist in the database' do
+            it 'creates new presentation contributions from the imported data where user IDs are present' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 2
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3308,9 +3359,11 @@ describe ActivityInsightImporter do
               expect(c2.position).to eq 2
             end
           end
-          context "when an included presentation contribution exists in the database" do
+
+          context 'when an included presentation contribution exists in the database' do
             let(:other_user) { create :user }
             let(:other_presentation) { create :presentation }
+
             before do
               create :presentation_contribution,
                      activity_insight_identifier: '83890556929',
@@ -3318,8 +3371,9 @@ describe ActivityInsightImporter do
                      presentation: other_presentation,
                      role: 'Existing Role'
             end
-            it "creates any new contributions and updates the existing contribution" do
-              expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+            it 'creates any new contributions and updates the existing contribution' do
+              expect { importer.call }.to change(PresentationContribution, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3341,7 +3395,8 @@ describe ActivityInsightImporter do
             end
           end
         end
-        context "when an included presentation exists in the database" do
+
+        context 'when an included presentation exists in the database' do
           before do
             create :presentation,
                    activity_insight_identifier: '83890556928',
@@ -3350,15 +3405,16 @@ describe ActivityInsightImporter do
                    visible: false
           end
 
-          context "when the existing presentation has been updated by an admin" do
+          context 'when the existing presentation has been updated by an admin' do
             let(:updated) { Time.zone.now }
-            it "creates any new presentations and does not update the existing presentation" do
-              expect { importer.call }.to change { Presentation.count }.by 1
+
+            it 'creates any new presentations and does not update the existing presentation' do
+              expect { importer.call }.to change(Presentation, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
 
-              expect(p1.title).to eq "Existing Title"
+              expect(p1.title).to eq 'Existing Title'
               expect(p1.name).to be_nil
               expect(p1.organization).to be_nil
               expect(p1.location).to be_nil
@@ -3385,10 +3441,10 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq true
             end
 
-            context "when no included presentation contributions exist in the database" do
-              context "when a user that matches the contribution exists" do
-                it "creates new presentation contributions from the imported data where user IDs are present" do
-                  expect { importer.call }.to change { PresentationContribution.count }.by 2
+            context 'when no included presentation contributions exist in the database' do
+              context 'when a user that matches the contribution exists' do
+                it 'creates new presentation contributions from the imported data where user IDs are present' do
+                  expect { importer.call }.to change(PresentationContribution, :count).by 2
 
                   p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                   p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3408,9 +3464,11 @@ describe ActivityInsightImporter do
                 end
               end
             end
-            context "when an included presentation contribution exists in the database" do
+
+            context 'when an included presentation contribution exists in the database' do
               let(:other_user) { create :user }
               let(:other_presentation) { create :presentation }
+
               before do
                 create :presentation_contribution,
                        activity_insight_identifier: '83890556929',
@@ -3419,10 +3477,9 @@ describe ActivityInsightImporter do
                        role: 'Existing Role'
               end
 
-              context "when a user that matches the contribution exists" do
-
-                it "creates any new contributions and updates the existing contribution" do
-                  expect { importer.call }.to change { PresentationContribution.count }.by 1
+              context 'when a user that matches the contribution exists' do
+                it 'creates any new contributions and updates the existing contribution' do
+                  expect { importer.call }.to change(PresentationContribution, :count).by 1
 
                   p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                   p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3446,10 +3503,11 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when the existing presentation has not been updated by an admin" do
+          context 'when the existing presentation has not been updated by an admin' do
             let(:updated) { nil }
-            it "creates any new presentations and updates the existing presentation" do
-              expect { importer.call }.to change { Presentation.count }.by 1
+
+            it 'creates any new presentations and updates the existing presentation' do
+              expect { importer.call }.to change(Presentation, :count).by 1
 
               p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
               p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3481,9 +3539,9 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq true
             end
 
-            context "when no included presentation contributions exist in the database" do
-              it "creates new presentation contributions from the imported data where user IDs are present" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 2
+            context 'when no included presentation contributions exist in the database' do
+              it 'creates new presentation contributions from the imported data where user IDs are present' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 2
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3504,9 +3562,11 @@ describe ActivityInsightImporter do
                 expect(c2.position).to eq 2
               end
             end
-            context "when an included presentation contribution exists in the database" do
+
+            context 'when an included presentation contribution exists in the database' do
               let(:other_user) { create :user }
               let(:other_presentation) { create :presentation }
+
               before do
                 create :presentation_contribution,
                        activity_insight_identifier: '83890556929',
@@ -3514,8 +3574,9 @@ describe ActivityInsightImporter do
                        presentation: other_presentation,
                        role: 'Existing Role'
               end
-              it "creates any new contributions and updates the existing contribution" do
-                expect { importer.call }.to change { PresentationContribution.count }.by 1
+
+              it 'creates any new contributions and updates the existing contribution' do
+                expect { importer.call }.to change(PresentationContribution, :count).by 1
 
                 p1 = Presentation.find_by(activity_insight_identifier: '83890556928')
                 p2 = Presentation.find_by(activity_insight_identifier: '113825011712')
@@ -3539,41 +3600,41 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included performances exist in the database" do
-          it "creates new performances from the imported data" do
-            expect { importer.call }.to change { Performance.count }.by 2
+        context 'when no included performances exist in the database' do
+          it 'creates new performances from the imported data' do
+            expect { importer.call }.to change(Performance, :count).by 2
 
             p1 = Performance.find_by(activity_insight_id: '126500763648')
             p2 = Performance.find_by(activity_insight_id: '13745734789')
 
             expect(p1.title).to eq "Sally's Documentary"
-            expect(p1.performance_type).to eq "Film - Documentary"
-            expect(p1.sponsor).to eq "Test Sponsor"
-            expect(p1.description).to eq "A description"
-            expect(p1.group_name).to eq "Test Group"
-            expect(p1.location).to eq "University Park, PA"
-            expect(p1.delivery_type).to eq "Invitation"
-            expect(p1.scope).to eq "Regional"
+            expect(p1.performance_type).to eq 'Film - Documentary'
+            expect(p1.sponsor).to eq 'Test Sponsor'
+            expect(p1.description).to eq 'A description'
+            expect(p1.group_name).to eq 'Test Group'
+            expect(p1.location).to eq 'University Park, PA'
+            expect(p1.delivery_type).to eq 'Invitation'
+            expect(p1.scope).to eq 'Regional'
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
             expect(p1.visible).to eq true
 
             expect(p2.title).to eq "Sally's Film"
-            expect(p2.performance_type).to eq "Film - Other"
-            expect(p2.sponsor).to eq "Another Sponsor"
-            expect(p2.description).to eq "Another description"
-            expect(p2.group_name).to eq "Another Group"
-            expect(p2.location).to eq "Philadelphia, PA"
+            expect(p2.performance_type).to eq 'Film - Other'
+            expect(p2.sponsor).to eq 'Another Sponsor'
+            expect(p2.description).to eq 'Another description'
+            expect(p2.group_name).to eq 'Another Group'
+            expect(p2.location).to eq 'Philadelphia, PA'
             expect(p2.delivery_type).to be_nil
-            expect(p2.scope).to eq "Local"
+            expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
             expect(p2.visible).to eq true
           end
 
-          context "when no included user performances exist in the database" do
-            it "creates new user performances from the imported data" do
-              expect { importer.call }.to change { UserPerformance.count }.by 2
+          context 'when no included user performances exist in the database' do
+            it 'creates new user performances from the imported data' do
+              expect { importer.call }.to change(UserPerformance, :count).by 2
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3593,9 +3654,10 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when an included user performance exists in the database" do
+          context 'when an included user performance exists in the database' do
             let(:other_user) { create :user }
             let(:other_performance) { create :performance }
+
             before do
               create :user_performance,
                      activity_insight_id: '126500763649',
@@ -3603,8 +3665,9 @@ describe ActivityInsightImporter do
                      performance: other_performance,
                      contribution: 'Existing Contribution'
             end
-            it "creates any new user performances and updates the existing user performances" do
-              expect { importer.call }.to change { UserPerformance.count }.by 1
+
+            it 'creates any new user performances and updates the existing user performances' do
+              expect { importer.call }.to change(UserPerformance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3625,7 +3688,7 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when an included performance exists in the database" do
+        context 'when an included performance exists in the database' do
           before do
             create :performance,
                    activity_insight_id: '126500763648',
@@ -3642,15 +3705,17 @@ describe ActivityInsightImporter do
                    end_on: nil,
                    visible: false
           end
-          context "when the existing performance has been updated by an admin" do
+
+          context 'when the existing performance has been updated by an admin' do
             let(:updated) { Time.zone.now }
-            it "creates any new performances and does not update the existing performance" do
-              expect { importer.call }.to change { Performance.count }.by 1
+
+            it 'creates any new performances and does not update the existing performance' do
+              expect { importer.call }.to change(Performance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
 
-              expect(p1.title).to eq "Existing Title"
+              expect(p1.title).to eq 'Existing Title'
               expect(p1.performance_type).to be_nil
               expect(p1.sponsor).to be_nil
               expect(p1.description).to be_nil
@@ -3663,23 +3728,22 @@ describe ActivityInsightImporter do
               expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
-              expect(p2.performance_type).to eq "Film - Other"
-              expect(p2.sponsor).to eq "Another Sponsor"
-              expect(p2.description).to eq "Another description"
-              expect(p2.group_name).to eq "Another Group"
-              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.performance_type).to eq 'Film - Other'
+              expect(p2.sponsor).to eq 'Another Sponsor'
+              expect(p2.description).to eq 'Another description'
+              expect(p2.group_name).to eq 'Another Group'
+              expect(p2.location).to eq 'Philadelphia, PA'
               expect(p2.delivery_type).to be_nil
-              expect(p2.scope).to eq "Local"
+              expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
               expect(p2.visible).to eq true
             end
 
-
-            context "when no included user performances exist in the database" do
-              context "when a user that matches the contribution exists" do
-                it "creates new user performances from the imported data" do
-                  expect { importer.call }.to change { UserPerformance.count }.by 2
+            context 'when no included user performances exist in the database' do
+              context 'when a user that matches the contribution exists' do
+                it 'creates new user performances from the imported data' do
+                  expect { importer.call }.to change(UserPerformance, :count).by 2
 
                   p1 = Performance.find_by(activity_insight_id: '126500763648')
                   p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3700,9 +3764,10 @@ describe ActivityInsightImporter do
               end
             end
 
-            context "when an included user performance exists in the database" do
+            context 'when an included user performance exists in the database' do
               let(:other_user) { create :user }
               let(:other_performance) { create :performance }
+
               before do
                 create :user_performance,
                        activity_insight_id: '126500763649',
@@ -3710,9 +3775,10 @@ describe ActivityInsightImporter do
                        performance: other_performance,
                        contribution: 'Existing Contribution'
               end
-              context "when a user that matches the contribution exists" do
-                it "creates any new user performances and updates the existing user performances" do
-                  expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              context 'when a user that matches the contribution exists' do
+                it 'creates any new user performances and updates the existing user performances' do
+                  expect { importer.call }.to change(UserPerformance, :count).by 1
 
                   p1 = Performance.find_by(activity_insight_id: '126500763648')
                   p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3734,43 +3800,43 @@ describe ActivityInsightImporter do
             end
           end
 
-          context "when the existing performance has not been updated by an admin" do
+          context 'when the existing performance has not been updated by an admin' do
             let(:updated) { nil }
-            it "creates any new performances and updates the existing performance" do
-              expect { importer.call }.to change { Performance.count }.by 1
+
+            it 'creates any new performances and updates the existing performance' do
+              expect { importer.call }.to change(Performance, :count).by 1
 
               p1 = Performance.find_by(activity_insight_id: '126500763648')
               p2 = Performance.find_by(activity_insight_id: '13745734789')
 
               expect(p1.title).to eq "Sally's Documentary"
-              expect(p1.performance_type).to eq "Film - Documentary"
-              expect(p1.sponsor).to eq "Test Sponsor"
-              expect(p1.description).to eq "A description"
-              expect(p1.group_name).to eq "Test Group"
-              expect(p1.location).to eq "University Park, PA"
-              expect(p1.delivery_type).to eq "Invitation"
-              expect(p1.scope).to eq "Regional"
-              expect(p1.start_on). to eq Date.new(2009, 2, 1)
+              expect(p1.performance_type).to eq 'Film - Documentary'
+              expect(p1.sponsor).to eq 'Test Sponsor'
+              expect(p1.description).to eq 'A description'
+              expect(p1.group_name).to eq 'Test Group'
+              expect(p1.location).to eq 'University Park, PA'
+              expect(p1.delivery_type).to eq 'Invitation'
+              expect(p1.scope).to eq 'Regional'
+              expect(p1.start_on).to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
               expect(p1.visible).to eq false
 
               expect(p2.title).to eq "Sally's Film"
-              expect(p2.performance_type).to eq "Film - Other"
-              expect(p2.sponsor).to eq "Another Sponsor"
-              expect(p2.description).to eq "Another description"
-              expect(p2.group_name).to eq "Another Group"
-              expect(p2.location).to eq "Philadelphia, PA"
+              expect(p2.performance_type).to eq 'Film - Other'
+              expect(p2.sponsor).to eq 'Another Sponsor'
+              expect(p2.description).to eq 'Another description'
+              expect(p2.group_name).to eq 'Another Group'
+              expect(p2.location).to eq 'Philadelphia, PA'
               expect(p2.delivery_type).to be_nil
-              expect(p2.scope).to eq "Local"
+              expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
               expect(p2.visible).to eq true
             end
 
-
-            context "when no included user performances exist in the database" do
-              it "creates new user performances from the imported data" do
-                expect { importer.call }.to change { UserPerformance.count }.by 2
+            context 'when no included user performances exist in the database' do
+              it 'creates new user performances from the imported data' do
+                expect { importer.call }.to change(UserPerformance, :count).by 2
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3790,9 +3856,10 @@ describe ActivityInsightImporter do
               end
             end
 
-            context "when an included user performance exists in the database" do
+            context 'when an included user performance exists in the database' do
               let(:other_user) { create :user }
               let(:other_performance) { create :performance }
+
               before do
                 create :user_performance,
                        activity_insight_id: '126500763649',
@@ -3800,8 +3867,9 @@ describe ActivityInsightImporter do
                        performance: other_performance,
                        contribution: 'Existing Contribution'
               end
-              it "creates any new user performances and updates the existing user performances" do
-                expect { importer.call }.to change { UserPerformance.count }.by 1
+
+              it 'creates any new user performances and updates the existing user performances' do
+                expect { importer.call }.to change(UserPerformance, :count).by 1
 
                 p1 = Performance.find_by(activity_insight_id: '126500763648')
                 p2 = Performance.find_by(activity_insight_id: '13745734789')
@@ -3823,18 +3891,18 @@ describe ActivityInsightImporter do
           end
         end
 
-        context "when no included publications exist in the database" do
-          it "creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { PublicationImport.count }.by 4
+        context 'when no included publications exist in the database' do
+          it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(PublicationImport, :count).by 4
           end
-  
-          it "creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data" do
-            expect { importer.call }.to change { Publication.count }.by 4
+
+          it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+            expect { importer.call }.to change(Publication, :count).by 4
           end
-          
-          it "saves the correct data to the new publication records" do
+
+          it 'saves the correct data to the new publication records' do
             importer.call
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -3843,7 +3911,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
             expect(p1.journal_title).to eq 'Test Journal 1'
@@ -3861,7 +3929,7 @@ describe ActivityInsightImporter do
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
             expect(p1.updated_by_user_at).to eq nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-  
+
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
@@ -3880,7 +3948,7 @@ describe ActivityInsightImporter do
             expect(p2.visible).to eq true
             expect(p2.updated_by_user_at).to eq nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-  
+
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
@@ -3919,19 +3987,19 @@ describe ActivityInsightImporter do
             expect(p4.updated_by_user_at).to eq nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
-  
-          it "groups duplicates of new publication records" do
-            expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+          it 'groups duplicates of new publication records' do
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
             group = p1.duplicate_group
-            
+
             expect(group.publications).to match_array [p1, duplicate_pub]
           end
 
-          it "hides new publications that might be duplicates" do
+          it 'hides new publications that might be duplicates' do
             importer.call
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
@@ -3939,14 +4007,15 @@ describe ActivityInsightImporter do
 
             expect(p1.visible).to eq false
           end
-          it "creates a new authorship record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { Authorship.count }.by 4
+
+          it 'creates a new authorship record for every faculty author for each imported publication' do
+            expect { importer.call }.to change(Authorship, :count).by 4
           end
-  
-          it "saves the correct attributes with each new authorship" do
+
+          it 'saves the correct attributes with each new authorship' do
             importer.call
             u = User.find_by(webaccess_id: 'abc123')
-  
+
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
             p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -3959,25 +4028,25 @@ describe ActivityInsightImporter do
             a2 = Authorship.find_by(publication: p2, user: u)
             a3 = Authorship.find_by(publication: p3, user: u)
             a4 = Authorship.find_by(publication: p4, user: u)
-  
+
             expect(a1.author_number).to eq 2
             expect(a1.role).to eq 'Author'
-  
+
             expect(a2.author_number).to eq 1
             expect(a2.role).to eq 'Primary Author'
-  
+
             expect(a3.author_number).to eq 2
             expect(a3.role).to eq 'Author'
 
             expect(a4.author_number).to eq 2
             expect(a4.role).to eq 'Author'
           end
-  
-          it "creates a new contributor name record for every faculty author for each imported publication" do
-            expect { importer.call }.to change { ContributorName.count }.by 9
+
+          it 'creates a new contributor name record for every faculty author for each imported publication' do
+            expect { importer.call }.to change(ContributorName, :count).by 9
           end
-  
-          it "saves the correct attributes with each new contributor name" do
+
+          it 'saves the correct attributes with each new contributor name' do
             importer.call
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -3987,7 +4056,7 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
-  
+
             expect(ContributorName.find_by(publication: p1,
                                            first_name: 'Elizabeth',
                                            middle_name: 'A.',
@@ -4006,7 +4075,7 @@ describe ActivityInsightImporter do
                                            last_name: 'Testington',
                                            position: 3,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p2,
                                            first_name: 'Sally',
                                            middle_name: nil,
@@ -4019,7 +4088,7 @@ describe ActivityInsightImporter do
                                            last_name: 'Tester',
                                            position: 2,
                                            role: 'Author')).not_to be_nil
-  
+
             expect(ContributorName.find_by(publication: p3,
                                            first_name: 'Mary',
                                            middle_name: 'E.',
@@ -4047,7 +4116,8 @@ describe ActivityInsightImporter do
                                            role: 'Author')).not_to be_nil
           end
         end
-        context "when an included publication exists in the database" do
+
+        context 'when an included publication exists in the database' do
           let!(:existing_import) { create :publication_import,
                                           source: 'Activity Insight',
                                           source_identifier: '171620739072',
@@ -4071,20 +4141,24 @@ describe ActivityInsightImporter do
                                       updated_by_user_at: timestamp,
                                       visible: false,
                                       doi: 'https://doi.org/10.000/existing' }
-          context "when the existing publication has been modified by an admin user" do
+
+          context 'when the existing publication has been modified by an admin user' do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
-  
-            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 3
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(PublicationImport, :count).by 3
             end
-    
-            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 3
+
+            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(Publication, :count).by 3
             end
-            
-            it "saves the correct data to the new publication records and does not update the existing record" do
+
+            it 'saves the correct data to the new publication records and does not update the existing record' do
               importer.call
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4093,7 +4167,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
@@ -4111,7 +4185,7 @@ describe ActivityInsightImporter do
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-    
+
               expect(p2.title).to eq 'Existing Title'
               expect(p2.publication_type).to eq 'Trade Journal Article'
               expect(p2.journal_title).to eq 'Existing Journal'
@@ -4130,7 +4204,7 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
               expect(p2.doi).to eq 'https://doi.org/10.000/existing'
-    
+
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
@@ -4169,42 +4243,42 @@ describe ActivityInsightImporter do
               expect(p4.updated_by_user_at).to eq nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
-  
-            it "groups duplicates of new publication records" do
-              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+
+            it 'groups duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               group = p1.duplicate_group
-              
+
               expect(group.publications).to match_array [p1, duplicate_pub]
             end
 
-            it "hides new publications that might be duplicates" do
+            it 'hides new publications that might be duplicates' do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               expect(p1.visible).to eq false
             end
 
-            context "when authorships already exist for the existing publication" do
+            context 'when authorships already exist for the existing publication' do
               let!(:existing_authorship1) { create :authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
 
-              it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+              it 'creates new authorship records for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
-  
-              it "saves the correct attributes with each new authorship and does not update the existing authorship" do
+
+              it 'saves the correct attributes with each new authorship and does not update the existing authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4217,13 +4291,13 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 6
                 expect(a2.role).to eq 'Existing Role'
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -4231,16 +4305,16 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            context "when no authorships exist for the existing publication" do
-              it "creates a new authorship record for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+
+            context 'when no authorships exist for the existing publication' do
+              it 'creates a new authorship record for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
-      
-              it "saves the correct attributes with each new authorship" do
+
+              it 'saves the correct attributes with each new authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4253,12 +4327,12 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2).to eq nil
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -4266,19 +4340,17 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-  
-            it "creates a new contributor name record for every faculty author for each new imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 7
+
+            it 'creates a new contributor name record for every faculty author for each new imported publication' do
+              expect { importer.call }.to change(ContributorName, :count).by 7
             end
-            
-            it "does not remove any existing contributor names on the existing publication" do
+
+            it 'does not remove any existing contributor names on the existing publication' do
               importer.call
               expect(existing_cont.reload).not_to be_nil
             end
-    
-            it "saves the correct attributes with each new contributor name" do
+
+            it 'saves the correct attributes with each new contributor name' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
 
@@ -4290,7 +4362,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
                                              middle_name: 'A.',
@@ -4312,7 +4384,7 @@ describe ActivityInsightImporter do
                                              position: 3,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'Sally',
                                              middle_name: nil,
@@ -4327,7 +4399,7 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: nil,
                                              role: 'Author')).to be_nil
-    
+
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Mary',
                                              middle_name: 'E.',
@@ -4357,21 +4429,24 @@ describe ActivityInsightImporter do
                                              role: 'Author')).not_to be_nil
             end
           end
-  
-          context "when the existing publication has not been modified by an admin user" do
+
+          context 'when the existing publication has not been modified by an admin user' do
             let(:timestamp) { nil }
-  
-            it "creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { PublicationImport.count }.by 3
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+
+            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(PublicationImport, :count).by 3
             end
-    
-            it "creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data" do
-              expect { importer.call }.to change { Publication.count }.by 3
+
+            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+              expect { importer.call }.to change(Publication, :count).by 3
             end
-            
-            it "saves the correct data to the new publication records and updates the existing record" do
+
+            it 'saves the correct data to the new publication records and updates the existing record' do
               importer.call
-    
+
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
               p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4380,7 +4455,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
               expect(p1.publication_type).to eq 'Journal Article'
               expect(p1.journal_title).to eq 'Test Journal 1'
@@ -4398,7 +4473,7 @@ describe ActivityInsightImporter do
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
               expect(p1.updated_by_user_at).to eq nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
-    
+
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
@@ -4417,7 +4492,7 @@ describe ActivityInsightImporter do
               expect(p2.visible).to eq false
               expect(p2.updated_by_user_at).to eq nil
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-    
+
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
@@ -4457,41 +4532,41 @@ describe ActivityInsightImporter do
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
-            it "groups duplicates of new publication records" do
-              expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+            it 'groups duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               group = p1.duplicate_group
-              
+
               expect(group.publications).to match_array [p1, duplicate_pub]
             end
 
-            it "hides new publications that might be duplicates" do
+            it 'hides new publications that might be duplicates' do
               importer.call
 
               p1 = PublicationImport.find_by(source: 'Activity Insight',
-                                            source_identifier: '190706413568').publication
+                                             source_identifier: '190706413568').publication
 
               expect(p1.visible).to eq false
             end
-  
-            context "when authorships exist for the existing publication" do
+
+            context 'when authorships exist for the existing publication' do
               let!(:existing_authorship1) { create :authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
                                                    author_number: 6 }
 
-              it "creates new authorship records for every new faculty author for each new imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 3
+              it 'creates new authorship records for every new faculty author for each new imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 3
               end
-  
-              it "saves the correct attributes with each new authorship and updates the existing authorship" do
+
+              it 'saves the correct attributes with each new authorship and updates the existing authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4504,13 +4579,13 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 1
                 expect(a2.role).to eq 'Primary Author'
-      
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -4518,16 +4593,16 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            context "when no authorships already exist for the existing publication" do
-              it "creates a new authorship record for every new faculty author for each imported publication" do
-                expect { importer.call }.to change { Authorship.count }.by 4
+
+            context 'when no authorships already exist for the existing publication' do
+              it 'creates a new authorship record for every new faculty author for each imported publication' do
+                expect { importer.call }.to change(Authorship, :count).by 4
               end
-      
-              it "saves the correct attributes with each new authorship" do
+
+              it 'saves the correct attributes with each new authorship' do
                 importer.call
                 u = User.find_by(activity_insight_identifier: '1649499')
-      
+
                 p1 = PublicationImport.find_by(source: 'Activity Insight',
                                                source_identifier: '190706413568').publication
                 p2 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4540,13 +4615,13 @@ describe ActivityInsightImporter do
                 a2 = Authorship.find_by(publication: p2, user: u)
                 a3 = Authorship.find_by(publication: p3, user: u)
                 a4 = Authorship.find_by(publication: p4, user: u)
-      
+
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
-      
+
                 expect(a2.author_number).to eq 1
                 expect(a2.role).to eq 'Primary Author'
-  
+
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
 
@@ -4554,19 +4629,17 @@ describe ActivityInsightImporter do
                 expect(a4.role).to eq 'Author'
               end
             end
-  
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
-  
-            it "creates a new contributor name record for every faculty author for each imported publication" do
-              expect { importer.call }.to change { ContributorName.count }.by 8
+
+            it 'creates a new contributor name record for every faculty author for each imported publication' do
+              expect { importer.call }.to change(ContributorName, :count).by 8
             end
-  
-            it "removes any existing contributor names that are not in the new import" do
+
+            it 'removes any existing contributor names that are not in the new import' do
               importer.call
               expect { existing_cont.reload }.to raise_error ActiveRecord::RecordNotFound
             end
-    
-            it "saves the correct attributes with each new contributor name" do
+
+            it 'saves the correct attributes with each new contributor name' do
               importer.call
               u = User.find_by(activity_insight_identifier: '1649499')
 
@@ -4578,7 +4651,7 @@ describe ActivityInsightImporter do
                                              source_identifier: '92747188475').publication
               p4 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190707482930').publication
-    
+
               expect(ContributorName.find_by(publication: p1,
                                              first_name: 'Elizabeth',
                                              middle_name: 'A.',
@@ -4600,7 +4673,7 @@ describe ActivityInsightImporter do
                                              position: 3,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p2,
                                              first_name: 'Sally',
                                              middle_name: nil,
@@ -4615,7 +4688,7 @@ describe ActivityInsightImporter do
                                              position: 2,
                                              user: nil,
                                              role: 'Author')).not_to be_nil
-    
+
               expect(ContributorName.find_by(publication: p3,
                                              first_name: 'Mary',
                                              middle_name: 'E.',
@@ -4651,22 +4724,26 @@ describe ActivityInsightImporter do
   end
 
   describe '#errors' do
-    context "when no errors have occurred during an import" do
+    context 'when no errors have occurred during an import' do
       before { importer.call }
-      it "returns an empty array" do
+
+      it 'returns an empty array' do
         expect(importer.errors).to eq []
       end
     end
-    context "when errors occur during an import" do
+
+    context 'when errors occur during an import' do
       let(:user) { instance_spy(User) }
       let(:error) { RuntimeError.new }
+
       before do
         allow(User).to receive(:find_by).with(webaccess_id: 'abc123').and_return(user)
         allow(User).to receive(:find_by).with(webaccess_id: 'def45')
         allow(user).to receive(:save!).and_raise(error)
         importer.call
       end
-      it "returns an array of the errors" do
+
+      it 'returns an array of the errors' do
         expect(importer.errors).to eq [error]
       end
     end
