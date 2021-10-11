@@ -56,7 +56,7 @@ gem 'omniauth-oauth2', '~> 1.7'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 # Authorization framework
-gem 'cancancan', '~> 2.0'
+gem 'cancancan', '~> 3.3'
 
 # A lightning fast JSON:API serializer for Ruby Objects
 gem 'fast_jsonapi'
