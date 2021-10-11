@@ -71,7 +71,7 @@ gem 'swagger_ui_engine'
 gem 'rails_admin_material'
 
 # Bootstrap 4 ruby gem for Ruby on Rails
-gem 'bootstrap', '< 5.0'
+gem 'bootstrap', '< 6.0'
 
 # jQuery for Rails
 gem 'jquery-rails'
