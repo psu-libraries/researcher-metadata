@@ -113,6 +113,8 @@ gem 'delayed_job_active_record'
 # For running delayed_job daemon (or other processes)
 gem 'daemons'
 
+gem 'psu_identity', github: 'psu-libraries/psu_identity', branch: 'main'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
@@ -151,30 +153,16 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15', '< 4.0'
-
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
-
-  # Clean out database between test runs
-  gem 'database_cleaner'
-
-  # See what your headless browser is seeing with save_and_open_page
-  gem 'launchy'
-
-  # Fancy rspec matchers for rails
-  gem 'shoulda-matchers', '~> 5.0'
-
-  # Test object factory
-  gem 'factory_bot_rails'
-
-  # Integration test helpers for mailers
   gem 'capybara-email'
-
-  # Extracted test matchers for rails controllers
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'launchy'
   gem 'rails-controller-testing'
-
-  # CodeClimate does not work with .18 or later
-  gem 'simplecov', '< 0.18', require: false
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 5.0'
+  gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later
+  gem 'vcr'
+  gem 'webdrivers'
+  gem 'webmock'
 end

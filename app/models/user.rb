@@ -116,6 +116,16 @@ class User < ApplicationRecord
       .distinct(:id)
   end
 
+  def psu_identity
+    return if attributes['psu_identity'].blank?
+
+    PsuIdentity::SearchService::Person.new(data: attributes['psu_identity'])
+  end
+
+  def update_psu_identity
+    update(psu_identity: psu_identity_data)
+  end
+
   def old_potential_open_access_publications
     potential_open_access_publications
       .where.not('authorships.open_access_notification_sent_at' => nil)
@@ -441,5 +451,9 @@ class User < ApplicationRecord
         .published_during_membership
         .subject_to_open_access_policy
         .where('authorships.confirmed IS TRUE')
+    end
+
+    def psu_identity_data
+      @psu_identity_data ||= PsuIdentity::SearchService::Client.new.userid(webaccess_id)
     end
 end
