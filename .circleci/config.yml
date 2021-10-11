@@ -54,26 +54,9 @@ jobs:
       - run:
           name: Niftany
           command: bundle exec niftany
-      # Run the unit tests
       - run:
-          name: Unit Tests
-          command: bin/rspec spec/unit
-
-      # Run the component tests
-      - run:
-          name: Component Tests
-          command: bin/rspec spec/component
-
-      # Run the request tests
-      - run:
-          name: Request Tests
-          command: bin/rspec spec/requests
-
-      # Run the integration tests
-      - run:
-          name: Integration Tests
-          command: bin/rspec spec/integration
-
+          name: RSpec
+          command: bundle exec rspec
       - run:
           name: Upload Coverage
           when: on_success
