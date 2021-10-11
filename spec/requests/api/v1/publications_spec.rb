@@ -4,6 +4,10 @@ require 'requests/requests_spec_helper'
 
 describe 'API::V1 Publications' do
   describe 'GET /v1/publications' do
+    def query_pubs
+      get "/v1/publications#{params}", headers: { "X-API-Key": 'token123' }
+    end
+
     context 'when no authorization header is included in the request' do
       it 'returns 401 Unauthorized' do
         get '/v1/publications'
@@ -31,26 +35,107 @@ describe 'API::V1 Publications' do
         publications.each { |p| create :authorship, publication: p, user: user }
         create :user_organization_membership, user: user, organization: org
         create :organization_api_permission, organization: org, api_token: token
-        get "/v1/publications#{params}", headers: { "X-API-Key": 'token123' }
       end
 
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
+      describe 'with no provided params:' do
+        before do
+          query_pubs
+        end
 
-      it 'returns all visible publications to which the given API token has access' do
-        expect(json_response[:data].size).to eq(10)
-      end
+        it 'returns HTTP status 200' do
+          expect(response).to have_http_status :ok
+        end
 
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
+        it 'returns all visible publications to which the given API token has access' do
+          expect(json_response[:data].size).to eq(10)
+        end
+
+        it 'updates the usage statistics on the API token' do
+          updated_token = token.reload
+          expect(updated_token.total_requests).to eq 1
+          expect(updated_token.last_used_at).not_to be_nil
+        end
       end
 
       describe 'params:' do
+        describe 'activity_insight_id' do
+          let(:ai_pub) { create(:publication, visible: true, imports: [pub_import]) }
+          let(:pub_import) { create(:publication_import, source: 'Activity Insight', source_identifier: '123') }
+
+          before do
+            create :authorship, user: user, publication: ai_pub
+            query_pubs
+          end
+
+          context 'with a valid Activity Insight ID' do
+            let(:params) { '?activity_insight_id=123' }
+
+            it 'returns a publication matching the specified Activity Insight ID' do
+              expect(json_response[:data].size).to eq(1)
+              expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
+              expect(json_response[:data].first[:attributes][:activity_insight_ids].first).to eq('123')
+            end
+          end
+
+          context 'with an invalid Activity Insight ID' do
+            let(:params) { '?activity_insight_id=lol' }
+
+            it 'returns no results' do
+              expect(json_response[:data].size).to eq(0)
+            end
+          end
+        end
+
+        describe 'doi' do
+          let(:doi_pub) { create(:publication, visible: true, doi: 'https://doi.org/10.26207/46a7-9981') }
+
+          before do
+            create :authorship, user: user, publication: doi_pub
+            query_pubs
+          end
+
+          context 'with a full DOI URL' do
+            let(:params) { '?doi=https://doi.org/10.26207/46a7-9981' }
+
+            it 'returns a publication matching the specified DOI' do
+              expect(json_response[:data].size).to eq(1)
+              expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
+            end
+          end
+
+          context 'with a DOI starting with the doi: prefix' do
+            let(:params) { '?doi=doi:10.26207/46a7-9981' }
+
+            it 'returns a publication matching the specified DOI' do
+              expect(json_response[:data].size).to eq(1)
+              expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
+            end
+          end
+
+          context 'with a DOI with no prefix' do
+            let(:params) { '?doi=10.26207/46a7-9981' }
+
+            it 'returns a publication matching the specified DOI' do
+              expect(json_response[:data].size).to eq(1)
+              expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
+            end
+          end
+
+          context 'with an invalid DOI' do
+            let(:params) { '?doi=lol' }
+
+            it 'returns no results' do
+              expect(json_response[:data].size).to eq(0)
+            end
+          end
+        end
+
         describe 'limit' do
           let(:params) { '?limit=5' }
+
+          before do
+            query_pubs
+          end
 
           it 'returns the specified number of publications' do
             expect(json_response[:data].size).to eq(5)
