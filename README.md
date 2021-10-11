@@ -1,3 +1,5 @@
+[[![Maintainability](https://api.codeclimate.com/v1/badges/74b6e379ab6fc90ab149/maintainability)](https://codeclimate.com/github/psu-stewardship/researcher-metadata/maintainability) [![Test Coverage](https://api.codeclimate.com/v1/badges/74b6e379ab6fc90ab149/test_coverage)](https://codeclimate.com/github/psu-stewardship/researcher-metadata/test_coverage)
+
 ![Penn State Libraries Logo](https://metadata.libraries.psu.edu/psu_libraries.png)
 
 # Researcher Metadata Database (RMD)
