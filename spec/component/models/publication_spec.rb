@@ -286,7 +286,8 @@ describe Publication, type: :model do
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
     let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
-    it "returns publications that were published after Penn State's open access policy went into effect" do
+    let!(:pub5) { create :publication, published_on: Date.new(2020, 7, 2), status: 'In Press' }
+    it "returns publications that were published after Penn State's open access policy went into effect and have a status of 'Published'" do
       expect(Publication.subject_to_open_access_policy).to match_array [pub2, pub3]
     end
   end
@@ -2559,6 +2560,24 @@ describe Publication, type: :model do
     before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return(policy) }
     it 'delegates to the preferred journal info policy' do
       expect(pub.preferred_publisher_name).to eq 'preferred name'
+    end
+  end
+
+  describe "#published" do
+    context "when publication's status is 'Published" do
+      let(:pub) { FactoryBot.create :publication, status: 'Published' }
+
+      it 'returns true' do
+        expect(pub.published?).to eq true
+      end
+    end
+
+    context "when publication's status is 'In Press'" do
+      let(:pub) { FactoryBot.create :publication, status: 'In Press' }
+
+      it 'returns false' do
+        expect(pub.published?).to eq false
+      end
     end
   end
 end

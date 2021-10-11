@@ -57,7 +57,7 @@ class Publication < ApplicationRecord
   
   validates :publication_type, :title, :status, presence: true
   validates :publication_type, inclusion: {in: publication_types }
-  validates :status, inclusion: {in: statuses }
+  validates :status, inclusion: { in: statuses }
   validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }
@@ -582,6 +582,10 @@ class Publication < ApplicationRecord
     preferred_journal_info_policy.publisher_name
   end
 
+  def published?
+    status == 'Published'
+  end
+
   private
 
   def preferred_journal_info_policy
@@ -595,6 +599,4 @@ class Publication < ApplicationRecord
       end
     end
   end
-
-
 end
