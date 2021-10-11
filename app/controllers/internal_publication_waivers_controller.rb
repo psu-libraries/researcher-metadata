@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InternalPublicationWaiversController < OpenAccessWorkflowController
   def new
     authorship = current_user.authorships.find_by!(publication_id: params[:id])
@@ -19,7 +21,7 @@ class InternalPublicationWaiversController < OpenAccessWorkflowController
 
   private
 
-  def waiver_params
-    params.require(:internal_publication_waiver).permit([:reason_for_waiver])
-  end
+    def waiver_params
+      params.require(:internal_publication_waiver).permit([:reason_for_waiver])
+    end
 end

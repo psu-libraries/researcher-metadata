@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class User < ApplicationRecord
   class OmniauthError < RuntimeError; end
 
@@ -58,21 +60,21 @@ class User < ApplicationRecord
     users += find_confirmed_by_wos_pub(pub)
     pub.author_names.each do |an|
       if an.first_name && an.middle_name
-        users += where(first_name: an.first_name, middle_name: an.middle_name, last_name: an.last_name).
-          or(where(first_name: an.first_name, last_name: an.last_name))
+        users += where(first_name: an.first_name, middle_name: an.middle_name, last_name: an.last_name)
+          .or(where(first_name: an.first_name, last_name: an.last_name))
       end
       if an.first_name && an.middle_initial
-        users += where("first_name = ? AND middle_name ILIKE ? AND last_name = ?",
-                      an.first_name,
-                      "#{an.middle_initial}%",
-                      an.last_name).
-          or(where(first_name: an.first_name, last_name: an.last_name))
+        users += where('first_name = ? AND middle_name ILIKE ? AND last_name = ?',
+                       an.first_name,
+                       "#{an.middle_initial}%",
+                       an.last_name)
+          .or(where(first_name: an.first_name, last_name: an.last_name))
       end
       if an.first_name && !(an.middle_name || an.middle_initial)
         users += where(first_name: an.first_name, last_name: an.last_name)
       end
       if an.first_initial && an.middle_initial
-        users += where("first_name ILIKE ? AND middle_name ILIKE ? AND last_name =?",
+        users += where('first_name ILIKE ? AND middle_name ILIKE ? AND last_name =?',
                        "#{an.first_initial}%",
                        "#{an.middle_initial}%",
                        an.last_name)
@@ -101,30 +103,40 @@ class User < ApplicationRecord
   end
 
   def self.needs_open_access_notification
-    joins(:authorships, :publications, :user_organization_memberships).
-    where("publications.status = 'Published'").
-    where("publications.publication_type ~* 'Journal Article'").
-    where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))').
-    where(%{publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending'))}).
-    where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago).
-    where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START).
-    where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)').
-    where('authorships.confirmed IS TRUE').
-    where("(publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '') AND (publications.scholarsphere_open_access_url IS NULL OR publications.scholarsphere_open_access_url = '')").
-    where('publications.visible = true').
-    distinct(:id)
+    joins(:authorships, :publications, :user_organization_memberships)
+      .where("publications.status = 'Published'")
+      .where("publications.publication_type ~* 'Journal Article'")
+      .where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))')
+      .where(%{publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending'))})
+      .where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago)
+      .where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START)
+      .where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
+      .where('authorships.confirmed IS TRUE')
+      .where("(publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '') AND (publications.scholarsphere_open_access_url IS NULL OR publications.scholarsphere_open_access_url = '')")
+      .where('publications.visible = true')
+      .distinct(:id)
+  end
+
+  def psu_identity
+    return if attributes['psu_identity'].blank?
+
+    PsuIdentity::SearchService::Person.new(data: attributes['psu_identity'])
+  end
+
+  def update_psu_identity
+    update(psu_identity: psu_identity_data)
   end
 
   def old_potential_open_access_publications
-    potential_open_access_publications.
-      where('authorships.open_access_notification_sent_at IS NOT NULL').
-      select { |p| p.no_open_access_information? }
+    potential_open_access_publications
+      .where.not('authorships.open_access_notification_sent_at' => nil)
+      .select(&:no_open_access_information?)
   end
 
   def new_potential_open_access_publications
-    potential_open_access_publications.
-      where('authorships.open_access_notification_sent_at IS NULL').
-      select { |p| p.no_open_access_information? }
+    potential_open_access_publications
+      .where(authorships: { open_access_notification_sent_at: nil })
+      .select(&:no_open_access_information?)
   end
 
   def confirmed_publications
@@ -179,7 +191,7 @@ class User < ApplicationRecord
   end
 
   def orcid
-    orcid_identifier.gsub("https://orcid.org/", "").presence if orcid_identifier
+    orcid_identifier.gsub('https://orcid.org/', '').presence if orcid_identifier
   end
 
   def clear_orcid_access_token
@@ -193,7 +205,7 @@ class User < ApplicationRecord
   rails_admin do
     configure :publications do
       pretty_value do
-        bindings[:view].render :partial => "rails_admin/partials/users/publications.html.erb", :locals => { :publications => value }
+        bindings[:view].render partial: 'rails_admin/partials/users/publications.html.erb', locals: { publications: value }
       end
     end
 
@@ -418,27 +430,31 @@ class User < ApplicationRecord
 
   private
 
-  def downcase_webaccess_id
-    self.webaccess_id = self.webaccess_id.downcase if self.webaccess_id.present?
-  end
+    def downcase_webaccess_id
+      self.webaccess_id = webaccess_id.downcase if webaccess_id.present?
+    end
 
-  def convert_blank_psu_id_to_nil
-    self.penn_state_identifier = nil if self.penn_state_identifier.blank?
-  end
+    def convert_blank_psu_id_to_nil
+      self.penn_state_identifier = nil if penn_state_identifier.blank?
+    end
 
-  def convert_blank_pure_id_to_nil
-    self.pure_uuid = nil if self.pure_uuid.blank?
-  end
+    def convert_blank_pure_id_to_nil
+      self.pure_uuid = nil if pure_uuid.blank?
+    end
 
-  def convert_blank_ai_id_to_nil
-    self.activity_insight_identifier = nil if self.activity_insight_identifier.blank?
-  end
+    def convert_blank_ai_id_to_nil
+      self.activity_insight_identifier = nil if activity_insight_identifier.blank?
+    end
 
-  def potential_open_access_publications
-    publications.
-      joins(:authorships).
-      published_during_membership.
-      subject_to_open_access_policy.
-      where('authorships.confirmed IS TRUE')
-  end
+    def potential_open_access_publications
+      publications
+        .joins(:authorships)
+        .published_during_membership
+        .subject_to_open_access_policy
+        .where('authorships.confirmed IS TRUE')
+    end
+
+    def psu_identity_data
+      @psu_identity_data ||= PsuIdentity::SearchService::Client.new.userid(webaccess_id)
+    end
 end

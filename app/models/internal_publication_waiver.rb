@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class InternalPublicationWaiver < ApplicationRecord
   belongs_to :authorship, inverse_of: :waiver
   has_one :user, through: :authorship

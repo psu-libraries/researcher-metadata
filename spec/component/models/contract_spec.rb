@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
-  
+
 describe 'the contracts table', type: :model do
   subject { Contract.new }
 
@@ -34,18 +36,20 @@ describe Contract, type: :model do
     it { is_expected.to have_many(:organizations).through(:users) }
   end
 
-  describe "deleting a contract with user_contracts" do
+  describe 'deleting a contract with user_contracts' do
     let(:c) { create :contract }
-    let!(:u) { create :user_contract, contract: c}
+    let!(:u) { create :user_contract, contract: c }
+
     it "also deletes the contract's user_contracts" do
       c.destroy
       expect { u.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
-  describe "deleting a contract with contract_imports" do
+  describe 'deleting a contract with contract_imports' do
     let(:c) { create :contract }
-    let!(:ci) { create :contract_import, contract: c}
+    let!(:ci) { create :contract_import, contract: c }
+
     it "also deletes the contract's contract_imports" do
       c.destroy
       expect { ci.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -56,8 +60,9 @@ describe Contract, type: :model do
     let(:visible_contract1) { create :contract, visible: true }
     let(:visible_contract2) { create :contract, visible: true }
     let(:invisible_contract) { create :contract, visible: false }
-    it "returns the contracts that are marked as visible" do
-      expect(Contract.visible).to match_array [visible_contract1, visible_contract2]
+
+    it 'returns the contracts that are marked as visible' do
+      expect(described_class.visible).to match_array [visible_contract1, visible_contract2]
     end
   end
 end

@@ -1,50 +1,52 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe OrcidAccessTokensController, type: :controller do
-
   describe '#new' do
-    context "when the user is authenticated" do
+    context 'when the user is authenticated' do
       let!(:user) { create :user, orcid_access_token: token }
+
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)
       end
 
-      context "when the user already has an ORCID access token" do
-        let(:token) { "abc123" }
+      context 'when the user already has an ORCID access token' do
+        let(:token) { 'abc123' }
 
-        it "sets a flash message" do
+        it 'sets a flash message' do
           post :new
 
           expect(flash[:notice]).to eq I18n.t('profile.orcid_access_tokens.new.already_linked')
         end
 
-        it "redirects back to the profile bio page" do
+        it 'redirects back to the profile bio page' do
           post :new
 
           expect(response).to redirect_to profile_bio_path
         end
       end
 
-      context "when the user does not have an ORCID access token" do
+      context 'when the user does not have an ORCID access token' do
         let(:token) { nil }
-        
-        it "redirects to the start of the ORCID Oauth page" do
+
+        it 'redirects to the start of the ORCID Oauth page' do
           post :new
-          
-          expect(response).to redirect_to "https://sandbox.orcid.org/oauth/authorize?client_id=test&response_type=code&scope=/read-limited%20/activities/update%20/person/update&redirect_uri=http://test.host/orcid_access_token"
+
+          expect(response).to redirect_to 'https://sandbox.orcid.org/oauth/authorize?client_id=test&response_type=code&scope=/read-limited%20/activities/update%20/person/update&redirect_uri=http://test.host/orcid_access_token'
         end
       end
     end
 
-    context "when the user is not authenticated" do
-      it "redirects to the home page" do
+    context 'when the user is not authenticated' do
+      it 'redirects to the home page' do
         post :new
 
         expect(response).to redirect_to root_path
       end
 
-      it "sets a flash error message" do
+      it 'sets a flash error message' do
         post :new
 
         expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
@@ -53,8 +55,9 @@ describe OrcidAccessTokensController, type: :controller do
   end
 
   describe '#create' do
-    context "when the user is authenticated" do
+    context 'when the user is authenticated' do
       let(:client) { double 'ORCID Oauth client' }
+      let!(:user) { create :user }
       let(:response) { double 'ORCID Oauth response',
                               code: response_code,
                               content_type: nil,
@@ -72,68 +75,67 @@ describe OrcidAccessTokensController, type: :controller do
         allow(response).to receive(:[]).with('orcid').and_return('0000-0001-2345-6789')
       end
 
-      let!(:user) { create :user }
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)
-        post :create, params: {code: 'abc123'}
+        post :create, params: { code: 'abc123' }
       end
-      
-      context "when ORCID redirects back with an access_denied error" do
-        before { get :create, params: {error: 'access_denied'} }
-  
-        it "sets a flash message" do
+
+      context 'when ORCID redirects back with an access_denied error' do
+        before { get :create, params: { error: 'access_denied' } }
+
+        it 'sets a flash message' do
           expect(flash.now[:alert]).to eq I18n.t('profile.orcid_access_tokens.create.authorization_denied')
         end
-        
-        it "renders the create template" do
+
+        it 'renders the create template' do
           expect(response).to render_template('create')
         end
       end
 
-      context "when ORCID redirects back with no error" do
-        before { get :create, params: {code: 'abc123'} }
+      context 'when ORCID redirects back with no error' do
+        before { get :create, params: { code: 'abc123' } }
 
-        context "when the request to create an access token is successful" do
-          it "saves the data from the response" do
+        context 'when the request to create an access token is successful' do
+          it 'saves the data from the response' do
             expect(user.orcid_access_token).to eq 'xyz789'
             expect(user.orcid_refresh_token).to eq 'def456'
             expect(user.orcid_access_token_expires_in).to eq 20000000
             expect(user.orcid_access_token_scope).to eq '/authenticate'
             expect(user.authenticated_orcid_identifier).to eq '0000-0001-2345-6789'
           end
-  
-          it "sets a flash message" do
+
+          it 'sets a flash message' do
             expect(flash[:notice]).to eq I18n.t('profile.orcid_access_tokens.create.success')
           end
-  
-          it "redirects back to the profile bio page" do
+
+          it 'redirects back to the profile bio page' do
             expect(response).to redirect_to profile_bio_path
           end
         end
-  
-        context "when the request to create an access token fails" do
+
+        context 'when the request to create an access token fails' do
           let(:response_code) { 500 }
-  
-          it "sets a flash message" do
+
+          it 'sets a flash message' do
             expect(flash[:alert]).to eq I18n.t('profile.orcid_access_tokens.create.error')
           end
-  
-          it "redirects back to the profile bio page" do
+
+          it 'redirects back to the profile bio page' do
             expect(response).to redirect_to profile_bio_path
           end
         end
       end
     end
 
-    context "when the user is not authenticated" do
-      it "redirects to the home page" do
+    context 'when the user is not authenticated' do
+      it 'redirects to the home page' do
         get :create
 
         expect(response).to redirect_to root_path
       end
 
-      it "sets a flash error message" do
+      it 'sets a flash error message' do
         get :create
 
         expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')

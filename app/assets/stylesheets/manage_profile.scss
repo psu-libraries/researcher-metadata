@@ -1,28 +1,28 @@
-@import "bootstrap";
-@import "font-awesome";
+@import 'bootstrap';
+@import 'font-awesome';
 
 body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
 }
 
 .manage-profile-nav {
-  border-bottom: 1px solid lightgrey;
-  margin-bottom: 20px;
   background-color: #fff;
+  border-bottom: 1px solid lightgrey;
   clear: both;
+  margin-bottom: 20px;
   padding: 0 16px 0 0;
 
   .navbar-brand {
-    padding-top: 0px;
     margin: 0 60px 0 8px;
+    padding-top: 0;
   }
 }
 
 .manage-profile-header {
-  height: 38px;
   background-color: #595959;
+  height: 38px;
 
   h1 {
     float: left;
@@ -30,36 +30,38 @@ body {
   }
 
   ul {
-    list-style: none;
     float: right;
+    list-style: none;
     padding: 6px 16px 0 0;
   }
 
-  a, h1 {
+  a,
+  h1 {
     color: #fff;
-    text-decoration: none;
     font-size: 17px;
+    text-decoration: none;
   }
 }
 
 .open-access-info {
-  margin: 30px 0 30px 0;
+  margin: 30px 0;
 }
 
 .oa-publication-details {
-  td {
-    padding: 4px 20px 4px 0;
-    min-width: 142px;
-  }
-
   margin-bottom: 30px;
+
+  td {
+    min-width: 142px;
+    padding: 4px 20px 4px 0;
+  }
 }
 
-.open-access-action, .profile-bio-section {
-  padding: 30px;
+.open-access-action,
+.profile-bio-section {
   border: 1px solid lightgrey;
   border-radius: 10px;
-  margin: 20px 0
+  margin: 20px 0;
+  padding: 30px;
 }
 
 .open-access-actions {
@@ -71,18 +73,20 @@ body {
   text-align: center;
 }
 
+// scss-lint:disable QualifyingElement
 table.legend {
   font-size: 13px;
+
   td {
     padding: 4px 8px;
   }
 }
 
 #icon-key {
-  border-radius: 10px;
-  padding: 16px;
-  margin-bottom: 20px;
   background-color: lightgrey;
+  border-radius: 10px;
+  margin-bottom: 20px;
+  padding: 16px;
 }
 
 #waiver-list {
@@ -97,33 +101,34 @@ table.legend {
 
 // ====v Styles for ORCID branding - do not modify v====
 #connect-orcid-button {
-	border: 1px solid #D3D3D3;
-	padding: .3em;
-	background-color: #fff;
-	border-radius: 8px;
-	box-shadow: 1px 1px 3px #999;
-	cursor: pointer;
-	color: #999;
-	font-weight: bold;
-	font-size: .8em;
-	line-height: 24px;
-	vertical-align: middle;
+  background-color: #fff;
+  border: 1px solid #d3d3d3;
+  border-radius: 8px;
+  box-shadow: 1px 1px 3px #999;
+  color: #999;
+  cursor: pointer;
+  font-size: .8em;
+  font-weight: bold;
+  line-height: 24px;
+  padding: .3em;
+  vertical-align: middle;
 }
 
 #connect-orcid-button:hover {
-	border: 1px solid #338caf;
-	color: #338caf;
+  border: 1px solid #338caf;
+  color: #338caf;
 }
 
 #orcid-id-icon {
-	display: block;
-	margin: 0 .5em 0 0;
-	padding: 0;
-	float: left;
+  display: block;
+  float: left;
+  margin: 0 .5em 0 0;
+  padding: 0;
 }
 // =======================================================
 
-.orcid-button, .orcid-button:hover {
+.orcid-button,
+.orcid-button:hover {
   background-color: #a6ce39;
   color: #fff;
 }
@@ -148,22 +153,23 @@ table.legend {
   min-height: 126px;
 
   .file-group {
-    min-height: inherit;
     border: 1px solid lightgrey;
     border-radius: 10px;
-    padding: 14px;
     margin-bottom: 14px;
+    min-height: inherit;
+    padding: 14px;
   }
 
+  // scss-lint:disable SelectorFormat
   .scholarsphere_work_deposit_file_uploads_file {
-    width: 80%;
-    margin-right: 20px;
     float: left;
+    margin-right: 20px;
+    width: 80%;
   }
 
   input.file {
-    padding: 10px;
     height: inherit;
+    padding: 10px;
   }
 
   .remove_fields {
@@ -172,8 +178,8 @@ table.legend {
 }
 
 .cocoon-links {
-  margin-bottom: 14px;
   float: right;
+  margin-bottom: 14px;
 }
 
 .file-uploads {

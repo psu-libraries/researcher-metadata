@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class APIToken < ApplicationRecord
   before_create :set_token
 
@@ -29,7 +31,7 @@ class APIToken < ApplicationRecord
       field(:id)
       field(:token)
       field(:app_name)
-      field(:organization_count) { label 'Orgs'}
+      field(:organization_count) { label 'Orgs' }
       field(:total_requests)
       field(:last_used_at)
       field(:admin_email)
@@ -52,7 +54,7 @@ class APIToken < ApplicationRecord
 
   private
 
-  def set_token
-    self.token ||= SecureRandom.hex(48)
-  end
+    def set_token
+      self.token ||= SecureRandom.hex(48)
+    end
 end

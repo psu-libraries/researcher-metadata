@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OrcidWorksController < UserController
   before_action :authenticate!
 
@@ -16,7 +18,6 @@ class OrcidWorksController < UserController
         flash[:notice] = I18n.t('profile.orcid_works.create.success')
       end
     end
-
   rescue OrcidWork::InvalidToken
     current_user.clear_orcid_access_token
     flash[:alert] = I18n.t('profile.orcid_works.create.account_not_linked')

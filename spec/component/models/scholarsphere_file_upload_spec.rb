@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -16,22 +18,23 @@ describe 'the scholarsphere_file_uploads table', type: :model do
 end
 
 describe ScholarsphereFileUpload, type: :model do
-  subject(:upload) { ScholarsphereFileUpload.new }
+  subject(:upload) { described_class.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to belong_to(:work_deposit).class_name(:ScholarsphereWorkDeposit).with_foreign_key(:scholarsphere_work_deposit_id).optional }
 
   it { is_expected.to validate_presence_of(:file) }
 
-  describe "#file" do
-    it "mounts a ScholarsphereFileUploader" do
+  describe '#file' do
+    it 'mounts a ScholarsphereFileUploader' do
       expect(upload.file).to be_a(ScholarsphereFileUploader)
     end
   end
 
   describe '#destroy' do
     let!(:upload) { create :scholarsphere_file_upload }
+
     it 'removes the file from the filesystem' do
       expect(File.exist?(upload.file.path)).to eq true
       upload.destroy
@@ -46,7 +49,7 @@ describe ScholarsphereFileUpload, type: :model do
 
     before { allow(ScholarsphereFileUploader).to receive(:new).and_return uploader }
 
-    it "returns the full path to the saved file" do
+    it 'returns the full path to the saved file' do
       expect(upload.stored_file_path).to eq 'the/file/path'
     end
   end

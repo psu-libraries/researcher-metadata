@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 RSpec::Matchers.define :have_db_foreign_key do |expected|
-  match do |actual|
+  match do |_actual|
     foreign_key_exists? && correct_name?
   end
 
@@ -23,7 +25,7 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
   end
 
   def foreign_key_exists?
-    if ! matched_foreign_key.nil?
+    if !matched_foreign_key.nil?
       true
     else
       @error_details = "#{model_class} does not have a foreign key constraint on #{expected}"
@@ -36,9 +38,9 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
 
     if matched_key_name == @expected_name.to_s
       true
-    else 
+    else
       @error_details = "#{model_class} hasa foreign key constraint on #{expected}, " <<
-      "named #{matched_key_name.inspect}, not #{@expected_name.inspect}"
+        "named #{matched_key_name.inspect}, not #{@expected_name.inspect}"
       false
     end
   end
@@ -48,15 +50,17 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
     expected_table_name = expected_class_name.tableize
     expected_column_name = expected_class_name.foreign_key
 
-    foreign_keys.find{ |fk| (fk.to_table == expected_table_name || fk.to_table == @expected_to_table_name) && fk.options[:column] == expected_column_name }
+    foreign_keys.find { |fk| (fk.to_table == expected_table_name || fk.to_table == @expected_to_table_name) && fk.options[:column] == expected_column_name }
   end
 
   def matched_key_name
-    matched_foreign_key.options[:name] rescue nil
+    matched_foreign_key.options[:name]
+  rescue StandardError
+    nil
   end
 
   def foreign_keys
-    ::ActiveRecord::Base.connection.foreign_keys( table_name )
+    ::ActiveRecord::Base.connection.foreign_keys(table_name)
   end
 
   def model_class

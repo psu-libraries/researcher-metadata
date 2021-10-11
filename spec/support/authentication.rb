@@ -1,21 +1,20 @@
-module StubbedAuthenticationHelper
+# frozen_string_literal: true
 
+module StubbedAuthenticationHelper
   # Call this method in your "before" block to be signed in as the given user
   # (pass in the entire user object, not just a username).
 
   def sign_in_as(user)
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new({
-      provider: 'azure_oauth',
-      uid: user.webaccess_id
-    })
+                                                                       provider: 'azure_oauth',
+                                                                       uid: user.webaccess_id
+                                                                     })
   end
-
 end
 
 RSpec.configure do |config|
-
-  config.after(:each) do
+  config.after do
     OmniAuth.config.test_mode = false
     OmniAuth.config.mock_auth[:azure_oauth] = nil
   end

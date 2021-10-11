@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe LDAPImporter do
-  let(:importer) { LDAPImporter.new }
+  let(:importer) { described_class.new }
 
   let!(:user_1) { create :user, webaccess_id: 'abc1' }
   let!(:user_2) { create :user, webaccess_id: 'def2' }
@@ -24,16 +26,17 @@ describe LDAPImporter do
     allow(Net::LDAP::Filter).to receive(:eq).with('uid', 'jkl4').and_return user_4_filter
 
     allow(psu_ldap).to receive(:search).with(base: 'dc=psu,dc=edu',
-                                             filter: user_1_filter).and_return([{edupersonorcid: ['user-1-orcid']}])
+                                             filter: user_1_filter).and_return([{ edupersonorcid: ['user-1-orcid'] }])
     allow(psu_ldap).to receive(:search).with(base: 'dc=psu,dc=edu',
-                                             filter: user_2_filter).and_return([{edupersonorcid: ['user-2-orcid']}])
+                                             filter: user_2_filter).and_return([{ edupersonorcid: ['user-2-orcid'] }])
     allow(psu_ldap).to receive(:search).with(base: 'dc=psu,dc=edu',
                                              filter: user_3_filter).and_return([])
     allow(psu_ldap).to receive(:search).with(base: 'dc=psu,dc=edu',
-                                             filter: user_4_filter).and_return([{edupersonorcid: []}])
+                                             filter: user_4_filter).and_return([{ edupersonorcid: [] }])
     allow(psu_ldap).to receive(:open).and_yield
   end
-  describe "#call" do
+
+  describe '#call' do
     it "updates each user's ORCID ID with the value returned from LDAP" do
       importer.call
 

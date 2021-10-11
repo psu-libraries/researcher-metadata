@@ -1,5 +1,7 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
-  
+
 describe 'the user_performances table', type: :model do
   subject { UserPerformance.new }
 
@@ -25,9 +27,10 @@ describe UserPerformance, type: :model do
     it { is_expected.to belong_to(:performance).inverse_of(:user_performances) }
   end
 
-  describe "deleting a performance with user_performances" do
+  describe 'deleting a performance with user_performances' do
     let(:p) { create :performance }
-    let!(:up) { create :user_performance, performance: p}
+    let!(:up) { create :user_performance, performance: p }
+
     it "also deletes the performance's user_performances" do
       p.destroy
       expect { up.reload }.to raise_error ActiveRecord::RecordNotFound

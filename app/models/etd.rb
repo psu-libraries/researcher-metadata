@@ -1,5 +1,6 @@
-class ETD < ApplicationRecord
+# frozen_string_literal: true
 
+class ETD < ApplicationRecord
   def self.submission_types
     [
       'Dissertation',
@@ -20,7 +21,7 @@ class ETD < ApplicationRecord
   validates :webaccess_id, presence: true, uniqueness: { case_sensitive: false }
   validates :external_identifier, presence: true, uniqueness: true
 
-  validates :submission_type, inclusion: {in: submission_types }
+  validates :submission_type, inclusion: { in: submission_types }
 
   has_many :committee_memberships, inverse_of: :etd
   has_many :users, through: :committee_memberships

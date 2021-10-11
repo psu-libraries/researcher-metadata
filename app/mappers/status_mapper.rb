@@ -1,10 +1,12 @@
+# frozen_string_literal: true
+
 class StatusMapper
   def self.map(status)
     if status.nil?
       status.to_s
-    elsif status.downcase == 'in press' || status.downcase == 'accepted/in press'
+    elsif status.casecmp('in press').zero? || status.casecmp('accepted/in press').zero?
       'In Press'
-    elsif status.downcase == 'published'
+    elsif status.casecmp('published').zero?
       'Published'
     else
       status.to_s

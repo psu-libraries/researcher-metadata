@@ -1,7 +1,8 @@
-Rails.application.routes.draw do
+# frozen_string_literal: true
 
+Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  mount SwaggerUiEngine::Engine, at: "/api_docs"
+  mount SwaggerUiEngine::Engine, at: '/api_docs'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
@@ -54,7 +55,6 @@ Rails.application.routes.draw do
   post 'profile/publications/open_access_waivers' => 'external_publication_waivers#create', as: :external_publication_waivers
   post 'orcid_access_token' => 'orcid_access_tokens#new', as: :new_orcid_access_token
   get 'orcid_access_token' => 'orcid_access_tokens#create', as: :orcid_access_token
-  
 
   get 'profile' => redirect('profile/publications/edit')
 

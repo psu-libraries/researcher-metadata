@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Presentation < ApplicationRecord
   has_many :presentation_contributions
   has_many :users, through: :presentation_contributions
@@ -11,12 +13,12 @@ class Presentation < ApplicationRecord
   end
 
   def label_name
-    label || self.id.to_s
+    label || id.to_s
   end
 
   def label
     l = name.to_s
-    l += " - " if name.present? && title.present?
+    l += ' - ' if name.present? && title.present?
     l += title.to_s if title.present?
     l.presence
   end

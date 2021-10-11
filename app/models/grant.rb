@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class Grant < ApplicationRecord
   def self.agency_names
-    ["National Science Foundation"]
+    ['National Science Foundation']
   end
 
   has_many :research_funds
@@ -8,7 +10,7 @@ class Grant < ApplicationRecord
   has_many :researcher_funds
   has_many :users, through: :researcher_funds
 
-  validates :agency_name, inclusion: {in: agency_names, allow_nil: true}
+  validates :agency_name, inclusion: { in: agency_names, allow_nil: true }
 
   def name
     title.presence || identifier.presence || wos_identifier.presence
@@ -23,7 +25,7 @@ class Grant < ApplicationRecord
       field(:id)
       field(:agency)
       field(:name) do
-        label "Identifier"
+        label 'Identifier'
       end
       field(:created_at)
       field(:updated_at)

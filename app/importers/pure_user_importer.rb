@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 class PureUserImporter < PureImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Pure persons (users)', total: total_pages) unless Rails.env.test?
 
     1.upto(total_pages) do |i|
-      offset = (i-1) * page_size
+      offset = (i - 1) * page_size
       persons = get_records(type: record_type, page_size: page_size, offset: offset)
 
       persons['items'].each do |item|
@@ -31,27 +33,25 @@ class PureUserImporter < PureImporter
 
           u.save!
 
-          if item['staffOrganisationAssociations']
-            item['staffOrganisationAssociations'].each do |a|
-              o_uuid = a['organisationalUnit']['uuid']
+          item['staffOrganisationAssociations']&.each do |a|
+            o_uuid = a['organisationalUnit']['uuid']
 
-              o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
+            o = o_uuid ? Organization.find_by(pure_uuid: o_uuid) : nil
 
-              if o
-                m = UserOrganizationMembership.find_by(source_identifier: a['pureId'], import_source: 'Pure') ||
-                  UserOrganizationMembership.find_by(user: u, organization: o, started_on: a['period']['startDate'], import_source: 'HR') ||
-                  UserOrganizationMembership.new
+            if o
+              m = UserOrganizationMembership.find_by(source_identifier: a['pureId'], import_source: 'Pure') ||
+                UserOrganizationMembership.find_by(user: u, organization: o, started_on: a['period']['startDate'], import_source: 'HR') ||
+                UserOrganizationMembership.new
 
-                m.import_source = 'Pure'
-                m.source_identifier = a['pureId']
-                m.organization = o
-                m.user = u
-                m.primary = a['isPrimaryAssociation']
-                m.position_title = position_title(a)
-                m.started_on = a['period']['startDate']
-                m.ended_on = a['period']['endDate']
-                m.save!
-              end
+              m.import_source = 'Pure'
+              m.source_identifier = a['pureId']
+              m.organization = o
+              m.user = u
+              m.primary = a['isPrimaryAssociation']
+              m.position_title = position_title(a)
+              m.started_on = a['period']['startDate']
+              m.ended_on = a['period']['endDate']
+              m.save!
             end
           end
         end
@@ -71,7 +71,7 @@ class PureUserImporter < PureImporter
 
   private
 
-  def position_title(association)
-    association['jobDescription'] && association['jobDescription']['text'].detect { |text| text['locale'] == 'en_US' }['value']
-  end
+    def position_title(association)
+      association['jobDescription'] && association['jobDescription']['text'].find { |text| text['locale'] == 'en_US' }['value']
+    end
 end

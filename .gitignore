@@ -37,3 +37,6 @@
 
 # Ignore files uploaded through the app
 /uploads
+
+# Coverage output
+coverage

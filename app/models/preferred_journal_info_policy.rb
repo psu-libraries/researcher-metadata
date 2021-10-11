@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PreferredJournalInfoPolicy
   def initialize(publication)
     @publication = publication
@@ -13,5 +15,5 @@ class PreferredJournalInfoPolicy
 
   private
 
-  attr_reader :publication
+    attr_reader :publication
 end

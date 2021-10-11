@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ActivityInsightImporter
   IMPORT_SOURCE = 'Activity Insight'
 
@@ -146,18 +148,18 @@ class ActivityInsightImporter
         details.publications.each do |pub|
           if pub.importable?
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
-                PublicationImport.new(source: IMPORT_SOURCE,
-                                      source_identifier: pub.activity_insight_id,
-                                      publication: Publication.create!(pub_attrs(pub)))
+              PublicationImport.new(source: IMPORT_SOURCE,
+                                    source_identifier: pub.activity_insight_id,
+                                    publication: Publication.create!(pub_attrs(pub)))
             pub_record = pi.publication
 
             if pi.persisted?
-              pub_record.update_attributes!(pub_attrs(pub)) unless pub_record.updated_by_user_at.present?
+              pub_record.update!(pub_attrs(pub)) if pub_record.updated_by_user_at.blank?
             else
               pi.save!
             end
 
-            unless pub_record.updated_by_user_at.present?
+            if pub_record.updated_by_user_at.blank?
               authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
 
               if authorship.new_record?
@@ -187,11 +189,10 @@ class ActivityInsightImporter
             DuplicatePublicationGroup.group_duplicates_of(pub_record)
 
             if pub_record.reload.duplicate_group
-              pub_record.update_attributes!(visible: false)
+              pub_record.update!(visible: false)
             end
           end
         end
-
       rescue Exception => e
         errors << e
       end
@@ -202,48 +203,47 @@ class ActivityInsightImporter
 
   private
 
-  def pub_attrs(pub)
-    {
-      title: pub.title,
-      publication_type: pub.publication_type,
-      journal_title: pub.journal_title,
-      publisher_name: pub.publisher,
-      secondary_title: pub.secondary_title,
-      status: pub.status,
-      volume: pub.volume,
-      issue: pub.issue,
-      edition: pub.edition,
-      page_range: pub.page_range,
-      url: pub.url,
-      issn: pub.issn,
-      abstract: pub.abstract,
-      authors_et_al: pub.authors_et_al,
-      published_on: pub.published_on,
-      doi: pub.doi
-    }
-  end
+    def pub_attrs(pub)
+      {
+        title: pub.title,
+        publication_type: pub.publication_type,
+        journal_title: pub.journal_title,
+        publisher_name: pub.publisher,
+        secondary_title: pub.secondary_title,
+        status: pub.status,
+        volume: pub.volume,
+        issue: pub.issue,
+        edition: pub.edition,
+        page_range: pub.page_range,
+        url: pub.url,
+        issn: pub.issn,
+        abstract: pub.abstract,
+        authors_et_al: pub.authors_et_al,
+        published_on: pub.published_on,
+        doi: pub.doi
+      }
+    end
 
-  def ai_users
-    @users ||= Nokogiri::XML(ai_users_xml).css('Users User').map { |u| ActivityInsightListUser.new(u) }
-  end
+    def ai_users
+      @users ||= Nokogiri::XML(ai_users_xml).css('Users User').map { |u| ActivityInsightListUser.new(u) }
+    end
 
-  def ai_users_xml
-    @xml ||= HTTParty.get('https://webservices.digitalmeasures.com/login/service/v4/User',
-                          basic_auth: {username: Rails.configuration.x.activity_insight['username'],
-                                       password: Rails.configuration.x.activity_insight['password']}).to_s
-  end
+    def ai_users_xml
+      @xml ||= HTTParty.get('https://webservices.digitalmeasures.com/login/service/v4/User',
+                            basic_auth: { username: Rails.configuration.x.activity_insight['username'],
+                                          password: Rails.configuration.x.activity_insight['password'] }).to_s
+    end
 
-  def ai_user_detail_xml(id)
-    HTTParty.get("https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:#{id}",
-                 basic_auth: {username: Rails.configuration.x.activity_insight['username'],
-                              password: Rails.configuration.x.activity_insight['password']}).to_s
-  end
+    def ai_user_detail_xml(id)
+      HTTParty.get("https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:#{id}",
+                   basic_auth: { username: Rails.configuration.x.activity_insight['username'],
+                                 password: Rails.configuration.x.activity_insight['password'] }).to_s
+    end
 
-  def ai_user_detail(id)
-    ActivityInsightDetailUser.new(Nokogiri::XML(ai_user_detail_xml(id)))
-  end
+    def ai_user_detail(id)
+      ActivityInsightDetailUser.new(Nokogiri::XML(ai_user_detail_xml(id)))
+    end
 end
-
 
 class ActivityInsightListUser
   def initialize(parsed_user)
@@ -280,17 +280,16 @@ class ActivityInsightListUser
 
   private
 
-  attr_reader :parsed_user
+    attr_reader :parsed_user
 
-  def text_for(element)
-    parsed_user.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_user.css(element).text.strip.presence
+    end
 
-  def value_for(attribute)
-    parsed_user.attribute(attribute).value
-  end
+    def value_for(attribute)
+      parsed_user.attribute(attribute).value
+    end
 end
-
 
 class ActivityInsightDetailUser
   def initialize(parsed_user)
@@ -375,25 +374,24 @@ class ActivityInsightDetailUser
 
   private
 
-  attr_reader :parsed_user
+    attr_reader :parsed_user
 
-  def user
-    parsed_user.css('Data Record')
-  end
+    def user
+      parsed_user.css('Data Record')
+    end
 
-  def contact_info
-    user.css('PCI')
-  end
+    def contact_info
+      user.css('PCI')
+    end
 
-  def contact_info_text_for(element)
-    contact_info.css(element).text.strip.presence
-  end
+    def contact_info_text_for(element)
+      contact_info.css(element).text.strip.presence
+    end
 
-  def user_text_for(element)
-    user.css(element).text.strip.presence
-  end
+    def user_text_for(element)
+      user.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightEducationHistoryItem
   def initialize(parsed_item)
@@ -462,13 +460,12 @@ class ActivityInsightEducationHistoryItem
 
   private
 
-  attr_reader :parsed_item
+    attr_reader :parsed_item
 
-  def text_for(element)
-    parsed_item.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_item.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightPresentation
   def initialize(parsed_presentation)
@@ -535,13 +532,12 @@ class ActivityInsightPresentation
 
   private
 
-  attr_reader :parsed_presentation
+    attr_reader :parsed_presentation
 
-  def text_for(element)
-    parsed_presentation.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_presentation.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightPresentationContributor
   def initialize(parsed_contributor)
@@ -555,7 +551,7 @@ class ActivityInsightPresentationContributor
   def activity_insight_user_id
     text_for('FACULTY_NAME')
   end
-  
+
   def role
     if text_for('ROLE') && text_for('ROLE') != 'Other'
       text_for('ROLE')
@@ -566,13 +562,12 @@ class ActivityInsightPresentationContributor
 
   private
 
-  attr_reader :parsed_contributor
+    attr_reader :parsed_contributor
 
-  def text_for(element)
-    parsed_contributor.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_contributor.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightPerformance
   def initialize(parsed_performance)
@@ -635,13 +630,12 @@ class ActivityInsightPerformance
 
   private
 
-  attr_reader :parsed_performance
+    attr_reader :parsed_performance
 
-  def text_for(element)
-    parsed_performance.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_performance.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightPerformanceContributor
   def initialize(parsed_contributor)
@@ -662,13 +656,12 @@ class ActivityInsightPerformanceContributor
 
   private
 
-  attr_reader :parsed_contributor
+    attr_reader :parsed_contributor
 
-  def text_for(element)
-    parsed_contributor.css(element).text.strip.presence
-  end
+    def text_for(element)
+      parsed_contributor.css(element).text.strip.presence
+    end
 end
-
 
 class ActivityInsightPublication
   def initialize(parsed_publication, user)
@@ -677,17 +670,16 @@ class ActivityInsightPublication
   end
 
   def publication_type
-    if cleaned_ai_type == 'journal article, academic journal'
+    case cleaned_ai_type
+    when 'journal article, academic journal'
       'Academic Journal Article'
-    elsif cleaned_ai_type == 'journal article, in-house journal' ||
-      cleaned_ai_type == 'journal article, in-house'
+    when 'journal article, in-house journal', 'journal article, in-house'
       'In-house Journal Article'
-    elsif cleaned_ai_type == 'journal article, professional journal'
+    when 'journal article, professional journal'
       'Professional Journal Article'
-    elsif cleaned_ai_type == 'journal article, public or trade journal' ||
-      cleaned_ai_type == 'magazine or trade journal article'
+    when 'journal article, public or trade journal', 'magazine or trade journal article'
       'Trade Journal Article'
-    elsif cleaned_ai_type == 'journal article'
+    when 'journal article'
       'Journal Article'
     else
       ActivityInsightPublicationTypeMapIn.map(cleaned_ai_type)
@@ -773,7 +765,7 @@ class ActivityInsightPublication
   end
 
   def faculty_author
-    contributors.detect { |c| c.activity_insight_user_id == user.activity_insight_id }
+    contributors.find { |c| c.activity_insight_user_id == user.activity_insight_id }
   end
 
   def contributors
@@ -788,29 +780,28 @@ class ActivityInsightPublication
 
   private
 
-  attr_reader :parsed_publication, :user
+    attr_reader :parsed_publication, :user
 
-  def doi_element
-    text_for('DOI')
-  end
-
-  def text_for(element)
-    parsed_publication.css(element).text.strip.presence
-  end
-
-  def contype
-    text_for('CONTYPE')
-  end
-
-  def cleaned_ai_type
-    if contype == 'Other'
-      text_for('CONTYPEOTHER').try(:downcase)
-    else
-      contype
+    def doi_element
+      text_for('DOI')
     end
-  end
-end
 
+    def text_for(element)
+      parsed_publication.css(element).text.strip.presence
+    end
+
+    def contype
+      text_for('CONTYPE')
+    end
+
+    def cleaned_ai_type
+      if contype == 'Other'
+        text_for('CONTYPEOTHER').try(:downcase)
+      else
+        contype
+      end
+    end
+end
 
 class ActivityInsightPublicationAuthor
   # initialize with user passed from publication
@@ -828,7 +819,7 @@ class ActivityInsightPublicationAuthor
     if user_name_confirmed?
       text
     else
-      text.chars.first if text
+      text[0] if text
     end
   end
 
@@ -858,17 +849,17 @@ class ActivityInsightPublicationAuthor
 
   private
 
-  attr_reader :parsed_author, :imported_user
-  
-  def text_for(element)
-    parsed_author.css(element).text.strip.presence
-  end
+    attr_reader :parsed_author, :imported_user
 
-  def user_name_confirmed?
-    for_external_person? || for_imported_user?
-  end
+    def text_for(element)
+      parsed_author.css(element).text.strip.presence
+    end
 
-  def for_external_person?
-    activity_insight_user_id.blank?
-  end
+    def user_name_confirmed?
+      for_external_person? || for_imported_user?
+    end
+
+    def for_external_person?
+      activity_insight_user_id.blank?
+    end
 end

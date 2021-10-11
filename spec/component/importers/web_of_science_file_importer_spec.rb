@@ -1,67 +1,83 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe WebOfScienceFileImporter do
-  let(:importer) { WebOfScienceFileImporter.new(dirname: dirname) }
+  let(:importer) { described_class.new(dirname: dirname) }
 
   describe '#call' do
-    context "when given an XML file of publication data from Web of Science with Penn State Journal Articles" do
+    context 'when given an XML file of publication data from Web of Science with Penn State Journal Articles' do
       let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_psu_articles') }
-      context "when no existing publications match the data" do
-        context "when no existing users match the data" do
-          context "when no existing grants match the data" do
-            it "does not create any new grants" do
-              expect { importer.call }.not_to change { Grant.count }
+
+      context 'when no existing publications match the data' do
+        context 'when no existing users match the data' do
+          context 'when no existing grants match the data' do
+            it 'does not create any new grants' do
+              expect { importer.call }.not_to change(Grant, :count)
             end
-            it "does not create any new publications" do
-              expect { importer.call }.not_to change { Publication.count }
+
+            it 'does not create any new publications' do
+              expect { importer.call }.not_to change(Publication, :count)
             end
-            it "does not create any new associations between grants and publications" do
-              expect { importer.call }.not_to change { ResearchFund.count }
+
+            it 'does not create any new associations between grants and publications' do
+              expect { importer.call }.not_to change(ResearchFund, :count)
             end
           end
-          context "when existing grants have the same Web of Science agency and identifier" do
+
+          context 'when existing grants have the same Web of Science agency and identifier' do
             let!(:grant1) { create :grant,
                                    wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
                                    wos_identifier: 'NIH-346346'}
-            it "does not create any new grants" do
-              expect { importer.call }.not_to change { Grant.count }
+
+            it 'does not create any new grants' do
+              expect { importer.call }.not_to change(Grant, :count)
             end
-            it "does not create any new publications" do
-              expect { importer.call }.not_to change { Publication.count }
+
+            it 'does not create any new publications' do
+              expect { importer.call }.not_to change(Publication, :count)
             end
-            it "does not create any new associations between grants and publications" do
-              expect { importer.call }.not_to change { ResearchFund.count }
+
+            it 'does not create any new associations between grants and publications' do
+              expect { importer.call }.not_to change(ResearchFund, :count)
             end
           end
-          context "when existing grants match the Web of Science agency and identifier" do
+
+          context 'when existing grants match the Web of Science agency and identifier' do
             let!(:grant1) { create :grant,
                                    agency_name: 'National Science Foundation',
                                    identifier: '0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
                                    wos_identifier: 'NIH-346346'}
-            it "does not create any new grants" do
-              expect { importer.call }.not_to change { Grant.count }
+
+            it 'does not create any new grants' do
+              expect { importer.call }.not_to change(Grant, :count)
             end
-            it "does not create any new publications" do
-              expect { importer.call }.not_to change { Publication.count }
+
+            it 'does not create any new publications' do
+              expect { importer.call }.not_to change(Publication, :count)
             end
-            it "does not create any new associations between grants and publications" do
-              expect { importer.call }.not_to change { ResearchFund.count }
+
+            it 'does not create any new associations between grants and publications' do
+              expect { importer.call }.not_to change(ResearchFund, :count)
             end
           end
         end
-        context "when existing users match the data" do
+
+        context 'when existing users match the data' do
           let!(:u1) { create :user, orcid_identifier: 'https://orcid.org/1234-0003-3051-5678' }
           let!(:u2) { create :user, first_name: 'Jennifer', last_name: 'Testauthor' }
           let!(:u3) { create :user, orcid_identifier: 'https://orcid.org/5678-0003-3051-1234' }
-          context "when no existing grants match the data" do
+
+          context 'when no existing grants match the data' do
             let!(:grant) { create :grant, agency_name: nil, identifier: nil }
-            it "creates new grants for each publication in the given XML file" do
-              expect { importer.call }.to change { Grant.count }.by 2
+
+            it 'creates new grants for each publication in the given XML file' do
+              expect { importer.call }.to change(Grant, :count).by 2
               expect(Grant.find_by(wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779',
                                    agency_name: 'National Science Foundation',
@@ -71,8 +87,9 @@ describe WebOfScienceFileImporter do
                                    agency_name: nil,
                                    identifier: nil)).not_to be_nil
             end
-            it "creates new associations between the new grants and new publications" do
-              expect { importer.call }.to change { ResearchFund.count }.by 2
+
+            it 'creates new associations between the new grants and new publications' do
+              expect { importer.call }.to change(ResearchFund, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -84,8 +101,9 @@ describe WebOfScienceFileImporter do
               expect(ResearchFund.find_by(publication: new_pub1, grant: new_grant1)).not_to be_nil
               expect(ResearchFund.find_by(publication: new_pub2, grant: new_grant2)).not_to be_nil
             end
-            it "creates a new publication import record for each publication in the given XML file" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+
+            it 'creates a new publication import record for each publication in the given XML file' do
+              expect { importer.call }.to change(PublicationImport, :count).by 2
 
               new_import1 = PublicationImport.find_by(source_identifier: 'WOS:000323531400013')
               new_import2 = PublicationImport.find_by(source_identifier: 'WOS:000323531400014')
@@ -97,8 +115,9 @@ describe WebOfScienceFileImporter do
               expect(new_import2.source).to eq 'Web of Science'
               expect(new_import2.publication).to eq new_pub2
             end
-            it "creates a new publication record for each publication in the given XML file" do
-              expect { importer.call }.to change { Publication.count }.by 2
+
+            it 'creates a new publication record for each publication in the given XML file' do
+              expect { importer.call }.to change(Publication, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -107,18 +126,21 @@ describe WebOfScienceFileImporter do
               expect(new_pub2).not_to be_nil
             end
           end
-          context "when existing grants have the same Web of Science agency and identifier" do
+
+          context 'when existing grants have the same Web of Science agency and identifier' do
             let!(:grant1) { create :grant,
                                    wos_agency_name: 'NSF',
                                    wos_identifier: 'ATMO-0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
                                    wos_identifier: 'NIH-346346'}
-            it "does not create any new grants" do
-              expect { importer.call }.not_to change { Grant.count }
+
+            it 'does not create any new grants' do
+              expect { importer.call }.not_to change(Grant, :count)
             end
-            it "creates new associations between the existing grants and new publications" do
-              expect { importer.call }.to change { ResearchFund.count }.by 2
+
+            it 'creates new associations between the existing grants and new publications' do
+              expect { importer.call }.to change(ResearchFund, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -126,8 +148,9 @@ describe WebOfScienceFileImporter do
               expect(ResearchFund.find_by(publication: new_pub1, grant: grant1)).not_to be_nil
               expect(ResearchFund.find_by(publication: new_pub2, grant: grant2)).not_to be_nil
             end
-            it "creates a new publication import record for each publication in the given XML file" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+
+            it 'creates a new publication import record for each publication in the given XML file' do
+              expect { importer.call }.to change(PublicationImport, :count).by 2
 
               new_import1 = PublicationImport.find_by(source_identifier: 'WOS:000323531400013')
               new_import2 = PublicationImport.find_by(source_identifier: 'WOS:000323531400014')
@@ -140,8 +163,9 @@ describe WebOfScienceFileImporter do
               expect(new_import2.source).to eq 'Web of Science'
               expect(new_import2.publication).to eq new_pub2
             end
-            it "creates a new publication record for each publication in the given XML file" do
-              expect { importer.call }.to change { Publication.count }.by 2
+
+            it 'creates a new publication record for each publication in the given XML file' do
+              expect { importer.call }.to change(Publication, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -170,8 +194,9 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
               expect(new_pub2.status).to eq 'Published'
             end
-            it "creates new authorships for every user referenced in the given XML file" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+
+            it 'creates new authorships for every user referenced in the given XML file' do
+              expect { importer.call }.to change(Authorship, :count).by 3
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -184,8 +209,9 @@ describe WebOfScienceFileImporter do
               expect(new_auth2.author_number).to eq 2
               expect(new_auth3.author_number).to eq 1
             end
-            it "creates new contributor names for every author in the given XML file" do
-              expect { importer.call }.to change { ContributorName.count }.by 4
+
+            it 'creates new contributor names for every author in the given XML file' do
+              expect { importer.call }.to change(ContributorName, :count).by 4
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -212,18 +238,21 @@ describe WebOfScienceFileImporter do
                                              position: 2)).not_to be_nil
             end
           end
-          context "when existing grants match the Web of Science agency and identifier" do
+
+          context 'when existing grants match the Web of Science agency and identifier' do
             let!(:grant1) { create :grant,
                                    agency_name: 'National Science Foundation',
                                    identifier: '0803779'}
             let!(:grant2) { create :grant,
                                    wos_agency_name: 'NIH',
                                    wos_identifier: 'NIH-346346'}
-            it "does not create any new grants" do
-              expect { importer.call }.not_to change { Grant.count }
+
+            it 'does not create any new grants' do
+              expect { importer.call }.not_to change(Grant, :count)
             end
-            it "creates new associations between the existing grants and new publications" do
-              expect { importer.call }.to change { ResearchFund.count }.by 2
+
+            it 'creates new associations between the existing grants and new publications' do
+              expect { importer.call }.to change(ResearchFund, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -231,8 +260,9 @@ describe WebOfScienceFileImporter do
               expect(ResearchFund.find_by(publication: new_pub1, grant: grant1)).not_to be_nil
               expect(ResearchFund.find_by(publication: new_pub2, grant: grant2)).not_to be_nil
             end
-            it "creates a new publication import record for each publication in the given XML file" do
-              expect { importer.call }.to change { PublicationImport.count }.by 2
+
+            it 'creates a new publication import record for each publication in the given XML file' do
+              expect { importer.call }.to change(PublicationImport, :count).by 2
 
               new_import1 = PublicationImport.find_by(source_identifier: 'WOS:000323531400013')
               new_import2 = PublicationImport.find_by(source_identifier: 'WOS:000323531400014')
@@ -245,8 +275,9 @@ describe WebOfScienceFileImporter do
               expect(new_import2.source).to eq 'Web of Science'
               expect(new_import2.publication).to eq new_pub2
             end
-            it "creates a new publication record for each publication in the given XML file" do
-              expect { importer.call }.to change { Publication.count }.by 2
+
+            it 'creates a new publication record for each publication in the given XML file' do
+              expect { importer.call }.to change(Publication, :count).by 2
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -275,8 +306,9 @@ describe WebOfScienceFileImporter do
               expect(new_pub2.published_on).to eq Date.new(2016, 8, 2)
               expect(new_pub2.status).to eq 'Published'
             end
-            it "creates new authorships for every user referenced in the given XML file" do
-              expect { importer.call }.to change { Authorship.count }.by 3
+
+            it 'creates new authorships for every user referenced in the given XML file' do
+              expect { importer.call }.to change(Authorship, :count).by 3
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -289,8 +321,9 @@ describe WebOfScienceFileImporter do
               expect(new_auth2.author_number).to eq 2
               expect(new_auth3.author_number).to eq 1
             end
-            it "creates new contributor names for every author in the given XML file" do
-              expect { importer.call }.to change { ContributorName.count }.by 4
+
+            it 'creates new contributor names for every author in the given XML file' do
+              expect { importer.call }.to change(ContributorName, :count).by 4
 
               new_pub1 = Publication.find_by(title: 'Web of Science Test Publication')
               new_pub2 = Publication.find_by(title: 'Another Publication')
@@ -319,15 +352,18 @@ describe WebOfScienceFileImporter do
           end
         end
       end
-      context "when existing publications match the data" do
+
+      context 'when existing publications match the data' do
         let!(:pub1) { create :publication, doi: 'https://doi.org/10.15288/jsad.2013.74.765' }
         let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2016, 8, 1) }
-        context "when no existing grants match the data" do
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+        context 'when no existing grants match the data' do
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "creates new grants where agency name and ID information are available" do
-            expect { importer.call }.to change { Grant.count }.by 2
+
+          it 'creates new grants where agency name and ID information are available' do
+            expect { importer.call }.to change(Grant, :count).by 2
             expect(Grant.find_by(wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779',
                                  agency_name: 'National Science Foundation',
@@ -337,17 +373,19 @@ describe WebOfScienceFileImporter do
                                  agency_name: nil,
                                  identifier: nil)).not_to be_nil
           end
-          it "creates new research fund records to associate the grants with the publications" do
-            expect { importer.call }.to change { ResearchFund.count }.by 2
+
+          it 'creates new research fund records to associate the grants with the publications' do
+            expect { importer.call }.to change(ResearchFund, :count).by 2
             new_grant1 = Grant.find_by(wos_agency_name: 'NSF',
-                                      wos_identifier: 'ATMO-0803779')
+                                       wos_identifier: 'ATMO-0803779')
             new_grant2 = Grant.find_by(wos_agency_name: 'NIH',
                                        wos_identifier: 'NIH-346346')
             expect(pub1.grants).to eq [new_grant1]
             expect(pub2.grants).to eq [new_grant2]
           end
         end
-        context "when existing grants have the same Web of Science agency and identifier" do
+
+        context 'when existing grants have the same Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
@@ -355,392 +393,481 @@ describe WebOfScienceFileImporter do
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
 
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants match the Web of Science agency and identifier" do
+
+        context 'when existing grants match the Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  agency_name: 'National Science Foundation',
                                  identifier: '0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          context "when no associations between the matching grant and the publication exist" do
-            it "creates new research fund records to associate the matching grants with the publications" do
-              expect { importer.call }.to change { ResearchFund.count }.by 1
+
+          context 'when no associations between the matching grant and the publication exist' do
+            it 'creates new research fund records to associate the matching grants with the publications' do
+              expect { importer.call }.to change(ResearchFund, :count).by 1
               expect(pub1.grants).to eq [grant1]
             end
           end
-          context "when an association between the matching grant and the publication already exists" do
-            before { create :research_fund, publication: pub1, grant: grant1}
-            it "does not create any new associations" do
-              expect { importer.call }.to change { ResearchFund.count }.by 0
+
+          context 'when an association between the matching grant and the publication already exists' do
+            before { create :research_fund, publication: pub1, grant: grant1 }
+
+            it 'does not create any new associations' do
+              expect { importer.call }.to change(ResearchFund, :count).by 0
             end
           end
         end
       end
-      context "when the publications have already been imported" do
+
+      context 'when the publications have already been imported' do
         before do
           create :publication_import, source: 'Web of Science', source_identifier: 'WOS:000323531400013'
           create :publication_import, source: 'Web of Science', source_identifier: 'WOS:000323531400014'
         end
-        context "when no existing grants match the data" do
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+        context 'when no existing grants match the data' do
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants have the same Web of Science agency and identifier" do
+
+        context 'when existing grants have the same Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants match the Web of Science agency and identifier" do
+
+        context 'when existing grants match the Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  agency_name: 'National Science Foundation',
                                  identifier: '0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
       end
     end
 
-    context "when given an XML file of publication data from Web of Science with non-Penn State Journal Articles" do
+    context 'when given an XML file of publication data from Web of Science with non-Penn State Journal Articles' do
       let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_articles') }
-      context "when no existing publications match the data" do
-        context "when no existing grants match the data" do
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+      context 'when no existing publications match the data' do
+        context 'when no existing grants match the data' do
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants have the same Web of Science agency and identifier" do
+
+        context 'when existing grants have the same Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants match the Web of Science agency and identifier" do
+
+        context 'when existing grants match the Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  agency_name: 'National Science Foundation',
                                  identifier: '0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
       end
-      context "when existing publications match the data" do
+
+      context 'when existing publications match the data' do
         let!(:pub1) { create :publication, doi: 'https://doi.org/10.15288/jsad.2013.74.765' }
         let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2013, 9, 1) }
-        context "when no existing grants match the data" do
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+        context 'when no existing grants match the data' do
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants have the same Web of Science agency and identifier" do
+
+        context 'when existing grants have the same Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  wos_agency_name: 'NSF',
                                  wos_identifier: 'ATMO-0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
-        context "when existing grants match the Web of Science agency and identifier" do
+
+        context 'when existing grants match the Web of Science agency and identifier' do
           let!(:grant1) { create :grant,
                                  agency_name: 'National Science Foundation',
                                  identifier: '0803779'}
           let!(:grant2) { create :grant,
                                  wos_agency_name: 'NIH',
                                  wos_identifier: 'NIH-346346'}
-          it "does not create any new grants" do
-            expect { importer.call }.not_to change { Grant.count }
+
+          it 'does not create any new grants' do
+            expect { importer.call }.not_to change(Grant, :count)
           end
-          it "does not create any new publications" do
-            expect { importer.call }.not_to change { Publication.count }
+
+          it 'does not create any new publications' do
+            expect { importer.call }.not_to change(Publication, :count)
           end
-          it "does not create any new associations between grants and publications" do
-            expect { importer.call }.not_to change { ResearchFund.count }
+
+          it 'does not create any new associations between grants and publications' do
+            expect { importer.call }.not_to change(ResearchFund, :count)
           end
         end
       end
     end
   end
 
-  context "when given an XML file of publication data from Web of Science with Penn State non-Journal Articles" do
+  context 'when given an XML file of publication data from Web of Science with Penn State non-Journal Articles' do
     let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_psu_non_articles') }
-    context "when no existing publications match the data" do
-      context "when no existing grants match the data" do
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+    context 'when no existing publications match the data' do
+      context 'when no existing grants match the data' do
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants have the same Web of Science agency and identifier" do
+
+      context 'when existing grants have the same Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants match the Web of Science agency and identifier" do
+
+      context 'when existing grants match the Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                agency_name: 'National Science Foundation',
                                identifier: '0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
     end
-    context "when existing publications match the data" do
+
+    context 'when existing publications match the data' do
       let!(:pub1) { create :publication, doi: 'https://doi.org/10.15288/jsad.2013.74.765' }
       let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2013, 9, 1) }
-      context "when no existing grants match the data" do
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+      context 'when no existing grants match the data' do
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants have the same Web of Science agency and identifier" do
+
+      context 'when existing grants have the same Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
     end
-    context "when existing grants match the Web of Science agency and identifier" do
+
+    context 'when existing grants match the Web of Science agency and identifier' do
       let!(:grant1) { create :grant,
                              agency_name: 'National Science Foundation',
                              identifier: '0803779'}
       let!(:grant2) { create :grant,
                              wos_agency_name: 'NIH',
                              wos_identifier: 'NIH-346346'}
-      it "does not create any new grants" do
-        expect { importer.call }.not_to change { Grant.count }
+
+      it 'does not create any new grants' do
+        expect { importer.call }.not_to change(Grant, :count)
       end
-      it "does not create any new publications" do
-        expect { importer.call }.not_to change { Publication.count }
+
+      it 'does not create any new publications' do
+        expect { importer.call }.not_to change(Publication, :count)
       end
-      it "does not create any new associations between grants and publications" do
-        expect { importer.call }.not_to change { ResearchFund.count }
+
+      it 'does not create any new associations between grants and publications' do
+        expect { importer.call }.not_to change(ResearchFund, :count)
       end
     end
   end
 
-  context "when given an XML file of publication data from Web of Science with non-Penn State non-Journal Articles" do
+  context 'when given an XML file of publication data from Web of Science with non-Penn State non-Journal Articles' do
     let(:dirname) { Rails.root.join('spec', 'fixtures', 'wos_non_psu_non_articles') }
-    context "when no existing publications match the data" do
-      context "when no existing grants match the data" do
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+    context 'when no existing publications match the data' do
+      context 'when no existing grants match the data' do
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants have the same Web of Science agency and identifier" do
+
+      context 'when existing grants have the same Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants match the Web of Science agency and identifier" do
+
+      context 'when existing grants match the Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                agency_name: 'National Science Foundation',
                                identifier: '0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
     end
-    context "when existing publications match the data" do
+
+    context 'when existing publications match the data' do
       let!(:pub1) { create :publication, doi: 'https://doi.org/10.15288/jsad.2013.74.765' }
       let!(:pub2) { create :publication, title: 'Another Publication', published_on: Date.new(2013, 9, 1) }
-      context "when no existing grants match the data" do
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+      context 'when no existing grants match the data' do
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants have the same Web of Science agency and identifier" do
+
+      context 'when existing grants have the same Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                wos_agency_name: 'NSF',
                                wos_identifier: 'ATMO-0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
-      context "when existing grants match the Web of Science agency and identifier" do
+
+      context 'when existing grants match the Web of Science agency and identifier' do
         let!(:grant1) { create :grant,
                                agency_name: 'National Science Foundation',
                                identifier: '0803779'}
         let!(:grant2) { create :grant,
                                wos_agency_name: 'NIH',
                                wos_identifier: 'NIH-346346'}
-        it "does not create any new grants" do
-          expect { importer.call }.not_to change { Grant.count }
+
+        it 'does not create any new grants' do
+          expect { importer.call }.not_to change(Grant, :count)
         end
-        it "does not create any new publications" do
-          expect { importer.call }.not_to change { Publication.count }
+
+        it 'does not create any new publications' do
+          expect { importer.call }.not_to change(Publication, :count)
         end
-        it "does not create any new associations between grants and publications" do
-          expect { importer.call }.not_to change { ResearchFund.count }
+
+        it 'does not create any new associations between grants and publications' do
+          expect { importer.call }.not_to change(ResearchFund, :count)
         end
       end
     end

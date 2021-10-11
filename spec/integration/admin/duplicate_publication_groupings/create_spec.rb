@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-feature "grouping publications from a user's list of publications", type: :feature do
+describe "grouping publications from a user's list of publications", type: :feature do
   let!(:user) { create :user }
 
   let!(:pub1) { create :publication, duplicate_group: group1 }
@@ -23,43 +25,43 @@ feature "grouping publications from a user's list of publications", type: :featu
     create :authorship, user: user, publication: pub6
   end
 
-  context "when the current user is an admin" do
+  context 'when the current user is an admin' do
     before do
       authenticate_admin_user
       visit rails_admin.show_path(model_name: :user, id: user.id)
     end
 
-    describe "selecting no publications and clicking the group button" do
+    describe 'selecting no publications and clicking the group button' do
       before do
-        click_button "Group Selected"
+        click_button 'Group Selected'
       end
 
-      it "redirects back to the user details page" do
-        expect(page.current_path).to eq rails_admin.show_path(model_name: :user, id: user.id)
+      it 'redirects back to the user details page' do
+        expect(page).to have_current_path rails_admin.show_path(model_name: :user, id: user.id), ignore_query: true
       end
 
-      it "shows an error message" do
+      it 'shows an error message' do
         expect(page).to have_content I18n.t('admin.duplicate_publication_groupings.create.no_pub_error')
       end
     end
 
-    describe "selecting one publications and clicking the group button" do
+    describe 'selecting one publications and clicking the group button' do
       before do
         check "bulk_ids_#{pub1.id}"
 
-        click_button "Group Selected"
+        click_button 'Group Selected'
       end
 
-      it "redirects back to the user details page" do
-        expect(page.current_path).to eq rails_admin.show_path(model_name: :user, id: user.id)
+      it 'redirects back to the user details page' do
+        expect(page).to have_current_path rails_admin.show_path(model_name: :user, id: user.id), ignore_query: true
       end
 
-      it "shows an error message" do
+      it 'shows an error message' do
         expect(page).to have_content I18n.t('admin.duplicate_publication_groupings.create.no_pub_error')
       end
     end
 
-    describe "selecting several publications to group and clicking the group button" do
+    describe 'selecting several publications to group and clicking the group button' do
       before do
         check "bulk_ids_#{pub1.id}"
         check "bulk_ids_#{pub2.id}"
@@ -67,20 +69,20 @@ feature "grouping publications from a user's list of publications", type: :featu
         check "bulk_ids_#{pub4.id}"
         check "bulk_ids_#{pub5.id}"
 
-        click_button "Group Selected"
+        click_button 'Group Selected'
       end
 
-      it "groups all of the selected publications into the same group" do
+      it 'groups all of the selected publications into the same group' do
         group = pub1.reload.duplicate_group || pub2.reload.duplicate_group
 
         expect(group.publications).to match_array [pub1, pub2, pub3, pub4, pub5]
       end
 
-      it "redirects back to the user details page" do
-        expect(page.current_path).to eq rails_admin.show_path(model_name: :user, id: user.id)
+      it 'redirects back to the user details page' do
+        expect(page).to have_current_path rails_admin.show_path(model_name: :user, id: user.id), ignore_query: true
       end
 
-      it "shows a success message" do
+      it 'shows a success message' do
         expect(page).to have_content I18n.t('admin.duplicate_publication_groupings.create.success')
       end
     end

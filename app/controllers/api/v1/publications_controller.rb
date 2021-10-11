@@ -1,10 +1,23 @@
+# frozen_string_literal: true
+
 module API::V1
   class PublicationsController < APIController
     include Swagger::Blocks
 
     def index
-      params[:limit].present? ? limit = params[:limit] : limit = 100
-      render json: API::V1::PublicationSerializer.new(api_token.publications.visible.limit(limit))
+      limit = params[:limit].presence || 100
+
+      query = api_token.publications.visible.limit(limit)
+
+      if params[:activity_insight_id].present?
+        query = filter_by_activity_insight_id(query)
+      end
+
+      if params[:doi].present?
+        query = filter_by_doi(query)
+      end
+
+      render json: API::V1::PublicationSerializer.new(query)
     end
 
     def show
@@ -88,7 +101,7 @@ module API::V1
                   property :identifier do
                     key :type, [:string, :null]
                     key :example, '1789352'
-                    key :description, "A code identifying the grant that is unique to the awarding agency"
+                    key :description, 'A code identifying the grant that is unique to the awarding agency'
                   end
                 end
               end
@@ -164,11 +177,25 @@ module API::V1
         key :operationId, 'findPublications'
         key :produces, [
           'application/json',
-          'text/html',
+          'text/html'
         ]
         key :tags, [
           'publication'
         ]
+        parameter do
+          key :name, :activity_insight_id
+          key :in, :query
+          key :description, 'Activity Insight ID to filter by'
+          key :required, false
+          key :type, :string
+        end
+        parameter do
+          key :name, :doi
+          key :in, :query
+          key :description, 'DOI to filter by'
+          key :required, false
+          key :type, :string
+        end
         parameter do
           key :name, :limit
           key :in, :query
@@ -200,5 +227,31 @@ module API::V1
         end
       end
     end
+
+    private
+
+      def filter_by_activity_insight_id(query)
+        query.joins(:imports)
+          .where(publication_imports: {
+                   source: 'Activity Insight',
+                   source_identifier: params[:activity_insight_id]
+                 })
+      end
+
+      def filter_by_doi(query)
+        # allow DOI param to be provided in any of the following formats:
+        # 1. https://doi.org/10.123/example
+        # 2. doi:10.123/example
+        # 3. 10.123/example
+        doi = params[:doi]
+        url_prefix = 'https://doi.org/'
+
+        unless doi.start_with?(url_prefix)
+          doi.delete_prefix!('doi:')
+          doi = url_prefix + doi
+        end
+
+        query.where(doi: doi)
+      end
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class ScholarsphereFileUpload < ApplicationRecord
   after_destroy :remove_file!
 

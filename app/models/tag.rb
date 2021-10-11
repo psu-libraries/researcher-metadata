@@ -1,5 +1,6 @@
-class Tag < ApplicationRecord
+# frozen_string_literal: true
 
+class Tag < ApplicationRecord
   before_validation :titleize_name
 
   validates :name, presence: true, uniqueness: { case_sensitive: false }
@@ -9,7 +10,7 @@ class Tag < ApplicationRecord
 
   private
 
-  def titleize_name
-    self.name = self.name.downcase.titleize if self.name.present?
-  end
+    def titleize_name
+      self.name = name.downcase.titleize if name.present?
+    end
 end

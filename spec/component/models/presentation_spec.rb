@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -28,14 +30,14 @@ describe 'the presentations table', type: :model do
 end
 
 describe Presentation, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to validate_presence_of(:activity_insight_identifier) }
 
   it { is_expected.to have_many(:presentation_contributions) }
   it { is_expected.to have_many(:users).through(:presentation_contributions) }
 
-  context "given an otherwise valid presentation" do
+  context 'given an otherwise valid presentation' do
     subject { build :presentation }
 
     it { is_expected.to validate_uniqueness_of(:activity_insight_identifier) }
@@ -45,13 +47,15 @@ describe Presentation, type: :model do
     let(:visible_pres1) { create :presentation, visible: true }
     let(:visible_pres2) { create :presentation, visible: true }
     let(:invisible_pres) { create :presentation, visible: false }
-    it "returns the presentations that are marked as visible" do
-      expect(Presentation.visible).to match_array [visible_pres1, visible_pres2]
+
+    it 'returns the presentations that are marked as visible' do
+      expect(described_class.visible).to match_array [visible_pres1, visible_pres2]
     end
   end
 
   describe '#mark_as_updated_by_user' do
-    let(:pres) { Presentation.new }
+    let(:pres) { described_class.new }
+
     before { allow(Time).to receive(:current).and_return Time.new(2018, 8, 23, 10, 7, 0) }
 
     it "sets the presentation's updated_by_user_at field to the current time" do
@@ -63,7 +67,7 @@ describe Presentation, type: :model do
   describe '#label_name' do
     let(:p) { create :presentation, name: name, title: title }
 
-    context "when the presentation has no title or name" do
+    context 'when the presentation has no title or name' do
       let(:title) { nil }
       let(:name) { nil }
 
@@ -72,10 +76,10 @@ describe Presentation, type: :model do
       end
     end
 
-    context "when the presentation has a name" do
+    context 'when the presentation has a name' do
       let(:name) { 'Test Name' }
 
-      context "when the presentation has a title" do
+      context 'when the presentation has a title' do
         let(:title) { 'Test Title' }
 
         it "returns the presentation's name followed by its title" do
@@ -83,7 +87,7 @@ describe Presentation, type: :model do
         end
       end
 
-      context "when the presentation has no title" do
+      context 'when the presentation has no title' do
         let(:title) { nil }
 
         it "returns the presentation's name" do
@@ -92,10 +96,10 @@ describe Presentation, type: :model do
       end
     end
 
-    context "when the presentation has a title" do
+    context 'when the presentation has a title' do
       let(:title) { 'Test Title' }
 
-      context "when the presentation has no name" do
+      context 'when the presentation has no name' do
         let(:name) { nil }
 
         it "returns the presentation's title" do
@@ -108,19 +112,19 @@ describe Presentation, type: :model do
   describe '#label' do
     let(:p) { create :presentation, name: name, title: title }
 
-    context "when the presentation has no title or name" do
+    context 'when the presentation has no title or name' do
       let(:title) { nil }
       let(:name) { nil }
 
-      it "returns nil" do
+      it 'returns nil' do
         expect(p.label).to be_nil
       end
     end
 
-    context "when the presentation has a name" do
+    context 'when the presentation has a name' do
       let(:name) { 'Test Name' }
 
-      context "when the presentation has a title" do
+      context 'when the presentation has a title' do
         let(:title) { 'Test Title' }
 
         it "returns the presentation's name followed by its title" do
@@ -128,7 +132,7 @@ describe Presentation, type: :model do
         end
       end
 
-      context "when the presentation has no title" do
+      context 'when the presentation has no title' do
         let(:title) { nil }
 
         it "returns the presentation's name" do
@@ -137,10 +141,10 @@ describe Presentation, type: :model do
       end
     end
 
-    context "when the presentation has a title" do
+    context 'when the presentation has a title' do
       let(:title) { 'Test Title' }
 
-      context "when the presentation has no name" do
+      context 'when the presentation has no name' do
         let(:name) { nil }
 
         it "returns the presentation's title" do

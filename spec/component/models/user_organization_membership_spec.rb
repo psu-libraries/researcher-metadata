@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -28,9 +30,9 @@ describe 'the user_organization_memberships table', type: :model do
 end
 
 describe UserOrganizationMembership, type: :model do
-  subject { UserOrganizationMembership.new }
+  subject { described_class.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to delegate_method(:organization_name).to(:organization).as(:name) }
 
@@ -47,17 +49,17 @@ describe UserOrganizationMembership, type: :model do
 
   describe '.import_sources' do
     it 'returns an array of the possible data import sources for a membership' do
-      expect(UserOrganizationMembership.import_sources).to eq ['HR', 'Pure']
+      expect(described_class.import_sources).to eq ['HR', 'Pure']
     end
   end
 
   describe '#name' do
-    let(:u) { User.new(first_name: "Sue", last_name: "Tester") }
-    let(:o) { Organization.new(name: "Science Department") }
-    let(:m) { UserOrganizationMembership.new(user: u, organization: o) }
+    let(:u) { User.new(first_name: 'Sue', last_name: 'Tester') }
+    let(:o) { Organization.new(name: 'Science Department') }
+    let(:m) { described_class.new(user: u, organization: o) }
 
-    it "returns a string with the name of the user and the name of the organization" do
-      expect(m.name).to eq "Sue Tester - Science Department"
+    it 'returns a string with the name of the user and the name of the organization' do
+      expect(m.name).to eq 'Sue Tester - Science Department'
     end
   end
 end

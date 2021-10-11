@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
@@ -41,7 +43,7 @@ gem 'activerecord-import'
 gem 'progressbar'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem "rails_admin", "~> 1.4"
+gem 'rails_admin', '~> 1.4'
 
 gem 'rails_admin_toggleable'
 
@@ -111,9 +113,14 @@ gem 'delayed_job_active_record'
 # For running delayed_job daemon (or other processes)
 gem 'daemons'
 
+gem 'psu_identity', github: 'psu-libraries/psu_identity', branch: 'main'
+
 group :development, :test do
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug', platform: :mri
+
+  # Enables binding.pry for debugging
+  gem 'pry-byebug'
 
   # Default test framework
   gem 'rspec-rails'
@@ -124,17 +131,19 @@ group :development, :test do
   # Automatically test your rails API against its OpenAPI (Swagger) description
   # of end-points, models, and query parameters
   gem 'apivore'
+
+  gem 'niftany'
 end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'web-console', '>= 3.3.0'
   gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'web-console', '>= 3.3.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
   gem 'spring'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'spring-commands-rspec'
+  gem 'spring-watcher-listen', '~> 2.0.0'
 
   # Deploy to multiple environments
   gem 'capistrano-ext'
@@ -144,27 +153,16 @@ group :development do
 end
 
 group :test do
-  # Adds support for Capybara system testing and selenium driver
   gem 'capybara', '>= 2.15', '< 4.0'
-
-  gem 'selenium-webdriver'
-  gem 'webdrivers'
-
-  # Clean out database between test runs
-  gem 'database_cleaner'
-
-  # See what your headless browser is seeing with save_and_open_page
-  gem 'launchy'
-
-  # Fancy rspec matchers for rails
-  gem 'shoulda-matchers', '~> 5.0'
-
-  # Test object factory
-  gem 'factory_bot_rails'
-
-  # Integration test helpers for mailers
   gem 'capybara-email'
-
-  # Extracted test matchers for rails controllers
+  gem 'database_cleaner'
+  gem 'factory_bot_rails'
+  gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'selenium-webdriver'
+  gem 'shoulda-matchers', '~> 5.0'
+  gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later
+  gem 'vcr'
+  gem 'webdrivers'
+  gem 'webmock'
 end

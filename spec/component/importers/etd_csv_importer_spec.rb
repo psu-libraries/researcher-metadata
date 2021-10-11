@@ -1,15 +1,17 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe ETDCSVImporter do
-  let(:importer) { ETDCSVImporter.new(filename: filename) }
+  let(:importer) { described_class.new(filename: filename) }
 
   describe '#call' do
-    context "when given a well-formed .csv file of valid etd data" do
+    context 'when given a well-formed .csv file of valid etd data' do
       let(:filename) { Rails.root.join('spec', 'fixtures', 'etds.csv') }
 
-      context "when no etd records exist in the database" do
-        it "creates a new etd record for each row in the .csv file" do
-          expect { importer.call }.to change { ETD.count }.by 3
+      context 'when no etd records exist in the database' do
+        it 'creates a new etd record for each row in the .csv file' do
+          expect { importer.call }.to change(ETD, :count).by 3
 
           etd1 = ETD.find_by(webaccess_id: 'sat1')
           etd2 = ETD.find_by(webaccess_id: 'bbt2')
@@ -47,24 +49,25 @@ describe ETDCSVImporter do
         end
       end
 
-      context "when a ETD in the .csv file already exists in the database" do
+      context 'when a ETD in the .csv file already exists in the database' do
         let!(:existing_etd) { create :etd,
-                                      webaccess_id: 'bbt2',
-                                      author_first_name: 'Robert',
-                                      author_middle_name: 'B',
-                                      author_last_name: 'Testuser',
-                                      year: 2017,
-                                      title: 'Bobs Thesis',
-                                      url: 'https://etda.libraries.psu.edu/catalog/22222',
-                                      submission_type: 'Master Thesis',
-                                      external_identifier: '2',
-                                      access_level: 'restricted_to_institution',
-                                      updated_by_user_at: timestamp }
+                                     webaccess_id: 'bbt2',
+                                     author_first_name: 'Robert',
+                                     author_middle_name: 'B',
+                                     author_last_name: 'Testuser',
+                                     year: 2017,
+                                     title: 'Bobs Thesis',
+                                     url: 'https://etda.libraries.psu.edu/catalog/22222',
+                                     submission_type: 'Master Thesis',
+                                     external_identifier: '2',
+                                     access_level: 'restricted_to_institution',
+                                     updated_by_user_at: timestamp }
 
-        context "when the existing ETD has been updated by a human" do
+        context 'when the existing ETD has been updated by a human' do
           let(:timestamp) { Time.zone.now }
-          it "creates new records for the new ETDs and does not update the existing ETD" do
-            expect { importer.call }.to change { ETD.count }.by 2
+
+          it 'creates new records for the new ETDs and does not update the existing ETD' do
+            expect { importer.call }.to change(ETD, :count).by 2
 
             etd1 = ETD.find_by(webaccess_id: 'sat1')
             etd2 = ETD.find_by(webaccess_id: 'bbt2')
@@ -101,10 +104,12 @@ describe ETDCSVImporter do
             expect(etd3.access_level).to eq 'open_access'
           end
         end
-        context "when the existing etd has not been updated by a human" do
+
+        context 'when the existing etd has not been updated by a human' do
           let(:timestamp) { nil }
-          it "creates new records for the new etds and updates the existing etd" do
-            expect { importer.call }.to change { ETD.count }.by 2
+
+          it 'creates new records for the new etds and updates the existing etd' do
+            expect { importer.call }.to change(ETD, :count).by 2
 
             etd1 = ETD.find_by(webaccess_id: 'sat1')
             etd2 = ETD.find_by(webaccess_id: 'bbt2')
@@ -144,47 +149,43 @@ describe ETDCSVImporter do
       end
     end
 
-    context "when given a well-formed .csv file that contains invalid ETD data" do
+    context 'when given a well-formed .csv file that contains invalid ETD data' do
       let(:filename) { Rails.root.join('spec', 'fixtures', 'etds_invalid.csv') }
 
-      it "creates new records for each valid row and records an error for each invalid row" do
-        begin
-          importer.call
-        rescue CSVImporter::ParseError
-          expect(ETD.count).to eq 1
+      it 'creates new records for each valid row and records an error for each invalid row' do
+        importer.call
+      rescue CSVImporter::ParseError
+        expect(ETD.count).to eq 1
 
-          etd = ETD.find_by(webaccess_id: 'bbt2')
+        etd = ETD.find_by(webaccess_id: 'bbt2')
 
-          expect(etd.author_first_name).to eq 'Bob'
-          expect(etd.author_middle_name).to eq 'B'
-          expect(etd.author_last_name).to eq 'Testuser'
-          expect(etd.year).to eq 2017
-          expect(etd.title).to eq 'Thesis 2'
-          expect(etd.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
-          expect(etd.submission_type).to eq 'Master Thesis'
-          expect(etd.external_identifier).to eq '2'
-          expect(etd.access_level).to eq 'restricted_to_institution'
+        expect(etd.author_first_name).to eq 'Bob'
+        expect(etd.author_middle_name).to eq 'B'
+        expect(etd.author_last_name).to eq 'Testuser'
+        expect(etd.year).to eq 2017
+        expect(etd.title).to eq 'Thesis 2'
+        expect(etd.url).to eq 'https://etda.libraries.psu.edu/catalog/22222'
+        expect(etd.submission_type).to eq 'Master Thesis'
+        expect(etd.external_identifier).to eq '2'
+        expect(etd.access_level).to eq 'restricted_to_institution'
 
-          expect(importer.fatal_errors.count).to eq 2
-        end
+        expect(importer.fatal_errors.count).to eq 2
       end
     end
 
-    context "when given a well-formed .csv file that contains a duplicate ETD" do
+    context 'when given a well-formed .csv file that contains a duplicate ETD' do
       let(:filename) { Rails.root.join('spec', 'fixtures', 'etds_duplicates.csv') }
 
-      it "creates a new record for each unique row and records an error" do
-        begin
-          importer.call
-        rescue CSVImporter::ParseError
-          expect(ETD.count).to eq 3
+      it 'creates a new record for each unique row and records an error' do
+        importer.call
+      rescue CSVImporter::ParseError
+        expect(ETD.count).to eq 3
 
-          expect(ETD.find_by(webaccess_id: 'sat1')).to_not be_nil
-          expect(ETD.find_by(webaccess_id: 'bbt2')).to_not be_nil
-          expect(ETD.find_by(webaccess_id: 'jct3')).to_not be_nil
+        expect(ETD.find_by(webaccess_id: 'sat1')).not_to be_nil
+        expect(ETD.find_by(webaccess_id: 'bbt2')).not_to be_nil
+        expect(ETD.find_by(webaccess_id: 'jct3')).not_to be_nil
 
-          expect(importer.fatal_errors.count).to eq 1
-        end
+        expect(importer.fatal_errors.count).to eq 1
       end
     end
   end

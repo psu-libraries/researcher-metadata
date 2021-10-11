@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 
 describe PSUDickinsonPublicationImporter do
-  let(:importer) { PSUDickinsonPublicationImporter.new }
+  let(:importer) { described_class.new }
 
   let(:dickinson_law_repo) { double 'fieldhand repository for Dickinson Law' }
   let(:records) { [record1, record2, record3] }
@@ -27,13 +29,13 @@ describe PSUDickinsonPublicationImporter do
                     creators: [c1, c2] }
 
   let(:c1) { double 'creator 1',
-                    first_name: "First",
-                    last_name: "Creator",
+                    first_name: 'First',
+                    last_name: 'Creator',
                     user_match: u1,
                     ambiguous_user_matches: [] }
   let(:c2) { double 'creator 2',
-                    first_name: "Second",
-                    last_name: "Author",
+                    first_name: 'Second',
+                    last_name: 'Author',
                     user_match: nil,
                     ambiguous_user_matches: [u2, u3] }
 
@@ -55,44 +57,44 @@ describe PSUDickinsonPublicationImporter do
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record3).and_return r3
   end
 
-  describe "#call" do
+  describe '#call' do
     it "saves new imports for records that are importable and that don't already exist" do
-      expect { importer.call }.to change { PublicationImport.count }.by 1
+      expect { importer.call }.to change(PublicationImport, :count).by 1
     end
 
     it "creates new publications for records that are importable and that don't already exist" do
-      expect { importer.call }.to change { Publication.count }.by 1
+      expect { importer.call }.to change(Publication, :count).by 1
     end
 
     it "creates new authorships for records that are importable and that don't already exist" do
-      expect { importer.call }.to change { Authorship.count }.by 3
+      expect { importer.call }.to change(Authorship, :count).by 3
     end
 
     it "creates new contributor names for records that are importable and that don't already exist" do
-      expect { importer.call }.to change { ContributorName.count }.by 2
+      expect { importer.call }.to change(ContributorName, :count).by 2
     end
 
-    it "is idempotent in terms of creating publication imports" do
+    it 'is idempotent in terms of creating publication imports' do
       importer.call
-      expect { importer.call }.not_to change { PublicationImport.count }
+      expect { importer.call }.not_to change(PublicationImport, :count)
     end
 
-    it "is idempotent in terms of creating publications" do
+    it 'is idempotent in terms of creating publications' do
       importer.call
-      expect { importer.call }.not_to change { Publication.count }
+      expect { importer.call }.not_to change(Publication, :count)
     end
 
-    it "is idempotent in terms of creating authorships" do
+    it 'is idempotent in terms of creating authorships' do
       importer.call
-      expect { importer.call }.not_to change { Authorship.count }
+      expect { importer.call }.not_to change(Authorship, :count)
     end
 
-    it "is idempotent in terms of creating contributor names" do
+    it 'is idempotent in terms of creating contributor names' do
       importer.call
-      expect { importer.call }.not_to change { ContributorName.count }
+      expect { importer.call }.not_to change(ContributorName, :count)
     end
 
-    it "saves the correct metadata" do
+    it 'saves the correct metadata' do
       importer.call
       import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
                                          source_identifier: 'non-existing-identifier')
@@ -129,8 +131,8 @@ describe PSUDickinsonPublicationImporter do
       expect(auth3.confirmed).to eq false
     end
 
-    it "groups duplicates of new publication records" do
-      expect { importer.call }.to change { DuplicatePublicationGroup.count }.by 1
+    it 'groups duplicates of new publication records' do
+      expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
       import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
                                          source_identifier: 'non-existing-identifier')
@@ -141,7 +143,7 @@ describe PSUDickinsonPublicationImporter do
       expect(group.publications).to match_array [pub, duplicate_pub]
     end
 
-    it "hides new publications that might be duplicates" do
+    it 'hides new publications that might be duplicates' do
       importer.call
 
       import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
@@ -151,7 +153,7 @@ describe PSUDickinsonPublicationImporter do
       expect(pub.visible).to eq false
     end
 
-    it "returns nil" do
+    it 'returns nil' do
       expect(importer.call).to eq nil
     end
   end

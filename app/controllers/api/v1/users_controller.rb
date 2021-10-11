@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module API::V1
   class UsersController < APIController
     include Swagger::Blocks
@@ -12,7 +14,7 @@ module API::V1
           format.json { render json: API::V1::PresentationSerializer.new(@presentations) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -25,7 +27,7 @@ module API::V1
           format.json { render json: API::V1::GrantSerializer.new(@grants) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -38,7 +40,7 @@ module API::V1
           format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_items) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -51,7 +53,7 @@ module API::V1
           format.json { render json: API::V1::PerformanceSerializer.new(@performances) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -64,7 +66,7 @@ module API::V1
           format.json { render json: API::V1::ETDSerializer.new(@etds) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -77,7 +79,7 @@ module API::V1
           format.json { render json: API::V1::PublicationSerializer.new(@pubs) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -90,7 +92,7 @@ module API::V1
           format.json { render json: API::V1::OrganizationMembershipSerializer.new(@memberships) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -105,7 +107,7 @@ module API::V1
           format.json { render json: API::V1::UserProfileSerializer.new(@profile) }
         end
       else
-        render json: { :message => "User not found", :code => 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: 404
       end
     end
 
@@ -225,7 +227,7 @@ module API::V1
           key :required, true
           key :type, :string
         end
-         response 200 do
+        response 200 do
           key :description, 'user news_feed_items response'
           schema do
             key :required, [:data]
@@ -271,7 +273,7 @@ module API::V1
               end
             end
           end
-         end
+        end
         response 401 do
           key :description, 'unauthorized'
           schema do
@@ -534,7 +536,7 @@ module API::V1
                   property :identifier do
                     key :type, [:string, :null]
                     key :example, '1789352'
-                    key :description, "A code identifying the grant that is unique to the awarding agency"
+                    key :description, 'A code identifying the grant that is unique to the awarding agency'
                   end
                 end
               end
@@ -578,7 +580,7 @@ module API::V1
           key :required, true
           key :type, :string
         end
-         response 200 do
+        response 200 do
           key :description, 'user performances response'
           schema do
             key :required, [:data]
@@ -1156,7 +1158,7 @@ module API::V1
 
     swagger_path '/v1/users/publications' do
       operation :post do
-        key :summary, "Retrieve publications for a group of users"
+        key :summary, 'Retrieve publications for a group of users'
         key :description, 'Returns publications for a group of users'
         key :operationId, 'findUsersPublications'
         key :tags, [

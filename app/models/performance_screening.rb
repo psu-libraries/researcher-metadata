@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PerformanceScreening < ApplicationRecord
   belongs_to :performance
 

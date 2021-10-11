@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -12,111 +14,111 @@ describe 'the duplicate_publication_groups table', type: :model do
 end
 
 describe DuplicatePublicationGroup, type: :model do
-  subject(:dpg) { DuplicatePublicationGroup.new }
+  subject(:dpg) { described_class.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   it { is_expected.to have_many(:publications).inverse_of(:duplicate_group) }
 
   describe '.group_duplicates' do
-    context "when many publications exist, and some have similar data" do
+    context 'when many publications exist, and some have similar data' do
       let!(:existing_group1) { create :duplicate_publication_group }
       let!(:existing_group2) { create :duplicate_publication_group }
 
       # three publications that match perfectly
       let!(:p1_1) { create :publication,
-                           title: "Publication with an Exactly Duplicated Title",
+                           title: 'Publication with an Exactly Duplicated Title',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-123456789" }
-                         
+                           doi: 'https://doi.org/10.000/some-doi-123456789' }
+
       let!(:p1_2) { create :publication,
-                           title: "Publication with an Exactly Duplicated Title",
+                           title: 'Publication with an Exactly Duplicated Title',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-123456789" }
+                           doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       let!(:p1_3) { create :publication,
-                           title: "Publication with an Exactly Duplicated Title",
+                           title: 'Publication with an Exactly Duplicated Title',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-123456789" }
+                           doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       # a publication that is already in a group that has the same title as other publications
       let!(:p1) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          duplicate_group: existing_group1 }
 
       # two publications that have similar titles and otherwise match
       let!(:p2_1) { create :publication,
-                           title: "Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films",
+                           title: 'Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-987654321" }
-                         
+                           doi: 'https://doi.org/10.000/some-doi-987654321' }
+
       let!(:p2_2) { create :publication,
-                           title: "Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films",
+                           title: 'Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-987654321" }
+                           doi: 'https://doi.org/10.000/some-doi-987654321' }
 
       # two publications with somewhat different titles and the same publication date
       let!(:p3_1) { create :publication,
-                           title: "Utilizing cloud computing to address big geospatial data challenges",
+                           title: 'Utilizing cloud computing to address big geospatial data challenges',
                            published_on: Date.new(2000, 1, 1),
                            doi: nil }
-                         
+
       let!(:p3_2) { create :publication,
-                           title: "Utilizing cloud computing to do something entirely different with big data sets",
+                           title: 'Utilizing cloud computing to do something entirely different with big data sets',
                            published_on: Date.new(2000, 1, 1),
                            doi: nil }
 
       # two publications with similar titles and no other data
       let!(:p4_1) { create :publication,
-                           title: "Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
+                           title: 'Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming',
                            published_on: nil,
                            doi: nil }
-                         
+
       let!(:p4_2) { create :publication,
-                           title: "Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
+                           title: 'Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming',
                            published_on: nil,
                            doi: nil }
 
       # two publications with similar titles and different publication dates that have the same year
       let!(:p5_1) { create :publication,
-                           title: "Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV",
+                           title: 'Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV',
                            published_on: Date.new(2000, 5, 20),
                            doi: nil }
-                         
+
       let!(:p5_2) { create :publication,
-                           title: "Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV",
+                           title: 'Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV',
                            published_on: Date.new(2000, 1, 1),
                            doi: nil }
 
       # two publications with the same title and publication date but with different DOIs
       let!(:p6_1) { create :publication,
-                           title: "A Really Generic Title",
+                           title: 'A Really Generic Title',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-23456431" }
-                         
+                           doi: 'https://doi.org/10.000/some-doi-23456431' }
+
       let!(:p6_2) { create :publication,
-                           title: "A Really Generic Title",
+                           title: 'A Really Generic Title',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-4563457245" }
+                           doi: 'https://doi.org/10.000/some-doi-4563457245' }
 
       # two publications with the same title where only one has a DOI and publication date
       let!(:p7_1) { create :publication,
-                           title: "A Publication That Matches Another Publication",
+                           title: 'A Publication That Matches Another Publication',
                            published_on: Date.new(2000, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-22357534" }
-                         
+                           doi: 'https://doi.org/10.000/some-doi-22357534' }
+
       let!(:p7_2) { create :publication,
-                           title: "A Publication That Matches Another Publication",
+                           title: 'A Publication That Matches Another Publication',
                            published_on: nil,
                            doi: nil }
 
       # two publications with the same title where one has the title split between the two title fields
       let!(:p8_1) { create :publication,
                            title: "Assessing and investigating clinicians' research interests",
-                           secondary_title: "Lessons on expanding practices and data collection in a large practice research network",
+                           secondary_title: 'Lessons on expanding practices and data collection in a large practice research network',
                            published_on: nil,
                            doi: nil }
-                         
+
       let!(:p8_2) { create :publication,
                            title: "Assessing and investigating clinicians' research interests: Lessons on expanding practices and data collection in a large practice research network",
                            secondary_title: nil,
@@ -125,31 +127,31 @@ describe DuplicatePublicationGroup, type: :model do
 
       # two publications that match but are in the same non-duplicate publication group
       let!(:p9_1) { create :publication,
-                           title: "Same as another publication but grouped as false-positive",
+                           title: 'Same as another publication but grouped as false-positive',
                            published_on: Date.new(1980, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-234623613" }
-                         
+                           doi: 'https://doi.org/10.000/some-doi-234623613' }
+
       let!(:p9_2) { create :publication,
-                           title: "Same as another publication but grouped as false-positive",
+                           title: 'Same as another publication but grouped as false-positive',
                            published_on: Date.new(1980, 1, 1),
-                           doi: "https://doi.org/10.000/some-doi-234623613" }
+                           doi: 'https://doi.org/10.000/some-doi-234623613' }
 
       let!(:p9_ndpg) { create :non_duplicate_publication_group,
                               publications: [p9_1, p9_2] }
 
       # two publications that match and are in different non-duplicate publication groups
       let!(:p10_1) { create :publication,
-                            title: "In a different false-positive group from the match",
+                            title: 'In a different false-positive group from the match',
                             published_on: Date.new(1981, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-854537454" }
-                         
-      let!(:p10_2) { create :publication,
-                            title: "In a different false-positive group from the match",
-                            published_on: Date.new(1981, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-854537454" }
+                            doi: 'https://doi.org/10.000/some-doi-854537454' }
 
-      let!(:other1) { create :publication, title: "uquwegflkqulkuagekahkwehf"}
-      let!(:other2) { create :publication, title: "kvbkbcbebbcubibekubkubeuke" }
+      let!(:p10_2) { create :publication,
+                            title: 'In a different false-positive group from the match',
+                            published_on: Date.new(1981, 1, 1),
+                            doi: 'https://doi.org/10.000/some-doi-854537454' }
+
+      let!(:other1) { create :publication, title: 'uquwegflkqulkuagekahkwehf' }
+      let!(:other2) { create :publication, title: 'kvbkbcbebbcubibekubkubeuke' }
 
       let!(:p_10_ndpg1) { create :non_duplicate_publication_group,
                                  publications: [p10_1, other1] }
@@ -159,52 +161,52 @@ describe DuplicatePublicationGroup, type: :model do
 
       # three publications that match but are in the same non-duplicate publication group
       let!(:p11_1) { create :publication,
-                            title: "One in a group of three matching false-positives",
+                            title: 'One in a group of three matching false-positives',
                             published_on: Date.new(1982, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-3463473" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-3463473' }
+
       let!(:p11_2) { create :publication,
-                            title: "One in a group of three matching false-positives",
+                            title: 'One in a group of three matching false-positives',
                             published_on: Date.new(1982, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-3463473" }
+                            doi: 'https://doi.org/10.000/some-doi-3463473' }
 
       let!(:p11_3) { create :publication,
-                            title: "One in a group of three matching false-positives",
+                            title: 'One in a group of three matching false-positives',
                             published_on: Date.new(1982, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-3463473" }
+                            doi: 'https://doi.org/10.000/some-doi-3463473' }
 
       let!(:p_11_ndpg) { create :non_duplicate_publication_group,
                                 publications: [p11_1, p11_2, p11_3] }
 
       # three publications that match where only two are in the same non-duplicate publication group
       let!(:p12_1) { create :publication,
-                            title: "Publication with a two matches where one might not be legit",
+                            title: 'Publication with a two matches where one might not be legit',
                             published_on: Date.new(1983, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-234534363" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-234534363' }
+
       let!(:p12_2) { create :publication,
-                            title: "Publication with a two matches where one might not be legit",
+                            title: 'Publication with a two matches where one might not be legit',
                             published_on: Date.new(1983, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-234534363" }
+                            doi: 'https://doi.org/10.000/some-doi-234534363' }
 
       let!(:p12_3) { create :publication,
-                            title: "Publication with a two matches where one might not be legit",
+                            title: 'Publication with a two matches where one might not be legit',
                             published_on: Date.new(1983, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-234534363" }
+                            doi: 'https://doi.org/10.000/some-doi-234534363' }
 
       let!(:p_12_ndpg) { create :non_duplicate_publication_group,
                                 publications: [p12_1, p12_3] }
 
       # two publications that match and that each belong to two identical non-duplicate publication groups
       let!(:p13_1) { create :publication,
-                            title: "Publication in two identical false-positive groups with another publication",
+                            title: 'Publication in two identical false-positive groups with another publication',
                             published_on: Date.new(1984, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-956525657" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-956525657' }
+
       let!(:p13_2) { create :publication,
-                            title: "Publication in two identical false-positive groups with another publication",
+                            title: 'Publication in two identical false-positive groups with another publication',
                             published_on: Date.new(1984, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-956525657" }
+                            doi: 'https://doi.org/10.000/some-doi-956525657' }
 
       let!(:p13_ndpg1) { create :non_duplicate_publication_group,
                                 publications: [p13_1, p13_2] }
@@ -216,24 +218,24 @@ describe DuplicatePublicationGroup, type: :model do
       # I'm not sure that this one would ever occur in real life, but it's good to think about
       # what would happen if it somehow did.
       let!(:p14_1) { create :publication,
-                            title: "One of four matches in two different false-positive groups",
+                            title: 'One of four matches in two different false-positive groups',
                             published_on: Date.new(1985, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-45782186" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-45782186' }
+
       let!(:p14_2) { create :publication,
-                            title: "One of four matches in two different false-positive groups",
+                            title: 'One of four matches in two different false-positive groups',
                             published_on: Date.new(1985, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-45782186" }
+                            doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:p14_3) { create :publication,
-                            title: "One of four matches in two different false-positive groups",
+                            title: 'One of four matches in two different false-positive groups',
                             published_on: Date.new(1985, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-45782186" }
+                            doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:p14_4) { create :publication,
-                            title: "One of four matches in two different false-positive groups",
+                            title: 'One of four matches in two different false-positive groups',
                             published_on: Date.new(1985, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-45782186" }
+                            doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:p_14_ndpg1) { create :non_duplicate_publication_group,
                                  publications: [p14_1, p14_2] }
@@ -242,12 +244,12 @@ describe DuplicatePublicationGroup, type: :model do
 
       # two publications with the same title where only one has a publication date and one has a blank DOI
       let!(:p15_1) { create :publication,
-                            title: "A Perfect Title Match Where a DOI is blank",
+                            title: 'A Perfect Title Match Where a DOI is blank',
                             published_on: Date.new(2000, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-22357534" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-22357534' }
+
       let!(:p15_2) { create :publication,
-                            title: "A Perfect Title Match Where a DOI is blank",
+                            title: 'A Perfect Title Match Where a DOI is blank',
                             published_on: nil,
                             doi: '' }
 
@@ -255,8 +257,8 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p16_1) { create :publication,
                             title: "A match where there's a junk DOI from Activity Insight",
                             published_on: Date.new(1986, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-457472486" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-457472486' }
+
       let!(:p16_2) { create :publication,
                             title: "A match where there's a junk DOI from Activity Insight",
                             published_on: Date.new(1986, 1, 1),
@@ -268,12 +270,12 @@ describe DuplicatePublicationGroup, type: :model do
 
       # two publications that match except for DOI and one has an Activity Insight import and a Pure import
       let!(:p17_1) { create :publication,
-                            title: "consider DOI because AI is not the only import",
+                            title: 'consider DOI because AI is not the only import',
                             published_on: Date.new(1987, 1, 1),
-                            doi: "https://doi.org/10.000/some-doi-457472486" }
-                         
+                            doi: 'https://doi.org/10.000/some-doi-457472486' }
+
       let!(:p17_2) { create :publication,
-                            title: "consider DOI because AI is not the only import",
+                            title: 'consider DOI because AI is not the only import',
                             published_on: Date.new(1987, 1, 1),
                             doi: 'https://doi.org/10.000/junk' }
 
@@ -285,12 +287,12 @@ describe DuplicatePublicationGroup, type: :model do
                                      source: 'Pure',
                                      publication: p17_2}
 
-      it "creates the correct number of duplicate groups" do
-        expect { DuplicatePublicationGroup.group_duplicates }.to change { DuplicatePublicationGroup.count }.by 10
+      it 'creates the correct number of duplicate groups' do
+        expect { described_class.group_duplicates }.to change(described_class, :count).by 10
       end
 
-      it "finds similar publications and groups them" do
-        DuplicatePublicationGroup.group_duplicates
+      it 'finds similar publications and groups them' do
+        described_class.group_duplicates
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
 
@@ -323,7 +325,7 @@ describe DuplicatePublicationGroup, type: :model do
         # The second publication here ties together the first and the third which have
         # been grouped as false-positive matches of each other. The second publication
         # could be a true match for either the first or the third (but not both). Thus
-        # they all need to be placed into the same duplicate group together so that 
+        # they all need to be placed into the same duplicate group together so that
         # they can be sorted out. In that scenario a few things could happen:
         #   1. We might say that second publication is also a false match for both the
         #      first and the third. In that case, we'd select all three, put them into
@@ -367,8 +369,8 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p17_2.reload.duplicate_group).to be_nil
       end
 
-      it "is idempotent" do
-        expect { 2.times { DuplicatePublicationGroup.group_duplicates } }.to change { DuplicatePublicationGroup.count }.by 10
+      it 'is idempotent' do
+        expect { 2.times { described_class.group_duplicates } }.to change(described_class, :count).by 10
 
         expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
         expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
@@ -402,24 +404,24 @@ describe DuplicatePublicationGroup, type: :model do
   end
 
   describe '.group_duplicates_of' do
-    context "when given a publication with perfect matches" do
+    context 'when given a publication with perfect matches' do
       let!(:p1) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
+
       let!(:p2) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       let!(:p3) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
 
-      it "groups the matching publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the matching publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -427,149 +429,149 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context "when given a publication with perfect matches that has already been grouped" do
+    context 'when given a publication with perfect matches that has already been grouped' do
       let!(:p1) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
+
       let!(:p2) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       let!(:p3) { create :publication,
-                         title: "Publication with an Exactly Duplicated Title",
+                         title: 'Publication with an Exactly Duplicated Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-123456789" }
+                         doi: 'https://doi.org/10.000/some-doi-123456789' }
 
       let!(:group) { create :duplicate_publication_group, publications: [p1, p2, p3] }
 
-      it "leaves the publications in the existing group" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'leaves the publications in the existing group' do
+        described_class.group_duplicates_of(p1)
 
         expect(group.reload.publications).to match_array [p1, p2, p3]
       end
     end
 
-    context "given a publication that has a similar title to another publication and otherwise matches" do
+    context 'given a publication that has a similar title to another publication and otherwise matches' do
       let!(:p1) { create :publication,
-                         title: "Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films",
+                         title: 'Multiple-Exponential Electron Injection in Ru(dcbpy)<sub>2</sub>(SCN)<sub>2</sub> Sensitized ZnO Nanocrystalline Thin Films',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-987654321" }
-                         
-      let!(:p2) { create :publication,
-                         title: "Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films",
-                         published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-987654321" }
+                         doi: 'https://doi.org/10.000/some-doi-987654321' }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      let!(:p2) { create :publication,
+                         title: 'Multiple-exponential electron injection in Ru(dcbpy)(2)(SCN)(2) sensitized ZnO nanocrystalline thin films',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-987654321' }
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
     end
 
-    context "given a publication  with a somewhat different title and the same publication date as another publication" do
+    context 'given a publication  with a somewhat different title and the same publication date as another publication' do
       let!(:p1) { create :publication,
-                         title: "Utilizing cloud computing to address big geospatial data challenges",
-                         published_on: Date.new(2000, 1, 1),
-                         doi: nil }
-                         
-      let!(:p2) { create :publication,
-                         title: "Utilizing cloud computing to do something entirely different with big data sets",
+                         title: 'Utilizing cloud computing to address big geospatial data challenges',
                          published_on: Date.new(2000, 1, 1),
                          doi: nil }
 
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+      let!(:p2) { create :publication,
+                         title: 'Utilizing cloud computing to do something entirely different with big data sets',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: nil }
+
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
       end
     end
-    
-    context "given a publication with a similar titles to another publication and no other data" do
+
+    context 'given a publication with a similar titles to another publication and no other data' do
       let!(:p1) { create :publication,
-                         title: "Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
-                         published_on: nil,
-                         doi: nil }
-                         
-      let!(:p2) { create :publication,
-                         title: "Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming",
+                         title: 'Telomeric (TTAGGG)n sequences are associated with nucleolus organizer regions (NORs) in the wood lemming',
                          published_on: nil,
                          doi: nil }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      let!(:p2) { create :publication,
+                         title: 'Telomeric (TTAGGG)(n) sequences are associated with nucleolus organizer regions (NORs) in the wood lemming',
+                         published_on: nil,
+                         doi: nil }
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
     end
 
-    context "given a publication with a similar title to another publication and a different publication date that has the same year" do
+    context 'given a publication with a similar title to another publication and a different publication date that has the same year' do
       let!(:p1) { create :publication,
-                         title: "Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV",
+                         title: 'Observation and properties of the X(3872) decaying to J/ψπ<sup>+</sup>π<sup>-</sup> in pp̄ collisions at √s = 1.96 TeV',
                          published_on: Date.new(2000, 5, 20),
                          doi: nil }
-                         
+
       let!(:p2) { create :publication,
-                         title: "Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV",
+                         title: 'Observation and properties of the X(3872) decaying to J/psi pi(+)pi(-) in p(p)over-bar collisions at root s=1.96 TeV',
                          published_on: Date.new(2000, 1, 1),
                          doi: nil }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
     end
 
-    context "given a publication with the same title and publication date as another publication but with a different DOI" do
+    context 'given a publication with the same title and publication date as another publication but with a different DOI' do
       let!(:p1) { create :publication,
-                         title: "A Really Generic Title",
+                         title: 'A Really Generic Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-23456431" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-23456431' }
+
       let!(:p2) { create :publication,
-                         title: "A Really Generic Title",
+                         title: 'A Really Generic Title',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-4563457245" }
-      
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+                         doi: 'https://doi.org/10.000/some-doi-4563457245' }
+
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
       end
     end
 
-    context "given a publication with the same title as another publication where only one has a DOI and publication date" do
+    context 'given a publication with the same title as another publication where only one has a DOI and publication date' do
       let!(:p1) { create :publication,
-                         title: "A Publication That Matches Another Publication",
+                         title: 'A Publication That Matches Another Publication',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-22357534" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-22357534' }
+
       let!(:p2) { create :publication,
-                         title: "A Publication That Matches Another Publication",
+                         title: 'A Publication That Matches Another Publication',
                          published_on: nil,
                          doi: nil }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
 
-      context "given the other publication" do
-        it "groups the publications" do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+      context 'given the other publication' do
+        it 'groups the publications' do
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
@@ -577,72 +579,72 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context "given a publication with the same title as another publication where the title is split between the two title fields" do
+    context 'given a publication with the same title as another publication where the title is split between the two title fields' do
       let!(:p1) { create :publication,
                          title: "Assessing and investigating clinicians' research interests",
-                         secondary_title: "Lessons on expanding practices and data collection in a large practice research network",
+                         secondary_title: 'Lessons on expanding practices and data collection in a large practice research network',
                          published_on: nil,
                          doi: nil }
-                         
+
       let!(:p2) { create :publication,
                          title: "Assessing and investigating clinicians' research interests: Lessons on expanding practices and data collection in a large practice research network",
                          secondary_title: nil,
                          published_on: nil,
                          doi: nil }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
 
-      context "given the other publication" do
-        it "groups the publications" do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+      context 'given the other publication' do
+        it 'groups the publications' do
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
         end
       end
     end
-    
-    context "given a publication that matches another publication but is in the same non-duplicate group" do
+
+    context 'given a publication that matches another publication but is in the same non-duplicate group' do
       let!(:p1) { create :publication,
-                         title: "Same as another publication but grouped as false-positive",
+                         title: 'Same as another publication but grouped as false-positive',
                          published_on: Date.new(1980, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-234623613" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-234623613' }
+
       let!(:p2) { create :publication,
-                         title: "Same as another publication but grouped as false-positive",
+                         title: 'Same as another publication but grouped as false-positive',
                          published_on: Date.new(1980, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-234623613" }
+                         doi: 'https://doi.org/10.000/some-doi-234623613' }
 
       let!(:ndpg) { create :non_duplicate_publication_group,
                            publications: [p1, p2] }
 
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
       end
     end
 
-    context "given a publication that matches another publication that is in a different non-duplicate group" do
+    context 'given a publication that matches another publication that is in a different non-duplicate group' do
       let!(:p1) { create :publication,
-                         title: "In a different false-positive group from the match",
+                         title: 'In a different false-positive group from the match',
                          published_on: Date.new(1981, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-854537454" }
-                         
-      let!(:p2) { create :publication,
-                         title: "In a different false-positive group from the match",
-                         published_on: Date.new(1981, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-854537454" }
+                         doi: 'https://doi.org/10.000/some-doi-854537454' }
 
-      let!(:other1) { create :publication, title: "uquwegflkqulkuagekahkwehf"}
-      let!(:other2) { create :publication, title: "kvbkbcbebbcubibekubkubeuke" }
+      let!(:p2) { create :publication,
+                         title: 'In a different false-positive group from the match',
+                         published_on: Date.new(1981, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-854537454' }
+
+      let!(:other1) { create :publication, title: 'uquwegflkqulkuagekahkwehf' }
+      let!(:other2) { create :publication, title: 'kvbkbcbebbcubibekubkubeuke' }
 
       let!(:ndpg1) { create :non_duplicate_publication_group,
                             publications: [p1, other1] }
@@ -650,16 +652,16 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:ndpg2) { create :non_duplicate_publication_group,
                             publications: [p2, other2] }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
 
-      context "given the other publication" do
-        it "groups the publications" do
-          DuplicatePublicationGroup.group_duplicates_of(p2)
+      context 'given the other publication' do
+        it 'groups the publications' do
+          described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
           expect(p1.reload.duplicate_group).to eq group
@@ -667,29 +669,29 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context "given a publication that matches two other publications that are both in the same non-duplicate group" do
+    context 'given a publication that matches two other publications that are both in the same non-duplicate group' do
       let!(:p1) { create :publication,
-                         title: "One in a group of three matching false-positives",
+                         title: 'One in a group of three matching false-positives',
                          published_on: Date.new(1982, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-3463473" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-3463473' }
+
       let!(:p2) { create :publication,
-                         title: "One in a group of three matching false-positives",
+                         title: 'One in a group of three matching false-positives',
                          published_on: Date.new(1982, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-3463473" }
+                         doi: 'https://doi.org/10.000/some-doi-3463473' }
 
       let!(:p3) { create :publication,
-                         title: "One in a group of three matching false-positives",
+                         title: 'One in a group of three matching false-positives',
                          published_on: Date.new(1982, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-3463473" }
+                         doi: 'https://doi.org/10.000/some-doi-3463473' }
 
       let!(:ndpg) { create :non_duplicate_publication_group,
                            publications: [p1, p2, p3] }
 
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
-        DuplicatePublicationGroup.group_duplicates_of(p3)
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
+        described_class.group_duplicates_of(p3)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -697,27 +699,27 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context "given a publication that matches two other publications where only one is in the same non-duplicate group" do
+    context 'given a publication that matches two other publications where only one is in the same non-duplicate group' do
       let!(:p1) { create :publication,
-                         title: "Publication with a two matches where one might not be legit",
+                         title: 'Publication with a two matches where one might not be legit',
                          published_on: Date.new(1983, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-234534363" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-234534363' }
+
       let!(:p2) { create :publication,
-                         title: "Publication with a two matches where one might not be legit",
+                         title: 'Publication with a two matches where one might not be legit',
                          published_on: Date.new(1983, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-234534363" }
+                         doi: 'https://doi.org/10.000/some-doi-234534363' }
 
       let!(:p3) { create :publication,
-                         title: "Publication with a two matches where one might not be legit",
+                         title: 'Publication with a two matches where one might not be legit',
                          published_on: Date.new(1983, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-234534363" }
+                         doi: 'https://doi.org/10.000/some-doi-234534363' }
 
       let!(:ndpg) { create :non_duplicate_publication_group,
                            publications: [p1, p3] }
-      
-      it "only groups the two that are not in the same non-duplicate group" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+
+      it 'only groups the two that are not in the same non-duplicate group' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
@@ -725,59 +727,59 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context "given a publication that matches another publication where they both belong to two identical non-duplicate groups" do
+    context 'given a publication that matches another publication where they both belong to two identical non-duplicate groups' do
       let!(:p1) { create :publication,
-                         title: "Publication in two identical false-positive groups with another publication",
+                         title: 'Publication in two identical false-positive groups with another publication',
                          published_on: Date.new(1984, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-956525657" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-956525657' }
+
       let!(:p2) { create :publication,
-                         title: "Publication in two identical false-positive groups with another publication",
+                         title: 'Publication in two identical false-positive groups with another publication',
                          published_on: Date.new(1984, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-956525657" }
+                         doi: 'https://doi.org/10.000/some-doi-956525657' }
 
       let!(:ndpg1) { create :non_duplicate_publication_group,
                             publications: [p1, p2] }
       let!(:ndpg2) { create :non_duplicate_publication_group,
                             publications: [p1, p2] }
 
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
       end
     end
 
-    context "given a publication that matches other publications that are in different non-duplicate groups" do
+    context 'given a publication that matches other publications that are in different non-duplicate groups' do
       let!(:p1) { create :publication,
-                         title: "One of four matches in two different false-positive groups",
+                         title: 'One of four matches in two different false-positive groups',
                          published_on: Date.new(1985, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-45782186" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-45782186' }
+
       let!(:p2) { create :publication,
-                         title: "One of four matches in two different false-positive groups",
+                         title: 'One of four matches in two different false-positive groups',
                          published_on: Date.new(1985, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-45782186" }
+                         doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:p3) { create :publication,
-                         title: "One of four matches in two different false-positive groups",
+                         title: 'One of four matches in two different false-positive groups',
                          published_on: Date.new(1985, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-45782186" }
+                         doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:p4) { create :publication,
-                         title: "One of four matches in two different false-positive groups",
+                         title: 'One of four matches in two different false-positive groups',
                          published_on: Date.new(1985, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-45782186" }
+                         doi: 'https://doi.org/10.000/some-doi-45782186' }
 
       let!(:ndpg1) { create :non_duplicate_publication_group,
                             publications: [p1, p2] }
       let!(:ndpg2) { create :non_duplicate_publication_group,
                             publications: [p3, p4] }
 
-      it "groups only the publications that are not in the same non-duplicate group" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups only the publications that are not in the same non-duplicate group' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to be_nil
@@ -788,29 +790,29 @@ describe DuplicatePublicationGroup, type: :model do
 
     context "given a publication with the same title as another publication that doesn't have a publication date and has a blank DOI" do
       let!(:p1) { create :publication,
-                         title: "A Perfect Title Match Where a DOI is blank",
+                         title: 'A Perfect Title Match Where a DOI is blank',
                          published_on: Date.new(2000, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-22357534" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-22357534' }
+
       let!(:p2) { create :publication,
-                         title: "A Perfect Title Match Where a DOI is blank",
+                         title: 'A Perfect Title Match Where a DOI is blank',
                          published_on: nil,
                          doi: '' }
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
       end
     end
 
-    context "given a publication that matches another publication except for DOI and the other has only an Activity Insight import" do
+    context 'given a publication that matches another publication except for DOI and the other has only an Activity Insight import' do
       let!(:p1) { create :publication,
                          title: "A match where there's a junk DOI from Activity Insight",
                          published_on: Date.new(1986, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-457472486" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-457472486' }
+
       let!(:p2) { create :publication,
                          title: "A match where there's a junk DOI from Activity Insight",
                          published_on: Date.new(1986, 1, 1),
@@ -820,22 +822,22 @@ describe DuplicatePublicationGroup, type: :model do
                                   source: 'Activity Insight',
                                   publication: p2}
 
-      it "groups the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
         expect(p2.reload.duplicate_group).to eq group
-      end         
+      end
     end
 
-    context "given a publication that matches another publication except for DOI and the other has both an Activity Insight import and a Pure import" do
+    context 'given a publication that matches another publication except for DOI and the other has both an Activity Insight import and a Pure import' do
       let!(:p1) { create :publication,
-                         title: "consider DOI because AI is not the only import",
+                         title: 'consider DOI because AI is not the only import',
                          published_on: Date.new(1987, 1, 1),
-                         doi: "https://doi.org/10.000/some-doi-457472486" }
-                         
+                         doi: 'https://doi.org/10.000/some-doi-457472486' }
+
       let!(:p2) { create :publication,
-                         title: "consider DOI because AI is not the only import",
+                         title: 'consider DOI because AI is not the only import',
                          published_on: Date.new(1987, 1, 1),
                          doi: 'https://doi.org/10.000/junk' }
 
@@ -846,10 +848,10 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p2_import_2) { create :publication_import,
                                   source: 'Pure',
                                   publication: p2}
-      
-      it "does not group the publications" do
-        DuplicatePublicationGroup.group_duplicates_of(p1)
-        DuplicatePublicationGroup.group_duplicates_of(p2)
+
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        described_class.group_duplicates_of(p2)
 
         expect(p1.duplicate_group).to be_nil
         expect(p2.duplicate_group).to be_nil
@@ -860,17 +862,19 @@ describe DuplicatePublicationGroup, type: :model do
   describe '.group_publications' do
     let!(:pub1) { create :publication }
 
-    context "when given no publications" do
-      it "does not create any new duplicate publication groups" do
-        expect { DuplicatePublicationGroup.group_publications([]) }.not_to change { DuplicatePublicationGroup.count }
+    context 'when given no publications' do
+      it 'does not create any new duplicate publication groups' do
+        expect { described_class.group_publications([]) }.not_to change(described_class, :count)
       end
     end
-    context "when given one publication" do
-      it "does not create any new duplicate publication groups" do
-        expect { DuplicatePublicationGroup.group_publications([pub1]) }.not_to change { DuplicatePublicationGroup.count }
+
+    context 'when given one publication' do
+      it 'does not create any new duplicate publication groups' do
+        expect { described_class.group_publications([pub1]) }.not_to change(described_class, :count)
       end
     end
-    context "when given multiple publications" do
+
+    context 'when given multiple publications' do
       let!(:pub2) { create :publication }
       let!(:pub3) { create :publication }
       let!(:other_pub) { create :publication }
@@ -881,13 +885,13 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:grouped_pub3) { create :publication, duplicate_group: existing_group2 }
       let!(:grouped_pub4) { create :publication, duplicate_group: existing_group2 }
 
-      context "when none of the publications belong to a duplicate group" do
-        it "creates a new duplicate group" do
-          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, pub3]) }.to change { DuplicatePublicationGroup.count }.by 1
+      context 'when none of the publications belong to a duplicate group' do
+        it 'creates a new duplicate group' do
+          expect { described_class.group_publications([pub1, pub2, pub3]) }.to change(described_class, :count).by 1
         end
 
-        it "adds each given publication to the group" do
-          DuplicatePublicationGroup.group_publications([pub1, pub2, pub3])
+        it 'adds each given publication to the group' do
+          described_class.group_publications([pub1, pub2, pub3])
 
           new_group = pub1.reload.duplicate_group
 
@@ -895,37 +899,37 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
 
-      context "when one of the publications already belongs to a duplicate group" do
-        it "does not create any new duplicate publication groups" do
-          expect { DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1]) }.not_to change { DuplicatePublicationGroup.count }
+      context 'when one of the publications already belongs to a duplicate group' do
+        it 'does not create any new duplicate publication groups' do
+          expect { described_class.group_publications([pub1, pub2, grouped_pub1]) }.not_to change(described_class, :count)
         end
 
-        it "adds all of the given publications to the existing group" do
-          DuplicatePublicationGroup.group_publications([pub1, pub2, grouped_pub1])
+        it 'adds all of the given publications to the existing group' do
+          described_class.group_publications([pub1, pub2, grouped_pub1])
 
           expect(existing_group1.reload.publications).to match_array [pub1, pub2, grouped_pub1, grouped_pub2]
         end
       end
 
-      context "when two of the given publications already belong to the same duplicate group" do
-        it "does not create any new duplicate publication groups" do
-          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2]) }.not_to change { DuplicatePublicationGroup.count }
+      context 'when two of the given publications already belong to the same duplicate group' do
+        it 'does not create any new duplicate publication groups' do
+          expect { described_class.group_publications([pub2, grouped_pub1, grouped_pub2]) }.not_to change(described_class, :count)
         end
 
-        it "adds all of the given publications to the existing group" do
-          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub2])
+        it 'adds all of the given publications to the existing group' do
+          described_class.group_publications([pub2, grouped_pub1, grouped_pub2])
 
           expect(existing_group1.reload.publications).to match_array [pub2, grouped_pub1, grouped_pub2]
         end
       end
 
-      context "when two of the given publications already belong to different duplicate groups" do
-        it "removes one of the existing duplicate groups" do
-          expect { DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3]) }.to change { DuplicatePublicationGroup.count }.by -1
+      context 'when two of the given publications already belong to different duplicate groups' do
+        it 'removes one of the existing duplicate groups' do
+          expect { described_class.group_publications([pub2, grouped_pub1, grouped_pub3]) }.to change(described_class, :count).by -1
         end
 
-        it "adds all of the given publications and the other members of their groups to the remaining existing group" do
-          DuplicatePublicationGroup.group_publications([pub2, grouped_pub1, grouped_pub3])
+        it 'adds all of the given publications and the other members of their groups to the remaining existing group' do
+          described_class.group_publications([pub2, grouped_pub1, grouped_pub3])
 
           remaining_group = grouped_pub1.reload.duplicate_group || grouped_pub3.reload.duplicate_group
 
@@ -971,9 +975,8 @@ describe DuplicatePublicationGroup, type: :model do
     let!(:group3_pub1_ai_import) { create(:publication_import, source: 'Activity Insight') }
     let!(:group3_pub2_ai_import) { create(:publication_import, source: 'Activity Insight') }
 
-
-    it "automatically merges applicable publications in each group" do
-      DuplicatePublicationGroup.auto_merge
+    it 'automatically merges applicable publications in each group' do
+      described_class.auto_merge
 
       expect { group1.reload }.to raise_error ActiveRecord::RecordNotFound
       expect { group2.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -993,27 +996,30 @@ describe DuplicatePublicationGroup, type: :model do
 
   describe '#publication_count' do
     let!(:dpg) { create :duplicate_publication_group }
-    before { 2.times { create :publication, duplicate_group: dpg } }
-    it "returns the number of publications that belong to the group" do
+
+    before { create_list :publication, 2, duplicate_group: dpg }
+
+    it 'returns the number of publications that belong to the group' do
       expect(dpg.publication_count).to eq 2
     end
   end
 
   describe '#first_publication_title' do
     let!(:dpg) { create :duplicate_publication_group }
-    context "when the group has no publications" do
-      it "returns nil" do
+
+    context 'when the group has no publications' do
+      it 'returns nil' do
         expect(dpg.first_publication_title).to be_nil
       end
     end
 
-    context "when the group has publications" do
+    context 'when the group has publications' do
       before do
         create :publication, duplicate_group: dpg, title: 'First Pub'
         create :publication, duplicate_group: dpg, title: 'Second Pub'
       end
 
-      it "returns the title of the first publication in the group" do
+      it 'returns the title of the first publication in the group' do
         expect(dpg.first_publication_title).to eq 'First Pub'
       end
     end
@@ -1021,44 +1027,46 @@ describe DuplicatePublicationGroup, type: :model do
 
   describe '#auto_merge' do
     let!(:group) { create :duplicate_publication_group }
-    context "when the group has no publications" do
-      it "does not change the number of publications in the database" do
-        expect { group.auto_merge }.not_to change { Publication.count }
+
+    context 'when the group has no publications' do
+      it 'does not change the number of publications in the database' do
+        expect { group.auto_merge }.not_to change(Publication, :count)
       end
 
-      it "does not change the number of duplicate publication groups in the database" do
-        expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+      it 'does not change the number of duplicate publication groups in the database' do
+        expect { group.auto_merge }.not_to change(described_class, :count)
       end
 
-      it "does not delete the group" do
+      it 'does not delete the group' do
         group.auto_merge
         expect { group.reload }.not_to raise_error
       end
 
-      it "returns false" do
+      it 'returns false' do
         expect(group.auto_merge).to eq false
       end
     end
 
-    context "when the group has 1 publication" do
+    context 'when the group has 1 publication' do
       let!(:pub) { create :publication, duplicate_group: group, imports: imports }
 
-      context "when the publication has no imports" do
+      context 'when the publication has no imports' do
         let(:imports) { [] }
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to eq [pub]
         end
@@ -1068,29 +1076,29 @@ describe DuplicatePublicationGroup, type: :model do
           expect(pub.reload.imports).to eq []
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
 
-      context "when the publication has an import from Pure" do
+      context 'when the publication has an import from Pure' do
         let(:imports) { [pure_import] }
         let(:pure_import) { create(:publication_import, source: 'Pure') }
 
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to eq [pub]
         end
@@ -1100,30 +1108,30 @@ describe DuplicatePublicationGroup, type: :model do
           expect(pub.reload.imports).to eq [pure_import]
           expect(pure_import.reload.auto_merged).to eq nil
         end
-              
-        it "returns false" do
+
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
 
-      context "when the publication has an import from Activity Insight" do
+      context 'when the publication has an import from Activity Insight' do
         let(:imports) { [ai_import] }
         let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
 
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to eq [pub]
         end
@@ -1134,62 +1142,63 @@ describe DuplicatePublicationGroup, type: :model do
           expect(ai_import.reload.auto_merged).to eq nil
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
     end
 
-    context "when the group has 2 publications" do
+    context 'when the group has 2 publications' do
       let!(:pub1) { create :publication, duplicate_group: group, imports: pub1_imports }
       let!(:pub2) { create :publication, duplicate_group: group, imports: pub2_imports }
 
-      context "when both of the publications have no imports" do
+      context 'when both of the publications have no imports' do
         let(:pub1_imports) { [] }
         let(:pub2_imports) { [] }
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to match_array [pub1, pub2]
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
 
-      context "when both of the publications only have an import from Pure" do
+      context 'when both of the publications only have an import from Pure' do
         let(:pub1_imports) { [pure_import1] }
         let(:pub2_imports) { [pure_import2] }
         let(:pure_import1) { create(:publication_import, source: 'Pure') }
         let(:pure_import2) { create(:publication_import, source: 'Pure') }
 
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to match_array [pub1, pub2]
         end
@@ -1202,31 +1211,31 @@ describe DuplicatePublicationGroup, type: :model do
           expect(pure_import2.reload.auto_merged).to eq nil
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
 
-      context "when both of the publications only have an import from Activity Insight" do
+      context 'when both of the publications only have an import from Activity Insight' do
         let(:pub1_imports) { [ai_import1] }
         let(:pub2_imports) { [ai_import2] }
         let(:ai_import1) { create(:publication_import, source: 'Activity Insight') }
         let(:ai_import2) { create(:publication_import, source: 'Activity Insight') }
 
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to match_array [pub1, pub2]
         end
@@ -1239,24 +1248,24 @@ describe DuplicatePublicationGroup, type: :model do
           expect(ai_import2.reload.auto_merged).to eq nil
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end
 
-      context "when one publication has only an import from Activity Insight and the other has only an import from Pure" do
+      context 'when one publication has only an import from Activity Insight and the other has only an import from Pure' do
         let(:pub1_imports) { [ai_import] }
         let(:pub2_imports) { [pure_import] }
         let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
         let(:pure_import) { create(:publication_import, source: 'Pure') }
 
-        it "deletes the Activity Insight publication" do
-          expect { group.auto_merge }.to change { Publication.count }.by -1
+        it 'deletes the Activity Insight publication' do
+          expect { group.auto_merge }.to change(Publication, :count).by -1
           expect { pub1.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
-        it "deletes the group" do
-          expect { group.auto_merge }.to change { DuplicatePublicationGroup.count }.by -1
+        it 'deletes the group' do
+          expect { group.auto_merge }.to change(described_class, :count).by -1
           expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
@@ -1275,18 +1284,18 @@ describe DuplicatePublicationGroup, type: :model do
           expect(ai_import.reload.auto_merged).to eq true
         end
 
-        it "returns true" do
+        it 'returns true' do
           expect(group.auto_merge).to eq true
         end
       end
     end
 
-    context "when the group has 3 publications" do
+    context 'when the group has 3 publications' do
       let!(:pub1) { create :publication, duplicate_group: group, imports: pub1_imports }
       let!(:pub2) { create :publication, duplicate_group: group, imports: pub2_imports }
       let!(:pub3) { create :publication, duplicate_group: group, imports: pub3_imports }
 
-      context "when one publication has only an import from Activity Insight and another has only an import from Pure" do
+      context 'when one publication has only an import from Activity Insight and another has only an import from Pure' do
         let(:pub1_imports) { [ai_import] }
         let(:pub2_imports) { [pure_import] }
         let(:pub3_imports) { [ai_import2] }
@@ -1294,21 +1303,20 @@ describe DuplicatePublicationGroup, type: :model do
         let(:ai_import2) { create(:publication_import, source: 'Activity Insight') }
         let(:pure_import) { create(:publication_import, source: 'Pure') }
 
-
-        it "does not change the number of publications in the database" do
-          expect { group.auto_merge }.not_to change { Publication.count }
+        it 'does not change the number of publications in the database' do
+          expect { group.auto_merge }.not_to change(Publication, :count)
         end
 
-        it "does not change the number of duplicate publication groups in the database" do
-          expect { group.auto_merge }.not_to change { DuplicatePublicationGroup.count }
+        it 'does not change the number of duplicate publication groups in the database' do
+          expect { group.auto_merge }.not_to change(described_class, :count)
         end
 
-        it "does not delete the group" do
+        it 'does not delete the group' do
           group.auto_merge
           expect { group.reload }.not_to raise_error
         end
 
-        it "does not change the group membership" do
+        it 'does not change the group membership' do
           group.auto_merge
           expect(group.reload.publications).to match_array [pub1, pub2, pub3]
         end
@@ -1323,7 +1331,7 @@ describe DuplicatePublicationGroup, type: :model do
           expect(ai_import2.reload.auto_merged).to eq nil
         end
 
-        it "returns false" do
+        it 'returns false' do
           expect(group.auto_merge).to eq false
         end
       end

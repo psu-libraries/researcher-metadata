@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
-describe "editing profile preferences" do
+describe 'editing profile preferences' do
   let!(:user) { create :user,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
@@ -10,12 +12,12 @@ describe "editing profile preferences" do
                        show_all_publications: true,
                        orcid_identifier: orcid_id,
                        orcid_access_token: orcid_token }
-  let!(:other_user) { create :user, webaccess_id: 'xyz789'}
+  let!(:other_user) { create :user, webaccess_id: 'xyz789' }
 
   let!(:pres1) { create :presentation,
                         title: "Bob's Presentation",
-                        organization: "Penn State",
-                        location: "University Park, PA",
+                        organization: 'Penn State',
+                        location: 'University Park, PA',
                         visible: true }
   let!(:pres2) { create :presentation,
                         title: "Bob's Other Presentation",
@@ -30,7 +32,7 @@ describe "editing profile preferences" do
                          visible_in_profile: false }
   let!(:perf_1) { create :performance,
                          title: "Bob's Performance",
-                         location: "University Park, PA",
+                         location: 'University Park, PA',
                          start_on: Date.new(2000, 1, 1),
                          visible: true }
   let!(:perf_2) { create :performance,
@@ -45,139 +47,146 @@ describe "editing profile preferences" do
   let(:orcid_id) { nil }
   let(:orcid_token) { nil }
 
-  feature "the manage profile link", type: :feature do
-    describe "visiting the profile page for a given user" do
-      context "when not logged in" do
+  describe 'the manage profile link', type: :feature do
+    describe 'visiting the profile page for a given user' do
+      context 'when not logged in' do
         before { visit profile_path(webaccess_id: 'abc123') }
 
-        it "does not display a link to manage the profile" do
-          expect(page).to_not have_link "Manage my profile"
+        it 'does not display a link to manage the profile' do
+          expect(page).not_to have_link 'Manage my profile'
         end
       end
-      context "when logged in as that user" do
+
+      context 'when logged in as that user' do
         before do
           authenticate_as(user)
           visit profile_path(webaccess_id: 'abc123')
         end
 
-        it "displays a link to manage the profile" do
-          expect(page).to have_link "Manage my profile", href: profile_bio_path
+        it 'displays a link to manage the profile' do
+          expect(page).to have_link 'Manage my profile', href: profile_bio_path
         end
       end
-      context "when logged in as a different user" do
+
+      context 'when logged in as a different user' do
         before do
           authenticate_as(other_user)
           visit profile_path(webaccess_id: 'abc123')
         end
 
-        it "does not display a link to manage the profile" do
-          expect(page).to_not have_link "Manage my profile"
+        it 'does not display a link to manage the profile' do
+          expect(page).not_to have_link 'Manage my profile'
         end
       end
     end
   end
 
-  feature "the ORCID link", type: :feature do
-    describe "visiting the profile page for a given user" do
-      context "when not logged in" do
+  describe 'the ORCID link', type: :feature do
+    describe 'visiting the profile page for a given user' do
+      context 'when not logged in' do
         before { visit profile_path(webaccess_id: 'abc123') }
 
-        context "when the user has no ORCID ID" do
-          it "does not display an ORCID ID link" do
-            expect(page).to_not have_link "ORCID iD"
+        context 'when the user has no ORCID ID' do
+          it 'does not display an ORCID ID link' do
+            expect(page).not_to have_link 'ORCID iD'
           end
 
-          it "does not display an ORCID call to action" do
-            expect(page).to_not have_link "Link my ORCID ID"
+          it 'does not display an ORCID call to action' do
+            expect(page).not_to have_link 'Link my ORCID ID'
           end
         end
-        context "when the user has an ORCID ID" do
+
+        context 'when the user has an ORCID ID' do
           let(:orcid_id) { 'https://orcid.org/my-orcid-id' }
 
-          it "displays an ORCID ID link" do
-            expect(page).to have_link "ORCID iD", href: 'https://orcid.org/my-orcid-id'
+          it 'displays an ORCID ID link' do
+            expect(page).to have_link 'ORCID iD', href: 'https://orcid.org/my-orcid-id'
           end
 
-          it "does not display an ORCID call to action" do
-            expect(page).to_not have_link "Link my ORCID ID"
+          it 'does not display an ORCID call to action' do
+            expect(page).not_to have_link 'Link my ORCID ID'
           end
         end
       end
-      context "when logged in as that user" do
+
+      context 'when logged in as that user' do
         before do
           authenticate_as(user)
           visit profile_path(webaccess_id: 'abc123')
         end
 
-        context "when the user has no ORCID ID" do
-          it "does not display an ORCID ID link" do
-            expect(page).to_not have_link "ORCID iD"
+        context 'when the user has no ORCID ID' do
+          it 'does not display an ORCID ID link' do
+            expect(page).not_to have_link 'ORCID iD'
           end
 
-          it "does display an ORCID call to action" do
-            expect(page).to have_link "Link my ORCID ID", href: 'https://guides.libraries.psu.edu/orcid'
+          it 'does display an ORCID call to action' do
+            expect(page).to have_link 'Link my ORCID ID', href: 'https://guides.libraries.psu.edu/orcid'
           end
         end
-        context "when the user has an ORCID ID" do
+
+        context 'when the user has an ORCID ID' do
           let(:orcid_id) { 'https://orcid.org/my-orcid-id' }
 
-          it "displays an ORCID ID link" do
-            expect(page).to have_link "ORCID iD", href: 'https://orcid.org/my-orcid-id'
+          it 'displays an ORCID ID link' do
+            expect(page).to have_link 'ORCID iD', href: 'https://orcid.org/my-orcid-id'
           end
 
-          it "does not display an ORCID call to action" do
-            expect(page).to_not have_link "Link my ORCID ID"
+          it 'does not display an ORCID call to action' do
+            expect(page).not_to have_link 'Link my ORCID ID'
           end
         end
       end
-      context "when logged in as a different user" do
+
+      context 'when logged in as a different user' do
         before do
           authenticate_as(other_user)
           visit profile_path(webaccess_id: 'abc123')
         end
 
-        context "when the user has no ORCID ID" do
-          it "does not display an ORCID ID link" do
-            expect(page).to_not have_link "ORCID iD"
+        context 'when the user has no ORCID ID' do
+          it 'does not display an ORCID ID link' do
+            expect(page).not_to have_link 'ORCID iD'
           end
 
-          it "does not display an ORCID call to action" do
-            expect(page).to_not have_link "Link my ORCID ID"
+          it 'does not display an ORCID call to action' do
+            expect(page).not_to have_link 'Link my ORCID ID'
           end
         end
-        context "when the user has an ORCID ID" do
+
+        context 'when the user has an ORCID ID' do
           let(:orcid_id) { 'https://orcid.org/my-orcid-id' }
 
-          it "displays an ORCID ID link" do
-            expect(page).to have_link "ORCID iD", href: 'https://orcid.org/my-orcid-id'
+          it 'displays an ORCID ID link' do
+            expect(page).to have_link 'ORCID iD', href: 'https://orcid.org/my-orcid-id'
           end
 
-          it "does not display an ORCID call to action" do
-            expect(page).to_not have_link "Link my ORCID ID"
+          it 'does not display an ORCID call to action' do
+            expect(page).not_to have_link 'Link my ORCID ID'
           end
         end
       end
     end
   end
 
-  feature "the profile publications edit page" do
-    context "when the user is signed in" do
+  describe 'the profile publications edit page' do
+    context 'when the user is signed in' do
       before do
         authenticate_as(user)
         visit edit_profile_publications_path
       end
 
-      it_behaves_like "a profile management page"
+      it_behaves_like 'a profile management page'
 
-      it "shows the correct heading content" do
-        expect(page).to have_content "Manage Profile Publications"
+      it 'shows the correct heading content' do
+        expect(page).to have_content 'Manage Profile Publications'
       end
 
-      context "when the user has publications" do
+      context 'when the user has publications' do
         let!(:pub_1) { create :publication,
                               title: "Bob's Publication",
                               visible: true,
-                              journal_title: "The Journal",
+                              journal_title: 'The Journal',
                               published_on: Date.new(2007, 1, 1) }
         let!(:pub_2) { create :publication,
                               title: "Bob's Other Publication",
@@ -185,11 +194,11 @@ describe "editing profile preferences" do
         let!(:pub_3) { create :publication,
                               title: "Bob's Open Access Publication",
                               visible: true,
-                              open_access_url: "https://example.org/pubs/1" }
+                              open_access_url: 'https://example.org/pubs/1' }
         let!(:pub_4) { create :publication,
                               title: "Bob's Other Open Access Publication",
                               visible: true,
-                              user_submitted_open_access_url: "https://example.org/pubs/2" }
+                              user_submitted_open_access_url: 'https://example.org/pubs/2' }
         let!(:pub_5) { create :publication,
                               title: "Bob's Non-Open Access Publication",
                               visible: true }
@@ -218,7 +227,7 @@ describe "editing profile preferences" do
         it "shows descriptions of the user's visible publications" do
           expect(page).to have_content "Bob's Publication, The Journal, 2007"
           expect(page).to have_link "Bob's Publication", href: edit_open_access_publication_path(pub_1)
-          expect(page).to_not have_content "Bob's Other Publication"
+          expect(page).not_to have_content "Bob's Other Publication"
           expect(page).to have_content "Bob's Open Access Publication"
           expect(page).not_to have_link "Bob's Open Access Publication"
           expect(page).to have_content "Bob's Other Open Access Publication"
@@ -237,7 +246,7 @@ describe "editing profile preferences" do
           end
         end
 
-        it "shows an icon to indicate when we have an open access URL for a publication" do
+        it 'shows an icon to indicate when we have an open access URL for a publication' do
           within "tr#authorship_row_#{auth_3.id}" do
             expect(page).to have_css '.fa-unlock-alt'
           end
@@ -247,13 +256,13 @@ describe "editing profile preferences" do
           end
         end
 
-        it "shows an icon to indicate when open access obligations have been waived for a publication" do
+        it 'shows an icon to indicate when open access obligations have been waived for a publication' do
           within "tr#authorship_row_#{auth_5.id}" do
             expect(page).to have_css '.fa-lock'
           end
         end
 
-        it "shows an icon to indicate when a publication is being added to ScholarSphere" do
+        it 'shows an icon to indicate when a publication is being added to ScholarSphere' do
           within "tr#authorship_row_#{auth_6.id}" do
             expect(page).to have_css '.fa-hourglass-half'
           end
@@ -265,89 +274,91 @@ describe "editing profile preferences" do
           end
         end
 
-        it "shows a link to submit a waiver for a publication that is outside of the system" do
-          expect(page).to have_link "waiver form", href: new_external_publication_waiver_path
+        it 'shows a link to submit a waiver for a publication that is outside of the system' do
+          expect(page).to have_link 'waiver form', href: new_external_publication_waiver_path
         end
 
-        it "does not show the empty list message" do
-          expect(page).not_to have_content "There are currently no publications to show for your profile."
-        end
-      end
-
-      context "when the user has no publications" do
-        it "shows a message about the empty list" do
-          expect(page).to have_content "There are currently no publications to show for your profile."
+        it 'does not show the empty list message' do
+          expect(page).not_to have_content 'There are currently no publications to show for your profile.'
         end
       end
 
-      context "when the user has no external publication waivers" do
-        it "does not show the waiver list" do
-          expect(page).not_to have_content "Open Access Waivers"
+      context 'when the user has no publications' do
+        it 'shows a message about the empty list' do
+          expect(page).to have_content 'There are currently no publications to show for your profile.'
         end
       end
 
-      context "when the user has external publication waivers" do
+      context 'when the user has no external publication waivers' do
+        it 'does not show the waiver list' do
+          expect(page).not_to have_content 'Open Access Waivers'
+        end
+      end
+
+      context 'when the user has external publication waivers' do
         let!(:waiver1) { create :external_publication_waiver,
                                 user: user,
-                                publication_title: "Waived Publication",
-                                journal_title: "Example Journal" }
+                                publication_title: 'Waived Publication',
+                                journal_title: 'Example Journal' }
         let!(:waiver2) { create :external_publication_waiver,
                                 user: user,
-                                publication_title: "Another Waived Publication",
-                                journal_title: "Other Journal" }
+                                publication_title: 'Another Waived Publication',
+                                journal_title: 'Other Journal' }
 
         before { visit edit_profile_publications_path }
-        it "shows the list of waivers" do
-          expect(page).to have_content "Open Access Waivers"
+
+        it 'shows the list of waivers' do
+          expect(page).to have_content 'Open Access Waivers'
 
           within "#external_publication_waiver_#{waiver1.id}" do
-            expect(page).to have_content "Waived Publication"
-            expect(page).to have_content "Example Journal"
+            expect(page).to have_content 'Waived Publication'
+            expect(page).to have_content 'Example Journal'
           end
 
           within "#external_publication_waiver_#{waiver2.id}" do
-            expect(page).to have_content "Another Waived Publication"
-            expect(page).to have_content "Other Journal"
+            expect(page).to have_content 'Another Waived Publication'
+            expect(page).to have_content 'Other Journal'
           end
         end
       end
     end
-    context "when the user is not signed in" do
+
+    context 'when the user is not signed in' do
       before { visit edit_profile_publications_path }
 
-      it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq edit_profile_publications_path
+      it 'does not allow the user to visit the page' do
+        expect(page).to have_no_current_path edit_profile_publications_path, ignore_query: true
       end
     end
   end
 
-  feature "the profile other publications edit page" do
-    context "when the user is signed in" do
+  describe 'the profile other publications edit page' do
+    context 'when the user is signed in' do
       before do
         authenticate_as(user)
         visit edit_profile_other_publications_path
       end
 
-      it_behaves_like "a profile management page"
+      it_behaves_like 'a profile management page'
 
-      it "shows the correct heading content" do
-        expect(page).to have_content "Manage Non-Article Profile Publications"
+      it 'shows the correct heading content' do
+        expect(page).to have_content 'Manage Non-Article Profile Publications'
       end
 
-      context "when the user has other publications" do
+      context 'when the user has other publications' do
         let!(:pub_1) { create :publication,
                               publication_type: 'Chapter',
-                              title: "Title 1",
+                              title: 'Title 1',
                               visible: true,
                               published_on: Date.new(2007, 1, 1) }
         let!(:pub_2) { create :publication,
                               publication_type: 'Chapter',
-                              title: "Title 2",
+                              title: 'Title 2',
                               visible: false,
                               published_on: Date.new(2008, 1, 1) }
         let!(:pub_3) { create :publication,
                               publication_type: 'Letter',
-                              title: "Title 1",
+                              title: 'Title 1',
                               visible: true,
                               journal_title: 'Journal 1',
                               published_on: Date.new(2008, 1, 1) }
@@ -358,117 +369,115 @@ describe "editing profile preferences" do
         before { visit edit_profile_other_publications_path }
 
         it "shows descriptions of the user's visible other publications" do
-          expect(page).to have_content "Chapter"
-          expect(page).to have_content "Title 1, 2007"
-          expect(page).to_not have_content "Title 2, 2008"
-          expect(page).to have_content "Letter"
-          expect(page).to have_content "Title 1, Journal 1, 2008"
+          expect(page).to have_content 'Chapter'
+          expect(page).to have_content 'Title 1, 2007'
+          expect(page).not_to have_content 'Title 2, 2008'
+          expect(page).to have_content 'Letter'
+          expect(page).to have_content 'Title 1, Journal 1, 2008'
         end
       end
     end
 
-    context "when the user is not signed in" do
+    context 'when the user is not signed in' do
       before { visit edit_profile_other_publications_path }
 
-      it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq edit_profile_other_publications_path
+      it 'does not allow the user to visit the page' do
+        expect(page).to have_no_current_path edit_profile_other_publications_path, ignore_query: true
       end
     end
   end
 
-
-
-  feature "the profile presentations edit page" do
-    context "when the user is signed in" do
+  describe 'the profile presentations edit page' do
+    context 'when the user is signed in' do
       before do
         authenticate_as(user)
         visit edit_profile_presentations_path
       end
 
-      it_behaves_like "a profile management page"
+      it_behaves_like 'a profile management page'
 
-      it "shows the correct heading content" do
-        expect(page).to have_content "Manage Profile Presentations"
+      it 'shows the correct heading content' do
+        expect(page).to have_content 'Manage Profile Presentations'
       end
 
       it "shows descriptions of the user's visible presentations" do
         expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
-        expect(page).to_not have_content "Bob's Other Presentation - -"
+        expect(page).not_to have_content "Bob's Other Presentation - -"
       end
     end
 
-    context "when the user is not signed in" do
+    context 'when the user is not signed in' do
       before { visit edit_profile_presentations_path }
 
-      it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq edit_profile_presentations_path
+      it 'does not allow the user to visit the page' do
+        expect(page).to have_no_current_path edit_profile_presentations_path, ignore_query: true
       end
     end
   end
 
-  feature "the profile performances edit page" do
-    context "when the user is signed in" do
+  describe 'the profile performances edit page' do
+    context 'when the user is signed in' do
       before do
         authenticate_as(user)
         visit edit_profile_performances_path
       end
 
-      it_behaves_like "a profile management page"
+      it_behaves_like 'a profile management page'
 
-      it "shows the correct heading content" do
-        expect(page).to have_content "Manage Profile Performances"
+      it 'shows the correct heading content' do
+        expect(page).to have_content 'Manage Profile Performances'
       end
 
       it "shows descriptions of the user's visible performances" do
         expect(page).to have_content "Bob's Performance - University Park, PA - 2000-01-01"
-        expect(page).to_not have_content "Bob's Other Performance - -"
+        expect(page).not_to have_content "Bob's Other Performance - -"
       end
     end
 
-    context "when the user is not signed in" do
+    context 'when the user is not signed in' do
       before { visit edit_profile_performances_path }
 
-      it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq edit_profile_performances_path
+      it 'does not allow the user to visit the page' do
+        expect(page).to have_no_current_path edit_profile_performances_path, ignore_query: true
       end
     end
   end
 
-  feature "the profile bio page" do
-    context "when the user is signed in" do
+  describe 'the profile bio page' do
+    context 'when the user is signed in' do
       before do
         authenticate_as(user)
         visit profile_bio_path
       end
 
-      it_behaves_like "a profile management page"
+      it_behaves_like 'a profile management page'
 
-      it "shows the correct heading content" do
-        expect(page).to have_content "Profile Bio"
+      it 'shows the correct heading content' do
+        expect(page).to have_content 'Profile Bio'
       end
 
-      it "shows bio information for the user" do
-        expect(page).to have_content "Bob Testuser"
+      it 'shows bio information for the user' do
+        expect(page).to have_content 'Bob Testuser'
       end
 
       context "when the user doesn't belong to an organization" do
-        it "does not show organization information" do
-          expect(page).not_to have_content "Organizations"
+        it 'does not show organization information' do
+          expect(page).not_to have_content 'Organizations'
         end
       end
 
-      context "when the user belongs to organizations" do
-        let(:org1) { create :organization, name: "Biology" }
-        let(:org2) { create :organization, name: "Life Sciences Institute" }
-        let(:employment_button_text) { "Add to my ORCID Record" }
-        let(:connect_orcid_button_text) { "Connect your ORCID iD" }
+      context 'when the user belongs to organizations' do
+        let(:org1) { create :organization, name: 'Biology' }
+        let(:org2) { create :organization, name: 'Life Sciences Institute' }
+        let(:employment_button_text) { 'Add to my ORCID Record' }
+        let(:connect_orcid_button_text) { 'Connect your ORCID iD' }
         let(:orcid_employment_id) { nil }
 
         let!(:mem1) {
           create :user_organization_membership,
                  user: user,
                  organization: org1,
-                 position_title: "Professor",
+                 position_title: 'Professor',
                  started_on: Date.new(2010, 1, 1),
                  ended_on: Date.new(2015, 12, 31),
                  import_source: 'Pure',
@@ -484,64 +493,68 @@ describe "editing profile preferences" do
                  started_on: Date.new(2012, 1, 1),
                  ended_on: Date.new(2015, 12, 31)
         }
+
         before { visit profile_bio_path }
 
-        it "shows information for each organization" do
+        it 'shows information for each organization' do
           within "#organization_membership_#{mem1.id}" do
-            expect(page).to have_content "Biology"
-            expect(page).to have_content "Professor"
-            expect(page).to have_content "2010-01-01"
-            expect(page).to have_content "2015-12-31"
+            expect(page).to have_content 'Biology'
+            expect(page).to have_content 'Professor'
+            expect(page).to have_content '2010-01-01'
+            expect(page).to have_content '2015-12-31'
           end
 
           within "#organization_membership_#{mem2.id}" do
-            expect(page).to have_content "Life Sciences Institute"
-            expect(page).to have_content "Director"
-            expect(page).to have_content "2012-01-01"
-            expect(page).to have_content "2015-12-31"
+            expect(page).to have_content 'Life Sciences Institute'
+            expect(page).to have_content 'Director'
+            expect(page).to have_content '2012-01-01'
+            expect(page).to have_content '2015-12-31'
           end
         end
 
-        context "when the user does not have an ORCID iD" do
+        context 'when the user does not have an ORCID iD' do
           it "does not show a button to connect to the user's ORCID record" do
             expect(page).not_to have_button connect_orcid_button_text
           end
 
-          it "does not show a button to add an employment to their ORCID record" do
+          it 'does not show a button to add an employment to their ORCID record' do
             expect(page).not_to have_button employment_button_text
           end
         end
-        context "when the user has an ORCiD" do
-          let(:orcid_id) { "https://orcid.org/0000-0000-1234-5678" }
-          context "when the user has an ORCID access token" do
-            let(:orcid_token) { "abc123" }
+
+        context 'when the user has an ORCiD' do
+          let(:orcid_id) { 'https://orcid.org/0000-0000-1234-5678' }
+
+          context 'when the user has an ORCID access token' do
+            let(:orcid_token) { 'abc123' }
+
             it "does not show a button to connect to the user's ORCID record" do
               expect(page).not_to have_button connect_orcid_button_text
             end
 
             it "shows the user's ORCID iD" do
-              expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
-                                        href: "https://orcid.org/0000-0000-1234-5678"
+              expect(page).to have_link 'https://orcid.org/0000-0000-1234-5678',
+                                        href: 'https://orcid.org/0000-0000-1234-5678'
             end
 
-            context "when the user has added an organization membership to their ORCID record" do
-              let(:orcid_employment_id) { "an identifier" }
+            context 'when the user has added an organization membership to their ORCID record' do
+              let(:orcid_employment_id) { 'an identifier' }
 
-              it "does not show a button to add that employment to their ORCID record" do
+              it 'does not show a button to add that employment to their ORCID record' do
                 within "#organization_membership_#{mem1.id}" do
                   expect(page).not_to have_button employment_button_text
                 end
               end
 
-              it "tells the user that the information has been added" do
+              it 'tells the user that the information has been added' do
                 within "#organization_membership_#{mem1.id}" do
-                  expect(page).to have_content "information has been added to your ORCID record"
+                  expect(page).to have_content 'information has been added to your ORCID record'
                 end
               end
             end
 
-            context "when the user has not added an organization membership to their ORCID record" do
-              it "shows a button to add the employment to their ORCID record" do
+            context 'when the user has not added an organization membership to their ORCID record' do
+              it 'shows a button to add the employment to their ORCID record' do
                 within "#organization_membership_#{mem1.id}" do
                   expect(page).to have_button employment_button_text
                 end
@@ -549,17 +562,17 @@ describe "editing profile preferences" do
             end
           end
 
-          context "when the user does not have an ORCID access token" do
+          context 'when the user does not have an ORCID access token' do
             it "shows the user's ORCID iD" do
-              expect(page).to have_link "https://orcid.org/0000-0000-1234-5678",
-                                        href: "https://orcid.org/0000-0000-1234-5678"
+              expect(page).to have_link 'https://orcid.org/0000-0000-1234-5678',
+                                        href: 'https://orcid.org/0000-0000-1234-5678'
             end
-            
+
             it "shows a button to connect to the user's ORCID record" do
               expect(page).to have_button connect_orcid_button_text
             end
 
-            it "does not show a button to add the employment to their ORCID record" do
+            it 'does not show a button to add the employment to their ORCID record' do
               expect(page).not_to have_button employment_button_text
             end
           end
@@ -567,23 +580,23 @@ describe "editing profile preferences" do
       end
     end
 
-    context "when the user is not signed in" do
+    context 'when the user is not signed in' do
       before { visit profile_bio_path }
 
-      it "does not allow the user to visit the page" do
-        expect(page.current_path).not_to eq profile_bio_path
+      it 'does not allow the user to visit the page' do
+        expect(page).to have_no_current_path profile_bio_path, ignore_query: true
       end
     end
   end
 
-  describe "the path /profile" do
+  describe 'the path /profile' do
     before do
       authenticate_as(user)
       visit 'profile'
     end
 
-    it "redirects to the profile publications edit page" do
-      expect(page.current_path).to eq edit_profile_publications_path
+    it 'redirects to the profile publications edit page' do
+      expect(page).to have_current_path edit_profile_publications_path, ignore_query: true
     end
   end
 end

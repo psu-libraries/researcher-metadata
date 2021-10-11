@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -14,9 +16,9 @@ describe 'the tags_table', type: :model do
 end
 
 describe Tag, type: :model do
-  subject(:tag) { Tag.new }
+  subject(:tag) { described_class.new }
 
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to have_many(:publication_taggings) }
@@ -26,17 +28,20 @@ describe Tag, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of :name }
 
-    context "given an otherwise valid record" do
-      subject { Tag.new(name: 'abc') }
+    context 'given an otherwise valid record' do
+      subject { described_class.new(name: 'abc') }
+
       it { is_expected.to validate_uniqueness_of(:name).case_insensitive }
     end
   end
 
-  describe "saving a value for name" do
+  describe 'saving a value for name' do
     let(:t) { create :tag, name: tag_name }
-    context "when the value contains upper and lowercase letters" do
+
+    context 'when the value contains upper and lowercase letters' do
       let(:tag_name) { 'ABC DeF ghi' }
-      it "titleizes before saving" do
+
+      it 'titleizes before saving' do
         expect(t.name).to eq 'Abc Def Ghi'
       end
     end

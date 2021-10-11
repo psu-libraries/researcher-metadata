@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CSVImporter
   class ParseError < RuntimeError; end
 
@@ -8,8 +10,8 @@ class CSVImporter
   def initialize(filename:, batch_size: 500)
     @fatal_errors = []
     @filename = filename
-    @fatal_errors << "Cannot find file #{filename.inspect}" unless File.exists?( filename )
-    @fatal_errors << "File is empty #{filename.inspect}" if File.zero?( filename )
+    @fatal_errors << "Cannot find file #{filename.inspect}" unless File.exists?(filename)
+    @fatal_errors << "File is empty #{filename.inspect}" if File.zero?(filename)
     @fatal_errors << "File has no records #{filename.inspect}" unless File.new(filename).readlines.size > 1
     @batch_size = batch_size
   end
@@ -28,7 +30,7 @@ class CSVImporter
             object.validate!
             objects << object
           end
-        rescue => e
+        rescue StandardError => e
           add_error(message: e.message, row_number: row_number)
         end
       end
@@ -50,20 +52,20 @@ class CSVImporter
   end
 
   def fatal_errors_encountered?
-    fatal_errors.length > 0
+    fatal_errors.length.positive?
   end
 
   private
 
-  def add_error(message:, row_number:)
-    fatal_errors << "Line #{row_number}: #{message}"
-  end
+    def add_error(message:, row_number:)
+      fatal_errors << "Line #{row_number}: #{message}"
+    end
 
-  def line_count
-    `wc -l #{filename}`.to_i - 1
-  end
+    def line_count
+      `wc -l #{filename}`.to_i - 1
+    end
 
-  def encoding
-    'utf-8'
-  end
+    def encoding
+      'utf-8'
+    end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 
 class NSFGrantImporter
@@ -43,5 +45,5 @@ class NSFGrantImporter
 
   private
 
-  attr_reader :dirname
+    attr_reader :dirname
 end

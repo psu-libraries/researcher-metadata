@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 class OpenAccessPublicationsController < OpenAccessWorkflowController
   skip_before_action :redirect_if_inaccessible, only: [:edit]
-  
+
   def edit
     if publication.no_open_access_information?
       @form = OpenAccessURLForm.new
@@ -15,7 +17,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def update
     @form = OpenAccessURLForm.new(form_params)
-      
+
     if @form.valid?
       publication.update!(user_submitted_open_access_url: @form.open_access_url)
       flash[:notice] = I18n.t('profile.open_access_publications.update.success')
@@ -31,7 +33,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    extra_params = {authorship: @authorship}
+    extra_params = { authorship: @authorship }
     @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
 
     ActiveRecord::Base.transaction do
@@ -45,7 +47,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     redirect_to edit_profile_publications_path
   rescue ActiveRecord::RecordInvalid
     @form = OpenAccessURLForm.new
-    flash.now[:alert] = @deposit.errors.full_messages.join(", ")
+    flash.now[:alert] = @deposit.errors.full_messages.join(', ')
     render :edit
   end
 
@@ -53,21 +55,21 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   private
 
-  def form_params
-    params.require(:open_access_url_form).permit([:open_access_url])
-  end
+    def form_params
+      params.require(:open_access_url_form).permit([:open_access_url])
+    end
 
-  def deposit_params
-    params.require(:scholarsphere_work_deposit).permit(:title,
-                                                       :description,
-                                                       :publisher_statement,
-                                                       :published_date,
-                                                       :rights,
-                                                       :embargoed_until,
-                                                       :deposit_agreement,
-                                                       :doi,
-                                                       :subtitle,
-                                                       :publisher,
-                                                       file_uploads_attributes: [:file, :file_cache])
-  end
+    def deposit_params
+      params.require(:scholarsphere_work_deposit).permit(:title,
+                                                         :description,
+                                                         :publisher_statement,
+                                                         :published_date,
+                                                         :rights,
+                                                         :embargoed_until,
+                                                         :deposit_agreement,
+                                                         :doi,
+                                                         :subtitle,
+                                                         :publisher,
+                                                         file_uploads_attributes: [:file, :file_cache])
+    end
 end

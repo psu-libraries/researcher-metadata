@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -18,7 +20,7 @@ describe 'the organization_api_permissions table', type: :model do
 end
 
 describe OrganizationAPIPermission, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:api_token).inverse_of(:organization_api_permissions) }

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class WOSContributor
   def initialize(parsed_contributor)
     @parsed_contributor = parsed_contributor
@@ -13,5 +15,5 @@ class WOSContributor
 
   private
 
-  attr_reader :parsed_contributor
+    attr_reader :parsed_contributor
 end

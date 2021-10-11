@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class PSUHRUserImporter < CSVImporter
   def row_to_object(row)
     if row[:accessid]
@@ -45,30 +47,28 @@ class PSUHRUserImporter < CSVImporter
 
   private
 
-  def first_name(row)
-    row[:academic_appointee].split(' ')[0].strip
-  end
-
-  def last_name(row)
-    row[:academic_appointee].split(' ')[1].strip
-  end
-
-  def organization(row)
-    case row[:academic_unit_for_primary_academic_appointment]
-    when 'Penn State Law'
-      law_school_org
-    when 'Dickinson Law'
-      dickinson_org
-    else
-      nil
+    def first_name(row)
+      row[:academic_appointee].split(' ')[0].strip
     end
-  end
 
-  def law_school_org
-    @law_school_org ||= Organization.find_by(pure_external_identifier: 'COLLEGE-PL')
-  end
+    def last_name(row)
+      row[:academic_appointee].split(' ')[1].strip
+    end
 
-  def dickinson_org
-    @dickinson_org ||= Organization.find_by(pure_external_identifier: 'CAMPUS-DN')
-  end
+    def organization(row)
+      case row[:academic_unit_for_primary_academic_appointment]
+      when 'Penn State Law'
+        law_school_org
+      when 'Dickinson Law'
+        dickinson_org
+      end
+    end
+
+    def law_school_org
+      @law_school_org ||= Organization.find_by(pure_external_identifier: 'COLLEGE-PL')
+    end
+
+    def dickinson_org
+      @dickinson_org ||= Organization.find_by(pure_external_identifier: 'CAMPUS-DN')
+    end
 end

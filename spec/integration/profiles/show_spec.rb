@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'integration/integration_spec_helper'
 
-feature "Profile page", type: :feature do
+describe 'Profile page', type: :feature do
   let!(:user) { create :user,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
@@ -29,7 +31,7 @@ feature "Profile page", type: :feature do
                        title: 'Second Publication',
                        journal_title: 'Journal 2',
                        published_on: Date.new(2011, 1, 1),
-                       open_access_url: "https://example.org/pubs/123.pdf" }
+                       open_access_url: 'https://example.org/pubs/123.pdf' }
   let!(:pub3) { create :publication,
                        publication_type: 'Book',
                        visible: true,
@@ -74,13 +76,13 @@ feature "Profile page", type: :feature do
                        year: 1999, submission_type: 'Dissertation' }
   let!(:org) { create :organization, name: 'Test Organization' }
   let!(:grant1) { create :grant,
-                         title: "First Grant",
-                         agency_name: "National Science Foundation",
+                         title: 'First Grant',
+                         agency_name: 'National Science Foundation',
                          start_date: Date.new(2001, 2, 3),
                          end_date: Date.new(2004, 5, 6) }
   let!(:grant2) { create :grant,
-                         identifier: "Grant123",
-                         wos_agency_name: "Agency 2",
+                         identifier: 'Grant123',
+                         wos_agency_name: 'Agency 2',
                          start_date: Date.new(2010, 1, 1),
                          end_date: Date.new(2015, 2, 2) }
 
@@ -133,11 +135,11 @@ feature "Profile page", type: :feature do
     visit profile_path(webaccess_id: 'abc123')
   end
 
-  it "shows the profile layout" do
-    expect(page).to have_link "2019 The Pennsylvania State University"
+  it 'shows the profile layout' do
+    expect(page).to have_link '2019 The Pennsylvania State University'
   end
 
-  it "shows the name of the requested user" do
+  it 'shows the name of the requested user' do
     expect(page).to have_content 'Bob Testuser'
   end
 
@@ -145,19 +147,19 @@ feature "Profile page", type: :feature do
     expect(page).to have_content 'Test Organization'
   end
 
-  it "shows the office location for the requested user" do
+  it 'shows the office location for the requested user' do
     expect(page).to have_content '123 Office Building'
   end
 
-  it "shows the office phone number for the requested user" do
+  it 'shows the office phone number for the requested user' do
     expect(page).to have_content '(123) 456-7890'
   end
 
-  it "shows the email address for the requested user" do
+  it 'shows the email address for the requested user' do
     expect(page).to have_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
   end
 
-  it "shows the H-index for the requested user" do
+  it 'shows the H-index for the requested user' do
     expect(page).to have_content 'Scopus H-index'
     expect(page).to have_content '18'
   end

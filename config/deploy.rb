@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'bundler/capistrano'            # Use bundler on remote server
 require 'capistrano/ext/multistage'     # Support for multiple deploy targets
 require 'capistrano-helpers/branch'     # Ask user what tag to deploy
@@ -34,7 +36,7 @@ set :shared, %w{
 }
 
 # The directory that we're deploying to on the remote host.
-set :deploy_to, "/var/www/rmd"
+set :deploy_to, '/var/www/rmd'
 
 # Delayed Job hook
 after 'deploy:restart', 'delayed_job:restart'

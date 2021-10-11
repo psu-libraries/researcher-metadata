@@ -1,5 +1,5 @@
 <h3>ORCID and the Penn State Researcher Metadata Database</h3>
-<br/>
+<br>
 <h4>Why Connect?</h4>
 <p>
   Connecting your ORCID iD with your Researcher Metadata Database profile will allow you to:
@@ -24,11 +24,11 @@
   Learn about ORCID's <a href="https://orcid.org/privacy-policy" target="_blank">privacy policy</a>.
 </p>
 
-<br/>
+<br>
 
 <%= button_to new_orcid_access_token_path, id: "connect-orcid-button", remote: false do %>
   <%= image_tag "orcid_24x24.png", id: "orcid-id-icon", width: "24", height: "24", alt: "ORCID iD icon" %>
   I changed my mind, connect my ORCID iD
 <% end %>
-<br/>
+<br>
 <%= link_to "Return to my profile", profile_bio_path, class: 'btn btn-light' %>
