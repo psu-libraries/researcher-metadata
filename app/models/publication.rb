@@ -7,6 +7,9 @@ class Publication < ApplicationRecord
 
   include Swagger::Blocks
 
+  PUBLISHED_STATUS = 'Published'
+  IN_PRESS_STATUS = 'In Press'
+
   def self.publication_types
     [
       'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
@@ -17,10 +20,6 @@ class Publication < ApplicationRecord
       'Editorial', 'Foreword/Postscript', 'Letter', 'Paper', 'Patent', 'Poster',
       'Scholarly Edition', 'Short Survey', 'Working Paper', 'Other'
     ]
-  end
-
-  def self.statuses
-    ['Published', 'In Press']
   end
 
   has_many :authorships, inverse_of: :publication
@@ -59,7 +58,7 @@ class Publication < ApplicationRecord
 
   validates :publication_type, :title, :status, presence: true
   validates :publication_type, inclusion: { in: publication_types }
-  validates :status, inclusion: { in: statuses }
+  validates :status, inclusion: { in: [PUBLISHED_STATUS, IN_PRESS_STATUS] }
 
   validate :doi_format_is_valid
 
@@ -81,7 +80,7 @@ class Publication < ApplicationRecord
 
   scope :non_journal_article, -> { where("publications.publication_type !~* 'Journal Article'") }
 
-  scope :published, -> { where("publications.status = 'Published'") }
+  scope :published, -> { where("publications.status = ?", PUBLISHED_STATUS) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
@@ -590,7 +589,7 @@ class Publication < ApplicationRecord
   end
 
   def published?
-    status == 'Published'
+    status == PUBLISHED_STATUS
   end
 
   private

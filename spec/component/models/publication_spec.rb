@@ -56,7 +56,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_presence_of(:status) }
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(described_class.publication_types) }
-    it { is_expected.to validate_inclusion_of(:status).in_array(described_class.statuses) }
+    it { is_expected.to validate_inclusion_of(:status).in_array([Publication::PUBLISHED_STATUS, Publication::IN_PRESS_STATUS]) }
 
     describe 'validating DOI format' do
       let(:pub) { build :publication, doi: doi }
@@ -237,12 +237,6 @@ describe Publication, type: :model do
                                                        'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
                                                        'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition',
                                                        'Short Survey', 'Working Paper', 'Other']
-    end
-  end
-
-  describe '.statuses' do
-    it 'returns a list of valid statuses' do
-      expect(described_class.statuses).to eq ['Published', 'In Press']
     end
   end
 

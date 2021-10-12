@@ -104,7 +104,7 @@ class User < ApplicationRecord
 
   def self.needs_open_access_notification
     joins(:authorships, :publications, :user_organization_memberships)
-      .where("publications.status = 'Published'")
+      .where("publications.status = ?", Publication::PUBLISHED_STATUS)
       .where("publications.publication_type ~* 'Journal Article'")
       .where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))')
       .where(%{publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending'))})

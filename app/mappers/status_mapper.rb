@@ -2,12 +2,13 @@
 
 class StatusMapper
   def self.map(status)
-    if status.nil?
-      status.to_s
-    elsif status.casecmp('in press').zero? || status.casecmp('accepted/in press').zero?
-      'In Press'
-    elsif status.casecmp('published').zero?
-      'Published'
+    case (status || '').to_s
+    when /^published$/i
+      Publication::PUBLISHED_STATUS
+    when /^in press$/i
+      Publication::IN_PRESS_STATUS
+    when /^accepted\/in press$/i
+      Publication::IN_PRESS_STATUS
     else
       status.to_s
     end
