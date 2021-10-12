@@ -80,7 +80,7 @@ class Publication < ApplicationRecord
 
   scope :non_journal_article, -> { where("publications.publication_type !~* 'Journal Article'") }
 
-  scope :published, -> { where("publications.status = ?", PUBLISHED_STATUS) }
+  scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
