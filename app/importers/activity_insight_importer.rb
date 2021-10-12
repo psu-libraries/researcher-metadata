@@ -12,7 +12,7 @@ class ActivityInsightImporter
   def call
     pbar = ProgressBar.create(title: 'Importing Activity Insight Data', total: ai_users.count) unless Rails.env.test?
 
-    ai_users&.each do |aiu|
+    ai_users.each do |aiu|
       pbar.increment unless Rails.env.test?
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
       details = ai_user_detail(aiu.raw_webaccess_id)
@@ -225,20 +225,16 @@ class ActivityInsightImporter
     end
 
     def ai_users
-      @users = nil
+      return @users if @users.present?
+
       users_xml = Nokogiri::XML(ai_users_xml)
-      @users ||= users_xml.css('Users User').map { |u| ActivityInsightListUser.new(u) }
+      @users = users_xml.css('Users User').map { |u| ActivityInsightListUser.new(u) }
     rescue StandardError => e
-      ImporterErrorLog::ActivityInsightImporterErrorLog.create!(
-        error_type: e.class.to_s,
-        error_message: e.message.to_s,
-        metadata: {
-          users_xml: users_xml&.to_s
-        },
-        occurred_at: Time.zone.now,
-        stacktrace: e.backtrace.to_s
+      ImporterErrorLog::ActivityInsightImporterErrorLog.log_error(
+        error: e,
+        metadata: { users_xml: users_xml&.to_s }
       )
-      @users
+      @users = []
     end
 
     def ai_users_xml
@@ -257,15 +253,12 @@ class ActivityInsightImporter
       user_detail_xml = Nokogiri::XML(ai_user_detail_xml(id))
       ActivityInsightDetailUser.new(user_detail_xml)
     rescue StandardError => e
-      ImporterErrorLog::ActivityInsightImporterErrorLog.create!(
-        error_type: e.class.to_s,
-        error_message: e.message.to_s,
+      ImporterErrorLog::ActivityInsightImporterErrorLog.log_error(
+        error: e,
         metadata: {
           user_id: id,
           user_detail_xml: user_detail_xml&.to_s
-        },
-        occurred_at: Time.zone.now,
-        stacktrace: e.backtrace.to_s
+        }
       )
     end
 end
