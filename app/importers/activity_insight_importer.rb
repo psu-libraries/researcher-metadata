@@ -230,7 +230,8 @@ class ActivityInsightImporter
       users_xml = Nokogiri::XML(ai_users_xml)
       @users = users_xml.css('Users User').map { |u| ActivityInsightListUser.new(u) }
     rescue StandardError => e
-      ImporterErrorLog::ActivityInsightImporterErrorLog.log_error(
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
         error: e,
         metadata: { users_xml: users_xml&.to_s }
       )
@@ -253,7 +254,8 @@ class ActivityInsightImporter
       user_detail_xml = Nokogiri::XML(ai_user_detail_xml(id))
       ActivityInsightDetailUser.new(user_detail_xml)
     rescue StandardError => e
-      ImporterErrorLog::ActivityInsightImporterErrorLog.log_error(
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
         error: e,
         metadata: {
           user_id: id,

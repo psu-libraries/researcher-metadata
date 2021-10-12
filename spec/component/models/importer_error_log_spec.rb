@@ -30,13 +30,14 @@ describe ImporterErrorLog, type: :model do
     it 'creates an error log with the given params' do
       raise 'my error'
     rescue RuntimeError => e
-      # We need to use a subclass here to populate the STI column, but we will be removing this soon
-      log = described_class::ActivityInsightImporterErrorLog.log_error(
+      log = described_class.log_error(
+        importer_class: ActivityInsightImporter,
         error: e,
         metadata: { key: 'val' }
       )
 
       expect(log).to be_persisted
+      expect(log.importer_type).to eq 'ActivityInsightImporter'
       expect(log.error_type).to eq 'RuntimeError'
       expect(log.error_message).to eq 'my error'
       expect(log.metadata['key']).to eq 'val'

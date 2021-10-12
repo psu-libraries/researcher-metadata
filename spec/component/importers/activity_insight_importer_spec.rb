@@ -4727,15 +4727,16 @@ describe ActivityInsightImporter do
         allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:ABC123',
                                               basic_auth: { username: 'test',
                                                             password: 'secret' }).and_raise(RuntimeError)
-        allow(ImporterErrorLog::ActivityInsightImporterErrorLog).to receive(:log_error)
+        allow(ImporterErrorLog).to receive(:log_error)
       end
 
       it 'logs the error' do
         importer.call
 
-        expect(ImporterErrorLog::ActivityInsightImporterErrorLog)
+        expect(ImporterErrorLog)
           .to have_received(:log_error)
           .with(
+            importer_class: described_class,
             error: an_instance_of(RuntimeError),
             metadata: {
               user_id: 'ABC123',
@@ -4760,15 +4761,16 @@ describe ActivityInsightImporter do
     context 'when an error is raised for getting users list' do
       before do
         allow(HTTParty).to receive(:get).and_raise(RuntimeError)
-        allow(ImporterErrorLog::ActivityInsightImporterErrorLog).to receive(:log_error)
+        allow(ImporterErrorLog).to receive(:log_error)
       end
 
       it 'logs the error' do
         importer.call
 
-        expect(ImporterErrorLog::ActivityInsightImporterErrorLog)
+        expect(ImporterErrorLog)
           .to have_received(:log_error)
           .with(
+            importer_class: described_class,
             error: an_instance_of(RuntimeError),
             metadata: {
               users_xml: nil
