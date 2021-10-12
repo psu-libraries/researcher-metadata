@@ -19,6 +19,10 @@ class Publication < ApplicationRecord
     ]
   end
 
+  def self.open_access_statuses
+    ["gold", "hybrid", "bronze", "green", "closed"]
+  end
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -43,6 +47,8 @@ class Publication < ApplicationRecord
            through: :non_duplicate_groups,
            class_name: :Publication,
            source: :publications
+  has_many :open_access_locations,
+           inverse_of: :publication
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
@@ -55,6 +61,7 @@ class Publication < ApplicationRecord
 
   validates :publication_type, :title, presence: true
   validates :publication_type, inclusion: { in: publication_types }
+  validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }
@@ -378,6 +385,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:open_access_status)
       field(:open_access_url) do
         label 'Open access URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
@@ -391,6 +399,7 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:open_access_button_last_checked_at)
+      field(:open_access_locations)
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)

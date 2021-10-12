@@ -29,7 +29,8 @@ describe 'Admin publication detail page', type: :feature do
                       journal: journal,
                       scholarsphere_open_access_url: 'https://scholarsphere.psu.edu/resources/3',
                       published_on: Date.new(2018, 8, 1),
-                      open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, '-00:00') }
+                      open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, '-00:00'),
+                      open_access_status: 'gold' }
 
   let!(:auth1) { create :authorship,
                         publication: pub,
@@ -70,6 +71,12 @@ describe 'Admin publication detail page', type: :feature do
   let!(:rf2) { create :research_fund,
                       grant: grant2,
                       publication: pub }
+
+  let!(:oal1) { create :open_access_location,
+                       publication: pub }
+
+  let!(:oal2) { create :open_access_location,
+                       publication: pub }
 
   let!(:journal) { create :journal,
                           title: 'Test Journal Record' }
@@ -136,6 +143,10 @@ describe 'Admin publication detail page', type: :feature do
         expect(page).to have_link 'https://scholarsphere.psu.edu/resources/3', href: 'https://scholarsphere.psu.edu/resources/3'
       end
 
+      it "shows the publication's open access status" do
+        expect(page).to have_content 'gold'
+      end
+      
       it "shows the publication's publication date" do
         expect(page).to have_content 'August 01, 2018'
       end
@@ -163,6 +174,13 @@ describe 'Admin publication detail page', type: :feature do
       it "shows the publication's imports" do
         expect(page).to have_link "PublicationImport ##{imp1.id}"
         expect(page).to have_link "PublicationImport ##{imp2.id}"
+      end
+
+      it "shows the publication's open access locations" do
+        expect(page).to have_link "OpenAccessLocation ##{oal1.id}",
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal1.id)
+        expect(page).to have_link "OpenAccessLocation ##{oal2.id}",
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal2.id)
       end
 
       it "shows the publication's journal" do

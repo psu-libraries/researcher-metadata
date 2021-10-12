@@ -249,6 +249,23 @@ ActiveRecord::Schema.define(version: 2021_10_08_145225) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "open_access_locations", force: :cascade do |t|
+    t.integer "publication_id"
+    t.string "host_type"
+    t.boolean "is_best"
+    t.string "license"
+    t.date "oa_date"
+    t.string "source"
+    t.datetime "source_updated_at"
+    t.string "url"
+    t.string "landing_page_url"
+    t.string "pdf_url"
+    t.string "version"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["publication_id"], name: "index_open_access_locations_on_publication_id"
+  end
+
   create_table "organization_api_permissions", force: :cascade do |t|
     t.integer "api_token_id", null: false
     t.integer "organization_id", null: false
@@ -392,8 +409,9 @@ ActiveRecord::Schema.define(version: 2021_10_08_145225) do
     t.datetime "open_access_button_last_checked_at"
     t.text "user_submitted_open_access_url"
     t.integer "journal_id"
-    t.boolean "exported_to_activity_insight"
     t.text "scholarsphere_open_access_url"
+    t.boolean "exported_to_activity_insight"
+    t.string "open_access_status"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
@@ -582,6 +600,7 @@ ActiveRecord::Schema.define(version: 2021_10_08_145225) do
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "non_duplicate_publication_group_memberships", "non_duplicate_publication_groups", name: "non_duplicate_publication_group_membership_group_id_fk", on_delete: :cascade
   add_foreign_key "non_duplicate_publication_group_memberships", "publications", name: "non_duplicate_publication_group_membership_publication_id_fk", on_delete: :cascade
+  add_foreign_key "open_access_locations", "publications", name: "open_access_locations_publication_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
