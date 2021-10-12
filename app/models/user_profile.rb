@@ -3,6 +3,7 @@
 class UserProfile
   def initialize(user)
     @user = user
+    update_identity_data
   end
 
   delegate :name,
@@ -14,6 +15,7 @@ class UserProfile
            :pure_profile_url,
            :orcid_identifier,
            :organization_name,
+           :psu_identity,
            to: :user
 
   def title
@@ -22,6 +24,12 @@ class UserProfile
 
   def email
     "#{user.webaccess_id}@psu.edu"
+  end
+
+  def active?
+    return false if psu_identity.nil?
+
+    psu_identity.affiliation != ['MEMBER']
   end
 
   def personal_website
@@ -168,5 +176,11 @@ class UserProfile
       most_significant_memberships(committee_memberships).map do |m|
         %{#{m.role} for #{m.etd.author_full_name} - <a href="#{m.etd.url}" target="_blank">#{m.etd.title.gsub('\n', ' ')}</a> #{m.etd.year}}
       end
+    end
+
+    def update_identity_data
+      return if user.psu_identity_updated_at.present?
+
+      user.update_psu_identity
     end
 end

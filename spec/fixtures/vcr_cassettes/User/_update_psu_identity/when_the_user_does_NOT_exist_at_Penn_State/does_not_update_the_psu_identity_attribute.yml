@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/idonotexist
     body:
       encoding: US-ASCII
       string: ''
@@ -15,35 +15,35 @@ http_interactions:
       - "*/*"
   response:
     status:
-      code: 200
-      message: OK
+      code: 404
+      message: Not Found
     headers:
       Date:
-      - Tue, 12 Oct 2021 20:30:56 GMT
+      - Tue, 12 Oct 2021 20:30:55 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
-      - '357'
+      - '124'
       Connection:
       - keep-alive
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=5XtWGDwDxgegDcSW3XqgVLRc7NPZTiSA_LGHQ_BB.search-service-7fb749d9-tcl7b;
+      - JSESSIONID=26h41zrUa5LYIiep615TYenqvetVzm7oFFliho85.search-service-7fb749d9-tcl7b;
         path=/search-service
       X-Request-Id:
-      - 23adf4c0cebf3450b3503efe7712e78c
+      - cd3f319b8be777ae6e435c93ca05946e
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - 45bec82c-f7a6-4b98-9885-8b8096606a01
+      - 11ff3248-0898-425f-a060-6327a849fee0
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
+      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
+        matched the input userid: idonotexist"],"link":null}'
   recorded_at: Tue, 12 Oct 2021 20:30:56 GMT
 recorded_with: VCR 6.0.0
