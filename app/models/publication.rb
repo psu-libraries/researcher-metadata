@@ -73,13 +73,15 @@ class Publication < ApplicationRecord
             .distinct(:id)
         }
 
-  scope :subject_to_open_access_policy, -> { journal_article.where("published_on >= ? AND status = 'Published'", Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { journal_article.published.where("published_on >= ?", Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
   scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
 
   scope :non_journal_article, -> { where("publications.publication_type !~* 'Journal Article'") }
+
+  scope :published, -> { where("publications.status = 'Published'") }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true

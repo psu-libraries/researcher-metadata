@@ -393,8 +393,8 @@ describe AuthorshipDecorator do
     context 'when the given object is not published' do
       let(:published) { false }
 
-      it "returns 'newspaper-o'" do
-        expect(ad.open_access_status_icon).to eq 'newspaper-o'
+      it "returns 'circle-o-notch'" do
+        expect(ad.open_access_status_icon).to eq 'circle-o-notch'
       end
     end
   end

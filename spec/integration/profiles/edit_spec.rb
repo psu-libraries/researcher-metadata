@@ -270,7 +270,7 @@ describe 'editing profile preferences' do
 
         it "shows an icon to indicate when a publication is not 'Published' (still 'In Press')" do
           within "tr#authorship_row_#{auth_7.id}" do
-            expect(page).to have_css '.fa-newspaper-o'
+            expect(page).to have_css '.fa-circle-o-notch'
           end
         end
 

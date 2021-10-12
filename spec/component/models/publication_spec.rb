@@ -593,6 +593,15 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.published' do
+    let(:pub1) { FactoryBot.create :publication, status: 'Published' }
+    let(:pub2) { FactoryBot.create :publication, status: 'In Press' }
+
+    it 'returns publications that are not journal articles' do
+      expect(described_class.published).to match_array [pub1]
+    end
+  end
+
   describe '#confirmed_authorships' do
     let!(:pub) { create :publication }
     let!(:a1) { create :authorship, publication: pub, confirmed: false }
