@@ -36,7 +36,7 @@ class AuthorshipDecorator < SimpleDelegator
         'unlock-alt'
       end
     else
-      'newspaper-o'
+      'circle-o-notch'
     end
   end
 
