@@ -226,9 +226,10 @@ describe Publication, type: :model do
     end
   end
 
-  describe "deleting a publication with open access locations" do
+  describe 'deleting a publication with open access locations' do
     let(:p) { create :publication }
-    let!(:oal) { create :open_access_location, publication: p}
+    let!(:oal) { create :open_access_location, publication: p }
+
     it "also deletes the publication's open access locations" do
       p.destroy
       expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
@@ -251,8 +252,8 @@ describe Publication, type: :model do
   end
 
   describe '.open_access_statuses' do
-    it "returns the list of valid values for open access status" do
-      expect(Publication.open_access_statuses).to eq ["gold", "hybrid", "bronze", "green", "closed"]
+    it 'returns the list of valid values for open access status' do
+      expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed']
     end
   end
 

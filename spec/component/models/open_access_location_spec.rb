@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
@@ -25,7 +27,7 @@ describe 'the open_access_locations table', type: :model do
 end
 
 describe OpenAccessLocation, type: :model do
-  it_behaves_like "an application record"
+  it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:open_access_locations) }
@@ -36,12 +38,12 @@ describe OpenAccessLocation, type: :model do
     it { is_expected.to validate_presence_of(:source) }
     it { is_expected.to validate_presence_of(:url) }
 
-    it { is_expected.to validate_inclusion_of(:source).in_array(OpenAccessLocation.sources)}
+    it { is_expected.to validate_inclusion_of(:source).in_array(described_class.sources) }
   end
 
   describe '.sources' do
-    it "returns an array of the possible sources of open access location data" do
-      expect(OpenAccessLocation.sources).to eq ["User", "ScholarSphere", "Open Access Button", "Unpaywall"]
+    it 'returns an array of the possible sources of open access location data' do
+      expect(described_class.sources).to eq ['User', 'ScholarSphere', 'Open Access Button', 'Unpaywall']
     end
   end
 end

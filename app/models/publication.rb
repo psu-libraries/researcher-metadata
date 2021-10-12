@@ -20,7 +20,7 @@ class Publication < ApplicationRecord
   end
 
   def self.open_access_statuses
-    ["gold", "hybrid", "bronze", "green", "closed"]
+    ['gold', 'hybrid', 'bronze', 'green', 'closed']
   end
 
   has_many :authorships, inverse_of: :publication

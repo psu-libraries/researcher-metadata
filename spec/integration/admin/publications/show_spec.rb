@@ -146,7 +146,7 @@ describe 'Admin publication detail page', type: :feature do
       it "shows the publication's open access status" do
         expect(page).to have_content 'gold'
       end
-      
+
       it "shows the publication's publication date" do
         expect(page).to have_content 'August 01, 2018'
       end
