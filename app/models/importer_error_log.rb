@@ -17,4 +17,32 @@ class ImporterErrorLog < ApplicationRecord
       stacktrace: error.backtrace.to_s
     )
   end
+
+  rails_admin do
+    list do
+      field(:importer_type)
+      field(:occurred_at)
+      field(:error_type)
+      field(:error_message)
+    end
+
+    show do
+      field(:importer_type)
+      field(:occurred_at)
+      field(:error_type)
+      field(:error_message)
+      field(:metadata)
+      field(:stacktrace, :text) do
+        pretty_value do
+          pretty_stacktrace = JSON.parse(value)
+            .map { |line| line.sub("#{Rails.root}/", '') }
+            .join("\n")
+
+          "<pre>#{pretty_stacktrace}</pre>".html_safe
+        rescue StandardError
+          value
+        end
+      end
+    end
+  end
 end
