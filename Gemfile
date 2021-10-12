@@ -56,7 +56,7 @@ gem 'omniauth-oauth2', '~> 1.7'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 # Authorization framework
-gem 'cancancan', '~> 2.0'
+gem 'cancancan', '~> 3.3'
 
 # A lightning fast JSON:API serializer for Ruby Objects
 gem 'fast_jsonapi'
@@ -137,7 +137,7 @@ end
 
 group :development do
   # Access an interactive console on exception pages or by calling 'console' anywhere in the code.
-  gem 'listen', '>= 3.0.5', '< 3.2'
+  gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'web-console', '>= 3.3.0'
 
   # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
