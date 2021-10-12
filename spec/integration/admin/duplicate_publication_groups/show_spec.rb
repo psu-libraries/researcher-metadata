@@ -118,8 +118,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
         end
 
         it 'shows the statuses of the publications in the group' do
-          expect(page).to have_content 'Published'
-          expect(page).to have_content 'Published'
+          expect(page).to have_content('Published').twice
         end
 
         it 'shows the volumes of the publications in the group' do
