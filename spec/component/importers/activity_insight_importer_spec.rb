@@ -4721,6 +4721,60 @@ describe ActivityInsightImporter do
         end
       end
     end
+
+    context 'when an error is raised for getting an individual user activity' do
+      before do
+        allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:ABC123',
+                                              basic_auth: { username: 'test',
+                                                            password: 'secret' }).and_raise(RuntimeError)
+      end
+
+      it 'logs the error' do
+        expect {
+          importer.call
+        }.to change(ImporterErrorLog::ActivityInsightImporterErrorLog, :count).by(1)
+
+        log = ImporterErrorLog::ActivityInsightImporterErrorLog.last
+
+        expect(log.error_type).to eq 'RuntimeError'
+        expect(log.error_message).to be_present
+        expect(log.metadata['user_id']).to eq 'ABC123'
+        expect(log.metadata['user_detail_xml']).to be_nil
+        expect(log.occurred_at).to be_within(5.seconds).of(Time.zone.now)
+        expect(log.stacktrace).to be_present
+      end
+
+      it 'continues with the import' do
+        expect { importer.call }.to change(User, :count).by 1
+
+        user = User.find_by(webaccess_id: 'def45')
+
+        expect(user.first_name).to eq 'Bob'
+        expect(user.middle_name).to eq 'A.'
+        expect(user.last_name).to eq 'Tester'
+        expect(user.activity_insight_identifier).to eq '1949490'
+        expect(user.penn_state_identifier).to eq '9293659323'
+      end
+    end
+
+    context 'when an error is raised for getting users list' do
+      before do
+        allow(HTTParty).to receive(:get).and_raise(RuntimeError)
+      end
+
+      it 'logs the error' do
+        expect {
+          importer.call
+        }.to change(ImporterErrorLog::ActivityInsightImporterErrorLog, :count).by(1)
+
+        log = ImporterErrorLog::ActivityInsightImporterErrorLog.last
+        expect(log.error_type).to eq 'RuntimeError'
+        expect(log.error_message).to be_present
+        expect(log.metadata['users_xml']).to be_nil
+        expect(log.occurred_at).to be_within(5.seconds).of(Time.zone.now)
+        expect(log.stacktrace).to be_present
+      end
+    end
   end
 
   describe '#errors' do

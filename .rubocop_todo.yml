@@ -66,19 +66,19 @@ Metrics/ClassLength:
 # Offense count: 25
 # Configuration parameters: IgnoredMethods.
 Metrics/CyclomaticComplexity:
-  Max: 46
+  Max: 47
 
 # Offense count: 21
 # Configuration parameters: IgnoredMethods.
 Metrics/PerceivedComplexity:
-  Max: 47
+  Max: 48
 
 # Offense count: 1
 Naming/AccessorMethodName:
   Exclude:
     - 'lib/utilities/pure_downloader.rb'
 
-# Offense count: 3
+# Offense count: 2
 # Configuration parameters: EnforcedStyleForLeadingUnderscores.
 # SupportedStylesForLeadingUnderscores: disallowed, required, optional
 Naming/MemoizedInstanceVariableName:
