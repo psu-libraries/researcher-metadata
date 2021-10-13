@@ -25,4 +25,24 @@ describe ImporterErrorLog, type: :model do
     it { is_expected.to validate_presence_of(:stacktrace) }
     it { is_expected.to validate_presence_of(:occurred_at) }
   end
+
+  describe '.log_error' do
+    it 'creates an error log with the given params' do
+      raise 'my error'
+    rescue RuntimeError => e
+      log = described_class.log_error(
+        importer_class: ActivityInsightImporter,
+        error: e,
+        metadata: { key: 'val' }
+      )
+
+      expect(log).to be_persisted
+      expect(log.importer_type).to eq 'ActivityInsightImporter'
+      expect(log.error_type).to eq 'RuntimeError'
+      expect(log.error_message).to eq 'my error'
+      expect(log.metadata['key']).to eq 'val'
+      expect(log.occurred_at).to be_within(5.seconds).of(Time.zone.now)
+      expect(log.stacktrace).to be_present
+    end
+  end
 end

@@ -62,7 +62,8 @@ RailsAdmin.config do |config|
             :Publisher,
             :StatisticsSnapshot,
             :EmailError,
-            :ScholarsphereWorkDeposit]
+            :ScholarsphereWorkDeposit,
+            :ImporterErrorLog]
     end
     new do
       only [:Publication,

@@ -62,16 +62,14 @@ class OpenAccessButtonPublicationImporter
       # that users make no more than 1 request per second.
       sleep 1
     rescue StandardError => e
-      ImporterErrorLog::OpenAccessButtonImporterErrorLog.create!(
-        error_type: e.class.to_s,
-        error_message: e.message.to_s,
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: e,
         metadata: {
           publication_id: publication&.id,
           publication_doi_url_path: publication&.doi_url_path,
           oab_json: oab_json.to_s
-        },
-        occurred_at: Time.zone.now,
-        stacktrace: e.backtrace.to_s
+        }
       )
     end
 end
