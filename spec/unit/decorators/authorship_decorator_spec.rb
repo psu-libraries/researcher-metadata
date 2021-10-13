@@ -16,7 +16,8 @@ describe AuthorshipDecorator do
                       open_access_waived?: waived,
                       no_open_access_information?: no_info,
                       is_journal_article?: true,
-                      publication: pub }
+                      publication: pub,
+                      published?: published}
   let(:title) { '' }
   let(:publisher) { '' }
   let(:year) { '' }
@@ -27,6 +28,7 @@ describe AuthorshipDecorator do
   let(:no_info) { true }
   let(:pub) { double 'publication' }
   let(:context) { double 'view context' }
+  let(:published) { true }
   let(:ad) { described_class.new(auth, context) }
 
   before do
@@ -128,7 +130,7 @@ describe AuthorshipDecorator do
     context 'when the given object has open access information' do
       let(:no_info) { false }
 
-      context 'when the given objet has a title' do
+      context 'when the given object has a title' do
         let(:title) { 'Test Title' }
 
         context 'when the given object has a publisher' do
@@ -218,160 +220,181 @@ describe AuthorshipDecorator do
         end
       end
     end
+
+    context 'when the given object is not published' do
+      context 'when the given object has a title' do
+        let(:title) { 'Test Title' }
+        let(:published) { false }
+
+        it 'returns a label without a link for the given object with the publication title' do
+          expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
+        end
+      end
+    end
   end
 
   describe '#open_access_status_icon' do
-    context 'when the given object does not have an open access URL' do
-      context 'when the given object does not have a failed ScholarSphere upload' do
-        context 'when the given object does not have a pending ScholarSphere upload' do
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'question'" do
-              expect(ad.open_access_status_icon).to eq 'question'
+    context 'when the given object is published' do
+      context 'when the given object does not have an open access URL' do
+        context 'when the given object does not have a failed ScholarSphere upload' do
+          context 'when the given object does not have a pending ScholarSphere upload' do
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'question'" do
+                expect(ad.open_access_status_icon).to eq 'question'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'lock'" do
+                expect(ad.open_access_status_icon).to eq 'lock'
+              end
             end
           end
 
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
+          context 'when the given object has a pending ScholarSphere upload' do
+            let(:pending) { true }
 
-            it "returns 'lock'" do
-              expect(ad.open_access_status_icon).to eq 'lock'
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'hourglass-half'" do
+                expect(ad.open_access_status_icon).to eq 'hourglass-half'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'hourglass-half'" do
+                expect(ad.open_access_status_icon).to eq 'hourglass-half'
+              end
             end
           end
         end
 
-        context 'when the given object has a pending ScholarSphere upload' do
-          let(:pending) { true }
+        context 'when the given object has a failed ScholarSphere upload' do
+          let(:failed) { true }
 
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'hourglass-half'" do
-              expect(ad.open_access_status_icon).to eq 'hourglass-half'
+          context 'when the given object does not have a pending ScholarSphere upload' do
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'exclamation-circle'" do
+                expect(ad.open_access_status_icon).to eq 'exclamation-circle'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'exclamation-circle'" do
+                expect(ad.open_access_status_icon).to eq 'exclamation-circle'
+              end
             end
           end
 
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
+          context 'when the given object has a pending ScholarSphere upload' do
+            let(:pending) { true }
 
-            it "returns 'hourglass-half'" do
-              expect(ad.open_access_status_icon).to eq 'hourglass-half'
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'exclamation-circle'" do
+                expect(ad.open_access_status_icon).to eq 'hourglass-half'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'exclamation-circle'" do
+                expect(ad.open_access_status_icon).to eq 'hourglass-half'
+              end
             end
           end
         end
       end
 
-      context 'when the given object has a failed ScholarSphere upload' do
-        let(:failed) { true }
+      context 'when the given object has an open access URL' do
+        let(:url) { 'a_url' }
 
-        context 'when the given object does not have a pending ScholarSphere upload' do
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'exclamation-circle'" do
-              expect(ad.open_access_status_icon).to eq 'exclamation-circle'
+        context 'when the given object does not have a failed ScholarSphere upload' do
+          context 'when the given object does not have a pending ScholarSphere upload' do
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'unlock-alt'" do
+                expect(ad.open_access_status_icon).to eq 'unlock-alt'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'unlock-alt'" do
+                expect(ad.open_access_status_icon).to eq 'unlock-alt'
+              end
             end
           end
 
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
+          context 'when the given object has a pending ScholarSphere upload' do
+            let(:pending) { true }
 
-            it "returns 'exclamation-circle'" do
-              expect(ad.open_access_status_icon).to eq 'exclamation-circle'
+            context 'when the given object does not have an open access waiver' do
+              it "returns 'unlock-alt'" do
+                expect(ad.open_access_status_icon).to eq 'unlock-alt'
+              end
+            end
+
+            context 'when the given object has an open access waiver' do
+              let(:waived) { true }
+
+              it "returns 'unlock-alt'" do
+                expect(ad.open_access_status_icon).to eq 'unlock-alt'
+              end
             end
           end
-        end
 
-        context 'when the given object has a pending ScholarSphere upload' do
-          let(:pending) { true }
+          context 'when the given object has a failed ScholarSphere upload' do
+            let(:failed) { true }
 
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'exclamation-circle'" do
-              expect(ad.open_access_status_icon).to eq 'hourglass-half'
+            context 'when the given object does not have a pending ScholarSphere upload' do
+              context 'when the given object does not have an open access waiver' do
+                it "returns 'unlock-alt'" do
+                  expect(ad.open_access_status_icon).to eq 'unlock-alt'
+                end
+              end
+
+              context 'when the given object has an open access waiver' do
+                let(:waived) { true }
+
+                it "returns 'unlock-alt'" do
+                  expect(ad.open_access_status_icon).to eq 'unlock-alt'
+                end
+              end
             end
-          end
 
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
+            context 'when the given object has a pending ScholarSphere upload' do
+              let(:pending) { true }
 
-            it "returns 'exclamation-circle'" do
-              expect(ad.open_access_status_icon).to eq 'hourglass-half'
+              context 'when the given object does not have an open access waiver' do
+                it "returns 'unlock-alt'" do
+                  expect(ad.open_access_status_icon).to eq 'unlock-alt'
+                end
+              end
+
+              context 'when the given object has an open access waiver' do
+                let(:waived) { true }
+
+                it "returns 'unlock-alt'" do
+                  expect(ad.open_access_status_icon).to eq 'unlock-alt'
+                end
+              end
             end
           end
         end
       end
     end
 
-    context 'when the given object has an open access URL' do
-      let(:url) { 'a_url' }
+    context 'when the given object is not published' do
+      let(:published) { false }
 
-      context 'when the given object does not have a failed ScholarSphere upload' do
-        context 'when the given object does not have a pending ScholarSphere upload' do
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
-
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-        end
-
-        context 'when the given object has a pending ScholarSphere upload' do
-          let(:pending) { true }
-
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
-
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-        end
-      end
-
-      context 'when the given object has a failed ScholarSphere upload' do
-        let(:failed) { true }
-
-        context 'when the given object does not have a pending ScholarSphere upload' do
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
-
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-        end
-
-        context 'when the given object has a pending ScholarSphere upload' do
-          let(:pending) { true }
-
-          context 'when the given object does not have an open access waiver' do
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-
-          context 'when the given object has an open access waiver' do
-            let(:waived) { true }
-
-            it "returns 'unlock-alt'" do
-              expect(ad.open_access_status_icon).to eq 'unlock-alt'
-            end
-          end
-        end
+      it "returns 'circle-o-notch'" do
+        expect(ad.open_access_status_icon).to eq 'circle-o-notch'
       end
     end
   end

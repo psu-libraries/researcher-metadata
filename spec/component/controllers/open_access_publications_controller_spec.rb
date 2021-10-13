@@ -12,6 +12,7 @@ describe OpenAccessPublicationsController, type: :controller do
   let!(:other_pub) { create :publication }
   let!(:uploaded_pub) { create :publication }
   let!(:other_uploaded_pub) { create :publication }
+  let!(:unpublished_pub) { create :publication, status: 'In Press' }
   let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_pub) { create :publication }
   let!(:other_waived_pub) { create :publication }
@@ -66,6 +67,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that does not belong to the user' do
         it 'returns 404' do
           expect { get :edit, params: { id: other_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that is not published' do
+        it 'returns 404' do
+          expect { get :edit, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -185,6 +192,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that does not belong to the user' do
         it 'returns 404' do
           expect { patch :update, params: { id: other_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that is not published' do
+        it 'returns 404' do
+          expect { patch :update, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -341,6 +354,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that does not belong to the user' do
         it 'returns 404' do
           expect { post :create_scholarsphere_deposit, params: { id: other_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that is not published' do
+        it 'returns 404' do
+          expect { post :create_scholarsphere_deposit, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 

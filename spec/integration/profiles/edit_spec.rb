@@ -205,6 +205,10 @@ describe 'editing profile preferences' do
         let!(:pub_6) { create :publication,
                               title: "Bob's Pending Scholarsphere Publication",
                               visible: true }
+        let!(:pub_7) { create :publication,
+                              title: "Bob's In Press Publication",
+                              status: 'In Press',
+                              visible: true }
         let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
         let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
         let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
@@ -214,6 +218,7 @@ describe 'editing profile preferences' do
                                publication: pub_6,
                                user: user,
                                visible_in_profile: false }
+        let!(:auth_7) { create :authorship, publication: pub_7, user: user, visible_in_profile: false }
         let!(:swd) { create :scholarsphere_work_deposit, authorship: auth_6, status: 'Pending' }
         let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
 
@@ -231,6 +236,8 @@ describe 'editing profile preferences' do
           expect(page).not_to have_link "Bob's Non-Open Access Publication"
           expect(page).to have_content "Bob's Pending Scholarsphere Publication"
           expect(page).not_to have_link "Bob's Pending Scholarsphere Publication"
+          expect(page).to have_content "Bob's In Press Publication"
+          expect(page).not_to have_link "Bob's In Press Publication"
         end
 
         it "shows an icon to indicate when we don't have open access information for a publication" do
@@ -258,6 +265,12 @@ describe 'editing profile preferences' do
         it 'shows an icon to indicate when a publication is being added to ScholarSphere' do
           within "tr#authorship_row_#{auth_6.id}" do
             expect(page).to have_css '.fa-hourglass-half'
+          end
+        end
+
+        it "shows an icon to indicate when a publication is not 'Published' (still 'In Press')" do
+          within "tr#authorship_row_#{auth_7.id}" do
+            expect(page).to have_css '.fa-circle-o-notch'
           end
         end
 

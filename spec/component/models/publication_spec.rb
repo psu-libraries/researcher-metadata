@@ -54,8 +54,10 @@ describe Publication, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
+    it { is_expected.to validate_presence_of(:status) }
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(described_class.publication_types) }
+    it { is_expected.to validate_inclusion_of(:status).in_array([Publication::PUBLISHED_STATUS, Publication::IN_PRESS_STATUS]) }
     it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
 
     describe 'validating DOI format' do
@@ -323,8 +325,9 @@ describe Publication, type: :model do
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
     let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
     let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
+    let!(:pub5) { create :publication, published_on: Date.new(2020, 7, 2), status: 'In Press' }
 
-    it "returns publications that were published after Penn State's open access policy went into effect" do
+    it "returns publications that were published after Penn State's open access policy went into effect and have a status of 'Published'" do
       expect(described_class.subject_to_open_access_policy).to match_array [pub2, pub3]
     end
   end
@@ -600,6 +603,15 @@ describe Publication, type: :model do
 
     it 'returns publications that are not journal articles' do
       expect(described_class.non_journal_article).to match_array [pub4, pub5, pub6]
+    end
+  end
+
+  describe '.published' do
+    let(:pub1) { FactoryBot.create :publication, status: 'Published' }
+    let(:pub2) { FactoryBot.create :publication, status: 'In Press' }
+
+    it 'returns publications that are not journal articles' do
+      expect(described_class.published).to match_array [pub1]
     end
   end
 
@@ -2609,6 +2621,24 @@ describe Publication, type: :model do
 
     it 'delegates to the preferred journal info policy' do
       expect(pub.preferred_publisher_name).to eq 'preferred name'
+    end
+  end
+
+  describe '#published' do
+    context "when publication's status is 'Published" do
+      let(:pub) { FactoryBot.create :publication, status: 'Published' }
+
+      it 'returns true' do
+        expect(pub.published?).to eq true
+      end
+    end
+
+    context "when publication's status is 'In Press'" do
+      let(:pub) { FactoryBot.create :publication, status: 'In Press' }
+
+      it 'returns false' do
+        expect(pub.published?).to eq false
+      end
     end
   end
 end

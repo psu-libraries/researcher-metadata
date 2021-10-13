@@ -1,11 +1,11 @@
-"title","publication_type"
-pub title 0,"Academic Journal Article",
-pub title 1,"Academic Journal Article",
-pub title 2,"Academic Journal Article",
-pub title 3,"Academic Journal Article",
-pub title 4,"Academic Journal Article",
-pub title 5,"Academic Journal Article",
-pub title 6,"Academic Journal Article",
-pub title 7,"Academic Journal Article",
-pub title 8,"Academic Journal Article",
-pub title 9,"Academic Journal Article",
+"title","publication_type","status"
+pub title 0,"Academic Journal Article","Published"
+pub title 1,"Academic Journal Article","Accepted/In press"
+pub title 2,"Academic Journal Article","In press"
+pub title 3,"Academic Journal Article","Published"
+pub title 4,"Academic Journal Article","Published"
+pub title 5,"Academic Journal Article","Published"
+pub title 6,"Academic Journal Article","Accepted/In press"
+pub title 7,"Academic Journal Article","Published"
+pub title 8,"Academic Journal Article","Published"
+pub title 9,"Academic Journal Article","Published"
