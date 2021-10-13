@@ -35,6 +35,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_button_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:journal_id).of_type(:integer) }
   it { is_expected.to have_db_column(:exported_to_activity_insight).of_type(:boolean) }
+  it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -57,6 +58,7 @@ describe Publication, type: :model do
 
     it { is_expected.to validate_inclusion_of(:publication_type).in_array(described_class.publication_types) }
     it { is_expected.to validate_inclusion_of(:status).in_array([Publication::PUBLISHED_STATUS, Publication::IN_PRESS_STATUS]) }
+    it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
 
     describe 'validating DOI format' do
       let(:pub) { build :publication, doi: doi }
@@ -154,6 +156,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:non_duplicate_group_memberships).class_name(:NonDuplicatePublicationGroupMembership).inverse_of(:publication) }
     it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships) }
     it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
+    it { is_expected.to have_many(:open_access_locations).inverse_of(:publication) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
     it { is_expected.to belong_to(:journal).optional.inverse_of(:publications) }
@@ -225,6 +228,16 @@ describe Publication, type: :model do
     end
   end
 
+  describe 'deleting a publication with open access locations' do
+    let(:p) { create :publication }
+    let!(:oal) { create :open_access_location, publication: p }
+
+    it "also deletes the publication's open access locations" do
+      p.destroy
+      expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '.publication_types' do
     it 'returns the list of valid publication types' do
       expect(described_class.publication_types).to eq ['Academic Journal Article', 'In-house Journal Article',
@@ -237,6 +250,12 @@ describe Publication, type: :model do
                                                        'Digital or Visual Product', 'Editorial', 'Foreword/Postscript',
                                                        'Letter', 'Paper', 'Patent', 'Poster', 'Scholarly Edition',
                                                        'Short Survey', 'Working Paper', 'Other']
+    end
+  end
+
+  describe '.open_access_statuses' do
+    it 'returns the list of valid values for open access status' do
+      expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed']
     end
   end
 
