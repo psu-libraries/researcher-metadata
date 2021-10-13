@@ -45,5 +45,48 @@ describe LDAPImporter do
       expect(user_3.reload.orcid_identifier).to be_nil
       expect(user_4.reload.orcid_identifier).to be_nil
     end
+
+    context 'when an error happens outside the loop' do
+      before do
+        allow(psu_ldap).to receive(:open).and_raise(ZeroDivisionError)
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'captures and logs the error' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: {}
+        )
+      end
+    end
+
+    context 'when an error happens inside the loop' do
+      before do
+        allow(psu_ldap).to receive(:search)
+          .with(base: 'dc=psu,dc=edu', filter: user_1_filter)
+          .and_raise(ZeroDivisionError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'captures and logs the error, then moves on' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            user_id: user_1.id,
+            entry: anything
+          )
+        )
+
+        expect(user_1.reload.orcid_identifier).to be_nil
+        expect(user_2.reload.orcid_identifier).to eq 'user-2-orcid'
+      end
+    end
   end
 end
