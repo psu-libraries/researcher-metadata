@@ -23,6 +23,9 @@ linters:
   IdSelector:
     exclude:
       - app/assets/stylesheets/manage_profile.scss
+  SelectorFormat:
+    exclude:
+      - app/assets/stylesheets/rails_admin/custom/variables.scss
   QualifyingElement:
     exclude:
       - app/assets/stylesheets/rails_admin/custom/variables.scss

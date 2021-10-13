@@ -43,7 +43,7 @@ gem 'activerecord-import'
 gem 'progressbar'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 1.4'
+gem 'rails_admin', '~> 2.2'
 
 gem 'rails_admin_toggleable'
 
@@ -66,9 +66,6 @@ gem 'swagger-blocks'
 
 # Include swagger-ui as a Raile engine
 gem 'swagger_ui_engine'
-
-# A Material Design theme for rails_admin
-gem 'rails_admin_material'
 
 # Bootstrap 4 ruby gem for Ruby on Rails
 gem 'bootstrap', '< 5.0'
