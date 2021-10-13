@@ -62,6 +62,8 @@ class OpenAccessButtonPublicationImporter
         else
           publication.open_access_locations.create!(source: 'Open Access Button', url: oab_json['url'])
         end
+      else
+        existing_oa_location.try(:destroy)
       end
       publication.open_access_button_last_checked_at = Time.current
       publication.save!

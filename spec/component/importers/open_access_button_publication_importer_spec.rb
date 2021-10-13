@@ -15,8 +15,8 @@ describe OpenAccessButtonPublicationImporter do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create :publication, doi: nil }
 
-      it "does not create any open access locations for the publication" do
-        expect { importer.import_all }.not_to change { OpenAccessLocation.count }
+      it 'does not create any open access locations for the publication' do
+        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
@@ -28,8 +28,8 @@ describe OpenAccessButtonPublicationImporter do
     context 'when an existing publication has a blank DOI' do
       let!(:pub) { create :publication, doi: '' }
 
-      it "does not create any open access locations for the publication" do
-        expect { importer.import_all }.not_to change { OpenAccessLocation.count }
+      it 'does not create any open access locations for the publication' do
+        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
@@ -60,7 +60,7 @@ describe OpenAccessButtonPublicationImporter do
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
       end
 
-      context "when the publication has no open access locations" do
+      context 'when the publication has no open access locations' do
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.open_access_locations.count }.by 1
         end
@@ -84,7 +84,7 @@ describe OpenAccessButtonPublicationImporter do
                             source: 'Open Access Button' }
 
         it 'does not create any new open access locations' do
-          expect { importer.import_all }.not_to change { OpenAccessLocation.count }
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
         it 'updates the existing open access location with the URL to the open access content' do
@@ -108,9 +108,9 @@ describe OpenAccessButtonPublicationImporter do
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
       end
 
-      context "when the publication has no open access locations" do
+      context 'when the publication has no open access locations' do
         it 'does not create any new open access locations' do
-          expect { importer.import_all }.not_to change { OpenAccessLocation.count }
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
         it 'updates Open Access Button check timestamp on the publication' do
@@ -125,13 +125,9 @@ describe OpenAccessButtonPublicationImporter do
                             url: 'existing_url',
                             source: 'Open Access Button' }
 
-        it 'does not create any new open access locations' do
-          expect { importer.import_all }.not_to change { OpenAccessLocation.count }
-        end
-
-        it 'does not update the URL for the existing open access location' do
-          importer.import_all
-          expect(oal.reload.url).to eq 'existing_url'
+        it 'removes the existing open access location' do
+          expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
+          expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it 'updates Open Access Button check timestamp on the publication' do
@@ -177,8 +173,8 @@ describe OpenAccessButtonPublicationImporter do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create :publication, doi: nil }
 
-      it "does not create any open access locations for the publication" do
-        expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+      it 'does not create any open access locations for the publication' do
+        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
@@ -190,8 +186,8 @@ describe OpenAccessButtonPublicationImporter do
     context 'when an existing publication has a blank DOI' do
       let!(:pub) { create :publication, doi: '' }
 
-      it "does not create any open access locations for the publication" do
-        expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+      it 'does not create any open access locations for the publication' do
+        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
       end
 
       it "does not update the publication's Open Access Button check timestamp" do
@@ -226,9 +222,9 @@ describe OpenAccessButtonPublicationImporter do
       context 'when the publication has been checked in Open Access Button before' do
         let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
 
-        context "when the publication has no open access locations" do
-          it "does not create any open access locations for the publication" do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+        context 'when the publication has no open access locations' do
+          it 'does not create any open access locations for the publication' do
+            expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
           end
 
           it 'does not update the Open Access Button check timestamp on the publication' do
@@ -244,7 +240,7 @@ describe OpenAccessButtonPublicationImporter do
                               source: 'Open Access Button' }
 
           it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+            expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
           end
 
           it 'does not update the URL for the existing open access location' do
@@ -292,9 +288,9 @@ describe OpenAccessButtonPublicationImporter do
       context 'when the publication has been checked in Open Access Button before' do
         let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
 
-        context "when the publication has no open access locations" do
+        context 'when the publication has no open access locations' do
           it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+            expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
           end
 
           it 'does not update the Open Access Button check timestamp on the publication' do
@@ -309,13 +305,9 @@ describe OpenAccessButtonPublicationImporter do
                               url: 'existing_url',
                               source: 'Open Access Button' }
 
-          it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
-          end
-
-          it 'does not update the URL for the existing open access location' do
-            importer.import_new
-            expect(oal.reload.url).to eq 'existing_url'
+          it 'removes the existing open access location' do
+            expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
+            expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
           end
 
           it "does not update the publication's Open Access Button check timestamp" do
@@ -328,9 +320,9 @@ describe OpenAccessButtonPublicationImporter do
       context 'when the publication has never been checked in Open Access Button' do
         let(:last_check) { nil }
 
-        context "when the publication has no open access locations" do
+        context 'when the publication has no open access locations' do
           it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
+            expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
           end
 
           it 'updates Open Access Button check timestamp on the publication' do
