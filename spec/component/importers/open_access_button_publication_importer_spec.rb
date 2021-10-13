@@ -276,27 +276,6 @@ describe OpenAccessButtonPublicationImporter do
           importer.import_new
           expect(pub.reload.open_access_button_last_checked_at).to eq now
         end
-
-        context 'when the publication already has an open access location' do
-          let!(:oal) { create :open_access_location,
-                              publication: pub,
-                              url: 'existing_url',
-                              source: 'Open Access Button' }
-
-          it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
-          end
-
-          it 'updates the existing open access location with the URL to the open access content' do
-            importer.import_new
-            expect(oal.reload.url).to eq 'http://openaccessexample.org/publications/pub1.pdf'
-          end
-
-          it 'updates Open Access Button check timestamp on the publication' do
-            importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq now
-          end
-        end
       end
     end
 
@@ -352,27 +331,6 @@ describe OpenAccessButtonPublicationImporter do
         context "when the publication has no open access locations" do
           it 'does not create any new open access locations' do
             expect { importer.import_new }.not_to change { OpenAccessLocation.count }
-          end
-
-          it 'updates Open Access Button check timestamp on the publication' do
-            importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq now
-          end
-        end
-
-        context 'when the publication already has an open access location' do
-          let!(:oal) { create :open_access_location,
-                              publication: pub,
-                              url: 'existing_url',
-                              source: 'Open Access Button' }
-
-          it 'does not create any new open access locations' do
-            expect { importer.import_new }.not_to change { OpenAccessLocation.count }
-          end
-
-          it 'does not update the URL for the existing open access location' do
-            importer.import_new
-            expect(oal.reload.url).to eq 'existing_url'
           end
 
           it 'updates Open Access Button check timestamp on the publication' do
