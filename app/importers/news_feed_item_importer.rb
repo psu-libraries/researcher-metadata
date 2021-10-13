@@ -26,7 +26,18 @@ class NewsFeedItemImporter
             find_or_create_news_feed_item(user, result)
           end
         end
+      rescue StandardError => e
+        log_error(e, {
+                    feed: feed.to_s,
+                    result: result.to_s,
+                    html_doc: binding.local_variable_get(:html_doc).to_s,
+                    mailto_ids: binding.local_variable_get(:mailto_ids),
+                    tag_names: binding.local_variable_get(:tag_names)
+                  })
       end
+
+    rescue StandardError => e
+      log_error(e, { feed: feed })
     end
   end
 
@@ -78,5 +89,13 @@ class NewsFeedItemImporter
 
     def rss_feeds
       ['https://news.psu.edu/rss/topic/research', 'https://news.psu.edu/rss/topic/academics', 'https://news.psu.edu/rss/topic/impact', 'https://news.psu.edu/rss/topic/campus-life']
+    end
+
+    def log_error(err, metadata)
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: err,
+        metadata: metadata
+      )
     end
 end
