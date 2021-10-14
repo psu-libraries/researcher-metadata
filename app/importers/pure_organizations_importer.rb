@@ -17,7 +17,6 @@ class PureOrganizationsImporter < PureImporter
         o.save!
       rescue StandardError => e
         log_error(e, {
-                    record_type: record_type,
                     organization_id: o&.id,
                     item: item
                   })
@@ -26,7 +25,6 @@ class PureOrganizationsImporter < PureImporter
 
     rescue StandardError => e
       log_error(e, {
-                  record_type: record_type,
                   organizations: organizations
                 })
     end
@@ -47,7 +45,6 @@ class PureOrganizationsImporter < PureImporter
         child_org.save!
       rescue StandardError => e
         log_error(e, {
-                    record_type: record_type,
                     child_org_id: child_org&.id,
                     parent_org_id: parent_org&.id,
                     item: item
@@ -57,7 +54,6 @@ class PureOrganizationsImporter < PureImporter
 
     rescue StandardError => e
       log_error(e, {
-                  record_type: record_type,
                   organizations: organizations
                 })
     end

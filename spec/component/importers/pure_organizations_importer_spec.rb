@@ -123,7 +123,6 @@ describe PureOrganizationsImporter do
           importer_class: described_class,
           error: an_instance_of(ZeroDivisionError),
           metadata: a_hash_including(
-            record_type: 'organisational-units',
             organization_id: nil,
             item: an_instance_of(Hash)
           )
@@ -133,7 +132,6 @@ describe PureOrganizationsImporter do
           importer_class: described_class,
           error: an_instance_of(ZeroDivisionError),
           metadata: a_hash_including(
-            record_type: 'organisational-units',
             child_org_id: nil,
             parent_org_id: nil,
             item: an_instance_of(Hash)
