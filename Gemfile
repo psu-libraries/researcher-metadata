@@ -147,6 +147,10 @@ group :development do
 
   # Useful recipes for generalizing deployment behavior
   gem 'capistrano-helpers'
+
+  # net-ssh requires for ed25519 support
+  gem 'bcrypt_pbkdf'
+  gem 'ed25519'
 end
 
 group :test do
