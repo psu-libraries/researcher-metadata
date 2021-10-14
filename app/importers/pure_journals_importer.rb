@@ -14,10 +14,19 @@ class PureJournalsImporter < PureImporter
         j.title = item['titles'].first['value']
         j.publisher = Publisher.find_by(pure_uuid: item['publisher']['uuid']) if item['publisher']
         j.save!
+      rescue StandardError => e
+        log_error(e, {
+                    journal_id: j&.id,
+                    item: item
+                  })
       end
       pbar.increment unless Rails.env.test?
+    rescue StandardError => e
+      log_error(e, {})
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size
