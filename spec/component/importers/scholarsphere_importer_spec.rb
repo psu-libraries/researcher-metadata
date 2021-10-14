@@ -25,8 +25,6 @@ describe ScholarsphereImporter do
       let!(:pub) { create :publication,
                           doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
                           scholarsphere_open_access_url: url }
-      let!(:auth1) { create :authorship, publication: pub }
-      let!(:auth2) { create :authorship, publication: pub }
       let(:url) { '' }
 
       context 'when the publication already has a ScholarSphere open access URL' do
