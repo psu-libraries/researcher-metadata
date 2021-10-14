@@ -13,10 +13,20 @@ class PurePublishersImporter < PureImporter
         p.pure_uuid = item['uuid'] if p.new_record?
         p.name = item['name']
         p.save!
+      rescue StandardError => e
+        log_error(e, {
+                    publisher_id: p&.id,
+                    item: item
+                  })
       end
       pbar.increment unless Rails.env.test?
+
+    rescue StandardError => e
+      log_error(e, {})
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size
