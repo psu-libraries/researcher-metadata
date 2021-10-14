@@ -14,6 +14,9 @@ class PurePublicationImporter < PureImporter
         next unless importable?(publication)
 
         ActiveRecord::Base.transaction do
+          # We will not do any error handling inside this transaction because I
+          # don't want to affect the transaction rollback
+
           pi = PublicationImport.find_by(source: IMPORT_SOURCE,
                                          source_identifier: publication['uuid']) ||
             PublicationImport.new(source: IMPORT_SOURCE,
@@ -84,10 +87,17 @@ class PurePublicationImporter < PureImporter
             end
           end
         end
+
+      rescue StandardError => e
+        log_error(e, { publication: publication })
       end
       pbar.increment unless Rails.env.test?
+    rescue StandardError => e
+      log_error(e, {})
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size
