@@ -19,7 +19,7 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Tue, 12 Oct 2021 20:30:56 GMT
+      - Tue, 12 Oct 2021 20:30:57 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
@@ -29,21 +29,21 @@ http_interactions:
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=5XtWGDwDxgegDcSW3XqgVLRc7NPZTiSA_LGHQ_BB.search-service-7fb749d9-tcl7b;
+      - JSESSIONID=4OuP5CnMCiTzUpv2anpb6EM8nzauDMtsnpGlG6gp.search-service-7fb749d9-vwt2r;
         path=/search-service
       X-Request-Id:
-      - 23adf4c0cebf3450b3503efe7712e78c
+      - ed9fb08c837cf74c51885b07215457bc
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - 45bec82c-f7a6-4b98-9885-8b8096606a01
+      - fa9e1a61-ac18-4b84-be5c-adefc9618d2c
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
       string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
         Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Tue, 12 Oct 2021 20:30:56 GMT
+  recorded_at: Tue, 12 Oct 2021 20:30:57 GMT
 recorded_with: VCR 6.0.0

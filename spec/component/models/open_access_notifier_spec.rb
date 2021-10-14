@@ -17,8 +17,8 @@ describe OpenAccessNotifier do
   let(:pubs2) { [pub2] }
   let(:pubs3) { [pub3] }
   let(:pubs4) { [pub4] }
-  let(:profile1) { double 'user profile 1' }
-  let(:profile2) { double 'user profile 2' }
+  let(:profile1) { double 'user profile 1', active?: true }
+  let(:profile2) { double 'user profile 2', active?: true }
   let(:email1) { double 'email 1', deliver_now: nil }
   let(:email2) { double 'email 2', deliver_now: nil }
   let(:pub1) { double 'publication 1', authorships: pub1_auths }
@@ -102,6 +102,33 @@ describe OpenAccessNotifier do
         notifier.send_notifications
       end
     end
+
+    context 'when a profile is inactive' do
+      let(:profile2) { double 'user profile 2', active?: false }
+
+      it 'sends a notification email only to the active profile' do
+        expect(email1).to receive(:deliver_now)
+        expect(email2).not_to receive(:deliver_now)
+
+        notifier.send_notifications
+      end
+
+      it 'records the notification only for the active profile' do
+        expect(user1).to receive(:record_open_access_notification)
+        expect(user2).not_to receive(:record_open_access_notification)
+
+        notifier.send_notifications
+      end
+
+      it 'records the notification only for the authorships in the active profile' do
+        expect(auth1).to receive(:record_open_access_notification)
+        expect(auth2).to receive(:record_open_access_notification)
+        expect(auth3).not_to receive(:record_open_access_notification)
+        expect(auth4).not_to receive(:record_open_access_notification)
+
+        notifier.send_notifications
+      end
+    end
   end
 
   describe '#send_first_five_notifications' do
@@ -122,10 +149,10 @@ describe OpenAccessNotifier do
                          old_potential_open_access_publications: pubs1,
                          new_potential_open_access_publications: pubs2,
                          record_open_access_notification: nil }
-    let(:profile3) { double 'user profile 3' }
-    let(:profile4) { double 'user profile 4' }
-    let(:profile5) { double 'user profile 5' }
-    let(:profile6) { double 'user profile 6' }
+    let(:profile3) { double 'user profile 3', active?: true }
+    let(:profile4) { double 'user profile 4', active?: true }
+    let(:profile5) { double 'user profile 5', active?: true }
+    let(:profile6) { double 'user profile 6', active?: true }
     let(:email3) { double 'email 3', deliver_now: nil }
     let(:email4) { double 'email 4', deliver_now: nil }
     let(:email5) { double 'email 5', deliver_now: nil }

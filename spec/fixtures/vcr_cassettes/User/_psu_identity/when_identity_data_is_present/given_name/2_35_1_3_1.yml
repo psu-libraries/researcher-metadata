@@ -29,16 +29,16 @@ http_interactions:
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=5XtWGDwDxgegDcSW3XqgVLRc7NPZTiSA_LGHQ_BB.search-service-7fb749d9-tcl7b;
+      - JSESSIONID=gsQ-2PXlxSgu12v1lPxjk-1YC4Rb4HNmIzYj6GHU.search-service-7fb749d9-vwt2r;
         path=/search-service
       X-Request-Id:
-      - 23adf4c0cebf3450b3503efe7712e78c
+      - b1f63bb6fe4f14ab4507a6c28c7d5be1
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - 45bec82c-f7a6-4b98-9885-8b8096606a01
+      - 6f42ecfd-854f-4e6c-b494-061161f6c187
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:

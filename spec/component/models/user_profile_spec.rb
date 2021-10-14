@@ -25,6 +25,28 @@ describe UserProfile do
   it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
   it { is_expected.to delegate_method(:organization_name).to(:user) }
 
+  describe '::new' do
+    before { allow(user).to receive(:update_psu_identity) }
+
+    context 'when the user has data from the identity management service' do
+      let(:user) { build(:user, :with_psu_identity) }
+
+      it 'does NOT update their identity' do
+        described_class.new(user)
+        expect(user).not_to have_received(:update_psu_identity)
+      end
+    end
+
+    context 'when the user has not updated their identity data' do
+      let(:user) { build(:user) }
+
+      it 'updates their identity' do
+        described_class.new(user)
+        expect(user).to have_received(:update_psu_identity)
+      end
+    end
+  end
+
   describe '#title' do
     it "returns the given user's title from Activity Insight" do
       expect(profile.title).to eq 'test title'
@@ -34,6 +56,24 @@ describe UserProfile do
   describe '#email' do
     it 'returns the email address for the given user based on their webaccess ID' do
       expect(profile.email).to eq 'abc123@psu.edu'
+    end
+  end
+
+  describe '#active?' do
+    context 'when their identity data is present' do
+      let(:user) { build(:user, :with_psu_identity) }
+
+      it { is_expected.to be_active }
+    end
+
+    context 'when their identity data is NOT present' do
+      it { is_expected.not_to be_active }
+    end
+
+    context 'when the affliation is only MEMBER' do
+      let(:user) { build(:user, :with_psu_member_affiliation) }
+
+      it { is_expected.not_to be_active }
     end
   end
 

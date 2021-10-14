@@ -49,6 +49,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:uid).of_type(:string) }
   it { is_expected.to have_db_column(:provider).of_type(:string) }
   it { is_expected.to have_db_column(:psu_identity).of_type(:jsonb) }
+  it { is_expected.to have_db_column(:psu_identity_updated_at).of_type(:datetime) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
@@ -1562,27 +1563,39 @@ describe User, type: :model do
         expect {
           user.update_psu_identity
         }.to change { user.psu_identity.present? }.from(false).to(true)
+          .and change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
       end
     end
 
     context 'when the user does NOT exist at Penn State' do
       let(:user) { create(:user, webaccess_id: 'idonotexist') }
 
-      it 'does not update the record' do
+      it 'does not update the psu_identity attribute' do
         expect {
           user.update_psu_identity
         }.not_to change(user, :psu_identity)
+      end
+
+      it 'updates the psu_identity timestamp' do
+        expect {
+          user.update_psu_identity
+        }.to change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
       end
     end
   end
 
   describe '#psu_identity', :vcr do
+    subject { user.psu_identity }
+
     context 'when identity data is present' do
       let(:user) { create(:user, webaccess_id: 'agw13') }
 
       before { user.update_psu_identity }
 
-      it { expect(user.psu_identity).to be_a(PsuIdentity::SearchService::Person) }
+      it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
+      its(:surname) { is_expected.to eq('Wead') }
+      its(:given_name) { is_expected.to eq('Adam') }
+      its(:user_id) { is_expected.to eq('agw13') }
     end
 
     context 'when identity data is not present' do

@@ -120,7 +120,6 @@ group :development, :test do
   gem 'pry-byebug'
 
   # Default test framework
-  gem 'rspec-rails'
 
   # Generate fake test data
   gem 'ffaker'
@@ -156,6 +155,8 @@ group :test do
   gem 'factory_bot_rails'
   gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'rspec-its'
+  gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later

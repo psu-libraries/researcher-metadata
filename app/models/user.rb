@@ -120,11 +120,11 @@ class User < ApplicationRecord
   def psu_identity
     return if attributes['psu_identity'].blank?
 
-    PsuIdentity::SearchService::Person.new(data: attributes['psu_identity'])
+    PsuIdentity::SearchService::Person.new(attributes['psu_identity']['data'])
   end
 
   def update_psu_identity
-    update(psu_identity: psu_identity_data)
+    update(psu_identity: psu_identity_data, psu_identity_updated_at: Time.zone.now)
   end
 
   def old_potential_open_access_publications
