@@ -21,23 +21,38 @@ describe ScholarsphereImporter do
       allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'
     end
 
-    context 'when a publication exists in the database that matches an incoming DOI' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.1109/5.771073' }
+    context 'when a publications exist in the database that match an incoming DOI' do
+      let!(:pub1) { create :publication,
+                           doi: 'https://doi.org/10.1109/5.771073' }
+      let!(:pub2) { create :publication,
+                           doi: 'https://doi.org/10.1109/5.771073' }
 
-      context 'when the publication already has an open access location that matches a URL from ScholarSphere' do
+      context 'when one of the publications already has an open access location that matches a URL from ScholarSphere' do
         let!(:oal) { create :open_access_location,
                             source: 'ScholarSphere',
-                            publication: pub,
+                            publication: pub1,
                             url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc'}
 
-        it 'only creates new open access locations for new URLs from ScholarSphere' do
-          expect { importer.call }.to change(OpenAccessLocation, :count).by 2
-          expect(pub.open_access_locations.find_by(
+        it 'creates new open access locations only for new URLs from ScholarSphere for each publication' do
+          expect { importer.call }.to change(OpenAccessLocation, :count).by 5
+          expect(pub1.open_access_locations.find_by(
                    source: 'ScholarSphere',
                    url: 'https://scholarsphere.test/resources/0b591fea-7bef-4e06-9554-6417bf2c040e'
                  )).not_to be_nil
-          expect(pub.open_access_locations.find_by(
+          expect(pub1.open_access_locations.find_by(
+                   source: 'ScholarSphere',
+                   url: 'https://scholarsphere.test/resources/21dd75c1-65c8-49ba-959a-9443ab27dc16'
+                 )).not_to be_nil
+
+          expect(pub2.open_access_locations.find_by(
+                   source: 'ScholarSphere',
+                   url: 'https://scholarsphere.test/resources/0b591fea-7bef-4e06-9554-6417bf2c040e'
+                 )).not_to be_nil
+          expect(pub2.open_access_locations.find_by(
+                   source: 'ScholarSphere',
+                   url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc'
+                 )).not_to be_nil
+          expect(pub2.open_access_locations.find_by(
                    source: 'ScholarSphere',
                    url: 'https://scholarsphere.test/resources/21dd75c1-65c8-49ba-959a-9443ab27dc16'
                  )).not_to be_nil
