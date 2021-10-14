@@ -30,7 +30,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'shows a link to the API documentation' do
-      expect(page).to have_link 'API Documentation', href: swagger_ui_engine_path
+      expect(page).to have_link 'API Documentation', href: rswag_ui_path
     end
 
     it 'shows a link to the developer resources page' do
@@ -63,7 +63,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'shows a link to the API documentation' do
-      expect(page).to have_link 'API Documentation', href: swagger_ui_engine_path
+      expect(page).to have_link 'API Documentation', href: rswag_ui_path
     end
 
     it 'shows a link to the developer resources page' do
@@ -93,7 +93,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'shows a link to the API documentation' do
-      expect(page).to have_link 'API Documentation', href: swagger_ui_engine_path
+      expect(page).to have_link 'API Documentation', href: rswag_ui_path
     end
 
     it 'shows a link to the developer resources page' do

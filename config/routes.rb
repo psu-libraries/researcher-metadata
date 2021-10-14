@@ -2,7 +2,7 @@
 
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
-  mount SwaggerUiEngine::Engine, at: '/api_docs'
+  mount Rswag::Ui::Engine => '/swagger_ui'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
@@ -16,6 +16,7 @@ Rails.application.routes.draw do
 
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources
+  get '/api_docs' => 'public#api_docs', as: :api_docs
 
   scope module: 'api' do
     namespace :v1 do

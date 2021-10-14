@@ -65,7 +65,7 @@ gem 'fast_jsonapi'
 gem 'swagger-blocks'
 
 # Include swagger-ui as a Raile engine
-gem 'swagger_ui_engine'
+gem 'rswag-ui'
 
 # Bootstrap 4 ruby gem for Ruby on Rails
 gem 'bootstrap', '< 5.0'
