@@ -48,10 +48,21 @@ class PurePublicationTagImporter < PureImporter
             rank: rank
           ).find_or_create_by(tag: tag)
         end
+      rescue StandardError => e
+        log_error(e, {
+                    publication_import_id: pub_import&.id,
+                    publication_id: pub&.id,
+                    fingerprint: fingerprint_xml,
+                    publication: publication
+                  })
       end
       pbar.increment unless Rails.env.test?
+    rescue StandardError => e
+      log_error(e, {})
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size
