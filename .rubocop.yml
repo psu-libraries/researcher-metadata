@@ -12,3 +12,7 @@ AllCops:
     - 'vendor/**/*'
     - 'bin/**/*'
     - 'node_modules/**/*'
+
+Style/RescueModifier:
+  Exclude:
+    - 'app/importers/**/*'

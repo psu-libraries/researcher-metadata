@@ -88,10 +88,57 @@ describe PureOrganizationsImporter do
 
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/organisational-units?navigationLink=false&size=1000&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
+
+        allow(ImporterErrorLog).to receive(:log_error)
       end
 
-      it 'raises an error' do
-        expect { importer.call }.to raise_error PureImporter::ServiceNotFound
+      it 'reports an error' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(PureImporter::ServiceNotFound),
+          metadata: {}
+        )
+      end
+    end
+
+    context 'when there is a problem inside one of the loops' do
+      before do
+        allow(Organization).to receive(:find_by).and_raise(ZeroDivisionError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'reports an error and moves on to the next iteration' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: anything
+        ).at_least(2).times
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            record_type: 'organisational-units',
+            organization_id: nil,
+            item: an_instance_of(Hash)
+          )
+        ).at_least(1).times
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            record_type: 'organisational-units',
+            child_org_id: nil,
+            parent_org_id: nil,
+            item: an_instance_of(Hash)
+          )
+        ).at_least(1).times
       end
     end
   end
