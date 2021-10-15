@@ -24,7 +24,6 @@ class OAIImporter
             p.abstract = rr.description
             p.published_on = rr.date
             p.publisher_name = rr.publisher
-            p.open_access_url = rr.url
             p.publication_type = 'Journal Article'
             p.status = 'Published'
             p.save!
@@ -62,6 +61,12 @@ class OAIImporter
                 a.save!
               end
             end
+
+            oal = OpenAccessLocation.new
+            oal.publication = p
+            oal.url = rr.url
+            oal.source = import_source
+            oal.save!
 
             DuplicatePublicationGroup.group_duplicates_of(p)
 

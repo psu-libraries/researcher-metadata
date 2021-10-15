@@ -2,7 +2,14 @@
 
 class OpenAccessLocation < ApplicationRecord
   def self.sources
-    ['User', 'ScholarSphere', 'Open Access Button', 'Unpaywall']
+    [
+      'User',
+      'ScholarSphere',
+      'Open Access Button',
+      'Unpaywall',
+      'Dickinson Law IDEAS Repo',
+      'Penn State Law eLibrary Repo'
+    ]
   end
 
   belongs_to :publication, inverse_of: :open_access_locations

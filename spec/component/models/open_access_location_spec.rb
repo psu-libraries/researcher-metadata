@@ -43,7 +43,14 @@ describe OpenAccessLocation, type: :model do
 
   describe '.sources' do
     it 'returns an array of the possible sources of open access location data' do
-      expect(described_class.sources).to eq ['User', 'ScholarSphere', 'Open Access Button', 'Unpaywall']
+      expect(described_class.sources).to eq [
+        'User',
+        'ScholarSphere',
+        'Open Access Button',
+        'Unpaywall',
+        'Dickinson Law IDEAS Repo',
+        'Penn State Law eLibrary Repo'
+      ]
     end
   end
 end
