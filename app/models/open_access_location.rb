@@ -14,14 +14,36 @@ class OpenAccessLocation < ApplicationRecord
     show do
       include_all_fields
 
+      field(:oa_date) { label 'OA date' }
       field(:url) do
+        label 'URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:landing_page_url) do
+        label 'Landing page URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:pdf_url) do
+        label 'PDF URL'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      end
+    end
+
+    create do
+      field(:url) { label 'URL' }
+      field(:source, :enum) do
+        enum do
+          [value || 'User']
+        end
+      end
+    end
+
+    edit do
+      field(:url) { label 'URL' }
+      field(:source, :enum) do
+        enum do
+          [value || 'User']
+        end
       end
     end
   end
