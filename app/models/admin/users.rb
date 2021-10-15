@@ -28,6 +28,7 @@ module Admin::Users
             bindings[:view]._current_user.is_admin
           end
         end
+        field(:is_active, :boolean) { label 'Active?' }
         field(:pure_uuid) do
           label 'Pure ID'
           visible do
@@ -80,6 +81,8 @@ module Admin::Users
         field(:pure_uuid) { label 'Pure ID' }
         field(:activity_insight_identifier) { label 'Activity Insight ID' }
         field(:penn_state_identifier) { label 'Penn State ID' }
+        field(:psu_identity) { label 'Penn State Identity' }
+        field(:psu_identity_updated_at) { label 'Identity Updated On' }
         field(:scopus_h_index) { label 'H-Index' }
         field(:ai_title) { label 'Title' }
         field(:ai_rank) { label 'Rank' }

@@ -6,16 +6,16 @@ class UserProfile
     update_identity_data
   end
 
-  delegate :name,
+  delegate :active?,
            :id,
+           :name,
            :office_location,
            :office_phone_number,
-           :total_scopus_citations,
-           :scopus_h_index,
-           :pure_profile_url,
            :orcid_identifier,
            :organization_name,
-           :psu_identity,
+           :pure_profile_url,
+           :scopus_h_index,
+           :total_scopus_citations,
            to: :user
 
   def title
@@ -24,12 +24,6 @@ class UserProfile
 
   def email
     "#{user.webaccess_id}@psu.edu"
-  end
-
-  def active?
-    return false if psu_identity.nil?
-
-    psu_identity.affiliation != ['MEMBER']
   end
 
   def personal_website

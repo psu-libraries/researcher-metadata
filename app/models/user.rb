@@ -124,6 +124,16 @@ class User < ApplicationRecord
     PsuIdentity::SearchService::Person.new(attributes['psu_identity']['data'])
   end
 
+  def is_active # rubocop:disable Naming/PredicateName
+    return false if psu_identity.nil?
+
+    psu_identity.affiliation != ['MEMBER']
+  end
+
+  def active?
+    is_active
+  end
+
   def update_psu_identity
     update(psu_identity: psu_identity_data, psu_identity_updated_at: Time.zone.now)
   end

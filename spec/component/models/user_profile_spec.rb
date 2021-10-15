@@ -15,15 +15,16 @@ describe UserProfile do
                        ai_teaching_interests: 'test teaching interests',
                        ai_research_interests: 'test research interests' }
 
+  it { is_expected.to delegate_method(:active?).to(:user) }
   it { is_expected.to delegate_method(:id).to(:user) }
   it { is_expected.to delegate_method(:name).to(:user) }
   it { is_expected.to delegate_method(:office_location).to(:user) }
   it { is_expected.to delegate_method(:office_phone_number).to(:user) }
-  it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
-  it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
-  it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
   it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
   it { is_expected.to delegate_method(:organization_name).to(:user) }
+  it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
+  it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
+  it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
 
   describe '::new' do
     before { allow(user).to receive(:update_psu_identity) }
@@ -56,24 +57,6 @@ describe UserProfile do
   describe '#email' do
     it 'returns the email address for the given user based on their webaccess ID' do
       expect(profile.email).to eq 'abc123@psu.edu'
-    end
-  end
-
-  describe '#active?' do
-    context 'when their identity data is present' do
-      let(:user) { build(:user, :with_psu_identity) }
-
-      it { is_expected.to be_active }
-    end
-
-    context 'when their identity data is NOT present' do
-      it { is_expected.not_to be_active }
-    end
-
-    context 'when the affliation is only MEMBER' do
-      let(:user) { build(:user, :with_psu_member_affiliation) }
-
-      it { is_expected.not_to be_active }
     end
   end
 
