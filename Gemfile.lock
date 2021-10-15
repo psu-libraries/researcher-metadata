@@ -92,6 +92,7 @@ GEM
       babel-source (>= 4.0, < 6)
       execjs (~> 2.0)
     bcrypt (3.1.16)
+    bcrypt_pbkdf (1.1.0)
     better_html (1.0.16)
       actionview (>= 4.0)
       activesupport (>= 4.0)
@@ -177,6 +178,7 @@ GEM
       warden (~> 1.2.3)
     diff-lcs (1.4.4)
     docile (1.4.0)
+    ed25519 (1.2.4)
     erb_lint (0.0.37)
       activesupport
       better_html (~> 1.0.7)
@@ -559,6 +561,7 @@ PLATFORMS
 DEPENDENCIES
   activerecord-import
   apivore
+  bcrypt_pbkdf
   bootstrap (< 5.0)
   bugsnag
   byebug
@@ -574,6 +577,7 @@ DEPENDENCIES
   database_cleaner
   delayed_job_active_record
   devise (~> 4.8)
+  ed25519
   factory_bot_rails
   fast_jsonapi
   ffaker
