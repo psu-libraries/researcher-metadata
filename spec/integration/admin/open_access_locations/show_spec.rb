@@ -27,7 +27,7 @@ describe 'Admin open access location detail page', type: :feature do
       before { visit rails_admin.show_path(model_name: :open_access_location, id: oal.id) }
 
       it 'shows the location detail heading' do
-        expect(page).to have_content "Details for Open access location 'OpenAccessLocation ##{oal.id}'"
+        expect(page).to have_content "Details for Open access location 'https://nature.com/articles/testpub123 (Unpaywall)'"
       end
 
       it "shows the location's host type" do

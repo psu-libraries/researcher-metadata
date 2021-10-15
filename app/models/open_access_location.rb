@@ -10,6 +10,10 @@ class OpenAccessLocation < ApplicationRecord
   validates :publication, :source, :url, presence: true
   validates :source, inclusion: { in: sources }
 
+  def name
+    "#{url} (#{source})"
+  end
+
   rails_admin do
     show do
       include_all_fields
