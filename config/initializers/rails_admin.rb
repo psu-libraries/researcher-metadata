@@ -74,7 +74,7 @@ RailsAdmin.config do |config|
     end
     export
     bulk_delete do
-      only [:Publication, :User]
+      only [:Publication, :User, :ImporterErrorLog]
     end
     show do
     end
@@ -89,7 +89,7 @@ RailsAdmin.config do |config|
             :InternalPublicationWaiver]
     end
     delete do
-      only [:Publication, :User, :APIToken, :ExternalPublicationWaiver]
+      only [:Publication, :User, :APIToken, :ExternalPublicationWaiver, :ImporterErrorLog]
     end
     index_publications_by_organization do
       only [:Publication]
