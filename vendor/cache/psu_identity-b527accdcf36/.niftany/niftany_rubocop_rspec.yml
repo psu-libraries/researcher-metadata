@@ -1,0 +1,47 @@
+---
+require: rubocop-rspec
+
+Layout/MultilineBlockLayout:
+  Exclude:
+    - 'spec/**/*'
+
+Naming/PredicateName:
+  Exclude:
+    - spec/**/*
+
+Style/BlockDelimiters:
+  Exclude:
+    - 'spec/**/*'
+
+Layout/BlockEndNewline:
+  Exclude:
+    - 'spec/**/*'
+
+RSpec/ExampleWording:
+  CustomTransform:
+    be: is
+    have: has
+    not: does not
+    NOT: does NOT
+  IgnoredWords:
+    - only
+
+RSpec/FilePath:
+  Enabled: false
+
+RSpec/InstanceVariable:
+  Enabled: false
+
+RSpec/DescribeClass:
+  Enabled: true
+
+RSpec/BeforeAfterAll:
+  Enabled: false
+
+RSpec/ExampleLength:
+  Enabled:
+    false
+
+RSpec/MultipleExpectations:
+  Enabled:
+    false
