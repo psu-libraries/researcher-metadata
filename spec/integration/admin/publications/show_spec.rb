@@ -73,10 +73,14 @@ describe 'Admin publication detail page', type: :feature do
                       publication: pub }
 
   let!(:oal1) { create :open_access_location,
-                       publication: pub }
+                       publication: pub,
+                       source: 'User',
+                       url: 'https://example.com/oal1' }
 
   let!(:oal2) { create :open_access_location,
-                       publication: pub }
+                       publication: pub,
+                       source: 'ScholarSphere',
+                       url: 'https://scholarsphere.psu.edu/oal2' }
 
   let!(:journal) { create :journal,
                           title: 'Test Journal Record' }
@@ -177,9 +181,9 @@ describe 'Admin publication detail page', type: :feature do
       end
 
       it "shows the publication's open access locations" do
-        expect(page).to have_link "OpenAccessLocation ##{oal1.id}",
+        expect(page).to have_link 'https://example.com/oal1 (User)',
                                   href: rails_admin.show_path(model_name: :open_access_location, id: oal1.id)
-        expect(page).to have_link "OpenAccessLocation ##{oal2.id}",
+        expect(page).to have_link 'https://scholarsphere.psu.edu/oal2 (ScholarSphere)',
                                   href: rails_admin.show_path(model_name: :open_access_location, id: oal2.id)
       end
 
