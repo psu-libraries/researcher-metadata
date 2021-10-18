@@ -167,6 +167,7 @@ describe Publication, type: :model do
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:contributor_names).allow_destroy(true) }
   it { is_expected.to accept_nested_attributes_for(:taggings).allow_destroy(true) }
+  it { is_expected.to accept_nested_attributes_for(:open_access_locations).allow_destroy(true) }
 
   describe 'deleting a publication with authorships' do
     let(:p) { create :publication }

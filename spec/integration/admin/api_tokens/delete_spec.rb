@@ -27,6 +27,10 @@ describe 'Deleting an API Token', type: :feature do
       it 'deletes the API token' do
         expect { token.reload }.to raise_error ActiveRecord::RecordNotFound
       end
+
+      it 'redirects to the API token list' do
+        expect(page).to have_current_path rails_admin.index_path(model_name: :api_token), ignore_query: true
+      end
     end
   end
 

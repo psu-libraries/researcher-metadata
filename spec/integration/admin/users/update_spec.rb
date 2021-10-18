@@ -105,6 +105,10 @@ describe 'updating a user via the admin interface', type: :feature do
       it 'sets the timestamp on the user record to indicate that it was manually updated' do
         expect(user.reload.updated_by_user_at).not_to be_blank
       end
+
+      it 'redirects back to the user list' do
+        expect(page).to have_current_path rails_admin.index_path(model_name: :user), ignore_query: true
+      end
     end
   end
 

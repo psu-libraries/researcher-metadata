@@ -92,6 +92,7 @@ class Publication < ApplicationRecord
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
+  accepts_nested_attributes_for :open_access_locations, allow_destroy: true
 
   def self.find_by_wos_pub(pub)
     by_doi = pub.doi ? where(doi: pub.doi) : Publication.none
@@ -445,6 +446,7 @@ class Publication < ApplicationRecord
       field(:doi) { label 'DOI' }
       field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
       field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
+      field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }

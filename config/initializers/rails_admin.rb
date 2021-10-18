@@ -70,7 +70,8 @@ RailsAdmin.config do |config|
             :User,
             :APIToken,
             :ExternalPublicationWaiver,
-            :InternalPublicationWaiver]
+            :InternalPublicationWaiver,
+            :OpenAccessLocation]
     end
     export
     bulk_delete do
@@ -86,10 +87,15 @@ RailsAdmin.config do |config|
             :Performance,
             :APIToken,
             :ExternalPublicationWaiver,
-            :InternalPublicationWaiver]
+            :InternalPublicationWaiver,
+            :OpenAccessLocation]
     end
     delete do
-      only [:Publication, :User, :APIToken, :ExternalPublicationWaiver]
+      only [:Publication,
+            :User,
+            :APIToken,
+            :ExternalPublicationWaiver,
+            :OpenAccessLocation]
     end
     index_publications_by_organization do
       only [:Publication]

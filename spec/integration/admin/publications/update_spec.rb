@@ -18,6 +18,10 @@ describe 'updating a publication via the admin interface', type: :feature do
       it 'does not allow the total Scopus citations to be set' do
         expect(page).not_to have_field 'Total scopus citations'
       end
+
+      it 'shows a nested form for adding open access locations' do
+        expect(page).to have_content 'Add a new Open access location'
+      end
     end
 
     describe 'submitting the form with new data to update a publication record' do
