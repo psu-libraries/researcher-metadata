@@ -1,0 +1,40 @@
+version: 2.1
+orbs:
+  ruby: circleci/ruby@0.1.2
+
+jobs:
+  build:
+    docker:
+      - image: circleci/ruby:2.6.3-stretch-node
+    executor: ruby/default
+    steps:
+      - checkout
+      - run:
+          name: "Create Necessary Directories"
+          command: mkdir ./log
+
+      - run:
+          name: "Install Bundler 2.1.4"
+          command: |
+            gem install bundler:2.1.4 &&
+            bundle -v
+
+      # An orb function for bundling
+      - ruby/bundle-install
+
+      - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > bin/cc-test-reporter
+            chmod +x bin/cc-test-reporter
+
+      - run:
+          name: "Rubocop"
+          command: bundle exec rubocop
+
+      - run:
+          name: "Rspec"
+          command: |
+            RAILS_ENV=test bundle exec rspec &&
+            bin/cc-test-reporter format-coverage -t simplecov -o coverage/codeclimate.json coverage/.resultset.json &&
+            bin/cc-test-reporter upload-coverage
