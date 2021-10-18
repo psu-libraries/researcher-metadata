@@ -163,7 +163,7 @@ group :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 5.0'
-  gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later
+  gem 'simplecov', '< 0.22', require: false # CodeClimate does not work with .18 or later
   gem 'vcr'
   gem 'webdrivers'
   gem 'webmock'
