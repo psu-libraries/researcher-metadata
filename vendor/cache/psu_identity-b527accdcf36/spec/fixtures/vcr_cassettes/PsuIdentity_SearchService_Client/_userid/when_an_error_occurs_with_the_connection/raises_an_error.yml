@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v0.17.3
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 401
+      message: Unauthorized
+    headers:
+      Date:
+      - Thu, 07 Oct 2021 14:29:16 GMT
+      Content-Length:
+      - '0'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=rmrqAp0OdS112O1i72lhNVXthN8N5kennhffiIXS.search-service-7fb749d9-vwt2r;
+        path=/search-service
+      X-Request-Id:
+      - aa39a0b120633a2b96935952f94ff663
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Www-Authenticate:
+      - Bearer
+      Uniqueid:
+      - d001a1bd-4a70-45da-84b9-56bce2611b46
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: ''
+    http_version:
+  recorded_at: Thu, 07 Oct 2021 14:29:17 GMT
+recorded_with: VCR 5.1.0
