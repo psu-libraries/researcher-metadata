@@ -67,9 +67,6 @@ gem 'fast_jsonapi'
 # Swagger::Blocks is a DSL for pure Ruby code blocks that can be turned into JSON
 gem 'swagger-blocks'
 
-# Include swagger-ui as a Raile engine
-gem 'swagger_ui_engine'
-
 # Bootstrap 4 ruby gem for Ruby on Rails
 gem 'bootstrap', '< 5.0'
 
