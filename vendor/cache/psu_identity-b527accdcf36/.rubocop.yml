@@ -1,0 +1,19 @@
+---
+inherit_from:
+  - .niftany/layout.yml
+  - .niftany/lint.yml
+  - .niftany/metrics.yml
+  - .niftany/naming.yml
+  - .niftany/niftany_rubocop_rspec.yml
+  - .niftany/performance.yml
+  - .niftany/style.yml
+  - .rubocop_todo.yml
+
+AllCops:
+  DisplayCopNames: true
+  NewCops: enable
+
+Metrics/BlockLength:
+  Exclude:
+    - 'spec/**/*'
+    - 'psu_identity.gemspec'
