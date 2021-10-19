@@ -12,6 +12,7 @@ module Admin::Users
       end
 
       list do
+        scopes [nil, :active]
         field(:id) do
           visible do
             bindings[:view]._current_user.is_admin
