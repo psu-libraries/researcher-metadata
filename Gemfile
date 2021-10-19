@@ -15,6 +15,9 @@ gem 'puma', '~> 5.5'
 # Use SCSS for stylesheets
 gem 'sass-rails'
 
+# Bundle assets
+gem 'webpacker'
+
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier', '>= 1.3.0'
 

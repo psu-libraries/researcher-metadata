@@ -44,3 +44,10 @@ coverage
 # Mac-specific versions of gems, assuming that our dev machines are macs and our
 # production ones are linux.
 /vendor/cache/*darwin*
+
+/public/packs
+/public/packs-test
+/node_modules
+/yarn-error.log
+yarn-debug.log*
+.yarn-integrity
