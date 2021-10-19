@@ -7,13 +7,9 @@ class ScholarsphereImporter
       doi_url = k.gsub('doi:', 'https://doi.org/')
       matching_pubs = Publication.where(doi: doi_url)
       matching_pubs.each do |p|
-        if p.scholarsphere_open_access_url.blank?
-          ActiveRecord::Base.transaction do
-            # Update the open access status of the publication by adding the first ScholarSphere
-            # URL that's listed for this publication's DOI.
-            p.scholarsphere_open_access_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}/resources/#{v.first}"
-            p.save!
-          end
+        v.each do |ss_oa_id|
+          ss_oa_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}/resources/#{ss_oa_id}"
+          p.open_access_locations.find_or_create_by(source: 'ScholarSphere', url: ss_oa_url)
         end
       rescue StandardError => e
         log_error(e, {

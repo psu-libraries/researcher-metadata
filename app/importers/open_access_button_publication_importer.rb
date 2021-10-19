@@ -54,7 +54,17 @@ class OpenAccessButtonPublicationImporter
       find_url = URI.encode("https://api.openaccessbutton.org/find?id=#{publication.doi_url_path}")
       oab_json = JSON.parse(get_pub(find_url))
 
-      publication.open_access_url = oab_json['url'] if oab_json['url']
+      existing_oa_location = publication.open_access_locations.find_by(source: 'Open Access Button')
+
+      if oab_json['url']
+        if existing_oa_location
+          existing_oa_location.update!(url: oab_json['url'])
+        else
+          publication.open_access_locations.create!(source: 'Open Access Button', url: oab_json['url'])
+        end
+      else
+        existing_oa_location.try(:destroy)
+      end
       publication.open_access_button_last_checked_at = Time.current
       publication.save!
 
