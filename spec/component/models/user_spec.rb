@@ -1604,4 +1604,24 @@ describe User, type: :model do
       it { expect(user.psu_identity).to be_nil }
     end
   end
+
+  describe '#active?' do
+    subject { user }
+
+    context 'when their identity data is present' do
+      let(:user) { build(:user, :with_psu_identity) }
+
+      it { is_expected.to be_active }
+    end
+
+    context 'when their identity data is not present' do
+      it { is_expected.not_to be_active }
+    end
+
+    context 'when the affliation is only member' do
+      let(:user) { build(:user, :with_psu_member_affiliation) }
+
+      it { is_expected.not_to be_active }
+    end
+  end
 end

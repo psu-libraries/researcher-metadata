@@ -4,30 +4,31 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin user detail page', type: :feature do
-  let!(:user) { create(:user, first_name: 'Bob',
-                              last_name: 'Testuser',
-                              webaccess_id: 'bat123',
-                              activity_insight_identifier: 'ai12345',
-                              pure_uuid: 'pure67890',
-                              penn_state_identifier: 'psu345678',
-                              scopus_h_index: 724,
-                              ai_title: 'Test Title',
-                              ai_rank: 'Test Rank', ai_endowed_title: 'Test Endowed Title',
-                              orcid_identifier: 'Test Orcid ID',
-                              ai_alt_name: 'Test Alt Name',
-                              ai_building: 'Test Building',
-                              ai_room_number: 'Test Room Number',
-                              ai_office_area_code: 385,
-                              ai_office_phone_1: 503,
-                              ai_office_phone_2: 2953,
-                              ai_fax_area_code: 743,
-                              ai_fax_1: 298,
-                              ai_fax_2: 1094,
-                              ai_google_scholar: 'Test Google Scholar',
-                              ai_website: 'http://test-example.com',
-                              ai_bio: 'Test Bio',
-                              ai_teaching_interests: 'Test Teaching Interests',
-                              ai_research_interests: 'Test Research Interests') }
+  let!(:user) { create(:user, :with_psu_identity,
+                       first_name: 'Bob',
+                       last_name: 'Testuser',
+                       webaccess_id: 'bat123',
+                       activity_insight_identifier: 'ai12345',
+                       pure_uuid: 'pure67890',
+                       penn_state_identifier: 'psu345678',
+                       scopus_h_index: 724,
+                       ai_title: 'Test Title',
+                       ai_rank: 'Test Rank', ai_endowed_title: 'Test Endowed Title',
+                       orcid_identifier: 'Test Orcid ID',
+                       ai_alt_name: 'Test Alt Name',
+                       ai_building: 'Test Building',
+                       ai_room_number: 'Test Room Number',
+                       ai_office_area_code: 385,
+                       ai_office_phone_1: 503,
+                       ai_office_phone_2: 2953,
+                       ai_fax_area_code: 743,
+                       ai_fax_1: 298,
+                       ai_fax_2: 1094,
+                       ai_google_scholar: 'Test Google Scholar',
+                       ai_website: 'http://test-example.com',
+                       ai_bio: 'Test Bio',
+                       ai_teaching_interests: 'Test Teaching Interests',
+                       ai_research_interests: 'Test Research Interests') }
 
   let!(:pub1) { create :publication, title: "Bob's First Publication",
                                      journal_title: 'First Journal',
@@ -101,6 +102,10 @@ describe 'Admin user detail page', type: :feature do
 
       it "shows the user's WebAccess ID" do
         expect(page).to have_content 'bat123'
+      end
+
+      it "shows the user's Penn State identity data" do
+        expect(page).to have_content(/{.*affiliation.*FACULTY.*}/)
       end
 
       it "shows the user's Activity Insight ID" do

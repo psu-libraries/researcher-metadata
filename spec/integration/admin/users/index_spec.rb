@@ -26,6 +26,11 @@ describe 'Admin user list', type: :feature do
         expect(page).to have_content 'Susan'
         expect(page).to have_content 'Tester'
       end
+
+      it 'shows their status' do
+        visit rails_admin.index_path(model_name: :user, set: 1)
+        expect(page).to have_content 'Active?'
+      end
     end
 
     describe 'the page layout' do
