@@ -346,6 +346,7 @@ class Publication < ApplicationRecord
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
       field(:open_access_button_last_checked_at)
+      field(:unpaywall_last_checked_at)
     end
 
     create do
@@ -411,6 +412,7 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:open_access_button_last_checked_at)
+      field(:unpaywall_last_checked_at)
       field(:open_access_locations)
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
