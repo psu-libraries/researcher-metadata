@@ -60,4 +60,54 @@ describe NewsFeedItemImporter do
     expect(mailto_nodes).not_to be_nil
     expect(tag_nodes).not_to be_nil
   end
+
+  context 'when there is an error retrieving a feed' do
+    before do
+      allow_any_instance_of(described_class).to receive(:rss_feeds)
+        .and_return(['bad_url_raises_an_error', 'spec/fixtures/rss_output.xml'])
+
+      allow(ImporterErrorLog).to receive(:log_error)
+    end
+
+    it 'logs the error' do
+      importer.call
+
+      expect(ImporterErrorLog).to have_received(:log_error).with(
+        importer_class: described_class,
+        error: an_instance_of(Errno::ENOENT),
+        metadata: {
+          feed: 'bad_url_raises_an_error'
+        }
+      )
+    end
+
+    it 'moves on to the next feed in the list' do
+      expect { importer.call }.to change(NewsFeedItem, :count)
+    end
+  end
+
+  context 'when there is an error parsing a feed' do
+    before do
+      allow_any_instance_of(described_class).to receive(:rss_feeds)
+        .and_return(['spec/fixtures/rss_output.xml'])
+
+      allow(ImporterErrorLog).to receive(:log_error)
+      allow(User).to receive(:find_by).and_raise(ActiveRecord::RecordNotFound)
+    end
+
+    it 'logs the error' do
+      importer.call
+      expect(ImporterErrorLog).to have_received(:log_error).with(
+        importer_class: described_class,
+        error: an_instance_of(ActiveRecord::RecordNotFound),
+        metadata: a_hash_including(
+          feed: 'spec/fixtures/rss_output.xml',
+          result: an_instance_of(String),
+          html_doc: an_instance_of(String),
+          mailto_ids: an_instance_of(Array),
+          tag_names: nil
+        )
+      )
+    end
+  end
 end

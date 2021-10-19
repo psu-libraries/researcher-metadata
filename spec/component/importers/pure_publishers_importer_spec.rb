@@ -54,10 +54,39 @@ describe PurePublishersImporter do
 
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/publishers?navigationLink=false&size=1000&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
+
+        allow(ImporterErrorLog).to receive(:log_error)
       end
 
-      it 'raises an error' do
-        expect { importer.call }.to raise_error PureImporter::ServiceNotFound
+      it 'captures and logs the error' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(PureImporter::ServiceNotFound),
+          metadata: {}
+        )
+      end
+    end
+
+    context 'when there is an error within the loop' do
+      before do
+        allow(Publisher).to receive(:find_by).and_raise(ZeroDivisionError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error and moves on' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            publisher_id: nil,
+            item: an_instance_of(Hash)
+          )
+        ).at_least(2).times
       end
     end
   end

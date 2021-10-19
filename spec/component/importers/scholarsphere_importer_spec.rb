@@ -45,5 +45,73 @@ describe ScholarsphereImporter do
         end
       end
     end
+
+    context 'when the API endpoint is not found' do
+      before do
+        allow(HTTParty).to receive(:get).with('https://scholarsphere.test/api/dois',
+                                              headers: { 'X-API-KEY' => 'secret_key' }).and_raise(SocketError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'captures and logs the error' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(SocketError),
+          metadata: {}
+        )
+      end
+    end
+
+    context 'when there is an error within the loop' do
+      before do
+        allow(Publication).to receive(:where).and_raise(ZeroDivisionError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error and moves on' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            k: an_instance_of(String),
+            v: an_instance_of(Array),
+            matching_pub_ids: nil
+          )
+        ).at_least(2).times
+      end
+    end
+
+    context 'when there is an error within the inner loop' do
+      let!(:pub) { create :publication,
+                          doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
+                          scholarsphere_open_access_url: url }
+      let(:url) { '' }
+
+      before do
+        allow(ActiveRecord::Base).to receive(:transaction).and_raise(ZeroDivisionError)
+
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error and moves on' do
+        importer.call
+
+        expect(ImporterErrorLog).to have_received(:log_error).with(
+          importer_class: described_class,
+          error: an_instance_of(ZeroDivisionError),
+          metadata: a_hash_including(
+            k: an_instance_of(String),
+            v: an_instance_of(Array),
+            publication_id: pub.id
+          )
+        )
+      end
+    end
   end
 end

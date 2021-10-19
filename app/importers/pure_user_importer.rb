@@ -55,10 +55,20 @@ class PureUserImporter < PureImporter
             end
           end
         end
+      rescue StandardError => e
+        log_error(e, {
+                    user_id: u&.id,
+                    item: item
+                  })
       end
       pbar.increment unless Rails.env.test?
+
+    rescue StandardError => e
+      log_error(e, {})
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size

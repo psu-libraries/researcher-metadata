@@ -15,8 +15,18 @@ class PureOrganizationsImporter < PureImporter
         o.pure_external_identifier = item['externalId']
         o.organization_type = extract_organization_type(item)
         o.save!
+      rescue StandardError => e
+        log_error(e, {
+                    organization_id: o&.id,
+                    item: item
+                  })
       end
       pbar.increment unless Rails.env.test?
+
+    rescue StandardError => e
+      log_error(e, {
+                  organizations: organizations
+                })
     end
     pbar.finish unless Rails.env.test?
 
@@ -33,10 +43,23 @@ class PureOrganizationsImporter < PureImporter
 
         child_org.parent = parent_org
         child_org.save!
+      rescue StandardError => e
+        log_error(e, {
+                    child_org_id: child_org&.id,
+                    parent_org_id: parent_org&.id,
+                    item: item
+                  })
       end
       pbar.increment unless Rails.env.test?
+
+    rescue StandardError => e
+      log_error(e, {
+                  organizations: organizations
+                })
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   def page_size

@@ -35,4 +35,12 @@ class PureImporter
                               headers: { 'api-key' => pure_api_key,
                                          'Accept' => 'application/json' }).to_s)
     end
+
+    def log_error(err, metadata)
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: err,
+        metadata: metadata
+      )
+    end
 end

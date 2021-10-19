@@ -15,10 +15,24 @@ class ScholarsphereImporter
             p.save!
           end
         end
+      rescue StandardError => e
+        log_error(e, {
+                    k: k,
+                    v: v,
+                    publication_id: p&.id
+                  })
       end
       pbar.increment unless Rails.env.test?
+    rescue StandardError => e
+      log_error(e, {
+                  k: k,
+                  v: v,
+                  matching_pub_ids: (binding.local_variable_get(:matching_pubs)&.map(&:id) rescue nil)
+                })
     end
     pbar.finish unless Rails.env.test?
+  rescue StandardError => e
+    log_error(e, {})
   end
 
   private
@@ -31,6 +45,14 @@ class ScholarsphereImporter
       @response ||= HTTParty.get(
         "#{Rails.application.config.x.scholarsphere['SS4_ENDPOINT']}dois",
         headers: { 'X-API-KEY' => Rails.application.config.x.scholarsphere['SS_CLIENT_KEY'] }
+      )
+    end
+
+    def log_error(err, metadata)
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: err,
+        metadata: metadata
       )
     end
 end
