@@ -43,7 +43,7 @@ gem 'activerecord-import'
 gem 'progressbar'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 1.4'
+gem 'rails_admin', '~> 2.2'
 
 gem 'rails_admin_toggleable'
 
@@ -66,9 +66,6 @@ gem 'swagger-blocks'
 
 # Include swagger-ui as a Raile engine
 gem 'swagger_ui_engine'
-
-# A Material Design theme for rails_admin
-gem 'rails_admin_material'
 
 # Bootstrap 4 ruby gem for Ruby on Rails
 gem 'bootstrap', '< 5.0'
@@ -123,7 +120,6 @@ group :development, :test do
   gem 'pry-byebug'
 
   # Default test framework
-  gem 'rspec-rails'
 
   # Generate fake test data
   gem 'ffaker'
@@ -150,6 +146,10 @@ group :development do
 
   # Useful recipes for generalizing deployment behavior
   gem 'capistrano-helpers'
+
+  # net-ssh requires for ed25519 support
+  gem 'bcrypt_pbkdf'
+  gem 'ed25519'
 end
 
 group :test do
@@ -159,6 +159,8 @@ group :test do
   gem 'factory_bot_rails'
   gem 'launchy'
   gem 'rails-controller-testing'
+  gem 'rspec-its'
+  gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 5.0'
   gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later

@@ -15,15 +15,38 @@ describe UserProfile do
                        ai_teaching_interests: 'test teaching interests',
                        ai_research_interests: 'test research interests' }
 
+  it { is_expected.to delegate_method(:active?).to(:user) }
   it { is_expected.to delegate_method(:id).to(:user) }
   it { is_expected.to delegate_method(:name).to(:user) }
   it { is_expected.to delegate_method(:office_location).to(:user) }
   it { is_expected.to delegate_method(:office_phone_number).to(:user) }
-  it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
-  it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
-  it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
   it { is_expected.to delegate_method(:orcid_identifier).to(:user) }
   it { is_expected.to delegate_method(:organization_name).to(:user) }
+  it { is_expected.to delegate_method(:pure_profile_url).to(:user) }
+  it { is_expected.to delegate_method(:scopus_h_index).to(:user) }
+  it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
+
+  describe '::new' do
+    before { allow(user).to receive(:update_psu_identity) }
+
+    context 'when the user has data from the identity management service' do
+      let(:user) { build(:user, :with_psu_identity) }
+
+      it 'does NOT update their identity' do
+        described_class.new(user)
+        expect(user).not_to have_received(:update_psu_identity)
+      end
+    end
+
+    context 'when the user has not updated their identity data' do
+      let(:user) { build(:user) }
+
+      it 'updates their identity' do
+        described_class.new(user)
+        expect(user).to have_received(:update_psu_identity)
+      end
+    end
+  end
 
   describe '#title' do
     it "returns the given user's title from Activity Insight" do

@@ -19,20 +19,18 @@ class AuthorshipDecorator < SimpleDelegator
   end
 
   def open_access_status_icon
-    if preferred_open_access_url.blank?
-      if scholarsphere_upload_pending?
-        'hourglass-half'
-      elsif scholarsphere_upload_failed?
-        'exclamation-circle'
-      else
-        if open_access_waived?
-          'lock'
-        else
-          'question'
-        end
-      end
+    return 'circle-o-notch' unless published?
+
+    return 'unlock-alt' if preferred_open_access_url.present?
+
+    if scholarsphere_upload_pending?
+      'hourglass-half'
+    elsif scholarsphere_upload_failed?
+      'exclamation-circle'
+    elsif open_access_waived?
+      'lock'
     else
-      'unlock-alt'
+      'question'
     end
   end
 
@@ -49,7 +47,7 @@ class AuthorshipDecorator < SimpleDelegator
     end
 
     def profile_management_pub_title
-      if no_open_access_information? && is_journal_article?
+      if no_open_access_information? && is_journal_article? && published?
         view_context.link_to title, view_context.edit_open_access_publication_path(publication)
       else
         title

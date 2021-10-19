@@ -35,7 +35,13 @@ module RailsAdmin
               if @object.save
                 @auditing_adapter&.update_object(@object, @abstract_model, _current_user, changes)
                 respond_to do |format|
-                  format.html { redirect_to_on_success }
+                  format.html do
+                    if @object.is_a? OpenAccessLocation
+                      redirect_to show_path(id: @object.id)
+                    else
+                      redirect_to_on_success
+                    end
+                  end
                   format.js { render json: { id: @object.id.to_s, label: @model_config.with(object: @object).object_label } }
                 end
               else

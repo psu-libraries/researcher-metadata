@@ -83,5 +83,38 @@ FactoryBot.define do
         create_list(:user_performance, evaluator.performances_count, user: user)
       end
     end
+
+    trait :with_psu_identity do
+      psu_identity do
+        {
+          data: {
+            userid: webaccess_id,
+            givenName: 'Test',
+            familyName: 'User',
+            affiliation: ['FACULTY']
+          }
+        }
+      end
+      psu_identity_updated_at { Time.zone.now }
+    end
+
+    trait :with_psu_member_affiliation do
+      psu_identity do
+        {
+          data: {
+            userid: webaccess_id,
+            givenName: 'Test',
+            familyName: 'User',
+            affiliation: ['MEMBER']
+          }
+        }
+      end
+      psu_identity_updated_at { Time.zone.now }
+    end
+
+    trait :with_inactive_psu_identity do
+      psu_identity { nil }
+      psu_identity_updated_at { Time.zone.now }
+    end
   end
 end

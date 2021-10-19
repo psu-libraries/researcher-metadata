@@ -4,6 +4,7 @@ require 'integration/integration_spec_helper'
 
 describe 'Profile page', type: :feature do
   let!(:user) { create :user,
+                       :with_psu_identity,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
                        last_name: 'Testuser',
@@ -131,153 +132,166 @@ describe 'Profile page', type: :feature do
 
     create :researcher_fund, grant: grant1, user: user
     create :researcher_fund, grant: grant2, user: user
-
-    visit profile_path(webaccess_id: 'abc123')
   end
 
-  it 'shows the profile layout' do
-    expect(page).to have_link '2019 The Pennsylvania State University'
-  end
+  context 'when the profile is active' do
+    before { visit profile_path(webaccess_id: 'abc123') }
 
-  it 'shows the name of the requested user' do
-    expect(page).to have_content 'Bob Testuser'
-  end
+    it 'shows the profile layout' do
+      expect(page).to have_link '2019 The Pennsylvania State University'
+    end
 
-  it "shows the name of the requested user's organization" do
-    expect(page).to have_content 'Test Organization'
-  end
+    it 'shows the name of the requested user' do
+      expect(page).to have_content 'Bob Testuser'
+    end
 
-  it 'shows the office location for the requested user' do
-    expect(page).to have_content '123 Office Building'
-  end
+    it "shows the name of the requested user's organization" do
+      expect(page).to have_content 'Test Organization'
+    end
 
-  it 'shows the office phone number for the requested user' do
-    expect(page).to have_content '(123) 456-7890'
-  end
+    it 'shows the office location for the requested user' do
+      expect(page).to have_content '123 Office Building'
+    end
 
-  it 'shows the email address for the requested user' do
-    expect(page).to have_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
-  end
+    it 'shows the office phone number for the requested user' do
+      expect(page).to have_content '(123) 456-7890'
+    end
 
-  it 'shows the H-index for the requested user' do
-    expect(page).to have_content 'Scopus H-index'
-    expect(page).to have_content '18'
-  end
+    it 'shows the email address for the requested user' do
+      expect(page).to have_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
+    end
 
-  it "shows the requested user's number of citations" do
-    expect(page).to have_content 'Scopus Citations'
-    expect(page).to have_content '22'
-  end
+    it 'shows the H-index for the requested user' do
+      expect(page).to have_content 'Scopus H-index'
+      expect(page).to have_content '18'
+    end
 
-  it "shows a link to the requested user's Pure profile" do
-    expect(page).to have_link 'Pure Profile', href: 'https://pennstate.pure.elsevier.com/en/persons/xyz789'
-  end
+    it "shows the requested user's number of citations" do
+      expect(page).to have_content 'Scopus Citations'
+      expect(page).to have_content '22'
+    end
 
-  it "shows the requested user's research interests in the sidebar" do
-    within '.research' do
-      expect(page).to have_content 'Research Interests'
-      expect(page).to have_content 'My interests for research'
+    it "shows a link to the requested user's Pure profile" do
+      expect(page).to have_link 'Pure Profile', href: 'https://pennstate.pure.elsevier.com/en/persons/xyz789'
+    end
+
+    it "shows the requested user's research interests in the sidebar" do
+      within '.research' do
+        expect(page).to have_content 'Research Interests'
+        expect(page).to have_content 'My interests for research'
+      end
+    end
+
+    it "shows the requested user's bio information in the Bio tab" do
+      within '#bio' do
+        expect(page).to have_content 'Biography'
+        expect(page).to have_content 'My bio information'
+      end
+    end
+
+    it "shows the requested user's research interests in the Bio tab" do
+      within '#bio' do
+        expect(page).to have_content 'Research Interests'
+        expect(page).to have_content 'My interests for research'
+      end
+    end
+
+    it "shows the requested user's teaching interests in the Bio tab" do
+      within '#bio' do
+        expect(page).to have_content 'Teaching Interests'
+        expect(page).to have_content 'My interests for teaching'
+      end
+    end
+
+    it "shows the requested user's education history in the Bio tab" do
+      within '#bio' do
+        expect(page).to have_content 'Education'
+        expect(page).to have_content 'PhD, Major 2 - Institution 2 - 2005'
+        expect(page).to have_content 'MS, Major 1 - Institution 1 - 2000'
+      end
+    end
+
+    it "shows the requested user's publications in the Publications tab" do
+      within '#publications' do
+        expect(page).to have_content 'Publications'
+        expect(page).to have_content 'First Publication, Journal 1, 2010'
+        expect(page).to have_content 'Second Publication, Journal 2, 2011'
+        expect(page).to have_link 'Second Publication', href: 'https://example.org/pubs/123.pdf'
+      end
+    end
+
+    it "shows the requested user's presentations in the Presentations tab" do
+      within '#presentations' do
+        expect(page).to have_content 'Presentations'
+        expect(page).to have_content 'First Presentation, Organization 1, Location 1'
+        expect(page).to have_content 'Second Presentation, Organization 2, Location 2'
+      end
+    end
+
+    it "shows the requested user's performances in the Performances tab" do
+      within '#performances' do
+        expect(page).to have_content 'Performances'
+        expect(page).to have_content 'First Performance, Location 1, 1/2/2018'
+        expect(page).to have_content 'Second Performance, Location 2, 1/2/2019'
+      end
+    end
+
+    it "shows the requested user's PhD advising roles in the Graduate Advising tab" do
+      within '#advising' do
+        expect(page).to have_content 'Graduate Advising'
+        expect(page).to have_content 'PhD Committees'
+        expect(page).to have_content 'Committee Chair for Another Author'
+        expect(page).to have_link 'Second Thesis'
+        expect(page).to have_content '1999'
+      end
+    end
+
+    it "shows the requested user's masters advising roles in the Graduate Advising tab" do
+      within '#advising' do
+        expect(page).to have_content 'Masters Committees'
+        expect(page).to have_content 'Committee Member for Anne Author'
+        expect(page).to have_link 'First Thesis'
+        expect(page).to have_content '1998'
+      end
+    end
+
+    it "shows the requested user's new stories in the News tab" do
+      within '#news' do
+        expect(page).to have_content 'News'
+        expect(page).to have_link 'First Story'
+        expect(page).to have_content '1/2/2016'
+        expect(page).to have_link 'Second Story'
+        expect(page).to have_content '3/4/2017'
+      end
+    end
+
+    it "shows the requested user's grants in the Grants tab" do
+      within '#grants' do
+        expect(page).to have_content 'Grants'
+        expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
+        expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
+      end
+    end
+
+    it "shows the requested user's other publications in the Others tab" do
+      within '#other-publications' do
+        expect(page).to have_content 'Books'
+        expect(page).not_to have_content 'Letters'
+        expect(page).to have_content 'Third Publication, Journal 3, 2013'
+        expect(page).to have_content 'Conference Proceedings'
+        expect(page).to have_content 'Fourth Publication, Journal 4, 2010'
+      end
     end
   end
 
-  it "shows the requested user's bio information in the Bio tab" do
-    within '#bio' do
-      expect(page).to have_content 'Biography'
-      expect(page).to have_content 'My bio information'
+  context 'when the profile is inactive' do
+    before do
+      user.update(psu_identity: nil)
+      visit profile_path(webaccess_id: 'abc123')
     end
-  end
 
-  it "shows the requested user's research interests in the Bio tab" do
-    within '#bio' do
-      expect(page).to have_content 'Research Interests'
-      expect(page).to have_content 'My interests for research'
-    end
-  end
-
-  it "shows the requested user's teaching interests in the Bio tab" do
-    within '#bio' do
-      expect(page).to have_content 'Teaching Interests'
-      expect(page).to have_content 'My interests for teaching'
-    end
-  end
-
-  it "shows the requested user's education history in the Bio tab" do
-    within '#bio' do
-      expect(page).to have_content 'Education'
-      expect(page).to have_content 'PhD, Major 2 - Institution 2 - 2005'
-      expect(page).to have_content 'MS, Major 1 - Institution 1 - 2000'
-    end
-  end
-
-  it "shows the requested user's publications in the Publications tab" do
-    within '#publications' do
-      expect(page).to have_content 'Publications'
-      expect(page).to have_content 'First Publication, Journal 1, 2010'
-      expect(page).to have_content 'Second Publication, Journal 2, 2011'
-      expect(page).to have_link 'Second Publication', href: 'https://example.org/pubs/123.pdf'
-    end
-  end
-
-  it "shows the requested user's presentations in the Presentations tab" do
-    within '#presentations' do
-      expect(page).to have_content 'Presentations'
-      expect(page).to have_content 'First Presentation, Organization 1, Location 1'
-      expect(page).to have_content 'Second Presentation, Organization 2, Location 2'
-    end
-  end
-
-  it "shows the requested user's performances in the Performances tab" do
-    within '#performances' do
-      expect(page).to have_content 'Performances'
-      expect(page).to have_content 'First Performance, Location 1, 1/2/2018'
-      expect(page).to have_content 'Second Performance, Location 2, 1/2/2019'
-    end
-  end
-
-  it "shows the requested user's PhD advising roles in the Graduate Advising tab" do
-    within '#advising' do
-      expect(page).to have_content 'Graduate Advising'
-      expect(page).to have_content 'PhD Committees'
-      expect(page).to have_content 'Committee Chair for Another Author'
-      expect(page).to have_link 'Second Thesis'
-      expect(page).to have_content '1999'
-    end
-  end
-
-  it "shows the requested user's masters advising roles in the Graduate Advising tab" do
-    within '#advising' do
-      expect(page).to have_content 'Masters Committees'
-      expect(page).to have_content 'Committee Member for Anne Author'
-      expect(page).to have_link 'First Thesis'
-      expect(page).to have_content '1998'
-    end
-  end
-
-  it "shows the requested user's new stories in the News tab" do
-    within '#news' do
-      expect(page).to have_content 'News'
-      expect(page).to have_link 'First Story'
-      expect(page).to have_content '1/2/2016'
-      expect(page).to have_link 'Second Story'
-      expect(page).to have_content '3/4/2017'
-    end
-  end
-
-  it "shows the requested user's grants in the Grants tab" do
-    within '#grants' do
-      expect(page).to have_content 'Grants'
-      expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
-      expect(page).to have_content 'Grant123, Agency 2, 1/2010 - 2/2015'
-    end
-  end
-
-  it "shows the requested user's other publications in the Others tab" do
-    within '#other-publications' do
-      expect(page).to have_content 'Books'
-      expect(page).not_to have_content 'Letters'
-      expect(page).to have_content 'Third Publication, Journal 3, 2013'
-      expect(page).to have_content 'Conference Proceedings'
-      expect(page).to have_content 'Fourth Publication, Journal 4, 2010'
+    it 'does NOT show the email' do
+      expect(page).not_to have_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
     end
   end
 end

@@ -986,7 +986,7 @@ describe ActivityInsightImporter do
                                     journal_title: 'Existing Journal',
                                     publisher_name: 'Existing Publisher',
                                     secondary_title: 'Existing Subtitle',
-                                    status: 'Existing Status',
+                                    status: 'In Press',
                                     volume: '111',
                                     issue: '222',
                                     edition: '333',
@@ -1049,7 +1049,7 @@ describe ActivityInsightImporter do
             expect(p2.journal_title).to eq 'Existing Journal'
             expect(p2.publisher_name).to eq 'Existing Publisher'
             expect(p2.secondary_title).to eq 'Existing Subtitle'
-            expect(p2.status).to eq 'Existing Status'
+            expect(p2.status).to eq 'In Press'
             expect(p2.volume).to eq '111'
             expect(p2.issue).to eq '222'
             expect(p2.edition).to eq '333'
@@ -2568,7 +2568,7 @@ describe ActivityInsightImporter do
                                       journal_title: 'Existing Journal',
                                       publisher_name: 'Existing Publisher',
                                       secondary_title: 'Existing Subtitle',
-                                      status: 'Existing Status',
+                                      status: 'In Press',
                                       volume: '111',
                                       issue: '222',
                                       edition: '333',
@@ -2631,7 +2631,7 @@ describe ActivityInsightImporter do
               expect(p2.journal_title).to eq 'Existing Journal'
               expect(p2.publisher_name).to eq 'Existing Publisher'
               expect(p2.secondary_title).to eq 'Existing Subtitle'
-              expect(p2.status).to eq 'Existing Status'
+              expect(p2.status).to eq 'In Press'
               expect(p2.volume).to eq '111'
               expect(p2.issue).to eq '222'
               expect(p2.edition).to eq '333'
@@ -4128,7 +4128,7 @@ describe ActivityInsightImporter do
                                       journal_title: 'Existing Journal',
                                       publisher_name: 'Existing Publisher',
                                       secondary_title: 'Existing Subtitle',
-                                      status: 'Existing Status',
+                                      status: 'In Press',
                                       volume: '111',
                                       issue: '222',
                                       edition: '333',
@@ -4191,7 +4191,7 @@ describe ActivityInsightImporter do
               expect(p2.journal_title).to eq 'Existing Journal'
               expect(p2.publisher_name).to eq 'Existing Publisher'
               expect(p2.secondary_title).to eq 'Existing Subtitle'
-              expect(p2.status).to eq 'Existing Status'
+              expect(p2.status).to eq 'In Press'
               expect(p2.volume).to eq '111'
               expect(p2.issue).to eq '222'
               expect(p2.edition).to eq '333'

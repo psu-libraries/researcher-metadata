@@ -7,6 +7,9 @@ class Publication < ApplicationRecord
 
   include Swagger::Blocks
 
+  PUBLISHED_STATUS = 'Published'
+  IN_PRESS_STATUS = 'In Press'
+
   def self.publication_types
     [
       'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
@@ -59,9 +62,11 @@ class Publication < ApplicationRecord
 
   has_one :publisher, through: :journal
 
-  validates :publication_type, :title, presence: true
+  validates :publication_type, :title, :status, presence: true
   validates :publication_type, inclusion: { in: publication_types }
+  validates :status, inclusion: { in: [PUBLISHED_STATUS, IN_PRESS_STATUS] }
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
+
   validate :doi_format_is_valid
 
   scope :visible, -> { where visible: true }
@@ -74,7 +79,7 @@ class Publication < ApplicationRecord
             .distinct(:id)
         }
 
-  scope :subject_to_open_access_policy, -> { journal_article.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { journal_article.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
 
@@ -82,9 +87,12 @@ class Publication < ApplicationRecord
 
   scope :non_journal_article, -> { where("publications.publication_type !~* 'Journal Article'") }
 
+  scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
+  accepts_nested_attributes_for :open_access_locations, allow_destroy: true
 
   def self.find_by_wos_pub(pub)
     by_doi = pub.doi ? where(doi: pub.doi) : Publication.none
@@ -98,6 +106,10 @@ class Publication < ApplicationRecord
             "%#{pub.title}%",
             pub.publication_date.try(:year))
     end
+  end
+
+  def status=(new_status)
+    write_attribute(:status, StatusMapper.map(new_status.to_s))
   end
 
   def confirmed_authorships
@@ -434,6 +446,7 @@ class Publication < ApplicationRecord
       field(:doi) { label 'DOI' }
       field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
       field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
+      field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -584,6 +597,10 @@ class Publication < ApplicationRecord
 
   def preferred_publisher_name
     preferred_journal_info_policy.publisher_name
+  end
+
+  def published?
+    status == PUBLISHED_STATUS
   end
 
   private

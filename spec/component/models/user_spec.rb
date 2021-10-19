@@ -49,6 +49,7 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:uid).of_type(:string) }
   it { is_expected.to have_db_column(:provider).of_type(:string) }
   it { is_expected.to have_db_column(:psu_identity).of_type(:jsonb) }
+  it { is_expected.to have_db_column(:psu_identity_updated_at).of_type(:datetime) }
 
   it { is_expected.to have_db_index(:activity_insight_identifier).unique(true) }
   it { is_expected.to have_db_index(:pure_uuid).unique(true) }
@@ -624,6 +625,18 @@ describe User, type: :model do
                                publication: ou_pub_14,
                                confirmed: true }
 
+    # filtered out due to the publication having a status that is not 'Published'
+    let!(:other_user_15) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_1' }
+    let!(:ou_mem_15) { create :user_organization_membership,
+                              user: other_user_15,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil }
+    let!(:ou_pub_15) { create :publication, published_on: Date.new(2020, 7, 1), status: 'In Press' }
+    let!(:ou_auth_15) { create :authorship,
+                               user: other_user_15,
+                               publication: ou_pub_15,
+                               confirmed: true }
+
     it 'returns only users who should currently receive an email reminder about open access publications' do
       expect(described_class.needs_open_access_notification).to match_array [email_user_1,
                                                                              email_user_2,
@@ -782,7 +795,17 @@ describe User, type: :model do
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago }
 
-    it "returns the user's recent publications that they've been notified about before that don't have any associated open access information" do
+    # Filtered out due to not being published
+    let!(:other_pub_16) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 status: 'In Press' }
+    let!(:o_auth_16) { create :authorship,
+                              user: user,
+                              publication: other_pub_16,
+                              confirmed: true,
+                              open_access_notification_sent_at: 1.month.ago }
+
+    it "returns the user's recent publications that they've been notified about before that don't have any associated open access information and have a 'Published' status" do
       expect(user.old_potential_open_access_publications).to match_array [potential_pub_1,
                                                                           potential_pub_2]
     end
@@ -927,7 +950,17 @@ describe User, type: :model do
                               publication: other_pub_15,
                               confirmed: true }
 
-    it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information" do
+    # Filtered out due to not being published
+    let!(:other_pub_16) { create :publication,
+                                 published_on: Date.new(2020, 7, 1),
+                                 status: 'In Press' }
+    let!(:o_auth_16) { create :authorship,
+                              user: user,
+                              publication: other_pub_16,
+                              confirmed: true,
+                              open_access_notification_sent_at: nil }
+
+    it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information and have a 'Published' status" do
       expect(user.new_potential_open_access_publications).to match_array [potential_pub_1,
                                                                           potential_pub_2]
     end
@@ -1530,33 +1563,65 @@ describe User, type: :model do
         expect {
           user.update_psu_identity
         }.to change { user.psu_identity.present? }.from(false).to(true)
+          .and change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
       end
     end
 
     context 'when the user does NOT exist at Penn State' do
       let(:user) { create(:user, webaccess_id: 'idonotexist') }
 
-      it 'does not update the record' do
+      it 'does not update the psu_identity attribute' do
         expect {
           user.update_psu_identity
         }.not_to change(user, :psu_identity)
+      end
+
+      it 'updates the psu_identity timestamp' do
+        expect {
+          user.update_psu_identity
+        }.to change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
       end
     end
   end
 
   describe '#psu_identity', :vcr do
+    subject { user.psu_identity }
+
     context 'when identity data is present' do
       let(:user) { create(:user, webaccess_id: 'agw13') }
 
       before { user.update_psu_identity }
 
-      it { expect(user.psu_identity).to be_a(PsuIdentity::SearchService::Person) }
+      it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
+      its(:surname) { is_expected.to eq('Wead') }
+      its(:given_name) { is_expected.to eq('Adam') }
+      its(:user_id) { is_expected.to eq('agw13') }
     end
 
     context 'when identity data is not present' do
       let(:user) { create(:user) }
 
       it { expect(user.psu_identity).to be_nil }
+    end
+  end
+
+  describe '#active?' do
+    subject { user }
+
+    context 'when their identity data is present' do
+      let(:user) { build(:user, :with_psu_identity) }
+
+      it { is_expected.to be_active }
+    end
+
+    context 'when their identity data is not present' do
+      it { is_expected.not_to be_active }
+    end
+
+    context 'when the affliation is only member' do
+      let(:user) { build(:user, :with_psu_member_affiliation) }
+
+      it { is_expected.not_to be_active }
     end
   end
 end

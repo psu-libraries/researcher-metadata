@@ -10,7 +10,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
                        journal_title: 'journal1',
                        publisher_name: 'publisher1',
                        published_on: Date.new(2018, 8, 13),
-                       status: 'status1',
+                       status: 'Published',
                        volume: 'volume1',
                        issue: 'issue1',
                        edition: 'edition1',
@@ -26,7 +26,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
                        journal_title: 'journal2',
                        publisher_name: 'publisher2',
                        published_on: Date.new(2018, 8, 14),
-                       status: 'status2',
+                       status: 'Published',
                        volume: 'volume2',
                        issue: 'issue2',
                        edition: 'edition2',
@@ -118,8 +118,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
         end
 
         it 'shows the statuses of the publications in the group' do
-          expect(page).to have_content 'status1'
-          expect(page).to have_content 'status2'
+          expect(page).to have_content('Published').twice
         end
 
         it 'shows the volumes of the publications in the group' do

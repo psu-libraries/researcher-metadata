@@ -19,8 +19,8 @@ RailsAdmin.config do |config|
   end
   config.current_user_method(&:current_user)
 
-  # == Cancan ==
-  config.authorize_with :cancan
+  ## == CancanCan ==
+  config.authorize_with :cancancan
 
   ## == Pundit ==
   # config.authorize_with :pundit
@@ -70,7 +70,8 @@ RailsAdmin.config do |config|
             :User,
             :APIToken,
             :ExternalPublicationWaiver,
-            :InternalPublicationWaiver]
+            :InternalPublicationWaiver,
+            :OpenAccessLocation]
     end
     export
     bulk_delete do
@@ -86,10 +87,16 @@ RailsAdmin.config do |config|
             :Performance,
             :APIToken,
             :ExternalPublicationWaiver,
-            :InternalPublicationWaiver]
+            :InternalPublicationWaiver,
+            :OpenAccessLocation]
     end
     delete do
-      only [:Publication, :User, :APIToken, :ExternalPublicationWaiver, :ImporterErrorLog]
+      only [:APIToken,
+            :ExternalPublicationWaiver,
+            :ImporterErrorLog,
+            :OpenAccessLocation,
+            :Publication,
+            :User]
     end
     index_publications_by_organization do
       only [:Publication]

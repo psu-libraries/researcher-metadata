@@ -29,6 +29,9 @@ class OpenAccessNotifier
 
     def send_notification_to_user(user)
       user_profile = UserProfile.new(user)
+
+      return unless user_profile.active?
+
       begin
         FacultyNotificationsMailer.open_access_reminder(user_profile,
                                                         user.old_potential_open_access_publications,

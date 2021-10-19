@@ -1,12 +1,17 @@
-$brand-primary: #2e2d3e;
 $brand-info: #497295;
 $link-color: #337ab7;
 $nav-pills-active-link-hover-bg: #497295;
 $btn-primary-bg: #497295;
 $btn-primary-border: #497295;
-$btn-info-bg: #dfdfdf;
-$btn-info-border: #dfdfdf;
-$fg-nav-tabs-active: #777;
+$white: #fff;
+
+.label-info a {
+  color: $white;
+}
+
+body.rails_admin .form-horizontal .ui-autocomplete-input {
+  width: 100%;
+}
 
 .grouped-publications {
 

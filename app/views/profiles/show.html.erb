@@ -37,34 +37,36 @@
           <div class="profile-info">
             <table>
               <tbody>
-              <% if @profile.office_location %>
-                <tr>
-                  <td><%= image_tag('address.png', alt: "Address") %></td>
-                  <td><%= @profile.office_location %></td>
-                </tr>
-              <% end %>
-              <% if @profile.office_phone_number %>
-                <tr>
-                  <td><%= image_tag('phone.png', alt: "Phone") %></td>
-                  <td><%= @profile.office_phone_number %></td>
-                </tr>
-              <% end %>
-              <tr>
-                <td><%= image_tag('email.png', alt: "Email") %></td>
-                <td><a href="mailto:<%= @profile.email %>"><%= @profile.email %></a></td>
-              </tr>
-              <% if @profile.scopus_h_index %>
-                <tr>
-                  <td>Scopus H-index</td>
-                  <td><%= @profile.scopus_h_index %></td>
-                </tr>
-              <% end %>
-              <% if @profile.total_scopus_citations > 0 %>
-                <tr>
-                  <td>Scopus Citations</td>
-                  <td><%= @profile.total_scopus_citations %></td>
-                </tr>
-              <% end %>
+                <% if @profile.office_location %>
+                  <tr>
+                    <td><%= image_tag('address.png', alt: "Address") %></td>
+                    <td><%= @profile.office_location %></td>
+                  </tr>
+                <% end %>
+                <% if @profile.office_phone_number %>
+                  <tr>
+                    <td><%= image_tag('phone.png', alt: "Phone") %></td>
+                    <td><%= @profile.office_phone_number %></td>
+                  </tr>
+                <% end %>
+                <% if @profile.active? %>
+                  <tr>
+                    <td><%= image_tag('email.png', alt: "Email") %></td>
+                    <td><a class="" href="mailto:<%= @profile.email %>"><%= @profile.email %></a></td>
+                  </tr>
+                <% end %>
+                <% if @profile.scopus_h_index %>
+                  <tr>
+                    <td>Scopus H-index</td>
+                    <td><%= @profile.scopus_h_index %></td>
+                  </tr>
+                <% end %>
+                <% if @profile.total_scopus_citations > 0 %>
+                  <tr>
+                    <td>Scopus Citations</td>
+                    <td><%= @profile.total_scopus_citations %></td>
+                  </tr>
+                <% end %>
               </tbody>
             </table>
             <% if @profile.pure_profile_url %>
