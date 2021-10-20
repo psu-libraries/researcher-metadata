@@ -4,29 +4,21 @@ require 'component/component_spec_helper'
 
 describe OpenAccessUrlsMigrationService do
   before do
-    5.times { create :publication, open_access_url: 'example.com' }
-    5.times { create :publication, scholarsphere_open_access_url: 'scholarsphere.edu' }
-    5.times { create :publication, user_submitted_open_access_url: 'user_example.com' }
-    5.times do
-      create :publication, user_submitted_open_access_url: 'user_example.com', open_access_url: 'example.com'
-    end
-    5.times do
-      create :publication, scholarsphere_open_access_url: 'scholarsphere.edu', open_access_url: 'example.com'
-    end
-    5.times do
-      create :publication, user_submitted_open_access_url: 'user_example.com',
-             scholarsphere_open_access_url: 'scholarsphere.edu'
-    end
-    5.times do
-      create :publication, user_submitted_open_access_url: 'user_example.com',
-             scholarsphere_open_access_url: 'scholarsphere.edu',
-             open_access_url: 'example.com'
-    end
+    create_list :publication, 5, open_access_url: 'example.com'
+    create_list :publication, 5, scholarsphere_open_access_url: 'scholarsphere.edu'
+    create_list :publication, 5, user_submitted_open_access_url: 'user_example.com'
+    create_list :publication, 5, user_submitted_open_access_url: 'user_example.com', open_access_url: 'example.com'
+    create_list :publication, 5, scholarsphere_open_access_url: 'scholarsphere.edu', open_access_url: 'example.com'
+    create_list :publication, 5, user_submitted_open_access_url: 'user_example.com',
+                                 scholarsphere_open_access_url: 'scholarsphere.edu'
+    create_list :publication, 5, user_submitted_open_access_url: 'user_example.com',
+                                 scholarsphere_open_access_url: 'scholarsphere.edu',
+                                 open_access_url: 'example.com'
   end
 
   describe '#call' do
     it 'creates OpenAccessLocation records from Publication open access url data' do
-      expect{ described_class.call }.to change{ OpenAccessLocation.count }.by 60
+      expect { described_class.call }.to change(OpenAccessLocation, :count).by 60
     end
 
     it 'creates OpenAccessLocation records with proper attributes' do
@@ -45,7 +37,7 @@ describe OpenAccessUrlsMigrationService do
 
     it 'is idempotent' do
       described_class.call
-      expect{ described_class.call }.not_to change{ OpenAccessLocation.count }
+      expect { described_class.call }.not_to change(OpenAccessLocation, :count)
     end
   end
 end
