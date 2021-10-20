@@ -41,6 +41,8 @@ class User < ApplicationRecord
   has_many :external_publication_waivers
   has_many :contributor_names
 
+  scope :active, -> { where.not(psu_identity: nil).where("psu_identity->'data'->>'affiliation' != '[\"MEMBER\"]'") }
+
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
   def self.from_omniauth(auth)

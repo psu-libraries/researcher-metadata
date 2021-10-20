@@ -17,6 +17,10 @@ describe 'Admin user list', type: :feature do
         expect(page).to have_content 'List of Users'
       end
 
+      it 'has a tab for "Active" users' do
+        expect(page).to have_link('Active', href: '/admin/user?model_name=user&scope=active')
+      end
+
       it 'shows information about each user' do
         expect(page).to have_content user1.id
         expect(page).to have_content 'Bob'
