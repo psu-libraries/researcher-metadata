@@ -113,22 +113,12 @@ gem 'daemons'
 gem 'psu_identity', github: 'psu-libraries/psu_identity', branch: 'main'
 
 group :development, :test do
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug', platform: :mri
-
-  # Enables binding.pry for debugging
-  gem 'pry-byebug'
-
-  # Default test framework
-
-  # Generate fake test data
-  gem 'ffaker'
-
-  # Automatically test your rails API against its OpenAPI (Swagger) description
-  # of end-points, models, and query parameters
   gem 'apivore'
-
+  gem 'byebug', platform: :mri
+  gem 'factory_bot_rails'
+  gem 'ffaker'
   gem 'niftany'
+  gem 'pry-byebug'
 end
 
 group :development do
@@ -156,7 +146,6 @@ group :test do
   gem 'capybara', '>= 2.15', '< 4.0'
   gem 'capybara-email'
   gem 'database_cleaner'
-  gem 'factory_bot_rails'
   gem 'launchy'
   gem 'rails-controller-testing'
   gem 'rspec-its'

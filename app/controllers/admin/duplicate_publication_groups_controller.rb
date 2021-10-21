@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CustomAdmin::DuplicatePublicationGroupsController < RailsAdmin::ApplicationController
+class Admin::DuplicatePublicationGroupsController < RailsAdmin::ApplicationController
   def delete
     group = DuplicatePublicationGroup.find(params[:id])
 

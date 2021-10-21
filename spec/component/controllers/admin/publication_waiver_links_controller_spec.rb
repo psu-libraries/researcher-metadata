@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe CustomAdmin::PublicationWaiverLinksController, type: :controller do
+describe Admin::PublicationWaiverLinksController, type: :controller do
   let!(:waiver) { create :external_publication_waiver, user: user, reason_for_waiver: 'The reason' }
   let!(:pub) { create :publication }
   let!(:user) { create :user }
