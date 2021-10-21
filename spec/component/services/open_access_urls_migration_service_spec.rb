@@ -27,11 +27,11 @@ describe OpenAccessUrlsMigrationService do
       user_oa_url_pub = create :publication, user_submitted_open_access_url: 'user_oa_url.com'
 
       described_class.call
-      expect(OpenAccessLocation.find_by(url: oa_url_pub.open_access_url).source).to eq 'Open Access Button'
+      expect(OpenAccessLocation.find_by(url: oa_url_pub.open_access_url).source).to eq Source::OPEN_ACCESS_BUTTON
       expect(OpenAccessLocation.find_by(url: oa_url_pub.open_access_url).publication_id).to eq oa_url_pub.id
-      expect(OpenAccessLocation.find_by(url: ss_oa_url_pub.scholarsphere_open_access_url).source).to eq 'ScholarSphere'
+      expect(OpenAccessLocation.find_by(url: ss_oa_url_pub.scholarsphere_open_access_url).source).to eq Source::SCHOLARSPHERE
       expect(OpenAccessLocation.find_by(url: ss_oa_url_pub.scholarsphere_open_access_url).publication_id).to eq ss_oa_url_pub.id
-      expect(OpenAccessLocation.find_by(url: user_oa_url_pub.user_submitted_open_access_url).source).to eq 'User'
+      expect(OpenAccessLocation.find_by(url: user_oa_url_pub.user_submitted_open_access_url).source).to eq Source::USER
       expect(OpenAccessLocation.find_by(url: user_oa_url_pub.user_submitted_open_access_url).publication_id).to eq user_oa_url_pub.id
     end
 
