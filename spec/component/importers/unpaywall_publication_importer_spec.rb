@@ -61,7 +61,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
           importer.import_all
-          oal = pub.open_access_locations.find_by(source: 'Unpaywall')
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
         end
 
@@ -80,7 +80,7 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:oal) { create :open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: 'Unpaywall' }
+                            source: Source::UNPAYWALL }
 
         it 'does not create any new open access locations' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -127,7 +127,7 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:oal) { create :open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: 'Unpaywall' }
+                            source: Source::UNPAYWALL }
 
         it 'removes the existing open access location' do
           expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
@@ -283,7 +283,7 @@ describe UnpaywallPublicationImporter, :vcr do
           let!(:oal) { create :open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: 'Unpaywall' }
+                              source: Source::UNPAYWALL }
 
           it 'does not create any new open access locations' do
             expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
@@ -315,7 +315,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
           importer.import_new
-          oal = pub.open_access_locations.find_by(source: 'Unpaywall')
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
         end
 
@@ -360,7 +360,7 @@ describe UnpaywallPublicationImporter, :vcr do
           let!(:oal) { create :open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: 'Unpaywall' }
+                              source: Source::UNPAYWALL }
 
           it 'removes the existing open access location' do
             expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1

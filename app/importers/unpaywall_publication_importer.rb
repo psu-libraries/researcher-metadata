@@ -50,14 +50,14 @@ class UnpaywallPublicationImporter
       unpaywall_json = JSON.parse(get_pub(find_url))
 
       best_oa_location = unpaywall_json.dig('best_oa_location', 'url')
-      existing_oa_location = publication.open_access_locations.find_by(source: 'Unpaywall')
+      existing_oa_location = publication.open_access_locations.find_by(source: Source::UNPAYWALL)
       oa_status = unpaywall_json['oa_status']
 
       if best_oa_location
         if existing_oa_location
           existing_oa_location.update!(url: best_oa_location)
         else
-          publication.open_access_locations.create!(source: 'Unpaywall', url: best_oa_location)
+          publication.open_access_locations.create!(source: Source::UNPAYWALL, url: best_oa_location)
         end
       else
         existing_oa_location.try(:destroy)
