@@ -2,29 +2,25 @@
 
 class UnpaywallPublicationImporter
   def import_all
-    unless Rails.env.test?
-      pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
-                                total: all_pubs.count)
-    end
+    pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
+                              total: all_pubs.count)
 
     all_pubs.find_each do |p|
       query_unpaywall_for(p)
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   end
 
   def import_new
-    unless Rails.env.test?
-      pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
-                                total: new_pubs.count)
-    end
+    pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
+                              total: new_pubs.count)
 
     new_pubs.find_each do |p|
       query_unpaywall_for(p)
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   end
 
   private
@@ -37,13 +33,12 @@ class UnpaywallPublicationImporter
       all_pubs.where(unpaywall_last_checked_at: nil)
     end
 
-    def get_pub(url)
-      attempts = 0
+    def get_pub(url, attempts = 1)
       HTTParty.get(url).to_s
     rescue Net::ReadTimeout, Net::OpenTimeout
+      attempts += 1
       if attempts <= 10
-        attempts += 1
-        retry
+        get_pub(url, attempts)
       else
         raise
       end
@@ -69,14 +64,12 @@ class UnpaywallPublicationImporter
       end
 
       publication.open_access_status = oa_status
-      publication.unpaywall_last_checked_at = Time.current
+      publication.unpaywall_last_checked_at = Time.zone.now
       publication.save!
 
       # Unpaywall asks that users limit requests to no more than 100,000 per day.
       # Limiting to 1 request per second caps us at 86,400 requests per day.
-      unless Rails.env.test?
-        sleep 1
-      end
+      sleep 1 unless Rails.env.test?
     rescue StandardError => e
       ImporterErrorLog.log_error(
         importer_class: self.class,

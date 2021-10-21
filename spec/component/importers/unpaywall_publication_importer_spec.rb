@@ -5,12 +5,6 @@ require 'component/component_spec_helper'
 describe UnpaywallPublicationImporter, :vcr do
   let(:importer) { described_class.new }
 
-  let(:now) { Time.new(2019, 11, 13, 0, 0, 0) }
-
-  before do
-    allow(Time).to receive(:current).and_return(now)
-  end
-
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create :publication, doi: nil, open_access_status: nil }
@@ -73,7 +67,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates Unpaywall check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to eq now
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
@@ -99,7 +93,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates Unpaywall check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to eq now
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
@@ -120,7 +114,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates Unpaywall check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to eq now
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
@@ -142,7 +136,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates Unpaywall check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to eq now
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
@@ -181,6 +175,37 @@ describe UnpaywallPublicationImporter, :vcr do
         importer.import_all
         expect(ImporterErrorLog).to have_received(:log_error).twice
       end
+    end
+  end
+
+  context 'when the API request times out too many times' do
+    let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+
+    before do
+      allow(HTTParty).to receive(:get).and_raise(Net::ReadTimeout)
+      allow(ImporterErrorLog).to receive(:log_error)
+    end
+
+    it 'logs the error' do
+      importer.import_all
+
+      expect(ImporterErrorLog)
+        .to have_received(:log_error)
+        .with(
+          importer_class: described_class,
+          error: an_instance_of(Net::ReadTimeout),
+          metadata: {
+            publication_id: pub.id,
+            publication_doi_url_path: pub.doi_url_path,
+            unpaywall_json: ''
+          }
+        )
+    end
+
+    it 'continues with the import' do
+      create :publication, doi: 'https://doi.org/10.000/nodata'
+      importer.import_all
+      expect(ImporterErrorLog).to have_received(:log_error).twice
     end
   end
 
@@ -236,7 +261,7 @@ describe UnpaywallPublicationImporter, :vcr do
                           open_access_status: 'green' }
 
       context 'when the publication has been checked in Unpaywall before' do
-        let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
+        let(:last_check) { Time.zone.yesterday }
 
         context 'when the publication has no open access locations' do
           it 'does not create any open access locations for the publication' do
@@ -245,7 +270,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
           it 'does not update the Unpaywall check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.unpaywall_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.unpaywall_last_checked_at).to eq Time.zone.yesterday
           end
 
           it 'does not update the open access status on the publication' do
@@ -271,7 +296,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
           it "does not update the publication's Unpaywall check timestamp" do
             importer.import_new
-            expect(pub.reload.unpaywall_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.unpaywall_last_checked_at).to eq Time.zone.yesterday
           end
 
           it 'does not update the open access status on the publication' do
@@ -296,7 +321,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates Unpaywall check timestamp on the publication' do
           importer.import_new
-          expect(pub.reload.unpaywall_last_checked_at).to eq now
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
@@ -313,7 +338,7 @@ describe UnpaywallPublicationImporter, :vcr do
                           open_access_status: nil }
 
       context 'when the publication has been checked in Unpaywall before' do
-        let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
+        let(:last_check) { Time.zone.yesterday }
 
         context 'when the publication has no open access locations' do
           it 'does not create any new open access locations' do
@@ -322,7 +347,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
           it 'does not update the Unpaywall check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.unpaywall_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.unpaywall_last_checked_at).to eq Time.zone.yesterday
           end
 
           it 'does not update the open access status on the publication' do
@@ -344,7 +369,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
           it "does not update the publication's Unpaywall check timestamp" do
             importer.import_new
-            expect(pub.reload.unpaywall_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.unpaywall_last_checked_at).to eq Time.zone.yesterday
           end
 
           it 'does not update the open access status on the publication' do
@@ -364,7 +389,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
           it 'updates Unpaywall check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.unpaywall_last_checked_at).to eq now
+            expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
           it 'does not update the open access status on the publication' do
