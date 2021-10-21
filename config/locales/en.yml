@@ -94,3 +94,10 @@ en:
   omniauth:
     login_error: "There was an error while attempting to log in to your account. Please contact RMD support for assistance."
     user_not_found: "You do not have a user account in the Researcher Metadata Database. Please contact RMD support if you believe that this is incorrect."
+  source:
+    user: 'User'
+    scholarsphere: 'ScholarSphere'
+    open_access_button: 'Open Access Button'
+    unpaywall: 'Unpaywall'
+    dickinson_ideas: 'Dickinson Law IDEAS Repo'
+    psu_law_elibrary: 'Penn State Law eLibrary Repo'

@@ -67,7 +67,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'assigns the metadata from Open Access Button to the new open access location' do
           importer.import_all
-          oal = pub.open_access_locations.find_by(source: 'Open Access Button')
+          oal = pub.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
           expect(oal.url).to eq 'http://openaccessexample.org/publications/pub1.pdf'
         end
 
@@ -81,7 +81,7 @@ describe OpenAccessButtonPublicationImporter do
         let!(:oal) { create :open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: 'Open Access Button' }
+                            source: Source::OPEN_ACCESS_BUTTON}
 
         it 'does not create any new open access locations' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -123,7 +123,7 @@ describe OpenAccessButtonPublicationImporter do
         let!(:oal) { create :open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: 'Open Access Button' }
+                            source: Source::OPEN_ACCESS_BUTTON}
 
         it 'removes the existing open access location' do
           expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
@@ -237,7 +237,7 @@ describe OpenAccessButtonPublicationImporter do
           let!(:oal) { create :open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: 'Open Access Button' }
+                              source: Source::OPEN_ACCESS_BUTTON}
 
           it 'does not create any new open access locations' do
             expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
@@ -264,7 +264,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'assigns the metadata from Open Access Button to the new open access location' do
           importer.import_new
-          oal = pub.open_access_locations.find_by(source: 'Open Access Button')
+          oal = pub.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
           expect(oal.url).to eq 'http://openaccessexample.org/publications/pub1.pdf'
         end
 
@@ -303,7 +303,7 @@ describe OpenAccessButtonPublicationImporter do
           let!(:oal) { create :open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: 'Open Access Button' }
+                              source: Source::OPEN_ACCESS_BUTTON}
 
           it 'removes the existing open access location' do
             expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1

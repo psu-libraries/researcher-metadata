@@ -9,7 +9,7 @@ class ScholarsphereImporter
       matching_pubs.each do |p|
         v.each do |ss_oa_id|
           ss_oa_url = "#{ResearcherMetadata::Application.scholarsphere_base_uri}/resources/#{ss_oa_id}"
-          p.open_access_locations.find_or_create_by(source: 'ScholarSphere', url: ss_oa_url)
+          p.open_access_locations.find_or_create_by(source: Source::SCHOLARSPHERE, url: ss_oa_url)
         end
       rescue StandardError => e
         log_error(e, {
