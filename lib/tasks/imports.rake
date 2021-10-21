@@ -29,9 +29,19 @@ namespace :import do
     OpenAccessButtonPublicationImporter.new.import_all
   end
 
-  desc 'Import Open Access Button publication URLs for publications that have been checked before'
+  desc 'Import Open Access Button publication URLs for publications that have not been checked before'
   task new_open_access_button: :environment do
     OpenAccessButtonPublicationImporter.new.import_new
+  end
+
+  desc 'Import Unpaywall publication metadata'
+  task unpaywall: :environment do
+    UnpaywallPublicationImporter.new.import_all
+  end
+
+  desc 'Import Unpaywall publication metadata for publications that have not been checked before'
+  task new_unpaywall: :environment do
+    UnpaywallPublicationImporter.new.import_new
   end
 
   desc 'Import ScholarSphere publication URLs'
@@ -139,6 +149,7 @@ namespace :import do
     ).call
 
     OpenAccessButtonPublicationImporter.new.import_all
+    UnpaywallPublicationImporter.new.import_all
     ScholarsphereImporter.new.call
   end
 end
