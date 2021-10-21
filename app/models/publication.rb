@@ -571,6 +571,10 @@ class Publication < ApplicationRecord
         amp.waivers_to_destroy.each(&:destroy)
       end
 
+      new_oa_locations = all_pubs.map(&:open_access_locations).flatten.uniq { |oal| [oal.source, oal.url] }
+      open_access_locations = []
+      open_access_locations << new_oa_locations
+
       pubs_to_delete.each do |p|
         p.non_duplicate_groups.each do |ndg|
           ndg.publications << self
