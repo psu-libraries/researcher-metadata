@@ -4,252 +4,95 @@ require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/preferred_open_access_policy'
+require_relative '../../../app/models/source'
 
 describe PreferredOpenAccessPolicy do
   let(:policy) { described_class.new(pub) }
-  let(:pub) { double 'publication',
-                     scholarsphere_open_access_url: ssoau,
-                     open_access_url: oau,
-                     user_submitted_open_access_url: usoau }
+  let(:pub) { double 'publication', open_access_locations: open_access_locations }
 
-  let(:oau) { nil }
-  let(:ssoau) { nil }
-  let(:usoau) { nil }
+  let(:open_access_locations) { [] }
 
   describe '#url' do
-    context 'when the publication has an open access URL' do
-      let(:oau) { 'A URL' }
+    context 'when there are blank urls' do
+      let(:open_access_locations) { [
+        double('OAL', source: Source::SCHOLARSPHERE, url: '', is_best: false),
+        double('OAL', source: Source::OPEN_ACCESS_BUTTON, url: nil, is_best: false),
+        double('OAL', source: Source::USER, url: 'USER url', is_best: false)
+      ]}
 
-      context 'when the publication has a user-submitted open access URL' do
-        let(:usoau) { 'User URL' }
-
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
-      end
-
-      context "when the publication's user-submitted open access URL is blank" do
-        let(:usoau) { '' }
-
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
-      end
-
-      context 'when the publication does not have a user-submitted open access URL' do
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns the open access URL' do
-            expect(policy.url).to eq 'A URL'
-          end
-        end
+      it 'considers only OALs with URLs' do
+        expect(policy.url).to eq 'USER url'
       end
     end
 
-    context "when the publication's open access URL is blank" do
-      let(:oau) { '' }
+    context 'when multiple locations are present' do
+      context 'when ScholarSphere is present' do
+        let(:open_access_locations) { [
+          double('OAL', source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false),
+          double('OAL', source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false),
+          double('OAL', source: Source::USER, url: 'USER url', is_best: false)
+        ]}
 
-      context 'when the publication has a user-submitted open access URL' do
-        let(:usoau) { 'User URL' }
-
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns the user-submitted open access URL' do
-            expect(policy.url).to eq 'User URL'
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns the user-submitted open access URL' do
-            expect(policy.url).to eq 'User URL'
-          end
+        it 'is picked' do
+          expect(policy.url).to eq 'SCHOLARSPHERE url'
         end
       end
 
-      context "when the publication's user-submitted open access URL is blank" do
-        let(:usoau) { '' }
+      context 'when OAB is present' do
+        let(:open_access_locations) { [
+          double('OAL', source: Source::UNPAYWALL, url: 'UNPAYWALL url', is_best: false),
+          double('OAL', source: Source::USER, url: 'USER url', is_best: false),
+          double('OAL', source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false)
+        ]}
 
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
+        it 'is picked' do
+          expect(policy.url).to eq 'OPEN_ACCESS_BUTTON url'
         end
       end
 
-      context 'when the publication does not have a user-submitted open access URL' do
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
+      context 'when an unknown source is present' do
+        let(:open_access_locations) { [
+          double('OAL', source: Source::USER, url: 'USER url', is_best: false),
+          double('OAL', source: 'wacky', url: 'wacky url', is_best: false)
+        ]}
 
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
-        end
-      end
-    end
-
-    context 'when the publication does not have an open access URL' do
-      context 'when the publication has a user-submitted open access URL' do
-        let(:usoau) { 'User URL' }
-
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns the user-submitted open access URL' do
-            expect(policy.url).to eq 'User URL'
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns the user-submitted open access URL' do
-            expect(policy.url).to eq 'User URL'
-          end
+        it 'is the least preferred option' do
+          expect(policy.url).to eq 'USER url'
         end
       end
 
-      context "when the publication's user-submitted open access URL is blank" do
-        let(:usoau) { '' }
+      context 'when there are multiple choices from the same source' do
+        context 'when one is_best' do
+          let(:open_access_locations) { [
+            double('OAL', source: Source::UNPAYWALL, url: 'not best url', is_best: false),
+            double('OAL', source: Source::UNPAYWALL, url: 'best url', is_best: true)
+          ]}
 
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
+          it 'picks the one where is_best is true' do
+            expect(policy.url).to eq 'best url'
           end
         end
 
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
+        context 'when none are marked is_best' do
+          let(:open_access_locations) { [
+            double('OAL', source: Source::UNPAYWALL, url: 'not best url', is_best: false),
+            double('OAL', source: Source::UNPAYWALL, url: 'also not best url', is_best: false)
+          ]}
 
-          it 'returns nil' do
-            expect(policy.url).to be_nil
+          it 'randomly picks one' do
+            expect(policy.url).to be_present
           end
         end
 
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
-        end
-      end
+        context 'when the OALs with is_best are mixed in with more preferred sources' do
+          let(:open_access_locations) { [
+            double('OAL', source: Source::UNPAYWALL, url: 'UNPAYWALL not best url', is_best: false),
+            double('OAL', source: Source::UNPAYWALL, url: 'UNPAYWALL best url', is_best: true),
+            double('OAL', source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false)
+          ]}
 
-      context 'when the publication does not have a user-submitted open access URL' do
-        context 'when the publication has a Scholarsphere open access URL' do
-          let(:ssoau) { 'Scholarsphere URL' }
-
-          it 'returns the Scholarsphere open access URL' do
-            expect(policy.url).to eq 'Scholarsphere URL'
-          end
-        end
-
-        context "when the publication's Scholarsphere open access URL is blank" do
-          let(:ssoau) { '' }
-
-          it 'returns nil' do
-            expect(policy.url).to be_nil
-          end
-        end
-
-        context 'when the publication does not have a Scholarsphere open access URL' do
-          it 'returns nil' do
-            expect(policy.url).to be_nil
+          it 'ranks the source higher than is_best' do
+            expect(policy.url).to eq 'SCHOLARSPHERE url'
           end
         end
       end
