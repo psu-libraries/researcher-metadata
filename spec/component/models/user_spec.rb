@@ -104,6 +104,16 @@ describe User, type: :model do
     end
   end
 
+  describe 'active scope' do
+    let!(:active_user) { create(:user, :with_psu_identity) }
+    let!(:member_user) { create(:user, :with_psu_member_affiliation) }
+    let!(:inactve_user) { create(:user, :with_inactive_psu_identity) }
+
+    it 'limits to active users' do
+      expect(described_class.active.map(&:webaccess_id)).to contain_exactly(active_user.webaccess_id)
+    end
+  end
+
   it { is_expected.to accept_nested_attributes_for(:user_organization_memberships).allow_destroy(true) }
 
   describe 'saving a value for webaccess_id' do

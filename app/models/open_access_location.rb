@@ -1,30 +1,33 @@
 # frozen_string_literal: true
 
 class OpenAccessLocation < ApplicationRecord
-  def self.sources
-    [
-      'User',
-      'ScholarSphere',
-      'Open Access Button',
-      'Unpaywall',
-      'Dickinson Law IDEAS Repo',
-      'Penn State Law eLibrary Repo'
-    ]
-  end
+  enum source: to_enum_hash([
+                              Source::USER,
+                              Source::SCHOLARSPHERE,
+                              Source::OPEN_ACCESS_BUTTON,
+                              Source::UNPAYWALL,
+                              Source::DICKINSON_IDEAS,
+                              Source::PSU_LAW_ELIBRARY
+                            ]),
+       _prefix: :source
 
   belongs_to :publication, inverse_of: :open_access_locations
 
   validates :publication, :source, :url, presence: true
-  validates :source, inclusion: { in: sources }
+
+  def source
+    @source ||= (Source.new(read_attribute(:source)) if read_attribute(:source).present?)
+  end
 
   def name
-    "#{url} (#{source})"
+    "#{url} (#{source&.display})"
   end
 
   rails_admin do
     show do
       include_all_fields
 
+      field(:source) { pretty_value { Source.new(value).display } }
       field(:oa_date) { label 'OA date' }
       field(:url) do
         label 'URL'
@@ -44,7 +47,7 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || 'User']
+          [value || Source::USER].index_by { |str| Source.new(str).display }
         end
       end
     end
@@ -53,7 +56,7 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || 'User']
+          [value || Source::USER].index_by { |str| Source.new(str).display }
         end
       end
     end

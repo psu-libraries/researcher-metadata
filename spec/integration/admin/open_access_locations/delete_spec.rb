@@ -5,7 +5,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'deleting an open access location via the admin interface', type: :feature do
   let!(:oal) { create :open_access_location,
-                      source: 'Open Access Button',
+                      source: Source::OPEN_ACCESS_BUTTON,
                       url: 'https://example.com/test',
                       publication: pub }
   let(:pub) { create :publication }

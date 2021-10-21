@@ -85,6 +85,11 @@ namespace :import do
     LDAPImporter.new.call
   end
 
+  desc 'Import PSU identity data'
+  task psu_identity: :environment do
+    PsuIdentityImporter.new.call
+  end
+
   desc 'Import publication data from Penn State Law School OAI repositories'
   task law_school_publications: :environment do
     PSULawSchoolPublicationImporter.new.call

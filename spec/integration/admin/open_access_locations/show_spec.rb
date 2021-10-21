@@ -9,7 +9,7 @@ describe 'Admin open access location detail page', type: :feature do
                       host_type: 'publisher',
                       license: 'cc-by-nc',
                       oa_date: Date.new(2020, 5, 3),
-                      source: 'Unpaywall',
+                      source: Source::UNPAYWALL,
                       source_updated_at: Time.new(2021, 10, 7, 18, 7, 0, '+00:00'),
                       url: 'https://nature.com/articles/testpub123',
                       landing_page_url: 'https://nature.com/articles/testpub123/info',

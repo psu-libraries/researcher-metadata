@@ -138,7 +138,7 @@ describe PSUDickinsonPublicationImporter do
       expect(auth3.author_number).to eq 2
       expect(auth3.confirmed).to eq false
 
-      oal = pub.open_access_locations.find_by(source: 'Dickinson Law IDEAS Repo')
+      oal = pub.open_access_locations.find_by(source: Source::DICKINSON_IDEAS)
       expect(oal.url).to eq 'https://example.com/article'
     end
 
