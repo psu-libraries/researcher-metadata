@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe CustomAdmin::DuplicatePublicationGroupsController, type: :controller do
+describe Admin::DuplicatePublicationGroupsController, type: :controller do
   let!(:group) { create :duplicate_publication_group }
 
   describe '#delete' do

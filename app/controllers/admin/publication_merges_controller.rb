@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class CustomAdmin::PublicationMergesController < RailsAdmin::ApplicationController
+class Admin::PublicationMergesController < RailsAdmin::ApplicationController
   def create
     group = DuplicatePublicationGroup.find(params[:duplicate_publication_group_id])
 
@@ -19,7 +19,12 @@ class CustomAdmin::PublicationMergesController < RailsAdmin::ApplicationControll
         pub_ids.each do |pub_id|
           known_non_dup_ids << Publication.find(pub_id).non_duplicate_group_ids
         end
-        hashed_kwn_non_dup = known_non_dup_ids.flatten.reduce(Hash.new(0)) { |total, e| total[e] += 1; total }
+        hashed_kwn_non_dup = known_non_dup_ids
+          .flatten
+          .reduce(Hash.new(0)) do |total, e|
+            total[e] += 1
+            total
+          end
         ids_to_delete = hashed_kwn_non_dup.map { |k, v| k if v > 1 }.compact
         ids_to_delete.each do |id|
           NonDuplicatePublicationGroup.destroy(id)

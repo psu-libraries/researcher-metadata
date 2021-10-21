@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe CustomAdmin::DuplicatePublicationGroupingsController, type: :controller do
+describe Admin::DuplicatePublicationGroupingsController, type: :controller do
   let!(:user) { create :user }
 
   describe '#create' do
