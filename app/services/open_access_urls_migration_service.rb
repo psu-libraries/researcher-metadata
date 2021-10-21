@@ -2,7 +2,7 @@
 
 class OpenAccessUrlsMigrationService
   def self.call
-    Publication.all.each do |pub|
+    Publication.find_each do |pub|
       if pub.open_access_url
         OpenAccessLocation.find_or_create_by(source: 'Open Access Button',
                                              url: pub.open_access_url,
