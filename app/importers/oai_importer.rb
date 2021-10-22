@@ -24,7 +24,6 @@ class OAIImporter
             p.abstract = rr.description
             p.published_on = rr.date
             p.publisher_name = rr.publisher
-            p.open_access_url = rr.url
             p.publication_type = 'Journal Article'
             p.status = 'Published'
             p.save!
@@ -63,6 +62,12 @@ class OAIImporter
               end
             end
 
+            oal = OpenAccessLocation.new
+            oal.publication = p
+            oal.url = rr.url
+            oal.source = location_source # TODO return to import_source once import sources are refactored
+            oal.save!
+
             DuplicatePublicationGroup.group_duplicates_of(p)
 
             if p.reload.duplicate_group
@@ -85,6 +90,14 @@ class OAIImporter
     end
 
     def import_source
+      raise NotImplementedError.new('This method should be defined in a subclass')
+    end
+
+    # TODO this is a temporary method so we can refactor the sources used in
+    # OpenAccessLocation and PublicationImport separately. Once botha are refactored
+    # to use the Source object, then we should remove this method and only
+    # use #import_source
+    def location_source
       raise NotImplementedError.new('This method should be defined in a subclass')
     end
 

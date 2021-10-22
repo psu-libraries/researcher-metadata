@@ -11,6 +11,14 @@ class PSUDickinsonPublicationImporter < OAIImporter
       'Dickinson Law IDEAS Repo'
     end
 
+    # TODO this is a temporary method so we can refactor the sources used in
+    # OpenAccessLocation and PublicationImport separately. Once botha are refactored
+    # to use the Source object, then we should remove this method and only
+    # use #import_source
+    def location_source
+      Source::DICKINSON_IDEAS
+    end
+
     def repo_url
       'https://ideas.dickinsonlaw.psu.edu/do/oai'
     end

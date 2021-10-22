@@ -21,27 +21,41 @@ describe ScholarsphereImporter do
       allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'
     end
 
-    context 'when a publication exists in the database that matches an incoming DOI' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
-                          scholarsphere_open_access_url: url }
-      let!(:auth1) { create :authorship, publication: pub }
-      let!(:auth2) { create :authorship, publication: pub }
-      let(:url) { '' }
+    context 'when a publications exist in the database that match an incoming DOI' do
+      let!(:pub1) { create :publication,
+                           doi: 'https://doi.org/10.1109/5.771073' }
+      let!(:pub2) { create :publication,
+                           doi: 'https://doi.org/10.1109/5.771073' }
 
-      context 'when the publication already has a ScholarSphere open access URL' do
-        let(:url) { 'a_url' }
+      context 'when one of the publications already has an open access location that matches a URL from ScholarSphere' do
+        let!(:oal) { create :open_access_location,
+                            source: Source::SCHOLARSPHERE,
+                            publication: pub1,
+                            url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc'}
 
-        it 'does not update the URL' do
-          importer.call
-          expect(pub.reload.scholarsphere_open_access_url).to eq 'a_url'
-        end
-      end
+        it 'creates new open access locations only for new URLs from ScholarSphere for each publication' do
+          expect { importer.call }.to change(OpenAccessLocation, :count).by 5
+          expect(pub1.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/0b591fea-7bef-4e06-9554-6417bf2c040e'
+                 )).not_to be_nil
+          expect(pub1.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/21dd75c1-65c8-49ba-959a-9443ab27dc16'
+                 )).not_to be_nil
 
-      context 'when the publication does not already have a ScholarSphere open access URL' do
-        it "updates the publication with the first ScholarSphere URL listed for the publication's DOI" do
-          importer.call
-          expect(pub.reload.scholarsphere_open_access_url).to eq 'https://scholarsphere.test/resources/cd1542ae-087d-4f32-b920-5a7faaab63ac'
+          expect(pub2.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/0b591fea-7bef-4e06-9554-6417bf2c040e'
+                 )).not_to be_nil
+          expect(pub2.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc'
+                 )).not_to be_nil
+          expect(pub2.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/21dd75c1-65c8-49ba-959a-9443ab27dc16'
+                 )).not_to be_nil
         end
       end
     end

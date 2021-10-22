@@ -8,10 +8,12 @@ Rails.application.routes.draw do
     match 'sign_out', to: 'devise/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
   end
 
-  post 'admin/user/:user_id/duplicate_publication_groupings' => 'custom_admin/duplicate_publication_groupings#create', as: :admin_user_duplicate_publication_groupings
-  post 'admin/duplicate_publication_group/:duplicate_publication_group_id/merge' => 'custom_admin/publication_merges#create', as: :admin_duplicate_publication_group_merge
-  delete 'admin/duplicate_publication_group/:id' => 'custom_admin/duplicate_publication_groups#delete', as: :admin_duplicate_publication_group
-  post 'admin/external_publication_waivers/:external_publication_waiver_id/link' => 'custom_admin/publication_waiver_links#create', as: :admin_publication_waiver_link
+  namespace :admin do
+    post 'user/:user_id/duplicate_publication_groupings' => 'duplicate_publication_groupings#create', as: :user_duplicate_publication_groupings
+    post 'duplicate_publication_group/:duplicate_publication_group_id/merge' => 'publication_merges#create', as: :duplicate_publication_group_merge
+    delete 'duplicate_publication_group/:id' => 'duplicate_publication_groups#delete', as: :duplicate_publication_group
+    post 'external_publication_waivers/:external_publication_waiver_id/link' => 'publication_waiver_links#create', as: :publication_waiver_link
+  end
 
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources

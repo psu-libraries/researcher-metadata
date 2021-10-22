@@ -74,12 +74,12 @@ describe 'Admin publication detail page', type: :feature do
 
   let!(:oal1) { create :open_access_location,
                        publication: pub,
-                       source: 'User',
+                       source: Source::USER,
                        url: 'https://example.com/oal1' }
 
   let!(:oal2) { create :open_access_location,
                        publication: pub,
-                       source: 'ScholarSphere',
+                       source: Source::SCHOLARSPHERE,
                        url: 'https://scholarsphere.psu.edu/oal2' }
 
   let!(:journal) { create :journal,

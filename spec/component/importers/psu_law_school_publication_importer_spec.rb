@@ -74,6 +74,10 @@ describe PSULawSchoolPublicationImporter do
       expect { importer.call }.to change(ContributorName, :count).by 2
     end
 
+    it "creates new open access locations for records that are importable and that don't already exist" do
+      expect { importer.call }.to change(OpenAccessLocation, :count).by 1
+    end
+
     it 'is idempotent in terms of creating publication imports' do
       importer.call
       expect { importer.call }.not_to change(PublicationImport, :count)
@@ -94,6 +98,11 @@ describe PSULawSchoolPublicationImporter do
       expect { importer.call }.not_to change(ContributorName, :count)
     end
 
+    it 'is idempotent in terms of creating open access locations' do
+      importer.call
+      expect { importer.call }.not_to change(OpenAccessLocation, :count)
+    end
+
     it 'saves the correct metadata' do
       importer.call
       import = PublicationImport.find_by(source: 'Penn State Law eLibrary Repo',
@@ -104,7 +113,6 @@ describe PSULawSchoolPublicationImporter do
       expect(pub.abstract).to eq 'a description of the article'
       expect(pub.published_on).to eq Date.new(2020, 1, 1)
       expect(pub.publisher_name).to eq 'The Publisher'
-      expect(pub.open_access_url).to eq 'https://example.com/article'
       expect(pub.publication_type).to eq 'Journal Article'
       expect(pub.status).to eq 'Published'
       expect(pub.journal_title).to eq 'The Source'
@@ -129,6 +137,9 @@ describe PSULawSchoolPublicationImporter do
       auth3 = pub.authorships.find_by(user: u3)
       expect(auth3.author_number).to eq 2
       expect(auth3.confirmed).to eq false
+
+      oal = pub.open_access_locations.find_by(source: Source::PSU_LAW_ELIBRARY)
+      expect(oal.url).to eq 'https://example.com/article'
     end
 
     it 'groups duplicates of new publication records' do

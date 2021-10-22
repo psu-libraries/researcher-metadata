@@ -29,9 +29,19 @@ namespace :import do
     OpenAccessButtonPublicationImporter.new.import_all
   end
 
-  desc 'Import Open Access Button publication URLs for publications that have been checked before'
+  desc 'Import Open Access Button publication URLs for publications that have not been checked before'
   task new_open_access_button: :environment do
     OpenAccessButtonPublicationImporter.new.import_new
+  end
+
+  desc 'Import Unpaywall publication metadata'
+  task unpaywall: :environment do
+    UnpaywallPublicationImporter.new.import_all
+  end
+
+  desc 'Import Unpaywall publication metadata for publications that have not been checked before'
+  task new_unpaywall: :environment do
+    UnpaywallPublicationImporter.new.import_new
   end
 
   desc 'Import ScholarSphere publication URLs'
@@ -85,6 +95,11 @@ namespace :import do
     LDAPImporter.new.call
   end
 
+  desc 'Import PSU identity data'
+  task psu_identity: :environment do
+    PsuIdentityImporter.new.call
+  end
+
   desc 'Import publication data from Penn State Law School OAI repositories'
   task law_school_publications: :environment do
     PSULawSchoolPublicationImporter.new.call
@@ -134,6 +149,7 @@ namespace :import do
     ).call
 
     OpenAccessButtonPublicationImporter.new.import_all
+    UnpaywallPublicationImporter.new.import_all
     ScholarsphereImporter.new.call
   end
 end

@@ -1,0 +1,84 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.unpaywall.org/v2/10.1001/jamadermatol.2015.3091?email=openaccess@psu.edu
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Server:
+      - gunicorn
+      Date:
+      - Wed, 20 Oct 2021 17:02:22 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '865'
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE, PATCH
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, x-requested-with
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: ASCII-8BIT
+      string: '{"doi": "10.1001/jamadermatol.2015.3091", "doi_url": "https://doi.org/10.1001/jamadermatol.2015.3091",
+        "title": "Laboratory Monitoring During Isotretinoin Therapy for Acne", "genre":
+        "journal-article", "is_paratext": false, "published_date": "2016-01-01", "year":
+        2016, "journal_name": "JAMA Dermatology", "journal_issns": "2168-6068", "journal_issn_l":
+        "2168-6068", "journal_is_oa": false, "journal_is_in_doaj": false, "publisher":
+        "American Medical Association (AMA)", "is_oa": true, "oa_status": "bronze",
+        "has_repository_copy": false, "best_oa_location": {"updated": "2019-12-26T19:24:13.434842",
+        "url": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_pdf": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_landing_page": "https://doi.org/10.1001/jamadermatol.2015.3091",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}, "first_oa_location":
+        {"updated": "2019-12-26T19:24:13.434842", "url": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_pdf": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_landing_page": "https://doi.org/10.1001/jamadermatol.2015.3091",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}, "oa_locations": [{"updated":
+        "2019-12-26T19:24:13.434842", "url": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_pdf": "https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf",
+        "url_for_landing_page": "https://doi.org/10.1001/jamadermatol.2015.3091",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}], "oa_locations_embargoed":
+        [], "updated": "2021-01-13T23:12:16.677687", "data_standard": 2, "z_authors":
+        [{"given": "Young H.", "family": "Lee", "sequence": "first", "affiliation":
+        [{"name": "Division of Dermatology, Sharp Rees-Stealy Medical Group, San Diego,
+        California"}]}, {"given": "Thomas P.", "family": "Scharnitz", "sequence":
+        "additional", "affiliation": [{"name": "Penn State College of Medicine, Hershey,
+        Pennsylvania"}]}, {"given": "Joshua", "family": "Muscat", "sequence": "additional",
+        "affiliation": [{"name": "Department of Public Health Sciences, Penn State
+        Milton S. Hershey Medical Center, Hershey, Pennsylvania"}]}, {"given": "Allshine",
+        "family": "Chen", "sequence": "additional", "affiliation": [{"name": "Department
+        of Public Health Sciences, Penn State Milton S. Hershey Medical Center, Hershey,
+        Pennsylvania"}]}, {"given": "Gaytri", "family": "Gupta-Elera", "sequence":
+        "additional", "affiliation": [{"name": "Penn State College of Medicine, Hershey,
+        Pennsylvania"}]}, {"given": "Joslyn S.", "family": "Kirby", "sequence": "additional",
+        "affiliation": [{"name": "Department of Dermatology, Penn State Milton S.
+        Hershey Medical Center, Hershey, Pennsylvania"}]}]}'
+  recorded_at: Wed, 20 Oct 2021 17:02:22 GMT
+recorded_with: VCR 6.0.0

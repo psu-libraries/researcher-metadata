@@ -19,7 +19,7 @@ http_interactions:
       message: Not Found
     headers:
       Date:
-      - Tue, 12 Oct 2021 20:30:55 GMT
+      - Thu, 21 Oct 2021 17:01:54 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
@@ -29,21 +29,21 @@ http_interactions:
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=26h41zrUa5LYIiep615TYenqvetVzm7oFFliho85.search-service-7fb749d9-tcl7b;
+      - JSESSIONID=2ZKzVykBEcL72t32G_r39p_aMuEqZWKHyv5rl_65.search-service-7fb749d9-vwt2r;
         path=/search-service
       X-Request-Id:
-      - cd3f319b8be777ae6e435c93ca05946e
+      - a5baaa9a57dbccb1f9613dc7c253e05d
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - 11ff3248-0898-425f-a060-6327a849fee0
+      - a827876d-5f22-45e0-87e9-7617b3c2a0e4
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
       string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
         matched the input userid: idonotexist"],"link":null}'
-  recorded_at: Tue, 12 Oct 2021 20:30:56 GMT
+  recorded_at: Thu, 21 Oct 2021 17:01:54 GMT
 recorded_with: VCR 6.0.0

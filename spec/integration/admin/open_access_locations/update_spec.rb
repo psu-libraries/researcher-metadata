@@ -5,7 +5,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating an open access location via the admin interface', type: :feature do
   let!(:oal) { create :open_access_location,
-                      source: 'Open Access Button',
+                      source: Source::OPEN_ACCESS_BUTTON,
                       url: 'https://example.com/test' }
 
   context 'when the current user is an admin' do
@@ -23,7 +23,7 @@ describe 'updating an open access location via the admin interface', type: :feat
       it 'shows the correct options for the Source field', js: true do
         find('.dropdown-toggle').click
         within '#ui-id-1' do
-          expect(page).to have_content 'Open Access Button'
+          expect(page).to have_content Source.new(Source::OPEN_ACCESS_BUTTON).display
           expect(page).not_to have_content 'User'
         end
       end
@@ -40,7 +40,7 @@ describe 'updating an open access location via the admin interface', type: :feat
       end
 
       it "does not update the open access location record's source" do
-        expect(oal.reload.source).to eq 'Open Access Button'
+        expect(oal.reload.source).to eq Source::OPEN_ACCESS_BUTTON
       end
 
       it 'redirects back to the detail view of the open access location' do

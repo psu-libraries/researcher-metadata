@@ -27,28 +27,44 @@ describe 'the open_access_locations table', type: :model do
 end
 
 describe OpenAccessLocation, type: :model do
+  subject(:oal) { described_class.new }
+
   it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:open_access_locations) }
   end
 
-  describe 'validations' do
-    it { is_expected.to validate_presence_of(:publication) }
-    it { is_expected.to validate_presence_of(:source) }
-    it { is_expected.to validate_presence_of(:url) }
-
-    it { is_expected.to validate_inclusion_of(:source).in_array(described_class.sources) }
+  specify do
+    expect(oal).to define_enum_for(:source)
+      .backed_by_column_of_type(:string)
+      .with_values(
+        user: 'user',
+        scholarsphere: 'scholarsphere',
+        open_access_button: 'open_access_button',
+        unpaywall: 'unpaywall',
+        dickinson_ideas: 'dickinson_ideas',
+        psu_law_elibrary: 'psu_law_elibrary'
+      )
+      .with_prefix(:source)
   end
 
-  describe '.sources' do
-    it 'returns an array of the possible sources of open access location data' do
-      expect(described_class.sources).to eq ['User', 'ScholarSphere', 'Open Access Button', 'Unpaywall']
+  describe 'validations' do
+    it { is_expected.to validate_presence_of(:publication) }
+    it { is_expected.not_to allow_value(nil).for(:source) }
+    it { is_expected.to validate_presence_of(:url) }
+  end
+
+  describe '#source' do
+    it 'is a Source value object' do
+      oal = described_class.new(source: Source::USER)
+      expect(oal.source).to be_a(Source)
+      expect(oal.source.to_s).to eq Source::USER
     end
   end
 
   describe '#name' do
-    let(:oal) { described_class.new(url: 'https://example.com/article', source: 'User') }
+    let(:oal) { described_class.new(url: 'https://example.com/article', source: Source::USER) }
 
     it "returns a string that includes the location's URL and source" do
       expect(oal.name).to eq 'https://example.com/article (User)'
