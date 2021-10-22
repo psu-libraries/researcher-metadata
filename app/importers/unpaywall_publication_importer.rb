@@ -33,21 +33,10 @@ class UnpaywallPublicationImporter
       all_pubs.where(unpaywall_last_checked_at: nil)
     end
 
-    def get_pub(url, attempts = 1)
-      HTTParty.get(url).to_s
-    rescue Net::ReadTimeout, Net::OpenTimeout
-      attempts += 1
-      if attempts <= 10
-        get_pub(url, attempts)
-      else
-        raise
-      end
-    end
-
     def query_unpaywall_for(publication)
       unpaywall_json = nil
       find_url = URI::DEFAULT_PARSER.escape("https://api.unpaywall.org/v2/#{publication.doi_url_path}?email=openaccess@psu.edu")
-      unpaywall_json = JSON.parse(get_pub(find_url))
+      unpaywall_json = JSON.parse(HttpService.get(find_url))
 
       best_oa_location = unpaywall_json.dig('best_oa_location', 'url')
       existing_oa_location = publication.open_access_locations.find_by(source: Source::UNPAYWALL)

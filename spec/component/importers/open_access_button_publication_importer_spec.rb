@@ -5,12 +5,6 @@ require 'component/component_spec_helper'
 describe OpenAccessButtonPublicationImporter do
   let(:importer) { described_class.new }
 
-  let(:now) { Time.new(2019, 11, 13, 0, 0, 0) }
-
-  before do
-    allow(Time).to receive(:current).and_return(now)
-  end
-
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create :publication, doi: nil }
@@ -73,7 +67,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'updates Open Access Button check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.open_access_button_last_checked_at).to eq now
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
 
@@ -94,7 +88,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'updates Open Access Button check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.open_access_button_last_checked_at).to eq now
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
     end
@@ -115,7 +109,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'updates Open Access Button check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.open_access_button_last_checked_at).to eq now
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
 
@@ -132,7 +126,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'updates Open Access Button check timestamp on the publication' do
           importer.import_all
-          expect(pub.reload.open_access_button_last_checked_at).to eq now
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
     end
@@ -153,6 +147,37 @@ describe OpenAccessButtonPublicationImporter do
           .with(
             importer_class: described_class,
             error: an_instance_of(RuntimeError),
+            metadata: {
+              publication_id: pub.id,
+              publication_doi_url_path: pub.doi_url_path,
+              oab_json: ''
+            }
+          )
+      end
+
+      it 'continues with the import' do
+        create :publication, doi: 'https://doi.org/10.000/nodata'
+        importer.import_all
+        expect(ImporterErrorLog).to have_received(:log_error).twice
+      end
+    end
+
+    context 'when the API request times out too many times' do
+      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+
+      before do
+        allow(HTTParty).to receive(:get).and_raise(Net::ReadTimeout)
+        allow(ImporterErrorLog).to receive(:log_error)
+      end
+
+      it 'logs the error' do
+        importer.import_all
+
+        expect(ImporterErrorLog)
+          .to have_received(:log_error)
+          .with(
+            importer_class: described_class,
+            error: an_instance_of(Net::ReadTimeout),
             metadata: {
               publication_id: pub.id,
               publication_doi_url_path: pub.doi_url_path,
@@ -220,7 +245,7 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       context 'when the publication has been checked in Open Access Button before' do
-        let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
+        let(:last_check) { Time.zone.yesterday }
 
         context 'when the publication has no open access locations' do
           it 'does not create any open access locations for the publication' do
@@ -229,7 +254,7 @@ describe OpenAccessButtonPublicationImporter do
 
           it 'does not update the Open Access Button check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.open_access_button_last_checked_at).to eq Time.zone.yesterday
           end
         end
 
@@ -250,7 +275,7 @@ describe OpenAccessButtonPublicationImporter do
 
           it "does not update the publication's Open Access Button check timestamp" do
             importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.open_access_button_last_checked_at).to eq Time.zone.yesterday
           end
         end
       end
@@ -270,7 +295,7 @@ describe OpenAccessButtonPublicationImporter do
 
         it 'updates Open Access Button check timestamp on the publication' do
           importer.import_new
-          expect(pub.reload.open_access_button_last_checked_at).to eq now
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
     end
@@ -286,7 +311,7 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       context 'when the publication has been checked in Open Access Button before' do
-        let(:last_check) { Time.new(2021, 1, 1, 0, 0, 0) }
+        let(:last_check) { Time.zone.yesterday }
 
         context 'when the publication has no open access locations' do
           it 'does not create any new open access locations' do
@@ -295,7 +320,7 @@ describe OpenAccessButtonPublicationImporter do
 
           it 'does not update the Open Access Button check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.open_access_button_last_checked_at).to eq Time.zone.yesterday
           end
         end
 
@@ -312,7 +337,7 @@ describe OpenAccessButtonPublicationImporter do
 
           it "does not update the publication's Open Access Button check timestamp" do
             importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq Time.new(2021, 1, 1, 0, 0, 0)
+            expect(pub.reload.open_access_button_last_checked_at).to eq Time.zone.yesterday
           end
         end
       end
@@ -327,7 +352,7 @@ describe OpenAccessButtonPublicationImporter do
 
           it 'updates Open Access Button check timestamp on the publication' do
             importer.import_new
-            expect(pub.reload.open_access_button_last_checked_at).to eq now
+            expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
         end
       end
