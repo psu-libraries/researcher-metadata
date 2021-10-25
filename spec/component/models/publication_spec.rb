@@ -1559,7 +1559,6 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue RuntimeError; end
-
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -2065,7 +2064,6 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -2221,7 +2219,6 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -2375,7 +2372,6 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-
         expect(pub1.open_access_locations.count).to eq 1
       end
 
@@ -2529,7 +2525,6 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-
         expect(pub1.open_access_locations.count).to eq 1
       end
 
