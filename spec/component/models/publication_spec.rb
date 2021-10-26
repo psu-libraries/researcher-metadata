@@ -1375,9 +1375,10 @@ describe Publication, type: :model do
     end
 
     it 'transfers unique open access locations from publications to the publication' do
+      expect(pub1.open_access_locations.count).to eq 1
       pub1.merge!([pub2, pub3, pub4])
 
-      expect(pub1.reload.open_access_locations.count).to eq 3
+      expect(pub1.reload.open_access_locations.count).to eq 4
     end
 
     context 'when the publication is not visible' do
@@ -1734,9 +1735,10 @@ describe Publication, type: :model do
       end
 
       it 'transfers unique open access locations from publications to the publication' do
+        expect(pub1.open_access_locations.count).to eq 1
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.open_access_locations.count).to eq 3
+        expect(pub1.reload.open_access_locations.count).to eq 4
       end
 
       context 'when the publication is not visible' do
@@ -1911,9 +1913,10 @@ describe Publication, type: :model do
       end
 
       it 'transfers unique open access locations from publications to the publication' do
+        expect(pub1.open_access_locations.count).to eq 1
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.open_access_locations.count).to eq 3
+        expect(pub1.reload.open_access_locations.count).to eq 4
       end
 
       context 'when the publication is not visible' do

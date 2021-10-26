@@ -572,8 +572,7 @@ class Publication < ApplicationRecord
       end
 
       oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
-      self.open_access_locations = []
-      open_access_locations << oalmp.open_access_locations_to_keep
+      self.open_access_locations = oalmp.open_access_locations_to_keep
 
       pubs_to_delete.each do |p|
         p.non_duplicate_groups.each do |ndg|
