@@ -7,7 +7,7 @@ describe 'API documentation home page', type: :feature, js: true do
   context 'when the user is logged in' do
     before do
       authenticate_user
-      visit 'api_docs/swagger_docs/v1'
+      visit 'api_docs'
     end
 
     it 'shows the home page content' do
@@ -26,7 +26,7 @@ describe 'API documentation home page', type: :feature, js: true do
   context 'when the user is logged in as an admin' do
     before do
       authenticate_admin_user
-      visit 'api_docs/swagger_docs/v1'
+      visit 'api_docs'
     end
 
     it 'shows a link to the home page' do
@@ -39,18 +39,22 @@ describe 'API documentation home page', type: :feature, js: true do
   end
 
   context 'when the user is not logged in' do
-    before { visit 'api_docs/swagger_docs/v1' }
+    before { visit 'api_docs' }
 
     it 'shows the home page content' do
       expect(page).to have_content 'Researcher Metadata Database API'
     end
 
     it 'shows a link for publications API' do
-      expect(page).to have_link 'publication'
+      expect(page).to have_selector 'a.nostyle span', text: 'publication'
     end
 
     it 'shows a link for users API' do
-      expect(page).to have_link 'user'
+      expect(page).to have_selector 'a.nostyle span', text: 'user'
+    end
+
+    it 'shows a link for organizations API' do
+      expect(page).to have_selector 'a.nostyle span', text: 'organization'
     end
 
     it 'shows a link to the home page' do

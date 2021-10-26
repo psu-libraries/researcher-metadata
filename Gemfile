@@ -44,9 +44,9 @@ gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
 gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can be turned into JSON
-gem 'swagger_ui_engine'                 # include swagger-ui as a Raile engine
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
+gem 'webpacker'                         # bundle assets
 
 group :development, :test do
   gem 'apivore'

@@ -6,4 +6,6 @@ class PublicController < ApplicationController
   end
 
   def resources; end
+
+  def api_docs; end
 end
