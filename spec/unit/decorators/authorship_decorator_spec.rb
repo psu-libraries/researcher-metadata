@@ -3,6 +3,7 @@
 require 'unit/unit_spec_helper'
 require 'active_support'
 require 'active_support/core_ext'
+require_relative '../../../app/decorators/base_decorator'
 require_relative '../../../app/decorators/authorship_decorator'
 
 describe AuthorshipDecorator do
@@ -34,12 +35,6 @@ describe AuthorshipDecorator do
   before do
     allow(context).to receive(:edit_open_access_publication_path).with(pub).and_return 'the pub path'
     allow(context).to receive(:link_to).with(title, 'the pub path').and_return 'the pub link'
-  end
-
-  describe '#class' do
-    it 'returns the class name of the wrapped object' do
-      expect(ad.class).to eq RSpec::Mocks::Double
-    end
   end
 
   describe '#label' do
