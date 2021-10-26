@@ -1,31 +1,32 @@
 # frozen_string_literal: true
 
 class PreferredOpenAccessPolicy
-  def initialize(publication)
-    @publication = publication
+  def initialize(open_access_locations)
+    @open_access_locations = open_access_locations
   end
 
-  delegate :open_access_locations, to: :publication
-
   def url
+    rank_all.first&.url
+  end
+
+  def rank_all
     open_access_locations
       .filter { |loc| loc.url.present? }
-      .min_by { |loc| rank(loc) }
-      .try(:url)
+      .sort_by { |loc| rank(loc) }
   end
 
   private
 
-    attr_reader :publication
+    attr_reader :open_access_locations
 
     def rank(location)
       source_rankings = [
         # Most preferred
         Source::SCHOLARSPHERE,
-        Source::OPEN_ACCESS_BUTTON,
-        Source::UNPAYWALL,
         Source::DICKINSON_IDEAS,
         Source::PSU_LAW_ELIBRARY,
+        Source::OPEN_ACCESS_BUTTON,
+        Source::UNPAYWALL,
         Source::USER
         # Least preferred
       ].map.with_index { |src, index| [src, index] }.to_h

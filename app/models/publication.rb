@@ -81,7 +81,7 @@ class Publication < ApplicationRecord
 
   scope :subject_to_open_access_policy, -> { journal_article.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
-  scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
+  scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }
 
   scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
 
@@ -485,7 +485,22 @@ class Publication < ApplicationRecord
   end
 
   def preferred_open_access_url
-    policy = PreferredOpenAccessPolicy.new(self)
+    policy = PreferredOpenAccessPolicy.new(open_access_locations)
+    policy.url
+  end
+
+  # TODO more of these and we should metaprogram them from `OpenAccessLocation.sources`
+  def scholarsphere_open_access_url
+    scholarsphere_locations = open_access_locations.filter(&:source_scholarsphere?)
+    policy = PreferredOpenAccessPolicy.new(scholarsphere_locations)
+
+    policy.url
+  end
+
+  def user_submitted_open_access_url
+    user_locations = open_access_locations.filter(&:source_user?)
+    policy = PreferredOpenAccessPolicy.new(user_locations)
+
     policy.url
   end
 
