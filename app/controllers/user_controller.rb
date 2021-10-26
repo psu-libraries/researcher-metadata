@@ -7,4 +7,8 @@ class UserController < ApplicationController
       session[:requested_url] = request.url
       authenticate_user!
     end
+
+    def current_user
+      @current_user ||= CurrentUserBuilder.call(current_user: super, current_session: session)
+    end
 end
