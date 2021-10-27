@@ -34,7 +34,9 @@ describe 'Creating an open access location', type: :feature do
       it 'shows the correct options for the Source field', js: true do
         find('.dropdown-toggle').click
         within '#ui-id-1' do
-          expect(page).to have_content 'User'
+          expect(page).to have_content Source.new(Source::USER).display
+          expect(page).to have_content Source.new(Source::SCHOLARSPHERE).display
+          expect(page).not_to have_content Source.new(Source::OPEN_ACCESS_BUTTON).display
         end
       end
     end

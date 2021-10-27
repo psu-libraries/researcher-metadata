@@ -47,7 +47,11 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || Source::USER].index_by { |str| Source.new(str).display }
+          if value
+            [value].index_by { |str| Source.new(str).display }
+          else
+            [Source::USER, Source::SCHOLARSPHERE].index_by { |str| Source.new(str).display }
+          end
         end
       end
     end
@@ -56,7 +60,11 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || Source::USER].index_by { |str| Source.new(str).display }
+          if value
+            [value].index_by { |str| Source.new(str).display }
+          else
+            [Source::USER, Source::SCHOLARSPHERE].index_by { |str| Source.new(str).display }
+          end
         end
       end
     end
