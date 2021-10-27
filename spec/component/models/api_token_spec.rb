@@ -10,6 +10,7 @@ describe 'the api_tokens table', type: :model do
   it { is_expected.to have_db_column(:token).of_type(:string).with_options(null: false) }
   it { is_expected.to have_db_column(:app_name).of_type(:string) }
   it { is_expected.to have_db_column(:admin_email).of_type(:string) }
+  it { is_expected.to have_db_column(:write_access).of_type(:boolean).with_options(default: false) }
   it { is_expected.to have_db_column(:total_requests).of_type(:integer).with_options(default: 0) }
   it { is_expected.to have_db_column(:last_used_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }

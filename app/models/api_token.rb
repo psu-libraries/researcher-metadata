@@ -22,6 +22,7 @@ class APIToken < ApplicationRecord
       field(:token)
       field(:app_name)
       field(:admin_email)
+      field(:write_access)
       field(:total_requests)
       field(:last_used_at)
       field(:organizations)
@@ -35,6 +36,7 @@ class APIToken < ApplicationRecord
       field(:total_requests)
       field(:last_used_at)
       field(:admin_email)
+      field(:write_access)
       field(:created_at)
       field(:updated_at)
     end
@@ -42,12 +44,14 @@ class APIToken < ApplicationRecord
     create do
       field(:admin_email)
       field(:app_name)
+      field(:write_access)
       field(:organizations)
     end
 
     edit do
       field(:admin_email)
       field(:app_name)
+      field(:write_access)
       field(:organizations)
     end
   end

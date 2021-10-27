@@ -43,6 +43,35 @@ describe 'Admin API token edit page', type: :feature do
         expect(t.app_name).to eq 'Updated'
         expect(t.admin_email).to eq 'test@email.com'
         expect(t.total_requests).to eq 0
+        expect(t).not_to be_write_access
+      end
+    end
+
+    describe 'submitting the form to update an API Token with write access' do
+      before do
+        check 'Write access'
+
+        click_button 'Save'
+      end
+
+      it 'saves the new API Token data' do
+        t = token.reload
+        expect(t.token).not_to be_blank
+        expect(t).to be_write_access
+      end
+    end
+
+    describe 'submitting the form to update an API Token with no write access' do
+      before do
+        uncheck 'Write access'
+
+        click_button 'Save'
+      end
+
+      it 'saves the new API Token data' do
+        t = token.reload
+        expect(t.token).not_to be_blank
+        expect(t).not_to be_write_access
       end
     end
   end
