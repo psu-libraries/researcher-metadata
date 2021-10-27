@@ -1145,6 +1145,11 @@ describe Publication, type: :model do
     let!(:pub2_import2) { create :publication_import, publication: pub2 }
     let!(:pub3_import1) { create :publication_import, publication: pub3 }
 
+    let!(:open_access_location1) { create :open_access_location, url: 'example1.edu', publication: pub1 }
+    let!(:open_access_location2) { create :open_access_location, url: 'example2.edu', publication: pub2 }
+    let!(:open_access_location3) { create :open_access_location, url: 'example3.edu', publication: pub2 }
+    let!(:open_access_location4) { create :open_access_location, url: 'example4.edu', publication: pub4 }
+
     let(:waiver1) { build :internal_publication_waiver }
     let(:waiver2) { build :internal_publication_waiver }
 
@@ -1369,6 +1374,13 @@ describe Publication, type: :model do
       expect(pub1.reload.updated_by_user_at).to be_within(1.minute).of(Time.current)
     end
 
+    it 'transfers unique open access locations from publications to the publication' do
+      expect(pub1.open_access_locations.count).to eq 1
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.reload.open_access_locations.count).to eq 4
+    end
+
     context 'when the publication is not visible' do
       it 'makes the publication visible' do
         pub1.merge!([pub2, pub3, pub4])
@@ -1544,6 +1556,13 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
+      it 'does not transfer open access locations' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+        expect(pub1.open_access_locations.count).to eq 1
+      end
+
       context 'when the publication is not visible' do
         it 'does not change the visibility' do
           begin
@@ -1713,6 +1732,13 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq 2
         expect(auth2.position_in_profile).to eq nil
         expect(auth3.position_in_profile).to eq nil
+      end
+
+      it 'transfers unique open access locations from publications to the publication' do
+        expect(pub1.open_access_locations.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.open_access_locations.count).to eq 4
       end
 
       context 'when the publication is not visible' do
@@ -1886,6 +1912,13 @@ describe Publication, type: :model do
         expect(auth3.position_in_profile).to eq nil
       end
 
+      it 'transfers unique open access locations from publications to the publication' do
+        expect(pub1.open_access_locations.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.open_access_locations.count).to eq 4
+      end
+
       context 'when the publication is not visible' do
         it 'makes the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
@@ -2028,6 +2061,13 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to eq nil
+      end
+
+      it 'does not transfer open access locations' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.open_access_locations.count).to eq 1
       end
 
       context 'when the publication is not visible' do
@@ -2178,6 +2218,13 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
+      it 'does not transfer open access locations' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.open_access_locations.count).to eq 1
+      end
+
       context 'when the publication is not visible' do
         it 'does not change the visibility' do
           begin
@@ -2324,6 +2371,13 @@ describe Publication, type: :model do
         expect(auth1.position_in_profile).to eq nil
       end
 
+      it 'does not transfer open access locations' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.open_access_locations.count).to eq 1
+      end
+
       context 'when the publication is not visible' do
         it 'does not change the visibility' do
           begin
@@ -2468,6 +2522,13 @@ describe Publication, type: :model do
         auth1 = pub1.authorships.find_by(user: user1)
 
         expect(auth1.position_in_profile).to eq nil
+      end
+
+      it 'does not transfer open access locations' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.open_access_locations.count).to eq 1
       end
 
       context 'when the publication is not visible' do
