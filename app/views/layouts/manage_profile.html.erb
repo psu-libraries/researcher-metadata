@@ -18,6 +18,9 @@
       <li><a href="https://libraries.psu.edu/" target="_blank">University Libraries</a></li>
     </ul>
   </nav>
+
+  <%= render '/shared/masquerade_navbar' if current_user.masquerading? %>
+
   <nav class="navbar navbar-expand-lg navbar-light manage-profile-nav">
     <span class="navbar-brand"><%= image_tag('logo.png', alt: "Penn State") %></span>
     <ul class="navbar-nav mr-auto">
