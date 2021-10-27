@@ -9,43 +9,43 @@ describe OpenAccessLocationMergePolicy do
   let!(:open_access_location1) do
     create :open_access_location,
            url: 'example.edu',
-           source: 'User',
+           source: Source::USER,
            publication_id: publication1.id
   end
   let!(:open_access_location2) do
     create :open_access_location,
            url: 'example.edu',
-           source: 'Open Access Button',
+           source: Source::OPEN_ACCESS_BUTTON,
            publication_id: publication2.id
   end
   let!(:open_access_location3) do
     create :open_access_location,
            url: 'example.edu',
-           source: 'User',
+           source: Source::USER,
            publication_id: publication3.id
   end
   let!(:open_access_location4) do
     create :open_access_location,
            url: 'scholarsphere.edu',
-           source: 'ScholarSphere',
+           source: Source::SCHOLARSPHERE,
            publication_id: publication1.id
   end
   let!(:open_access_location5) do
     create :open_access_location,
            url: 'scholarsphere.edu',
-           source: 'ScholarSphere',
+           source: Source::SCHOLARSPHERE,
            publication_id: publication2.id
   end
   let!(:open_access_location6) do
     create :open_access_location,
            url: 'scholarsphere.edu',
-           source: 'Unpaywall',
+           source: Source::UNPAYWALL,
            publication_id: publication3.id
   end
   let!(:open_access_location7) do
     create :open_access_location,
            url: 'site.edu',
-           source: 'Unpaywall',
+           source: Source::UNPAYWALL,
            publication_id: publication3.id
   end
 
