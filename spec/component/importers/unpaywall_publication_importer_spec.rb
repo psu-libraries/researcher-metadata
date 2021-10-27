@@ -76,29 +76,109 @@ describe UnpaywallPublicationImporter, :vcr do
         end
       end
 
+      context 'when Unpaywall has multiple open access locations' do
+        let!(:pub) { create :publication,
+                            doi: 'https://doi.org/10.1001/jamadermatol.2015.3091' }
+
+        it 'creates multiple open access locations in RMD' do
+          expect { importer.import_all }.to change(OpenAccessLocation, :count).by 2
+        end
+      end
+
       context 'when the publication already has an open access location from Unpaywall' do
-        let!(:oal) { create :open_access_location,
-                            publication: pub,
-                            url: 'existing_url',
-                            source: Source::UNPAYWALL }
+        context 'when the existing and new open access locations have the same URL' do
+          let!(:oal) { create :open_access_location,
+                              publication: pub,
+                              url: 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf',
+                              source: Source::UNPAYWALL,
+                              pdf_url: 'http://test.com',
+                              landing_page_url: 'http://test.net',
+                              host_type: 'host type',
+                              is_best: false,
+                              license: 'license type',
+                              oa_date: Time.zone.yesterday,
+                              source_updated_at: Time.zone.yesterday,
+                              version: '1.0'
+          }
 
-        it 'does not create any new open access locations' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          it 'does not create any new open access locations' do
+            expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          end
+
+          it 'updates the matching open access location with the new metadata from Unpaywall' do
+            importer.import_all
+
+            oal.reload
+
+            expect(oal.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
+            expect(oal.pdf_url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
+            expect(oal.landing_page_url).to eq 'https://doi.org/10.1001/jamadermatol.2015.3091'
+            expect(oal.host_type).to eq 'publisher'
+            expect(oal.is_best).to be true
+            expect(oal.license).to be_nil
+            expect(oal.oa_date).to be_nil
+            expect(oal.source_updated_at).to eq '2019-12-26T19:24:13.434842'.to_datetime
+            expect(oal.version).to eq 'publishedVersion'
+          end
+
+          it 'updates Unpaywall check timestamp on the publication' do
+            importer.import_all
+            expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+          end
+
+          it 'updates the open access status on the publication' do
+            importer.import_all
+            pub.reload
+            expect(pub.open_access_status).to eq 'bronze'
+          end
         end
 
-        it 'updates the existing open access location with the URL to the open access content' do
-          importer.import_all
-          expect(oal.reload.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
-        end
+        context 'when the OA location from Unpaywall has a different URL than the one in RMD' do
+          let!(:oal) { create :open_access_location,
+                              publication: pub,
+                              url: 'existing_url',
+                              source: Source::UNPAYWALL,
+                              pdf_url: 'http://test.com',
+                              landing_page_url: 'http://test.net',
+                              host_type: 'host type',
+                              is_best: false,
+                              license: 'license type',
+                              oa_date: Time.zone.yesterday,
+                              source_updated_at: Time.zone.yesterday,
+                              version: '1.0' }
 
-        it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-        end
+          it 'adds a new open access location with the data from Unpaywall' do
+            expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
 
-        it 'updates the open access status on the publication' do
-          importer.import_all
-          expect(pub.reload.open_access_status).to eq 'bronze'
+            oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+
+            expect(oal.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
+            expect(oal.pdf_url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
+            expect(oal.landing_page_url).to eq 'https://doi.org/10.1001/jamadermatol.2015.3091'
+            expect(oal.host_type).to eq 'publisher'
+            expect(oal.is_best).to be true
+            expect(oal.license).to be_nil
+            expect(oal.oa_date).to be_nil
+            expect(oal.source_updated_at).to eq '2019-12-26T19:24:13.434842'.to_datetime
+            expect(oal.version).to eq 'publishedVersion'
+          end
+
+          it 'removes the existing open access location from RMD' do
+            importer.import_all
+
+            expect { oal.reload }.to raise_error(ActiveRecord::RecordNotFound)
+          end
+
+          it 'updates Unpaywall check timestamp on the publication' do
+            importer.import_all
+            expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+          end
+
+          it 'updates the open access status on the publication' do
+            importer.import_all
+            pub.reload
+            expect(pub.open_access_status).to eq 'bronze'
+          end
         end
       end
     end
@@ -123,7 +203,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
       end
 
-      context 'when the publication already has an open access location' do
+      context "when the publication has an OA location that isn't in the Unpaywall results" do
         let!(:oal) { create :open_access_location,
                             publication: pub,
                             url: 'existing_url',
@@ -356,7 +436,7 @@ describe UnpaywallPublicationImporter, :vcr do
           end
         end
 
-        context 'when the publication already has an open access location' do
+        context "when the publication has an OA location that isn't in the Unpaywall results" do
           let!(:oal) { create :open_access_location,
                               publication: pub,
                               url: 'existing_url',

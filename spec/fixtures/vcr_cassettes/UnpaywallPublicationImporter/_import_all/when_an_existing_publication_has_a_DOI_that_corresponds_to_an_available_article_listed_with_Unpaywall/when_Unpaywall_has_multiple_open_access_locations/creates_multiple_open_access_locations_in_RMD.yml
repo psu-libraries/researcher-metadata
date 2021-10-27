@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - gunicorn
       Date:
-      - Wed, 27 Oct 2021 20:13:14 GMT
+      - Wed, 27 Oct 2021 20:09:31 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -64,7 +64,13 @@ http_interactions:
         "url_for_landing_page": "https://doi.org/10.1001/jamadermatol.2015.3091",
         "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
         "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
-        null, "repository_institution": null, "oa_date": null}], "oa_locations_embargoed":
+        null, "repository_institution": null, "oa_date": null}, {"updated":
+            "2019-12-26T19:24:13.434842", "url": "https://test.com",
+            "url_for_pdf": "https://test.comdoi150042.pdf",
+            "url_for_landing_page": "https://doi.org/10.1001/test",
+            "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+            "host_type": "publisher", "is_best": false, "pmh_id": null, "endpoint_id":
+            null, "repository_institution": null, "oa_date": null}], "oa_locations_embargoed":
         [], "updated": "2021-01-13T23:12:16.677687", "data_standard": 2, "z_authors":
         [{"given": "Young H.", "family": "Lee", "sequence": "first", "affiliation":
         [{"name": "Division of Dermatology, Sharp Rees-Stealy Medical Group, San Diego,
@@ -80,5 +86,5 @@ http_interactions:
         Pennsylvania"}]}, {"given": "Joslyn S.", "family": "Kirby", "sequence": "additional",
         "affiliation": [{"name": "Department of Dermatology, Penn State Milton S.
         Hershey Medical Center, Hershey, Pennsylvania"}]}]}'
-  recorded_at: Wed, 27 Oct 2021 20:13:14 GMT
+  recorded_at: Wed, 27 Oct 2021 20:09:31 GMT
 recorded_with: VCR 6.0.0

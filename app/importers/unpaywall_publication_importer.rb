@@ -33,27 +33,59 @@ class UnpaywallPublicationImporter
       all_pubs.where(unpaywall_last_checked_at: nil)
     end
 
+    def create_new_locations(publication, new_locations, existing_locations)
+      new_locations&.each do |new_location|
+        match = existing_locations&.find { |e| new_location['url'] == e.url }
+
+        if match.blank?
+          publication.open_access_locations.create!(source: Source::UNPAYWALL,
+                                                    url: new_location['url'],
+                                                    landing_page_url: new_location['url_for_landing_page'],
+                                                    pdf_url: new_location['url_for_pdf'],
+                                                    host_type: new_location['host_type'],
+                                                    is_best: new_location['is_best'],
+                                                    license: new_location['license'],
+                                                    oa_date: new_location['oa_date'],
+                                                    source_updated_at: new_location['updated'],
+                                                    version: new_location['version'])
+        end
+      end
+    end
+
+    def update_existing_locations(new_locations, existing_locations)
+      existing_locations.each do |existing_location|
+        match = new_locations&.find { |n| existing_location.url == n['url'] }
+
+        if match.present?
+          existing_location.update!(url: match['url'],
+                                    landing_page_url: match['url_for_landing_page'],
+                                    pdf_url: match['url_for_pdf'],
+                                    host_type: match['host_type'],
+                                    is_best: match['is_best'],
+                                    license: match['license'],
+                                    oa_date: match['oa_date'],
+                                    source_updated_at: match['updated'],
+                                    version: match['version'])
+        else
+          existing_location.try(:destroy)
+        end
+      end
+    end
+
     def query_unpaywall_for(publication)
       unpaywall_json = nil
       find_url = URI::DEFAULT_PARSER.escape("https://api.unpaywall.org/v2/#{publication.doi_url_path}?email=openaccess@psu.edu")
       unpaywall_json = JSON.parse(HttpService.get(find_url))
 
-      best_oa_location = unpaywall_json.dig('best_oa_location', 'url')
-      existing_oa_location = publication.open_access_locations.find_by(source: Source::UNPAYWALL)
-      oa_status = unpaywall_json['oa_status']
+      new_locations = unpaywall_json['oa_locations']
+      existing_locations = publication.open_access_locations.where(source: Source::UNPAYWALL)
 
-      if best_oa_location
-        if existing_oa_location
-          existing_oa_location.update!(url: best_oa_location)
-        else
-          publication.open_access_locations.create!(source: Source::UNPAYWALL, url: best_oa_location)
-        end
-      else
-        existing_oa_location.try(:destroy)
-      end
+      create_new_locations(publication, new_locations, existing_locations)
+      update_existing_locations(new_locations, existing_locations)
 
-      publication.open_access_status = oa_status
+      publication.open_access_status = unpaywall_json['oa_status']
       publication.unpaywall_last_checked_at = Time.zone.now
+
       publication.save!
 
       # Unpaywall asks that users limit requests to no more than 100,000 per day.
