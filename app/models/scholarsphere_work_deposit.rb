@@ -65,7 +65,9 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   def record_success(url)
     ActiveRecord::Base.transaction do
       update_columns(status: 'Success', deposited_at: Time.current)
-      publication.update_columns(scholarsphere_open_access_url: url)
+      oal = publication.open_access_locations.find_or_initialize_by(source: Source::SCHOLARSPHERE)
+      oal.url = url
+      oal.save
     end
     file_uploads.destroy_all
   end

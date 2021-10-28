@@ -230,10 +230,11 @@ describe ScholarsphereFileUpload, type: :model do
   describe '#record_success' do
     let!(:dep) { create :scholarsphere_work_deposit, file_uploads: [upload1, upload2], authorship: auth }
     let!(:auth) { create :authorship, publication: pub }
-    let!(:pub) { create :publication }
+    let!(:pub) { create :publication, open_access_locations: open_access_locations }
     let(:now) { Time.new(2021, 3, 28, 22, 8, 0) }
     let(:upload1) { create :scholarsphere_file_upload }
     let(:upload2) { create :scholarsphere_file_upload }
+    let(:open_access_locations) { [] }
 
     before { allow(Time).to receive(:current).and_return now }
 
@@ -258,6 +259,32 @@ describe ScholarsphereFileUpload, type: :model do
       expect { upload2.reload }.to raise_error ActiveRecord::RecordNotFound
     end
 
+    context 'when the publication has no ScholarSphere OALs' do
+      let(:open_access_locations) { [] }
+
+      it 'creates one' do
+        expect {
+          dep.record_success('an_open_access_url')
+        }.to change {
+          pub.reload.open_access_locations.count
+        }.by(1)
+      end
+    end
+
+    context 'when the publication has a ScholarSphere OAL' do
+      let(:open_access_locations) { [build(:open_access_location, :scholarsphere, url: 'existing')] }
+
+      it 'updates the existing one' do
+        expect {
+          dep.record_success('an_open_access_url')
+        }.not_to(change {
+          pub.reload.open_access_locations.count
+        })
+
+        expect(pub.reload.scholarsphere_open_access_url).to eq 'an_open_access_url'
+      end
+    end
+
     context 'when the deposit is invalid' do
       before { dep.title = nil }
 
@@ -268,7 +295,7 @@ describe ScholarsphereFileUpload, type: :model do
 
     context 'when an error is raised when updating the publication' do
       before do
-        allow_any_instance_of(Publication).to receive(:update_columns).and_raise(RuntimeError)
+        allow_any_instance_of(OpenAccessLocation).to receive(:url=).and_raise(RuntimeError)
       end
 
       it "does not set the deposit's status to 'Success'" do
