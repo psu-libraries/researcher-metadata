@@ -19,7 +19,10 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @form = OpenAccessURLForm.new(form_params)
 
     if @form.valid?
-      publication.update!(user_submitted_open_access_url: @form.open_access_url)
+      oal = publication.open_access_locations.find_or_initialize_by(source: Source::USER)
+      oal.url = @form.open_access_url
+      oal.save!
+
       flash[:notice] = I18n.t('profile.open_access_publications.update.success')
       redirect_to edit_profile_publications_path
     else
