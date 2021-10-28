@@ -525,7 +525,7 @@ describe User, type: :model do
                              user: other_user_6,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_6) { create :publication, 
+    let!(:ou_pub_6) { create :publication,
                              published_on: Date.new(2020, 7, 1),
                              open_access_locations: [build(:open_access_location,
                                                            source: Source::OPEN_ACCESS_BUTTON,
@@ -706,8 +706,8 @@ describe User, type: :model do
     let!(:other_pub_5) { create :publication,
                                 published_on: Date.new(2020, 7, 1),
                                 open_access_locations: [build(:open_access_location,
-                                                        source: Source::OPEN_ACCESS_BUTTON,
-                                                        url: 'a_url')] }
+                                                              source: Source::OPEN_ACCESS_BUTTON,
+                                                              url: 'a_url')] }
     let!(:o_auth_5) { create :authorship,
                              user: user,
                              publication: other_pub_5,
