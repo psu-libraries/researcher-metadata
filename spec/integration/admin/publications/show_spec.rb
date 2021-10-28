@@ -24,10 +24,10 @@ describe 'Admin publication detail page', type: :feature do
                       page_range: '12-15',
                       issn: '1234-5678',
                       doi: 'https://doi.org/10.000/test',
-                      open_access_url: 'https://openaccess.org/publications/1',
-                      user_submitted_open_access_url: 'https://example.org/publications/2',
+                      open_access_url: nil,
+                      user_submitted_open_access_url: nil,
                       journal: journal,
-                      scholarsphere_open_access_url: 'https://scholarsphere.psu.edu/resources/3',
+                      scholarsphere_open_access_url: nil,
                       published_on: Date.new(2018, 8, 1),
                       open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, '-00:00'),
                       open_access_status: 'gold' }
@@ -72,15 +72,20 @@ describe 'Admin publication detail page', type: :feature do
                       grant: grant2,
                       publication: pub }
 
-  let!(:oal1) { create :open_access_location,
-                       publication: pub,
-                       source: Source::USER,
-                       url: 'https://example.com/oal1' }
+  let!(:oal_user) { create :open_access_location,
+                           publication: pub,
+                           source: Source::USER,
+                           url: 'https://example.com/oal1' }
 
-  let!(:oal2) { create :open_access_location,
-                       publication: pub,
-                       source: Source::SCHOLARSPHERE,
-                       url: 'https://scholarsphere.psu.edu/oal2' }
+  let!(:oal_ss) { create :open_access_location,
+                         publication: pub,
+                         source: Source::SCHOLARSPHERE,
+                         url: 'https://scholarsphere.psu.edu/oal2' }
+
+  let!(:oal_oab) { create :open_access_location,
+                          publication: pub,
+                          source: Source::OPEN_ACCESS_BUTTON,
+                          url: 'https://openaccess.org/publications/oal3' }
 
   let!(:journal) { create :journal,
                           title: 'Test Journal Record' }
@@ -135,18 +140,6 @@ describe 'Admin publication detail page', type: :feature do
         expect(page).to have_link 'https://doi.org/10.000/test', href: 'https://doi.org/10.000/test'
       end
 
-      it "shows a link to the publication's open access content" do
-        expect(page).to have_link 'https://openaccess.org/publications/1', href: 'https://openaccess.org/publications/1'
-      end
-
-      it "shows a link to the publication's user-submitted open access content" do
-        expect(page).to have_link 'https://example.org/publications/2', href: 'https://example.org/publications/2'
-      end
-
-      it "shows a link to the publication's open access content in Scholarsphere" do
-        expect(page).to have_link 'https://scholarsphere.psu.edu/resources/3', href: 'https://scholarsphere.psu.edu/resources/3'
-      end
-
       it "shows the publication's open access status" do
         expect(page).to have_content 'gold'
       end
@@ -181,10 +174,12 @@ describe 'Admin publication detail page', type: :feature do
       end
 
       it "shows the publication's open access locations" do
-        expect(page).to have_link 'https://example.com/oal1 (User)',
-                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal1.id)
-        expect(page).to have_link 'https://scholarsphere.psu.edu/oal2 (ScholarSphere)',
-                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal2.id)
+        expect(page).to have_link 'https://example.com/oal1',
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal_user.id)
+        expect(page).to have_link 'https://scholarsphere.psu.edu/oal2',
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal_ss.id)
+        expect(page).to have_link 'https://openaccess.org/publications/oal3',
+                                  href: rails_admin.show_path(model_name: :open_access_location, id: oal_oab.id)
       end
 
       it "shows the publication's journal" do

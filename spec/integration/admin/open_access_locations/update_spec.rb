@@ -24,7 +24,7 @@ describe 'updating an open access location via the admin interface', type: :feat
         find('.dropdown-toggle').click
         within '#ui-id-1' do
           expect(page).to have_content Source.new(Source::OPEN_ACCESS_BUTTON).display
-          expect(page).not_to have_content 'User'
+          expect(page).not_to have_content Source.new(Source::USER).display
         end
       end
     end

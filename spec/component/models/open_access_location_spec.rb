@@ -70,4 +70,27 @@ describe OpenAccessLocation, type: :model do
       expect(oal.name).to eq 'https://example.com/article (User)'
     end
   end
+
+  describe '#options_for_admin_dropdown' do
+    context 'when the oal already has a source' do
+      before { oal.source = Source::UNPAYWALL }
+
+      it 'returns the given source as the only option' do
+        expect(oal.options_for_admin_dropdown).to eq({ Source.new(Source::UNPAYWALL).display => Source::UNPAYWALL })
+      end
+    end
+
+    context 'when the oal does not have any source yet' do
+      before { oal.source = nil }
+
+      specify do
+        expect(oal.options_for_admin_dropdown).to eq(
+          {
+            Source.new(Source::USER).display => Source::USER,
+            Source.new(Source::SCHOLARSPHERE).display => Source::SCHOLARSPHERE
+          }
+        )
+      end
+    end
+  end
 end

@@ -32,7 +32,7 @@ class PreferredOpenAccessPolicy
       ].map.with_index { |src, index| [src, index] }.to_h
 
       # Lower number = more preferred
-      source_rank = source_rankings.fetch(location.source, 1000)
+      source_rank = source_rankings.fetch(location.source.to_s, 1000)
       is_best_rank = location.is_best ? 0 : 1
 
       [source_rank, is_best_rank]

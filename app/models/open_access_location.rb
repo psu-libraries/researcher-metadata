@@ -20,7 +20,17 @@ class OpenAccessLocation < ApplicationRecord
   end
 
   def name
-    "#{url} (#{source&.display})"
+    "(#{source&.display}) #{url}"
+  end
+
+  def options_for_admin_dropdown
+    options = if source.present?
+                [source]
+              else
+                [Source::USER, Source::SCHOLARSPHERE]
+              end
+
+    options.index_by { |src| Source.new(src.to_s).display }
   end
 
   rails_admin do
@@ -47,7 +57,7 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || Source::USER].index_by { |str| Source.new(str).display }
+          bindings[:object].options_for_admin_dropdown
         end
       end
     end
@@ -56,7 +66,7 @@ class OpenAccessLocation < ApplicationRecord
       field(:url) { label 'URL' }
       field(:source, :enum) do
         enum do
-          [value || Source::USER].index_by { |str| Source.new(str).display }
+          bindings[:object].options_for_admin_dropdown
         end
       end
     end

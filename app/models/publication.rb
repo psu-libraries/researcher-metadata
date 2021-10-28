@@ -364,8 +364,7 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
-      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
+      field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -399,21 +398,16 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:open_access_status)
-      field(:open_access_url) do
-        label 'Open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:user_submitted_open_access_url) do
-        label 'User-submitted open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:scholarsphere_open_access_url) do
-        label 'Scholarsphere open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
-      field(:open_access_locations)
+      field(:open_access_locations) do
+        pretty_value do
+          bindings[:view].render(
+            partial: 'rails_admin/partials/publications/open_access_locations.html.erb',
+            locals: { open_access_locations: PreferredOpenAccessPolicy.new(value).rank_all }
+          )
+        end
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -446,8 +440,6 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
-      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)

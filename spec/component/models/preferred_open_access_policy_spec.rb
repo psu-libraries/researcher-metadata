@@ -12,12 +12,12 @@ describe PreferredOpenAccessPolicy do
       all_valid_sources
         .sort_by { rand }
         .map { |s|
-        instance_double('OpenAccessLocation', source: s, url: 'url', is_best: false)
+        OpenAccessLocation.new(source: s, url: 'url', is_best: false)
       }
     }
 
     specify do
-      expect(policy.rank_all.map(&:source)).to eq [
+      expect(policy.rank_all.map(&:source).map(&:to_s)).to eq [
         # Most preferred
         Source::SCHOLARSPHERE,
         Source::DICKINSON_IDEAS,
@@ -33,9 +33,9 @@ describe PreferredOpenAccessPolicy do
   describe '#url' do
     context 'when there are blank urls' do
       let(:open_access_locations) { [
-        instance_double('OpenAccessLocation', source: Source::SCHOLARSPHERE, url: '', is_best: false),
-        instance_double('OpenAccessLocation', source: Source::OPEN_ACCESS_BUTTON, url: nil, is_best: false),
-        instance_double('OpenAccessLocation', source: Source::USER, url: 'USER url', is_best: false)
+        OpenAccessLocation.new(source: Source::SCHOLARSPHERE, url: '', is_best: false),
+        OpenAccessLocation.new(source: Source::OPEN_ACCESS_BUTTON, url: nil, is_best: false),
+        OpenAccessLocation.new(source: Source::USER, url: 'USER url', is_best: false)
       ]}
 
       it 'considers only OALs with URLs' do
@@ -46,9 +46,9 @@ describe PreferredOpenAccessPolicy do
     context 'when multiple locations are present' do
       context 'when ScholarSphere is present' do
         let(:open_access_locations) { [
-          instance_double('OpenAccessLocation', source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false),
-          instance_double('OpenAccessLocation', source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false),
-          instance_double('OpenAccessLocation', source: Source::USER, url: 'USER url', is_best: false)
+          OpenAccessLocation.new(source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false),
+          OpenAccessLocation.new(source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false),
+          OpenAccessLocation.new(source: Source::USER, url: 'USER url', is_best: false)
         ]}
 
         it 'is picked' do
@@ -58,9 +58,9 @@ describe PreferredOpenAccessPolicy do
 
       context 'when OAB is present' do
         let(:open_access_locations) { [
-          instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'UNPAYWALL url', is_best: false),
-          instance_double('OpenAccessLocation', source: Source::USER, url: 'USER url', is_best: false),
-          instance_double('OpenAccessLocation', source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false)
+          OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'UNPAYWALL url', is_best: false),
+          OpenAccessLocation.new(source: Source::USER, url: 'USER url', is_best: false),
+          OpenAccessLocation.new(source: Source::OPEN_ACCESS_BUTTON, url: 'OPEN_ACCESS_BUTTON url', is_best: false)
         ]}
 
         it 'is picked' do
@@ -70,7 +70,7 @@ describe PreferredOpenAccessPolicy do
 
       context 'when an unknown source is present' do
         let(:open_access_locations) { [
-          instance_double('OpenAccessLocation', source: Source::USER, url: 'USER url', is_best: false),
+          OpenAccessLocation.new(source: Source::USER, url: 'USER url', is_best: false),
           instance_double('OpenAccessLocation', source: 'wacky', url: 'wacky url', is_best: false)
         ]}
 
@@ -82,8 +82,8 @@ describe PreferredOpenAccessPolicy do
       context 'when there are multiple choices from the same source' do
         context 'when one is_best' do
           let(:open_access_locations) { [
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'not best url', is_best: false),
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'best url', is_best: true)
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'not best url', is_best: false),
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'best url', is_best: true)
           ]}
 
           it 'picks the one where is_best is true' do
@@ -93,8 +93,8 @@ describe PreferredOpenAccessPolicy do
 
         context 'when none are marked is_best' do
           let(:open_access_locations) { [
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'not best url', is_best: false),
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'also not best url', is_best: false)
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'not best url', is_best: false),
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'also not best url', is_best: false)
           ]}
 
           it 'randomly picks one' do
@@ -104,9 +104,9 @@ describe PreferredOpenAccessPolicy do
 
         context 'when the OALs with is_best are mixed in with more preferred sources' do
           let(:open_access_locations) { [
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'UNPAYWALL not best url', is_best: false),
-            instance_double('OpenAccessLocation', source: Source::UNPAYWALL, url: 'UNPAYWALL best url', is_best: true),
-            instance_double('OpenAccessLocation', source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false)
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'UNPAYWALL not best url', is_best: false),
+            OpenAccessLocation.new(source: Source::UNPAYWALL, url: 'UNPAYWALL best url', is_best: true),
+            OpenAccessLocation.new(source: Source::SCHOLARSPHERE, url: 'SCHOLARSPHERE url', is_best: false)
           ]}
 
           it 'ranks the source higher than is_best' do

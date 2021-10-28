@@ -805,23 +805,24 @@ describe Publication, type: :model do
   end
 
   describe '#scholarsphere_open_access_url' do
+    subject(:ss_url) { pub.scholarsphere_open_access_url }
+
     let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
-    subject { pub.scholarsphere_open_access_url }
 
     context 'when an OpenAccessLocation from scholarsphere exists' do
       let(:open_access_locations) { [
         build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'SS OAL URL'),
-        build(:open_access_location, source: Source::USER) 
+        build(:open_access_location, source: Source::USER)
       ]}
 
       it 'uses the url from the correct OAL' do
-        is_expected.to eq 'SS OAL URL'
+        expect(ss_url).to eq 'SS OAL URL'
       end
     end
 
     context 'when an OpenAccessLocation from scholarsphere does not exist' do
       let(:open_access_locations) { [
-        build(:open_access_location, source: Source::USER) 
+        build(:open_access_location, source: Source::USER)
       ]}
 
       it { is_expected.to be_blank }
@@ -829,8 +830,9 @@ describe Publication, type: :model do
   end
 
   describe '#user_submitted_open_access_url' do
+    subject(:user_oa_url) { pub.user_submitted_open_access_url }
+
     let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
-    subject { pub.user_submitted_open_access_url }
 
     context 'when an OpenAccessLocation submitted by a user exists' do
       let(:open_access_locations) { [
@@ -839,13 +841,13 @@ describe Publication, type: :model do
       ]}
 
       it 'uses the url from the correct OAL' do
-        is_expected.to eq 'USER OAL URL'
+        expect(user_oa_url).to eq 'USER OAL URL'
       end
     end
 
     context 'when an OpenAccessLocation from a user does not exist' do
       let(:open_access_locations) { [
-        build(:open_access_location, source: Source::SCHOLARSPHERE),
+        build(:open_access_location, source: Source::SCHOLARSPHERE)
       ]}
 
       it { is_expected.to be_blank }

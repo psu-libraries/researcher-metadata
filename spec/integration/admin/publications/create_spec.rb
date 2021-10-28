@@ -14,6 +14,7 @@ describe 'Creating a publication', type: :feature do
       it_behaves_like 'a page with the admin layout'
       it 'show the correct content' do
         expect(page).to have_content 'New Publication'
+        expect(page).to have_content /add a new open access location/i
       end
 
       it 'does not allow the total Scopus citations to be set' do
@@ -34,8 +35,6 @@ describe 'Creating a publication', type: :feature do
         fill_in 'Page range', with: 'Test Range'
         fill_in 'ISSN', with: 'Test ISSN'
         fill_in 'DOI', with: 'https://doi.org/10.000/test'
-        fill_in 'Scholarsphere Open Access URL', with: 'Test Scholarsphere URL'
-        fill_in 'User-submitted open access URL', with: 'Test OA URL'
         fill_in 'Abstract', with: 'Test Abstract'
         check 'Et al authors?'
         fill_in 'Published on', with: 'August 23, 2018'
@@ -56,8 +55,6 @@ describe 'Creating a publication', type: :feature do
         expect(p.page_range).to eq 'Test Range'
         expect(p.issn).to eq 'Test ISSN'
         expect(p.doi).to eq 'https://doi.org/10.000/test'
-        expect(p.scholarsphere_open_access_url).to eq 'Test Scholarsphere URL'
-        expect(p.user_submitted_open_access_url).to eq 'Test OA URL'
         expect(p.abstract).to eq 'Test Abstract'
         expect(p.authors_et_al).to eq true
         expect(p.published_on).to eq Date.new(2018, 8, 23)
