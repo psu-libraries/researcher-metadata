@@ -34,7 +34,9 @@ describe 'visiting the page to edit the open acess status of a publication' do
                         volume: '620',
                         page_range: '112-124',
                         published_on: Date.new(2020, 1, 1),
-                        open_access_url: 'a_url' }
+                        open_access_locations: [build(:open_access_location,
+                                                      source: Source::OPEN_ACCESS_BUTTON,
+                                                      url: 'a_url')] }
   let(:ss_pub) { create :publication,
                         title: 'Scholarsphere Publication',
                         journal_title: 'Another Journal',
