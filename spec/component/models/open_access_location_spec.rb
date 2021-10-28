@@ -67,7 +67,7 @@ describe OpenAccessLocation, type: :model do
     let(:oal) { described_class.new(url: 'https://example.com/article', source: Source::USER) }
 
     it "returns a string that includes the location's URL and source" do
-      expect(oal.name).to eq 'https://example.com/article (User)'
+      expect(oal.name).to eq '(User) https://example.com/article'
     end
   end
 
