@@ -19,7 +19,9 @@ describe API::V1::PublicationSerializer do
                              abstract: 'an abstract',
                              total_scopus_citations: 1000,
                              doi: 'https://doi.org/10.000/example',
-                             open_access_url: 'OA URL',
+                             open_access_locations: [build(:open_access_location,
+                                                           source: Source::OPEN_ACCESS_BUTTON,
+                                                           url: 'OA URL')],
                              journal: journal }
   let(:date) { nil }
   let(:journal) { create :journal, title: 'test journal title', publisher: publisher }
