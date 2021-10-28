@@ -14,10 +14,16 @@ end
 
 describe StatisticsSnapshot, type: :model do
   before do
-    create :publication, open_access_url: nil, user_submitted_open_access_url: nil
-    create :publication, open_access_url: 'url1', user_submitted_open_access_url: nil
-    create :publication, open_access_url: nil, user_submitted_open_access_url: 'url2'
-    create :publication, open_access_url: nil, user_submitted_open_access_url: 'url3', publication_type: 'Book'
+    create :publication, open_access_locations: []
+    create :publication, open_access_locations: [build(:open_access_location,
+                                                       source: Source::OPEN_ACCESS_BUTTON,
+                                                       url: 'url1')]
+    create :publication, open_access_locations: [build(:open_access_location,
+                                                       source: Source::USER,
+                                                       url: 'url2')]
+    create :publication, publication_type: 'Book', open_access_locations: [build(:open_access_location,
+                                                                                 source: Source::USER,
+                                                                                 url: 'url3')]
   end
 
   describe '.record' do
