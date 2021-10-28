@@ -23,4 +23,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'URLs'
   inflect.acronym 'HR'
   inflect.acronym 'OAI'
+  inflect.acronym 'OAB'
 end

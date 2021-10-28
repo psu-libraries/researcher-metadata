@@ -333,7 +333,7 @@ describe Publication, type: :model do
     end
   end
 
-  describe '.open_access' do
+  describe 'open access scopes' do
     let!(:pub1) { create :publication,
                          title: 'pub1',
                          open_access_locations: [] }
@@ -364,8 +364,28 @@ describe Publication, type: :model do
                          ]
     }
 
-    it 'returns publications that have an open access URL' do
-      expect(described_class.open_access.map(&:title)).to match_array [pub2, pub3, pub4, pub5].map(&:title)
+    describe '.open_access' do
+      it 'returns publications that have an open access location' do
+        expect(described_class.open_access.map(&:title)).to match_array [pub2, pub3, pub4, pub5].map(&:title)
+      end
+    end
+
+    describe '.scholarsphere_open_access' do
+      it 'returns publications that have a ScholarSphere open access location' do
+        expect(described_class.scholarsphere_open_access.map(&:title)).to match_array [pub4, pub5].map(&:title)
+      end
+    end
+
+    describe '.user_open_access' do
+      it 'returns publications that have a user-submitted open access location' do
+        expect(described_class.user_open_access.map(&:title)).to match_array [pub3, pub5].map(&:title)
+      end
+    end
+
+    describe '.oab_open_access' do
+      it 'returns publications that have an Open Access Button open access location' do
+        expect(described_class.oab_open_access.map(&:title)).to match_array [pub2, pub5].map(&:title)
+      end
     end
   end
 
@@ -809,6 +829,8 @@ describe Publication, type: :model do
 
     let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
 
+    let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
+
     context 'when an OpenAccessLocation from scholarsphere exists' do
       let(:open_access_locations) { [
         build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'SS OAL URL'),
@@ -831,6 +853,8 @@ describe Publication, type: :model do
 
   describe '#user_submitted_open_access_url' do
     subject(:user_oa_url) { pub.user_submitted_open_access_url }
+
+    let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
 
     let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
 
