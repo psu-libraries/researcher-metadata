@@ -289,6 +289,48 @@ describe UnpaywallPublicationImporter, :vcr do
     end
   end
 
+  context 'when an error occurs updating an OpenAccessLocation' do
+    let!(:pub) { create :publication,
+                        doi: 'https://doi.org/10.1001/jamadermatol.2015.3091' }
+
+    before do
+      allow_any_instance_of(OpenAccessLocation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+      allow(ImporterErrorLog).to receive(:log_error)
+    end
+
+    it 'logs the error' do
+      importer.import_all
+
+      expect(ImporterErrorLog)
+        .to have_received(:log_error)
+        .with(
+          importer_class: described_class,
+          error: an_instance_of(ActiveRecord::RecordInvalid),
+          metadata: {
+            publication_id: pub.id,
+            publication_doi_url_path: pub.doi_url_path,
+            unpaywall_json: anything
+          }
+        )
+    end
+  end
+
+  context 'when a mystery error occurs that we cannot handle' do
+    let!(:pub) { create :publication,
+                        doi: 'https://doi.org/10.1001/jamadermatol.2015.3091',
+                        open_access_locations: [] }
+
+    before do
+      allow_any_instance_of(Publication).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+    end
+
+    it 'rolls back any db changes' do
+      expect {
+        importer.import_all
+      }.not_to change(OpenAccessLocation, :count)
+    end
+  end
+
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create :publication, doi: nil, open_access_status: nil }
