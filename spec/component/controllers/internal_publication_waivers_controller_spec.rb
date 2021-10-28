@@ -6,8 +6,8 @@ describe InternalPublicationWaiversController, type: :controller do
   let!(:user) { create :user }
   let!(:other_user) { create :user }
   let!(:pub) { create :publication }
-  let!(:oa_pub) { create :publication, open_access_url: 'url' }
-  let!(:uoa_pub) { create :publication, user_submitted_open_access_url: 'url' }
+  let!(:oa_pub) { create :publication, open_access_locations: [build(:open_access_location, :open_access_button)] }
+  let!(:uoa_pub) { create :publication, open_access_locations: [build(:open_access_location, :user)] }
   let!(:other_pub) { create :publication }
   let!(:uploaded_pub) { create :publication }
   let!(:other_uploaded_pub) { create :publication }
