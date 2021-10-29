@@ -24,6 +24,26 @@ describe 'Admin publication list', type: :feature do
         expect(page).to have_content publication2.id
         expect(page).to have_content 'Another Publication'
       end
+
+      it 'shows a link to view all publications' do
+        expect(page).to have_link 'All'
+      end
+
+      it 'shows a link to scope the list by open access' do
+        expect(page).to have_link 'Open Access'
+      end
+
+      it 'shows a link to scope the list by ScholarSphere open access' do
+        expect(page).to have_link 'Scholarsphere Open Access'
+      end
+
+      it 'shows a link to scope the list by user provided open access' do
+        expect(page).to have_link 'User Open Access'
+      end
+
+      it 'shows a link to scope the list by OAB open access' do
+        expect(page).to have_link 'OAB Open Access'
+      end
     end
 
     describe 'the page layout' do

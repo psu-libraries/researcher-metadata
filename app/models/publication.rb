@@ -82,6 +82,9 @@ class Publication < ApplicationRecord
   scope :subject_to_open_access_policy, -> { journal_article.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
   scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }
+  scope :scholarsphere_open_access, -> { open_access.where(open_access_locations: { source: Source::SCHOLARSPHERE }) }
+  scope :user_open_access, -> { open_access.where(open_access_locations: { source: Source::USER }) }
+  scope :oab_open_access, -> { open_access.where(open_access_locations: { source: Source::OPEN_ACCESS_BUTTON }) }
 
   scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
 
@@ -309,6 +312,14 @@ class Publication < ApplicationRecord
 
   rails_admin do
     list do
+      scopes [
+        nil,
+        :open_access,
+        :scholarsphere_open_access,
+        :user_open_access,
+        :oab_open_access
+      ]
+
       field(:id)
       field(:title)
       field(:secondary_title)
