@@ -25,6 +25,13 @@ Lint/ConstantDefinitionInBlock:
   Exclude:
     - 'spec/component/models/concerns/null_object_pattern_spec.rb'
 
+RSpec/AnyInstance:
+  Exclude:
+    - 'spec/component/importers/news_feed_item_importer_spec.rb'
+    - 'spec/component/importers/unpaywall_publication_importer_spec.rb'
+    - 'spec/component/models/activity_insight_publication_exporter_spec.rb'
+    - 'spec/component/models/scholarsphere_work_deposit_spec.rb'
+
 RSpec/LeakyConstantDeclaration:
   Exclude:
     - 'spec/component/models/concerns/null_object_pattern_spec.rb'

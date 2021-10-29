@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - gunicorn
       Date:
-      - Wed, 20 Oct 2021 17:02:21 GMT
+      - Wed, 27 Oct 2021 20:13:16 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -44,5 +44,5 @@ http_interactions:
             "error": true,
             "message": "'10.000/nodata' isn't in Unpaywall. See https://support.unpaywall.org/a/solutions/articles/44001900286"
         }
-  recorded_at: Wed, 20 Oct 2021 17:02:21 GMT
+  recorded_at: Wed, 27 Oct 2021 20:13:16 GMT
 recorded_with: VCR 6.0.0
