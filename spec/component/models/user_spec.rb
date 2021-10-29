@@ -457,8 +457,7 @@ describe User, type: :model do
                              ended_on: nil }
     let!(:eu_pub_4) { create :publication,
                              published_on: Date.new(2020, 7, 1),
-                             open_access_url: '',
-                             user_submitted_open_access_url: '' }
+                             open_access_locations: [] }
     let!(:eu_auth_4) { create :authorship,
                               user: email_user_4,
                               publication: eu_pub_4,
@@ -526,7 +525,11 @@ describe User, type: :model do
                              user: other_user_6,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_6) { create :publication, published_on: Date.new(2020, 7, 1), open_access_url: 'a_url' }
+    let!(:ou_pub_6) { create :publication,
+                             published_on: Date.new(2020, 7, 1),
+                             open_access_locations: [build(:open_access_location,
+                                                           source: Source::OPEN_ACCESS_BUTTON,
+                                                           url: 'a_url')] }
     let!(:ou_auth_6) { create :authorship,
                               user: other_user_6,
                               publication: ou_pub_6,
@@ -538,7 +541,11 @@ describe User, type: :model do
                              user: other_user_7,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:ou_pub_7) { create :publication, published_on: Date.new(2020, 7, 1), user_submitted_open_access_url: 'a_url' }
+    let!(:ou_pub_7) { create :publication,
+                             published_on: Date.new(2020, 7, 1),
+                             open_access_locations: [build(:open_access_location,
+                                                           source: Source::USER,
+                                                           url: 'a_url')] }
     let!(:ou_auth_7) { create :authorship,
                               user: other_user_7,
                               publication: ou_pub_7,
@@ -629,7 +636,11 @@ describe User, type: :model do
                               user: other_user_14,
                               started_on: Date.new(2019, 1, 1),
                               ended_on: nil }
-    let!(:ou_pub_14) { create :publication, published_on: Date.new(2020, 7, 1), scholarsphere_open_access_url: 'a_url' }
+    let!(:ou_pub_14) { create :publication,
+                              published_on: Date.new(2020, 7, 1),
+                              open_access_locations: [build(:open_access_location,
+                                                            source: Source::SCHOLARSPHERE,
+                                                            url: 'a_url')] }
     let!(:ou_auth_14) { create :authorship,
                                user: other_user_14,
                                publication: ou_pub_14,
@@ -675,8 +686,7 @@ describe User, type: :model do
 
     let!(:potential_pub_2) { create :publication,
                                     published_on: Date.new(2020, 7, 1),
-                                    open_access_url: '',
-                                    user_submitted_open_access_url: '' }
+                                    open_access_locations: [] }
     let!(:p_auth_2) { create :authorship,
                              user: user,
                              publication: potential_pub_2,
@@ -695,7 +705,9 @@ describe User, type: :model do
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create :publication,
                                 published_on: Date.new(2020, 7, 1),
-                                open_access_url: 'a_url' }
+                                open_access_locations: [build(:open_access_location,
+                                                              source: Source::OPEN_ACCESS_BUTTON,
+                                                              url: 'a_url')] }
     let!(:o_auth_5) { create :authorship,
                              user: user,
                              publication: other_pub_5,
@@ -705,7 +717,9 @@ describe User, type: :model do
     # Filtered out due to presence of user_submitted_open_access_url
     let!(:other_pub_6) { create :publication,
                                 published_on: Date.new(2020, 7, 1),
-                                user_submitted_open_access_url: 'a_url' }
+                                open_access_locations: [build(:open_access_location,
+                                                              source: Source::USER,
+                                                              url: 'a_url')] }
     let!(:o_auth_6) { create :authorship,
                              user: user,
                              publication: other_pub_6,
@@ -798,7 +812,9 @@ describe User, type: :model do
     # Filtered out due to presence of scholarsphere_open_access_url
     let!(:other_pub_15) { create :publication,
                                  published_on: Date.new(2020, 7, 1),
-                                 scholarsphere_open_access_url: 'a_url' }
+                                 open_access_locations: [build(:open_access_location,
+                                                               source: Source::SCHOLARSPHERE,
+                                                               url: 'a_url')] }
     let!(:o_auth_15) { create :authorship,
                               user: user,
                               publication: other_pub_15,
@@ -841,8 +857,7 @@ describe User, type: :model do
 
     let!(:potential_pub_2) { create :publication,
                                     published_on: Date.new(2020, 7, 1),
-                                    open_access_url: '',
-                                    user_submitted_open_access_url: '' }
+                                    open_access_locations: [] }
     let!(:p_auth_2) { create :authorship,
                              user: user,
                              publication: potential_pub_2,
@@ -860,7 +875,9 @@ describe User, type: :model do
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create :publication,
                                 published_on: Date.new(2020, 7, 1),
-                                open_access_url: 'a_url' }
+                                open_access_locations: [build(:open_access_location,
+                                                              source: Source::OPEN_ACCESS_BUTTON,
+                                                              url: 'a_url')] }
     let!(:o_auth_5) { create :authorship,
                              user: user,
                              publication: other_pub_5,
@@ -869,7 +886,9 @@ describe User, type: :model do
     # Filtered out due to presence of user_submitted_open_access_url
     let!(:other_pub_6) { create :publication,
                                 published_on: Date.new(2020, 7, 1),
-                                user_submitted_open_access_url: 'a_url' }
+                                open_access_locations: [build(:open_access_location,
+                                                              source: Source::USER,
+                                                              url: 'a_url')] }
     let!(:o_auth_6) { create :authorship,
                              user: user,
                              publication: other_pub_6,
@@ -954,7 +973,9 @@ describe User, type: :model do
     # Filtered out due to presence of scholarsphere_open_access_url
     let!(:other_pub_15) { create :publication,
                                  published_on: Date.new(2020, 7, 1),
-                                 scholarsphere_open_access_url: 'a_url' }
+                                 open_access_locations: [build(:open_access_location,
+                                                               source: Source::SCHOLARSPHERE,
+                                                               url: 'a_url')] }
     let!(:o_auth_15) { create :authorship,
                               user: user,
                               publication: other_pub_15,

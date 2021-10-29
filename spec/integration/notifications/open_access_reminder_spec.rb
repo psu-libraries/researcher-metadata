@@ -30,7 +30,9 @@ describe 'sending open access reminder emails' do
   let!(:u2_pub2) { create :publication,
                           published_on: Date.new(2020, 8, 1),
                           title: 'Other Pub',
-                          open_access_url: 'a_url' }
+                          open_access_locations: [build(:open_access_location,
+                                                        source: Source::OPEN_ACCESS_BUTTON,
+                                                        url: 'a_url')] }
 
   let!(:u2_auth2) { create :authorship, user: user2, publication: u2_pub2, confirmed: true }
 

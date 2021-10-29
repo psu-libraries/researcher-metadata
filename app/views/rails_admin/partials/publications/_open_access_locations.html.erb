@@ -1,0 +1,24 @@
+<% if open_access_locations.any? %>
+  <table class="table table-condensed table-striped">
+    <thead>
+      <tr>
+        <th class="header">Source</th>
+        <th class="header">Link</th>
+        <th class="header">Best?</th>
+      </tr>
+    </thead>
+    <tbody>
+
+      <% open_access_locations.each do |oal| %>
+        <tr>
+          <td><%= oal.source&.display %></td>
+          <td><%= link_to oal.url, rails_admin.show_path(model_name: :open_access_location, id: oal.id) %>
+          <td><%= oal.is_best ? '&#10004;'.html_safe : '' %>
+        </tr>
+      <% end %>
+
+    </tbody>
+  </table>
+<% else %>
+  -
+<% end %>

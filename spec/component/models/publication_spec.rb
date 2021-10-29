@@ -335,42 +335,37 @@ describe Publication, type: :model do
 
   describe '.open_access' do
     let!(:pub1) { create :publication,
-                         open_access_url: nil,
-                         user_submitted_open_access_url: nil,
-                         scholarsphere_open_access_url: nil }
+                         title: 'pub1',
+                         open_access_locations: [] }
     let!(:pub2) { create :publication,
-                         open_access_url: 'url',
-                         user_submitted_open_access_url: nil,
-                         scholarsphere_open_access_url: nil }
+                         title: 'pub2',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                         ]
+    }
     let!(:pub3) { create :publication,
-                         open_access_url: nil,
-                         user_submitted_open_access_url: 'url',
-                         scholarsphere_open_access_url: nil}
+                         title: 'pub3',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil)
+                         ]
+    }
     let!(:pub4) { create :publication,
-                         open_access_url: nil,
-                         user_submitted_open_access_url: nil,
-                         scholarsphere_open_access_url: 'url'
+                         title: 'pub4',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ]
     }
     let!(:pub5) { create :publication,
-                         open_access_url: 'url',
-                         user_submitted_open_access_url: 'url',
-                         scholarsphere_open_access_url: 'url'
+                         title: 'pub5',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ]
     }
-    let!(:pub6) { create :publication,
-                         open_access_url: '',
-                         user_submitted_open_access_url: nil,
-                         scholarsphere_open_access_url: nil }
-    let!(:pub6) { create :publication,
-                         open_access_url: nil,
-                         user_submitted_open_access_url: '',
-                         scholarsphere_open_access_url: nil }
-    let!(:pub6) { create :publication,
-                         open_access_url: nil,
-                         user_submitted_open_access_url: nil,
-                         scholarsphere_open_access_url: '' }
 
     it 'returns publications that have an open access URL' do
-      expect(described_class.open_access).to match_array [pub2, pub3, pub4, pub5]
+      expect(described_class.open_access.map(&:title)).to match_array [pub2, pub3, pub4, pub5].map(&:title)
     end
   end
 
@@ -798,13 +793,64 @@ describe Publication, type: :model do
   end
 
   describe '#preferred_open_access_url' do
-    let(:pub) { described_class.new }
-    let(:policy) { double 'preferred open access policy', url: 'preferred_url' }
+    let(:pub) { described_class.new open_access_locations: open_access_locations }
+    let(:open_access_locations) { [build_stubbed(:open_access_location)] }
+    let(:policy) { instance_double 'PreferredOpenAccessPolicy', url: 'preferred_url' }
 
-    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(open_access_locations).and_return policy }
 
     it 'returns the preferred URL' do
       expect(pub.preferred_open_access_url).to eq 'preferred_url'
+    end
+  end
+
+  describe '#scholarsphere_open_access_url' do
+    subject(:ss_url) { pub.scholarsphere_open_access_url }
+
+    let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
+
+    context 'when an OpenAccessLocation from scholarsphere exists' do
+      let(:open_access_locations) { [
+        build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'SS OAL URL'),
+        build(:open_access_location, source: Source::USER)
+      ]}
+
+      it 'uses the url from the correct OAL' do
+        expect(ss_url).to eq 'SS OAL URL'
+      end
+    end
+
+    context 'when an OpenAccessLocation from scholarsphere does not exist' do
+      let(:open_access_locations) { [
+        build(:open_access_location, source: Source::USER)
+      ]}
+
+      it { is_expected.to be_blank }
+    end
+  end
+
+  describe '#user_submitted_open_access_url' do
+    subject(:user_oa_url) { pub.user_submitted_open_access_url }
+
+    let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
+
+    context 'when an OpenAccessLocation submitted by a user exists' do
+      let(:open_access_locations) { [
+        build(:open_access_location, source: Source::SCHOLARSPHERE),
+        build(:open_access_location, source: Source::USER, url: 'USER OAL URL')
+      ]}
+
+      it 'uses the url from the correct OAL' do
+        expect(user_oa_url).to eq 'USER OAL URL'
+      end
+    end
+
+    context 'when an OpenAccessLocation from a user does not exist' do
+      let(:open_access_locations) { [
+        build(:open_access_location, source: Source::SCHOLARSPHERE)
+      ]}
+
+      it { is_expected.to be_blank }
     end
   end
 
@@ -897,7 +943,7 @@ describe Publication, type: :model do
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
 
-    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub.open_access_locations).and_return policy }
 
     context "when none of the publication's authorships have a waiver" do
       context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
@@ -1017,7 +1063,7 @@ describe Publication, type: :model do
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
 
-    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub).and_return policy }
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub.open_access_locations).and_return policy }
 
     context "when none of the publication's authorships have a waiver" do
       context 'when the publication has no authorships that have been uploaded to ScholarSphere' do

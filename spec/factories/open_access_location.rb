@@ -5,5 +5,11 @@ FactoryBot.define do
     publication
     source { Source::USER }
     url { 'test_url' }
+
+    OpenAccessLocation.sources.each do |src_k, src_v|
+      trait src_k do
+        source { src_v }
+      end
+    end
   end
 end

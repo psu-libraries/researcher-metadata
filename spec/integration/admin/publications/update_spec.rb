@@ -5,8 +5,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating a publication via the admin interface', type: :feature do
   let!(:pub) { create(:publication,
-                      title: 'Test Publication',
-                      scholarsphere_open_access_url: 'existing_scholarsphere_url') }
+                      title: 'Test Publication') }
 
   context 'when the current user is an admin' do
     before do
@@ -27,13 +26,11 @@ describe 'updating a publication via the admin interface', type: :feature do
     describe 'submitting the form with new data to update a publication record' do
       before do
         fill_in 'Title', with: 'Updated Title'
-        fill_in 'Scholarsphere Open Access URL', with: 'new_scholarsphere_url'
         click_on 'Save'
       end
 
       it "updates the publication's data" do
         expect(pub.reload.title).to eq 'Updated Title'
-        expect(pub.reload.scholarsphere_open_access_url).to eq 'new_scholarsphere_url'
       end
 
       it 'sets the timestamp on the publication to indicate that it was manually updated' do

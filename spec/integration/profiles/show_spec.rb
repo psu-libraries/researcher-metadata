@@ -32,7 +32,9 @@ describe 'Profile page', type: :feature do
                        title: 'Second Publication',
                        journal_title: 'Journal 2',
                        published_on: Date.new(2011, 1, 1),
-                       open_access_url: 'https://example.org/pubs/123.pdf' }
+                       open_access_locations: [build(:open_access_location,
+                                                     source: Source::OPEN_ACCESS_BUTTON,
+                                                     url: 'https://example.org/pubs/123.pdf')] }
   let!(:pub3) { create :publication,
                        publication_type: 'Book',
                        visible: true,

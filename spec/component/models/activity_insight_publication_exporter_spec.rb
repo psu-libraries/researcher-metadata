@@ -22,11 +22,13 @@ describe ActivityInsightPublicationExporter do
                       page_range: '1-2',
                       total_scopus_citations: '3',
                       authors_et_al: true,
-                      user_submitted_open_access_url: 'site.org',
+                      open_access_locations: [
+                        build(:open_access_location, :user, url: 'site.org')
+                      ],
                       isbn: '123-123-123')
   end
-  let!(:publication2) { FactoryBot.create(:publication) }
-  let!(:publication3) { FactoryBot.create(:publication, exported_to_activity_insight: true) }
+  let!(:publication2) { FactoryBot.create(:publication, id: 2) }
+  let!(:publication3) { FactoryBot.create(:publication, id: 3, exported_to_activity_insight: true) }
   let!(:ai_import) do
     FactoryBot.create(:publication_import, publication: publication2,
                                            source: 'Activity Insight', source_identifier: 'ai_id_1')

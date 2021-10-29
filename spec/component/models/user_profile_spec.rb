@@ -138,7 +138,9 @@ describe UserProfile do
       end
 
       context 'when a publication has an open access URL' do
-        before { pub1.update_attribute(:open_access_url, 'https://example.org/pubs/1') }
+        before { pub1.update_attribute(:open_access_locations, [build(:open_access_location,
+                                                                      source: Source::SCHOLARSPHERE,
+                                                                      url: 'https://example.org/pubs/1')]) }
 
         it "returns that publication's title as a link to the URL" do
           expect(profile.publications).to eq [

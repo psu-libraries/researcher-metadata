@@ -81,7 +81,7 @@ class Publication < ApplicationRecord
 
   scope :subject_to_open_access_policy, -> { journal_article.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
 
-  scope :open_access, -> { where(%{(open_access_url IS NOT NULL AND open_access_url != '') OR (user_submitted_open_access_url IS NOT NULL AND user_submitted_open_access_url != '') OR (scholarsphere_open_access_url IS NOT NULL AND scholarsphere_open_access_url != '')}) }
+  scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }
 
   scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
 
@@ -364,8 +364,7 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
-      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
+      field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
@@ -399,21 +398,16 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:open_access_status)
-      field(:open_access_url) do
-        label 'Open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:user_submitted_open_access_url) do
-        label 'User-submitted open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:scholarsphere_open_access_url) do
-        label 'Scholarsphere open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
-      field(:open_access_locations)
+      field(:open_access_locations) do
+        pretty_value do
+          bindings[:view].render(
+            partial: 'rails_admin/partials/publications/open_access_locations.html.erb',
+            locals: { open_access_locations: PreferredOpenAccessPolicy.new(value).rank_all }
+          )
+        end
+      end
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)
@@ -446,8 +440,6 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
-      field(:user_submitted_open_access_url) { label 'User-submitted open access URL' }
-      field(:scholarsphere_open_access_url) { label 'Scholarsphere Open Access URL' }
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -485,7 +477,22 @@ class Publication < ApplicationRecord
   end
 
   def preferred_open_access_url
-    policy = PreferredOpenAccessPolicy.new(self)
+    policy = PreferredOpenAccessPolicy.new(open_access_locations)
+    policy.url
+  end
+
+  # TODO more of these and we should metaprogram them from `OpenAccessLocation.sources`
+  def scholarsphere_open_access_url
+    scholarsphere_locations = open_access_locations.filter(&:source_scholarsphere?)
+    policy = PreferredOpenAccessPolicy.new(scholarsphere_locations)
+
+    policy.url
+  end
+
+  def user_submitted_open_access_url
+    user_locations = open_access_locations.filter(&:source_user?)
+    policy = PreferredOpenAccessPolicy.new(user_locations)
+
     policy.url
   end
 

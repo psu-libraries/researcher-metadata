@@ -208,11 +208,15 @@ describe 'editing profile preferences' do
         let!(:pub_3) { create :publication,
                               title: "Bob's Open Access Publication",
                               visible: true,
-                              open_access_url: 'https://example.org/pubs/1' }
+                              open_access_locations: [build(:open_access_location,
+                                                            source: Source::OPEN_ACCESS_BUTTON,
+                                                            url: 'https://example.org/pubs/1')] }
         let!(:pub_4) { create :publication,
                               title: "Bob's Other Open Access Publication",
                               visible: true,
-                              user_submitted_open_access_url: 'https://example.org/pubs/2' }
+                              open_access_locations: [build(:open_access_location,
+                                                            source: Source::OPEN_ACCESS_BUTTON,
+                                                            url: 'https://example.org/pubs/2')] }
         let!(:pub_5) { create :publication,
                               title: "Bob's Non-Open Access Publication",
                               visible: true }

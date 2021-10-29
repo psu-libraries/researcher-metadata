@@ -106,7 +106,8 @@ class User < ApplicationRecord
   end
 
   def self.needs_open_access_notification
-    joins(:authorships, :publications, :user_organization_memberships)
+    joins(:authorships, :user_organization_memberships, :publications)
+      .joins('LEFT OUTER JOIN open_access_locations ON open_access_locations.publication_id = publications.id')
       .where(publications: { status: Publication::PUBLISHED_STATUS })
       .where("publications.publication_type ~* 'Journal Article'")
       .where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))')
@@ -115,8 +116,8 @@ class User < ApplicationRecord
       .where('publications.published_on >= ?', Publication::OPEN_ACCESS_POLICY_START)
       .where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
       .where('authorships.confirmed IS TRUE')
-      .where("(publications.open_access_url IS NULL OR publications.open_access_url = '') AND (publications.user_submitted_open_access_url IS NULL OR publications.user_submitted_open_access_url = '') AND (publications.scholarsphere_open_access_url IS NULL OR publications.scholarsphere_open_access_url = '')")
       .where('publications.visible = true')
+      .where("open_access_locations.id IS NULL OR open_access_locations.url = ''")
       .distinct(:id)
   end
 
