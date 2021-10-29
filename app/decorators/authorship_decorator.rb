@@ -1,13 +1,9 @@
 # frozen_string_literal: true
 
-class AuthorshipDecorator < SimpleDelegator
+class AuthorshipDecorator < BaseDecorator
   def initialize(authorship, view_context = nil)
     @view_context = view_context
     super(authorship)
-  end
-
-  def class
-    __getobj__.class
   end
 
   def label

@@ -20,6 +20,18 @@ body {
   }
 }
 
+.masquerade-profile-nav {
+  background-color: $yellow;
+  clear: both;
+  margin-bottom: 10px;
+  padding: 0 16px 0 0;
+
+  .navbar-info {
+    margin: 0 60px 0 8px;
+    padding-top: 0;
+  }
+}
+
 .manage-profile-header {
   background-color: #595959;
   height: 38px;

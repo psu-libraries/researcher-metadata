@@ -9,10 +9,15 @@ Rails.application.routes.draw do
   end
 
   namespace :admin do
-    post 'user/:user_id/duplicate_publication_groupings' => 'duplicate_publication_groupings#create', as: :user_duplicate_publication_groupings
     post 'duplicate_publication_group/:duplicate_publication_group_id/merge' => 'publication_merges#create', as: :duplicate_publication_group_merge
     delete 'duplicate_publication_group/:id' => 'duplicate_publication_groups#delete', as: :duplicate_publication_group
     post 'external_publication_waivers/:external_publication_waiver_id/link' => 'publication_waiver_links#create', as: :publication_waiver_link
+
+    scope 'user/:user_id' do
+      post 'duplicate_publication_groupings' => 'duplicate_publication_groupings#create', as: :user_duplicate_publication_groupings
+      post 'unbecome' => 'masquerade#unbecome', as: :unbecomes_user
+      post 'become' => 'masquerade#become', as: :becomes_user
+    end
   end
 
   root to: 'public#home'

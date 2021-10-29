@@ -78,6 +78,20 @@ describe 'editing profile preferences' do
           expect(page).not_to have_link 'Manage my profile'
         end
       end
+
+      context 'when logged in as an admin' do
+        before do
+          authenticate_admin_user
+          visit profile_path(webaccess_id: 'abc123')
+        end
+
+        it 'allows the admin to become and unbecome the user in the profile' do
+          click_link('Become this user')
+          expect(page).to have_link('Unbecome this user')
+          click_link('Manage my profile')
+          expect(page).to have_link('Stop being abc123')
+        end
+      end
     end
   end
 

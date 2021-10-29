@@ -16,3 +16,15 @@ AllCops:
 Style/RescueModifier:
   Exclude:
     - 'app/importers/**/*'
+
+Lint/MissingSuper:
+  Exclude:
+    - 'app/models/concerns/null_object_pattern.rb'
+
+Lint/ConstantDefinitionInBlock:
+  Exclude:
+    - 'spec/component/models/concerns/null_object_pattern_spec.rb'
+
+RSpec/LeakyConstantDeclaration:
+  Exclude:
+    - 'spec/component/models/concerns/null_object_pattern_spec.rb'
