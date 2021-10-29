@@ -55,6 +55,9 @@ jobs:
           name: Database setup
           command: bundle exec rails db:schema:load --trace
       - run:
+          name: Check current version of node
+          command: node -v
+      - run:
           name: Niftany
           command: bundle exec niftany
       - run:
