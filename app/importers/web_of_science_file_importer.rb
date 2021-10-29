@@ -9,7 +9,7 @@ class WebOfScienceFileImporter
 
   def call
     import_files = Dir.children(dirname).select { |f| File.extname(f) == '.xml' }
-    pbar = ProgressBar.create(title: 'Importing Web of Science Data', total: import_files.count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing Web of Science Data', total: import_files.count)
     import_files.each do |file|
       Nokogiri::XML::Reader(File.open(dirname.join(file))).each do |node|
         if node.name == 'REC' && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT
@@ -129,9 +129,9 @@ class WebOfScienceFileImporter
           end
         end
       end
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   end
 
   private

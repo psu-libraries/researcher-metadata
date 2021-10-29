@@ -10,10 +10,10 @@ class ActivityInsightImporter
   attr_reader :errors
 
   def call
-    pbar = ProgressBar.create(title: 'Importing Activity Insight Data', total: ai_users.count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing Activity Insight Data', total: ai_users.count)
 
     ai_users.each do |aiu|
-      pbar.increment unless Rails.env.test?
+      pbar.increment
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
       details = ai_user_detail(aiu.raw_webaccess_id)
 
@@ -198,7 +198,7 @@ class ActivityInsightImporter
       end
     end
 
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   end
 
   private
@@ -225,7 +225,7 @@ class ActivityInsightImporter
     end
 
     def ai_users
-      return @users if @users.present?
+      return @users unless @users.nil?
 
       users_xml = Nokogiri::XML(ai_users_xml)
       @users = users_xml.css('Users User').map { |u| ActivityInsightListUser.new(u) }

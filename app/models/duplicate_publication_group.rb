@@ -4,17 +4,15 @@ class DuplicatePublicationGroup < ApplicationRecord
   has_many :publications, inverse_of: :duplicate_group
 
   def self.group_duplicates
-    unless Rails.env.test?
-      pbar = ProgressBar.create(title: 'Grouping duplicate publications',
-                                total: Publication.count)
-    end
+    pbar = ProgressBarTTY.create(title: 'Grouping duplicate publications',
+                                 total: Publication.count)
 
     Publication.find_each do |p|
       group_duplicates_of(p)
 
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
 
     nil
   end
@@ -60,16 +58,15 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def self.auto_merge
-    unless Rails.env.test?
-      pbar = ProgressBar.create(title: 'Auto-merging Pure and AI groups',
-                                total: count)
-    end
+    pbar = ProgressBarTTY.create(title: 'Auto-merging Pure and AI groups',
+                                 total: count)
+
     find_each do |g|
       g.auto_merge
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     end
 
-    pbar.finish unless Rails.env.test?
+    pbar.finish
     nil
   end
 

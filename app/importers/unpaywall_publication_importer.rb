@@ -2,8 +2,8 @@
 
 class UnpaywallPublicationImporter
   def import_all
-    pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
-                              total: all_pubs.count)
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
+                                 total: all_pubs.count)
 
     all_pubs.find_each do |p|
       query_unpaywall_for(p)
@@ -13,8 +13,8 @@ class UnpaywallPublicationImporter
   end
 
   def import_new
-    pbar = ProgressBar.create(title: 'Importing publication data from Unpaywall',
-                              total: new_pubs.count)
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
+                                 total: new_pubs.count)
 
     new_pubs.find_each do |p|
       query_unpaywall_for(p)

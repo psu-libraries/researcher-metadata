@@ -2,8 +2,8 @@
 
 class OpenAccessButtonPublicationImporter
   def import_all
-    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
-                              total: all_pubs.count)
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                 total: all_pubs.count)
 
     all_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -13,8 +13,8 @@ class OpenAccessButtonPublicationImporter
   end
 
   def import_new
-    pbar = ProgressBar.create(title: 'Importing publication data from Open Access Button',
-                              total: new_pubs.count)
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                 total: new_pubs.count)
 
     new_pubs.find_each do |p|
       query_open_access_button_for(p)

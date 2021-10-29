@@ -2,7 +2,7 @@
 
 class ScholarsphereImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing ScholarSphere publication URLs', total: ss_dois.count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing ScholarSphere publication URLs', total: ss_dois.count)
     ss_dois.each do |k, v|
       doi_url = k.gsub('doi:', 'https://doi.org/')
       matching_pubs = Publication.where(doi: doi_url)
@@ -18,7 +18,7 @@ class ScholarsphereImporter
                     publication_id: p&.id
                   })
       end
-      pbar.increment unless Rails.env.test?
+      pbar.increment
     rescue StandardError => e
       log_error(e, {
                   k: k,
@@ -26,7 +26,7 @@ class ScholarsphereImporter
                   matching_pub_ids: (binding.local_variable_get(:matching_pubs)&.map(&:id) rescue nil)
                 })
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   rescue StandardError => e
     log_error(e, {})
   end

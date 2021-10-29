@@ -2,7 +2,7 @@
 
 class LDAPImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing user data from LDAP', total: User.count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing user data from LDAP', total: User.count)
     ldap.open do
       User.find_each do |u|
         filter = Net::LDAP::Filter.eq('uid', u.webaccess_id)
@@ -13,7 +13,7 @@ class LDAPImporter
           u.save!
         end
 
-        pbar.increment unless Rails.env.test?
+        pbar.increment
       rescue StandardError => e
         log_error(e, {
                     user_id: u&.id,
@@ -21,7 +21,7 @@ class LDAPImporter
                   })
       end
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   rescue StandardError => e
     log_error(e, {})
   end

@@ -4,10 +4,10 @@ class OAIImporter
   def call
     puts "Loading publication records from #{repo_url} ..." unless Rails.env.test?
     load_records
-    pbar = ProgressBar.create(title: 'Importing publications', total: repo_records.count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing publications', total: repo_records.count)
 
     repo_records.each do |rr|
-      pbar.increment unless Rails.env.test?
+      pbar.increment
 
       if rr.any_user_matches?
         ActiveRecord::Base.transaction do
@@ -77,7 +77,7 @@ class OAIImporter
         end
       end
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
     nil
   end
 
