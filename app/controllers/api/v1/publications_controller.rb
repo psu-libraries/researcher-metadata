@@ -30,6 +30,18 @@ module API::V1
       render json: API::V1::GrantSerializer.new(publication.grants)
     end
 
+    def update_all
+      unless api_token.write_access?
+        render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401 and return
+      end
+
+      if params_valid?
+        render_patch_msg(200, 'success') if update_open_access_location.present?
+      else
+        render_patch_msg(422, 'params_invalid')
+      end
+    end
+
     swagger_path '/v1/publications/{id}/grants' do
       operation :get do
         key :summary, "Retrieve a publication's grants"
@@ -226,6 +238,78 @@ module API::V1
           key :api_key, []
         end
       end
+
+      operation :patch do
+        key :summary, 'Update publication\'s ScholarSphere Open Access Link'
+        key :description, 'Update publication\'s ScholarSphere Open Access Link by doi or activity insight id'
+        key :operationId, 'updateOpenAccessLink'
+        key :produces, [
+          'application/json'
+        ]
+        key :tags, [
+          'publication'
+        ]
+        parameter do
+          key :name, :Publication
+          key :in, :body
+          key :description, 'ScholarSphere Open Access Link update requires either a doi or an activity insight id'
+          key :required, true
+          schema do
+            key :'$ref', :PublicationInput
+          end
+        end
+        response 200 do
+          key :description, 'ScholarSphere Open Access Link successfully updated response'
+          schema do
+            key :'$ref', :PublicationPatchResult
+          end
+        end
+        response 404 do
+          key :description, 'No publications found response'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 422 do
+          key :description, 'ScholarSphere Open Access Link already exists response'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 401 do
+          key :description, 'Unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        security do
+          key :api_key, []
+        end
+      end
+    end
+
+    swagger_schema :PublicationInput do
+      key :required, [:scholarsphere_open_access_url]
+      property :activity_insight_id do
+        key :type, :string
+      end
+      property :doi do
+        key :type, :string
+      end
+      property :scholarsphere_open_access_url do
+        key :type, :string
+      end
+    end
+
+    swagger_schema :PublicationPatchResult do
+      key :required, [:code, :message]
+      property :code do
+        key :type, :integer
+        key :format, :int32
+      end
+      property :message do
+        key :type, :string
+      end
     end
 
     private
@@ -252,6 +336,66 @@ module API::V1
         end
 
         query.where(doi: doi)
+      end
+
+      def params_valid?
+        ai_id = params[:activity_insight_id]
+        doi = params[:doi]
+
+        (ai_id.present? && doi.nil?) ||
+          (ai_id.nil? && doi.present?) &&
+            params[:scholarsphere_open_access_url].present?
+      end
+
+      def update_open_access_location
+        locations = []
+
+        ActiveRecord::Base.transaction do
+          filtered_publications.each do |publication|
+            if existing_location?(publication)
+              render_patch_msg(422, 'already_exists')
+
+              return []
+            else
+              location = find_or_create_ss_oal(publication)
+              locations << location.url if location.valid?
+            end
+          end
+        end
+
+        render_patch_msg(404, 'no_content') if locations.blank?
+
+        locations
+      end
+
+      def filtered_publications
+        publications = []
+
+        if params[:activity_insight_id].present?
+          publications = filter_by_activity_insight_id(Publication)
+        elsif params[:doi].present?
+          publications = filter_by_doi(Publication)
+        end
+
+        publications
+      end
+
+      def existing_location?(publication)
+        publication.open_access_locations
+          .filter { |l| l.source == Source::USER }
+          .index_by(&:url)
+          .key?(params[:scholarsphere_open_access_url])
+      end
+
+      def find_or_create_ss_oal(publication)
+        publication.open_access_locations.find_or_create_by(
+          source: Source::USER,
+          url: params[:scholarsphere_open_access_url]
+        )
+      end
+
+      def render_patch_msg(code, message)
+        render json: { message: I18n.t("api.publications.patch.#{message}"), code: code }, status: code
       end
   end
 end

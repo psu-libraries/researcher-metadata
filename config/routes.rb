@@ -27,6 +27,7 @@ Rails.application.routes.draw do
   scope module: 'api' do
     namespace :v1 do
       get 'publications' => 'publications#index', as: :publications
+      patch 'publications' => 'publications#update_all'
       get 'publications/:id' => 'publications#show', as: :publication
       get 'publications/:id/grants' => 'publications#grants', as: :publication_grants
 

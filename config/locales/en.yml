@@ -57,6 +57,12 @@ en:
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
+    publications:
+      patch:
+        success: "The open access location was successfully updated."
+        no_content: "There were no publications found to be updated."
+        already_exists: "The open access location already exists."
+        params_invalid: "Invalid request params provided."
   profile:
     open_access_publications:
       update:

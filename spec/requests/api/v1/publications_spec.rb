@@ -145,6 +145,180 @@ describe 'API::V1 Publications' do
     end
   end
 
+  describe 'PATCH /v1/publications' do
+    context 'when no authorization header is included in the request' do
+      it 'returns 401 Unauthorized' do
+        patch '/v1/publications'
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when an invalid authorization header value is included in the request' do
+      before do
+        create :api_token, token: 'token123'
+      end
+
+      it 'returns 401 Unauthorized' do
+        patch '/v1/publications', headers: { "X-API-Key": 'bad-token' }
+        expect(response).to have_http_status :unauthorized
+      end
+
+      it 'returns 401 Unauthorized when the provided token does not have write access' do
+        patch '/v1/publications', headers: { "X-API-Key": 'token123' }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+
+    context 'when a valid authorization header value is included in the request' do
+      context 'with invalid request params' do
+        before do
+          create :api_token, token: 'token123', write_access: true
+
+          patch '/v1/publications',
+                headers: { "X-API-Key": 'token123' },
+                params: {
+                  some_key: 'some_value'
+                }
+        end
+
+        it 'returns HTTP status 422' do
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'returns the invalid params message' do
+          expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.params_invalid'))
+        end
+      end
+
+      context 'when valid request params: an activity insight id and a url' do
+        let(:activity_insight_id) { '123' }
+        let(:publication) { create :publication, open_access_locations: open_access_locations }
+
+        before do
+          create :api_token, token: 'token123', write_access: true
+          create :publication_import, source: 'Activity Insight', source_identifier: '123', publication: publication
+
+          patch '/v1/publications',
+                params: {
+                  activity_insight_id: activity_insight_id,
+                  scholarsphere_open_access_url: scholarsphere_open_access_url
+                },
+                headers: { "X-API-Key": 'token123' }
+        end
+
+        context 'with a new open access location' do
+          let(:scholarsphere_open_access_url) { 'new_url' }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+
+          it 'returns HTTP status 200' do
+            expect(response).to have_http_status :ok
+          end
+
+          it 'returns the success message' do
+            expect(json_response).to include(code: 200, message: I18n.t('api.publications.patch.success'))
+          end
+        end
+
+        context 'with an existing open access location' do
+          let(:scholarsphere_open_access_url) { 'existing_url' }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+
+          it 'returns HTTP status 422' do
+            expect(response).to have_http_status :unprocessable_entity
+          end
+
+          it 'returns the success message' do
+            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.already_exists'))
+          end
+        end
+
+        context 'when no publications found' do
+          let(:activity_insight_id) { 'non_existing_id' }
+          let(:scholarsphere_open_access_url) { 'new_url' }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+
+          it 'returns HTTP status 404' do
+            expect(response).to have_http_status :not_found
+          end
+
+          it 'returns the existing location message' do
+            expect(json_response).to include(code: 404, message: I18n.t('api.publications.patch.no_content'))
+          end
+        end
+      end
+
+      context 'when valid request params: a doi and a url' do
+        def request_with_doi
+          patch '/v1/publications',
+                params: {
+                  doi: doi,
+                  scholarsphere_open_access_url: scholarsphere_open_access_url
+                },
+                headers: { "X-API-Key": 'token123' }
+        end
+
+        let(:doi) { 'https://doi.org/10.26207/46a7-9981' }
+
+        before do
+          create :api_token, token: 'token123', write_access: true
+        end
+
+        context 'with a new open access location' do
+          let(:scholarsphere_open_access_url) { 'new_url' }
+
+          before do
+            create_list(:publication, 5, doi: doi)
+            request_with_doi
+          end
+
+          it 'returns HTTP status 200' do
+            expect(response).to have_http_status :ok
+          end
+
+          it 'returns the success message' do
+            expect(json_response).to include(code: 200, message: I18n.t('api.publications.patch.success'))
+          end
+        end
+
+        context 'with an existing open access location' do
+          let(:scholarsphere_open_access_url) { 'existing_url' }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+
+          before do
+            create :publication, doi: doi, open_access_locations: open_access_locations
+            request_with_doi
+          end
+
+          it 'returns HTTP status 422' do
+            expect(response).to have_http_status :unprocessable_entity
+          end
+
+          it 'returns the existing location message' do
+            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.already_exists'))
+          end
+        end
+
+        context 'when no publications found' do
+          let(:doi) { 'non_existing_doi' }
+          let(:scholarsphere_open_access_url) { 'new_url' }
+          let(:publication_import) {}
+
+          before do
+            request_with_doi
+          end
+
+          it 'returns HTTP status 404' do
+            expect(response).to have_http_status :not_found
+          end
+
+          it 'returns the existing location message' do
+            expect(json_response).to include(code: 404, message: I18n.t('api.publications.patch.no_content'))
+          end
+        end
+      end
+    end
+  end
+
   describe 'GET /v1/publications/:id' do
     let!(:pub) { create :publication,
                         title: 'requested publication',
