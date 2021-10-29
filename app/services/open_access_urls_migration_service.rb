@@ -3,19 +3,19 @@
 class OpenAccessUrlsMigrationService
   def self.call
     Publication.find_each do |pub|
-      if pub.open_access_url
+      if oa_url = pub.read_attribute(:open_access_url).presence
         OpenAccessLocation.find_or_create_by(source: Source::OPEN_ACCESS_BUTTON,
-                                             url: pub.open_access_url,
+                                             url: oa_url,
                                              publication_id: pub.id)
       end
-      if pub.scholarsphere_open_access_url
+      if ss_url = pub.read_attribute(:scholarsphere_open_access_url).presence
         OpenAccessLocation.find_or_create_by(source: Source::SCHOLARSPHERE,
-                                             url: pub.scholarsphere_open_access_url,
+                                             url: ss_url,
                                              publication_id: pub.id)
       end
-      if pub.user_submitted_open_access_url
+      if usr_url = pub.read_attribute(:user_submitted_open_access_url).presence
         OpenAccessLocation.find_or_create_by(source: Source::USER,
-                                             url: pub.user_submitted_open_access_url,
+                                             url: usr_url,
                                              publication_id: pub.id)
       end
     end
