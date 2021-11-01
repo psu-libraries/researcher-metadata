@@ -18,7 +18,12 @@ module Admin::Users
             bindings[:view]._current_user.is_admin
           end
         end
-        field(:webaccess_id) { label 'Penn State WebAccess ID' }
+        field(:webaccess_id) do
+          label 'Penn State WebAccess ID'
+          pretty_value do
+            %{<a href="#{Rails.application.routes.url_helpers.profile_path(value)}" target="_blank">#{value}</a>}.html_safe if value
+          end
+        end
         field(:first_name)
         field(:middle_name)
         field(:last_name)
