@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class OrcidWorksController < UserController
-  before_action :authenticate!
-
   def create
     authorship = current_user.authorships.find(params[:authorship_id])
 

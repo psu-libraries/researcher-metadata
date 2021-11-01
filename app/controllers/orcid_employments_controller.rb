@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class OrcidEmploymentsController < UserController
-  before_action :authenticate!
-
   def create
     membership = current_user.user_organization_memberships.find(params[:membership_id])
 

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class PresentationContributionsController < ApplicationController
-  before_action :authenticate_user!
-
+class PresentationContributionsController < UserController
   def update
     contribution = current_user.presentation_contributions.find(params[:id])
     contribution.update!(contribution_params)
