@@ -286,21 +286,23 @@ describe User, type: :model do
 
   describe '.from_omniauth' do
     let(:auth) { double 'auth', uid: uid }
-    let!(:user) { create :user, webaccess_id: 'abc123' }
 
     context 'when given an auth object with a UID matching a user in the database' do
-      let(:uid) { 'abc123' }
+      let(:user) { create :user, webaccess_id: 'abc123' }
+      let(:uid) { user.webaccess_id }
 
       it 'returns the matching user' do
         expect(described_class.from_omniauth(auth)).to eq user
       end
     end
 
-    context 'when given an auth object with a UID that does not match a user in the database' do
-      let(:uid) { 'xyz789' }
+    context 'when given an auth object with a UID that does not match a user in the database', :vcr do
+      let(:uid) { 'agw13' }
 
-      it 'raises an error' do
-        expect { described_class.from_omniauth(auth) }.to raise_error User::OmniauthError
+      it 'adds a new user' do
+        expect {
+          described_class.from_omniauth(auth)
+        }.to change(described_class, :count).by(1)
       end
     end
   end
@@ -1633,6 +1635,32 @@ describe User, type: :model do
       let(:user) { create(:user) }
 
       it { expect(user.psu_identity).to be_nil }
+    end
+  end
+
+  describe '#attributes_from_psu_identity', :vcr do
+    before { user.attributes_from_psu_identity }
+
+    context 'when identity data is present' do
+      let(:user) { create(:user, webaccess_id: 'agw13') }
+
+      it "sets the user's attributes using data from Penn State" do
+        expect(user.first_name).to eq('Adam')
+        expect(user.last_name).to eq('Wead')
+        expect(user.psu_identity).not_to be_nil
+        expect(user.psu_identity_updated_at).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
+    context 'when identity data is not present' do
+      let(:user) { create(:user, webaccess_id: 'idonotexist') }
+
+      it "does not change the user's attributes" do
+        expect(user.first_name).to eq(user.first_name)
+        expect(user.last_name).to eq(user.last_name)
+        expect(user.psu_identity).to be_nil
+        expect(user.psu_identity_updated_at).to be_nil
+      end
     end
   end
 
