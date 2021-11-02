@@ -12,7 +12,7 @@ class NSFGrantImporter
 
     import_dirs.each do |d|
       import_files = Dir.children(dirname.join(d)).select { |f| File.extname(f) == '.xml' }
-      pbar = ProgressBar.create(title: "Importing NSF Grant Data for #{d}", total: import_files.count) unless Rails.env.test?
+      pbar = ProgressBarTTY.create(title: "Importing NSF Grant Data for #{d}", total: import_files.count)
       import_files.each do |file|
         nsf_grant = NSFGrant.new(File.open(dirname.join(d).join(file)) { |f| Nokogiri::XML(f) })
 
@@ -37,9 +37,9 @@ class NSFGrantImporter
             end
           end
         end
-        pbar.increment unless Rails.env.test?
+        pbar.increment
       end
-      pbar.finish unless Rails.env.test?
+      pbar.finish
     end
   end
 

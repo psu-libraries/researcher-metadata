@@ -17,12 +17,12 @@ class CSVImporter
   end
 
   def call
-    pbar = ProgressBar.create(title: 'Importing CSV', total: line_count) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing CSV', total: line_count)
     chunk_number = 0
     SmarterCSV.process(filename, chunk_size: batch_size, headers_in_file: true, file_encoding: encoding) do |chunk|
       objects = []
       chunk.each_with_index.map do |row, index|
-        pbar.increment unless Rails.env.test?
+        pbar.increment
         row_number = (chunk_number * batch_size) + index + 1
         begin
           object = row_to_object(row)
@@ -37,7 +37,7 @@ class CSVImporter
       bulk_import(objects)
       chunk_number += 1
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
     raise ParseError, fatal_errors if fatal_errors_encountered?
   end
 
@@ -62,7 +62,10 @@ class CSVImporter
     end
 
     def line_count
-      `wc -l #{filename}`.to_i - 1
+      [
+        `wc -l #{filename}`.to_i - 1,
+        0
+      ].max
     end
 
     def encoding

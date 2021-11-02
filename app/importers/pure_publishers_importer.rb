@@ -2,7 +2,7 @@
 
 class PurePublishersImporter < PureImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing Pure publishers', total: total_pages) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing Pure publishers', total: total_pages)
 
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size
@@ -19,12 +19,12 @@ class PurePublishersImporter < PureImporter
                     item: item
                   })
       end
-      pbar.increment unless Rails.env.test?
+      pbar.increment
 
     rescue StandardError => e
       log_error(e, {})
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   rescue StandardError => e
     log_error(e, {})
   end

@@ -2,7 +2,7 @@
 
 class PureOrganizationsImporter < PureImporter
   def call
-    pbar = ProgressBar.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages)
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
@@ -21,16 +21,16 @@ class PureOrganizationsImporter < PureImporter
                     item: item
                   })
       end
-      pbar.increment unless Rails.env.test?
+      pbar.increment
 
     rescue StandardError => e
       log_error(e, {
                   organizations: organizations
                 })
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
 
-    pbar = ProgressBar.create(title: 'Importing Pure organization relationships', total: total_pages) unless Rails.env.test?
+    pbar = ProgressBarTTY.create(title: 'Importing Pure organization relationships', total: total_pages)
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
@@ -50,14 +50,14 @@ class PureOrganizationsImporter < PureImporter
                     item: item
                   })
       end
-      pbar.increment unless Rails.env.test?
+      pbar.increment
 
     rescue StandardError => e
       log_error(e, {
                   organizations: organizations
                 })
     end
-    pbar.finish unless Rails.env.test?
+    pbar.finish
   rescue StandardError => e
     log_error(e, {})
   end
