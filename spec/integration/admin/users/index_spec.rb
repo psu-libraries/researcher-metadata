@@ -8,8 +8,8 @@ describe 'Admin user list', type: :feature do
     before { authenticate_admin_user }
 
     describe 'the page content' do
-      let!(:user1) { create(:user, first_name: 'Bob', last_name: 'Testuser') }
-      let!(:user2) { create(:user, first_name: 'Susan', last_name: 'Tester') }
+      let!(:user1) { create(:user, first_name: 'Bob', last_name: 'Testuser', webaccess_id: 'bob') }
+      let!(:user2) { create(:user, first_name: 'Susan', last_name: 'Tester', webaccess_id: 'sue') }
 
       before { visit rails_admin.index_path(model_name: :user) }
 
@@ -34,6 +34,11 @@ describe 'Admin user list', type: :feature do
       it 'shows their status' do
         visit rails_admin.index_path(model_name: :user, set: 1)
         expect(page).to have_content 'Active?'
+      end
+
+      it "shows links to each user's public profile page" do
+        expect(page).to have_link('bob', href: '/profiles/bob')
+        expect(page).to have_link('sue', href: '/profiles/sue')
       end
     end
 
