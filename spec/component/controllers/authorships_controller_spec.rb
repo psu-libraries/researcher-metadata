@@ -1,22 +1,15 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe AuthorshipsController, type: :controller do
+  it { is_expected.to be_a(UserController) }
+
   describe '#update' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        put :update, params: { id: 1 }
+    let(:perform_request) { put :update, params: { id: 1 } }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        put :update, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       let!(:user) { create :user }
@@ -66,19 +59,9 @@ describe AuthorshipsController, type: :controller do
   end
 
   describe '#sort' do
-    context 'when not authenticated' do
-      it 'redirects to the sign in page' do
-        put :sort
+    let(:perform_request) { put :sort }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        put :sort
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       let!(:user) { create :user }

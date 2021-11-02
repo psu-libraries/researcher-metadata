@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::PublicationWaiverLinksController, type: :controller do
   let!(:waiver) { create :external_publication_waiver, user: user, reason_for_waiver: 'The reason' }
@@ -8,6 +9,10 @@ describe Admin::PublicationWaiverLinksController, type: :controller do
   let!(:user) { create :user }
 
   describe '#create' do
+    let(:perform_request) { post :create, params: { external_publication_waiver_id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when authenticated as an admin' do
       before do
         user = User.new(is_admin: true)
@@ -84,20 +89,6 @@ describe Admin::PublicationWaiverLinksController, type: :controller do
 
         expect(response).to redirect_to root_path
         expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        post :create, params: { external_publication_waiver_id: waiver.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        post :create, params: { external_publication_waiver_id: waiver.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

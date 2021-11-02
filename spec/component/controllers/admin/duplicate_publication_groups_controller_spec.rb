@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::DuplicatePublicationGroupsController, type: :controller do
   let!(:group) { create :duplicate_publication_group }
 
   describe '#delete' do
+    let(:perform_request) { delete :delete, params: { id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when authenticated as an admin' do
       before do
         user = User.new(is_admin: true)
@@ -83,20 +88,6 @@ describe Admin::DuplicatePublicationGroupsController, type: :controller do
 
         expect(response).to redirect_to root_path
         expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'redirects to the admin home page' do
-        delete :delete, params: { id: group.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        delete :delete, params: { id: group.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

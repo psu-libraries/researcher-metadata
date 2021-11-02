@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::PublicationMergesController, type: :controller do
   let!(:group) { create :duplicate_publication_group }
@@ -8,6 +9,14 @@ describe Admin::PublicationMergesController, type: :controller do
   let!(:pub2) { create :publication, duplicate_group: group }
 
   describe '#create' do
+    let(:perform_request) do
+      post :create, params: { duplicate_publication_group_id: 1,
+                              selected_publication_ids: [2],
+                              merge_target_publication_id: 3 }
+    end
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when authenticated as an admin' do
       before do
         user = User.new(is_admin: true)
@@ -38,24 +47,6 @@ describe Admin::PublicationMergesController, type: :controller do
 
         expect(response).to redirect_to root_path
         expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        post :create, params: { duplicate_publication_group_id: group.id,
-                                selected_publication_ids: [pub1.id],
-                                merge_target_publication_id: pub2.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        post :create, params: { duplicate_publication_group_id: group.id,
-                                selected_publication_ids: [pub1.id],
-                                merge_target_publication_id: pub2.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

@@ -1,12 +1,17 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::MasqueradeController, type: :controller do
   describe 'POST #become' do
-    let(:pretender) { create(:user) }
+    let(:perform_request) { post :become, params: { user_id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
+      let(:pretender) { create(:user) }
+
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)
@@ -35,26 +40,16 @@ describe Admin::MasqueradeController, type: :controller do
         end
       end
     end
-
-    context 'when not authenticated' do
-      it 'redirects to the admin home page' do
-        post :become, params: { user_id: pretender.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        post :become, params: { user_id: pretender.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
   end
 
   describe 'POST #unbecome' do
-    let(:pretender) { create(:user) }
+    let(:perform_request) { post :unbecome, params: { user_id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
+      let(:pretender) { create(:user) }
+
       before do
         session[:pretend_user_id] = pretender.id
         session[:admin_user_id] = user.id
@@ -87,20 +82,6 @@ describe Admin::MasqueradeController, type: :controller do
           expect(response).to redirect_to root_path
           expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
         end
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'redirects to the admin home page' do
-        post :unbecome, params: { user_id: pretender.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        post :unbecome, params: { user_id: pretender.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end
