@@ -1,11 +1,16 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::DuplicatePublicationGroupingsController, type: :controller do
   let!(:user) { create :user }
 
   describe '#create' do
+    let(:perform_request) { post :create, params: { user_id: user.id } }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when authenticated as an admin' do
       before do
         user = User.new(is_admin: true)
@@ -32,20 +37,6 @@ describe Admin::DuplicatePublicationGroupingsController, type: :controller do
 
         expect(response).to redirect_to root_path
         expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
-      end
-    end
-
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        post :create, params: { user_id: user.id }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'shows an error message' do
-        post :create, params: { user_id: user.id }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

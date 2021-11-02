@@ -1,69 +1,30 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe ProfilesController, type: :controller do
   describe '#edit_publications' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :edit_publications
+    let(:perform_request) { get :edit_publications }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :edit_publications
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
   end
 
   describe '#edit_presentations' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :edit_presentations
+    let(:perform_request) { get :edit_presentations }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :edit_presentations
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
   end
 
   describe '#edit_performances' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :edit_performances
+    let(:perform_request) { get :edit_performances }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :edit_performances
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
   end
 
   describe '#edit_other_publications' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :edit_other_publications
+    let(:perform_request) { get :edit_other_publications }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :edit_other_publications
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
   end
 end

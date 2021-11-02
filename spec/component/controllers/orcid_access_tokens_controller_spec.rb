@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe OrcidAccessTokensController, type: :controller do
+  it { is_expected.to be_a(UserController) }
+
   describe '#new' do
+    let(:perform_request) { post :new }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when the user is authenticated' do
       let!(:user) { create :user, orcid_access_token: token }
 
@@ -38,23 +45,13 @@ describe OrcidAccessTokensController, type: :controller do
         end
       end
     end
-
-    context 'when the user is not authenticated' do
-      it 'redirects to the home page' do
-        post :new
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        post :new
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
   end
 
   describe '#create' do
+    let(:perform_request) { get :create }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when the user is authenticated' do
       let(:client) { double 'ORCID Oauth client' }
       let!(:user) { create :user }
@@ -125,20 +122,6 @@ describe OrcidAccessTokensController, type: :controller do
             expect(response).to redirect_to profile_bio_path
           end
         end
-      end
-    end
-
-    context 'when the user is not authenticated' do
-      it 'redirects to the home page' do
-        get :create
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :create
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

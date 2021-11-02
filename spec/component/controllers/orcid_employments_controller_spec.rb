@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe OrcidEmploymentsController, type: :controller do
+  it { is_expected.to be_a(UserController) }
+
   describe '#create' do
+    let(:perform_request) { post :create, params: { membership_id: '2' } }
+
+    it_behaves_like 'an unauthenticated controller'
+
     context 'when the user is authenticated' do
       let!(:user) { create :user }
       let(:employment) { double 'ORCID employment', save!: nil, location: 'the_location' }
@@ -94,18 +101,6 @@ describe OrcidEmploymentsController, type: :controller do
         it 'redirects back to the profile bio page' do
           expect(response).to redirect_to profile_bio_path
         end
-      end
-    end
-
-    context 'when the user is not authenticated' do
-      it 'redirects to the home page' do
-        post :create, params: { membership_id: '2' }
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        post :create, params: { membership_id: '2' }
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
       end
     end
   end

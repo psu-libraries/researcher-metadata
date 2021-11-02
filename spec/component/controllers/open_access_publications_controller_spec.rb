@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe OpenAccessPublicationsController, type: :controller do
   let!(:user) { create :user }
@@ -44,19 +45,9 @@ describe OpenAccessPublicationsController, type: :controller do
   end
 
   describe '#edit' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :edit, params: { id: 1 }
+    let(:perform_request) { get :edit, params: { id: 1 } }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :edit, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       before do
@@ -169,19 +160,9 @@ describe OpenAccessPublicationsController, type: :controller do
   end
 
   describe '#update' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        patch :update, params: { id: 1 }
+    let(:perform_request) { patch :update, params: { id: 1 } }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        patch :update, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       before do
@@ -325,22 +306,11 @@ describe OpenAccessPublicationsController, type: :controller do
 
   describe '#create_scholarsphere_deposit' do
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
+    let(:perform_request) { post :create_scholarsphere_deposit, params: { id: 1 } }
 
     before { allow(ScholarsphereUploadJob).to receive(:perform_later) }
 
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        post :create_scholarsphere_deposit, params: { id: 1 }
-
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        post :create_scholarsphere_deposit, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       let(:now) { Time.new 2019, 1, 1, 0, 0, 0 }

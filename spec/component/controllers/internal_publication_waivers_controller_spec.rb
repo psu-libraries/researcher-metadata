@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe InternalPublicationWaiversController, type: :controller do
   let!(:user) { create :user }
@@ -40,19 +41,9 @@ describe InternalPublicationWaiversController, type: :controller do
   end
 
   describe '#new' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :new, params: { id: 1 }
+    let(:perform_request) { get :new, params: { id: 1 } }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :new, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       before do
@@ -118,19 +109,9 @@ describe InternalPublicationWaiversController, type: :controller do
   end
 
   describe '#create' do
-    context 'when not authenticated' do
-      it 'redirects to the home page' do
-        get :new, params: { id: 1 }
+    let(:perform_request) { post :create, params: { id: 1 } }
 
-        expect(response).to redirect_to root_path
-      end
-
-      it 'sets a flash error message' do
-        get :new, params: { id: 1 }
-
-        expect(flash[:alert]).to eq I18n.t('devise.failure.unauthenticated')
-      end
-    end
+    it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
       before do

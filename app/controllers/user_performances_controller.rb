@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class UserPerformancesController < ApplicationController
-  before_action :authenticate_user!
-
+class UserPerformancesController < UserController
   def update
     up = current_user.user_performances.find(params[:id])
     up.update!(up_params)

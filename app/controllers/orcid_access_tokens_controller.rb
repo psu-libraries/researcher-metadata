@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class OrcidAccessTokensController < UserController
-  before_action :authenticate!
   layout 'manage_profile'
 
   def new

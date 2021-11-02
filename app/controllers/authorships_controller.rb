@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class AuthorshipsController < ApplicationController
-  before_action :authenticate_user!
-
+class AuthorshipsController < UserController
   def update
     authorship = current_user.authorships.find(params[:id])
     authorship.update!(authorship_params.merge(updated_by_owner_at: Time.current))
