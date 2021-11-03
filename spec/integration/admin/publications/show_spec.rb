@@ -24,10 +24,8 @@ describe 'Admin publication detail page', type: :feature do
                       page_range: '12-15',
                       issn: '1234-5678',
                       doi: 'https://doi.org/10.000/test',
-                      open_access_url: nil,
-                      user_submitted_open_access_url: nil,
+                      open_access_locations: [],
                       journal: journal,
-                      scholarsphere_open_access_url: nil,
                       published_on: Date.new(2018, 8, 1),
                       open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, '-00:00'),
                       open_access_status: 'gold' }

@@ -18,8 +18,8 @@ describe 'visiting the page to submit an open access waiver for a publication' d
                      page_range: '478-483',
                      published_on: Date.new(2019, 1, 1) }
   let(:other_pub) { create :publication }
-  let(:oa_pub) { create :publication, open_access_url: 'a URL' }
-  let(:uoa_pub) { create :publication, user_submitted_open_access_url: 'user URL' }
+  let(:oa_pub) { create :publication, open_access_locations: [build(:open_access_location, :open_access_button, url: 'a URL')] }
+  let(:uoa_pub) { create :publication, open_access_locations: [build(:open_access_location, :user, url: 'user URL')] }
   let!(:auth) { create :authorship, user: user, publication: pub }
 
   before do

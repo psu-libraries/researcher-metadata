@@ -24,9 +24,6 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:authors_et_al).of_type(:boolean) }
   it { is_expected.to have_db_column(:published_on).of_type(:date) }
   it { is_expected.to have_db_column(:total_scopus_citations).of_type(:integer) }
-  it { is_expected.to have_db_column(:open_access_url).of_type(:text) }
-  it { is_expected.to have_db_column(:user_submitted_open_access_url).of_type(:text) }
-  it { is_expected.to have_db_column(:scholarsphere_open_access_url).of_type(:text) }
   it { is_expected.to have_db_column(:duplicate_publication_group_id).of_type(:integer) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
@@ -827,9 +824,7 @@ describe Publication, type: :model do
   describe '#scholarsphere_open_access_url' do
     subject(:ss_url) { pub.scholarsphere_open_access_url }
 
-    let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
-
-    let(:pub) { described_class.new scholarsphere_open_access_url: 'old url going away', open_access_locations: open_access_locations }
+    let(:pub) { described_class.new open_access_locations: open_access_locations }
 
     context 'when an OpenAccessLocation from scholarsphere exists' do
       let(:open_access_locations) { [
@@ -854,9 +849,7 @@ describe Publication, type: :model do
   describe '#user_submitted_open_access_url' do
     subject(:user_oa_url) { pub.user_submitted_open_access_url }
 
-    let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
-
-    let(:pub) { described_class.new user_submitted_open_access_url: 'old url going away', open_access_locations: open_access_locations }
+    let(:pub) { described_class.new open_access_locations: open_access_locations }
 
     context 'when an OpenAccessLocation submitted by a user exists' do
       let(:open_access_locations) { [

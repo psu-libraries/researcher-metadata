@@ -335,18 +335,6 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
-      field(:open_access_url) do
-        label 'Open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:user_submitted_open_access_url) do
-        label 'User-submitted open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
-      field(:scholarsphere_open_access_url) do
-        label 'Scholarsphere open access URL'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
-      end
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
