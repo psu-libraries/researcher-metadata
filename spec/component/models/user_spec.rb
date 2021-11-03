@@ -87,6 +87,10 @@ describe User, type: :model do
     it { is_expected.to have_many(:grants).through(:researcher_funds) }
     it { is_expected.to have_many(:external_publication_waivers) }
     it { is_expected.to have_many(:contributor_names) }
+    it { is_expected.to have_many(:primary_assignments).class_name(:DeputyAssignment).with_foreign_key(:primary_user_id) }
+    it { is_expected.to have_many(:deputies).through(:primary_assignments) }
+    it { is_expected.to have_many(:deputy_assignments).class_name(:DeputyAssignment).with_foreign_key(:deputy_user_id) }
+    it { is_expected.to have_many(:primaries).through(:deputy_assignments) }
   end
 
   describe 'validations' do
@@ -1681,6 +1685,48 @@ describe User, type: :model do
       let(:user) { build(:user, :with_psu_member_affiliation) }
 
       it { is_expected.not_to be_active }
+    end
+  end
+
+  describe '#deputies' do
+    subject(:user) { build(:user, deputies: [deputy]) }
+
+    let(:deputy) { build(:user) }
+
+    its(:deputies) { is_expected.to contain_exactly(deputy) }
+
+    context 'when deleting' do
+      before { user.save! }
+
+      it 'deletes the deputy and the relationship' do
+        expect(user).to be_persisted
+        expect(deputy).to be_persisted
+        deputy.destroy!
+        expect(user).to be_persisted
+        expect(deputy).not_to be_persisted
+        expect(user.reload.deputies).to be_empty
+      end
+    end
+  end
+
+  describe '#primaries' do
+    subject(:user) { build(:user, primaries: [primary]) }
+
+    let(:primary) { build(:user) }
+
+    its(:primaries) { is_expected.to contain_exactly(primary) }
+
+    context 'when deleting' do
+      before { user.save! }
+
+      it 'deletes the primary and the relationship' do
+        expect(user).to be_persisted
+        expect(primary).to be_persisted
+        primary.destroy!
+        expect(user).to be_persisted
+        expect(primary).not_to be_persisted
+        expect(user.reload.primaries).to be_empty
+      end
     end
   end
 end
