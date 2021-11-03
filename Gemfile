@@ -49,7 +49,7 @@ gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScr
 gem 'webpacker'                         # bundle assets
 
 group :development, :test do
-  gem 'apivore'
+  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
   gem 'byebug', platform: :mri
   gem 'factory_bot_rails'
   gem 'ffaker'
