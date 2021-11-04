@@ -3,6 +3,17 @@ en:
     attributes:
       open_access_url_form:
         open_access_url: "URL"
+  activerecord:
+    errors:
+      models:
+        deputy_assignment:
+          attributes:
+            deputy:
+              same_as_primary: 'cannot be the same as the primary user'
+              taken: 'has already been assigned to this user'
+              is_admin: 'cannot be an administrator'
+            primary:
+              is_admin: 'cannot be an administrator'
   admin:
     authorization:
       not_authorized: "Your account is not authorized to perform this action."

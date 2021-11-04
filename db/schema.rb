@@ -107,6 +107,19 @@ ActiveRecord::Schema.define(version: 2021_11_03_180127) do
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
+  create_table "deputy_assignments", force: :cascade do |t|
+    t.bigint "primary_user_id"
+    t.bigint "deputy_user_id"
+    t.datetime "deactivated_at"
+    t.boolean "is_active"
+    t.datetime "confirmed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deputy_user_id"], name: "index_deputy_assignments_on_deputy_user_id"
+    t.index ["primary_user_id", "deputy_user_id"], name: "index_deputy_assignments_on_primary_user_id_and_deputy_user_id", unique: true
+    t.index ["primary_user_id"], name: "index_deputy_assignments_on_primary_user_id"
+  end
+
   create_table "duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -590,6 +603,8 @@ ActiveRecord::Schema.define(version: 2021_11_03_180127) do
   add_foreign_key "contract_imports", "contracts", on_delete: :cascade
   add_foreign_key "contributor_names", "publications", on_delete: :cascade
   add_foreign_key "contributor_names", "users"
+  add_foreign_key "deputy_assignments", "users", column: "deputy_user_id"
+  add_foreign_key "deputy_assignments", "users", column: "primary_user_id"
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"

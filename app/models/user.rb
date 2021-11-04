@@ -41,6 +41,20 @@ class User < ApplicationRecord
   has_many :external_publication_waivers
   has_many :contributor_names
 
+  has_many :primary_assignments,
+           class_name: :DeputyAssignment,
+           foreign_key: :primary_user_id,
+           inverse_of: :primary,
+           dependent: :destroy
+  has_many :deputies, through: :primary_assignments
+
+  has_many :deputy_assignments,
+           class_name: :DeputyAssignment,
+           foreign_key: :deputy_user_id,
+           inverse_of: :deputy,
+           dependent: :destroy
+  has_many :primaries, through: :deputy_assignments
+
   scope :active, -> { where.not(psu_identity: nil).where("psu_identity->'data'->>'affiliation' != '[\"MEMBER\"]'") }
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
