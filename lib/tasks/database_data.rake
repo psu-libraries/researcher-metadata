@@ -5,6 +5,7 @@ namespace :database_data do
   # :get_prod_data_file should be run first
   # Then run :load_to_local, :load_to_qa, or :load_to_stage to load the data into
   # your local, qa, or stage environments respectively
+  # These tasks should be run from the root directory of the application on your local machine
 
   task get_prod_data_file: :environment do
     desc 'Pull production data down as a sql.gz file and store it in the tmp directory'
