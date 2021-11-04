@@ -1,0 +1,26 @@
+  <div class="open-access-action">
+    <h4>Search Publications</h4>
+
+    <%= simple_form_for :search, url: publications_path, method: :get do |f| %>
+      <%= f.input :title, type: :text, label: 'Title', required: false %>
+      <%= f.submit 'Search', class: 'btn btn-primary' %>
+    <% end %>
+  </div>
+
+  <% if @publications %>
+    <h5>Matching Publications</h5>
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Title</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @publications.each do |p| %>
+          <tr>
+            <td id="<%= dom_id(p) %>"><%= p.title %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  <% end %>

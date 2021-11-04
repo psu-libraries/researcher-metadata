@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 
   get 'profile' => redirect('profile/publications/edit')
   scope 'profile' do
+    get 'search_publications' => 'publications#index', as: :publications
     get 'publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
     get 'presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
     get 'performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
