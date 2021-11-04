@@ -11,7 +11,7 @@ namespace :database_data do
     hostname = 'rmdweb1prod'
 
     # Pull down db config to be parsed
-    db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
     # Parse values from db config
     db_password = db_config['production']['password']
@@ -54,7 +54,7 @@ namespace :database_data do
     hostname = 'rmdweb1qa'
 
     # Pull down db config to be parsed
-    db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
     # Parse values from db config
     db_password = db_config['staging']['password']
@@ -81,7 +81,7 @@ namespace :database_data do
     hostname = 'rmdweb1stage'
 
     # Pull down db config to be parsed
-    db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
     # Parse values from db config
     db_password = db_config['beta']['password']
