@@ -104,8 +104,7 @@ describe ScholarsphereImporter do
     context 'when there is an error within the inner loop' do
       let!(:pub) { create :publication,
                           doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
-                          scholarsphere_open_access_url: url }
-      let(:url) { '' }
+                          open_access_locations: [] }
 
       before do
         allow(ActiveRecord::Base).to receive(:transaction).and_raise(ZeroDivisionError)
