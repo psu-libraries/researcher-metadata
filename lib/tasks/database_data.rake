@@ -1,6 +1,11 @@
 # frozen_string_literal: true
 
 namespace :database_data do
+  # These tasks are for getting production data into local, qa, and stage environments
+  # :get_prod_data_file should be run first
+  # Then run :load_to_local, :load_to_qa, or :load_to_stage to load the data into
+  # your local, qa, or stage environments respectively
+
   task get_prod_data_file: :environment do
     desc 'Pull production data down as a sql.gz file and store it in the tmp directory'
     hostname = 'rmdweb1prod'
@@ -8,7 +13,7 @@ namespace :database_data do
     # Pull down db config to be parsed
     db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
-    # Parse values from db config locally
+    # Parse values from db config
     db_password = db_config['production']['password']
     db_username = db_config['production']['username']
     db_host = db_config['production']['host']
@@ -51,7 +56,7 @@ namespace :database_data do
     # Pull down db config to be parsed
     db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
-    # Parse values from db config locally
+    # Parse values from db config
     db_password = db_config['staging']['password']
     db_username = db_config['staging']['username']
     db_host = db_config['staging']['host']
@@ -68,7 +73,7 @@ namespace :database_data do
                                                                rm psql-rmd-prod-data.sql'`
 
     # Delete the production data file
-    File.delete("#{Rails.root}/tmp/psql-rmd-prod-data.sql") if File.exist?("#{Rails.root}/tmp/psql-rmd-prod-data.sql")
+    File.delete("#{Rails.root}/tmp/psql-rmd-prod-data.sql.gz") if File.exist?("#{Rails.root}/tmp/psql-rmd-prod-data.sql.gz")
   end
 
   task load_to_stage: :environment do
@@ -78,7 +83,7 @@ namespace :database_data do
     # Pull down db config to be parsed
     db_config = YAML.load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
-    # Parse values from db config locally
+    # Parse values from db config
     db_password = db_config['beta']['password']
     db_username = db_config['beta']['username']
     db_host = db_config['beta']['host']
@@ -95,6 +100,6 @@ namespace :database_data do
                                                                rm psql-rmd-prod-data.sql'`
 
     # Delete the production data file
-    File.delete("#{Rails.root}/tmp/psql-rmd-prod-data.sql") if File.exist?("#{Rails.root}/tmp/psql-rmd-prod-data.sql")
+    File.delete("#{Rails.root}/tmp/psql-rmd-prod-data.sql.gz") if File.exist?("#{Rails.root}/tmp/psql-rmd-prod-data.sql.gz")
   end
 end
