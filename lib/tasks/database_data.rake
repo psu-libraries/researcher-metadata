@@ -14,40 +14,38 @@ namespace :database_data do
     filename = "psql-rmd-prod-data-#{datetime}.sql"
     hostname = 'rmdweb1prod'
 
-    Net::SSH.start(hostname, "deploy", port: 1855) do |ssh|
-      # Pull down db config to be parsed
-      db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    # Pull down db config to be parsed
+    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
 
-      # Parse values from db config
-      db_password = db_config['production']['password']
-      db_username = db_config['production']['username']
-      db_host = db_config['production']['host']
-      db_name = db_config['production']['database']
+    # Parse values from db config
+    db_password = db_config['production']['password']
+    db_username = db_config['production']['username']
+    db_host = db_config['production']['host']
+    db_name = db_config['production']['database']
 
-      # Dump data into sql file and gzip
-      pg_prog = ProgressBar.create(total: nil, title: "pg_dump", format: "%t |%B| %a")
-      Thread.new { until pg_prog.finished? do pg_prog.increment; sleep(0.2); end }
-      `ssh deploy@#{hostname} -p 1855 PGPASSWORD=#{db_password} 'pg_dump --clean \
-                                                                         --no-owner \
-                                                                         -U #{db_username} \
-                                                                         -h #{db_host} \
-                                                                         -d #{db_name} > #{filename}'`
-      pg_prog.finish
+    # Dump data into sql file and gzip
+    pg_prog = ProgressBar.create(total: nil, title: "pg_dump", format: "%t |%B| %a")
+    Thread.new { until pg_prog.finished? do pg_prog.increment; sleep(0.2); end }
+    `ssh deploy@#{hostname} -p 1855 PGPASSWORD=#{db_password} 'pg_dump --clean \
+                                                                       --no-owner \
+                                                                       -U #{db_username} \
+                                                                       -h #{db_host} \
+                                                                       -d #{db_name} > #{filename}'`
+    pg_prog.finish
 
-      gz_prog = ProgressBar.create(total: nil, title: "gzip", format: "%t |%B| %a")
-      Thread.new { until gz_prog.finished? do gz_prog.increment; sleep(0.2); end }
-      `ssh deploy@#{hostname} -p 1855 'gzip #{filename}'`
-      gz_prog.finish
+    gz_prog = ProgressBar.create(total: nil, title: "gzip", format: "%t |%B| %a")
+    Thread.new { until gz_prog.finished? do gz_prog.increment; sleep(0.2); end }
+    `ssh deploy@#{hostname} -p 1855 'gzip #{filename}'`
+    gz_prog.finish
 
-      # Pull db dump down to local application's tmp directory
-      rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
-      Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
-      `rsync -e 'ssh -p 1855' deploy@#{hostname}:~/#{filename}.gz #{Rails.root}/tmp/#{filename}.gz`
-      rsync_prog.finish
+    # Pull db dump down to local application's tmp directory
+    rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
+    Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
+    `rsync -e 'ssh -p 1855' deploy@#{hostname}:~/#{filename}.gz #{Rails.root}/tmp/#{filename}.gz`
+    rsync_prog.finish
 
-      # Delete file on server
-      `ssh deploy@#{hostname} -p 1855 'rm #{filename}.gz'`
-    end
+    # Delete file on server
+    `ssh deploy@#{hostname} -p 1855 'rm #{filename}.gz'`
   end
 
   task load_to_local: :environment do
