@@ -107,10 +107,12 @@ class UserProfile
   end
 
   def education_history
-    degrees = user.education_history_items.where.not(degree: [nil, 'Other'],
-                                                     institution: nil,
-                                                     emphasis_or_major: nil,
-                                                     end_year: nil).order(end_year: :desc)
+    degrees = user.education_history_items
+      .where.not(degree: [nil, 'Other'])
+      .where.not(institution: nil)
+      .where.not(emphasis_or_major: nil)
+      .where.not(end_year: nil)
+      .order(end_year: :desc)
 
     degrees.map do |d|
       "#{d.degree}, #{d.emphasis_or_major} - #{d.institution} - #{d.end_year}"
