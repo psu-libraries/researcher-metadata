@@ -628,7 +628,7 @@ DEPENDENCIES
   pry-byebug
   psu_identity (~> 0.2)
   puma (~> 5.5)
-  rails (~> 6.1.4.1)
+  rails (~> 6.1)
   rails-controller-testing
   rails_admin (~> 2.2)
   rails_admin_toggleable
