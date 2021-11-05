@@ -5,7 +5,7 @@ class PublicationsController < ProfileManagementController
     if params[:search] && params[:search][:title].present?
       @publications = base_publication_query
         .where('title ILIKE ?', "%#{params[:search][:title]}%")
-        .limit(100).order(:title)
+        .limit(1000).order(:title)
     end
   end
 
