@@ -17,8 +17,8 @@
       </thead>
       <tbody>
         <% @publications.each do |p| %>
-          <tr>
-            <td id="<%= dom_id(p) %>"><%= p.title %></td>
+          <tr id="<%= dom_id(p) %>">
+            <td><%= p.title %></td>
           </tr>
         <% end %>
       </tbody>
