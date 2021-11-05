@@ -343,7 +343,8 @@ describe Publication, type: :model do
     let!(:pub3) { create :publication,
                          title: 'pub3',
                          open_access_locations: [
-                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil)
+                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
                          ]
     }
     let!(:pub4) { create :publication,
@@ -357,7 +358,8 @@ describe Publication, type: :model do
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
                            build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
-                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
                          ]
     }
 
@@ -382,6 +384,12 @@ describe Publication, type: :model do
     describe '.oab_open_access' do
       it 'returns publications that have an Open Access Button open access location' do
         expect(described_class.oab_open_access.map(&:title)).to match_array [pub2, pub5].map(&:title)
+      end
+    end
+
+    describe '.unpaywall_open_access' do
+      it 'returns publications that have an Unpaywall open access location' do
+        expect(described_class.unpaywall_open_access.map(&:title)).to match_array [pub3, pub5].map(&:title)
       end
     end
   end

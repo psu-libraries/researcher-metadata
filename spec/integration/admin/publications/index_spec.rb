@@ -44,6 +44,10 @@ describe 'Admin publication list', type: :feature do
       it 'shows a link to scope the list by OAB open access' do
         expect(page).to have_link 'OAB Open Access'
       end
+
+      it 'shows a link to scope the list by Unpaywall open access' do
+        expect(page).to have_link 'Unpaywall Open Access'
+      end
     end
 
     describe 'the page layout' do
