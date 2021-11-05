@@ -170,7 +170,7 @@ describe 'API::V1 Publications' do
     end
 
     context 'when a valid authorization header value is included in the request' do
-      context 'with invalid request params' do
+      context 'with invalid request params missing url' do
         before do
           create :api_token, token: 'token123', write_access: true
 
@@ -185,8 +185,51 @@ describe 'API::V1 Publications' do
           expect(response).to have_http_status :unprocessable_entity
         end
 
-        it 'returns the invalid params message' do
-          expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.params_invalid'))
+        it 'returns the invalid params missing url message' do
+          expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.params_missing_url'))
+        end
+      end
+
+      context 'with invalid request params missing ids' do
+        before do
+          create :api_token, token: 'token123', write_access: true
+
+          patch '/v1/publications',
+                headers: { "X-API-Key": 'token123' },
+                params: {
+                  scholarsphere_open_access_url: 'new_url',
+                  some_key: 'some_value'
+                }
+        end
+
+        it 'returns HTTP status 422' do
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'returns the invalid params missing ids message' do
+          expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.params_missing_id'))
+        end
+      end
+
+      context 'with invalid request both ids provided' do
+        before do
+          create :api_token, token: 'token123', write_access: true
+
+          patch '/v1/publications',
+                headers: { "X-API-Key": 'token123' },
+                params: {
+                  scholarsphere_open_access_url: 'new_url',
+                  doi: '123',
+                  activity_insight_id: '123'
+                }
+        end
+
+        it 'returns HTTP status 422' do
+          expect(response).to have_http_status :unprocessable_entity
+        end
+
+        it 'returns the invalid params both ids provided message' do
+          expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.params_both_ids'))
         end
       end
 
@@ -208,7 +251,7 @@ describe 'API::V1 Publications' do
 
         context 'with a new open access location' do
           let(:scholarsphere_open_access_url) { 'new_url' }
-          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
 
           it 'returns HTTP status 200' do
             expect(response).to have_http_status :ok
@@ -221,21 +264,21 @@ describe 'API::V1 Publications' do
 
         context 'with an existing open access location' do
           let(:scholarsphere_open_access_url) { 'existing_url' }
-          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
 
           it 'returns HTTP status 422' do
             expect(response).to have_http_status :unprocessable_entity
           end
 
           it 'returns the success message' do
-            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.already_exists'))
+            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.existing_location'))
           end
         end
 
         context 'when no publications found' do
           let(:activity_insight_id) { 'non_existing_id' }
           let(:scholarsphere_open_access_url) { 'new_url' }
-          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
 
           it 'returns HTTP status 404' do
             expect(response).to have_http_status :not_found
@@ -282,7 +325,7 @@ describe 'API::V1 Publications' do
 
         context 'with an existing open access location' do
           let(:scholarsphere_open_access_url) { 'existing_url' }
-          let(:open_access_locations) { [build(:open_access_location, source: Source::USER, url: 'existing_url')] }
+          let(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
 
           before do
             create :publication, doi: doi, open_access_locations: open_access_locations
@@ -294,7 +337,7 @@ describe 'API::V1 Publications' do
           end
 
           it 'returns the existing location message' do
-            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.already_exists'))
+            expect(json_response).to include(code: 422, message: I18n.t('api.publications.patch.existing_location'))
           end
         end
 

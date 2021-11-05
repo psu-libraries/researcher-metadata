@@ -107,6 +107,6 @@ class UnpaywallPublicationImporter
     end
 
     def build_new_oal(publication, url)
-      publication.open_access_locations.build(source: Source::USER, url: url)
+      publication.open_access_locations.build(source: Source::UNPAYWALL, url: url)
     end
 end
