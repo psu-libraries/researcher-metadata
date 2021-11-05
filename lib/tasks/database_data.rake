@@ -14,38 +14,41 @@ namespace :database_data do
     filename = "psql-rmd-prod-data-#{datetime}.sql"
     hostname = 'rmdweb1prod'
 
-    # Pull down db config to be parsed
-    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    Net::SSH.start(hostname, "deploy", port: 1855) do |ssh|
+      # Pull down db config to be parsed
+      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'))
 
-    # Parse values from db config
-    db_password = db_config['production']['password']
-    db_username = db_config['production']['username']
-    db_host = db_config['production']['host']
-    db_name = db_config['production']['database']
+      # Parse values from db config
+      db_password = db_config['production']['password']
+      db_username = db_config['production']['username']
+      db_host = db_config['production']['host']
+      db_name = db_config['production']['database']
 
-    # Dump data into sql file and gzip
-    pg_prog = ProgressBar.create(total: nil, title: "pg_dump", format: "%t |%B| %a")
-    Thread.new { until pg_prog.finished? do pg_prog.increment; sleep(0.2); end }
-    `ssh deploy@#{hostname} -p 1855 PGPASSWORD=#{db_password} 'pg_dump --clean \
-                                                                       --no-owner \
-                                                                       -U #{db_username} \
-                                                                       -h #{db_host} \
-                                                                       -d #{db_name} > #{filename}'`
-    pg_prog.finish
+      # Dump data into sql file and gzip
+      pg_prog = ProgressBar.create(total: nil, title: "pg_dump", format: "%t |%B| %a")
+      Thread.new { until pg_prog.finished? do pg_prog.increment; sleep(0.2); end }
+      ssh.exec!("PGPASSWORD=#{db_password} pg_dump --clean \
+                                                             --no-owner \
+                                                             -U #{db_username} \
+                                                             -h #{db_host} \
+                                                             -d #{db_name} > #{filename}")
+      pg_prog.finish
 
-    gz_prog = ProgressBar.create(total: nil, title: "gzip", format: "%t |%B| %a")
-    Thread.new { until gz_prog.finished? do gz_prog.increment; sleep(0.2); end }
-    `ssh deploy@#{hostname} -p 1855 'gzip #{filename}'`
-    gz_prog.finish
+      # Gzip file
+      gz_prog = ProgressBar.create(total: nil, title: "gzip", format: "%t |%B| %a")
+      Thread.new { until gz_prog.finished? do gz_prog.increment; sleep(0.2); end }
+      ssh.exec!("gzip #{filename}")
+      gz_prog.finish
 
-    # Pull db dump down to local application's tmp directory
-    rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
-    Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
-    `rsync -e 'ssh -p 1855' deploy@#{hostname}:~/#{filename}.gz #{Rails.root}/tmp/#{filename}.gz`
-    rsync_prog.finish
+      # Pull db dump down to local application's tmp directory
+      rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
+      Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
+      `rsync -e 'ssh -p 1855' -P deploy@#{hostname}:~/#{filename}.gz #{Rails.root}/tmp/#{filename}.gz`
+      rsync_prog.finish
 
-    # Delete file on server
-    `ssh deploy@#{hostname} -p 1855 'rm #{filename}.gz'`
+      # Delete file on server
+      ssh.exec!("rm #{filename}.gz")
+    end
   end
 
   task load_to_local: :environment do
@@ -65,7 +68,7 @@ namespace :database_data do
     psql_prog.finish
 
     # Delete the data file
-    Dir.glob("#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz").each { |file| File.delete(file) }
+    Dir.glob("#{Rails.root}/tmp/psql-rmd-prod-data-*.sql").each { |file| File.delete(file) }
   end
 
   task load_to_qa: :environment do
@@ -73,30 +76,32 @@ namespace :database_data do
     filename = File.basename(Dir["#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz"].first, ".gz")
     hostname = 'rmdweb1qa'
 
-    # Pull down db config to be parsed
-    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    Net::SSH.start(hostname, "deploy", port: 1855) do |ssh|
+      # Pull down db config to be parsed
+      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'))
 
-    # Parse values from db config
-    db_password = db_config['staging']['password']
-    db_username = db_config['staging']['username']
-    db_host = db_config['staging']['host']
-    db_name = db_config['staging']['database']
+      # Parse values from db config
+      db_password = db_config['staging']['password']
+      db_username = db_config['staging']['username']
+      db_host = db_config['staging']['host']
+      db_name = db_config['staging']['database']
 
-    # Push file out to qa
-    rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
-    Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
-    `rsync -e 'ssh -p 1855' #{Rails.root}/tmp/#{filename}.gz deploy@#{hostname}:~/#{filename}.gz`
-    rsync_prog.finish
+      # Push file out to qa
+      rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
+      Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
+      `rsync -e 'ssh -p 1855' #{Rails.root}/tmp/#{filename}.gz deploy@#{hostname}:~/#{filename}.gz`
+      rsync_prog.finish
 
-    # Unzip production data file and load it into the qa postgres db
-    psql_prog = ProgressBar.create(total: nil, title: "psql", format: "%t |%B| %a")
-    Thread.new { until psql_prog.finished? do psql_prog.increment; sleep(0.2); end }
-    `ssh deploy@#{hostname} -p 1855 'gunzip #{filename}.gz'`
-    `ssh deploy@#{hostname} -p 1855 PGPASSWORD=#{db_password} 'psql  -U #{db_username} \
-                                                                     -h #{db_host} \
-                                                                     -d #{db_name} < #{filename};
-                                                               rm #{filename}'`
-    psql_prog.finish
+      # Unzip production data file and load it into the qa postgres db
+      psql_prog = ProgressBar.create(total: nil, title: "psql", format: "%t |%B| %a")
+      Thread.new { until psql_prog.finished? do psql_prog.increment; sleep(0.2); end }
+      ssh.exec!("gunzip #{filename}.gz")
+      ssh.exec!("PGPASSWORD=#{db_password} 'psql  -U #{db_username} \
+                                                            -h #{db_host} \
+                                                            -d #{db_name} < #{filename};
+                                                      rm #{filename}")
+      psql_prog.finish
+    end
 
     # Delete the data file
     Dir.glob("#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz").each { |file| File.delete(file) }
@@ -107,30 +112,32 @@ namespace :database_data do
     filename = File.basename(Dir["#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz"].first, ".gz")
     hostname = 'rmdweb1stage'
 
-    # Pull down db config to be parsed
-    db_config = YAML.safe_load(`ssh deploy@#{hostname} -p 1855 'cat rmd/current/config/database.yml'`)
+    Net::SSH.start(hostname, "deploy", port: 1855) do |ssh|
+      # Pull down db config to be parsed
+      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'))
 
-    # Parse values from db config
-    db_password = db_config['beta']['password']
-    db_username = db_config['beta']['username']
-    db_host = db_config['beta']['host']
-    db_name = db_config['beta']['database']
+      # Parse values from db config
+      db_password = db_config['beta']['password']
+      db_username = db_config['beta']['username']
+      db_host = db_config['beta']['host']
+      db_name = db_config['beta']['database']
 
-    # Push file out to stage
-    rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
-    Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
-    `rsync -e 'ssh -p 1855' #{Rails.root}/tmp/#{filename}.gz deploy@#{hostname}:~/#{filename}.gz`
-    rsync_prog.finish
+      # Push file out to stage
+      rsync_prog = ProgressBar.create(total: nil, title: "rsync", format: "%t |%B| %a")
+      Thread.new { until rsync_prog.finished? do rsync_prog.increment; sleep(0.2); end }
+      `rsync -e 'ssh -p 1855' #{Rails.root}/tmp/#{filename}.gz deploy@#{hostname}:~/#{filename}.gz`
+      rsync_prog.finish
 
-    # Unzip production data file and load it into the stage postgres db
-    psql_prog = ProgressBar.create(total: nil, title: "psql", format: "%t |%B| %a")
-    Thread.new { until psql_prog.finished? do psql_prog.increment; sleep(0.2); end }
-    `ssh deploy@#{hostname} -p 1855 'gunzip #{filename}.gz'`
-    `ssh deploy@#{hostname} -p 1855 PGPASSWORD=#{db_password} 'psql  -U #{db_username} \
-                                                                     -h #{db_host} \
-                                                                     -d #{db_name} < #{filename};
-                                                               rm #{filename}'`
-    psql_prog.finish
+      # Unzip production data file and load it into the stage postgres db
+      psql_prog = ProgressBar.create(total: nil, title: "psql", format: "%t |%B| %a")
+      Thread.new { until psql_prog.finished? do psql_prog.increment; sleep(0.2); end }
+      ssh.exec!("gunzip #{filename}.gz")
+      ssh.exec!("PGPASSWORD=#{db_password} psql  -U #{db_username} \
+                                                           -h #{db_host} \
+                                                           -d #{db_name} < #{filename};
+                                                     rm #{filename}")
+      psql_prog.finish
+    end
 
     # Delete the data file
     Dir.glob("#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz").each { |file| File.delete(file) }
