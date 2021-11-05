@@ -24,4 +24,24 @@ describe PublicationsController, type: :controller do
       end
     end
   end
+
+  describe '#show' do
+    let!(:pub) { create :publication }
+    let(:perform_request) { get :show, params: { id: pub.id } }
+
+    it_behaves_like 'an unauthenticated controller'
+
+    context 'when the user is authenticated' do
+      let!(:user) { create :user }
+
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+
+      it 'renders the publication detail view' do
+        expect(perform_request).to render_template(:show)
+      end
+    end
+  end
 end

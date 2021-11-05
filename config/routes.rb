@@ -51,6 +51,7 @@ Rails.application.routes.draw do
   get 'profile' => redirect('profile/publications/edit')
   scope 'profile' do
     get 'search_publications' => 'publications#index', as: :publications
+    get 'search_publications/:id' => 'publications#show', as: :publication
     get 'publications/edit' => 'profiles#edit_publications', as: :edit_profile_publications
     get 'presentations/edit' => 'profiles#edit_presentations', as: :edit_profile_presentations
     get 'performances/edit' => 'profiles#edit_performances', as: :edit_profile_performances
@@ -77,6 +78,7 @@ Rails.application.routes.draw do
   patch 'proxies/:id/confirm' => 'deputy_assignments#confirm', as: :confirm_deputy_assignment
   delete 'proxies/:id' => 'deputy_assignments#destroy', as: :deputy_assignment
 
+  post 'authorships' => 'authorships#create', as: :authorships
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship
 

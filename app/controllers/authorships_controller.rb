@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class AuthorshipsController < UserController
+  def create; end
+
   def update
     authorship = current_user.authorships.find(params[:id])
     authorship.update!(authorship_params.merge(updated_by_owner_at: Time.current))

@@ -13,12 +13,14 @@
       <thead>
         <tr>
           <th>Title</th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
         <% @publications.each do |p| %>
           <tr id="<%= dom_id(p) %>">
             <td><%= p.title %></td>
+            <td><%= link_to 'View Details', publication_path(p) %></td>
           </tr>
         <% end %>
       </tbody>

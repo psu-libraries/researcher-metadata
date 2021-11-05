@@ -6,7 +6,22 @@ require 'integration/profiles/shared_examples_for_profile_management_page'
 describe 'claiming authorship of a publication' do
   let(:user) { create :user, webaccess_id: 'abc123' }
   let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication' }
-  let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication' }
+  let(:pub2) { create :publication,
+                      title: 'Another Researcher Metadata Database Test Publication',
+                      doi: 'https://doi.org/10.000/some-doi-457472486',
+                      journal: journal,
+                      volume: '101',
+                      issue: '102',
+                      page_range: '103',
+                      published_on: Date.new(2021, 1, 1) }
+  let(:pub2_author1) { create :user, first_name: 'Paula', last_name: 'Paperauthor' }
+  let(:pub2_author2) { create :user, first_name: 'Robert', last_name: 'Researcher' }
+  let(:journal) { create :journal, title: 'Test Journal' }
+
+  before do
+    create :authorship, publication: pub2, user: pub2_author1
+    create :authorship, publication: pub2, user: pub2_author2
+  end
 
   context 'when the user is signed in' do
     before { authenticate_as(user) }
@@ -49,6 +64,45 @@ describe 'claiming authorship of a publication' do
 
           it 'does not show the matching publications' do
             expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
+          end
+        end
+      end
+
+      describe 'navigating to see the details about a found publication' do
+        before do
+          do_title_search
+
+          within "#publication_#{pub2.id}" do
+            click_on 'View Details'
+          end
+        end
+
+        it 'loads the correct page' do
+          expect(page).to have_current_path publication_path(pub2), ignore_query: true
+        end
+
+        it_behaves_like 'a profile management page'
+
+        it 'shows details about the publication' do
+          expect(page).to have_content 'Another Researcher Metadata Database Test Publication'
+          expect(page).to have_content 'Test Journal'
+          expect(page).to have_content 'Paula Paperauthor'
+          expect(page).to have_content 'Robert Researcher'
+          expect(page).to have_content 'https://doi.org/10.000/some-doi-457472486'
+          expect(page).to have_content '101'
+          expect(page).to have_content '102'
+          expect(page).to have_content '103'
+          expect(page).to have_content '2021'
+        end
+
+        it 'shows a link back to the search list' do
+          expect(page).to have_link 'Back to list'
+        end
+
+        describe 'clicking the button to claim the publication' do
+          before { click_button 'Claim Publication' }
+
+          it "doesn't blow up" do
           end
         end
       end

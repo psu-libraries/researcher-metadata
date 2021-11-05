@@ -6,6 +6,12 @@ require 'component/controllers/shared_examples_for_an_unauthenticated_controller
 describe AuthorshipsController, type: :controller do
   it { is_expected.to be_a(UserController) }
 
+  describe '#create' do
+    let(:perform_request) { post :create }
+
+    it_behaves_like 'an unauthenticated controller'
+  end
+
   describe '#update' do
     let(:perform_request) { put :update, params: { id: 1 } }
 
