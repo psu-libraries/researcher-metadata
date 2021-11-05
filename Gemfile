@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 5.2.4'
+gem 'rails', '~> 6.1'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem 'rails_admin', '~> 2.2'

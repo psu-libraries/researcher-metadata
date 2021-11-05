@@ -289,8 +289,8 @@ describe 'visiting the page to edit the open acess status of a publication' do
           allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
           allow(ingest).to receive(:publish).and_raise RuntimeError.new('Oh no! Failure!')
           within '#new_scholarsphere_work_deposit' do
-            suppress(RuntimeError) do
-              perform_enqueued_jobs do
+            perform_enqueued_jobs do
+              suppress(RuntimeError) do
                 fill_in 'Subtitle', with: 'New Subtitle'
                 attach_file 'File', fixture('test_file.pdf')
                 select 'Public Domain Mark 1.0', from: 'License'
