@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_04_145655) do
+ActiveRecord::Schema.define(version: 2021_11_05_183946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -144,8 +144,9 @@ ActiveRecord::Schema.define(version: 2021_11_04_145655) do
     t.datetime "confirmed_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "active_uniqueness_key", default: 0
     t.index ["deputy_user_id"], name: "index_deputy_assignments_on_deputy_user_id"
-    t.index ["primary_user_id", "deputy_user_id"], name: "index_deputy_assignments_on_primary_user_id_and_deputy_user_id", unique: true
+    t.index ["primary_user_id", "deputy_user_id", "active_uniqueness_key"], name: "index_deputy_assignments_on_unique_users_if_active", unique: true
     t.index ["primary_user_id"], name: "index_deputy_assignments_on_primary_user_id"
   end
 
