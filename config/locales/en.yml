@@ -108,6 +108,8 @@ en:
         support: Support
         sign_out: Sign out
   profile:
+    errors:
+      not_authorized: "Your account is not authorized to perform this action"
     open_access_publications:
       update:
         success: "Thank you for taking the time to submit your open access URL. It was successfully saved."

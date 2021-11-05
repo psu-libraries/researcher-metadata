@@ -2,4 +2,8 @@
 
 class NullUser
   include NullObjectPattern
+
+  def deputies
+    []
+  end
 end

@@ -3,24 +3,26 @@
 require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
-describe Admin::MasqueradeController, type: :controller do
+describe MasqueradeController, type: :controller do
+  it { is_expected.to be_a(UserController) }
+
   describe 'POST #become' do
     let(:perform_request) { post :become, params: { user_id: 1 } }
 
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let(:primary) { create(:user) }
+      let(:user) { create(:user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)
       end
 
-      context 'when the user is an admin' do
-        let(:user) { create(:user, is_admin: true) }
+      context 'when the user is a deputy' do
+        let(:primary) { create(:user, deputies: [user]) }
 
-        it 'redirects to user profile' do
+        it "redirects the primary user's profile" do
           post :become, params: { user_id: primary.id }
 
           expect(session[MasqueradingBehaviors::SESSION_ID]).to eq(primary.id)
@@ -28,14 +30,14 @@ describe Admin::MasqueradeController, type: :controller do
         end
       end
 
-      context 'when the user is not an admin' do
-        let(:user) { create(:user, is_admin: false) }
+      context 'when the user is not a deputy' do
+        let(:primary) { create(:user) }
 
         it 'redirects back to the home page with an error message' do
           post :become, params: { user_id: primary.id }
 
           expect(response).to redirect_to root_path
-          expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
+          expect(flash[:alert]).to eq I18n.t!('profile.errors.not_authorized')
         end
       end
     end
@@ -47,7 +49,7 @@ describe Admin::MasqueradeController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let(:primary) { create(:user) }
+      let(:user) { create(:user) }
 
       before do
         session[MasqueradingBehaviors::SESSION_ID] = primary.id
@@ -55,8 +57,8 @@ describe Admin::MasqueradeController, type: :controller do
         allow(controller).to receive(:current_user).and_return(user)
       end
 
-      context 'when the user is an admin' do
-        let(:user) { create(:user, is_admin: true) }
+      context 'when the user is a deputy' do
+        let(:primary) { create(:user, deputies: [user]) }
 
         it 'redirects to user profile' do
           expect(session[MasqueradingBehaviors::SESSION_ID]).to eq(primary.id)
@@ -68,15 +70,15 @@ describe Admin::MasqueradeController, type: :controller do
         end
       end
 
-      context 'when the user is not an admin' do
-        let(:user) { create(:user, is_admin: false) }
+      context 'when the user is not a deputy' do
+        let(:primary) { create(:user) }
 
         it 'redirects back to the home page with an error message' do
           post :unbecome, params: { user_id: primary.id }
 
           expect(session[MasqueradingBehaviors::SESSION_ID]).to eq(primary.id)
           expect(response).to redirect_to root_path
-          expect(flash[:alert]).to eq I18n.t('admin.authorization.not_authorized')
+          expect(flash[:alert]).to eq I18n.t('profile.errors.not_authorized')
         end
       end
     end

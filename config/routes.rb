@@ -64,6 +64,8 @@ Rails.application.routes.draw do
     post 'publications/:id/open_access/waivers' => 'internal_publication_waivers#create', as: :internal_publication_waivers
     get 'publications/open_access_waivers/new' => 'external_publication_waivers#new', as: :new_external_publication_waiver
     post 'publications/open_access_waivers' => 'external_publication_waivers#create', as: :external_publication_waivers
+    post 'unbecome/:user_id' => 'masquerade#unbecome', as: :unbecomes_user
+    post 'become/:user_id' => 'masquerade#become', as: :becomes_user
   end
 
   post 'orcid_access_token' => 'orcid_access_tokens#new', as: :new_orcid_access_token

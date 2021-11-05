@@ -11,6 +11,8 @@ class UserController < ApplicationController
     end
 
     def current_user
-      @current_user ||= CurrentUserBuilder.call(current_user: super, current_session: session)
+      @current_user ||= super
+
+      CurrentUserBuilder.call(current_user: @current_user, current_session: session)
     end
 end
