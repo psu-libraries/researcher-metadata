@@ -85,6 +85,7 @@ class Publication < ApplicationRecord
   scope :scholarsphere_open_access, -> { open_access.where(open_access_locations: { source: Source::SCHOLARSPHERE }) }
   scope :user_open_access, -> { open_access.where(open_access_locations: { source: Source::USER }) }
   scope :oab_open_access, -> { open_access.where(open_access_locations: { source: Source::OPEN_ACCESS_BUTTON }) }
+  scope :unpaywall_open_access, -> { open_access.where(open_access_locations: { source: Source::UNPAYWALL }) }
 
   scope :journal_article, -> { where("publications.publication_type ~* 'Journal Article'") }
 
@@ -317,7 +318,8 @@ class Publication < ApplicationRecord
         :open_access,
         :scholarsphere_open_access,
         :user_open_access,
-        :oab_open_access
+        :oab_open_access,
+        :unpaywall_open_access
       ]
 
       field(:id)
