@@ -1,0 +1,13 @@
+<p>
+  Dear <%= @primary.name %>,
+</p>
+
+<p>
+  <%= @deputy.name %> (<%= @deputy.webaccess_id %>) has confirmed their status as a proxy acting on your behalf in the
+  Researcher Metadata Database. They can now do everything you can do in the Researcher Metadata Database, including
+  uploading an article to ScholarSphere, providing an article’s open access URL, waiving the Penn State open access
+  policy for an article, and choosing which articles to display in your public profile. You can remove their proxy
+  status at the following URL: <a href="<%= @deputy_url %>"><%= @deputy_url %></a>
+</p>
+
+<%= render :partial => 'footer' %>

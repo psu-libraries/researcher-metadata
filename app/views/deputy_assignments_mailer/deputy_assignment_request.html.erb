@@ -1,0 +1,17 @@
+<p>
+  Dear <%= @deputy.name %>,
+</p>
+
+<p>
+  <%= @primary.name %> (<%= @primary.webaccess_id %>) has requested that you act as a proxy on their behalf in the
+  Researcher Metadata Database. This will enable you to do everything they can do in the Researcher Metadata Database,
+  including uploading an article to ScholarSphere, providing an article’s open access URL, waiving the Penn State open
+  access policy for an article, and choosing which articles to display in their public profile.
+</p>
+
+<p>
+  Please visit the following URL to confirm or decline your status as a proxy for <%= @primary.name %>:
+  <a href="<%= @deputy_url %>"><%= @deputy_url %></a>
+</p>
+
+<%= render :partial => 'footer' %>

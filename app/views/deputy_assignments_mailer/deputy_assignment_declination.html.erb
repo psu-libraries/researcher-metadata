@@ -1,0 +1,10 @@
+<p>
+  Dear <%= @primary.name %>,
+</p>
+
+<p>
+  <%= @deputy.name %> (<%= @deputy.webaccess_id %>) has declined your request that they act as a proxy on your behalf
+  in the Researcher Metadata Database. If this was a mistake, you can try adding them again.
+</p>
+
+<%= render :partial => 'footer' %>
