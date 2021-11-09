@@ -28,6 +28,22 @@ en:
               is_admin: 'cannot be an administrator'
             primary:
               is_admin: 'cannot be an administrator'
+        external_publication_waiver:
+          attributes:
+            deputy:
+              not_assigned: 'is not a assigned or available deputy'
+        internal_publication_waiver:
+          attributes:
+            deputy:
+              not_assigned: 'is not a assigned or available deputy'
+        open_access_location:
+          attributes:
+            deputy:
+              not_assigned: 'is not a assigned or available deputy'
+        scholarsphere_work_deposit:
+          attributes:
+            deputy:
+              not_assigned: 'is not a assigned or available deputy'
   admin:
     authorization:
       not_authorized: "Your account is not authorized to perform this action."

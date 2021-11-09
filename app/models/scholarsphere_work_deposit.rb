@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ScholarsphereWorkDeposit < ApplicationRecord
+  include DeputyUser
+
   def self.statuses
     ['Pending', 'Success', 'Failed']
   end

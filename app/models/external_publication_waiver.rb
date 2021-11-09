@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ExternalPublicationWaiver < ApplicationRecord
+  include DeputyUser
+
   belongs_to :user, inverse_of: :external_publication_waivers
   belongs_to :internal_publication_waiver, inverse_of: :external_publication_waiver, optional: true
 

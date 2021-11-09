@@ -2,6 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
+require 'component/models/shared_examples_for_a_model_with_a_deputy_user'
 
 describe 'the scholarsphere_work_deposits table', type: :model do
   subject { ScholarsphereWorkDeposit.new }
@@ -22,10 +23,17 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:publisher).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
 
   it { is_expected.to have_db_index(:authorship_id) }
+  it { is_expected.to have_db_index :deputy_user_id }
 
   it { is_expected.to have_db_foreign_key(:authorship_id) }
+  it { is_expected.to have_db_foreign_key(:deputy_user_id).to_table(:users).with_name(:scholarsphere_work_deposits_deputy_user_id_fk) }
+end
+
+describe ScholarsphereWorkDeposit, type: :model do
+  it_behaves_like 'a model with a deputy user'
 end
 
 describe ScholarsphereFileUpload, type: :model do

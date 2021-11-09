@@ -2,6 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
+require 'component/models/shared_examples_for_a_model_with_a_deputy_user'
 
 describe 'the open_access_locations table', type: :model do
   subject { OpenAccessLocation.new }
@@ -20,16 +21,20 @@ describe 'the open_access_locations table', type: :model do
   it { is_expected.to have_db_column(:version).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
 
   it { is_expected.to have_db_index :publication_id }
+  it { is_expected.to have_db_index :deputy_user_id }
 
   it { is_expected.to have_db_foreign_key(:publication_id) }
+  it { is_expected.to have_db_foreign_key(:deputy_user_id).to_table(:users).with_name(:open_access_locations_deputy_user_id_fk) }
 end
 
 describe OpenAccessLocation, type: :model do
   subject(:oal) { described_class.new }
 
   it_behaves_like 'an application record'
+  it_behaves_like 'a model with a deputy user'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:open_access_locations) }

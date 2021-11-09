@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OpenAccessLocation < ApplicationRecord
+  include DeputyUser
+
   enum source: to_enum_hash([
                               Source::USER,
                               Source::SCHOLARSPHERE,

@@ -2,6 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
+require 'component/models/shared_examples_for_a_model_with_a_deputy_user'
 
 describe 'the external_publication_waivers table', type: :model do
   subject { ExternalPublicationWaiver.new }
@@ -16,16 +17,20 @@ describe 'the external_publication_waivers table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:internal_publication_waiver_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :internal_publication_waiver_id }
+  it { is_expected.to have_db_index :deputy_user_id }
 
   it { is_expected.to have_db_foreign_key(:user_id) }
   it { is_expected.to have_db_foreign_key(:internal_publication_waiver_id) }
+  it { is_expected.to have_db_foreign_key(:deputy_user_id).to_table(:users).with_name(:external_publication_waivers_deputy_user_id_fk) }
 end
 
 describe ExternalPublicationWaiver, type: :model do
   it_behaves_like 'an application record'
+  it_behaves_like 'a model with a deputy user'
 
   describe 'associations' do
     it { is_expected.to belong_to(:user).inverse_of(:external_publication_waivers) }
