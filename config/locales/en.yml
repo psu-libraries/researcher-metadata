@@ -121,3 +121,12 @@ en:
     unpaywall: 'Unpaywall'
     dickinson_ideas: 'Dickinson Law IDEAS Repo'
     psu_law_elibrary: 'Penn State Law eLibrary Repo'
+  view_component:
+    deputy_assignment_component:
+      delete_as_primary: Revoke
+      delete_as_deputy: Leave
+      delete_as_deputy_unconfirmed: Decline
+      pending_as_primary: Awaiting Confirmation
+      pending_as_deputy: wants you to be able to act on their behalf
+      accept: Accept
+

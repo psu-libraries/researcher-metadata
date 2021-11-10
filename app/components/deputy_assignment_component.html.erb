@@ -1,1 +1,30 @@
-<div>Add DeputyAssignment template here</div>
+<div id="<%= dom_id deputy_assignment %>" class="<%= root_class %>">
+  <div class="deputy-assignment__name">
+    <strong><%= name %></strong> <%= webaccess_id %>
+
+    <% if current_user_is_deputy? && pending? %>
+      <%= i18n('pending_as_deputy') %>
+    <% end %>
+  </div>
+
+  <% if current_user_is_primary? && pending? %>
+    <div class="deputy-assignment__action text-muted">
+      <%= i18n('pending_as_primary') %>
+    </div>
+  <% end %>
+
+  <% if current_user_is_deputy? && pending? %>
+    <div class="deputy-assignment__action">
+      <%= button_to i18n('accept'),
+        '#',
+        class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+
+  <div class="deputy-assignment__action">
+    <%= button_to delete_text,
+      '#',
+      method: :delete,
+      class: delete_class %>
+  </div>
+</div>
