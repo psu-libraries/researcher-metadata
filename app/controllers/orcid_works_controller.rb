@@ -2,7 +2,7 @@
 
 class OrcidWorksController < UserController
   def create
-    authorship = current_user.authorships.find(params[:authorship_id])
+    authorship = current_user.confirmed_authorships.find(params[:authorship_id])
 
     if authorship
       if authorship.orcid_resource_identifier.present?

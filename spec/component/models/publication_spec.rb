@@ -318,6 +318,40 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.claimable_by' do
+    let!(:user) { create :user }
+    let!(:pub1) { create :publication, visible: false }
+    let!(:pub2) { create :publication, visible: true }
+    let!(:pub3) { create :publication, visible: true }
+    let!(:pub4) { create :publication, visible: true }
+    let!(:pub5) { create :publication, visible: true }
+
+    before do
+      create :authorship, user: user, publication: pub3, confirmed: false, claimed_by_user: true
+      create :authorship, user: user, publication: pub4, confirmed: true, claimed_by_user: false
+      create :authorship, user: user, publication: pub5, confirmed: false, claimed_by_user: false
+    end
+
+    it 'returns the publications that can be claimed by the given user' do
+      claimable = described_class.claimable_by(user)
+      expect(claimable.count).to eq 2
+      expect(claimable).to include pub2
+      expect(claimable).to include pub5
+    end
+
+    it 'does not return publications that are not visible' do
+      expect(described_class.claimable_by(user)).not_to include pub1
+    end
+
+    it 'does not return publications that the given user has already claimed' do
+      expect(described_class.claimable_by(user)).not_to include pub3
+    end
+
+    it 'does not return publications for which the given user already has a confirmed authorship' do
+      expect(described_class.claimable_by(user)).not_to include pub4
+    end
+  end
+
   describe '.subject_to_open_access_policy' do
     let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
     let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
@@ -643,6 +677,18 @@ describe Publication, type: :model do
 
     it "returns only the publication's authorships that are confirmed" do
       expect(pub.confirmed_authorships).to eq [a2]
+    end
+  end
+
+  describe '#confirmed_users' do
+    let(:u1) { create :user }
+    let(:u2) { create :user }
+    let!(:pub) { create :publication }
+    let!(:a1) { create :authorship, publication: pub, confirmed: false, user: u1 }
+    let!(:a2) { create :authorship, publication: pub, confirmed: true, user: u2 }
+
+    it "returns only the publication's users that have confirmed authorships" do
+      expect(pub.confirmed_users).to eq [u2]
     end
   end
 

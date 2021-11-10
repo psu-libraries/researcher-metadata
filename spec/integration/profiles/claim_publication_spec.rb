@@ -99,10 +99,38 @@ describe 'claiming authorship of a publication' do
           expect(page).to have_link 'Back to list'
         end
 
-        describe 'clicking the button to claim the publication' do
-          before { click_button 'Claim Publication' }
+        describe 'submitting the form to claim the publication' do
+          let(:new_authorship) { user.authorships.first }
 
-          it "doesn't blow up" do
+          before do
+            fill_in 'Author number', with: 2
+            click_button 'Claim Publication'
+          end
+
+          it 'returns the user to page for managing their profile publications' do
+            expect(page).to have_current_path edit_profile_publications_path, ignore_query: true
+          end
+
+          it 'shows the claimed publication in the list' do
+            within "#authorship_row_#{new_authorship.id}" do
+              expect(page).to have_content 'Another Researcher Metadata Database Test Publication'
+            end
+          end
+
+          it 'indicates that the authorship for the claimed publication is unconfirmed' do
+            within "#authorship_row_#{new_authorship.id}" do
+              expect(page).to have_css '.fa-minus'
+            end
+          end
+
+          it "does not show a button to add the claimed publication to the user's ORCiD record" do
+            within "#authorship_row_#{new_authorship.id}" do
+              expect(page).not_to have_css '.orcid-button'
+            end
+          end
+
+          it 'does not show a link to edit open access information for the claimed publication' do
+            expect(page).not_to have_link 'Another Researcher Metadata Database Test Publication'
           end
         end
       end

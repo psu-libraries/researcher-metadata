@@ -8,7 +8,7 @@
       </tr>
       <tr>
         <td><strong>Penn State Authors:</strong></td>
-        <td><%= @publication.users.map { |u| u.name }.join(', ') %>
+        <td><%= @publication.confirmed_users.map { |u| u.name }.join(', ') %>
       </tr>
       <tr>
         <td><strong>DOI:</strong></td>
@@ -35,6 +35,10 @@
       </tr>
     </table>
   </div>
-  <%= button_to 'Claim Publication', authorships_path, class: 'btn btn-primary' %>
+  <%= simple_form_for :authorship, url: authorships_path do |f| %>
+    <%= f.input :publication_id, as: :hidden, input_html: { value: @publication.id } %>
+    <%= f.input :author_number, as: :integer, input_html: { min: 1 }, hint: 'A number indicating your position in the list of all of the authors of this publication - e.g. if you are first author, you would enter 1' %>
+    <%= f.submit 'Claim Publication', class: 'btn btn-primary' %>
+  <% end %>
 </div>
 <%= link_to 'Back to list', :back %>

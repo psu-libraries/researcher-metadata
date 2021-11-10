@@ -44,13 +44,20 @@ class UserProfile
   end
 
   def publications
-    publication_records.where('authorships.visible_in_profile is true').map do |pub|
+    public_publication_records.where('authorships.visible_in_profile is true').map do |pub|
       AuthorshipDecorator.new(pub).label
     end
   end
 
-  def publication_records
+  def public_publication_records
     user_query.publications.journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+  end
+
+  def publication_records
+    user_query
+      .publications(include_unconfirmed: true)
+      .where(%{(authorships.claimed_by_user IS TRUE AND authorships.confirmed IS FALSE) OR authorships.confirmed IS TRUE})
+      .journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants

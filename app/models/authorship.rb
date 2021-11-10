@@ -34,6 +34,9 @@ class Authorship < ApplicationRecord
            prefix: false
   delegate :webaccess_id, to: :user, prefix: true
 
+  scope :unclaimable, -> { where('claimed_by_user IS TRUE OR confirmed IS TRUE') }
+  scope :confirmed, -> { where(confirmed: true) }
+
   def description
     "##{id} (#{user.name} - #{publication.title})"
   end

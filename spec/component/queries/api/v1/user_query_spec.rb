@@ -107,6 +107,12 @@ describe API::V1::UserQuery do
         it "returns the user's visible, confirmed publications" do
           expect(uq.publications({})).to eq [vis_conf_pub]
         end
+
+        context 'when given params with a flag to include unconfirmed publications' do
+          it "returns all of the user's visible publications" do
+            expect(uq.publications({ include_unconfirmed: true })).to match_array [vis_conf_pub, vis_unconf_pub]
+          end
+        end
       end
     end
 

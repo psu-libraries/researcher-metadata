@@ -140,6 +140,9 @@ en:
         success: "The work record was successfully added to your ORCID record."
         account_not_linked: "Your ORCID record is no longer linked to your metadata profile."
         error: "There was an error adding your work history to your ORCID record."
+    authorships:
+      create:
+        success: "You have successfully claimed authorship of the publication \"%{title}\". Your claim will be reviewed by an administrator and will need to be approved before the publication will appear in your public profile."
   models:
     open_access_url_form:
       validation_errors:

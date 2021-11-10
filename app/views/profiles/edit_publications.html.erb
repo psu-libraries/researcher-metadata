@@ -43,6 +43,7 @@
       <th>Publication</th>
       <th>Visible in profile</th>
       <th>Open Access Status</th>
+      <th>Authorship Confirmed</th>
       <th></th>
     </tr>
     </thead>
@@ -58,6 +59,13 @@
           </td>
           <td class="oa-status">
             <%= fa_icon(a.open_access_status_icon) %>
+          </td>
+          <td>
+            <% if a.confirmed %>
+              <%= fa_icon('check') %>
+            <% else %>
+              <%= fa_icon('minus') %>
+            <% end %>
           </td>
           <td>
             <%= render partial: 'orcid_export_button', locals: { a: a } %>

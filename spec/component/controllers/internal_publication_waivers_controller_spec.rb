@@ -15,11 +15,11 @@ describe InternalPublicationWaiversController, type: :controller do
   let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_pub) { create :publication }
   let!(:other_waived_pub) { create :publication }
-  let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
   let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub }
   let!(:uploaded_auth) { create :authorship, user: user, publication: uploaded_pub }
   let!(:other_uploaded_auth) { create :authorship, user: other_user, publication: other_uploaded_pub }
+  let!(:unconfirmed_pub) { create :publication }
 
   before do
     create :authorship, user: user, publication: oa_pub
@@ -30,6 +30,10 @@ describe InternalPublicationWaiversController, type: :controller do
     create :authorship,
            user: user,
            publication: other_waived_pub
+    create :authorship,
+           user: user,
+           publication: unconfirmed_pub,
+           confirmed: false
 
     create :scholarsphere_work_deposit, authorship: uploaded_auth, status: 'Pending'
     create :scholarsphere_work_deposit, authorship: other_uploaded_auth, status: 'Pending'
@@ -54,6 +58,12 @@ describe InternalPublicationWaiversController, type: :controller do
       context 'when given the ID for a publication that does not belong to the user' do
         it 'returns 404' do
           expect { get :new, params: { id: other_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that belongs to the user but is unconfirmed' do
+        it 'returns 404' do
+          expect { get :new, params: { id: unconfirmed_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -122,6 +132,12 @@ describe InternalPublicationWaiversController, type: :controller do
       context 'when given the ID for a publication that does not belong to the user' do
         it 'returns 404' do
           expect { post :create, params: { id: other_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that belongs to the user but is unconfirmed' do
+        it 'returns 404' do
+          expect { post :create, params: { id: unconfirmed_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 

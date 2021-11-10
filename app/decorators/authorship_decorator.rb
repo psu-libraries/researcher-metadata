@@ -30,6 +30,10 @@ class AuthorshipDecorator < BaseDecorator
     end
   end
 
+  def exportable_to_orcid?
+    !!user.orcid_access_token && publication.orcid_allowed? && confirmed
+  end
+
   private
 
     attr_reader :view_context
@@ -43,7 +47,7 @@ class AuthorshipDecorator < BaseDecorator
     end
 
     def profile_management_pub_title
-      if no_open_access_information? && is_journal_article? && published?
+      if no_open_access_information? && is_journal_article? && published? && confirmed
         view_context.link_to title, view_context.edit_open_access_publication_path(publication)
       else
         title

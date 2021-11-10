@@ -7,9 +7,56 @@ describe AuthorshipsController, type: :controller do
   it { is_expected.to be_a(UserController) }
 
   describe '#create' do
-    let(:perform_request) { post :create }
+    let(:perform_request) { post :create, params: { authorship: { publication_id: 3, author_number: 5 } } }
 
     it_behaves_like 'an unauthenticated controller'
+
+    context 'when authenticated' do
+      let!(:user) { create :user }
+      let(:pub) { double 'publication', id: 3, title: 'Test Title' }
+
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+        allow(Publication).to receive(:find).with('3').and_return(pub)
+        allow(user).to receive(:claim_publication)
+      end
+
+      it 'claims the given publication for the current user' do
+        perform_request
+        expect(user).to have_received(:claim_publication).with(pub, '5')
+      end
+
+      it 'sets a success message' do
+        perform_request
+        expect(flash[:notice]).to eq I18n.t('profile.authorships.create.success', title: 'Test Title')
+      end
+
+      it "redirects to the list of publications for the user's profile" do
+        perform_request
+        expect(response).to redirect_to edit_profile_publications_path
+      end
+
+      context 'when a validation error occurs' do
+        let(:auth) { build :authorship }
+        let(:errors) { double 'validation errors', full_messages: ['bad data!'] }
+
+        before do
+          allow(auth).to receive(:errors).and_return errors
+          allow(user).to receive(:claim_publication).and_raise ActiveRecord::RecordInvalid.new(auth)
+        end
+
+        it 'sets an error message' do
+          perform_request
+          expect(flash[:alert]).to eq 'Validation failed: bad data!'
+        end
+
+        it 'redirects to the detail page for the given publication' do
+          perform_request
+          expect(response).to redirect_to publication_path(3)
+        end
+      end
+    end
   end
 
   describe '#update' do

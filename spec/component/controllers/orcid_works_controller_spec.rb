@@ -18,7 +18,7 @@ describe OrcidWorksController, type: :controller do
 
       before do
         allow(OrcidWork).to receive(:new).with(authorship).and_return(work)
-        allow(user).to receive_message_chain(:authorships, :find).and_return(authorship)
+        allow(user).to receive_message_chain(:confirmed_authorships, :find).and_return(authorship)
         allow(Time).to receive(:current).and_return(now)
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)

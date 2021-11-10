@@ -2,7 +2,7 @@
     <h4>Search Publications</h4>
 
     <%= simple_form_for :search, url: publications_path, method: :get do |f| %>
-      <%= f.input :title, type: :text, label: 'Title', required: false %>
+      <%= f.input :title, as: :string, label: 'Title', required: false %>
       <%= f.submit 'Search', class: 'btn btn-primary' %>
     <% end %>
   </div>
