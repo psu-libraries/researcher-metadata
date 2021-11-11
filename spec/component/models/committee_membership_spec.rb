@@ -51,6 +51,12 @@ describe CommitteeMembership, type: :model do
         end
       end
 
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq 1
+        end
+      end
+
       context 'when given another committee membership with a role of Committee Chair' do
         it 'returns 1' do
           expect(mem <=> described_class.new(role: 'Committee Chair')).to eq 1
@@ -74,6 +80,58 @@ describe CommitteeMembership, type: :model do
           expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
+    end
+
+    context "when the committee membership has a role of 'Thesis Advisor'" do
+      let(:role) { 'Thesis Advisor' }
+
+      context 'when given another committee membership with a role of Dissertation Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns 0' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq 0
+        end
+      end
+
+      context 'when given another committee membership with a role of Committee Chair' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq 1
+        end
+      end
+
+      context 'when given another committee membership with a role of Committee Member' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq 1
+        end
+      end
+
+      context 'when given another committee membership with a role of Outside Member' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq 1
+        end
+      end
+
+      context 'when given another committee membership with a role of Special Member' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
+        end
+      end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
     end
 
     context "when the committee membership has a role of 'Committee Chair'" do
@@ -82,6 +140,12 @@ describe CommitteeMembership, type: :model do
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
           expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq -1
         end
       end
 
@@ -108,6 +172,12 @@ describe CommitteeMembership, type: :model do
           expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
     end
 
     context "when the committee membership has a role of 'Committee Member'" do
@@ -116,6 +186,12 @@ describe CommitteeMembership, type: :model do
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
           expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq -1
         end
       end
 
@@ -142,6 +218,12 @@ describe CommitteeMembership, type: :model do
           expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
     end
 
     context "when the committee membership has a role of 'Outside Member'" do
@@ -150,6 +232,12 @@ describe CommitteeMembership, type: :model do
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
           expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq -1
         end
       end
 
@@ -176,6 +264,12 @@ describe CommitteeMembership, type: :model do
           expect(mem <=> described_class.new(role: 'Special Member')).to eq 1
         end
       end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
     end
 
     context "when the committee membership has a role of 'Special Member'" do
@@ -184,6 +278,12 @@ describe CommitteeMembership, type: :model do
       context 'when given another committee membership with a role of Dissertation Advisor' do
         it 'returns -1' do
           expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq -1
         end
       end
 
@@ -209,6 +309,78 @@ describe CommitteeMembership, type: :model do
         it 'returns 0' do
           expect(mem <=> described_class.new(role: 'Special Member')).to eq 0
         end
+      end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 1' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 1
+        end
+      end
+    end
+
+    context 'when the committee membership role is not in the rank list' do
+      let(:role) { 'Unknown Member' }
+
+      context 'when given another committee membership with a role of Dissertation Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Dissertation Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Thesis Advisor' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Thesis Advisor')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Committee Chair' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Committee Chair')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Committee Member' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Committee Member')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Outside Member' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Outside Member')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role of Special Member' do
+        it 'returns -1' do
+          expect(mem <=> described_class.new(role: 'Special Member')).to eq -1
+        end
+      end
+
+      context 'when given another committee membership with a role not in the rank list' do
+        it 'returns 0' do
+          expect(mem <=> described_class.new(role: 'Unknown Member')).to eq 0
+        end
+      end
+    end
+  end
+
+  describe '#unknown_role_check' do
+    let!(:cm) { FactoryBot.create :committee_membership }
+
+    context 'when updating role with a role in the RANK_LIST' do
+      it 'does not trigger bugsnag' do
+        allow(Bugsnag).to receive(:notify).with(I18n.t('models.committee_memberships.unknown_role_message', role: 'Dissertation Advisor'))
+        cm.update role: 'Dissertation Advisor'
+        expect(Bugsnag).not_to have_received(:notify).with(I18n.t('models.committee_memberships.unknown_role_message', role: 'Unknown Member'))
+      end
+    end
+
+    context 'when updating role with a role not in the RANK_LIST' do
+      it 'triggers bugsnag' do
+        allow(Bugsnag).to receive(:notify).with(I18n.t('models.committee_memberships.unknown_role_message', role: 'Unknown Member')).once
+        cm.update role: 'Unknown Member'
+        expect(Bugsnag).to have_received(:notify).with(I18n.t('models.committee_memberships.unknown_role_message', role: 'Unknown Member')).once
       end
     end
   end

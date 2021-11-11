@@ -12,6 +12,16 @@ class CommitteeMembership < ApplicationRecord
 
   validates :etd_id, uniqueness: { scope: [:user_id, :role] }
   validates :user_id, uniqueness: { scope: [:etd_id, :role] }
+  validate :unknown_role_check
+
+  RANK_LIST = {
+      'Dissertation Advisor' => 6,
+      'Thesis Advisor' => 5,
+      'Committee Chair' => 4,
+      'Committee Member' => 3,
+      'Outside Member' => 2,
+      'Special Member' => 1
+  }.freeze
 
   def <=>(other)
     role_ranking <=> other.role_ranking
@@ -19,15 +29,11 @@ class CommitteeMembership < ApplicationRecord
 
   protected
 
-    def role_ranking
-      rank_list = {
-        'Dissertation Advisor' => 5,
-        'Committee Chair' => 4,
-        'Committee Member' => 3,
-        'Outside Member' => 2,
-        'Special Member' => 1
-      }
+  def role_ranking
+    RANK_LIST[role] || 0
+  end
 
-      rank_list[role]
-    end
+  def unknown_role_check
+    Bugsnag.notify(I18n.t('models.committee_memberships.unknown_role_message', role: role)) unless RANK_LIST.include? role
+  end
 end
