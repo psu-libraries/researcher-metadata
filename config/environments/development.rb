@@ -5,6 +5,10 @@ require 'active_support/core_ext/integer/time'
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
+  # Allow any hostnames used locally
+  config.hosts << 'localhost'
+  config.hosts << 'researcher-metadata.test' # for puma-dev
+
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
   # since you don't have to restart the web server when you make code changes.
