@@ -26,6 +26,7 @@ class NewDeputyAssignmentForm
 
     begin
       deputy = find_or_initialize_deputy(webaccess_id: deputy_webaccess_id)
+      ensure_deputy_assignment_does_not_already_exist(deputy: deputy)
       create_deputy_assignment(primary: primary, deputy: deputy)
     rescue IdentityServiceError
       errors.add(:base, :identity_service_error)
@@ -57,28 +58,28 @@ class NewDeputyAssignmentForm
       end
     end
 
-    def create_deputy_assignment(primary:, deputy:)
-      if deputy.persisted?
-        existing_deputy_assignment = DeputyAssignment.active.find_by(
-          primary: primary,
-          deputy: deputy
-        )
-        raise AlreadyAssigned if existing_deputy_assignment.present?
-      end
+    def ensure_deputy_assignment_does_not_already_exist(deputy:)
+      return if deputy.new_record?
 
-      begin
-        DeputyAssignment.create!(
-          primary: primary,
-          deputy: deputy,
-          is_active: true
-        )
-      rescue ActiveRecord::RecordInvalid => e
-        e.record.errors.each do |err|
-          if err.match?(:deputy)
-            errors.add(:deputy_webaccess_id, err.message)
-          else
-            errors.add(:base, err.full_message)
-          end
+      existing_deputy_assignment = DeputyAssignment.active.find_by(
+        primary: primary,
+        deputy: deputy
+      )
+      raise AlreadyAssigned if existing_deputy_assignment.present?
+    end
+
+    def create_deputy_assignment(primary:, deputy:)
+      DeputyAssignment.create!(
+        primary: primary,
+        deputy: deputy,
+        is_active: true
+      )
+    rescue ActiveRecord::RecordInvalid => e
+      e.record.errors.each do |err|
+        if err.match?(:deputy)
+          errors.add(:deputy_webaccess_id, err.message)
+        else
+          errors.add(:base, err.full_message)
         end
       end
     end
