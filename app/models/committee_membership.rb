@@ -15,12 +15,12 @@ class CommitteeMembership < ApplicationRecord
   validate :unknown_role_check
 
   RANK_LIST = {
-      'Dissertation Advisor' => 6,
-      'Thesis Advisor' => 5,
-      'Committee Chair' => 4,
-      'Committee Member' => 3,
-      'Outside Member' => 2,
-      'Special Member' => 1
+    'Dissertation Advisor' => 6,
+    'Thesis Advisor' => 5,
+    'Committee Chair' => 4,
+    'Committee Member' => 3,
+    'Outside Member' => 2,
+    'Special Member' => 1
   }.freeze
 
   def <=>(other)
@@ -29,11 +29,11 @@ class CommitteeMembership < ApplicationRecord
 
   protected
 
-  def role_ranking
-    RANK_LIST[role] || 0
-  end
+    def role_ranking
+      RANK_LIST[role] || 0
+    end
 
-  def unknown_role_check
-    Bugsnag.notify(I18n.t('models.committee_memberships.unknown_role_message', role: role)) unless RANK_LIST.include? role
-  end
+    def unknown_role_check
+      Bugsnag.notify(I18n.t('models.committee_memberships.unknown_role_message', role: role)) unless RANK_LIST.include? role
+    end
 end
