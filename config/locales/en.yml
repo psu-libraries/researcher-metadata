@@ -3,6 +3,17 @@ en:
     attributes:
       open_access_url_form:
         open_access_url: "URL"
+    errors:
+      models:
+        new_deputy_assignment_form:
+          attributes:
+            base:
+              identity_service_error: There was a problem looking up this user's webaccess id. Please try again later, and contact support if the problem keeps happening.
+              error_creating_user: There was a problem with this user's webaccess id, please contact support for help.
+              unknown_error: There was a problem assigning this proxy, please contact support for help.
+            deputy_webaccess_id:
+              already_assigned: has already been assigned as your proxy!
+              invalid: must contain only letters an numbers
   activerecord:
     errors:
       models:
