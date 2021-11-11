@@ -3,10 +3,12 @@
 class AuthorshipsController < UserController
   def create
     publication = Publication.find(authorship_create_params[:publication_id])
-    current_user.claim_publication(
+    service = AuthorshipClaimService.new(
+      current_user,
       publication,
       authorship_create_params[:author_number]
     )
+    service.create
 
     flash[:notice] = I18n.t('profile.authorships.create.success', title: publication.title)
     redirect_to edit_profile_publications_path

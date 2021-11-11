@@ -259,6 +259,7 @@ class User < ApplicationRecord
       a.claimed_by_user = true
     end
     a.save!
+    a
   end
 
   private

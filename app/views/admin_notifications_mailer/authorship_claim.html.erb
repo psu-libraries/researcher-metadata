@@ -1,0 +1,8 @@
+<p>
+  <%= @authorship.user_name %> has claimed authorship of the publication <em><%= @authorship.title %></em>.
+</p>
+
+<p>
+  <%= link_to 'Click here', rails_admin.edit_url(model_name: :authorship, id: @authorship.id) %>
+  to review the authorship information and to confirm the authorship if it is correct.
+</p>

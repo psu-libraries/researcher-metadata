@@ -32,7 +32,7 @@ class Authorship < ApplicationRecord
            :published?,
            to: :publication,
            prefix: false
-  delegate :webaccess_id, to: :user, prefix: true
+  delegate :webaccess_id, :name, to: :user, prefix: true
 
   scope :unclaimable, -> { where('claimed_by_user IS TRUE OR confirmed IS TRUE') }
   scope :confirmed, -> { where(confirmed: true) }

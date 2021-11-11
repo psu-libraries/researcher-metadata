@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'claiming authorship of a publication' do
-  let(:user) { create :user, webaccess_id: 'abc123' }
+  let(:user) { create :user, webaccess_id: 'abc123', first_name: 'Test', last_name: 'Claimer' }
   let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication' }
   let(:pub2) { create :publication,
                       title: 'Another Researcher Metadata Database Test Publication',
@@ -105,6 +105,11 @@ describe 'claiming authorship of a publication' do
           before do
             fill_in 'Author number', with: 2
             click_button 'Claim Publication'
+          end
+
+          it 'sends a notification of the claim to the RMD admins' do
+            open_email('L-FAMS@lists.psu.edu')
+            expect(current_email.body).to match(/Test Claimer/)
           end
 
           it 'returns the user to page for managing their profile publications' do

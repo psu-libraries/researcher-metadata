@@ -1774,6 +1774,13 @@ describe User, type: :model do
         expect(a.confirmed).to eq false
         expect(a.claimed_by_user).to eq true
       end
+
+      it 'returns the new authorship' do
+        a = user.claim_publication(pub, 3)
+        expect(a).to be_a Authorship
+        expect(a.user).to eq user
+        expect(a.publication).to eq pub
+      end
     end
 
     context 'when the user already has an authorship for the given publication' do
@@ -1799,6 +1806,13 @@ describe User, type: :model do
           expect(a.confirmed).to eq true
           expect(a.claimed_by_user).to eq false
         end
+
+        it 'returns the authorship' do
+          a = user.claim_publication(pub, 3)
+          expect(a).to be_a Authorship
+          expect(a.user).to eq user
+          expect(a.publication).to eq pub
+        end
       end
 
       context 'when the authorship is not confirmed' do
@@ -1815,6 +1829,13 @@ describe User, type: :model do
           expect(a.author_number).to eq 3
           expect(a.confirmed).to eq false
           expect(a.claimed_by_user).to eq true
+        end
+
+        it 'returns the authorship' do
+          a = user.claim_publication(pub, 3)
+          expect(a).to be_a Authorship
+          expect(a.user).to eq user
+          expect(a.publication).to eq pub
         end
       end
     end

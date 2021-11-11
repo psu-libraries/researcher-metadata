@@ -14,17 +14,18 @@ describe AuthorshipsController, type: :controller do
     context 'when authenticated' do
       let!(:user) { create :user }
       let(:pub) { double 'publication', id: 3, title: 'Test Title' }
+      let(:service) { spy 'authorship claim service' }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
         allow(controller).to receive(:current_user).and_return(user)
         allow(Publication).to receive(:find).with('3').and_return(pub)
-        allow(user).to receive(:claim_publication)
+        allow(AuthorshipClaimService).to receive(:new).with(user, pub, '5').and_return service
       end
 
       it 'claims the given publication for the current user' do
         perform_request
-        expect(user).to have_received(:claim_publication).with(pub, '5')
+        expect(service).to have_received(:create)
       end
 
       it 'sets a success message' do
@@ -43,7 +44,7 @@ describe AuthorshipsController, type: :controller do
 
         before do
           allow(auth).to receive(:errors).and_return errors
-          allow(user).to receive(:claim_publication).and_raise ActiveRecord::RecordInvalid.new(auth)
+          allow(service).to receive(:create).and_raise ActiveRecord::RecordInvalid.new(auth)
         end
 
         it 'sets an error message' do
