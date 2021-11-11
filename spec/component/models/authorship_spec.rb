@@ -88,6 +88,17 @@ describe Authorship, type: :model do
     end
   end
 
+  describe '.claimed_and_unconfirmed' do
+    let!(:auth1) { create :authorship, claimed_by_user: false, confirmed: false }
+    let!(:auth2) { create :authorship, claimed_by_user: true, confirmed: false }
+    let!(:auth3) { create :authorship, claimed_by_user: false, confirmed: true }
+    let!(:auth4) { create :authorship, claimed_by_user: true, confirmed: true }
+
+    it 'only returns authorships that are both claimed by a user and unconfirmed' do
+      expect(described_class.claimed_and_unconfirmed).to match_array [auth2]
+    end
+  end
+
   describe '#description' do
     let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
     let(:p) { create :publication, title: 'Example Pub' }

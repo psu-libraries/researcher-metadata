@@ -4,16 +4,20 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin authorship detail page', type: :feature do
-  let!(:user) { create(:user,
-                       first_name: 'Bob',
-                       last_name: 'Testuser') }
+  let!(:user) do
+    create(:user,
+           first_name: 'Bob',
+           last_name: 'Testuser')
+  end
 
   let!(:pub) { create :publication, title: 'A Test Publication' }
 
-  let!(:auth) { create :authorship,
-                       publication: pub,
-                       user: user,
-                       author_number: 5 }
+  let!(:auth) do
+    create :authorship,
+           publication: pub,
+           user: user,
+           author_number: 5
+  end
 
   let!(:dep) { create :scholarsphere_work_deposit, title: 'Test Deposit', authorship: auth }
 
