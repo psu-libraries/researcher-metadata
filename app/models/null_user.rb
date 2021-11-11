@@ -6,4 +6,5 @@ class NullUser
   def deputies
     []
   end
+  alias :available_deputies :deputies
 end

@@ -142,6 +142,14 @@ class User < ApplicationRecord
     is_active
   end
 
+  def available_deputies
+    self
+      .class
+      .joins(:deputy_assignments)
+      .where(deputy_assignments: { primary_user_id: id, is_active: true, deactivated_at: nil })
+      .where.not(deputy_assignments: { confirmed_at: nil })
+  end
+
   def update_psu_identity
     update(psu_identity: psu_identity_data, psu_identity_updated_at: Time.zone.now)
   end

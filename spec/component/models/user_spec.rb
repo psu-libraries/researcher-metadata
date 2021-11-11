@@ -1709,6 +1709,22 @@ describe User, type: :model do
     end
   end
 
+  describe '#available_deputies' do
+    let(:user) { create(:user, primary_assignments: [available_assignment, unconfirmed_assignment, inactive_assignment]) }
+    let(:available_assignment) { create(:deputy_assignment, :active) }
+    let(:unconfirmed_assignment) { create(:deputy_assignment, :unconfirmed) }
+    let(:inactive_assignment) { create(:deputy_assignment, :inactive) }
+
+    it 'limits the available deputies to those that are active and confirmed' do
+      expect(user.deputies).to contain_exactly(
+        available_assignment.deputy,
+        unconfirmed_assignment.deputy,
+        inactive_assignment.deputy
+      )
+      expect(user.available_deputies).to contain_exactly(available_assignment.deputy)
+    end
+  end
+
   describe '#primaries' do
     subject(:user) { build(:user, primaries: [primary]) }
 

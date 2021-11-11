@@ -54,6 +54,7 @@ describe CurrentUserBuilder do
 
     before do
       allow(User).to receive(:find).with('primary-user-id').and_return(primary_user)
+      allow(primary_user).to receive(:available_deputies).and_return([user])
     end
 
     it { is_expected.to be_a(UserDecorator) }
@@ -69,6 +70,7 @@ describe CurrentUserBuilder do
 
     before do
       allow(User).to receive(:find).with('primary-user-id').and_return(primary_user)
+      allow(primary_user).to receive(:available_deputies).and_return([])
     end
 
     it { is_expected.to be_a(UserDecorator) }
