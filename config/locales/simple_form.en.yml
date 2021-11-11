@@ -10,6 +10,12 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    hints:
+      new_deputy_assignment_form:
+        deputy_webaccess_id: Enter the Penn State Access ID of a person to whom you'd like to grant proxy access. Only people with Access IDs can have proxy.
+    placeholders:
+      new_deputy_assignment_form:
+        deputy_webaccess_id: 'abc1234'
     # Examples
     # labels:
     #   defaults:

@@ -24,17 +24,18 @@
   <nav class="navbar navbar-expand-lg navbar-light manage-profile-nav">
     <span class="navbar-brand"><%= image_tag('logo.png', alt: "Penn State") %></span>
     <ul class="navbar-nav mr-auto">
-      <li class="nav-item<%= ' active' if action_name == 'bio' %>"><%= link_to "Bio", profile_bio_path, class: 'nav-link' %></li>
-      <li class="nav-item<%= ' active' if action_name == 'edit_publications' %>"><%= link_to "Publications", edit_profile_publications_path, class: 'nav-link' %></li>
-      <li class="nav-item<%= ' active' if action_name == 'edit_presentations' %>"><%= link_to "Presentations", edit_profile_presentations_path, class: 'nav-link' %></li>
-      <li class="nav-item<%= ' active' if action_name == 'edit_performances' %>"><%= link_to "Performances", edit_profile_performances_path, class: 'nav-link' %></li>
-      <li class="nav-item<%= ' active' if action_name == 'edit_other_publications' %>"><%= link_to "Other Works", edit_profile_other_publications_path, class: 'nav-link' %></li>
+      <li class="nav-item<%= ' active' if action_name == 'bio' %>"><%= link_to t(".nav.bio"), profile_bio_path, class: 'nav-link' %></li>
+      <li class="nav-item<%= ' active' if action_name == 'edit_publications' %>"><%= link_to t(".nav.publications"), edit_profile_publications_path, class: 'nav-link' %></li>
+      <li class="nav-item<%= ' active' if action_name == 'edit_presentations' %>"><%= link_to t(".nav.presentations"), edit_profile_presentations_path, class: 'nav-link' %></li>
+      <li class="nav-item<%= ' active' if action_name == 'edit_performances' %>"><%= link_to t(".nav.performances"), edit_profile_performances_path, class: 'nav-link' %></li>
+      <li class="nav-item<%= ' active' if action_name == 'edit_other_publications' %>"><%= link_to t(".nav.other_works"), edit_profile_other_publications_path, class: 'nav-link' %></li>
     </ul>
     <ul class="navbar-nav ml-auto">
-      <li class="nav-item"><%= link_to "Home", root_path, class: 'nav-link' %></li>
-      <li class="nav-item"><%= link_to "Public Profile", profile_path(webaccess_id: current_user.webaccess_id), class: 'nav-link' %></li>
-      <li class="nav-item"><%= link_to "Support", 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support', target: '_blank', class: 'nav-link' %></li>
-      <li class="nav-item"><%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %></li>
+      <li class="nav-item"><%= link_to t(".nav.home"), root_path, class: 'nav-link' %></li>
+      <li class="nav-item"><%= link_to t(".nav.public_profile"), profile_path(webaccess_id: current_user.webaccess_id), class: 'nav-link' %></li>
+      <li class="nav-item"><%= link_to t(".nav.deputies"), deputy_assignments_path, class: "nav-link" %></li>
+      <li class="nav-item"><%= link_to t(".nav.support"), 'mailto:L-FAMS@lists.psu.edu?subject=Researcher Metadata Database Profile Support', target: '_blank', class: 'nav-link' %></li>
+      <li class="nav-item"><%= link_to t(".nav.sign_out"), destroy_user_session_path, class: "nav-link" %></li>
     </ul>
   </nav>
   <% if flash[:alert].present? %>

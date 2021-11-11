@@ -16,15 +16,23 @@
   <% if current_user_is_deputy? && pending? %>
     <div class="deputy-assignment__action">
       <%= button_to i18n('accept'),
-        '#',
-        class: 'btn btn-primary' %>
+                    confirm_deputy_assignment_path(deputy_assignment),
+                    method: :patch,
+                    class: 'btn btn-primary',
+                    data: {
+                      disable_with: i18n('accept')
+                    } %>
     </div>
   <% end %>
 
   <div class="deputy-assignment__action">
     <%= button_to delete_text,
-      '#',
-      method: :delete,
-      class: delete_class %>
+                  deputy_assignment_path(deputy_assignment),
+                  method: :delete,
+                  class: delete_class,
+                  data: {
+                    confirm: delete_confirm,
+                    disable_with: delete_text
+                  } %>
   </div>
 </div>

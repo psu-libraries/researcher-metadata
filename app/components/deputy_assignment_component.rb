@@ -42,6 +42,10 @@ class DeputyAssignmentComponent < ViewComponent::Base
     i18n(key)
   end
 
+  def delete_confirm
+    i18n('delete_confirmation', action: delete_text.downcase)
+  end
+
   def delete_class
     classes = %w[btn btn-sm]
     classes << if current_user_is_deputy? && pending?
@@ -57,7 +61,7 @@ class DeputyAssignmentComponent < ViewComponent::Base
     attr_reader :deputy_assignment,
                 :current_user
 
-    def i18n(key)
-      I18n.t("view_component.#{self.class.name.underscore}.#{key}")
+    def i18n(key, options = {})
+      I18n.t("view_component.#{self.class.name.underscore}.#{key}", options)
     end
 end
