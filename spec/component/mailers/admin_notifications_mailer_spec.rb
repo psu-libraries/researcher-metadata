@@ -16,7 +16,7 @@ describe AdminNotificationsMailer, type: :model do
     end
 
     it 'sends the email to the correct admin email address' do
-      expect(email.to).to eq ['L-FAMS@lists.psu.edu']
+      expect(email.to).to eq ['rmd-admin@psu.edu']
     end
 
     it 'sends the email from the correct address' do
