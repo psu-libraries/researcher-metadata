@@ -1,7 +1,8 @@
 <div class="manage-profile-list">
   <h4>Manage Profile Publications</h4>
   <div id="icon-key">
-    <h6>Icon key:</h6>
+    <h5>Icon key:</h5>
+    <h6>Open Access Status</h6>
     <table class="legend">
       <tr>
         <td><%= fa_icon('unlock-alt') %></td>
@@ -26,6 +27,17 @@
       <tr>
         <td><%= fa_icon('circle-o-notch') %></td>
         <td>This publication is in press and will not be subject to the open access policy until it is published.</td>
+      </tr>
+    </table>
+    <h6>Authorship Confirmation</h6>
+    <table class="legend">
+      <tr>
+        <td><%= fa_icon('check') %></td>
+        <td>Your authorship of the publication has been confirmed.</td>
+      </tr>
+      <tr>
+        <td><%= fa_icon('minus') %></td>
+        <td>Confirmation of your authorship of the publication is pending review by an RMD administrator.</td>
       </tr>
     </table>
   </div>
