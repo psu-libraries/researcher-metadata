@@ -7,16 +7,16 @@ class WorksGenerator
     @user = User.find_by(webaccess_id: webaccess_id)
   end
 
-  def journal_article_no_open_access_url
+  def journal_article_no_open_access_location
     pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type})
     create_contributor_name(pub)
     create_authorship(pub)
     create_pure_publication_import(pub)
   end
 
-  def journal_article_with_open_access_url
+  def journal_article_with_open_access_location
     pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type})
-    pub.open_access_locations << FactoryBot.create(:open_access_location, url: FFaker::Internet.domain_name)
+    FactoryBot.create(:open_access_location, url: FFaker::Internet.domain_name, publication: pub)
     create_contributor_name(pub)
     create_authorship(pub)
     create_pure_publication_import(pub)
@@ -174,7 +174,7 @@ class WorksGenerator
     end
 
     def rand_journal
-      Journal.find(rand(Journal.count)) || FactoryBot.create(:journal)
+      Journal.count.zero? ? FactoryBot.create(:journal) : Journal.find(rand(Journal.count))
     end
 
     attr_accessor :user
