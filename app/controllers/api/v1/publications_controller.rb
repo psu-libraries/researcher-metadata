@@ -10,11 +10,11 @@ module API::V1
       query = api_token.publications.visible.limit(limit)
 
       if params[:activity_insight_id].present?
-        query = filter_by_activity_insight_id(query)
+        query = Publication.filter_by_activity_insight_id(query, params[:activity_insight_id])
       end
 
       if params[:doi].present?
-        query = filter_by_doi(query)
+        query = Publication.filter_by_doi(query, params[:doi])
       end
 
       render json: API::V1::PublicationSerializer.new(query)
@@ -28,6 +28,13 @@ module API::V1
     def grants
       publication = api_token.publications.visible.find(params[:id])
       render json: API::V1::GrantSerializer.new(publication.grants)
+    end
+
+    def update_all
+      response = ScholarsphereLocationOperator.new(params: params, token: api_token).perform
+
+      render json: { message: I18n.t("api.publications.patch.#{response.message}"), code: response.code },
+             status: response.code
     end
 
     swagger_path '/v1/publications/{id}/grants' do
@@ -226,32 +233,84 @@ module API::V1
           key :api_key, []
         end
       end
+
+      operation :patch do
+        key :summary, 'Update publication\'s ScholarSphere Open Access Link'
+        key :description, 'Update publication\'s ScholarSphere Open Access Link by doi or activity insight id'
+        key :operationId, 'updateOpenAccessLink'
+        key :produces, [
+          'application/json'
+        ]
+        key :tags, [
+          'publication'
+        ]
+        parameter do
+          key :name, :Publication
+          key :in, :body
+          key :description, 'ScholarSphere Open Access Link update requires either a doi or an activity insight id'
+          key :required, true
+          schema do
+            key :'$ref', :PublicationInput
+          end
+        end
+        response 200 do
+          key :description, 'ScholarSphere Open Access Link successfully updated response'
+          schema do
+            key :'$ref', :PublicationPatchResult
+          end
+        end
+        response 401 do
+          key :description, 'Unauthorized'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 404 do
+          key :description, 'No publications found response'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 422 do
+          key :description, 'ScholarSphere Open Access Link already exists response'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        response 422 do
+          key :description, 'Invalid params response'
+          schema do
+            key :'$ref', :ErrorModelV1
+          end
+        end
+        security do
+          key :api_key, []
+        end
+      end
     end
 
-    private
-
-      def filter_by_activity_insight_id(query)
-        query.joins(:imports)
-          .where(publication_imports: {
-                   source: 'Activity Insight',
-                   source_identifier: params[:activity_insight_id]
-                 })
+    swagger_schema :PublicationInput do
+      key :required, [:scholarsphere_open_access_url]
+      property :activity_insight_id do
+        key :type, :string
       end
-
-      def filter_by_doi(query)
-        # allow DOI param to be provided in any of the following formats:
-        # 1. https://doi.org/10.123/example
-        # 2. doi:10.123/example
-        # 3. 10.123/example
-        doi = params[:doi]
-        url_prefix = 'https://doi.org/'
-
-        unless doi.start_with?(url_prefix)
-          doi.delete_prefix!('doi:')
-          doi = url_prefix + doi
-        end
-
-        query.where(doi: doi)
+      property :doi do
+        key :type, :string
       end
+      property :scholarsphere_open_access_url do
+        key :type, :string
+      end
+    end
+
+    swagger_schema :PublicationPatchResult do
+      key :required, [:code, :message]
+      property :code do
+        key :type, :integer
+        key :format, :int32
+      end
+      property :message do
+        key :type, :string
+      end
+    end
   end
 end

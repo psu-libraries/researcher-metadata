@@ -616,6 +616,29 @@ class Publication < ApplicationRecord
     status == PUBLISHED_STATUS
   end
 
+  def self.filter_by_activity_insight_id(query, activity_insight_id)
+    query.joins(:imports)
+      .where(publication_imports: {
+               source: 'Activity Insight',
+               source_identifier: activity_insight_id
+             })
+  end
+
+  def self.filter_by_doi(query, doi)
+    # allow DOI param to be provided in any of the following formats:
+    # 1. https://doi.org/10.123/example
+    # 2. doi:10.123/example
+    # 3. 10.123/example
+    url_prefix = 'https://doi.org/'
+
+    unless doi.start_with?(url_prefix)
+      doi.delete_prefix!('doi:')
+      doi = url_prefix + doi
+    end
+
+    query.where(doi: doi)
+  end
+
   private
 
     def preferred_journal_info_policy

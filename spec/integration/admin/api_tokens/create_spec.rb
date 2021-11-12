@@ -39,6 +39,26 @@ describe 'Creating an API Token', type: :feature do
         expect(t.token).not_to be_blank
         expect(t.app_name).to eq 'Test App'
         expect(t.total_requests).to eq 0
+        expect(t).not_to be_write_access
+      end
+    end
+
+    describe 'submitting the form to create a new API Token with write access' do
+      before do
+        fill_in 'App name', with: 'Test App'
+        fill_in 'Admin email', with: 'test_write@email.com'
+        check 'Write access'
+
+        click_button 'Save'
+      end
+
+      it 'creates a new API Token record in the database with the provided data' do
+        t = APIToken.find_by(admin_email: 'test_write@email.com')
+
+        expect(t.token).not_to be_blank
+        expect(t.app_name).to eq 'Test App'
+        expect(t.total_requests).to eq 0
+        expect(t).to be_write_access
       end
     end
   end

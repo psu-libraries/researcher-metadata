@@ -9,7 +9,7 @@ describe 'Admin API tokens list', type: :feature do
 
     describe 'the page content' do
       let!(:token1) { create(:api_token, token: 'secret_token_1', app_name: 'A Test Application') }
-      let!(:token2) { create(:api_token, token: 'secret_token_2', app_name: 'Another Application') }
+      let!(:token2) { create(:api_token, token: 'secret_token_2', app_name: 'Another Application', write_access: true) }
 
       before { visit rails_admin.index_path(model_name: :api_token) }
 
@@ -25,6 +25,11 @@ describe 'Admin API tokens list', type: :feature do
         expect(page).to have_content token2.id
         expect(page).to have_content 'secret_token_2'
         expect(page).to have_content 'Another Application'
+
+        click_link href: '/admin/api_token?model_name=api_token&set=1', match: :first
+
+        expect(page).to have_css 'span.label-success', exact_text: '✓', count: 1
+        expect(page).to have_css 'span.label-danger', exact_text: '✘', count: 1
       end
     end
 

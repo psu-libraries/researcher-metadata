@@ -8,6 +8,7 @@ describe 'Admin API token detail page', type: :feature do
                         token: 'secret_token_1',
                         app_name: 'Test Application',
                         admin_email: 'admin123@psu.edu',
+                        write_access: true,
                         total_requests: 472,
                         last_used_at: Time.zone.local(2019, 8, 14, 16, 44, 0) }
 
@@ -34,6 +35,10 @@ describe 'Admin API token detail page', type: :feature do
 
       it "shows the token's administrator email" do
         expect(page).to have_content 'admin123@psu.edu'
+      end
+
+      it 'shows if the token has write access' do
+        expect(page).to have_css 'span.label-success', exact_text: '✓'
       end
 
       it "shows the token's total requests" do

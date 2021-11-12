@@ -52,6 +52,7 @@ ActiveRecord::Schema.define(version: 2021_11_04_145655) do
     t.datetime "updated_at", null: false
     t.integer "total_requests", default: 0
     t.datetime "last_used_at"
+    t.boolean "write_access", default: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
 

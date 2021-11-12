@@ -57,6 +57,15 @@ en:
   api:
     errors:
       not_authorized: "401: Request not authorized. Please provide a valid API key for access."
+    publications:
+      patch:
+        success: "The open access location was successfully updated."
+        no_content: "There were no publications found to be updated."
+        existing_location: "The open access location already exists."
+        params_invalid: "Invalid request params provided."
+        params_missing_url: "The open access location url is missing."
+        params_missing_id: "You must provide either a doi or an activity insight id."
+        params_both_ids: "You must provide either a doi or an activity insight id, not both."
   profile:
     open_access_publications:
       update:

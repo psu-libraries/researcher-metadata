@@ -9,6 +9,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:org) { create :organization, visible: true }
     let!(:publication_1) { create :publication, visible: true }
     let!(:publication_with_grants) { create :publication, visible: true }
+    let!(:pub_to_patch) { create :publication, doi: 'https://doi.org/10.26207/46a7-9981', open_access_locations: open_access_locations }
+    let!(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:user_with_grants) { create(:user_with_grants, webaccess_id: 'grant123', grants_count: 10) }
     let!(:user_with_presentations) { create(:user_with_presentations, webaccess_id: 'pres123', presentations_count: 10) }
@@ -100,6 +102,55 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       }
     }
 
+    let(:update_open_access_location_params) {
+      {
+        '_data' => { 'doi': pub_to_patch.doi, 'scholarsphere_open_access_url': 'new_url' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:not_found_publications_params) {
+      {
+        '_data' => { 'doi': 'non_existing_doi', 'scholarsphere_open_access_url': 'new_url' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:existing_open_access_location_params) {
+      {
+        '_data' => { 'doi': pub_to_patch.doi, 'scholarsphere_open_access_url': 'existing_url' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:missing_url_open_access_location_params) {
+      {
+        '_data' => { 'doi': pub_to_patch.doi },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:missing_ids_open_access_location_params) {
+      {
+        '_data' => { 'scholarsphere_open_access_url': 'new_url' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:both_ids_open_access_location_params) {
+      {
+        '_data' => { 'doi': pub_to_patch.doi, 'activity_insight_id': '123456', 'scholarsphere_open_access_url': 'new_url' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
+    let(:invalid_open_access_location_params) {
+      {
+        '_data' => { 'invalid_key': 'some_value' },
+        '_headers' => { 'X-API-Key' => 'token456' }
+      }
+    }
+
     before do
       create :organization_api_permission, api_token: api_token, organization: org
       create :user_organization_membership, organization: org, user: user
@@ -112,10 +163,20 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
       create :authorship, user: user, publication: publication_1
       create :authorship, user: user, publication: publication_with_grants
       create :research_fund, grant: grant, publication: publication_with_grants
+      create :api_token, token: 'token456', write_access: true
     end
 
     it { is_expected.to validate(:get, '/v1/publications', 200, publications_params) }
     it { is_expected.to validate(:get, '/v1/publications', 401, unauthorized_params) }
+
+    it { is_expected.to validate(:patch, '/v1/publications', 200, update_open_access_location_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 404, not_found_publications_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 401, unauthorized_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 422, existing_open_access_location_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 422, missing_url_open_access_location_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 422, missing_ids_open_access_location_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 422, both_ids_open_access_location_params) }
+    it { is_expected.to validate(:patch, '/v1/publications', 422, invalid_open_access_location_params) }
 
     it { is_expected.to validate(:get, '/v1/publications/{id}', 200, publication_params) }
     it { is_expected.to validate(:get, '/v1/publications/{id}', 401, unauthorized_params) }
