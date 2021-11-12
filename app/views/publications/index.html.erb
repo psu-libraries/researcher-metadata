@@ -1,28 +1,36 @@
-  <div class="open-access-action">
-    <h4>Search Publications</h4>
+<div class="open-access-action">
+  <h4>Search Publications</h4>
 
-    <%= simple_form_for :search, url: publications_path, method: :get do |f| %>
+  <%= simple_form_for :search, url: publications_path, method: :get do |f| %>
+    <h6>By title:</h6>
+    <fieldset>
       <%= f.input :title, as: :string, label: 'Title', required: false %>
-      <%= f.submit 'Search', class: 'btn btn-primary' %>
-    <% end %>
-  </div>
-
-  <% if @publications %>
-    <h5>Matching Publications</h5>
-    <table class="table">
-      <thead>
-        <tr>
-          <th>Title</th>
-          <th></th>
-        </tr>
-      </thead>
-      <tbody>
-        <% @publications.each do |p| %>
-          <tr id="<%= dom_id(p) %>">
-            <td><%= p.title %></td>
-            <td><%= link_to 'View Details', publication_path(p) %></td>
-          </tr>
-        <% end %>
-      </tbody>
-    </table>
+    </fieldset>
+    <h6>By author first and last name:</h6>
+    <fieldset>
+      <%= f.input :first_name, as: :string, label: 'First name', required: false %>
+      <%= f.input :last_name, as: :string, label: 'Last name', required: false %>
+    </fieldset>
+    <%= f.submit 'Search', class: 'btn btn-primary' %>
   <% end %>
+</div>
+
+<% if @publications.any? %>
+  <h5>Matching Publications</h5>
+  <table class="table">
+    <thead>
+      <tr>
+        <th>Title</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td><%= p.title %></td>
+          <td><%= link_to 'View Details', publication_path(p) %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

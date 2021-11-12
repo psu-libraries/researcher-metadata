@@ -14,11 +14,13 @@ describe 'claiming authorship of a publication' do
                       issue: '102',
                       page_range: '103',
                       published_on: Date.new(2021, 1, 1) }
+  let(:pub3) { create :publication, title: 'Non-matching Pub' }
   let(:pub2_author1) { create :user, first_name: 'Paula', last_name: 'Paperauthor' }
   let(:pub2_author2) { create :user, first_name: 'Robert', last_name: 'Researcher' }
   let(:journal) { create :journal, title: 'Test Journal' }
 
   before do
+    create :contributor_name, first_name: 'Susanna', last_name: 'scientist', publication: pub1
     create :authorship, publication: pub2, user: pub2_author1
     create :authorship, publication: pub2, user: pub2_author2
   end
@@ -42,11 +44,24 @@ describe 'claiming authorship of a publication' do
           within "#publication_#{pub2.id}" do
             expect(page).to have_content 'Another Researcher Metadata Database Test Publication'
           end
+
+          expect(page).not_to have_content pub3.title
         end
 
         context 'when matching publications are not visible' do
           let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication', visible: false }
           let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication', visible: false }
+
+          before { do_title_search }
+
+          it 'does not show the matching publications' do
+            expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
+          end
+        end
+
+        context 'when matching publications are not journal articles' do
+          let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication', publication_type: 'Book' }
+          let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication', publication_type: 'Book' }
 
           before { do_title_search }
 
@@ -65,6 +80,33 @@ describe 'claiming authorship of a publication' do
           it 'does not show the matching publications' do
             expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
           end
+        end
+      end
+
+      describe 'submitting the form to search for publications by author name' do
+        before { do_name_search }
+
+        it 'shows a list of matching publications' do
+          expect(page).to have_content 'Matching Publications'
+          within "#publication_#{pub1.id}" do
+            expect(page).to have_content 'Researcher Metadata Database Test Publication'
+          end
+
+          expect(page).not_to have_content 'Another Researcher Metadata Database Test Publication'
+          expect(page).not_to have_content pub3.title
+        end
+      end
+
+      describe 'submitting the form without any search criteria' do
+        before do
+          visit publications_path
+          click_on 'Search'
+        end
+
+        it 'does not show any publications' do
+          expect(page).not_to have_content 'Test Publication'
+          expect(page).not_to have_content pub3.title
+          expect(page).not_to have_content 'Matching Publications'
         end
       end
 
@@ -145,6 +187,13 @@ end
 
 def do_title_search
   visit publications_path
-  fill_in 'Title', with: 'Researcher Metadata Database Test Publication'
+  fill_in 'Title', with: 'metadata database'
+  click_on 'Search'
+end
+
+def do_name_search
+  visit publications_path
+  fill_in 'First name', with: 's'
+  fill_in 'Last name', with: 'scientist'
   click_on 'Search'
 end
