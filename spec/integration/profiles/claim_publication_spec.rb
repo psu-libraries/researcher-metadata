@@ -108,7 +108,7 @@ describe 'claiming authorship of a publication' do
           end
 
           it 'sends a notification of the claim to the RMD admins' do
-            open_email('L-FAMS@lists.psu.edu')
+            open_email('rmd-admin@psu.edu')
             expect(current_email.body).to match(/Test Claimer/)
           end
 
