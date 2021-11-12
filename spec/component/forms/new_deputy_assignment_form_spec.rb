@@ -73,6 +73,26 @@ s.psu.edu/cpr/resources/123456" } }
         end
       end
 
+      context 'when the webaccess_id is not found in PsuIdentity' do
+        before { allow(psu_identity_client).to receive(:userid).with(deputy_webaccess_id).and_return(nil) }
+
+        it 'returns false' do
+          expect(form.save).to eq false
+        end
+
+        it 'has a nice error' do
+          form.save
+          expect(form.errors.messages_for(:deputy_webaccess_id)).to include i18n_error('deputy_webaccess_id.not_found')
+        end
+
+        it 'creates nothing' do
+          expect {
+            form.save
+          }.to not_change(User, :count)
+            .and not_change(DeputyAssignment, :count)
+        end
+      end
+
       context 'when PsuIdentity raises an error' do
         before { allow(psu_identity_client).to receive(:userid).and_raise(StandardError) }
 
