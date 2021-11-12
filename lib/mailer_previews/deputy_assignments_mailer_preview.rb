@@ -16,6 +16,16 @@ class DeputyAssignmentsMailerPreview < ActionMailer::Preview
     DeputyAssignmentsMailer.deputy_assignment_declination(fake_deputy_assignment)
   end
 
+  # Accessible from http://localhost:3000/rails/mailers/deputy_assignments_mailer/deputy_status_ended
+  def deputy_status_ended
+    DeputyAssignmentsMailer.deputy_status_ended(fake_deputy_assignment)
+  end
+
+  # Accessible from http://localhost:3000/rails/mailers/deputy_assignments_mailer/deputy_status_revoked
+  def deputy_status_revoked
+    DeputyAssignmentsMailer.deputy_status_revoked(fake_deputy_assignment)
+  end
+
   private
 
     def fake_deputy_assignment
