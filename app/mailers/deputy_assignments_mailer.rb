@@ -29,4 +29,22 @@ class DeputyAssignmentsMailer < ApplicationMailer
          from: 'openaccess@psu.edu',
          reply_to: 'openaccess@psu.edu'
   end
+
+  def deputy_status_ended(deputy_assignment)
+    @primary = deputy_assignment.primary
+    @deputy = deputy_assignment.deputy
+    mail to: @primary.email,
+         subject: 'PSU Researcher Metadata Database - Proxy Status Ended',
+         from: 'openaccess@psu.edu',
+         reply_to: 'openaccess@psu.edu'
+  end
+
+  def deputy_status_revoked(deputy_assignment)
+    @primary = deputy_assignment.primary
+    @deputy = deputy_assignment.deputy
+    mail to: @deputy.email,
+         subject: 'PSU Researcher Metadata Database - Proxy Status Revoked',
+         from: 'openaccess@psu.edu',
+         reply_to: 'openaccess@psu.edu'
+  end
 end

@@ -1,0 +1,11 @@
+<p>
+  Dear <%= @primary.name %>,
+</p>
+
+<p>
+  <%= @deputy.name %> (<%= @deputy.webaccess_id %>) has ended their status as a proxy acting on your behalf in the
+  Researcher Metadata Database. They can no longer act on your behalf. If this was a mistake, you can try adding them
+  as a proxy again.
+</p>
+
+<%= render :partial => 'footer' %>

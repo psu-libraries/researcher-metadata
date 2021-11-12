@@ -20,7 +20,7 @@ describe DeputyAssignmentsMailer, type: :model do
   describe '#deputy_assignment_confirmation' do
     subject(:email) { described_class.deputy_assignment_confirmation(deputy_assignment) }
 
-    it "sends the email to the given user's email address" do
+    it "sends the email to the primary user's email address" do
       expect(email.to).to eq ['primary@psu.edu']
     end
 
@@ -52,7 +52,7 @@ describe DeputyAssignmentsMailer, type: :model do
   describe '#deputy_assignment_declination' do
     subject(:email) { described_class.deputy_assignment_declination(deputy_assignment) }
 
-    it "sends the email to the given user's email address" do
+    it "sends the email to the primary user's email address" do
       expect(email.to).to eq ['primary@psu.edu']
     end
 
@@ -88,7 +88,7 @@ describe DeputyAssignmentsMailer, type: :model do
       allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
     end
 
-    it "sends the email to the given user's email address" do
+    it "sends the email to the deputy user's email address" do
       expect(email.to).to eq ['deputy@psu.edu']
     end
 
@@ -109,6 +109,70 @@ describe DeputyAssignmentsMailer, type: :model do
 
       it 'addresses the user by name' do
         expect(body).to include('Dear Deputy User,')
+      end
+    end
+  end
+
+  describe '#deputy_status_ended' do
+    subject(:email) { described_class.deputy_status_ended(deputy_assignment) }
+
+    it "sends the email to the primary user's email address" do
+      expect(email.to).to eq ['primary@psu.edu']
+    end
+
+    it 'sends the email from the correct address' do
+      expect(email.from).to eq ['openaccess@psu.edu']
+    end
+
+    it 'sends the email with the correct subject' do
+      expect(email.subject).to eq 'PSU Researcher Metadata Database - Proxy Status Ended'
+    end
+
+    it 'sets the correct reply-to address' do
+      expect(email.reply_to).to eq ['openaccess@psu.edu']
+    end
+
+    describe 'the message body' do
+      let(:body) { email.body.raw_source }
+
+      it 'addresses the user by name' do
+        expect(body).to include('Dear Primary User,')
+      end
+
+      it 'mentions the deputy by name and webaccess ID' do
+        expect(body).to include('Deputy User (def456)')
+      end
+    end
+  end
+
+  describe '#deputy_status_revoked' do
+    subject(:email) { described_class.deputy_status_revoked(deputy_assignment) }
+
+    it "sends the email to the deputy user's email address" do
+      expect(email.to).to eq ['deputy@psu.edu']
+    end
+
+    it 'sends the email from the correct address' do
+      expect(email.from).to eq ['openaccess@psu.edu']
+    end
+
+    it 'sends the email with the correct subject' do
+      expect(email.subject).to eq 'PSU Researcher Metadata Database - Proxy Status Revoked'
+    end
+
+    it 'sets the correct reply-to address' do
+      expect(email.reply_to).to eq ['openaccess@psu.edu']
+    end
+
+    describe 'the message body' do
+      let(:body) { email.body.raw_source }
+
+      it 'addresses the user by name' do
+        expect(body).to include('Dear Deputy User,')
+      end
+
+      it 'mentions the primary user by name and webaccess ID' do
+        expect(body).to include('Primary User (abc123)')
       end
     end
   end
