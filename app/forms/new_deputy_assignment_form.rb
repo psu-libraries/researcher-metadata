@@ -2,9 +2,6 @@
 
 class NewDeputyAssignmentForm
   class IdentityServiceError < StandardError; end
-  class IdentityNotFound < StandardError; end
-  class AlreadyAssigned < StandardError; end
-  class ErrorCreatingUser < StandardError; end
 
   include ActiveModel::Model
 
@@ -26,16 +23,10 @@ class NewDeputyAssignmentForm
 
     begin
       deputy = find_or_initialize_deputy(webaccess_id: deputy_webaccess_id)
-      ensure_deputy_assignment_does_not_already_exist(deputy: deputy)
+      validate_deputy_assignment_does_not_already_exist(deputy: deputy)
+      return false if errors.any?
+
       create_deputy_assignment(primary: primary, deputy: deputy)
-    rescue IdentityServiceError
-      errors.add(:base, :identity_service_error)
-    rescue IdentityNotFound
-      errors.add(:deputy_webaccess_id, :not_found)
-    rescue AlreadyAssigned
-      errors.add(:deputy_webaccess_id, :already_assigned)
-    rescue ErrorCreatingUser
-      errors.add(:base, :error_creating_user)
     rescue StandardError
       errors.add(:base, :unknown_error)
     end
@@ -46,26 +37,44 @@ class NewDeputyAssignmentForm
   private
 
     def find_or_initialize_deputy(webaccess_id:)
-      User.find_or_initialize_by(webaccess_id: webaccess_id) do |new_user|
-        psu_identity = query_psu_identity(webaccess_id)
-        raise IdentityNotFound if psu_identity.blank?
-
-        new_user.first_name = psu_identity.given_name
-        new_user.last_name = psu_identity.family_name
-        new_user.psu_identity = psu_identity
-
-        raise ErrorCreatingUser unless new_user.valid?
-      end
+      User.find_by(webaccess_id: webaccess_id) ||
+        initialize_user_from_psu_identity(webaccess_id: webaccess_id)
     end
 
-    def ensure_deputy_assignment_does_not_already_exist(deputy:)
-      return if deputy.new_record?
+    def initialize_user_from_psu_identity(webaccess_id: webaccess_id)
+      psu_identity = query_psu_identity(webaccess_id)
+      if psu_identity.blank?
+        errors.add(:deputy_webaccess_id, :not_found)
+        return nil
+      end
 
-      existing_deputy_assignment = DeputyAssignment.active.find_by(
-        primary: primary,
-        deputy: deputy
+      new_user = User.new(
+        webaccess_id: webaccess_id,
+        first_name: psu_identity.given_name,
+        last_name: psu_identity.family_name,
+        psu_identity: psu_identity
       )
-      raise AlreadyAssigned if existing_deputy_assignment.present?
+
+      new_user.validate!
+
+      new_user
+    rescue ActiveRecord::RecordInvalid
+      errors.add(:base, :error_creating_user)
+      nil
+    rescue IdentityServiceError
+      errors.add(:base, :identity_service_error)
+      nil
+    end
+
+    def validate_deputy_assignment_does_not_already_exist(deputy:)
+      return if deputy.nil? || deputy.new_record?
+
+      existing_deputy_assignment = DeputyAssignment
+        .where(primary: primary, deputy: deputy)
+        .active
+        .any?
+
+      errors.add(:deputy_webaccess_id, :already_assigned) if existing_deputy_assignment
     end
 
     def create_deputy_assignment(primary:, deputy:)
@@ -87,7 +96,7 @@ class NewDeputyAssignmentForm
     def query_psu_identity(webaccess_id)
       PsuIdentity::SearchService::Client.new.userid(webaccess_id)
     rescue URI::InvalidURIError
-      raise IdentityNotFound
+      nil
     rescue StandardError
       raise IdentityServiceError
     end
