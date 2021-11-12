@@ -325,6 +325,7 @@ describe Publication, type: :model do
     let!(:pub3) { create :publication, visible: true }
     let!(:pub4) { create :publication, visible: true }
     let!(:pub5) { create :publication, visible: true }
+    let!(:pub6) { create :publication, visible: true, publication_type: 'Book' }
 
     before do
       create :authorship, user: user, publication: pub3, confirmed: false, claimed_by_user: true
