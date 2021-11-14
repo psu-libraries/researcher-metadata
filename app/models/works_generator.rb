@@ -8,14 +8,14 @@ class WorksGenerator
   end
 
   def journal_article_no_open_access_location
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
     create_contributor_name(pub)
     create_authorship(pub)
     create_pure_publication_import(pub)
   end
 
   def journal_article_with_open_access_location
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
     FactoryBot.create(:open_access_location, url: FFaker::Internet.domain_name, publication: pub)
     create_contributor_name(pub)
     create_authorship(pub)
@@ -23,22 +23,22 @@ class WorksGenerator
   end
 
   def journal_article_in_press
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type,
-                                                           status: 'In Press'})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
+                                                            status: 'In Press' })
     create_contributor_name(pub)
     create_authorship(pub)
     create_pure_publication_import(pub)
   end
 
   def other_work
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_non_journal_article_type})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_non_journal_article_type })
     create_contributor_name(pub)
     create_authorship(pub)
     create_pure_publication_import(pub)
   end
 
   def journal_article_from_activity_insight
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
     create_contributor_name(pub)
     create_authorship(pub)
     create_activity_insight_publication_import(pub)
@@ -46,8 +46,8 @@ class WorksGenerator
 
   def journal_article_duplicate_group
     dup_group = FactoryBot.create :duplicate_publication_group
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type,
-                                                           duplicate_publication_group_id: dup_group.id})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
+                                                            duplicate_publication_group_id: dup_group.id })
     create_duplicate_publication(pub)
     create_contributor_name(pub)
     create_authorship(pub)
@@ -58,8 +58,8 @@ class WorksGenerator
   def journal_article_non_duplicate_group
     dup_group = FactoryBot.create :duplicate_publication_group
     non_dup_group = FactoryBot.create :non_duplicate_publication_group
-    pub = FactoryBot.create :publication, pub_attrs.merge({publication_type: rand_journal_article_type,
-                                                           duplicate_publication_group_id: dup_group.id})
+    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
+                                                            duplicate_publication_group_id: dup_group.id })
     pub2 = create_duplicate_publication(pub)
     create_contributor_name(pub)
     create_authorship(pub)
@@ -152,11 +152,11 @@ class WorksGenerator
     end
 
     def rand_non_journal_article_type
-      Publication.publication_types.collect {|type| type if !type.match(/Journal Article/)}.compact.sample
+      Publication.publication_types.map { |type| type if type.exclude?('Journal Article') }.compact.sample
     end
 
     def rand_journal_article_type
-      Publication.publication_types.collect {|type| type if type.match(/Journal Article/)}.compact.sample
+      Publication.publication_types.map { |type| type if /Journal Article/.match?(type) }.compact.sample
     end
 
     def pub_attrs
