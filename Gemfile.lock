@@ -257,7 +257,7 @@ GEM
     image_processing (1.12.1)
       mini_magick (>= 4.9.5, < 5)
       ruby-vips (>= 2.0.17, < 3)
-    jbuilder (2.11.2)
+    jbuilder (2.11.3)
       activesupport (>= 5.0.0)
     jmespath (1.4.0)
     jquery-rails (4.4.0)
@@ -611,7 +611,7 @@ DEPENDENCIES
   font-awesome-rails
   foundation-rails
   httparty
-  jbuilder (~> 2.5)
+  jbuilder (~> 2.11)
   jquery-rails
   jquery-ui-rails
   launchy
