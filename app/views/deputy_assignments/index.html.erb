@@ -1,0 +1,35 @@
+<h4><%= t(".deputies_heading") %></h4>
+<p><%= t(".deputies_explanation") %></p>
+
+<% if @primary_assignments.any? %>
+  <div class="delegate-list">
+    <% @primary_assignments.each do |assignment| %>
+      <%= render DeputyAssignmentComponent.new(deputy_assignment: assignment, current_user: current_user) %>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="delegate-action mb-5">
+  <%= simple_form_for @new_deputy_assigment, url: deputy_assignments_path do |f| %>
+    <% if f.object.errors[:base].present? %>
+      <%= f.error_notification %>
+      <div class="text-danger mb-2">
+        <%= f.error :base %>
+      </div>
+    <% end %>
+
+    <%= f.input :deputy_webaccess_id, as: :string %>
+    <%= f.submit class: "btn btn-primary" %>
+  <% end %>
+</div>
+
+<% if @deputy_assignments.any? %>
+  <h4><%= t(".primaries_heading") %></h4>
+  <p><%= t(".primaries_explanation") %></p>
+
+  <div class="delegate-list">
+    <% @deputy_assignments.each do |assignment| %>
+      <%= render DeputyAssignmentComponent.new(deputy_assignment: assignment, current_user: current_user) %>
+    <% end %>
+  </div>
+<% end %>

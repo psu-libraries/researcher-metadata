@@ -24,6 +24,7 @@ linters:
     exclude:
       - app/assets/stylesheets/manage_profile.scss
   SelectorFormat:
+    convention: hyphenated_BEM
     exclude:
       - app/assets/stylesheets/rails_admin/custom/variables.scss
   QualifyingElement:

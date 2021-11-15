@@ -66,6 +66,11 @@ Rails.application.routes.draw do
 
   get 'profile' => redirect('profile/publications/edit')
 
+  get 'proxies' => 'deputy_assignments#index', as: :deputy_assignments
+  post 'proxies' => 'deputy_assignments#create'
+  patch 'proxies/:id/confirm' => 'deputy_assignments#confirm', as: :confirm_deputy_assignment
+  delete 'proxies/:id' => 'deputy_assignments#destroy', as: :deputy_assignment
+
   put 'authorships/sort' => 'authorships#sort'
   put 'authorships/:id' => 'authorships#update', as: :authorship
 

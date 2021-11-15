@@ -20,6 +20,7 @@ Style/RescueModifier:
 Lint/MissingSuper:
   Exclude:
     - 'app/models/concerns/null_object_pattern.rb'
+    - 'app/components/**/*'
 
 Lint/ConstantDefinitionInBlock:
   Exclude:

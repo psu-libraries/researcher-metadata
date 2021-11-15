@@ -1,0 +1,38 @@
+<div id="<%= dom_id deputy_assignment %>" class="<%= root_class %>">
+  <div class="deputy-assignment__name">
+    <strong><%= name %></strong> <%= webaccess_id %>
+
+    <% if current_user_is_deputy? && pending? %>
+      <%= i18n('pending_as_deputy') %>
+    <% end %>
+  </div>
+
+  <% if current_user_is_primary? && pending? %>
+    <div class="deputy-assignment__action text-muted">
+      <%= i18n('pending_as_primary') %>
+    </div>
+  <% end %>
+
+  <% if current_user_is_deputy? && pending? %>
+    <div class="deputy-assignment__action">
+      <%= button_to i18n('accept'),
+                    confirm_deputy_assignment_path(deputy_assignment),
+                    method: :patch,
+                    class: 'btn btn-primary',
+                    data: {
+                      disable_with: i18n('accept')
+                    } %>
+    </div>
+  <% end %>
+
+  <div class="deputy-assignment__action">
+    <%= button_to delete_text,
+                  deputy_assignment_path(deputy_assignment),
+                  method: :delete,
+                  class: delete_class,
+                  data: {
+                    confirm: delete_confirm,
+                    disable_with: delete_text
+                  } %>
+  </div>
+</div>

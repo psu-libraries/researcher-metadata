@@ -1,8 +1,22 @@
 en:
   activemodel:
     attributes:
+      new_deputy_assignment_form:
+        deputy_webaccess_id: Proxy's Access ID
       open_access_url_form:
         open_access_url: "URL"
+    errors:
+      models:
+        new_deputy_assignment_form:
+          attributes:
+            base:
+              identity_service_error: There was a problem looking up this user's webaccess id. Please try again later, and contact support if the problem keeps happening.
+              error_creating_user: There was a problem with this user's webaccess id, please contact support for help.
+              unknown_error: There was a problem assigning this proxy, please contact support for help.
+            deputy_webaccess_id:
+              not_found: could not be found, did you mistype it?
+              already_assigned: has already been assigned as your proxy!
+              invalid: must contain only letters an numbers
   activerecord:
     errors:
       models:
@@ -66,6 +80,33 @@ en:
         params_missing_url: "The open access location url is missing."
         params_missing_id: "You must provide either a doi or an activity insight id."
         params_both_ids: "You must provide either a doi or an activity insight id, not both."
+  deputy_assignments:
+    index:
+      deputies_heading: Your Proxies
+      deputies_explanation: The following people can act on your behalf within the Researcher Metadata Database. They can do everything you can do, including uploading an article to ScholarSphere, providing an article's open access URL, waiving the Penn State open access policy for an article, and choosing which articles to display in your public profile. Please use caution when granting proxy access to your account.
+      primaries_heading: You’re a Proxy For
+      primaries_explanation: You can act on behalf of the following people within the Researcher Metadata Database.
+    create:
+      success: Successfully created the Proxy
+    confirm:
+      success: You are now a proxy for %{name}
+      error: Something went wrong when accepting this proxy. Please contact support to resolve the issue.
+    destroy:
+      success: Successfully removed the proxy assignment.
+      error: Something went wrong when deleting this proxy. Please contact support to resolve the issue.
+  layouts:
+    manage_profile:
+      nav:
+        bio: Bio
+        publications: Publications
+        presentations: Presentations
+        performances: Performances
+        other_works: Other Works
+        home: Home
+        public_profile: Public Profile
+        deputies: Proxies
+        support: Support
+        sign_out: Sign out
   profile:
     open_access_publications:
       update:
@@ -121,3 +162,17 @@ en:
     unpaywall: 'Unpaywall'
     dickinson_ideas: 'Dickinson Law IDEAS Repo'
     psu_law_elibrary: 'Penn State Law eLibrary Repo'
+  view_component:
+    deputy_assignment_component:
+      delete_as_primary: Revoke
+      delete_as_deputy: End Proxy Relationship
+      delete_as_deputy_unconfirmed: Decline
+      delete_confirmation: Are you sure you want to %{action}? This cannot be undone.
+      pending_as_primary: Awaiting Confirmation
+      pending_as_deputy: wants you to be able to act on their behalf
+      accept: Accept
+
+  helpers:
+    submit:
+      new_deputy_assignment_form:
+        create: Add a New Proxy

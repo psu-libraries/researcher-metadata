@@ -69,7 +69,9 @@ body {
 }
 
 .open-access-action,
-.profile-bio-section {
+.profile-bio-section,
+.delegate-list,
+.delegate-action {
   border: 1px solid lightgrey;
   border-radius: 10px;
   margin: 20px 0;
@@ -196,4 +198,43 @@ table.legend {
 
 .file-uploads {
   margin-bottom: 60px;
+}
+
+.delegate-list {
+  padding: 0;
+}
+
+.deputy-assignment {
+  align-items: baseline;
+  border-bottom: 1px solid lightgrey;
+  display: flex;
+  padding: 10px 30px;
+
+  &.deputy-assignment--action-required {
+    background-color: lighten($yellow, 40%);
+
+    &:first-child {
+      @include border-top-radius(10px);
+    }
+
+    &:last-child {
+      @include border-bottom-radius(10px);
+    }
+  }
+
+  &:last-child {
+    border-bottom: 0;
+  }
+}
+
+.deputy-assignment__name {
+  flex: 1 0;
+}
+
+.deputy-assignment__action {
+  padding-right: 1rem;
+
+  &:last-child {
+    padding-right: 0;
+  }
 }

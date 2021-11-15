@@ -46,6 +46,7 @@ gem 'smarter_csv'                       # simple, efficient CSV processing for R
 gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can be turned into JSON
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
+gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
 
 group :development, :test do

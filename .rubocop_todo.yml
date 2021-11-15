@@ -304,6 +304,8 @@ Rails/SkipsModelValidations:
     - 'app/models/scholarsphere_work_deposit.rb'
     - 'app/models/user.rb'
     - 'spec/component/models/user_profile_spec.rb'
+    - 'app/models/deputy_assignment.rb'
+    - 'spec/component/controllers/deputy_assignments_controller_spec.rb'
 
 # Offense count: 7
 # Configuration parameters: Include.
