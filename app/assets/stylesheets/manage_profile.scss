@@ -16,7 +16,7 @@ body {
   padding: 0 16px 0 0;
 
   .navbar-brand {
-    margin: 0 60px 0 8px;
+    margin: 8px 60px 0 8px;
     padding-top: 0;
   }
 }
@@ -30,29 +30,6 @@ body {
   .navbar-info {
     margin: 0 60px 0 8px;
     padding-top: 0;
-  }
-}
-
-.manage-profile-header {
-  background-color: #595959;
-  height: 38px;
-
-  h1 {
-    float: left;
-    padding: 8px 16px 0 6px;
-  }
-
-  ul {
-    float: right;
-    list-style: none;
-    padding: 6px 16px 0 0;
-  }
-
-  a,
-  h1 {
-    color: #fff;
-    font-size: 17px;
-    text-decoration: none;
   }
 }
 

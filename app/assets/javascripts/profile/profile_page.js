@@ -43,19 +43,4 @@ $(document).on('ready', function() {
   $(window).scroll(function() {
     stickyNav();
   });
-
-// Move upper nav to hamburger container
-  var moveNav = function(){
-    if (Foundation.MediaQuery.atLeast('large')) {
-      $('#upper-nav').appendTo("#upper-nav-wrapper");
-    } else {
-      $('#upper-nav').appendTo("#lower-nav");
-    }
-  };
-
-  moveNav();
-
-  $(window).resize(function() {
-    moveNav();
-  });
 });

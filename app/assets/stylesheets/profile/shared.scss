@@ -1,3 +1,33 @@
+$gray: #595959;
+$white: #fff;
+
 .logo {
   max-width: 193px;
+}
+
+.profile-header {
+  background-color: $gray;
+  height: 38px;
+
+  h1 {
+    float: left;
+    padding: 8px 16px 0 6px;
+  }
+
+  ul {
+    float: right;
+    line-height: 1.5;
+    list-style: none;
+    margin-bottom: 0;
+    padding: 6px 16px 0 0;
+  }
+
+  a,
+  h1 {
+    color: $white;
+    font-size: 17px;
+    font-weight: normal;
+    line-height: 1.2;
+    text-decoration: none;
+  }
 }
