@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
 namespace :generate do
-  task :journal_article_no_open_access_url, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_no_open_access_url
+  task :journal_article_no_open_access_location, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).journal_article_no_open_access_location
   end
 
-  task :journal_article_with_open_access_url, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_with_open_access_url
+  task :journal_article_with_open_access_location, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).journal_article_with_open_access_location
   end
 
   task :journal_article_in_press, [:webaccess_id] => :environment do |_task, args|

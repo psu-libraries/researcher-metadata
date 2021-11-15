@@ -8,65 +8,31 @@ class WorksGenerator
   end
 
   def journal_article_no_open_access_location
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_pure_publication_import(pub)
+    FactoryBot.create :sample_publication, :journal_article, :from_pure, user: user
   end
 
   def journal_article_with_open_access_location
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
-    FactoryBot.create(:open_access_location, url: FFaker::Internet.domain_name, publication: pub)
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_pure_publication_import(pub)
+    FactoryBot.create :sample_publication, :journal_article, :from_pure, :with_open_access_location, user: user
   end
 
   def journal_article_in_press
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
-                                                            status: 'In Press' })
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_pure_publication_import(pub)
-  end
-
-  def other_work
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_non_journal_article_type })
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_pure_publication_import(pub)
+    FactoryBot.create :sample_publication, :journal_article, :from_pure, :in_press, user: user
   end
 
   def journal_article_from_activity_insight
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type })
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_activity_insight_publication_import(pub)
+    FactoryBot.create :sample_publication, :journal_article, :from_activity_insight, user: user
   end
 
   def journal_article_duplicate_group
-    dup_group = FactoryBot.create :duplicate_publication_group
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
-                                                            duplicate_publication_group_id: dup_group.id })
-    create_duplicate_publication(pub)
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_activity_insight_publication_import(pub)
-    create_pure_publication_import(pub)
+    FactoryBot.create :sample_publication, :journal_article, :from_pure, :with_duplicate_group, user: user
   end
 
   def journal_article_non_duplicate_group
-    dup_group = FactoryBot.create :duplicate_publication_group
-    non_dup_group = FactoryBot.create :non_duplicate_publication_group
-    pub = FactoryBot.create :publication, pub_attrs.merge({ publication_type: rand_journal_article_type,
-                                                            duplicate_publication_group_id: dup_group.id })
-    pub2 = create_duplicate_publication(pub)
-    create_contributor_name(pub)
-    create_authorship(pub)
-    create_activity_insight_publication_import(pub)
-    create_pure_publication_import(pub)
-    create_non_duplicate_group_membership(pub, non_dup_group.id)
-    create_non_duplicate_group_membership(pub2, non_dup_group.id)
+    FactoryBot.create :sample_publication, :journal_article, :from_pure, :with_non_duplicate_group, user: user
+  end
+
+  def other_work
+    FactoryBot.create :sample_publication, :other_work, :from_pure, user: user
   end
 
   def presentation

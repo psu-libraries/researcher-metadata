@@ -84,6 +84,12 @@ FactoryBot.define do
       end
     end
 
+    factory :sample_user do
+      webaccess_id { FFaker::Lorem.characters(6) }
+      first_name { FFaker::Name.first_name }
+      last_name { FFaker::Name.last_name }
+    end
+
     trait :with_psu_identity do
       psu_identity do
         {
