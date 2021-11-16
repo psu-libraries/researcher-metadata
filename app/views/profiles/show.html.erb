@@ -80,16 +80,17 @@
               <% end %>
             <% end %>
           </div>
+
           <% if profile_for_current_user? %>
             <%= link_to "Manage my profile", profile_bio_path, class: 'button' %>
           <% end %>
-          <% if current_user.masquerading? %>
-            <%= link_to "Unbecome this user", admin_unbecomes_user_path(current_user),
-              class: 'button', method: :post %>
-          <% elsif current_user.admin? %>
-            <%= link_to "Become this user", admin_becomes_user_path(@profile.id),
-              class: 'button', method: :post %>
+
+          <% if masquerading? %>
+            <%= link_to "Unbecome this user", path_to_unbecome_user, class: 'button', method: :post %>
+          <% elsif deputized? %>
+            <%= link_to "Become this user", path_to_become_user, class: 'button', method: :post %>
           <% end %>
+
         </div>
         <% if @profile.research_interests %>
           <div class="research">

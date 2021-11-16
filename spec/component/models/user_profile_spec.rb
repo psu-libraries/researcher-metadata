@@ -16,6 +16,7 @@ describe UserProfile do
                        ai_research_interests: 'test research interests' }
 
   it { is_expected.to delegate_method(:active?).to(:user) }
+  it { is_expected.to delegate_method(:available_deputy?).to(:user) }
   it { is_expected.to delegate_method(:id).to(:user) }
   it { is_expected.to delegate_method(:name).to(:user) }
   it { is_expected.to delegate_method(:office_location).to(:user) }
