@@ -14,7 +14,7 @@ class CurrentUserBuilder
 
     user = User.find(current_session[MasqueradingBehaviors::SESSION_ID]) || NullUser.new
 
-    if current_user.admin? || user.available_deputies.include?(current_user)
+    if current_user.admin? || user.available_deputy?(current_user)
       UserDecorator.new(
         user: user,
         impersonator: current_user

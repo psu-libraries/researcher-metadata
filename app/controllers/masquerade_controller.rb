@@ -8,7 +8,7 @@ class MasqueradeController < UserController
   private
 
     def verify_deputies
-      return if primary_user.available_deputies.include?(current_user)
+      return if primary_user.available_deputy?(current_user)
 
       flash[:alert] = I18n.t('profile.errors.not_authorized')
       redirect_to root_path
