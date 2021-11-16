@@ -2,9 +2,9 @@
 
 class WorksGenerator
   def initialize(webaccess_id)
-    raise ArgumentError, 'No Webaccess ID supplied' if webaccess_id.blank?
+    @user = User.find_by(webaccess_id: webaccess_id) || FactoryBot.create(:sample_user, webaccess_id: webaccess_id)
 
-    @user = User.find_by(webaccess_id: webaccess_id)
+    raise "Cannot generate publications in the production environment" if Rails.env.production?
   end
 
   def journal_article_no_open_access_location

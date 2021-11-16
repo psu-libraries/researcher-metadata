@@ -1,14 +1,23 @@
 # frozen_string_literal: true
 
 require 'component/component_spec_helper'
+require_relative '../../../../lib/utilities/works_generator'
 
 describe WorksGenerator do
   let!(:user) { FactoryBot.create :user, webaccess_id: 'abc123' }
   let(:generator) { described_class.new(user.webaccess_id) }
 
-  context 'when no webaccess id is supplied' do
-    it 'raises and ArgumentError' do
-      expect { described_class.new.other_work }.to raise_error ArgumentError
+  context 'when Rails.env is production' do
+    it 'raises error' do
+      allow(Rails).to receive_message_chain(:env, :production?).and_return(true)
+      expect { described_class.new('abc123').other_work }.to raise_error RuntimeError
+    end
+  end
+
+  context 'when webaccess id does not match any users' do
+    it 'creates a sample user' do
+      expect { described_class.new('fgh678').other_work }.to change(User, :count).by 1
+      expect(User.last.webaccess_id).to eq('fgh678')
     end
   end
 

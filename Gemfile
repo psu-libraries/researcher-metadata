@@ -47,12 +47,12 @@ gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'webpacker'                         # bundle assets
+gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
+gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 
 group :development, :test do
   gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
   gem 'byebug', platform: :mri
-  gem 'factory_bot_rails'
-  gem 'ffaker'
   gem 'niftany'
   gem 'pry-byebug'
 end

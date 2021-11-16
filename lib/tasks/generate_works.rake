@@ -1,4 +1,6 @@
 # frozen_string_literal: true
+#
+require_relative '../utilities/works_generator'
 
 namespace :generate do
   task :journal_article_no_open_access_location, [:webaccess_id] => :environment do |_task, args|
