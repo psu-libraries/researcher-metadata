@@ -11,5 +11,10 @@ FactoryBot.define do
         source { src_v }
       end
     end
+
+    factory :sample_open_access_location do
+      source { OpenAccessLocation.sources.keys.sample }
+      url { FFaker::Internet.domain_name }
+    end
   end
 end
