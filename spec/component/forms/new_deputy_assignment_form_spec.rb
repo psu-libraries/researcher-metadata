@@ -60,6 +60,7 @@ s.psu.edu/cpr/resources/123456" } }
           expect(deputy.first_name).to eq 'Deputy'
           expect(deputy.last_name).to eq 'FromPsu'
           expect(deputy.psu_identity).to be_present
+          expect(deputy.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
         end
 
         it 'creates an active DeputyAssignment' do
