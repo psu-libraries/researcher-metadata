@@ -11,9 +11,9 @@ class BaseDecorator < SimpleDelegator
     __getobj__
   end
 
-  # @note Ensures that type checks return the expected classes. This was causing ActiveRecord.where and .find_by
-  # operations not to work.
-  def is_a?(klass)
-    __getobj__.is_a?(klass)
-  end
+  # @note Ensures that type checks return the expected classes. This was causing ActiveRecord.where, .find_by,
+  # route helpers, and == operations not to work.
+  delegate :is_a?,
+           :instance_of?,
+           to: :__getobj__
 end
