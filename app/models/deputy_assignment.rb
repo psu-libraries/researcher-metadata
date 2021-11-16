@@ -39,6 +39,7 @@ class DeputyAssignment < ApplicationRecord
              inverse_of: :deputy_assignments
 
   scope :active, -> { where(is_active: true) }
+  scope :confirmed, -> { where.not(confirmed_at: nil) }
 
   validate :primary_and_deputy_cannot_be_the_same,
            :admins_cannot_be_assigned

@@ -40,6 +40,16 @@ describe DeputyAssignment, type: :model do
         expect(described_class.active).to contain_exactly(active)
       end
     end
+
+    describe '.confirmed' do
+      let!(:confirmed) { create :deputy_assignment, confirmed_at: Time.zone.now - 1.day }
+
+      before { create :deputy_assignment, confirmed_at: nil }
+
+      it 'returns confirmed models' do
+        expect(described_class.confirmed).to contain_exactly(confirmed)
+      end
+    end
   end
 
   describe 'validations' do

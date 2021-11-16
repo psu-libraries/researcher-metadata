@@ -92,6 +92,23 @@ describe 'editing profile preferences' do
           expect(page).to have_link('Stop being abc123')
         end
       end
+
+      context 'when logged in as a deputy of the user' do
+        let(:deputy) { create(:user) }
+
+        before do
+          create(:deputy_assignment, primary: user, deputy: deputy)
+          authenticate_as(deputy)
+          visit profile_path(webaccess_id: 'abc123')
+        end
+
+        it 'allows the deputy to become and unbecome the user in the profile' do
+          click_link('Become this user')
+          expect(page).to have_link('Unbecome this user')
+          click_link('Manage my profile')
+          expect(page).to have_link('Stop being abc123')
+        end
+      end
     end
   end
 

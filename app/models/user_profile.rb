@@ -7,6 +7,7 @@ class UserProfile
   end
 
   delegate :active?,
+           :available_deputy?,
            :id,
            :name,
            :office_location,

@@ -35,11 +35,39 @@ class ProfilesController < ProfileManagementController
     @memberships = current_user.user_organization_memberships
   end
 
-  helper_method :profile_for_current_user?
+  helper_method :profile_for_current_user?,
+                :masquerading?,
+                :deputized?,
+                :path_to_become_user,
+                :path_to_unbecome_user
 
   private
 
     def profile_for_current_user?
       current_user && current_user.webaccess_id == params[:webaccess_id]
+    end
+
+    def masquerading?
+      current_user.masquerading?
+    end
+
+    def deputized?
+      current_user.admin? || @profile.available_deputy?(current_user)
+    end
+
+    def path_to_become_user
+      if current_user.admin?
+        admin_becomes_user_path(@profile.id)
+      else
+        becomes_user_path(@profile.id)
+      end
+    end
+
+    def path_to_unbecome_user
+      if current_user.admin?
+        admin_unbecomes_user_path(current_user)
+      else
+        unbecomes_user_path(current_user)
+      end
     end
 end
