@@ -130,7 +130,7 @@ en:
           have granted Penn State a license to my scholarly articles, I hereby request a waiver of
           the license with respect to the following publication:
       hints:
-        reason_for_waiver: "Please explain why the waiver should be granted. This is optional but encouranged."
+        reason_for_waiver: "Please explain why you are getting this waiver. This is optional but encouraged."
       labels:
         doi: "Digital Object Identifier (DOI)"
         journal_title: "Journal"
