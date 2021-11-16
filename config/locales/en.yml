@@ -119,6 +119,22 @@ en:
     internal_publication_waivers:
       create:
         success: "The open access waiver for your publication, \"%{title}\", was successfully submitted."
+    waiver_form:
+      text:
+        heading: "Open Access Waiver"
+        limitations: >
+          This form only enables you to waive your obligations under Penn State policy; if you have
+          public access requirements from a federal funder such as NIH, NSF, or DOE, you must still comply with them.
+        request: >
+          As permitted by Penn State Policy AC02:  Open Access to Scholarly Articles, under which I
+          have granted Penn State a license to my scholarly articles, I hereby request a waiver of
+          the license with respect to the following publication:
+      hints:
+        reason_for_waiver: "Please explain why the waiver should be granted. This is optional but encouranged."
+      labels:
+        doi: "Digital Object Identifier (DOI)"
+        journal_title: "Journal"
+        submit: "Submit"
     orcid_access_tokens:
       new:
         already_linked: "Your ORCID record is already linked to your metadata profile."

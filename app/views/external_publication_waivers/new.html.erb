@@ -1,37 +1,26 @@
-<h2>Open Access Waiver</h2>
+<h2><%= I18n.t('profile.waiver_form.text.heading') %></h2>
 <p>
   Use this form to waive your obligations under AC02:  Open Access to Scholarly Articles.
-  You must fill out this form for each article for which you are requesting a waiver. This
-  form only enables you to waive your obligations under Penn State policy; if you have
-  public access requirements from a federal funder such as NIH, NSF, or DOE, you must still
-  comply with them.
+  You must fill out this form for each article for which you are requesting a waiver.
+  <%= I18n.t('profile.waiver_form.text.limitations') %>
 </p>
+
 <p>
-  As permitted by Penn State Policy AC02:  Open Access to Scholarly Articles, under which I
-  have granted Penn State a license to my scholarly articles, I hereby request a waiver of
-  the license with respect to the following publication:
+  <%= I18n.t('profile.waiver_form.text.request') %>
 </p>
 
 <div class="open-access-action">
   <%= simple_form_for @waiver do |f| %>
     <div class='form-group'>
       <%= f.input :publication_title, label: 'Publication Title', hint: "Enter the main title of the publication (required)." %>
-      <%= f.input :reason_for_waiver, hint: "Please explain why the waiver should be granted. This is optional but encouranged." %>
+      <%= f.input :reason_for_waiver, hint: I18n.t('profile.waiver_form.hints.reason_for_waiver') %>
       <%= f.input :abstract, hint: "Enter the abstract of the publication." %>
-      <%= f.input :doi, label: 'Digital Object Identifier (DOI)', hint: "Please add the publication's Digital Object Identifier here." %>
-      <%= f.input :journal_title, label: 'Journal', hint: "Please add the journal title here (required)." %>
+      <%= f.input :doi, label: I18n.t('profile.waiver_form.labels.doi'), hint: "Please add the publication's Digital Object Identifier here." %>
+      <%= f.input :journal_title, label: I18n.t('profile.waiver_form.labels.journal_title'), hint: "Please add the journal title here (required)." %>
       <%= f.input :publisher, hint: "Enter the name of the publisher of this item." %>
     </div>
-    <%= f.submit "Submit", class: 'btn btn-primary' %>
+    <%= f.submit I18n.t('profile.waiver_form.labels.submit'), class: 'btn btn-primary' %>
   <% end %>
 </div>
 
-<p>
-  Even though you are requesting a waiver, you should still consider depositing the accepted
-  manuscript version ("post-print") of your publication in
-  <%= link_to "ScholarSphere", "https://scholarsphere.psu.edu/", target: "_blank" %>. It may be
-  able to be made available immediately or after a delay depending on the nature of your
-  publication agreement. <%= link_to "Contact", "mailto:copyright@psu.edu" %> the Office of
-  Scholarly Communications and Copyright for help determining what kind of distribution is
-  appropriate for the work.
-</p>
+<%= render partial: 'shared/waiver_scholarsphere_message' %>
