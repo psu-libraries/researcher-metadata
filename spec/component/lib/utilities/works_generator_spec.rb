@@ -9,7 +9,7 @@ describe WorksGenerator do
 
   context 'when Rails.env is production' do
     it 'raises error' do
-      allow(Rails).to receive_message_chain(:env, :production?).and_return(true)
+      allow(Rails.env).to receive(:production?).and_return(true)
       expect { described_class.new('abc123').other_work }.to raise_error RuntimeError
     end
   end

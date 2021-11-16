@@ -24,7 +24,9 @@ gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
+gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'fast_jsonapi'                      # a lightning fast JSON:API serializer for Ruby Objects
+gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
 gem 'foundation-rails'                  # Foundation for Rails
@@ -47,8 +49,6 @@ gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'webpacker'                         # bundle assets
-gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
-gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 
 group :development, :test do
   gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
