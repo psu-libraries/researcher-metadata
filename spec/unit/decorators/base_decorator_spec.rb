@@ -28,4 +28,8 @@ describe BaseDecorator do
     specify { expect(decorator).not_to be_a(String) }
   end
   # rubocop:enable RSpec/PredicateMatcher
+
+  describe '#instance_of?' do
+    specify { expect(decorator.instance_of?(mock.class)).to eq true }
+  end
 end

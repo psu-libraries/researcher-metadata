@@ -1,10 +1,6 @@
 # frozen_string_literal: true
 
-require 'unit/unit_spec_helper'
-require 'active_support'
-require 'active_support/core_ext'
-require_relative '../../../app/decorators/base_decorator'
-require_relative '../../../app/decorators/user_decorator'
+require 'component/component_spec_helper'
 
 describe UserDecorator do
   describe 'masquerading?' do
@@ -21,6 +17,17 @@ describe UserDecorator do
       subject { described_class.new(user: mock_user) }
 
       it { is_expected.not_to be_masquerading }
+    end
+  end
+
+  describe 'equality' do
+    subject(:decorator) { described_class.new(user: user) }
+
+    let(:user) { build_stubbed :user }
+
+    it 'has symmetric ==' do
+      expect(decorator == user).to eq true
+      expect(user == decorator).to eq true
     end
   end
 end
