@@ -72,6 +72,15 @@ s.psu.edu/cpr/resources/123456" } }
           expect(assignment.primary).to eq primary
           expect(assignment.deputy.webaccess_id).to eq deputy_webaccess_id
         end
+
+        it 'sets :deputy_assignment to the newly created DeputyAssignment' do
+          expect {
+            form.save
+          }.to change(form, :deputy_assignment)
+            .from(nil).to(an_instance_of(DeputyAssignment))
+
+          expect(form.deputy_assignment).to eq DeputyAssignment.active.last
+        end
       end
 
       context 'when the webaccess_id is not found in PsuIdentity' do
@@ -91,6 +100,13 @@ s.psu.edu/cpr/resources/123456" } }
             form.save
           }.to not_change(User, :count)
             .and not_change(DeputyAssignment, :count)
+        end
+
+        it 'does not set :deputy_assignment' do
+          expect {
+            form.save
+          }.not_to change(form, :deputy_assignment)
+            .from(nil)
         end
       end
 

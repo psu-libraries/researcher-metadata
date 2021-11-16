@@ -20,14 +20,21 @@ describe 'Creating a new proxy', type: :feature do
     end
 
     context 'when all goes well' do
-      it 'creates a DeputyAssignment' do
+      before do
         fill_in 'new_deputy_assignment_form_deputy_webaccess_id', with: 'agw13'
         click_button I18n.t!('helpers.submit.new_deputy_assignment_form.create')
+      end
 
+      it 'creates a DeputyAssignment' do
         da = DeputyAssignment.active.where(primary: user).last
         expect(da).to be_present
         expect(da.deputy.webaccess_id).to eq 'agw13'
         expect(page).to have_content da.deputy.name
+      end
+
+      it 'emails the deputy of the assignment' do
+        open_email('agw13@psu.edu')
+        expect(current_email.subject).to match(/proxy assignment request/i)
       end
     end
 

@@ -2,8 +2,8 @@
 
 FactoryBot.define do
   factory :deputy_assignment do
-    primary factory: :user
-    deputy factory: :user
+    primary factory: [:user, :with_psu_identity]
+    deputy factory: [:user, :with_psu_identity]
     is_active { true }
     confirmed_at { Time.zone.now }
 

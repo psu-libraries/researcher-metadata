@@ -3,25 +3,31 @@
 require 'component/component_spec_helper'
 
 describe DeputyAssignmentsMailer, type: :model do
-  let(:primary) { double 'user',
-                         email: 'primary@psu.edu',
-                         name: 'Primary User',
-                         webaccess_id: 'abc123' }
+  include Rails.application.routes.url_helpers
 
-  let(:deputy) { double 'user',
-                        email: 'deputy@psu.edu',
-                        name: 'Deputy User',
-                        webaccess_id: 'def456' }
+  let(:primary) { instance_double 'User',
+                                  name: 'Primary User',
+                                  webaccess_id: 'abc123',
+                                  psu_identity_updated_at: Time.zone.now }
 
-  let(:deputy_assignment) { double 'deputy_assignment',
-                                   primary: primary,
-                                   deputy: deputy }
+  let(:deputy) { instance_double 'User',
+                                 name: 'Deputy User',
+                                 webaccess_id: 'def456',
+                                 psu_identity_updated_at: Time.zone.now }
+
+  let(:deputy_assignment) { instance_double 'DeputyAssignment',
+                                            primary: primary,
+                                            deputy: deputy }
+
+  before do
+    allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
+  end
 
   describe '#deputy_assignment_confirmation' do
     subject(:email) { described_class.deputy_assignment_confirmation(deputy_assignment) }
 
     it "sends the email to the primary user's email address" do
-      expect(email.to).to eq ['primary@psu.edu']
+      expect(email.to).to eq ['abc123@psu.edu']
     end
 
     it 'sends the email from the correct address' do
@@ -46,6 +52,10 @@ describe DeputyAssignmentsMailer, type: :model do
       it 'mentions the deputy by name and webaccess ID' do
         expect(body).to include('Deputy User (def456)')
       end
+
+      it 'has a link to the deputy assignments page' do
+        expect(body).to include(deputy_assignments_url(host: 'example.com'))
+      end
     end
   end
 
@@ -53,7 +63,7 @@ describe DeputyAssignmentsMailer, type: :model do
     subject(:email) { described_class.deputy_assignment_declination(deputy_assignment) }
 
     it "sends the email to the primary user's email address" do
-      expect(email.to).to eq ['primary@psu.edu']
+      expect(email.to).to eq ['abc123@psu.edu']
     end
 
     it 'sends the email from the correct address' do
@@ -84,12 +94,8 @@ describe DeputyAssignmentsMailer, type: :model do
   describe '#deputy_assignment_request' do
     subject(:email) { described_class.deputy_assignment_request(deputy_assignment) }
 
-    before do
-      allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
-    end
-
     it "sends the email to the deputy user's email address" do
-      expect(email.to).to eq ['deputy@psu.edu']
+      expect(email.to).to eq ['def456@psu.edu']
     end
 
     it 'sends the email from the correct address' do
@@ -110,6 +116,10 @@ describe DeputyAssignmentsMailer, type: :model do
       it 'addresses the user by name' do
         expect(body).to include('Dear Deputy User,')
       end
+
+      it 'has a link to the deputy assignments page' do
+        expect(body).to include(deputy_assignments_url(host: 'example.com'))
+      end
     end
   end
 
@@ -117,7 +127,7 @@ describe DeputyAssignmentsMailer, type: :model do
     subject(:email) { described_class.deputy_status_ended(deputy_assignment) }
 
     it "sends the email to the primary user's email address" do
-      expect(email.to).to eq ['primary@psu.edu']
+      expect(email.to).to eq ['abc123@psu.edu']
     end
 
     it 'sends the email from the correct address' do
@@ -149,7 +159,7 @@ describe DeputyAssignmentsMailer, type: :model do
     subject(:email) { described_class.deputy_status_revoked(deputy_assignment) }
 
     it "sends the email to the deputy user's email address" do
-      expect(email.to).to eq ['deputy@psu.edu']
+      expect(email.to).to eq ['def456@psu.edu']
     end
 
     it 'sends the email from the correct address' do
