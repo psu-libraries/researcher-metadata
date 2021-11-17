@@ -8,6 +8,8 @@ class NewDeputyAssignmentForm
   attr_accessor :primary,
                 :deputy_webaccess_id
 
+  attr_reader :deputy_assignment
+
   validates :primary,
             presence: true
 
@@ -26,7 +28,7 @@ class NewDeputyAssignmentForm
       validate_deputy_assignment_does_not_already_exist(deputy: deputy)
       return false if errors.any?
 
-      create_deputy_assignment(primary: primary, deputy: deputy)
+      @deputy_assignment = create_deputy_assignment(primary: primary, deputy: deputy)
     rescue StandardError
       errors.add(:base, :unknown_error)
     end
@@ -41,18 +43,21 @@ class NewDeputyAssignmentForm
         initialize_user_from_psu_identity(webaccess_id: webaccess_id)
     end
 
-    def initialize_user_from_psu_identity(webaccess_id: webaccess_id)
+    def initialize_user_from_psu_identity(webaccess_id:)
       psu_identity = query_psu_identity(webaccess_id)
       if psu_identity.blank?
         errors.add(:deputy_webaccess_id, :not_found)
         return nil
       end
 
+      # TODO this should be refactored along with
+      # User#attributes_from_psu_identity to share a common service
       new_user = User.new(
         webaccess_id: webaccess_id,
-        first_name: psu_identity.given_name,
-        last_name: psu_identity.family_name,
-        psu_identity: psu_identity
+        first_name: (psu_identity.preferred_given_name.presence || psu_identity.given_name),
+        last_name: (psu_identity.preferred_family_name.presence || psu_identity.family_name),
+        psu_identity: psu_identity,
+        psu_identity_updated_at: Time.zone.now
       )
 
       new_user.validate!

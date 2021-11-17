@@ -60,6 +60,7 @@ s.psu.edu/cpr/resources/123456" } }
           expect(deputy.first_name).to eq 'Deputy'
           expect(deputy.last_name).to eq 'FromPsu'
           expect(deputy.psu_identity).to be_present
+          expect(deputy.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
         end
 
         it 'creates an active DeputyAssignment' do
@@ -70,6 +71,15 @@ s.psu.edu/cpr/resources/123456" } }
           assignment = DeputyAssignment.active.last
           expect(assignment.primary).to eq primary
           expect(assignment.deputy.webaccess_id).to eq deputy_webaccess_id
+        end
+
+        it 'sets :deputy_assignment to the newly created DeputyAssignment' do
+          expect {
+            form.save
+          }.to change(form, :deputy_assignment)
+            .from(nil).to(an_instance_of(DeputyAssignment))
+
+          expect(form.deputy_assignment).to eq DeputyAssignment.active.last
         end
       end
 
@@ -90,6 +100,13 @@ s.psu.edu/cpr/resources/123456" } }
             form.save
           }.to not_change(User, :count)
             .and not_change(DeputyAssignment, :count)
+        end
+
+        it 'does not set :deputy_assignment' do
+          expect {
+            form.save
+          }.not_to change(form, :deputy_assignment)
+            .from(nil)
         end
       end
 
