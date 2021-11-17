@@ -211,6 +211,7 @@ class ActivityInsightImporter
         publisher_name: pub.publisher,
         secondary_title: pub.secondary_title,
         status: pub.status,
+        activity_insight_postprint_status: pub.activity_insight_postprint_status,
         volume: pub.volume,
         issue: pub.issue,
         edition: pub.edition,
@@ -798,6 +799,16 @@ class ActivityInsightPublication
     text_for('RMD_ID')
   end
 
+  def postprints
+    parsed_publication.css('POST_FILE').map do |p|
+      ActivityInsightPublicationPostprint.new(p)
+    end
+  end
+
+  def activity_insight_postprint_status
+    postprints.first&.postprint_status
+  end
+
   private
 
     attr_reader :parsed_publication, :user
@@ -881,5 +892,23 @@ class ActivityInsightPublicationAuthor
 
     def for_external_person?
       activity_insight_user_id.blank?
+    end
+end
+
+class ActivityInsightPublicationPostprint
+  def initialize(parsed_postprint)
+    @parsed_postprint = parsed_postprint
+  end
+
+  def postprint_status
+    text_for('ACCESIBLE')
+  end
+
+  private
+
+    attr_reader :parsed_postprint
+
+    def text_for(element)
+      parsed_postprint.css(element).text.strip.presence
     end
 end

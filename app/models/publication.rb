@@ -348,6 +348,7 @@ class Publication < ApplicationRecord
       field(:publisher_name)
       field(:publication_type)
       field(:status)
+      field(:activity_insight_postprint_status)
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
@@ -403,6 +404,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)

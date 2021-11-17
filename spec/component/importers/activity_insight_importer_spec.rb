@@ -776,6 +776,7 @@ describe ActivityInsightImporter do
           expect(p1.publisher_name).to eq 'Test Publisher 1'
           expect(p1.secondary_title).to eq 'Subtitle 1'
           expect(p1.status).to eq 'Published'
+          expect(p1.activity_insight_postprint_status).to eq nil
           expect(p1.volume).to eq '9'
           expect(p1.issue).to eq '5'
           expect(p1.edition).to eq '10'
@@ -794,6 +795,7 @@ describe ActivityInsightImporter do
           expect(p2.publisher_name).to eq nil
           expect(p2.secondary_title).to eq 'Second Pub Subtitle'
           expect(p2.status).to eq 'Published'
+          expect(p2.activity_insight_postprint_status).to eq 'In Progress'
           expect(p2.volume).to eq '7'
           expect(p2.issue).to eq nil
           expect(p2.edition).to eq nil
@@ -813,6 +815,7 @@ describe ActivityInsightImporter do
           expect(p3.publisher_name).to eq 'Some Other Publisher'
           expect(p3.secondary_title).to eq nil
           expect(p3.status).to eq 'Published'
+          expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
           expect(p3.volume).to eq '17'
           expect(p3.issue).to eq '8'
           expect(p3.edition).to eq '4'
@@ -832,6 +835,7 @@ describe ActivityInsightImporter do
           expect(p4.publisher_name).to eq 'Test Publisher 1'
           expect(p4.secondary_title).to eq 'Subtitle 2'
           expect(p4.status).to eq 'In Press'
+          expect(p4.activity_insight_postprint_status).to eq nil
           expect(p4.volume).to eq '10'
           expect(p4.issue).to eq '2'
           expect(p4.edition).to eq '15'
@@ -1032,6 +1036,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
+            expect(p1.activity_insight_postprint_status).to eq nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -1069,6 +1074,7 @@ describe ActivityInsightImporter do
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
+            expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
@@ -1088,6 +1094,7 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
+            expect(p4.activity_insight_postprint_status).to eq nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
@@ -1320,6 +1327,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
+            expect(p1.activity_insight_postprint_status).to eq nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -1338,6 +1346,7 @@ describe ActivityInsightImporter do
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
+            expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
             expect(p2.issue).to eq nil
             expect(p2.edition).to eq nil
@@ -1357,6 +1366,7 @@ describe ActivityInsightImporter do
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
+            expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
@@ -1376,6 +1386,7 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
+            expect(p4.activity_insight_postprint_status).to eq nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
@@ -2358,6 +2369,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
+            expect(p1.activity_insight_postprint_status).to eq nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -2376,6 +2388,7 @@ describe ActivityInsightImporter do
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
+            expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
             expect(p2.issue).to eq nil
             expect(p2.edition).to eq nil
@@ -2395,6 +2408,7 @@ describe ActivityInsightImporter do
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
+            expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
@@ -2414,6 +2428,7 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
+            expect(p4.activity_insight_postprint_status).to eq nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
@@ -2614,6 +2629,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
+              expect(p1.activity_insight_postprint_status).to eq nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -2651,6 +2667,7 @@ describe ActivityInsightImporter do
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
+              expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
@@ -2670,6 +2687,7 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
+              expect(p4.activity_insight_postprint_status).to eq nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
@@ -2903,6 +2921,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
+              expect(p1.activity_insight_postprint_status).to eq nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -2921,6 +2940,7 @@ describe ActivityInsightImporter do
               expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
+              expect(p2.activity_insight_postprint_status).to eq 'In Progress'
               expect(p2.volume).to eq '7'
               expect(p2.issue).to eq nil
               expect(p2.edition).to eq nil
@@ -2940,6 +2960,7 @@ describe ActivityInsightImporter do
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
+              expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
@@ -2959,6 +2980,7 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
+              expect(p4.activity_insight_postprint_status).to eq nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
@@ -3918,6 +3940,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
+            expect(p1.activity_insight_postprint_status).to eq nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -3936,6 +3959,7 @@ describe ActivityInsightImporter do
             expect(p2.publisher_name).to eq nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
+            expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
             expect(p2.issue).to eq nil
             expect(p2.edition).to eq nil
@@ -3955,6 +3979,7 @@ describe ActivityInsightImporter do
             expect(p3.publisher_name).to eq 'Some Other Publisher'
             expect(p3.secondary_title).to eq nil
             expect(p3.status).to eq 'Published'
+            expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
@@ -3974,6 +3999,7 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
+            expect(p4.activity_insight_postprint_status).to eq nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
@@ -4174,6 +4200,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
+              expect(p1.activity_insight_postprint_status).to eq nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -4211,6 +4238,7 @@ describe ActivityInsightImporter do
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
+              expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
@@ -4230,6 +4258,7 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
+              expect(p4.activity_insight_postprint_status).to eq nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
@@ -4462,6 +4491,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
+              expect(p1.activity_insight_postprint_status).to eq nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -4480,6 +4510,7 @@ describe ActivityInsightImporter do
               expect(p2.publisher_name).to eq nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
+              expect(p2.activity_insight_postprint_status).to eq 'In Progress'
               expect(p2.volume).to eq '7'
               expect(p2.issue).to eq nil
               expect(p2.edition).to eq nil
@@ -4499,6 +4530,7 @@ describe ActivityInsightImporter do
               expect(p3.publisher_name).to eq 'Some Other Publisher'
               expect(p3.secondary_title).to eq nil
               expect(p3.status).to eq 'Published'
+              expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
@@ -4518,6 +4550,7 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
+              expect(p4.activity_insight_postprint_status).to eq nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
