@@ -21,6 +21,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     if @form.valid?
       oal = publication.open_access_locations.find_or_initialize_by(source: Source::USER)
       oal.url = @form.open_access_url
+      oal.deputy_user_id = current_user.deputy.id
       oal.save!
 
       flash[:notice] = I18n.t('profile.open_access_publications.update.success')
@@ -36,7 +37,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    extra_params = { authorship: @authorship }
+    extra_params = { authorship: @authorship, deputy_user_id: current_user.deputy.id }
     @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
 
     ActiveRecord::Base.transaction do

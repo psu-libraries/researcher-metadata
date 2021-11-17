@@ -28,6 +28,12 @@ def authenticate_as(user)
   click_on 'Sign in'
 end
 
+def impersonate_user(primary:, deputy:)
+  authenticate_as(deputy)
+  visit profile_path(webaccess_id: primary.webaccess_id)
+  click_link('Become this user')
+end
+
 def authenticate_user
   sign_in_as current_user
   visit root_path
