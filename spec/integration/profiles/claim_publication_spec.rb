@@ -48,6 +48,10 @@ describe 'claiming authorship of a publication' do
           expect(page).not_to have_content pub3.title
         end
 
+        it 'shows the term used in the search' do
+          expect(page).to have_content 'metadata database'
+        end
+
         context 'when matching publications are not visible' do
           let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication', visible: false }
           let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication', visible: false }
@@ -56,6 +60,10 @@ describe 'claiming authorship of a publication' do
 
           it 'does not show the matching publications' do
             expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
+          end
+
+          it 'shows the term used in the search' do
+            expect(page).to have_content 'metadata database'
           end
         end
 
@@ -67,6 +75,14 @@ describe 'claiming authorship of a publication' do
 
           it 'does not show the matching publications' do
             expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
+          end
+
+          it 'shows the term used in the search' do
+            expect(page).to have_content 'metadata database'
+          end
+
+          it 'shows a helpful message' do
+            expect(page).to have_content 'No matching publications found'
           end
         end
 
@@ -80,6 +96,14 @@ describe 'claiming authorship of a publication' do
           it 'does not show the matching publications' do
             expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
           end
+
+          it 'shows the term used in the search' do
+            expect(page).to have_content 'metadata database'
+          end
+
+          it 'shows a helpful message' do
+            expect(page).to have_content 'No matching publications found'
+          end
         end
       end
 
@@ -87,13 +111,17 @@ describe 'claiming authorship of a publication' do
         before { do_name_search }
 
         it 'shows a list of matching publications' do
-          expect(page).to have_content 'Matching Publications'
+          expect(page).to have_content 'Matching publications'
           within "#publication_#{pub1.id}" do
             expect(page).to have_content 'Researcher Metadata Database Test Publication'
           end
 
           expect(page).not_to have_content 'Another Researcher Metadata Database Test Publication'
           expect(page).not_to have_content pub3.title
+        end
+
+        it 'shows the term used in the search' do
+          expect(page).to have_content 's scientist'
         end
       end
 
@@ -107,6 +135,10 @@ describe 'claiming authorship of a publication' do
           expect(page).not_to have_content 'Test Publication'
           expect(page).not_to have_content pub3.title
           expect(page).not_to have_content 'Matching Publications'
+        end
+
+        it 'shows a helpful message' do
+          expect(page).to have_content 'Please enter search terms'
         end
       end
 

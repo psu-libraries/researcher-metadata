@@ -16,7 +16,7 @@
 </div>
 
 <% if @publications.any? %>
-  <h5>Matching Publications</h5>
+  <h5>Matching publications for <%= search_term %></h5>
   <table class="table">
     <thead>
       <tr>
@@ -33,4 +33,8 @@
       <% end %>
     </tbody>
   </table>
+<% elsif search_present? %>
+  <p>No matching publications found for <%= search_term %>.</p>
+<% elsif search_incomplete? %>
+  <p>Please enter search terms either for the publication title or for an author's first and last name.</p>
 <% end %>
