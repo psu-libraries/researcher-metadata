@@ -18,7 +18,9 @@ describe AuthorshipDecorator do
                       no_open_access_information?: no_info,
                       is_journal_article?: true,
                       publication: pub,
-                      published?: published}
+                      published?: published,
+                      confirmed: confirmed,
+                      user: user }
   let(:title) { '' }
   let(:publisher) { '' }
   let(:year) { '' }
@@ -30,7 +32,9 @@ describe AuthorshipDecorator do
   let(:pub) { double 'publication' }
   let(:context) { double 'view context' }
   let(:published) { true }
+  let(:confirmed) { true }
   let(:ad) { described_class.new(auth, context) }
+  let(:user) { double 'user' }
 
   before do
     allow(context).to receive(:edit_open_access_publication_path).with(pub).and_return 'the pub path'
@@ -226,6 +230,17 @@ describe AuthorshipDecorator do
         end
       end
     end
+
+    context 'when the given object is not confirmed' do
+      context 'when the given object has a title' do
+        let(:title) { 'Test Title' }
+        let(:confirmed) { false }
+
+        it 'returns a label without a link for the given object with the publication title' do
+          expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}
+        end
+      end
+    end
   end
 
   describe '#open_access_status_icon' do
@@ -390,6 +405,88 @@ describe AuthorshipDecorator do
 
       it "returns 'circle-o-notch'" do
         expect(ad.open_access_status_icon).to eq 'circle-o-notch'
+      end
+    end
+  end
+
+  describe 'exportable_to_orcid?' do
+    context "when the authorship's user has an ORCiD access token" do
+      before { allow(user).to receive(:orcid_access_token).and_return 'token' }
+
+      context "when the authorship's publication can be exported to ORCiD" do
+        before { allow(pub).to receive(:orcid_allowed?).and_return true }
+
+        context 'when the authorship is confirmed' do
+          it 'returns true' do
+            expect(ad.exportable_to_orcid?).to eq true
+          end
+        end
+
+        context 'when the authorship is not confirmed' do
+          let(:confirmed) { false }
+
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+      end
+
+      context "when the authorship's publication cannot be exported to ORCiD" do
+        before { allow(pub).to receive(:orcid_allowed?).and_return false }
+
+        context 'when the authorship is confirmed' do
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+
+        context 'when the authorship is not confirmed' do
+          let(:confirmed) { false }
+
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+      end
+    end
+
+    context "when the authorship's user does not have an ORCiD access token" do
+      before { allow(user).to receive(:orcid_access_token).and_return(nil) }
+
+      context "when the authorship's publication can be exported to ORCiD" do
+        before { allow(pub).to receive(:orcid_allowed?).and_return true }
+
+        context 'when the authorship is confirmed' do
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+
+        context 'when the authorship is not confirmed' do
+          let(:confirmed) { false }
+
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+      end
+
+      context "when the authorship's publication cannot be exported to ORCiD" do
+        before { allow(pub).to receive(:orcid_allowed?).and_return false }
+
+        context 'when the authorship is confirmed' do
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
+
+        context 'when the authorship is not confirmed' do
+          let(:confirmed) { false }
+
+          it 'returns false' do
+            expect(ad.exportable_to_orcid?).to eq false
+          end
+        end
       end
     end
   end

@@ -1022,6 +1022,20 @@ describe User, type: :model do
     end
   end
 
+  describe '#confirmed_authorships' do
+    let(:u1) { create :user }
+    let(:u2) { create :user }
+
+    let!(:auth1) { create :authorship, user: u1, confirmed: false }
+    let!(:auth2) { create :authorship, user: u1, confirmed: true }
+    let!(:auth3) { create :authorship, user: u2, confirmed: true }
+
+    it 'returns only confirmed authorships that belong to the user' do
+      expect(u1.confirmed_authorships).to eq [auth2]
+      expect(u1.confirmed_authorships.length).to eq 1
+    end
+  end
+
   describe '#admin?' do
     context "when the user's is_admin value is true" do
       before { user.is_admin = true }
@@ -1739,6 +1753,90 @@ describe User, type: :model do
         expect(user).to be_persisted
         expect(primary).not_to be_persisted
         expect(user.reload.primaries).to be_empty
+      end
+    end
+  end
+
+  describe '#claim_publication' do
+    let!(:pub) { create :publication }
+    let!(:user) { create :user }
+
+    context "when the user doesn't have an authorship for the given publication" do
+      it 'creates a new authorship' do
+        expect { user.claim_publication(pub, 3) }.to change { user.authorships.count }.by 1
+      end
+
+      it 'saves the correct data in the new authorship' do
+        user.claim_publication(pub, 3)
+
+        a = Authorship.find_by(user: user, publication: pub)
+        expect(a.author_number).to eq 3
+        expect(a.confirmed).to eq false
+        expect(a.claimed_by_user).to eq true
+      end
+
+      it 'returns the new authorship' do
+        a = user.claim_publication(pub, 3)
+        expect(a).to be_a Authorship
+        expect(a.user).to eq user
+        expect(a.publication).to eq pub
+      end
+    end
+
+    context 'when the user already has an authorship for the given publication' do
+      let!(:auth) { create :authorship,
+                           user: user,
+                           publication: pub,
+                           confirmed: confirmed,
+                           claimed_by_user: false,
+                           author_number: 2 }
+
+      context 'when the authorship is already confirmed' do
+        let(:confirmed) { true }
+
+        it 'does not create a new authorship' do
+          expect { user.claim_publication(pub, 3) }.not_to change(Authorship, :count)
+        end
+
+        it 'does not update the existing authorship' do
+          user.claim_publication(pub, 3)
+
+          a = Authorship.find_by(user: user, publication: pub)
+          expect(a.author_number).to eq 2
+          expect(a.confirmed).to eq true
+          expect(a.claimed_by_user).to eq false
+        end
+
+        it 'returns the authorship' do
+          a = user.claim_publication(pub, 3)
+          expect(a).to be_a Authorship
+          expect(a.user).to eq user
+          expect(a.publication).to eq pub
+        end
+      end
+
+      context 'when the authorship is not confirmed' do
+        let(:confirmed) { false }
+
+        it 'does not create a new authorship' do
+          expect { user.claim_publication(pub, 3) }.not_to change(Authorship, :count)
+        end
+
+        it 'updates the authorship with the correct data' do
+          user.claim_publication(pub, 3)
+
+          a = Authorship.find_by(user: user, publication: pub)
+          expect(a.author_number).to eq 3
+          expect(a.confirmed).to eq false
+          expect(a.claimed_by_user).to eq true
+        end
+
+        it 'returns the authorship' do
+          a = user.claim_publication(pub, 3)
+          expect(a).to be_a Authorship
+          expect(a.user).to eq user
+          expect(a.publication).to eq pub
+        end
       end
     end
   end

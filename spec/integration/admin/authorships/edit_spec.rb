@@ -4,17 +4,21 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin authorship edit page', type: :feature do
-  let!(:user) { create(:user,
-                       first_name: 'Bob',
-                       last_name: 'Testuser') }
+  let!(:user) do
+    create(:user,
+           first_name: 'Bob',
+           last_name: 'Testuser')
+  end
 
   let!(:pub) { create :publication, title: 'A Test Publication' }
 
-  let!(:auth) { create :authorship,
-                       publication: pub,
-                       user: user,
-                       author_number: 5,
-                       orcid_resource_identifier: 'identifier-12345' }
+  let!(:auth) do
+    create :authorship,
+           publication: pub,
+           user: user,
+           author_number: 5,
+           orcid_resource_identifier: 'identifier-12345'
+  end
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }
@@ -34,12 +38,16 @@ describe 'Admin authorship edit page', type: :feature do
         expect(page).to have_link 'Bob Testuser', href: rails_admin.show_path(model_name: :user, id: user.id)
       end
 
-      it "shows the authorship's author number" do
-        expect(page).to have_content '5'
+      it "allows the authorship's author number to be edited" do
+        expect(page.find_field('Author number').value).to eq '5'
       end
 
       it "allows the authorship's ORCID resource identifier to be edited" do
         expect(page.find_field('Orcid resource identifier').value).to eq 'identifier-12345'
+      end
+
+      it "allows the authorship's confirmation flag to be set" do
+        expect(page.find_field('Confirmed').value).to eq '1'
       end
     end
 

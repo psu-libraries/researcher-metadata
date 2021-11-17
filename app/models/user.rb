@@ -181,6 +181,10 @@ class User < ApplicationRecord
     publications.where(authorships: { confirmed: true })
   end
 
+  def confirmed_authorships
+    authorships.confirmed
+  end
+
   def admin?
     is_admin
   end
@@ -242,6 +246,20 @@ class User < ApplicationRecord
 
   def mark_as_updated_by_user
     self.updated_by_user_at = Time.current
+  end
+
+  def claim_publication(publication, author_number)
+    a = Authorship.find_or_initialize_by(
+      user: self,
+      publication: publication
+    )
+    unless a.persisted? && a.confirmed
+      a.author_number = author_number
+      a.confirmed = false
+      a.claimed_by_user = true
+    end
+    a.save!
+    a
   end
 
   private

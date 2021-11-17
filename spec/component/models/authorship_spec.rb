@@ -18,6 +18,7 @@ describe 'the authorships table', type: :model do
   it { is_expected.to have_db_column(:open_access_notification_sent_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:orcid_resource_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:updated_by_owner_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:claimed_by_user).of_type(:boolean).with_options(default: false) }
 
   it { is_expected.to have_db_index :user_id }
   it { is_expected.to have_db_index :publication_id }
@@ -64,8 +65,40 @@ describe Authorship, type: :model do
   it { is_expected.to delegate_method(:preferred_journal_title).to(:publication) }
   it { is_expected.to delegate_method(:published?).to(:publication) }
   it { is_expected.to delegate_method(:user_webaccess_id).to(:user).as(:webaccess_id) }
+  it { is_expected.to delegate_method(:user_name).to(:user).as(:name) }
 
   it { is_expected.to accept_nested_attributes_for(:waiver) }
+
+  describe '.unclaimable' do
+    let!(:auth1) { create :authorship, claimed_by_user: false, confirmed: false }
+    let!(:auth2) { create :authorship, claimed_by_user: true, confirmed: false }
+    let!(:auth3) { create :authorship, claimed_by_user: false, confirmed: true }
+    let!(:auth4) { create :authorship, claimed_by_user: true, confirmed: true }
+
+    it 'only returns authorships that are either confirmed or already claimed by a user' do
+      expect(described_class.unclaimable).to match_array [auth2, auth3, auth4]
+    end
+  end
+
+  describe '.confirmed' do
+    let!(:auth1) { create :authorship, confirmed: false }
+    let!(:auth2) { create :authorship, confirmed: true }
+
+    it 'only returns authorships that are confirmed' do
+      expect(described_class.confirmed).to eq [auth2]
+    end
+  end
+
+  describe '.claimed_and_unconfirmed' do
+    let!(:auth1) { create :authorship, claimed_by_user: false, confirmed: false }
+    let!(:auth2) { create :authorship, claimed_by_user: true, confirmed: false }
+    let!(:auth3) { create :authorship, claimed_by_user: false, confirmed: true }
+    let!(:auth4) { create :authorship, claimed_by_user: true, confirmed: true }
+
+    it 'only returns authorships that are both claimed by a user and unconfirmed' do
+      expect(described_class.claimed_and_unconfirmed).to match_array [auth2]
+    end
+  end
 
   describe '#description' do
     let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }

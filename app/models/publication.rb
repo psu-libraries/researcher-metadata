@@ -80,6 +80,7 @@ class Publication < ApplicationRecord
         }
 
   scope :subject_to_open_access_policy, -> { journal_article.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+  scope :claimable_by, ->(user) { journal_article.visible.where.not(id: user.authorships.unclaimable.map(&:publication_id)) }
 
   scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }
   scope :scholarsphere_open_access, -> { open_access.where(open_access_locations: { source: Source::SCHOLARSPHERE }) }
@@ -117,7 +118,11 @@ class Publication < ApplicationRecord
   end
 
   def confirmed_authorships
-    authorships.where(confirmed: true)
+    authorships.confirmed
+  end
+
+  def confirmed_users
+    users.where(authorships: { confirmed: true })
   end
 
   def doi_url_path

@@ -17,11 +17,11 @@ describe OpenAccessPublicationsController, type: :controller do
   let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_pub) { create :publication }
   let!(:other_waived_pub) { create :publication }
-  let!(:auth) { create :authorship, user: user, publication: pub }
   let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
   let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub }
   let!(:uploaded_auth) { create :authorship, user: user, publication: uploaded_pub }
   let!(:other_uploaded_auth) { create :authorship, user: other_user, publication: other_uploaded_pub }
+  let!(:unconfirmed_pub) { create :publication }
 
   before do
     create :authorship, user: user, publication: oa_pub
@@ -34,6 +34,10 @@ describe OpenAccessPublicationsController, type: :controller do
     create :authorship,
            user: user,
            publication: other_waived_pub
+    create :authorship,
+           user: user,
+           publication: unconfirmed_pub,
+           confirmed: false
 
     create :scholarsphere_work_deposit, authorship: uploaded_auth, status: 'Pending'
     create :scholarsphere_work_deposit, authorship: other_uploaded_auth, status: 'Pending'
@@ -64,6 +68,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that is not published' do
         it 'returns 404' do
           expect { get :edit, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that belongs to the user but is unconfirmed' do
+        it 'returns 404' do
+          expect { get :edit, params: { id: unconfirmed_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -179,6 +189,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that is not published' do
         it 'returns 404' do
           expect { patch :update, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that belongs to the user but is unconfirmed' do
+        it 'returns 404' do
+          expect { get :update, params: { id: unconfirmed_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 
@@ -330,6 +346,12 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when given the ID for a publication that is not published' do
         it 'returns 404' do
           expect { post :create_scholarsphere_deposit, params: { id: unpublished_pub.id } }.to raise_error ActiveRecord::RecordNotFound
+        end
+      end
+
+      context 'when given the ID for a publication that belongs to the user but is unconfirmed' do
+        it 'returns 404' do
+          expect { get :create_scholarsphere_deposit, params: { id: unconfirmed_pub.id } }.to raise_error ActiveRecord::RecordNotFound
         end
       end
 

@@ -63,7 +63,8 @@ RailsAdmin.config do |config|
             :StatisticsSnapshot,
             :EmailError,
             :ScholarsphereWorkDeposit,
-            :ImporterErrorLog]
+            :ImporterErrorLog,
+            :Authorship]
     end
     new do
       only [:Publication,
@@ -96,7 +97,8 @@ RailsAdmin.config do |config|
             :ImporterErrorLog,
             :OpenAccessLocation,
             :Publication,
-            :User]
+            :User,
+            :Authorship]
     end
     index_publications_by_organization do
       only [:Publication]

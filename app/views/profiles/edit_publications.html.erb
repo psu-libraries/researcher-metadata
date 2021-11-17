@@ -1,7 +1,8 @@
 <div class="manage-profile-list">
   <h4>Manage Profile Publications</h4>
   <div id="icon-key">
-    <h6>Icon key:</h6>
+    <h5>Icon key:</h5>
+    <h6>Open Access Status</h6>
     <table class="legend">
       <tr>
         <td><%= fa_icon('unlock-alt') %></td>
@@ -28,10 +29,24 @@
         <td>This publication is in press and will not be subject to the open access policy until it is published.</td>
       </tr>
     </table>
+    <h6>Authorship Confirmation</h6>
+    <table class="legend">
+      <tr>
+        <td><%= fa_icon('check') %></td>
+        <td>Your authorship of the publication has been confirmed.</td>
+      </tr>
+      <tr>
+        <td><%= fa_icon('minus') %></td>
+        <td>Confirmation of your authorship of the publication is pending review by an RMD administrator.</td>
+      </tr>
+    </table>
   </div>
   <p>
     If you need to waive open access obligations for a publication that is not in the list below, then please fill
     out this <%= link_to "waiver form", new_external_publication_waiver_path %>.
+  </p>
+  <p>
+    Don't see one of your publications below? You can <%= link_to 'Search', publications_path %> the database and claim publications that we haven't been able to link to your profile.
   </p>
   <table class="table">
     <thead>
@@ -40,6 +55,7 @@
       <th>Publication</th>
       <th>Visible in profile</th>
       <th>Open Access Status</th>
+      <th>Authorship Confirmed</th>
       <th></th>
     </tr>
     </thead>
@@ -55,6 +71,13 @@
           </td>
           <td class="oa-status">
             <%= fa_icon(a.open_access_status_icon) %>
+          </td>
+          <td>
+            <% if a.confirmed %>
+              <%= fa_icon('check') %>
+            <% else %>
+              <%= fa_icon('minus') %>
+            <% end %>
           </td>
           <td>
             <%= render partial: 'orcid_export_button', locals: { a: a } %>

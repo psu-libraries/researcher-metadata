@@ -32,7 +32,11 @@ class Authorship < ApplicationRecord
            :published?,
            to: :publication,
            prefix: false
-  delegate :webaccess_id, to: :user, prefix: true
+  delegate :webaccess_id, :name, to: :user, prefix: true
+
+  scope :unclaimable, -> { where('claimed_by_user IS TRUE OR confirmed IS TRUE') }
+  scope :confirmed, -> { where(confirmed: true) }
+  scope :claimed_and_unconfirmed, -> { where(confirmed: false, claimed_by_user: true) }
 
   def description
     "##{id} (#{user.name} - #{publication.title})"
@@ -53,10 +57,21 @@ class Authorship < ApplicationRecord
   rails_admin do
     object_label_method { :description }
 
+    list do
+      scopes [nil, :claimed_and_unconfirmed]
+      field(:id)
+      field(:user)
+      field(:publication)
+      field(:confirmed)
+      field(:claimed_by_user)
+    end
+
     edit do
       field(:user) { read_only true }
       field(:publication) { read_only true }
-      field(:author_number) { read_only true }
+      field(:claimed_by_user) { read_only true }
+      field(:author_number)
+      field(:confirmed)
       field(:orcid_resource_identifier)
       field(:waiver)
     end

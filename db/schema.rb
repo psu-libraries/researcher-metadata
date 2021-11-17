@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_183946) do
+ActiveRecord::Schema.define(version: 2021_11_05_202204) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -69,6 +69,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_183946) do
     t.datetime "open_access_notification_sent_at"
     t.string "orcid_resource_identifier"
     t.datetime "updated_by_owner_at"
+    t.boolean "claimed_by_user", default: false
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
   end

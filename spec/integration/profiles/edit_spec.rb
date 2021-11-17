@@ -213,6 +213,10 @@ describe 'editing profile preferences' do
         expect(page).to have_content 'Manage Profile Publications'
       end
 
+      it 'shows a link to search for publications' do
+        expect(page).to have_link 'Search', href: publications_path
+      end
+
       context 'when the user has publications' do
         let!(:pub_1) { create :publication,
                               title: "Bob's Publication",
