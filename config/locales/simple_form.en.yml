@@ -1,4 +1,8 @@
 en:
+  helpers:
+    submit:
+      waiver:
+        create: 'Submit'
   simple_form:
     "yes": 'Yes'
     "no": 'No'
@@ -13,6 +17,13 @@ en:
     hints:
       new_deputy_assignment_form:
         deputy_webaccess_id: Enter the Penn State Access ID of a person to whom you'd like to grant proxy access. Only people with Access IDs can have proxy access.
+      waiver:
+        reason_for_waiver: Please explain why you are getting this waiver. This is optional but encouraged.
+    labels:
+      waiver:
+        doi: Digital Object Identifier (DOI)
+        journal_title: &journal_title Journal
+        published_by: *journal_title
     placeholders:
       new_deputy_assignment_form:
         deputy_webaccess_id: 'abc1234'

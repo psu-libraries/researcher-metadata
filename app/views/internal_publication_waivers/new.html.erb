@@ -1,37 +1,25 @@
-<h2>Open Access Waiver</h2>
+<h2><%= I18n.t('profile.waiver_form.text.heading') %></h2>
 <p>
   Use this form to waive your obligations under AC02:  Open Access to Scholarly Articles
   for the publication described below. This waiver will only be applicable to the publication
   described here. To waive your obligations for another publication, you must submit another
-  waiver specifically for that publication. This form only enables you to waive your
-  obligations under Penn State policy; if you have public access requirements from a federal
-  funder such as NIH, NSF, or DOE, you must still comply with them.
+  waiver specifically for that publication. <%= I18n.t('profile.waiver_form.text.limitations') %>
 </p>
 <p>
-  As permitted by Penn State Policy AC02:  Open Access to Scholarly Articles, under which I
-  have granted Penn State a license to my scholarly articles, I hereby request a waiver of
-  the license with respect to the following publication:
+  <%= I18n.t('profile.waiver_form.text.request') %>
 </p>
 
 <div class="open-access-action">
-  <%= simple_form_for @waiver do |f| %>
+  <%= simple_form_for @waiver, as: :waiver do |f| %>
     <div class='form-group'>
       <%= f.input :title, label: 'Title', readonly: true %>
       <%= f.input :abstract, label: 'Abstract', as: :text, readonly: true %>
-      <%= f.input :doi, label: 'Digital Object Identifier (DOI)', readonly: true %>
-      <%= f.input :published_by, label: 'Journal', readonly: true %>
-      <%= f.input :reason_for_waiver, as: :text, hint: "Please explain why the waiver should be granted. This is optional but encouranged." %>
+      <%= f.input :doi, readonly: true %>
+      <%= f.input :published_by, readonly: true %>
+      <%= f.input :reason_for_waiver, as: :text %>
     </div>
-    <%= f.submit "Submit", class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary' %>
   <% end %>
 </div>
 
-<p>
-  Even though you are requesting a waiver, you should still consider depositing the accepted
-  manuscript version ("post-print") of your publication in
-  <%= link_to "ScholarSphere", "https://scholarsphere.psu.edu/", target: "_blank" %>. It may be
-  able to be made available immediately or after a delay depending on the nature of your
-  publication agreement. <%= link_to "Contact", "mailto:copyright@psu.edu" %> the Office of
-  Scholarly Communications and Copyright for help determining what kind of distribution is
-  appropriate for the work.
-</p>
+<%= render partial: 'shared/waiver_scholarsphere_message' %>

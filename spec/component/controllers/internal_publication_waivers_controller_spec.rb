@@ -176,7 +176,7 @@ describe InternalPublicationWaiversController, type: :controller do
 
         context 'when given the required params' do
           it 'redirects to the publication list' do
-            post :create, params: { id: pub.id, internal_publication_waiver: { reason_for_waiver: 'reason' } }
+            post :create, params: { id: pub.id, waiver: { reason_for_waiver: 'reason' } }
             expect(response).to redirect_to edit_profile_publications_path
           end
         end
