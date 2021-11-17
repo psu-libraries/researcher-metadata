@@ -111,11 +111,23 @@ following types of records from NSF:
     - grants
     - researcher_funds
 
-1. **Open Access Button** - We import URLs to the content of open access publications that are provided by
+1. **Open Access Button** - We import information about open access copies of publications that is provided by
 Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
-Open Access Button by DOI, so this import only adds data to existing publications in our database that have
+Open Access Button by DOI, so this import only creates records for existing publications in our database that have
 DOIs. A cron job automatically runs this import in production once per week beginning at around 8:00 AM on
-Sunday. This import can sometimes take more than a day to finish.
+Sunday. This import can sometimes take more than a day to finish. We import the following types of records from
+Open Access Button:
+    - open_access_locations
+
+1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
+publications from Unpaywall's web [API](https://unpaywall.org/products/api). Again, we only query Unpaywall by
+DOI. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
+source may provide some metadata that is not provided by the other. In general, Unpaywall provides richer
+metadata than Open Access Button. In addition to importing metadata about any open access copies of a
+publication, this import also updates the open access status on publication records in RMD. In production,
+a cron job automatically runs this import once per week beginning at 8:00 PM on Tuesdays. It can take
+multiple days to finish due to API rate limiting. We import the following types of records from Unpaywall:
+    - open_access_locations
 
 1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
 by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open 
