@@ -129,12 +129,6 @@ en:
           As permitted by Penn State Policy AC02:  Open Access to Scholarly Articles, under which I
           have granted Penn State a license to my scholarly articles, I hereby request a waiver of
           the license with respect to the following publication:
-      hints:
-        reason_for_waiver: "Please explain why you are getting this waiver. This is optional but encouraged."
-      labels:
-        doi: "Digital Object Identifier (DOI)"
-        journal_title: "Journal"
-        submit: "Submit"
     orcid_access_tokens:
       new:
         already_linked: "Your ORCID record is already linked to your metadata profile."

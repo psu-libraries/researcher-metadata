@@ -10,16 +10,16 @@
 </p>
 
 <div class="open-access-action">
-  <%= simple_form_for @waiver do |f| %>
+  <%= simple_form_for @waiver, as: :waiver do |f| %>
     <div class='form-group'>
       <%= f.input :publication_title, label: 'Publication Title', hint: "Enter the main title of the publication (required)." %>
-      <%= f.input :reason_for_waiver, hint: I18n.t('profile.waiver_form.hints.reason_for_waiver') %>
+      <%= f.input :reason_for_waiver %>
       <%= f.input :abstract, hint: "Enter the abstract of the publication." %>
-      <%= f.input :doi, label: I18n.t('profile.waiver_form.labels.doi'), hint: "Please add the publication's Digital Object Identifier here." %>
-      <%= f.input :journal_title, label: I18n.t('profile.waiver_form.labels.journal_title'), hint: "Please add the journal title here (required)." %>
+      <%= f.input :doi, hint: "Please add the publication's Digital Object Identifier here." %>
+      <%= f.input :journal_title, hint: "Please add the journal title here (required)." %>
       <%= f.input :publisher, hint: "Enter the name of the publisher of this item." %>
     </div>
-    <%= f.submit I18n.t('profile.waiver_form.labels.submit'), class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary' %>
   <% end %>
 </div>
 

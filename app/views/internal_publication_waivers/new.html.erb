@@ -10,15 +10,15 @@
 </p>
 
 <div class="open-access-action">
-  <%= simple_form_for @waiver do |f| %>
+  <%= simple_form_for @waiver, as: :waiver do |f| %>
     <div class='form-group'>
       <%= f.input :title, label: 'Title', readonly: true %>
       <%= f.input :abstract, label: 'Abstract', as: :text, readonly: true %>
-      <%= f.input :doi, label: I18n.t('profile.waiver_form.labels.doi'), readonly: true %>
-      <%= f.input :published_by, label: I18n.t('profile.waiver_form.labels.journal_title'), readonly: true %>
-      <%= f.input :reason_for_waiver, as: :text, hint: I18n.t('profile.waiver_form.hints.reason_for_waiver') %>
+      <%= f.input :doi, readonly: true %>
+      <%= f.input :published_by, readonly: true %>
+      <%= f.input :reason_for_waiver, as: :text %>
     </div>
-    <%= f.submit I18n.t('profile.waiver_form.labels.submit'), class: 'btn btn-primary' %>
+    <%= f.submit class: 'btn btn-primary' %>
   <% end %>
 </div>
 
