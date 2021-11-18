@@ -91,6 +91,20 @@ class DuplicatePublicationGroup < ApplicationRecord
     else
       false
     end
+  rescue Publication::NonDuplicateMerge
+  end
+
+  def self.auto_merge_on_doi
+    pbar = ProgressBarTTY.create(title: 'Auto-merging Pure and AI groups',
+                                 total: count)
+
+    find_each do |g|
+      g.auto_merge_on_doi
+      pbar.increment
+    end
+
+    pbar.finish
+    nil
   end
 
   def auto_merge_on_doi
@@ -98,12 +112,20 @@ class DuplicatePublicationGroup < ApplicationRecord
     publications.each do |pub|
       next if first_pub_id == pub.id
 
-      policy = DuplicatePublicationGroupMergeOnDoiPolicy.new(Publication.find(first_pub_id), pub)
+      first_pub = Publication.find(first_pub_id)
+      policy = DuplicatePublicationGroupMergeOnDoiPolicy.new(first_pub, pub)
       next unless policy.ok_to_merge?
 
-      Publication.find(first_pub_id).merge_on_doi!(pub, policy)
+      ActiveRecord::Base.transaction do
+        first_pub.merge_on_doi!(pub, policy)
+
+      rescue Publication::NonDuplicateMerge
+        if publications.count == 1
+          first_pub.update!(duplicate_group: nil)
+          destroy
+        end
+      end
     end
-    destroy if publications.count == 1
   end
 
   rails_admin do

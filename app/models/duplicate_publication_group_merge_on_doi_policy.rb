@@ -8,11 +8,9 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
 
   def ok_to_merge?
     return true if dois_eql? &&
-                   standard_pass?(:title) &&
+                   title_pass? &&
                    standard_pass?(:secondary_title) &&
                    journal_pass? &&
-                   publisher_pass? &&
-                   standard_pass?(:published_on) &&
                    standard_pass?(:volume) &&
                    standard_pass?(:issue) &&
                    standard_pass?(:edition) &&
@@ -31,11 +29,12 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
 
   def attributes
     {
-      title: [publication1.title, publication2.title].uniq.compact.first,
+      title: [publication1.title, publication2.title].compact.max_by(&:length),
       secondary_title: [publication1.secondary_title, publication2.secondary_title].uniq.compact.first,
       journal: [publication1.journal, publication2.journal].uniq.compact.first,
-      publisher: [publication1.publisher, publication2.publisher].uniq.compact.first,
-      published_on: [publication1.published_on, publication2.published_on].uniq.compact.first,
+      journal_title: [publication1.journal_title, publication2.journal_title].uniq.compact.first,
+      publisher_name: [publication1.publisher_name, publication2.publisher_name].uniq.compact.sample,
+      published_on: [publication1.published_on, publication2.published_on].compact.sort.last,
       status: [publication1.status, publication2.status].include?(Publication::PUBLISHED_STATUS) ?
                                                                       Publication::PUBLISHED_STATUS :
                                                                       Publication::IN_PRESS_STATUS,
@@ -68,16 +67,16 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
     one_value_present?(pub1_value, pub2_value) || eql_values?(pub1_value, pub2_value)
   end
 
-  def journal_pass?
-    journal1 = publication1.journal
-    journal2 = publication2.journal
-    one_value_present?(journal1, journal2) || eql_values?(journal1.title, journal2.title)
+  def title_pass?
+    title1 = publication1.title
+    title2 = publication2.title
+    one_value_present?(title1, title2) || (title1.downcase.gsub(/[^a-z0-9]/, '') == title2.downcase.gsub(/[^a-z0-9]/, ''))
   end
 
-  def publisher_pass?
-    publisher1 = publication1.publisher
-    publisher2 = publication2.publisher
-    one_value_present?(publisher1, publisher2) || eql_values?(publisher1.name, publisher2.name)
+  def journal_pass?
+    journal1 = publication1.journal.present? ? publication1.journal.title : publication1.journal_title
+    journal2 = publication2.journal.present? ? publication2.journal.title : publication2.journal_title
+    one_value_present?(journal1, journal2) || eql_values?(journal1, journal2)
   end
 
   def page_range_pass?
