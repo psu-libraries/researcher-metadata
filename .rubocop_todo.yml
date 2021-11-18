@@ -307,11 +307,6 @@ Style/ConditionalAssignment:
   Exclude:
     - 'app/models/duplicate_publication_group.rb'
 
-# Offense count: 2
-Style/IdenticalConditionalBranches:
-  Exclude:
-    - 'app/controllers/orcid_access_tokens_controller.rb'
-
 # Offense count: 1
 # Configuration parameters: AllowIfModifier.
 Style/IfInsideElse:
