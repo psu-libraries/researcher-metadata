@@ -7,12 +7,6 @@
 # versions of RuboCop, may require this file to be generated again.
 
 # Offense count: 1
-# Cop supports --auto-correct.
-Layout/EmptyLines:
-  Exclude:
-    - 'app/controllers/orcid_employments_controller.rb'
-
-# Offense count: 1
 Lint/DuplicateHashKey:
   Exclude:
     - 'spec/integration/admin/publications/show_spec.rb'
