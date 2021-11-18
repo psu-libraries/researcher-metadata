@@ -20,9 +20,13 @@ class OpenAccessURLForm
       add_format_error
     end
 
+    def valid_response_codes
+      [200, 301, 302]
+    end
+
     def validate_response
       response_code = HTTParty.head(open_access_url, follow_redirects: false).code
-      unless response_code == 200 || response_code == 301 || response_code == 302
+      unless valid_response_codes.include?(response_code)
         add_response_error
       end
     rescue SocketError

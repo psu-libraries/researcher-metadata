@@ -28,11 +28,11 @@ class OAIImporter
             p.status = 'Published'
             p.save!
 
-            i = PublicationImport.new
-            i.publication = p
-            i.source = import_source
-            i.source_identifier = rr.identifier
-            i.save!
+            pi = PublicationImport.new
+            pi.publication = p
+            pi.source = import_source
+            pi.source_identifier = rr.identifier
+            pi.save!
 
             rr.creators.each_with_index do |c, i|
               con = ContributorName.new

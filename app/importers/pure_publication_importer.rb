@@ -6,8 +6,8 @@ class PurePublicationImporter < PureImporter
   def call
     pbar = ProgressBarTTY.create(title: 'Importing Pure research-outputs (publications)', total: total_pages)
 
-    1.upto(total_pages) do |i|
-      offset = (i - 1) * page_size
+    1.upto(total_pages) do |page|
+      offset = (page - 1) * page_size
       pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
       pubs['items'].each do |publication|

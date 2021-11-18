@@ -12,7 +12,6 @@ class OrcidEmploymentsController < UserController
         employment.save!
         membership.update_attributes!(orcid_resource_identifier: employment.location)
 
-
         flash[:notice] = I18n.t('profile.orcid_employments.create.success')
       end
     end
