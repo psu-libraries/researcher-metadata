@@ -25,7 +25,6 @@ Lint/RescueException:
 # Offense count: 2
 Lint/ShadowingOuterLocalVariable:
   Exclude:
-    - 'app/importers/oai_importer.rb'
     - 'app/importers/pure_publication_importer.rb'
 
 # Offense count: 1
