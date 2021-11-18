@@ -88,12 +88,6 @@ Naming/PredicateName:
     - 'app/models/external_publication_waiver.rb'
     - 'app/models/publication.rb'
 
-# Offense count: 6
-# Cop supports --auto-correct.
-Performance/CompareWithBlock:
-  Exclude:
-    - 'app/models/authorship_merge_policy.rb'
-
 # Offense count: 2
 # Cop supports --auto-correct.
 # Configuration parameters: AutoCorrect.
