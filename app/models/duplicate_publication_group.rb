@@ -93,6 +93,19 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
   end
 
+  def auto_merge_on_doi
+    first_pub_id = publications.first.id
+    publications.each do |pub|
+      next if first_pub_id == pub.id
+
+      policy = DuplicatePublicationGroupMergeOnDoiPolicy.new(Publication.find(first_pub_id), pub)
+      next unless policy.ok_to_merge?
+
+      Publication.find(first_pub_id).merge_on_doi!(pub, policy)
+    end
+    destroy if publications.count == 1
+  end
+
   rails_admin do
     configure :publications do
       pretty_value do

@@ -535,6 +535,14 @@ class Publication < ApplicationRecord
   end
 
   def merge!(publications_to_merge)
+    publication_merge(publications_to_merge)
+  end
+
+  def merge_on_doi!(publication_to_merge, doi_merge_policy)
+    publication_merge([publication_to_merge, self]) { doi_merge_policy.merge! }
+  end
+
+  def publication_merge(publications_to_merge)
     pubs_to_delete = publications_to_merge - [self]
     all_pubs = (publications_to_merge.to_a + [self]).uniq
 
@@ -588,6 +596,8 @@ class Publication < ApplicationRecord
 
       oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
       self.open_access_locations = oalmp.open_access_locations_to_keep
+
+      yield if block_given?
 
       pubs_to_delete.each do |p|
         p.non_duplicate_groups.each do |ndg|
