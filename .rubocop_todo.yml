@@ -22,11 +22,6 @@ Lint/RescueException:
     - 'app/importers/activity_insight_importer.rb'
     - 'app/jobs/scholarsphere_upload_job.rb'
 
-# Offense count: 2
-Lint/ShadowingOuterLocalVariable:
-  Exclude:
-    - 'app/importers/pure_publication_importer.rb'
-
 # Offense count: 1
 # Cop supports --auto-correct.
 # Configuration parameters: AllowUnusedKeywordArguments, IgnoreEmptyMethods, IgnoreNotImplementedMethods.
