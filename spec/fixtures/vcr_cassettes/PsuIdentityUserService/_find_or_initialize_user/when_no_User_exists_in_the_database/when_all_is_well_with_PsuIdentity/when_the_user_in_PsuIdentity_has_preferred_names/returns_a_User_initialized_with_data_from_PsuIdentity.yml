@@ -1,0 +1,49 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/abc123
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.8.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 18 Nov 2021 18:24:48 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '357'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=Rtqvxp9Iv0f8vhN_6mhpT9_s4IVCg_VLaEC7vJ19.search-service-77488f987b-hfzhk;
+        path=/search-service
+      X-Request-Id:
+      - e55fdb971b52b5de87c467d1a17f8458
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - 2e489ad3-7452-4f71-9e48-2f10c8890b71
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"userid":"abc123","cprid":"2784093","givenName":"Firstname","middleName":"Garner","familyName":"Lastname","preferredGivenName":"PreferredFirstname","preferredFamilyName":"PreferredLastname","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"PreferredFirstname
+        PreferredLastname","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
+  recorded_at: Thu, 18 Nov 2021 18:24:48 GMT
+recorded_with: VCR 6.0.0
