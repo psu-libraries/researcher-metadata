@@ -41,11 +41,6 @@ Lint/UriEscapeUnescape:
     - 'app/controllers/orcid_access_tokens_controller.rb'
     - 'app/importers/open_access_button_publication_importer.rb'
 
-# Offense count: 1
-Lint/UselessAssignment:
-  Exclude:
-    - 'spec/integration/profiles/open_access_publications/edit_spec.rb'
-
 # Offense count: 136
 # Configuration parameters: CountComments, CountAsOne, ExcludedMethods.
 # ExcludedMethods: refine

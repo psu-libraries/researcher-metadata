@@ -210,7 +210,7 @@ describe 'visiting the page to edit the open acess status of a publication' do
         end
 
         it 'sends a request to deposit the publication in ScholarSphere' do
-          dep = ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
+          ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
           expect(Scholarsphere::Client::Ingest).to have_received(:new) do |args|
             expect(args).to be_a Hash
             expect(args.keys).to match_array [:metadata, :files, :depositor]
