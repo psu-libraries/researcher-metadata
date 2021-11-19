@@ -7,7 +7,7 @@ class PublicationMergeOnDoiPolicy
   end
 
   def ok_to_merge?
-    return true if dois_eql? &&
+    return true if doi_pass? &&
                    title_pass?(:title) &&
                    title_pass?(:secondary_title) &&
                    journal_pass? &&
@@ -23,7 +23,7 @@ class PublicationMergeOnDoiPolicy
 
   def merge!
     publication1.update attributes
-    publication.contributor_names = contributor_names_to_keep
+    publication1.contributor_names = contributor_names_to_keep
     publication1.save!
   end
 
@@ -72,7 +72,9 @@ class PublicationMergeOnDoiPolicy
     string1.to_s.downcase.strip == string2.to_s.downcase.strip
   end
 
-  def dois_eql?
+  def doi_pass?
+    return false unless publication1.doi.present? && publication2.doi.present?
+
     publication1.doi == publication2.doi
   end
 
@@ -85,7 +87,7 @@ class PublicationMergeOnDoiPolicy
   def title_pass?(title_attr)
     title1 = publication1.send(title_attr)
     title2 = publication2.send(title_attr)
-    one_value_present?(title1, title2) || (title1.downcase.gsub(/[^a-z0-9]/, '') == title2.downcase.gsub(/[^a-z0-9]/, ''))
+    one_value_present?(title1, title2) || (title1&.downcase&.gsub(/[^a-z0-9]/, '') == title2&.downcase&.gsub(/[^a-z0-9]/, ''))
   end
 
   def journal_pass?

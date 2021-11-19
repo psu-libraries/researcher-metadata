@@ -18,12 +18,12 @@ class ContributorNameMergePolicy
                     cn_group.collect { |cn| cn if cn.user_id.present? }.compact :
                     cn_group
 
-      filter2 = filter1.collect { |cn| cn if cn.role.present? }.compact.present? ?
-                    filter1.collect { |cn| cn if cn.role.present? }.compact :
+      filter2 = filter1.collect { |cn| cn if cn.position.present? }.compact.present? ?
+                    filter1.collect { |cn| cn if cn.position.present? }.compact :
                     filter1
 
-      filter3 = filter2.collect { |cn| cn if cn.position.present? }.compact.present? ?
-                    filter2.collect { |cn| cn if cn.position.present? }.compact :
+      filter3 = filter2.collect { |cn| cn if cn.role.present? }.compact.present? ?
+                    filter2.collect { |cn| cn if cn.role.present? }.compact :
                     filter2
 
       grouped_by_name = filter3.group_by { |cn| cn.name }
