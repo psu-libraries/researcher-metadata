@@ -535,14 +535,14 @@ class Publication < ApplicationRecord
   end
 
   def merge!(publications_to_merge)
-    publication_merge(publications_to_merge)
+    merge(publications_to_merge)
   end
 
   def merge_on_doi!(publication_to_merge, doi_merge_policy)
-    publication_merge([publication_to_merge, self]) { doi_merge_policy.merge! }
+    merge([publication_to_merge, self]) { doi_merge_policy.merge! }
   end
 
-  def publication_merge(publications_to_merge)
+  def merge(publications_to_merge)
     pubs_to_delete = publications_to_merge - [self]
     all_pubs = (publications_to_merge.to_a + [self]).uniq
 

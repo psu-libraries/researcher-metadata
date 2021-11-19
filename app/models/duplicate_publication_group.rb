@@ -108,21 +108,29 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def auto_merge_on_doi
-    first_pub_id = publications.first.id
-    publications.each do |pub|
-      next if first_pub_id == pub.id
+    publications.each do |pub_primary|
+      publications.each do |pub|
+        next if pub_primary.id == pub.id
 
-      first_pub = Publication.find(first_pub_id)
-      policy = PublicationMergeOnDoiPolicy.new(first_pub, pub)
-      next unless policy.ok_to_merge?
+        begin
+          pub_primary.reload
+        rescue ActiveRecord::RecordNotFound
+          next
+        end
+        policy = PublicationMergeOnDoiPolicy.new(pub_primary, pub)
+        next unless policy.ok_to_merge?
 
-      ActiveRecord::Base.transaction do
-      begin
-        first_pub.merge_on_doi!(pub, policy)
-      rescue Publication::NonDuplicateMerge; end
-        if publications.count == 1
-          first_pub.update!(duplicate_group: nil)
-          destroy
+        ActiveRecord::Base.transaction do
+        begin
+          pub.imports.each do |i|
+            i.update!(auto_merged: true)
+          end
+          pub_primary.merge_on_doi!(pub, policy)
+        rescue Publication::NonDuplicateMerge; end
+          if publications.count == 1
+            pub_primary.update!(duplicate_group: nil)
+            destroy
+          end
         end
       end
     end

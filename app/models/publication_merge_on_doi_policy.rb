@@ -40,8 +40,8 @@ class PublicationMergeOnDoiPolicy
       secondary_title: longer_value(:secondary_title),
       journal: select_value(:journal),
       journal_title: select_value(:journal_title),
-      publisher_name: [publication1.publisher_name, publication2.publisher_name].uniq.compact.sample,
-      published_on: [publication1.published_on, publication2.published_on].compact.sort.last,
+      publisher_name: either_value(:publisher_name),
+      published_on: most_recent_value(:published_on),
       status: [publication1.status, publication2.status].include?(Publication::PUBLISHED_STATUS) ?
                                                                       Publication::PUBLISHED_STATUS :
                                                                       Publication::IN_PRESS_STATUS,
@@ -49,9 +49,22 @@ class PublicationMergeOnDoiPolicy
       issue: select_value(:issue),
       edition: select_value(:edition),
       page_range: longer_value(:page_range),
+      url: either_value(:url),
       issn: longer_value(:issn),
-      publication_type: longer_value(:publication_type)
+      isbn: either_value(:isbn),
+      publication_type: longer_value(:publication_type),
+      abstract: longer_value(:abstract),
+      author_et_al: [publication1.authors_et_al, publication2.authors_et_al].include?(true) ? true : false,
+      total_scopus_citations: either_value(:total_scopus_citations)
     }
+  end
+
+  def most_recent_value(attribute)
+    [publication1.send(attribute), publication2.send(attribute)].compact.sort.last
+  end
+
+  def either_value(attribute)
+    [publication1.send(attribute), publication2.send(attribute)].uniq.compact.sample
   end
 
   def select_value(attribute)
