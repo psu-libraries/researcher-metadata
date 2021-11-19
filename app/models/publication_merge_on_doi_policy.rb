@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DuplicatePublicationGroupMergeOnDoiPolicy
+class PublicationMergeOnDoiPolicy
   def initialize(publication1, publication2)
     @publication1 = publication1
     @publication2 = publication2
@@ -8,8 +8,8 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
 
   def ok_to_merge?
     return true if dois_eql? &&
-                   title_pass? &&
-                   standard_pass?(:secondary_title) &&
+                   title_pass?(:title) &&
+                   title_pass?(:secondary_title) &&
                    journal_pass? &&
                    standard_pass?(:volume) &&
                    standard_pass?(:issue) &&
@@ -22,29 +22,44 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
   end
 
   def merge!
-    publication1.update! attributes
+    publication1.update attributes
+    publication.contributor_names = contributor_names_to_keep
+    publication1.save!
   end
 
   private
 
+  def contributor_names_to_keep
+    ContributorNameMergePolicy.new([publication1.contributor_names,
+                                    publication2.contributor_names].flatten).contributor_names_to_keep
+  end
+
   def attributes
     {
-      title: [publication1.title, publication2.title].compact.max_by(&:length),
-      secondary_title: [publication1.secondary_title, publication2.secondary_title].uniq.compact.first,
-      journal: [publication1.journal, publication2.journal].uniq.compact.first,
-      journal_title: [publication1.journal_title, publication2.journal_title].uniq.compact.first,
+      title: longer_value(:title),
+      secondary_title: longer_value(:secondary_title),
+      journal: select_value(:journal),
+      journal_title: select_value(:journal_title),
       publisher_name: [publication1.publisher_name, publication2.publisher_name].uniq.compact.sample,
       published_on: [publication1.published_on, publication2.published_on].compact.sort.last,
       status: [publication1.status, publication2.status].include?(Publication::PUBLISHED_STATUS) ?
                                                                       Publication::PUBLISHED_STATUS :
                                                                       Publication::IN_PRESS_STATUS,
-      volume: [publication1.volume, publication2.volume].uniq.compact.first,
-      issue: [publication1.issue, publication2.issue].uniq.compact.first,
-      edition: [publication1.edition, publication2.edition].uniq.compact.first,
-      page_range: [publication1.page_range, publication2.page_range].compact.max_by(&:length),
-      issn: [publication1.issn, publication2.issn].compact.max_by(&:length),
-      publication_type: [publication1.publication_type, publication2.publication_type].compact.max_by(&:length)
+      volume: select_value(:volume),
+      issue: select_value(:issue),
+      edition: select_value(:edition),
+      page_range: longer_value(:page_range),
+      issn: longer_value(:issn),
+      publication_type: longer_value(:publication_type)
     }
+  end
+
+  def select_value(attribute)
+    [publication1.send(attribute), publication2.send(attribute)].uniq.compact.first
+  end
+
+  def longer_value(attribute)
+    [publication1.send(attribute), publication2.send(attribute)].compact.max_by(&:length)
   end
 
   def one_value_present?(value1, value2)
@@ -67,9 +82,9 @@ class DuplicatePublicationGroupMergeOnDoiPolicy
     one_value_present?(pub1_value, pub2_value) || eql_values?(pub1_value, pub2_value)
   end
 
-  def title_pass?
-    title1 = publication1.title
-    title2 = publication2.title
+  def title_pass?(title_attr)
+    title1 = publication1.send(title_attr)
+    title2 = publication2.send(title_attr)
     one_value_present?(title1, title2) || (title1.downcase.gsub(/[^a-z0-9]/, '') == title2.downcase.gsub(/[^a-z0-9]/, ''))
   end
 

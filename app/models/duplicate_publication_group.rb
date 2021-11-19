@@ -113,13 +113,13 @@ class DuplicatePublicationGroup < ApplicationRecord
       next if first_pub_id == pub.id
 
       first_pub = Publication.find(first_pub_id)
-      policy = DuplicatePublicationGroupMergeOnDoiPolicy.new(first_pub, pub)
+      policy = PublicationMergeOnDoiPolicy.new(first_pub, pub)
       next unless policy.ok_to_merge?
 
       ActiveRecord::Base.transaction do
+      begin
         first_pub.merge_on_doi!(pub, policy)
-
-      rescue Publication::NonDuplicateMerge
+      rescue Publication::NonDuplicateMerge; end
         if publications.count == 1
           first_pub.update!(duplicate_group: nil)
           destroy
