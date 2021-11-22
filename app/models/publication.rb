@@ -530,6 +530,10 @@ class Publication < ApplicationRecord
     publication_type.include? 'Journal Article'
   end
 
+  def publication_type_other?
+    publication_type == 'Other'
+  end
+
   def all_non_duplicate_ids
     (non_duplicate_ids.uniq - [id]).sort
   end
