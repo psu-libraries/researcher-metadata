@@ -43,11 +43,19 @@ describe 'Proxies page', type: :feature do
     it 'shows all active proxy assignments' do
       expect(page).to have_content deputy_confirmed.name
       expect(page).to have_content deputy_unconfirmed.name
-      expect(page).to have_content primary_confirmed.name
+      expect(page).to have_link primary_confirmed.name
       expect(page).to have_content primary_unconfirmed.name
+      expect(page).not_to have_link primary_unconfirmed.name
 
       expect(page).not_to have_content deputy_inactive
       expect(page).not_to have_content primary_inactive
+    end
+
+    describe "when link is clicked in confirmed primary's name" do
+      it "directs user to primary's public profile page" do
+        click_link primary_confirmed.name
+        expect(page).to have_current_path profile_path(primary_confirmed.webaccess_id)
+      end
     end
   end
 end
