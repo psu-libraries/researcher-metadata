@@ -6,7 +6,7 @@ class ContributorNameMergePolicy
   end
 
   def contributor_names_to_keep
-    contributor_names.group_by { |cn| [cn.first_name&.first, cn.last_name] }
+    contributor_names.group_by { |cn| [cn.first_name&.first&.downcase, cn.last_name&.downcase, cn.position] }
         .values
         .collect { |group| preferred_contributor_name(group) }
   end
