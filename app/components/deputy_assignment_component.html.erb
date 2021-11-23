@@ -1,10 +1,6 @@
 <div id="<%= dom_id deputy_assignment %>" class="<%= root_class %>">
   <div class="deputy-assignment__name">
-    <% if current_user_is_deputy? && !pending? %>
-      <%= link_to name, profile_path(primary.webaccess_id) %> <%= webaccess_id %>
-    <% else %>
-      <strong><%= name %></strong> <%= webaccess_id %>
-    <% end %>
+    <strong><%= link_to_if current_user_is_deputy? && confirmed?, name, profile_path(primary.webaccess_id) %></strong> <%= webaccess_id %>
 
     <% if current_user_is_deputy? && pending? %>
       <%= i18n('pending_as_deputy') %>
