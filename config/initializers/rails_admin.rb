@@ -67,7 +67,8 @@ RailsAdmin.config do |config|
             :Authorship]
     end
     new do
-      only [:Publication,
+      only [:Authorship,
+            :Publication,
             :User,
             :APIToken,
             :ExternalPublicationWaiver,

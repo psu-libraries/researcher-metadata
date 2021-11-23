@@ -103,10 +103,21 @@ describe Authorship, type: :model do
   describe '#description' do
     let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
     let(:p) { create :publication, title: 'Example Pub' }
-    let(:a) { create :authorship, user: u, publication: p }
 
-    it 'returns a string describing the record' do
-      expect(a.description).to eq "##{a.id} (Bob Testerson - Example Pub)"
+    context 'when the authorship is not persisted' do
+      let(:a) { described_class.new }
+
+      it 'returns nil' do
+        expect(a.description).to be_nil
+      end
+    end
+
+    context 'when the authorship is persisted' do
+      let(:a) { create :authorship, user: u, publication: p }
+
+      it 'returns a string describing the record' do
+        expect(a.description).to eq "##{a.id} (Bob Testerson - Example Pub)"
+      end
     end
   end
 

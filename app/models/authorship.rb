@@ -39,7 +39,9 @@ class Authorship < ApplicationRecord
   scope :claimed_and_unconfirmed, -> { where(confirmed: false, claimed_by_user: true) }
 
   def description
-    "##{id} (#{user.name} - #{publication.title})"
+    if persisted?
+      "##{id} (#{user.name} - #{publication.title})"
+    end
   end
 
   def record_open_access_notification
@@ -64,6 +66,13 @@ class Authorship < ApplicationRecord
       field(:publication)
       field(:confirmed)
       field(:claimed_by_user)
+    end
+
+    create do
+      field(:user)
+      field(:publication)
+      field(:author_number)
+      field(:confirmed)
     end
 
     edit do
