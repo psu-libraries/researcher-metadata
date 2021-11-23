@@ -14,10 +14,6 @@ class PublicationMergeOnDoiPolicy
 
   private
 
-  def ok_to_merge?
-    PublicationMatchOnDoiPolicy.new(publication1, publication2).ok_to_merge?
-  end
-
   def contributor_names_to_keep
     ContributorNameMergePolicy.new([publication1.contributor_names,
                                     publication2.contributor_names].flatten).contributor_names_to_keep
