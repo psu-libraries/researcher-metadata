@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_05_202204) do
+ActiveRecord::Schema.define(version: 2021_11_09_153954) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -217,6 +217,8 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "internal_publication_waiver_id"
+    t.bigint "deputy_user_id"
+    t.index ["deputy_user_id"], name: "index_external_publication_waivers_on_deputy_user_id"
     t.index ["internal_publication_waiver_id"], name: "index_external_waivers_on_internal_waiver_id"
     t.index ["user_id"], name: "index_external_publication_waivers_on_user_id"
   end
@@ -256,7 +258,9 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
     t.text "reason_for_waiver"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "deputy_user_id"
     t.index ["authorship_id"], name: "index_internal_publication_waivers_on_authorship_id"
+    t.index ["deputy_user_id"], name: "index_internal_publication_waivers_on_deputy_user_id"
   end
 
   create_table "journals", force: :cascade do |t|
@@ -307,6 +311,8 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
     t.string "version"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "deputy_user_id"
+    t.index ["deputy_user_id"], name: "index_open_access_locations_on_deputy_user_id"
     t.index ["publication_id"], name: "index_open_access_locations_on_publication_id"
   end
 
@@ -512,7 +518,9 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
     t.text "subtitle"
     t.string "publisher"
     t.text "publisher_statement"
+    t.bigint "deputy_user_id"
     t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
+    t.index ["deputy_user_id"], name: "index_scholarsphere_work_deposits_on_deputy_user_id"
   end
 
   create_table "statistics_snapshots", force: :cascade do |t|
@@ -641,13 +649,16 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
   add_foreign_key "education_history_items", "users", on_delete: :cascade
   add_foreign_key "email_errors", "users", name: "email_errors_user_id_fk"
   add_foreign_key "external_publication_waivers", "internal_publication_waivers", name: "external_publication_waivers_internal_publication_waiver_id_fk"
+  add_foreign_key "external_publication_waivers", "users", column: "deputy_user_id", name: "external_publication_waivers_deputy_user_id_fk"
   add_foreign_key "external_publication_waivers", "users", name: "external_publication_waivers_user_id_fk"
   add_foreign_key "internal_publication_waivers", "authorships", name: "internal_publication_waivers_authorship_id_fk"
+  add_foreign_key "internal_publication_waivers", "users", column: "deputy_user_id", name: "internal_publication_waivers_deputy_user_id_fk"
   add_foreign_key "journals", "publishers"
   add_foreign_key "news_feed_items", "users"
   add_foreign_key "non_duplicate_publication_group_memberships", "non_duplicate_publication_groups", name: "non_duplicate_publication_group_membership_group_id_fk", on_delete: :cascade
   add_foreign_key "non_duplicate_publication_group_memberships", "publications", name: "non_duplicate_publication_group_membership_publication_id_fk", on_delete: :cascade
   add_foreign_key "open_access_locations", "publications", name: "open_access_locations_publication_id_fk", on_delete: :cascade
+  add_foreign_key "open_access_locations", "users", column: "deputy_user_id", name: "open_access_locations_deputy_user_id_fk"
   add_foreign_key "organization_api_permissions", "api_tokens", name: "organization_api_permissions_api_token_id_fk", on_delete: :cascade
   add_foreign_key "organization_api_permissions", "organizations", name: "organization_api_permissions_organization_id_fk", on_delete: :cascade
   add_foreign_key "organizations", "organizations", column: "parent_id", name: "organizations_parent_id_fk", on_delete: :restrict
@@ -666,6 +677,7 @@ ActiveRecord::Schema.define(version: 2021_11_05_202204) do
   add_foreign_key "researcher_funds", "users", name: "research_funds_user_id_fk", on_delete: :cascade
   add_foreign_key "scholarsphere_file_uploads", "scholarsphere_work_deposits", name: "scholarsphere_file_uploads_deposit_id_fk"
   add_foreign_key "scholarsphere_work_deposits", "authorships"
+  add_foreign_key "scholarsphere_work_deposits", "users", column: "deputy_user_id", name: "scholarsphere_work_deposits_deputy_user_id_fk"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
   add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade

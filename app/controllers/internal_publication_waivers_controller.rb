@@ -8,7 +8,7 @@ class InternalPublicationWaiversController < OpenAccessWorkflowController
 
   def create
     authorship = current_user.confirmed_authorships.find_by!(publication_id: params[:id])
-    waiver = InternalPublicationWaiver.new(waiver_params)
+    waiver = InternalPublicationWaiver.new(waiver_params.merge(deputy_user_id: current_user.deputy.id))
     waiver.authorship = authorship
     waiver.save!
 

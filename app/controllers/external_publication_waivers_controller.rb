@@ -6,7 +6,9 @@ class ExternalPublicationWaiversController < ProfileManagementController
   end
 
   def create
-    @waiver = current_user.external_publication_waivers.build(waiver_params)
+    @waiver = current_user
+      .external_publication_waivers
+      .build(waiver_params.merge(deputy_user_id: current_user.deputy.id))
     @waiver.save!
     flash[:notice] = I18n.t('profile.external_publication_waivers.create.success')
     FacultyConfirmationsMailer.open_access_waiver_confirmation(UserProfile.new(current_user), @waiver).deliver_now

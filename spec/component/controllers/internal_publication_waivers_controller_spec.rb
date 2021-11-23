@@ -4,7 +4,9 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe InternalPublicationWaiversController, type: :controller do
-  let!(:user) { create :user }
+  let!(:assignment) { create(:deputy_assignment) }
+  let!(:user) { UserDecorator.new(user: assignment.primary, impersonator: deputy) }
+  let!(:deputy) { nil }
   let!(:other_user) { create :user }
   let!(:pub) { create :publication }
   let!(:oa_pub) { create :publication, open_access_locations: [build(:open_access_location, :open_access_button)] }
@@ -195,6 +197,18 @@ describe InternalPublicationWaiversController, type: :controller do
             post :create, params: { id: pub.id, waiver: { reason_for_waiver: 'reason' } }
             expect(response).to redirect_to edit_profile_publications_path
           end
+        end
+      end
+
+      context 'when the user is a deputy posing as the primary user' do
+        let(:deputy) { assignment.deputy }
+
+        before { post :create, params: { id: pub.id, waiver: { reason_for_waiver: 'reason' } } }
+
+        it "saves the waiver with the deputy's user id" do
+          waiver = InternalPublicationWaiver.find_by(deputy_user_id: deputy.id)
+
+          expect(waiver).not_to be_nil
         end
       end
     end

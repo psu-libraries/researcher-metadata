@@ -4,7 +4,9 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe OpenAccessPublicationsController, type: :controller do
-  let!(:user) { create :user }
+  let!(:assignment) { create(:deputy_assignment) }
+  let!(:user) { UserDecorator.new(user: assignment.primary, impersonator: deputy) }
+  let!(:deputy) { nil }
   let!(:other_user) { create :user }
   let!(:pub) { create :publication }
   let!(:blank_oa_pub) { create :publication, open_access_locations: [] }
@@ -316,6 +318,14 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(response).to render_template :edit
           end
         end
+
+        context 'when the user is a deputy impersonating another user' do
+          let(:deputy) { assignment.deputy }
+
+          it 'sets the deputy user id of the url' do
+            expect(pub.reload.open_access_locations.map(&:deputy_user_id)).to contain_exactly(deputy.id)
+          end
+        end
       end
     end
   end
@@ -448,6 +458,16 @@ describe OpenAccessPublicationsController, type: :controller do
           it 'schedules a job to send the publication to ScholarSphere' do
             post :create_scholarsphere_deposit, params: params
             expect(ScholarsphereUploadJob).to have_received(:perform_later).with(found_deposit.id, user.id)
+          end
+        end
+
+        context 'when the user is a deputy impersonating the primary user' do
+          let(:deputy) { assignment.deputy }
+
+          before { post :create_scholarsphere_deposit, params: params }
+
+          it 'adds the deputy user id to the work deposit' do
+            expect(found_deposit.deputy_user_id).to eq(deputy.id)
           end
         end
 
