@@ -25,7 +25,16 @@ class OpenAccessURLForm
     end
 
     def validate_response
-      response_code = HTTParty.head(open_access_url, follow_redirects: false).code
+      response_code = HTTParty.head(
+        open_access_url,
+        follow_redirects: false,
+        # Some websites that host open access articles - in particular, sciencedirect.com -
+        # are denying access based on user agent, so we have to fake our HTTP client in order
+        # to avoid 403 responses. There's nothing special about the user agent chosen here
+        # except that it's a desktop web browser and *not* a programmatic client like HTTParty
+        # or curl.
+        headers: { 'User-Agent' => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/96.0.4664.45 Safari/537.36' }
+      ).code
       unless valid_response_codes.include?(response_code)
         add_response_error
       end
