@@ -1656,32 +1656,6 @@ describe User, type: :model do
     end
   end
 
-  describe '#attributes_from_psu_identity', :vcr do
-    before { user.attributes_from_psu_identity }
-
-    context 'when identity data is present' do
-      let(:user) { create(:user, webaccess_id: 'agw13') }
-
-      it "sets the user's attributes using data from Penn State" do
-        expect(user.first_name).to eq('Adam')
-        expect(user.last_name).to eq('Wead')
-        expect(user.psu_identity).not_to be_nil
-        expect(user.psu_identity_updated_at).to be_within(1.minute).of(Time.zone.now)
-      end
-    end
-
-    context 'when identity data is not present' do
-      let(:user) { create(:user, webaccess_id: 'idonotexist') }
-
-      it "does not change the user's attributes" do
-        expect(user.first_name).to eq(user.first_name)
-        expect(user.last_name).to eq(user.last_name)
-        expect(user.psu_identity).to be_nil
-        expect(user.psu_identity_updated_at).to be_nil
-      end
-    end
-  end
-
   describe '#active?' do
     subject { user }
 

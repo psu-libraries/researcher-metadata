@@ -3,10 +3,13 @@
 require 'component/component_spec_helper'
 
 describe PsuIdentityUserService do
+  # Note this spec uses VCR to mock HTTP requests to the actual PSU identity
+  # server. If you change this value, you will will invalidate the VCR
+  # cassettes and send new requests.
+  let(:webaccess_id) { 'abc123' }
+
   describe '.find_or_initialize_user' do
     subject(:call) { described_class.find_or_initialize_user(webaccess_id: webaccess_id) }
-
-    let(:webaccess_id) { 'abc123' }
 
     context 'when the User exists in the database' do
       let!(:user) { create :user, :with_psu_identity, webaccess_id: webaccess_id }

@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class NewDeputyAssignmentForm
-  class IdentityServiceError < StandardError; end
-
   include ActiveModel::Model
 
   attr_accessor :primary,
@@ -39,34 +37,20 @@ class NewDeputyAssignmentForm
   private
 
     def find_or_initialize_deputy(webaccess_id:)
-      User.find_by(webaccess_id: webaccess_id) ||
-        initialize_user_from_psu_identity(webaccess_id: webaccess_id)
-    end
+      user = PsuIdentityUserService.find_or_initialize_user(webaccess_id: webaccess_id)
 
-    def initialize_user_from_psu_identity(webaccess_id:)
-      psu_identity = query_psu_identity(webaccess_id)
-      if psu_identity.blank?
+      if user.blank?
         errors.add(:deputy_webaccess_id, :not_found)
         return nil
       end
 
-      # TODO this should be refactored along with
-      # User#attributes_from_psu_identity to share a common service
-      new_user = User.new(
-        webaccess_id: webaccess_id,
-        first_name: (psu_identity.preferred_given_name.presence || psu_identity.given_name),
-        last_name: (psu_identity.preferred_family_name.presence || psu_identity.family_name),
-        psu_identity: psu_identity,
-        psu_identity_updated_at: Time.zone.now
-      )
+      user.validate! if user.new_record?
 
-      new_user.validate!
-
-      new_user
+      user
     rescue ActiveRecord::RecordInvalid
       errors.add(:base, :error_creating_user)
       nil
-    rescue IdentityServiceError
+    rescue PsuIdentityUserService::IdentityServiceError
       errors.add(:base, :identity_service_error)
       nil
     end
