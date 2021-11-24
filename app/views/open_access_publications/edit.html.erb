@@ -8,9 +8,12 @@
           <em><%= publication.title %></em>, on the web. If an open access version
           of your work has been published, you can let us know about it by submitting a URL for
           the document in the first form below. If an open access version of this publication
-          has not yet been published, we encourage you to submit it to ScholarSphere,
-          Penn State's institutional repository, via the second form below so that your research
-          can be preserved and made freely available to everyone.
+          has not yet been published, we encourage you to submit the
+          <a href="https://psu.libanswers.com/faq/279953">accepted manuscript version</a>
+          to ScholarSphere, Penn State's institutional repository, via the second form below
+          so that your research can be preserved and made freely available to everyone.
+          If you wish to waive the open access policy for this article,
+          you can do so at the bottom of this page.
         </p>
       </div>
       <div class="oa-publication-details">
@@ -62,9 +65,15 @@
           <h5>Upload to ScholarSphere</h5>
           <p>
             If there isn't already an open access version of your work available on the web, please
-            consider uploading it to ScholarSphere. Please review the information about your publication
-            below for accuracy, make any necessary corrections, and fill in any required fields that are
-            blank. You can attach as many files as needed, but you must attach at least one.
+            consider uploading the <a href="https://psu.libanswers.com/faq/279953">accepted
+            manuscript version</a> to ScholarSphere. Please review the information about your
+            publication below for accuracy, make any necessary corrections, and fill in any required
+            fields that are blank. You can attach as many files as needed, but you must attach at least one.
+          </p>
+          <p>
+            Most journals do not allow authors to deposit the final published version of an article to ScholarSphere.
+            If you wish to deposit the final published version, please contact the Office of Scholarly
+            Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a> for a review of the journal’s policy.
           </p>
 
           <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
@@ -109,11 +118,12 @@
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>
-      </div>
-      <div>
-        <p>
-          <%= link_to "Waive open access obligations for this publication", new_internal_publication_waiver_path(publication) %>
-        </p>
+        <div class="open-access-action">
+          <h5>Get a Waiver</h5>
+          <p>
+            <%= link_to "Waive open access obligations for this publication", new_internal_publication_waiver_path(publication) %>
+          </p>
+        </div>
       </div>
     </div>
   </div>
