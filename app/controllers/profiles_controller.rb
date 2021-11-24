@@ -64,7 +64,7 @@ class ProfilesController < ProfileManagementController
     end
 
     def path_to_unbecome_user
-      if current_user.admin?
+      if current_user.impersonator.admin?
         admin_unbecomes_user_path(current_user)
       else
         unbecomes_user_path(current_user)

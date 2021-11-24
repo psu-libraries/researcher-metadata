@@ -13,10 +13,11 @@ describe MasqueradeController, type: :controller do
 
     context 'when authenticated' do
       let(:user) { assignment.deputy }
+      let(:current_user) { CurrentUserBuilder.call(current_user: user, current_session: {}) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
+        allow(controller).to receive(:current_user).and_return(current_user)
       end
 
       context 'when the user is a deputy of the primary user' do
@@ -64,11 +65,12 @@ describe MasqueradeController, type: :controller do
 
     context 'when authenticated' do
       let(:user) { assignment.deputy }
+      let(:current_user) { CurrentUserBuilder.call(current_user: user, current_session: session) }
 
       before do
         session[MasqueradingBehaviors::SESSION_ID] = primary.id
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
-        allow(controller).to receive(:current_user).and_return(user)
+        allow(controller).to receive(:current_user).and_return(current_user)
       end
 
       context 'when the user is an available deputy of the primary user' do
