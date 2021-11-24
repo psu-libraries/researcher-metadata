@@ -6,8 +6,9 @@
 
   <ul class="navbar-nav ml-auto">
     <li class="nav-item">
-      <%= link_to "Stop being #{current_user.webaccess_id}", path_to_unbecome_user,
-        class: 'nav-link', method: :post %>
+      <%= link_to "Stop being #{current_user.webaccess_id}",
+                  current_user.impersonator.admin? ? admin_unbecomes_user_path(current_user) : unbecomes_user_path(current_user),
+                  class: 'nav-link', method: :post %>
     </li>
   </ul>
 </nav>
