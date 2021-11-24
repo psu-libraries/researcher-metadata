@@ -10,8 +10,8 @@ class MasqueradeController < UserController
     def verify_deputies
       if current_user.masquerading?
         return if primary_user.available_deputy?(current_user.impersonator)
-      else
-        return if primary_user.available_deputy?(current_user)
+      elsif primary_user.available_deputy?(current_user)
+        return
       end
 
       flash[:alert] = I18n.t('profile.errors.not_authorized')
