@@ -90,6 +90,9 @@ describe 'editing profile preferences' do
           expect(page).to have_link('Unbecome this user')
           click_link('Manage my profile')
           expect(page).to have_link('Stop being abc123')
+          click_link('Stop being abc123')
+          click_link('Become this user')
+          click_link('Unbecome this user')
         end
       end
 
@@ -107,6 +110,9 @@ describe 'editing profile preferences' do
           expect(page).to have_link('Unbecome this user')
           click_link('Manage my profile')
           expect(page).to have_link('Stop being abc123')
+          click_link('Stop being abc123')
+          click_link('Become this user')
+          click_link('Unbecome this user')
         end
       end
     end
