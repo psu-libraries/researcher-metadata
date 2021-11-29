@@ -101,7 +101,7 @@ en:
       deputies_heading: Your Proxies
       deputies_explanation: The following people can act on your behalf within the Researcher Metadata Database. They can do everything you can do, including uploading an article to ScholarSphere, providing an article's open access URL, waiving the Penn State open access policy for an article, and choosing which articles to display in your public profile. Please use caution when granting proxy access to your account.
       primaries_heading: You’re a Proxy For
-      primaries_explanation: You can act on behalf of the following people within the Researcher Metadata Database.
+      primaries_explanation: You can act on behalf of the following people within the Researcher Metadata Database.  To become one of the following people, click the link in their name to view their public profile.  Within the user's public profile, click the "Become this user" button to become them.  Then, click "Manage my profile" to enter their profile.
     create:
       success: Successfully created the Proxy
     confirm:
