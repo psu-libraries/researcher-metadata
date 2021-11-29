@@ -87,12 +87,13 @@ describe 'editing profile preferences' do
 
         it 'allows the admin to become and unbecome the user in the profile' do
           click_link('Become this user')
-          expect(page).to have_link('Unbecome this user')
+          expect(page).to have_content('You are acting on behalf of abc123')
+          expect(page).to have_link('Unbecome abc123')
           click_link('Manage my profile')
           expect(page).to have_link('Stop being abc123')
           click_link('Stop being abc123')
           click_link('Become this user')
-          click_link('Unbecome this user')
+          click_link('Unbecome abc123')
         end
       end
 
@@ -107,12 +108,13 @@ describe 'editing profile preferences' do
 
         it 'allows the deputy to become and unbecome the user in the profile' do
           click_link('Become this user')
-          expect(page).to have_link('Unbecome this user')
+          expect(page).to have_content('You are acting on behalf of abc123')
+          expect(page).to have_link('Unbecome abc123')
           click_link('Manage my profile')
           expect(page).to have_link('Stop being abc123')
           click_link('Stop being abc123')
           click_link('Become this user')
-          click_link('Unbecome this user')
+          click_link('Unbecome abc123')
         end
       end
     end

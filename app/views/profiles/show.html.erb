@@ -12,7 +12,6 @@
     <a href="#"><%= image_tag('logo.png', alt: "Penn State", class: 'logo') %></a>
   </div>
 </div>
-
 <div id="profile">
   <div class="grid-container">
     <div class="grid-x grid-margin-x">
@@ -80,7 +79,10 @@
           <% end %>
 
           <% if masquerading? %>
-            <%= link_to "Unbecome this user", path_to_unbecome_user, class: 'button', method: :post %>
+            <div class="masquerade-warning">
+              <strong>You are acting on behalf of <%= current_user.webaccess_id %>.</strong>
+            </div>
+            <%= link_to "Unbecome #{current_user.webaccess_id}", path_to_unbecome_user, class: 'button', method: :post %>
           <% elsif deputized? %>
             <%= link_to "Become this user", path_to_become_user, class: 'button', method: :post %>
           <% end %>
