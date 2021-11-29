@@ -22,6 +22,16 @@ class Publication < ApplicationRecord
     ]
   end
 
+  def self.postprint_statuses
+    [
+      'Already Openly Available',
+      'Cannot Deposit',
+      'Deposited to ScholarSphere',
+      'File provided was not a post-print',
+      'In Progress'
+    ]
+  end
+
   def self.open_access_statuses
     ['gold', 'hybrid', 'bronze', 'green', 'closed']
   end
@@ -66,6 +76,7 @@ class Publication < ApplicationRecord
   validates :publication_type, inclusion: { in: publication_types }
   validates :status, inclusion: { in: [PUBLISHED_STATUS, IN_PRESS_STATUS] }
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
+  validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
 
   validate :doi_format_is_valid
 

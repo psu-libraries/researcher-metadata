@@ -154,7 +154,7 @@ class ActivityInsightImporter
             pub_record = pi.publication
 
             if pi.persisted?
-              pub_record.update!(pub_attrs(pub)) if pub_record.updated_by_user_at.blank?
+              update_pub_record(pub_record, pub)
             else
               pi.save!
             end
@@ -202,6 +202,22 @@ class ActivityInsightImporter
   end
 
   private
+
+    def update_pub_record(pub_record, ai_pub)
+      if pub_record.updated_by_user_at.blank?
+        pub_record.update!(pub_attrs(ai_pub))
+      else
+        # If the publication has been updated by an admin, we only want to
+        # overwrite a subset of its attributes.
+        pub_record.update!(always_update_pub_attrs(ai_pub))
+      end
+    end
+
+    def always_update_pub_attrs(pub)
+      {
+        activity_insight_postprint_status: pub.activity_insight_postprint_status
+      }
+    end
 
     def pub_attrs(pub)
       {
