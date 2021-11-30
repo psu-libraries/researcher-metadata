@@ -917,6 +917,8 @@ class ActivityInsightPublicationPostprint
   end
 
   def postprint_status
+    # NOTE: this field is misspelled as "ACCESIBLE" (one S) on the Activity Insight side,
+    # so the below misspelling is intentional.
     text_for('ACCESIBLE')
   end
 
