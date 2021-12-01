@@ -2,7 +2,6 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
-require 'component/models/shared_examples_for_a_model_with_a_deputy_user'
 
 describe 'the internal_publication_waivers table', type: :model do
   subject { InternalPublicationWaiver.new }
@@ -24,7 +23,6 @@ describe InternalPublicationWaiver, type: :model do
   subject(:waiver) { described_class.new }
 
   it_behaves_like 'an application record'
-  it_behaves_like 'a model with a deputy user'
 
   describe 'associations' do
     it { is_expected.to belong_to(:authorship).inverse_of(:waiver) }
