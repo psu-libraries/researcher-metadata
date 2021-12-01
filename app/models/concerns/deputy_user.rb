@@ -10,17 +10,5 @@ module DeputyUser
                foreign_key: :deputy_user_id,
                optional: true
     # rubocop:enable Rails/InverseOf
-
-    validate :deputy_must_be_assigned
   end
-
-  private
-
-    # @note We can't tell (easily) if the deputy is associated with the exact user, but we can tell if they have any
-    # valid primary users.
-    def deputy_must_be_assigned
-      return if deputy.nil?
-
-      errors.add(:deputy, :not_assigned) if deputy.deputy_assignments.limit(1).empty?
-    end
 end
