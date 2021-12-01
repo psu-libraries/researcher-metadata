@@ -2,6 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
+require 'component/models/shared_examples_for_a_model_with_a_deputy_user'
 
 describe 'the open_access_locations table', type: :model do
   subject { OpenAccessLocation.new }
@@ -33,6 +34,7 @@ describe OpenAccessLocation, type: :model do
   subject(:oal) { described_class.new }
 
   it_behaves_like 'an application record'
+  it_behaves_like 'a model with a deputy user'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:open_access_locations) }
