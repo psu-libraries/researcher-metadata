@@ -59,8 +59,15 @@ class User < ApplicationRecord
 
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
+  # TODO handle the following cases:
+  #      * PsuIdentityUserService returns nil (user cannot be found in identity service)
+  #      * PsuIdentityUserService raises IdentityServiceError (network error, etc)
+  #      * PsuIdentityUserService returns a successful response, but that response is
+  #        invalid per User's validations (e.g. first or last name is blank)
   def self.from_omniauth(auth)
-    find_or_create_by(webaccess_id: auth.uid, &:attributes_from_psu_identity)
+    user = PsuIdentityUserService.find_or_initialize_user(webaccess_id: auth.uid)
+    user&.save
+    user
   end
 
   def self.find_all_by_wos_pub(pub)
@@ -150,19 +157,9 @@ class User < ApplicationRecord
       .any?
   end
 
+  # TODO update PsuIdentityUserService to be able to do this
   def update_psu_identity
     update(psu_identity: psu_identity_data, psu_identity_updated_at: Time.zone.now)
-  end
-
-  def attributes_from_psu_identity
-    return if psu_identity_data.nil?
-
-    assign_attributes(
-      first_name: psu_identity_data.preferred_given_name,
-      last_name: psu_identity_data.preferred_family_name,
-      psu_identity: psu_identity_data,
-      psu_identity_updated_at: Time.zone.now
-    )
   end
 
   def old_potential_open_access_publications

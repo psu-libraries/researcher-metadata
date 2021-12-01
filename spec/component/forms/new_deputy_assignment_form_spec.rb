@@ -14,12 +14,6 @@ describe NewDeputyAssignmentForm, type: :model do
   let!(:primary) { create :user, first_name: 'Primary' }
   let(:deputy_webaccess_id) { 'dep0987' }
 
-  let(:psu_identity_client) { instance_spy('PsuIdentity::SearchService::Client') }
-
-  before do
-    allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(psu_identity_client)
-  end
-
   describe 'validations' do
     it { is_expected.to validate_presence_of(:primary) }
     it { is_expected.to validate_presence_of(:deputy_webaccess_id) }
@@ -35,16 +29,11 @@ describe NewDeputyAssignmentForm, type: :model do
 
   describe '#save' do
     context 'when no User exists for the given webaccess id' do
-      let(:psu_identity_data) {
-        { 'userid' => 'dep0987', 'cprid' => '123456', 'givenName' => 'Deputy', 'familyName' =>
-'FromPsu', 'active' => true, 'confHold' => false, 'serviceAccount' => false, "affiliati
-on" => ['MEMBER'], 'displayName' => 'Deputy FromPsu', 'link' => { 'href' => "https://dev.app
-s.psu.edu/cpr/resources/123456" } }
-      }
-      let(:psu_person) { PsuIdentity::SearchService::Person.new(psu_identity_data) }
-
       context 'when PsuIdentity responds with a valid response' do
-        before { allow(psu_identity_client).to receive(:userid).with(deputy_webaccess_id).and_return(psu_person) }
+        before do
+          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+            .and_return(build(:user, :with_psu_identity, webaccess_id: deputy_webaccess_id))
+        end
 
         it 'returns true' do
           expect(form.save).to eq true
@@ -55,12 +44,8 @@ s.psu.edu/cpr/resources/123456" } }
             form.save
           }.to change(User, :count).by(1)
 
-          deputy = User.find_by(webaccess_id: deputy_webaccess_id)
-          expect(deputy).to be_present
-          expect(deputy.first_name).to eq 'Deputy'
-          expect(deputy.last_name).to eq 'FromPsu'
-          expect(deputy.psu_identity).to be_present
-          expect(deputy.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
+          expect(PsuIdentityUserService).to have_received(:find_or_initialize_user)
+            .with(webaccess_id: deputy_webaccess_id)
         end
 
         it 'creates an active DeputyAssignment' do
@@ -84,7 +69,7 @@ s.psu.edu/cpr/resources/123456" } }
       end
 
       context 'when the webaccess_id is not found in PsuIdentity' do
-        before { allow(psu_identity_client).to receive(:userid).with(deputy_webaccess_id).and_return(nil) }
+        before { allow(PsuIdentityUserService).to receive(:find_or_initialize_user).with(webaccess_id: deputy_webaccess_id).and_return(nil) }
 
         it 'returns false' do
           expect(form.save).to eq false
@@ -110,8 +95,11 @@ s.psu.edu/cpr/resources/123456" } }
         end
       end
 
-      context 'when PsuIdentity raises an error' do
-        before { allow(psu_identity_client).to receive(:userid).and_raise(StandardError) }
+      context 'when PsuIdentityUserService raises an error' do
+        before do
+          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+            .and_raise(PsuIdentityUserService::IdentityServiceError)
+        end
 
         it 'returns false' do
           expect(form.save).to eq false
@@ -130,10 +118,11 @@ s.psu.edu/cpr/resources/123456" } }
         end
       end
 
-      context 'when PsuIdentity responds with something, but the data is invalid' do
-        before { allow(psu_identity_client).to receive(:userid).with(deputy_webaccess_id).and_return(psu_person) }
-
-        let(:psu_identity_data) { {} }
+      context 'when PsuIdentityUserService responds with something, but the data is invalid' do
+        before do
+          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+            .and_return(build(:user, :with_psu_identity, webaccess_id: deputy_webaccess_id, first_name: ''))
+        end
 
         it 'returns false' do
           expect(form.save).to eq false
@@ -154,7 +143,9 @@ s.psu.edu/cpr/resources/123456" } }
 
       context 'when the PsuIdentity responds correctly, but there is a problem creating the DeputyAssignment' do
         before do
-          allow(psu_identity_client).to receive(:userid).with(deputy_webaccess_id).and_return(psu_person)
+          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+            .and_return(build(:user, :with_psu_identity))
+
           allow(DeputyAssignment).to receive(:create!).and_raise(StandardError)
         end
 
@@ -182,11 +173,6 @@ s.psu.edu/cpr/resources/123456" } }
       context 'when everything goes as expected' do
         it 'returns true' do
           expect(form.save).to eq true
-        end
-
-        it 'does not query PsuIdentity' do
-          form.save
-          expect(PsuIdentity::SearchService::Client).not_to have_received(:new)
         end
 
         it 'does not create any Users' do
