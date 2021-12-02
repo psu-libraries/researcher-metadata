@@ -8,9 +8,8 @@ class PublicationMatchOnDoiPolicy
 
   def ok_to_merge?
     return true if doi_pass? &&
-      title_pass?
-
-    journal_pass? &&
+      title_pass? &&
+      journal_pass? &&
       standard_pass?(:volume) &&
       standard_pass?(:issue) &&
       standard_pass?(:edition) &&
