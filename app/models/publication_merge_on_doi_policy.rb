@@ -6,6 +6,8 @@ class PublicationMergeOnDoiPolicy
     @publication2 = publication2
   end
 
+  # merge! is meant to only be applied to publications that return true
+  # when analyzed with PublicationMatchOnDoiPolicy's #ok_to_merge method
   def merge!
     publication1.update attributes
     publication1.contributor_names = contributor_names_to_keep
@@ -68,7 +70,7 @@ class PublicationMergeOnDoiPolicy
             title1&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title1&.downcase&.gsub(/[^a-z0-9]/, ''))
           return "#{title1}: #{secondary_title1}"
         else
-          title1
+          return title1
         end
       end
 
@@ -77,7 +79,7 @@ class PublicationMergeOnDoiPolicy
             title2&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title2&.downcase&.gsub(/[^a-z0-9]/, ''))
           return "#{title2}: #{secondary_title2}"
         else
-          title2
+          return title2
         end
       end
 
@@ -123,7 +125,7 @@ class PublicationMergeOnDoiPolicy
         [publication1.issn, publication2.issn]
           .reject(&:blank?)
           .min_by(&:length)
-          .gsub(/[^0-9xX]/, '')[0..8]
+          .gsub(/[^0-9xX]/, '')[0..7]
           .insert(4, '-')
       end
     end
