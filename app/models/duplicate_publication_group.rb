@@ -91,7 +91,6 @@ class DuplicatePublicationGroup < ApplicationRecord
     else
       false
     end
-  rescue Publication::NonDuplicateMerge
   end
 
   def self.auto_merge_on_doi
@@ -122,13 +121,12 @@ class DuplicatePublicationGroup < ApplicationRecord
 
         match_policy = PublicationMatchOnDoiPolicy.new(pub_primary, pub)
         if match_policy.ok_to_merge?
-          merge_policy = PublicationMergeOnDoiPolicy.new(pub_primary, pub)
           begin
             ActiveRecord::Base.transaction do
               pub.imports.each do |i|
                 i.update!(auto_merged: true)
               end
-              pub_primary.merge_on_doi!(pub, merge_policy)
+              pub_primary.merge_on_doi!(pub)
             end
           rescue Publication::NonDuplicateMerge; end
         end

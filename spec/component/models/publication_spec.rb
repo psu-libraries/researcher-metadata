@@ -2671,6 +2671,26 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#merge_on_doi!' do
+    # merge_on_doi! uses the exact same code as merge! except it includes
+    # a block that incorporates the PublicationMergeOnDoiPolicy during the merge
+    let!(:pub1) { create :sample_publication }
+    let!(:pub2) do
+      Publication.create pub1
+                             .attributes
+                             .delete_if { |key, _value| key == "id" }
+    end
+    before do
+      pub1.update title: 'Short Title'
+      pub2.update title: 'This is a longer title'
+    end
+    it "merges the publications' metadata using the PublicationMergeOnDoiPolicy" do
+      pub1.merge_on_doi!(pub2)
+      expect(pub1.reload.title).to eq pub2.title
+      expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '#all_non_duplicate_ids' do
     let!(:pub) { create :publication }
 

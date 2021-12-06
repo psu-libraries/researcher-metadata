@@ -542,8 +542,8 @@ class Publication < ApplicationRecord
     merge(publications_to_merge)
   end
 
-  def merge_on_doi!(publication_to_merge, doi_merge_policy)
-    merge([publication_to_merge, self]) { doi_merge_policy.merge! }
+  def merge_on_doi!(publication_to_merge)
+    merge([self, publication_to_merge]) { PublicationMergeOnDoiPolicy.new(self, publication_to_merge).merge! }
   end
 
   def has_single_import_from_pure?
