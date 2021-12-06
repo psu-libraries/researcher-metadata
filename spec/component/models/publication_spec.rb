@@ -2843,4 +2843,19 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#publication_type_other?' do
+    context "when publication_type is not 'Other'" do
+      let(:pub) { FactoryBot.create :publication, publication_type: 'Journal Article'}
+      it 'returns false' do
+        expect(pub.publication_type_other?).to eq false
+      end
+    end
+    context "when publication_type is 'Other'" do
+      let(:pub) { FactoryBot.create :publication, publication_type: 'Other'}
+      it 'returns true' do
+        expect(pub.publication_type_other?).to eq true
+      end
+    end
+  end
 end
