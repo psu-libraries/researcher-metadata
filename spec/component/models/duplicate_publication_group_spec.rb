@@ -1386,9 +1386,9 @@ describe DuplicatePublicationGroup, type: :model do
     context 'when the group has 2 publications' do
       let!(:pub1) { create :sample_publication, duplicate_group: group }
       let!(:pub2) do
-        Publication.create pub1
-                               .attributes
-                               .delete_if { |key, _value| key == "id" }
+        Publication.create(pub1
+          .attributes
+          .delete_if { |key, _value| key == 'id' })
       end
       let!(:import1) { FactoryBot.create :publication_import, publication: pub1 }
       let!(:import2) { FactoryBot.create :publication_import, publication: pub2 }
