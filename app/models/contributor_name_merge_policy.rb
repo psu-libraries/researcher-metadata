@@ -16,11 +16,9 @@ class ContributorNameMergePolicy
     def preferred_contributor_name(cn_group)
       filter1 = cn_group.map { |cn| cn if cn.user_id.present? }.compact.presence || cn_group
 
-      filter2 = filter1.map { |cn| cn if cn.position.present? }.compact.presence || filter1
+      filter2 = filter1.map { |cn| cn if cn.role.present? }.compact.presence || filter1
 
-      filter3 = filter2.map { |cn| cn if cn.role.present? }.compact.presence || filter2
-
-      grouped_by_name = filter3.group_by(&:name)
+      grouped_by_name = filter2.group_by(&:name)
       preferred_name_group = grouped_by_name.max_by { |k, _v| k.length }
       preferred_name_group.last.first
     end
