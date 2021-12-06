@@ -8,7 +8,7 @@ describe PublicationMatchOnDoiPolicy do
   let!(:publication2) do
     Publication.create(publication1
       .attributes
-      .delete_if { |key, _value| key.include?(['id', 'updated_at', 'created_at']) })
+      .delete_if { |key, _value| ['id', 'updated_at', 'created_at'].include?(key) })
   end
 
   describe '#ok_to_merge?' do
