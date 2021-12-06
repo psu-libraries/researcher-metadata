@@ -1403,19 +1403,29 @@ describe DuplicatePublicationGroup, type: :model do
           expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
-        it "reassigns one publication's import to the other publication" do
-          group.auto_merge_on_doi
-          expect(pub1.reload.imports).to match_array [import1, import2]
-        end
-
-        it "does not mark one publication's import as having been auto merged" do
-          group.auto_merge_on_doi
-          expect(import1.reload.auto_merged).to be_nil
-        end
-
         it "marks one publication's import as having been auto merged" do
           group.auto_merge_on_doi
-          expect(import2.reload.auto_merged).to eq true
+          expect([import1.reload.auto_merged, import2.reload.auto_merged].compact).to eq [true]
+        end
+      end
+    end
+
+    context 'when the group has 3 publications' do
+      let!(:pub1) { create :sample_publication, duplicate_group: group }
+      let!(:pub2) do
+        Publication.create(pub1
+                               .attributes
+                               .delete_if { |key, _value| key == 'id' })
+      end
+      let!(:pub3) { create :sample_publication, duplicate_group: group }
+
+      context 'when PublicationMatchOnDoiPolicy returns true for only two of publications' do
+        it 'deletes one publication' do
+          expect { group.auto_merge_on_doi }.to change(Publication, :count).by -1
+        end
+
+        it 'does not delete the group' do
+          expect { group.auto_merge_on_doi }.to change(described_class, :count).by 0
         end
       end
     end
