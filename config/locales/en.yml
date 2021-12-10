@@ -183,6 +183,8 @@ en:
     publication:
       validation_errors:
         doi_format: "format is invalid. DOIs should be a full URL beginning with `https://doi.org/10.` and contain only ASCII characters."
+    committee_memberships:
+      unknown_role_message: "Unknown eTD role: %{role}"
   omniauth:
     login_error: "There was an error while attempting to log in to your account. Please contact RMD support for assistance."
     user_not_found: "You do not have a user account in the Researcher Metadata Database. Please contact RMD support if you believe that this is incorrect."
