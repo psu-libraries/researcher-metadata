@@ -543,75 +543,20 @@ class Publication < ApplicationRecord
     publication_type.include? 'Journal Article'
   end
 
+  def publication_type_other?
+    publication_type == 'Other'
+  end
+
   def all_non_duplicate_ids
     (non_duplicate_ids.uniq - [id]).sort
   end
 
   def merge!(publications_to_merge)
-    pubs_to_delete = publications_to_merge - [self]
-    all_pubs = (publications_to_merge.to_a + [self]).uniq
+    merge(publications_to_merge)
+  end
 
-    all_pubs.each do |p|
-      other_pubs = all_pubs - [p]
-
-      p.non_duplicate_groups.each do |ndg|
-        if other_pubs.map(&:non_duplicate_groups).flatten.include?(ndg)
-          raise NonDuplicateMerge
-        end
-      end
-    end
-
-    ActiveRecord::Base.transaction do
-      imports_to_reassign = pubs_to_delete.map(&:imports).flatten
-
-      imports_to_reassign.each do |i|
-        i.update!(publication: self)
-      end
-
-      all_authorships = all_pubs.map(&:authorships).flatten
-      authorships_by_user = all_authorships.group_by(&:user)
-
-      authorships_to_keep = []
-
-      authorships_by_user.each do |user, auths|
-        existing_authorship = authorships.find_by(user: user)
-        if existing_authorship
-          authorships_to_keep << existing_authorship
-        else
-          authorship_to_keep = auths.first
-          authorship_to_keep.update!(publication: self)
-          authorships_to_keep << authorship_to_keep
-        end
-      end
-
-      authorships_to_keep.each do |atk|
-        amp = AuthorshipMergePolicy.new(authorships_by_user[atk.user])
-
-        atk.update!(orcid_resource_identifier: amp.orcid_resource_id_to_keep,
-                    role: amp.role_to_keep,
-                    confirmed: amp.confirmed_value_to_keep,
-                    open_access_notification_sent_at: amp.oa_timestamp_to_keep,
-                    updated_by_owner_at: amp.owner_update_timestamp_to_keep,
-                    waiver: amp.waiver_to_keep,
-                    visible_in_profile: amp.visibility_value_to_keep,
-                    position_in_profile: amp.position_value_to_keep,
-                    scholarsphere_work_deposits: amp.scholarsphere_deposits_to_keep)
-        amp.waivers_to_destroy.each(&:destroy)
-      end
-
-      oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
-      self.open_access_locations = oalmp.open_access_locations_to_keep
-
-      pubs_to_delete.each do |p|
-        p.non_duplicate_groups.each do |ndg|
-          ndg.publications << self
-        end
-
-        p.reload.destroy
-      end
-
-      update!(updated_by_user_at: Time.current, visible: true)
-    end
+  def merge_on_doi!(publication_to_merge)
+    merge([self, publication_to_merge]) { PublicationMergeOnDoiPolicy.new(self, publication_to_merge).merge! }
   end
 
   def has_single_import_from_pure?
@@ -658,6 +603,75 @@ class Publication < ApplicationRecord
   end
 
   private
+
+    def merge(publications_to_merge)
+      pubs_to_delete = publications_to_merge - [self]
+      all_pubs = (publications_to_merge.to_a + [self]).uniq
+
+      all_pubs.each do |p|
+        other_pubs = all_pubs - [p]
+
+        p.non_duplicate_groups.each do |ndg|
+          if other_pubs.map(&:non_duplicate_groups).flatten.include?(ndg)
+            raise NonDuplicateMerge
+          end
+        end
+      end
+
+      ActiveRecord::Base.transaction do
+        imports_to_reassign = pubs_to_delete.map(&:imports).flatten
+
+        imports_to_reassign.each do |i|
+          i.update!(publication: self)
+        end
+
+        all_authorships = all_pubs.map(&:authorships).flatten
+        authorships_by_user = all_authorships.group_by(&:user)
+
+        authorships_to_keep = []
+
+        authorships_by_user.each do |user, auths|
+          existing_authorship = authorships.find_by(user: user)
+          if existing_authorship
+            authorships_to_keep << existing_authorship
+          else
+            authorship_to_keep = auths.first
+            authorship_to_keep.update!(publication: self)
+            authorships_to_keep << authorship_to_keep
+          end
+        end
+
+        authorships_to_keep.each do |atk|
+          amp = AuthorshipMergePolicy.new(authorships_by_user[atk.user])
+
+          atk.update!(orcid_resource_identifier: amp.orcid_resource_id_to_keep,
+                      role: amp.role_to_keep,
+                      confirmed: amp.confirmed_value_to_keep,
+                      open_access_notification_sent_at: amp.oa_timestamp_to_keep,
+                      updated_by_owner_at: amp.owner_update_timestamp_to_keep,
+                      waiver: amp.waiver_to_keep,
+                      visible_in_profile: amp.visibility_value_to_keep,
+                      position_in_profile: amp.position_value_to_keep,
+                      scholarsphere_work_deposits: amp.scholarsphere_deposits_to_keep)
+          amp.waivers_to_destroy.each(&:destroy)
+        end
+
+        oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
+        self.open_access_locations = oalmp.open_access_locations_to_keep
+
+        yield if block_given?
+
+        pubs_to_delete.each do |p|
+          p.non_duplicate_groups.each do |ndg|
+            ndg.publications << self
+          end
+
+          p.reload.destroy
+        end
+
+        update!(updated_by_user_at: Time.current, visible: true)
+      end
+    end
 
     def preferred_journal_info_policy
       PreferredJournalInfoPolicy.new(self)
