@@ -25,8 +25,10 @@ describe ContributorNameMergePolicy do
                                publication: publication2,
                                user_id: 1
       end
+
       context 'when one contributor names comes from pure' do
         let!(:import) { FactoryBot.create :publication_import, :from_pure, publication: publication1 }
+
         it 'keeps this record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1
           expect(policy.contributor_names_to_keep.first).to eq contributor1
@@ -35,6 +37,7 @@ describe ContributorNameMergePolicy do
 
       context 'when one contributor name comes from activity insight' do
         let!(:import) { FactoryBot.create :publication_import, :from_activity_insight, publication: publication2 }
+
         it 'keeps this record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1
           expect(policy.contributor_names_to_keep.first).to eq contributor2
@@ -44,6 +47,7 @@ describe ContributorNameMergePolicy do
       context 'when one contributor name comes from activity insight and the other from pure' do
         let!(:import1) { FactoryBot.create :publication_import, :from_pure, publication: publication1 }
         let!(:import2) { FactoryBot.create :publication_import, :from_activity_insight, publication: publication2 }
+
         it 'keeps the pure record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1
           expect(policy.contributor_names_to_keep.first).to eq contributor1
@@ -60,7 +64,7 @@ describe ContributorNameMergePolicy do
     context 'when contributors have the same first letter of their first name' do
       context 'when contributors have the same last name' do
         context 'when contributors have the same position' do
-          let(:contributor1) { ContributorName.create first_name: 'Test', last_name: 'Tester', position: 1, publication: publication1}
+          let(:contributor1) { ContributorName.create first_name: 'Test', last_name: 'Tester', position: 1, publication: publication1 }
           let(:contributor2) { ContributorName.create first_name: 'T', last_name: 'Tester', position: 1, publication: publication2 }
 
           it 'treats these contributors as the same' do
