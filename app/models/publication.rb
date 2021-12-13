@@ -584,7 +584,7 @@ class Publication < ApplicationRecord
       .where(publication_imports: {
                source: 'Activity Insight',
                source_identifier: activity_insight_id
-             })
+             }).uniq
   end
 
   def self.filter_by_doi(query, doi)
@@ -599,7 +599,7 @@ class Publication < ApplicationRecord
       doi = url_prefix + doi
     end
 
-    query.where(doi: doi)
+    query.where(doi: doi).uniq
   end
 
   private
