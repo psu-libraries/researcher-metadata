@@ -82,12 +82,14 @@ describe 'API::V1 Publications' do
 
             context 'when the user of the found record is in multiple orgs (query returns multiple of same record)' do
               let!(:org2) { create :organization }
+
               before do
                 create :organization_api_permission, organization: org2, api_token: token
                 user.organizations << org2
                 user.save
                 query_pubs
               end
+
               it 'returns a unique list of publications matching the specified Activity Insight ID', skip_before: true do
                 expect(json_response[:data].size).to eq(1)
                 expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
@@ -125,12 +127,14 @@ describe 'API::V1 Publications' do
 
             context 'when the user of the found record is in multiple orgs (query returns multiple of same record)' do
               let!(:org2) { create :organization }
+
               before do
                 create :organization_api_permission, organization: org2, api_token: token
                 user.organizations << org2
                 user.save
                 query_pubs
               end
+
               it 'returns a unique list of publications matching the specified DOI', skip_before: true do
                 expect(json_response[:data].size).to eq(1)
                 expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
