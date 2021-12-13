@@ -28,8 +28,8 @@ describe 'API::V1 Publications' do
       let!(:inaccessible_pub) { create(:publication, visible: true) }
       let(:params) { '' }
       let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
-      let(:org) { create :organization }
-      let(:user) { create :user }
+      let!(:org) { create :organization }
+      let!(:user) { create :user }
 
       before do
         publications.each { |p| create :authorship, publication: p, user: user }
@@ -59,21 +59,40 @@ describe 'API::V1 Publications' do
 
       describe 'params:' do
         describe 'activity_insight_id' do
-          let(:ai_pub) { create(:publication, visible: true, imports: [pub_import]) }
-          let(:pub_import) { create(:publication_import, source: 'Activity Insight', source_identifier: '123') }
+          let!(:ai_pub) { create(:publication, visible: true, imports: [pub_import]) }
+          let!(:pub_import) { create(:publication_import, source: 'Activity Insight', source_identifier: '123') }
 
           before do
             create :authorship, user: user, publication: ai_pub
-            query_pubs
+            unless RSpec.current_example.metadata[:skip_before]
+              query_pubs
+            end
           end
 
           context 'with a valid Activity Insight ID' do
             let(:params) { '?activity_insight_id=123' }
 
-            it 'returns a publication matching the specified Activity Insight ID' do
-              expect(json_response[:data].size).to eq(1)
-              expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
-              expect(json_response[:data].first[:attributes][:activity_insight_ids].first).to eq('123')
+            context 'when one record is returned from the query' do
+              it 'returns a publication matching the specified Activity Insight ID' do
+                expect(json_response[:data].size).to eq(1)
+                expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
+                expect(json_response[:data].first[:attributes][:activity_insight_ids].first).to eq('123')
+              end
+            end
+
+            context 'when the user of the found record is in multiple orgs (query returns multiple of same record)' do
+              let!(:org2) { create :organization }
+              before do
+                create :organization_api_permission, organization: org2, api_token: token
+                user.organizations << org2
+                user.save
+                query_pubs
+              end
+              it 'returns a unique list of publications matching the specified Activity Insight ID', skip_before: true do
+                expect(json_response[:data].size).to eq(1)
+                expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
+                expect(json_response[:data].first[:attributes][:activity_insight_ids].first).to eq('123')
+              end
             end
           end
 
@@ -91,7 +110,9 @@ describe 'API::V1 Publications' do
 
           before do
             create :authorship, user: user, publication: doi_pub
-            query_pubs
+            unless RSpec.current_example.metadata[:skip_before]
+              query_pubs
+            end
           end
 
           context 'with a full DOI URL' do
@@ -100,6 +121,20 @@ describe 'API::V1 Publications' do
             it 'returns a publication matching the specified DOI' do
               expect(json_response[:data].size).to eq(1)
               expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
+            end
+
+            context 'when the user of the found record is in multiple orgs (query returns multiple of same record)' do
+              let!(:org2) { create :organization }
+              before do
+                create :organization_api_permission, organization: org2, api_token: token
+                user.organizations << org2
+                user.save
+                query_pubs
+              end
+              it 'returns a unique list of publications matching the specified DOI', skip_before: true do
+                expect(json_response[:data].size).to eq(1)
+                expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
+              end
             end
           end
 
