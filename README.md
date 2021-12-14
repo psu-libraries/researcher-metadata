@@ -286,16 +286,25 @@ grouped as potential duplicates again in the future.
 #### Auto-merging
 The task of manually inspecting possible duplicate publication records and merging them is somewhat tedious. To help
 reduce the amount of labor necessary to curate the publication metadata, we have decided that suspected duplicates can be
-automatically merged under some circumstances. Often when duplicate groups containing one publication import from
+automatically merged under some circumstances. 
+
+Often when duplicate groups containing one publication import from
 Pure and one import from another source are merged, the Pure import is the record that is chosen to be kept, and
 the data in that record needs little or no manual curation since the data from Pure is generally accurate and complete.
 Since a large proportion of duplicate groups end up containing exactly one publication imported from Pure and exactly
 one publication imported from Activity Insight, we've created a process by which all such groups can be automatically
-merged at once. This process is run as a rake task, `rake auto_merge_duplicate_pubs`. We know that a very small
+merged at once. This process is run as a rake task, `rake auto_merge:duplicate_pubs`. We know that a very small
 percentage of publications that are automatically grouped as suspected duplicates are not actually duplicate records.
 This means that whenever we perform auto-merging, we're accepting that a small number of false-positive publication
 matches are actually being merged when they shouldn't be. We deemed the amount of labor saved by this automation
 to be worth the small amount of data that we'll lose from occasionally merging non-duplicate publications by accident.
+
+If two publications have the same DOI, and are grouped as duplicates, they are likely to be merged by an admin.
+To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI 
+and most of their metadata either matches exactly or matches very closely.  The process can be run with the rake task, 
+`rake auto_merge:duplicate_pubs_on_doi`.  The matching criteria is very strict, to reduce false positives.  The logic 
+should be alterred by a programmer if users feel the matching should be less strict.  When merging, this process tries 
+to determine which data is best to keep between the two records.  This is done, in some cases, with somewhat complicated logic.
 
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
