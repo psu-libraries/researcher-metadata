@@ -299,7 +299,7 @@ This means that whenever we perform auto-merging, we're accepting that a small n
 matches are actually being merged when they shouldn't be. We deemed the amount of labor saved by this automation
 to be worth the small amount of data that we'll lose from occasionally merging non-duplicate publications by accident.
 
-If two publications have the same DOI, and are grouped as duplicates, they are likely to be merged by an admin.
+If two publications have the same DOI, and are grouped as duplicates, they will likely be merged by an admin.
 To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI 
 and most of their metadata either matches exactly or matches very closely.  The process can be run with the rake task, 
 `rake auto_merge:duplicate_pubs_on_doi`.  The matching criteria is very strict, to reduce false positives.  The logic 
