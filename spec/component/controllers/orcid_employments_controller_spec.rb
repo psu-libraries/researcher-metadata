@@ -29,7 +29,7 @@ describe OrcidEmploymentsController, type: :controller do
         let(:membership) { double 'user organization membership',
                                   started_on: Date.new(1999, 12, 31),
                                   orcid_resource_identifier: id,
-                                  update_attributes!: nil }
+                                  update!: nil }
 
         context "when the employment has already been added to the user's ORCID record" do
           let(:id) { 'abc123' }
@@ -51,7 +51,7 @@ describe OrcidEmploymentsController, type: :controller do
           end
 
           it 'updates the membership with the identifier of the employment that was created in ORCID' do
-            expect(membership).to have_received(:update_attributes!).with(orcid_resource_identifier: 'the_location')
+            expect(membership).to have_received(:update!).with(orcid_resource_identifier: 'the_location')
           end
 
           it 'sets a flash message' do
