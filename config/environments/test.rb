@@ -54,7 +54,7 @@ Rails.application.configure do
   config.active_support.deprecation = :stderr
 
   # Raises error for missing translations
-  config.action_view.raise_on_missing_translations = true
+  config.i18n.raise_on_missing_translations = true
 
   # Raise exceptions for disallowed deprecations.
   config.active_support.disallowed_deprecation = :raise
