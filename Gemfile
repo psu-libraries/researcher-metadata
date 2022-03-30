@@ -40,7 +40,7 @@ gem 'net-ldap'                          # lightweight Directory Access Protocol 
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
-gem 'puma', '~> 5.5'                    # use Puma as the app server
+gem 'puma', '~> 5.6'                    # use Puma as the app server
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
