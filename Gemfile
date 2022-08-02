@@ -15,7 +15,7 @@ gem 'omniauth-oauth2', '~> 1.7'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
-gem 'bootstrap', '< 5.0'
+gem 'bootstrap', '< 6.0'
 gem 'bugsnag'                           # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave'                       # file uploading
@@ -31,7 +31,7 @@ gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH reposito
 gem 'font-awesome-rails'                # UI Icons
 gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
-gem 'jbuilder', '~> 2.5'                # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
+gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
 gem 'mini_racer', platforms: :ruby      # used to minify assets
