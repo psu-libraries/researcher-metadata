@@ -286,6 +286,7 @@ GEM
     launchy (2.5.0)
       addressable (~> 2.7)
     libv8-node (16.10.0.0)
+    libv8-node (16.10.0.0-x86_64-linux)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -329,6 +330,8 @@ GEM
     nio4r (2.5.8)
     nokogiri (1.13.8)
       mini_portile2 (~> 2.8.0)
+      racc (~> 1.4)
+    nokogiri (1.13.8-x86_64-linux)
       racc (~> 1.4)
     oauth2 (1.4.7)
       faraday (>= 0.8, < 2.0)
@@ -587,6 +590,7 @@ GEM
 
 PLATFORMS
   ruby
+  x86_64-linux
 
 DEPENDENCIES
   activerecord-import
