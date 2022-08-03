@@ -6,7 +6,7 @@ orbs:
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.6.6-node
+      - image: cimg/ruby:3.1.2-node
     executor: ruby/default
     steps:
       - checkout
@@ -17,7 +17,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/ruby:2.6.6-node-browsers
+      - image: circleci/ruby:3.1.2-node-browsers
       - image: circleci/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
