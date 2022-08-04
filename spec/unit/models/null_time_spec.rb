@@ -23,13 +23,13 @@ describe NullTime do
   describe '#<' do
     context 'when given a time' do
       it 'returns true' do
-        expect(nt < Time.new(2000, 1, 1, 0, 0, 0)).to eq true
+        expect(nt < Time.new(2000, 1, 1, 0, 0, 0)).to be true
       end
     end
 
     context 'when given a null time' do
       it 'returns false' do
-        expect(nt < described_class.new).to eq false
+        expect(nt < described_class.new).to be false
       end
     end
   end

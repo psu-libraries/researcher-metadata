@@ -36,7 +36,7 @@ describe NewDeputyAssignmentForm, type: :model do
         end
 
         it 'returns true' do
-          expect(form.save).to eq true
+          expect(form.save).to be true
         end
 
         it 'creates a User' do
@@ -72,7 +72,7 @@ describe NewDeputyAssignmentForm, type: :model do
         before { allow(PsuIdentityUserService).to receive(:find_or_initialize_user).with(webaccess_id: deputy_webaccess_id).and_return(nil) }
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'has a nice error' do
@@ -102,7 +102,7 @@ describe NewDeputyAssignmentForm, type: :model do
         end
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'has a nice error' do
@@ -125,7 +125,7 @@ describe NewDeputyAssignmentForm, type: :model do
         end
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'has a nice error' do
@@ -150,7 +150,7 @@ describe NewDeputyAssignmentForm, type: :model do
         end
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'has a nice error' do
@@ -172,7 +172,7 @@ describe NewDeputyAssignmentForm, type: :model do
 
       context 'when everything goes as expected' do
         it 'returns true' do
-          expect(form.save).to eq true
+          expect(form.save).to be true
         end
 
         it 'does not create any Users' do
@@ -196,7 +196,7 @@ describe NewDeputyAssignmentForm, type: :model do
         let!(:existing_deputy_assignment) { create :deputy_assignment, :active, primary: primary, deputy: existing_user }
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'has a nice error' do
@@ -216,7 +216,7 @@ describe NewDeputyAssignmentForm, type: :model do
         let!(:existing_deputy_assignment) { create :deputy_assignment, :inactive, primary: primary, deputy: existing_user }
 
         it 'returns true' do
-          expect(form.save).to eq true
+          expect(form.save).to be true
         end
 
         it 'creates an active DeputyAssignment' do
@@ -237,7 +237,7 @@ describe NewDeputyAssignmentForm, type: :model do
         end
 
         it 'returns false' do
-          expect(form.save).to eq false
+          expect(form.save).to be false
         end
 
         it 'percolates error messages from the DeputyAssignment to the proper place on the form object' do
@@ -252,7 +252,7 @@ describe NewDeputyAssignmentForm, type: :model do
       let(:deputy_webaccess_id) { primary.webaccess_id }
 
       it 'returns false' do
-        expect(form.save).to eq false
+        expect(form.save).to be false
       end
 
       it 'percolates error messages from the DeputyAssignment to the proper place on the form object' do

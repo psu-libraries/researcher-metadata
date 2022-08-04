@@ -49,7 +49,7 @@ describe OrcidAPIClient do
     end
 
     it 'successfully POSTs to ORCID and does not return an error' do
-      expect(client.post.parsed_response).to eq nil
+      expect(client.post.parsed_response).to be_nil
       expect(employment_summary['department_name']).to eq json_resource['department_name']
       expect(employment_summary['role_title']).to eq json_resource['role_title']
       expect(employment_summary['organization']).to eq json_resource['organization']

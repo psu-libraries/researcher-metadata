@@ -982,7 +982,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -990,7 +990,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1002,7 +1002,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1010,7 +1010,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1026,7 +1026,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1034,7 +1034,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1046,7 +1046,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1054,7 +1054,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1074,7 +1074,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1082,7 +1082,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1094,7 +1094,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1102,7 +1102,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1118,7 +1118,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1126,7 +1126,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
         end
@@ -1138,7 +1138,7 @@ describe UserProfile do
             let(:items) { [ehi] }
 
             it 'returns true' do
-              expect(profile.has_bio_info?).to eq true
+              expect(profile.has_bio_info?).to be true
             end
           end
 
@@ -1146,7 +1146,7 @@ describe UserProfile do
             let(:items) { [] }
 
             it 'returns false' do
-              expect(profile.has_bio_info?).to eq false
+              expect(profile.has_bio_info?).to be false
             end
           end
         end

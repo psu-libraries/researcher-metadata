@@ -56,9 +56,9 @@ describe 'Creating a publication', type: :feature do
         expect(p.issn).to eq 'Test ISSN'
         expect(p.doi).to eq 'https://doi.org/10.000/test'
         expect(p.abstract).to eq 'Test Abstract'
-        expect(p.authors_et_al).to eq true
+        expect(p.authors_et_al).to be true
         expect(p.published_on).to eq Date.new(2018, 8, 23)
-        expect(p.visible).to eq true
+        expect(p.visible).to be true
       end
 
       it 'marks the new publication as having been manually edited' do

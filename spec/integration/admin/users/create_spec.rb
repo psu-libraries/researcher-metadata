@@ -46,9 +46,9 @@ describe 'Creating a user', type: :feature do
         expect(u.pure_uuid).to eq 'pure-12345'
         expect(u.activity_insight_identifier).to eq 'ai-67890'
         expect(u.penn_state_identifier).to eq '9999999'
-        expect(u.is_admin).to eq true
-        expect(u.show_all_publications).to eq true
-        expect(u.show_all_contracts).to eq true
+        expect(u.is_admin).to be true
+        expect(u.show_all_publications).to be true
+        expect(u.show_all_contracts).to be true
       end
 
       it 'marks the new user as having been manually edited' do

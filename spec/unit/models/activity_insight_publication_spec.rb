@@ -43,7 +43,7 @@ describe ActivityInsightPublication do
       end
     end
 
-    context "when the contype element in the given data contains 'Book' " do
+    context "when the contype element in the given data contains 'Book'" do
       let(:type_element) { double 'type element', text: 'Book' }
 
       it 'returns Book' do
@@ -78,7 +78,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article, academic journal  '" do
+      context "when the contypeother element in the given data contains ' journal article, academic journal '" do
         let(:type_other_element) { double 'type other element', text: '  journal article, academic journal  ' }
 
         it "returns 'Academic Journal Article'" do
@@ -102,7 +102,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article, in-house journal  '" do
+      context "when the contypeother element in the given data contains ' journal article, in-house journal '" do
         let(:type_other_element) { double 'type other element', text: '  journal article, in-house journal  ' }
 
         it "returns 'In-house Journal Article'" do
@@ -126,7 +126,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article, in-house  '" do
+      context "when the contypeother element in the given data contains ' journal article, in-house '" do
         let(:type_other_element) { double 'type other element', text: '  journal article, in-house  ' }
 
         it "returns 'In-house Journal Article'" do
@@ -150,7 +150,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article, professional journal  '" do
+      context "when the contypeother element in the given data contains ' journal article, professional journal '" do
         let(:type_other_element) { double 'type other element', text: '  journal article, professional journal  ' }
 
         it "returns 'Professional Journal Article'" do
@@ -174,7 +174,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article, public or trade journal  '" do
+      context "when the contypeother element in the given data contains ' journal article, public or trade journal '" do
         let(:type_other_element) { double 'type other element', text: '  journal article, public or trade journal  ' }
 
         it "returns 'Trade Journal Article'" do
@@ -198,7 +198,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  magazine or trade journal article  '" do
+      context "when the contypeother element in the given data contains ' magazine or trade journal article '" do
         let(:type_other_element) { double 'type other element', text: '  magazine or trade journal article  ' }
 
         it "returns 'Trade Journal Article'" do
@@ -222,7 +222,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains '  journal article  '" do
+      context "when the contypeother element in the given data contains ' journal article '" do
         let(:type_other_element) { double 'type other element', text: '  journal article  ' }
 
         it "returns 'Journal Article'" do
@@ -230,7 +230,7 @@ describe ActivityInsightPublication do
         end
       end
 
-      context "when the contypeother element in the given data contains 'Other' " do
+      context "when the contypeother element in the given data contains 'Other'" do
         let(:type_other_element) { double 'type other element', text: 'Other' }
 
         it 'returns Other' do
@@ -284,7 +284,7 @@ describe ActivityInsightPublication do
       let(:rmd_id_element) { double 'rmd id element', text: '' }
 
       it 'returns false' do
-        expect(pub.importable?).to eq false
+        expect(pub.importable?).to be false
       end
     end
 
@@ -293,7 +293,7 @@ describe ActivityInsightPublication do
       let(:rmd_id_element) { double 'rmd id element', text: '' }
 
       it 'returns true' do
-        expect(pub.importable?).to eq true
+        expect(pub.importable?).to be true
       end
     end
 
@@ -302,7 +302,7 @@ describe ActivityInsightPublication do
       let(:rmd_id_element) { double 'rmd id element', text: '123' }
 
       it 'returns true' do
-        expect(pub.importable?).to eq false
+        expect(pub.importable?).to be false
       end
     end
   end
@@ -452,7 +452,7 @@ describe ActivityInsightPublication do
       end
     end
 
-    context "when the journal name element in the given data contains '  other  '" do
+    context "when the journal name element in the given data contains ' other '" do
       let(:journal_name_element) { double 'journal name element', text: '  other  ' }
 
       context 'when the journal_name_other element in the given data is empty' do
@@ -568,7 +568,7 @@ describe ActivityInsightPublication do
       end
     end
 
-    context "when the publisher element in the given data contains '  other  '" do
+    context "when the publisher element in the given data contains ' other '" do
       let(:publisher_element) { double 'publisher element', text: '  other  ' }
 
       context 'when the publisher_other element in the given data is empty' do
@@ -762,7 +762,7 @@ describe ActivityInsightPublication do
       let(:etal_element) { double 'authors_etal element', text: '' }
 
       it 'returns false' do
-        expect(pub.authors_et_al).to eq false
+        expect(pub.authors_et_al).to be false
       end
     end
 
@@ -770,7 +770,7 @@ describe ActivityInsightPublication do
       let(:etal_element) { double 'authors_etal element', text: 'false' }
 
       it 'false' do
-        expect(pub.authors_et_al).to eq false
+        expect(pub.authors_et_al).to be false
       end
     end
 
@@ -778,7 +778,7 @@ describe ActivityInsightPublication do
       let(:etal_element) { double 'authors_etal element', text: 'true' }
 
       it 'true' do
-        expect(pub.authors_et_al).to eq true
+        expect(pub.authors_et_al).to be true
       end
     end
 
@@ -786,15 +786,15 @@ describe ActivityInsightPublication do
       let(:etal_element) { double 'authors_etal element', text: 'TRUE' }
 
       it 'true' do
-        expect(pub.authors_et_al).to eq true
+        expect(pub.authors_et_al).to be true
       end
     end
 
-    context "when the abstract element in the given data contains '  TRUE  '" do
+    context "when the abstract element in the given data contains ' TRUE '" do
       let(:etal_element) { double 'authors_etal element', text: '  TRUE  ' }
 
       it 'true' do
-        expect(pub.authors_et_al).to eq true
+        expect(pub.authors_et_al).to be true
       end
     end
   end
@@ -925,7 +925,7 @@ describe ActivityInsightPublication do
           before { allow(parsed_pub).to receive(:css).with('DOI').and_return invalid_doi_element }
 
           it 'returns nil' do
-            expect(pub.doi).to eq nil
+            expect(pub.doi).to be_nil
           end
         end
       end

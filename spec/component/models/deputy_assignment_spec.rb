@@ -42,7 +42,7 @@ describe DeputyAssignment, type: :model do
     end
 
     describe '.confirmed' do
-      let!(:confirmed) { create :deputy_assignment, confirmed_at: Time.zone.now - 1.day }
+      let!(:confirmed) { create :deputy_assignment, confirmed_at: 1.day.ago }
 
       before { create :deputy_assignment, confirmed_at: nil }
 
@@ -116,8 +116,8 @@ describe DeputyAssignment, type: :model do
 
   describe 'default values' do
     it 'initializes is_active to true' do
-      expect(described_class.new.is_active).to eq true
-      expect(described_class.new(is_active: false).is_active).to eq false
+      expect(described_class.new.is_active).to be true
+      expect(described_class.new(is_active: false).is_active).to be false
     end
 
     describe 'initializing active_uniqueness_key' do
@@ -173,7 +173,7 @@ describe DeputyAssignment, type: :model do
       it 'sets the appropriate flags to deactivate an assignment' do
         assignment.deactivate!
         assignment.reload
-        expect(assignment.is_active).to eq false
+        expect(assignment.is_active).to be false
         expect(assignment.deactivated_at).to be_within(2.seconds).of(Time.zone.now)
         expect(assignment.active_uniqueness_key).to eq assignment.id
       end

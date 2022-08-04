@@ -21,7 +21,7 @@ describe OpenAccessURLForm do
         let(:url) { '' }
 
         it 'returns false' do
-          expect(form.valid?).to eq false
+          expect(form.valid?).to be false
         end
 
         it 'sets an error on the attriute' do
@@ -34,7 +34,7 @@ describe OpenAccessURLForm do
         let(:url) { 'ftp://example.com' }
 
         it 'returns false' do
-          expect(form.valid?).to eq false
+          expect(form.valid?).to be false
         end
 
         it 'sets an error on the attriute' do
@@ -49,7 +49,7 @@ describe OpenAccessURLForm do
         before { allow(response).to receive(:code).and_return 200 }
 
         it 'returns true' do
-          expect(form.valid?).to eq true
+          expect(form.valid?).to be true
         end
       end
 
@@ -59,7 +59,7 @@ describe OpenAccessURLForm do
         before { allow(response).to receive(:code).and_return 200 }
 
         it 'returns true' do
-          expect(form.valid?).to eq true
+          expect(form.valid?).to be true
         end
       end
 
@@ -69,7 +69,7 @@ describe OpenAccessURLForm do
         before { allow(response).to receive(:code).and_return 301 }
 
         it 'returns true' do
-          expect(form.valid?).to eq true
+          expect(form.valid?).to be true
         end
       end
 
@@ -79,7 +79,7 @@ describe OpenAccessURLForm do
         before { allow(response).to receive(:code).and_return 302 }
 
         it 'returns true' do
-          expect(form.valid?).to eq true
+          expect(form.valid?).to be true
         end
       end
 
@@ -89,7 +89,7 @@ describe OpenAccessURLForm do
         before { allow(response).to receive(:code).and_return 404 }
 
         it 'returns false' do
-          expect(form.valid?).to eq false
+          expect(form.valid?).to be false
         end
 
         it 'sets an error on the attriute' do
@@ -132,7 +132,7 @@ describe OpenAccessURLForm do
         let(:url) { 'https://www.sciencedirect.com/science/article/am/pii/S0361923017302502' }
 
         xit 'returns true' do
-          expect(form.valid?).to eq true
+          expect(form.valid?).to be true
         end
       end
     end

@@ -26,17 +26,17 @@ class ContributorNameMergePolicy
     end
 
     def select_from_preferred_source(cn_group)
-      filter1 = cn_group.map { |cn| cn if cn.publication.pure_import_identifiers.present? }.compact.presence || cn_group
+      filter1 = cn_group.select { |cn| cn.publication.pure_import_identifiers.present? }.presence || cn_group
 
-      filter2 = filter1.map { |cn| cn if cn.publication.ai_import_identifiers.present? }.compact.presence || filter1
+      filter2 = filter1.select { |cn| cn.publication.ai_import_identifiers.present? }.presence || filter1
 
       filter2.sample
     end
 
     def preferred_contributor_name(cn_group)
-      filter1 = cn_group.map { |cn| cn if cn.user_id.present? }.compact.presence || cn_group
+      filter1 = cn_group.select { |cn| cn.user_id.present? }.presence || cn_group
 
-      filter2 = filter1.map { |cn| cn if cn.role.present? }.compact.presence || filter1
+      filter2 = filter1.select { |cn| cn.role.present? }.presence || filter1
 
       grouped_by_name = filter2.group_by(&:name)
       preferred_name_group = grouped_by_name.max_by { |k, _v| k.length }

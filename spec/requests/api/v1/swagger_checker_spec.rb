@@ -20,16 +20,16 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
     let!(:api_token) { create :api_token, token: 'token123' }
     let!(:grant) { create :grant }
-    let(:publications_params) { { 'query_string': 'limit=1', '_headers' => { 'X-API-Key' => 'token123' } } }
+    let(:publications_params) { { query_string: 'limit=1', '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:organizations_params) { { '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:organization_publication_params) { { 'id' => org.id, '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:invalid_organization_publication_params) { { 'id' => -2000, '_headers' => { 'X-API-Key' => 'token123' } } }
-    let(:publication_params) { { 'id' => publication_1.id, 'query_string': 'limit=1', '_headers' => { 'X-API-Key' => 'token123' } } }
+    let(:publication_params) { { 'id' => publication_1.id, query_string: 'limit=1', '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:user_publications_params) {
       {
         'webaccess_id' => user.webaccess_id,
         '_headers' => { 'accept' => 'application/json', 'X-API-Key' => 'token123' },
-        "_query_string": 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc&limit=10'
+        _query_string: 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc&limit=10'
       }
     }
     let(:user_grants_params) {
@@ -77,8 +77,8 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
     let(:invalid_publication_params) { { 'id' => -2000, '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:users_publications_params) {
       {
-        '_json': %w(abc123 xyz321 cws161 fake123),
-        '_query_string': 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc',
+        _json: %w(abc123 xyz321 cws161 fake123),
+        _query_string: 'start_year=2018&end_year=2018&order_first_by=citation_count_desc&order_second_by=title_asc',
         '_headers' => { 'X-API-Key' => 'token123' }
       }
     }
@@ -104,49 +104,49 @@ describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
 
     let(:update_open_access_location_params) {
       {
-        '_data' => { 'doi': pub_to_patch.doi, 'scholarsphere_open_access_url': 'new_url' },
+        '_data' => { doi: pub_to_patch.doi, scholarsphere_open_access_url: 'new_url' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:not_found_publications_params) {
       {
-        '_data' => { 'doi': 'non_existing_doi', 'scholarsphere_open_access_url': 'new_url' },
+        '_data' => { doi: 'non_existing_doi', scholarsphere_open_access_url: 'new_url' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:existing_open_access_location_params) {
       {
-        '_data' => { 'doi': pub_to_patch.doi, 'scholarsphere_open_access_url': 'existing_url' },
+        '_data' => { doi: pub_to_patch.doi, scholarsphere_open_access_url: 'existing_url' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:missing_url_open_access_location_params) {
       {
-        '_data' => { 'doi': pub_to_patch.doi },
+        '_data' => { doi: pub_to_patch.doi },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:missing_ids_open_access_location_params) {
       {
-        '_data' => { 'scholarsphere_open_access_url': 'new_url' },
+        '_data' => { scholarsphere_open_access_url: 'new_url' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:both_ids_open_access_location_params) {
       {
-        '_data' => { 'doi': pub_to_patch.doi, 'activity_insight_id': '123456', 'scholarsphere_open_access_url': 'new_url' },
+        '_data' => { doi: pub_to_patch.doi, activity_insight_id: '123456', scholarsphere_open_access_url: 'new_url' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }
 
     let(:invalid_open_access_location_params) {
       {
-        '_data' => { 'invalid_key': 'some_value' },
+        '_data' => { invalid_key: 'some_value' },
         '_headers' => { 'X-API-Key' => 'token456' }
       }
     }

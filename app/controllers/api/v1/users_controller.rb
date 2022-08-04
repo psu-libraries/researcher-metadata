@@ -14,7 +14,7 @@ module API::V1
           format.json { render json: API::V1::PresentationSerializer.new(@presentations) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -27,7 +27,7 @@ module API::V1
           format.json { render json: API::V1::GrantSerializer.new(@grants) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -40,7 +40,7 @@ module API::V1
           format.json { render json: API::V1::NewsFeedItemSerializer.new(@news_feed_items) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -53,7 +53,7 @@ module API::V1
           format.json { render json: API::V1::PerformanceSerializer.new(@performances) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -66,7 +66,7 @@ module API::V1
           format.json { render json: API::V1::ETDSerializer.new(@etds) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -79,7 +79,7 @@ module API::V1
           format.json { render json: API::V1::PublicationSerializer.new(@pubs) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -92,7 +92,7 @@ module API::V1
           format.json { render json: API::V1::OrganizationMembershipSerializer.new(@memberships) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -107,7 +107,7 @@ module API::V1
           format.json { render json: API::V1::UserProfileSerializer.new(@profile) }
         end
       else
-        render json: { message: 'User not found', code: 404 }, status: 404
+        render json: { message: 'User not found', code: 404 }, status: :not_found
       end
     end
 
@@ -193,13 +193,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -277,13 +277,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -445,13 +445,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -546,13 +546,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -745,13 +745,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -835,13 +835,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -926,7 +926,7 @@ module API::V1
             property :data do
               key :type, :array
               items do
-                key :'$ref', :PublicationV1
+                key :$ref, :PublicationV1
               end
             end
           end
@@ -934,13 +934,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -1150,7 +1150,7 @@ module API::V1
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
       end
@@ -1232,7 +1232,7 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do

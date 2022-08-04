@@ -5,7 +5,7 @@ module API::V1
     before_action :authenticate_request!, except: [:profile]
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
-      render json: exception, status: 404
+      render json: exception, status: :not_found
     end
 
     private
@@ -14,7 +14,7 @@ module API::V1
         if api_token
           api_token.increment_request_count
         else
-          render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: 401 unless api_token
+          render json: { message: I18n.t('api.errors.not_authorized'), code: 401 }, status: :unauthorized unless api_token
         end
       end
 

@@ -59,7 +59,7 @@ describe PreferredJournalInfoPolicy do
           let(:jt) { '' }
 
           it 'returns nil' do
-            expect(policy.journal_title).to eq nil
+            expect(policy.journal_title).to be_nil
           end
         end
 
@@ -74,7 +74,7 @@ describe PreferredJournalInfoPolicy do
 
       context 'when the publication does not have an associated journal record' do
         it 'returns nil' do
-          expect(policy.journal_title).to eq nil
+          expect(policy.journal_title).to be_nil
         end
       end
     end
@@ -87,7 +87,7 @@ describe PreferredJournalInfoPolicy do
           let(:jt) { '' }
 
           it 'returns nil' do
-            expect(policy.journal_title).to eq nil
+            expect(policy.journal_title).to be_nil
           end
         end
 
@@ -102,7 +102,7 @@ describe PreferredJournalInfoPolicy do
 
       context 'when the publication does not have an associated journal record' do
         it 'returns nil' do
-          expect(policy.journal_title).to eq nil
+          expect(policy.journal_title).to be_nil
         end
       end
     end
@@ -149,7 +149,7 @@ describe PreferredJournalInfoPolicy do
           let(:pn) { '' }
 
           it 'returns nil' do
-            expect(policy.publisher_name).to eq nil
+            expect(policy.publisher_name).to be_nil
           end
         end
 
@@ -164,7 +164,7 @@ describe PreferredJournalInfoPolicy do
 
       context 'when the publication does not have an associated publisher record' do
         it 'returns nil' do
-          expect(policy.publisher_name).to eq nil
+          expect(policy.publisher_name).to be_nil
         end
       end
     end
@@ -177,7 +177,7 @@ describe PreferredJournalInfoPolicy do
           let(:pn) { '' }
 
           it 'returns nil' do
-            expect(policy.publisher_name).to eq nil
+            expect(policy.publisher_name).to be_nil
           end
         end
 
@@ -192,7 +192,7 @@ describe PreferredJournalInfoPolicy do
 
       context 'when the publication does not have an associated publisher record' do
         it 'returns nil' do
-          expect(policy.publisher_name).to eq nil
+          expect(policy.publisher_name).to be_nil
         end
       end
     end

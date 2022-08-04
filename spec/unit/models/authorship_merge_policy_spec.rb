@@ -16,7 +16,7 @@ describe AuthorshipMergePolicy do
 
     context "when given authorships that don't have any orcid resource identifiers" do
       it 'returns nil' do
-        expect(amp.orcid_resource_id_to_keep).to eq nil
+        expect(amp.orcid_resource_id_to_keep).to be_nil
       end
     end
 
@@ -61,7 +61,7 @@ describe AuthorshipMergePolicy do
 
     context 'when given two unconfirmed authorships' do
       it 'returns false' do
-        expect(amp.confirmed_value_to_keep).to eq false
+        expect(amp.confirmed_value_to_keep).to be false
       end
     end
 
@@ -69,7 +69,7 @@ describe AuthorshipMergePolicy do
       before { allow(auth1).to receive(:confirmed).and_return true }
 
       it 'returns true' do
-        expect(amp.confirmed_value_to_keep).to eq true
+        expect(amp.confirmed_value_to_keep).to be true
       end
     end
   end
@@ -81,7 +81,7 @@ describe AuthorshipMergePolicy do
 
     context 'when given two authorships without roles' do
       it 'returns nil' do
-        expect(amp.role_to_keep).to eq nil
+        expect(amp.role_to_keep).to be_nil
       end
     end
 
@@ -174,7 +174,7 @@ describe AuthorshipMergePolicy do
 
     context "when given authorships that don't have any waivers" do
       it 'returns nil' do
-        expect(amp.waiver_to_keep).to eq nil
+        expect(amp.waiver_to_keep).to be_nil
       end
     end
 
@@ -267,7 +267,7 @@ describe AuthorshipMergePolicy do
     let(:auth3) { double 'authorship 3', visible_in_profile: true, updated_by_owner: Time.new(2000, 1, 1, 0, 0, 0) }
 
     it 'returns the visibility preference from the most recently updated authorhship' do
-      expect(amp.visibility_value_to_keep).to eq false
+      expect(amp.visibility_value_to_keep).to be false
     end
   end
 
@@ -279,7 +279,7 @@ describe AuthorshipMergePolicy do
 
     context "when given authorships that don't have any position preference" do
       it 'returns nil' do
-        expect(amp.position_value_to_keep).to eq nil
+        expect(amp.position_value_to_keep).to be_nil
       end
     end
 

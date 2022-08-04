@@ -25,7 +25,6 @@ gem 'daemons'                           # for running delayed_job daemon (or oth
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
-gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
@@ -34,12 +33,15 @@ gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
+gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
+gem 'net-smtp'
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
 gem 'puma', '~> 5.6'                    # use Puma as the app server
+gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
@@ -49,8 +51,6 @@ gem 'turbolinks', '~> 5'                # makes navigating your web application 
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
-gem 'net-smtp'
-gem 'rss'                               # RSS reading and writing
 
 group :development, :test do
   gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git', branch: 'ruby-3'

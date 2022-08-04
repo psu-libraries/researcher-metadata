@@ -183,7 +183,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub1.status).to eq 'Published'
 
               expect(new_pub2.publication_type).to eq 'Journal Article'
-              expect(new_pub2.doi).to be nil
+              expect(new_pub2.doi).to be_nil
               expect(new_pub2.issn).to eq '3964-0326'
               expect(new_pub2.abstract).to eq 'A summary of the research and findings'
               expect(new_pub2.journal_title).to eq 'Another Academic Journal'
@@ -295,7 +295,7 @@ describe WebOfScienceFileImporter do
               expect(new_pub1.status).to eq 'Published'
 
               expect(new_pub2.publication_type).to eq 'Journal Article'
-              expect(new_pub2.doi).to be nil
+              expect(new_pub2.doi).to be_nil
               expect(new_pub2.issn).to eq '3964-0326'
               expect(new_pub2.abstract).to eq 'A summary of the research and findings'
               expect(new_pub2.journal_title).to eq 'Another Academic Journal'
@@ -433,7 +433,7 @@ describe WebOfScienceFileImporter do
             before { create :research_fund, publication: pub1, grant: grant1 }
 
             it 'does not create any new associations' do
-              expect { importer.call }.to change(ResearchFund, :count).by 0
+              expect { importer.call }.not_to change(ResearchFund, :count)
             end
           end
         end

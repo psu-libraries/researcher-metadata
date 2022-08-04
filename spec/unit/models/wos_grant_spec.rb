@@ -29,7 +29,7 @@ describe WOSGrant do
       let(:agency_text) { 'Other Agency' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -93,7 +93,7 @@ describe WOSGrant do
       let(:agency_text) { 'Chinese NSF' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -101,7 +101,7 @@ describe WOSGrant do
       let(:agency_text) { 'NSFC' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -109,7 +109,7 @@ describe WOSGrant do
       let(:agency_text) { 'CNSF' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -117,7 +117,7 @@ describe WOSGrant do
       let(:agency_text) { 'NSF of China' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -125,7 +125,7 @@ describe WOSGrant do
       let(:agency_text) { 'NNSFC' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -133,7 +133,7 @@ describe WOSGrant do
       let(:agency_text) { 'NNSF of China' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -141,7 +141,7 @@ describe WOSGrant do
       let(:agency_text) { 'National Science Foundation of China' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -149,7 +149,7 @@ describe WOSGrant do
       let(:agency_text) { 'Swiss National Science Foundation' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -157,7 +157,7 @@ describe WOSGrant do
       let(:agency_text) { 'GNSF' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -165,7 +165,7 @@ describe WOSGrant do
       let(:agency_text) { 'SNSF' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -173,7 +173,7 @@ describe WOSGrant do
       let(:agency_text) { 'German National Science Foundation' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -181,7 +181,7 @@ describe WOSGrant do
       let(:agency_text) { 'SFFR-NSF' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -189,7 +189,7 @@ describe WOSGrant do
       let(:agency_text) { 'Chinese National Science Foundation' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -197,7 +197,7 @@ describe WOSGrant do
       let(:agency_text) { 'National Science Foundation for Distinguished Young Scholars of China' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
 
@@ -205,7 +205,7 @@ describe WOSGrant do
       let(:agency_text) { 'China National Science Foundation' }
 
       it 'returns nil' do
-        expect(grant.agency).to eq nil
+        expect(grant.agency).to be_nil
       end
     end
   end

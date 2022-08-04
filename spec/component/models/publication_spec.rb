@@ -66,7 +66,7 @@ describe Publication, type: :model do
         let(:doi) { nil }
 
         it 'passes validation' do
-          expect(pub.valid?).to eq true
+          expect(pub.valid?).to be true
         end
       end
 
@@ -74,7 +74,7 @@ describe Publication, type: :model do
         let(:doi) { '' }
 
         it 'passes validation' do
-          expect(pub.valid?).to eq true
+          expect(pub.valid?).to be true
         end
       end
 
@@ -82,7 +82,7 @@ describe Publication, type: :model do
         let(:doi) { 'https://doi.org/10.0000/valid-doi' }
 
         it 'passes validation' do
-          expect(pub.valid?).to eq true
+          expect(pub.valid?).to be true
         end
       end
 
@@ -90,12 +90,12 @@ describe Publication, type: :model do
         let(:doi) { ' ' }
 
         it 'fails validation' do
-          expect(pub.valid?).to eq false
+          expect(pub.valid?).to be false
         end
 
         it 'sets an error on the doi field' do
           pub.valid?
-          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to be true
         end
       end
 
@@ -103,12 +103,12 @@ describe Publication, type: :model do
         let(:doi) { '10.0000/valid-doi' }
 
         it 'fails validation' do
-          expect(pub.valid?).to eq false
+          expect(pub.valid?).to be false
         end
 
         it 'sets an error on the doi field' do
           pub.valid?
-          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to be true
         end
       end
 
@@ -116,12 +116,12 @@ describe Publication, type: :model do
         let(:doi) { "\thttps://doi.org/10.0000/valid-doi" }
 
         it 'fails validation' do
-          expect(pub.valid?).to eq false
+          expect(pub.valid?).to be false
         end
 
         it 'sets an error on the doi field' do
           pub.valid?
-          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to be true
         end
       end
 
@@ -129,12 +129,12 @@ describe Publication, type: :model do
         let(:doi) { "https://doi.org/10.0000/valid\u2013doi" }
 
         it 'fails validation' do
-          expect(pub.valid?).to eq false
+          expect(pub.valid?).to be false
         end
 
         it 'sets an error on the doi field' do
           pub.valid?
-          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to eq true
+          expect(pub.errors[:doi].include?(I18n.t('models.publication.validation_errors.doi_format'))).to be true
         end
       end
     end
@@ -863,7 +863,7 @@ describe Publication, type: :model do
       let(:doi) { nil }
 
       it 'returns nil' do
-        expect(pub.doi_url_path).to eq nil
+        expect(pub.doi_url_path).to be_nil
       end
     end
 
@@ -944,7 +944,7 @@ describe Publication, type: :model do
 
     context 'when the publication has no authorships with a pending ScholarSphere deposit' do
       it 'returns false' do
-        expect(pub.scholarsphere_upload_pending?).to eq false
+        expect(pub.scholarsphere_upload_pending?).to be false
       end
     end
 
@@ -954,7 +954,7 @@ describe Publication, type: :model do
       end
 
       it 'returns true' do
-        expect(pub.scholarsphere_upload_pending?).to eq true
+        expect(pub.scholarsphere_upload_pending?).to be true
       end
     end
 
@@ -964,7 +964,7 @@ describe Publication, type: :model do
       end
 
       it 'returns false' do
-        expect(pub.scholarsphere_upload_pending?).to eq false
+        expect(pub.scholarsphere_upload_pending?).to be false
       end
     end
   end
@@ -975,7 +975,7 @@ describe Publication, type: :model do
 
     context 'when the publication has no authorships with a failed ScholarSphere deposit' do
       it 'returns false' do
-        expect(pub.scholarsphere_upload_failed?).to eq false
+        expect(pub.scholarsphere_upload_failed?).to be false
       end
     end
 
@@ -985,7 +985,7 @@ describe Publication, type: :model do
       end
 
       it 'returns true' do
-        expect(pub.scholarsphere_upload_failed?).to eq true
+        expect(pub.scholarsphere_upload_failed?).to be true
       end
     end
 
@@ -995,7 +995,7 @@ describe Publication, type: :model do
       end
 
       it 'returns false' do
-        expect(pub.scholarsphere_upload_failed?).to eq false
+        expect(pub.scholarsphere_upload_failed?).to be false
       end
     end
   end
@@ -1007,7 +1007,7 @@ describe Publication, type: :model do
 
     context "when none of the publication's authorships have a waiver" do
       it 'returns false' do
-        expect(pub.open_access_waived?).to eq false
+        expect(pub.open_access_waived?).to be false
       end
     end
 
@@ -1015,7 +1015,7 @@ describe Publication, type: :model do
       before { create :internal_publication_waiver, authorship: auth2 }
 
       it 'returns true' do
-        expect(pub.open_access_waived?).to eq true
+        expect(pub.open_access_waived?).to be true
       end
     end
   end
@@ -1033,7 +1033,7 @@ describe Publication, type: :model do
       context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.no_open_access_information?).to eq true
+            expect(pub.no_open_access_information?).to be true
           end
         end
 
@@ -1041,7 +1041,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1051,7 +1051,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
 
@@ -1059,7 +1059,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1069,7 +1069,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.no_open_access_information?).to eq true
+            expect(pub.no_open_access_information?).to be true
           end
         end
 
@@ -1077,7 +1077,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1089,7 +1089,7 @@ describe Publication, type: :model do
       context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
 
@@ -1097,7 +1097,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1107,7 +1107,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
 
@@ -1115,7 +1115,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1125,7 +1125,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
 
@@ -1133,7 +1133,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns false' do
-            expect(pub.no_open_access_information?).to eq false
+            expect(pub.no_open_access_information?).to be false
           end
         end
       end
@@ -1153,7 +1153,7 @@ describe Publication, type: :model do
       context 'when the publication has no authorships that have been uploaded to ScholarSphere' do
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.has_open_access_information?).to eq false
+            expect(pub.has_open_access_information?).to be false
           end
         end
 
@@ -1161,7 +1161,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1171,7 +1171,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
 
@@ -1179,7 +1179,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1189,7 +1189,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
-            expect(pub.has_open_access_information?).to eq false
+            expect(pub.has_open_access_information?).to be false
           end
         end
 
@@ -1197,7 +1197,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1209,7 +1209,7 @@ describe Publication, type: :model do
       context 'when the publication has no authorships that have been uploaded to ScholarSphere' do
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
 
@@ -1217,7 +1217,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1227,7 +1227,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
 
@@ -1235,7 +1235,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1245,7 +1245,7 @@ describe Publication, type: :model do
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
 
@@ -1253,7 +1253,7 @@ describe Publication, type: :model do
           let(:url) { 'a_url' }
 
           it 'returns true' do
-            expect(pub.has_open_access_information?).to eq true
+            expect(pub.has_open_access_information?).to be true
           end
         end
       end
@@ -1389,9 +1389,9 @@ describe Publication, type: :model do
       auth2 = pub1.authorships.find_by(user: user2)
       auth3 = pub1.authorships.find_by(user: user3)
 
-      expect(auth1.confirmed).to eq true
-      expect(auth2.confirmed).to eq false
-      expect(auth3.confirmed).to eq true
+      expect(auth1.confirmed).to be true
+      expect(auth2.confirmed).to be false
+      expect(auth3.confirmed).to be true
     end
 
     it 'transfers authorship roles' do
@@ -1403,7 +1403,7 @@ describe Publication, type: :model do
 
       expect(auth1.role).to eq 'author'
       expect(auth2.role).to eq 'co-author'
-      expect(auth3.role).to eq nil
+      expect(auth3.role).to be_nil
     end
 
     it 'transfers ORCiD identifiers' do
@@ -1426,7 +1426,7 @@ describe Publication, type: :model do
       auth3 = pub1.authorships.find_by(user: user3)
 
       expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
-      expect(auth2.open_access_notification_sent_at).to eq nil
+      expect(auth2.open_access_notification_sent_at).to be_nil
       expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
     end
 
@@ -1450,8 +1450,8 @@ describe Publication, type: :model do
       auth3 = pub1.authorships.find_by(user: user3)
 
       expect(auth1.waiver).to eq waiver1
-      expect(auth2.waiver).to eq nil
-      expect(auth3.waiver).to eq nil
+      expect(auth2.waiver).to be_nil
+      expect(auth3.waiver).to be_nil
     end
 
     it 'transfers ScholarSphere deposits' do
@@ -1473,9 +1473,9 @@ describe Publication, type: :model do
       auth2 = pub1.authorships.find_by(user: user2)
       auth3 = pub1.authorships.find_by(user: user3)
 
-      expect(auth1.visible_in_profile).to eq false
-      expect(auth2.visible_in_profile).to eq true
-      expect(auth3.visible_in_profile).to eq true
+      expect(auth1.visible_in_profile).to be false
+      expect(auth2.visible_in_profile).to be true
+      expect(auth3.visible_in_profile).to be true
     end
 
     it 'transfers position' do
@@ -1486,8 +1486,8 @@ describe Publication, type: :model do
       auth3 = pub1.authorships.find_by(user: user3)
 
       expect(auth1.position_in_profile).to eq 2
-      expect(auth2.position_in_profile).to eq nil
-      expect(auth3.position_in_profile).to eq nil
+      expect(auth2.position_in_profile).to be_nil
+      expect(auth3.position_in_profile).to be_nil
     end
 
     it 'deletes the given publications' do
@@ -1515,7 +1515,7 @@ describe Publication, type: :model do
       it 'makes the publication visible' do
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.visible).to eq true
+        expect(pub1.reload.visible).to be true
       end
     end
 
@@ -1525,7 +1525,7 @@ describe Publication, type: :model do
       it 'leaves the publication visible' do
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.visible).to eq true
+        expect(pub1.reload.visible).to be true
       end
     end
 
@@ -1557,7 +1557,7 @@ describe Publication, type: :model do
         it 'makes the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
 
@@ -1567,7 +1567,7 @@ describe Publication, type: :model do
         it 'leaves the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -1614,7 +1614,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue RuntimeError; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.confirmed).to eq false
+        expect(auth1.confirmed).to be false
       end
 
       it 'does not transfer any authorship roles' do
@@ -1638,7 +1638,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue RuntimeError; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.open_access_notification_sent_at).to eq nil
+        expect(auth1.open_access_notification_sent_at).to be_nil
       end
 
       it 'does not transfer any owner modification timestamps' do
@@ -1656,7 +1656,7 @@ describe Publication, type: :model do
         rescue RuntimeError; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.waiver).to eq nil
+        expect(auth1.waiver).to be_nil
       end
 
       it 'does not transfer any ScholarSphere deposits' do
@@ -1674,7 +1674,7 @@ describe Publication, type: :model do
         rescue RuntimeError; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be true
       end
 
       it 'does not transfer position' do
@@ -1683,7 +1683,7 @@ describe Publication, type: :model do
         rescue RuntimeError; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.position_in_profile).to eq nil
+        expect(auth1.position_in_profile).to be_nil
       end
 
       it 'does not transfer open access locations' do
@@ -1698,7 +1698,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue RuntimeError; end
-          expect(pub1.reload.visible).to eq false
+          expect(pub1.reload.visible).to be false
         end
       end
 
@@ -1709,7 +1709,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue RuntimeError; end
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -1763,9 +1763,9 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.confirmed).to eq true
-        expect(auth2.confirmed).to eq false
-        expect(auth3.confirmed).to eq true
+        expect(auth1.confirmed).to be true
+        expect(auth2.confirmed).to be false
+        expect(auth3.confirmed).to be true
       end
 
       it 'transfers authorship roles' do
@@ -1777,7 +1777,7 @@ describe Publication, type: :model do
 
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
-        expect(auth3.role).to eq nil
+        expect(auth3.role).to be_nil
       end
 
       it 'transfers ORCiD identifiers' do
@@ -1800,7 +1800,7 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
-        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth2.open_access_notification_sent_at).to be_nil
         expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
       end
 
@@ -1824,8 +1824,8 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.waiver).to eq waiver1
-        expect(auth2.waiver).to eq nil
-        expect(auth3.waiver).to eq nil
+        expect(auth2.waiver).to be_nil
+        expect(auth3.waiver).to be_nil
       end
 
       it 'transfers ScholarSphere deposits' do
@@ -1847,9 +1847,9 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.visible_in_profile).to eq false
-        expect(auth2.visible_in_profile).to eq true
-        expect(auth3.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be false
+        expect(auth2.visible_in_profile).to be true
+        expect(auth3.visible_in_profile).to be true
       end
 
       it 'transfers position' do
@@ -1860,8 +1860,8 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.position_in_profile).to eq 2
-        expect(auth2.position_in_profile).to eq nil
-        expect(auth3.position_in_profile).to eq nil
+        expect(auth2.position_in_profile).to be_nil
+        expect(auth3.position_in_profile).to be_nil
       end
 
       it 'transfers unique open access locations from publications to the publication' do
@@ -1875,7 +1875,7 @@ describe Publication, type: :model do
         it 'makes the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
 
@@ -1885,7 +1885,7 @@ describe Publication, type: :model do
         it 'leaves the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -1941,9 +1941,9 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.confirmed).to eq true
-        expect(auth2.confirmed).to eq false
-        expect(auth3.confirmed).to eq true
+        expect(auth1.confirmed).to be true
+        expect(auth2.confirmed).to be false
+        expect(auth3.confirmed).to be true
       end
 
       it 'transfers authorship roles' do
@@ -1955,7 +1955,7 @@ describe Publication, type: :model do
 
         expect(auth1.role).to eq 'author'
         expect(auth2.role).to eq 'co-author'
-        expect(auth3.role).to eq nil
+        expect(auth3.role).to be_nil
       end
 
       it 'transfers ORCiD identifiers' do
@@ -1978,7 +1978,7 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.open_access_notification_sent_at).to eq Time.new(2000, 1, 1, 0, 0, 0)
-        expect(auth2.open_access_notification_sent_at).to eq nil
+        expect(auth2.open_access_notification_sent_at).to be_nil
         expect(auth3.open_access_notification_sent_at).to eq Time.new(2010, 1, 1, 0, 0, 0)
       end
 
@@ -2002,8 +2002,8 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.waiver).to eq waiver1
-        expect(auth2.waiver).to eq nil
-        expect(auth3.waiver).to eq nil
+        expect(auth2.waiver).to be_nil
+        expect(auth3.waiver).to be_nil
       end
 
       it 'transfers ScholarSphere deposits' do
@@ -2025,9 +2025,9 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.visible_in_profile).to eq false
-        expect(auth2.visible_in_profile).to eq true
-        expect(auth3.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be false
+        expect(auth2.visible_in_profile).to be true
+        expect(auth3.visible_in_profile).to be true
       end
 
       it 'transfers position' do
@@ -2038,8 +2038,8 @@ describe Publication, type: :model do
         auth3 = pub1.authorships.find_by(user: user3)
 
         expect(auth1.position_in_profile).to eq 2
-        expect(auth2.position_in_profile).to eq nil
-        expect(auth3.position_in_profile).to eq nil
+        expect(auth2.position_in_profile).to be_nil
+        expect(auth3.position_in_profile).to be_nil
       end
 
       it 'transfers unique open access locations from publications to the publication' do
@@ -2053,7 +2053,7 @@ describe Publication, type: :model do
         it 'makes the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
 
@@ -2063,7 +2063,7 @@ describe Publication, type: :model do
         it 'leaves the publication visible' do
           pub1.merge!([pub2, pub3, pub4])
 
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -2121,7 +2121,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.confirmed).to eq false
+        expect(auth1.confirmed).to be false
       end
 
       it 'does not transfer any authorship roles' do
@@ -2145,7 +2145,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.open_access_notification_sent_at).to eq nil
+        expect(auth1.open_access_notification_sent_at).to be_nil
       end
 
       it 'does not transfer any owner modification timestamps' do
@@ -2163,7 +2163,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.waiver).to eq nil
+        expect(auth1.waiver).to be_nil
       end
 
       it 'does not transfer any ScholarSphere deposits' do
@@ -2181,7 +2181,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be true
       end
 
       it 'does not transfer position' do
@@ -2190,7 +2190,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.position_in_profile).to eq nil
+        expect(auth1.position_in_profile).to be_nil
       end
 
       it 'does not transfer open access locations' do
@@ -2205,7 +2205,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq false
+          expect(pub1.reload.visible).to be false
         end
       end
 
@@ -2216,7 +2216,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -2276,7 +2276,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.confirmed).to eq false
+        expect(auth1.confirmed).to be false
       end
 
       it 'does not transfer any authorship roles' do
@@ -2300,7 +2300,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.open_access_notification_sent_at).to eq nil
+        expect(auth1.open_access_notification_sent_at).to be_nil
       end
 
       it 'does not transfer any owner modification timestamps' do
@@ -2318,7 +2318,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.waiver).to eq nil
+        expect(auth1.waiver).to be_nil
       end
 
       it 'does not transfer any ScholarSphere deposits' do
@@ -2336,7 +2336,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be true
       end
 
       it 'does not transfer position' do
@@ -2345,7 +2345,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.position_in_profile).to eq nil
+        expect(auth1.position_in_profile).to be_nil
       end
 
       it 'does not transfer open access locations' do
@@ -2360,7 +2360,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq false
+          expect(pub1.reload.visible).to be false
         end
       end
 
@@ -2371,7 +2371,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -2429,7 +2429,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.confirmed).to eq false
+        expect(auth1.confirmed).to be false
       end
 
       it 'does not transfer any authorship roles' do
@@ -2453,7 +2453,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.open_access_notification_sent_at).to eq nil
+        expect(auth1.open_access_notification_sent_at).to be_nil
       end
 
       it 'does not transfer any owner modification timestamps' do
@@ -2471,7 +2471,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.waiver).to eq nil
+        expect(auth1.waiver).to be_nil
       end
 
       it 'does not transfer any ScholarSphere deposits' do
@@ -2489,7 +2489,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be true
       end
 
       it 'does not transfer position' do
@@ -2498,7 +2498,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.position_in_profile).to eq nil
+        expect(auth1.position_in_profile).to be_nil
       end
 
       it 'does not transfer open access locations' do
@@ -2513,7 +2513,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq false
+          expect(pub1.reload.visible).to be false
         end
       end
 
@@ -2524,7 +2524,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -2582,7 +2582,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.confirmed).to eq false
+        expect(auth1.confirmed).to be false
       end
 
       it 'does not transfer any authorship roles' do
@@ -2606,7 +2606,7 @@ describe Publication, type: :model do
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
-        expect(auth1.open_access_notification_sent_at).to eq nil
+        expect(auth1.open_access_notification_sent_at).to be_nil
       end
 
       it 'does not transfer any owner modification timestamps' do
@@ -2624,7 +2624,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.waiver).to eq nil
+        expect(auth1.waiver).to be_nil
       end
 
       it 'does not transfer any ScholarSphere deposits' do
@@ -2642,7 +2642,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.visible_in_profile).to eq true
+        expect(auth1.visible_in_profile).to be true
       end
 
       it 'does not transfer position' do
@@ -2651,7 +2651,7 @@ describe Publication, type: :model do
         rescue Publication::NonDuplicateMerge; end
         auth1 = pub1.authorships.find_by(user: user1)
 
-        expect(auth1.position_in_profile).to eq nil
+        expect(auth1.position_in_profile).to be_nil
       end
 
       it 'does not transfer open access locations' do
@@ -2666,7 +2666,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq false
+          expect(pub1.reload.visible).to be false
         end
       end
 
@@ -2677,7 +2677,7 @@ describe Publication, type: :model do
           begin
             pub1.merge!([pub2, pub3, pub4])
           rescue Publication::NonDuplicateMerge; end
-          expect(pub1.reload.visible).to eq true
+          expect(pub1.reload.visible).to be true
         end
       end
     end
@@ -2731,7 +2731,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [pure_import] }
 
       it 'returns true' do
-        expect(pub.has_single_import_from_pure?).to eq true
+        expect(pub.has_single_import_from_pure?).to be true
       end
     end
 
@@ -2739,7 +2739,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [pure_import, other_pure_import] }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_pure?).to eq false
+        expect(pub.has_single_import_from_pure?).to be false
       end
     end
 
@@ -2747,7 +2747,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [pure_import, ai_import] }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_pure?).to eq false
+        expect(pub.has_single_import_from_pure?).to be false
       end
     end
 
@@ -2755,7 +2755,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_pure?).to eq false
+        expect(pub.has_single_import_from_pure?).to be false
       end
     end
   end
@@ -2769,7 +2769,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [ai_import] }
 
       it 'returns true' do
-        expect(pub.has_single_import_from_ai?).to eq true
+        expect(pub.has_single_import_from_ai?).to be true
       end
     end
 
@@ -2777,7 +2777,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [ai_import, other_ai_import] }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_ai?).to eq false
+        expect(pub.has_single_import_from_ai?).to be false
       end
     end
 
@@ -2785,7 +2785,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication, imports: [ai_import, pure_import] }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_ai?).to eq false
+        expect(pub.has_single_import_from_ai?).to be false
       end
     end
 
@@ -2793,7 +2793,7 @@ describe Publication, type: :model do
       let(:pub) { create :publication }
 
       it 'returns false' do
-        expect(pub.has_single_import_from_ai?).to eq false
+        expect(pub.has_single_import_from_ai?).to be false
       end
     end
   end
@@ -2803,7 +2803,7 @@ describe Publication, type: :model do
       let!(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
 
       it 'returns true' do
-        expect(pub1.is_journal_article?).to eq true
+        expect(pub1.is_journal_article?).to be true
       end
     end
 
@@ -2811,7 +2811,7 @@ describe Publication, type: :model do
       let!(:pub2) { FactoryBot.create :publication, publication_type: 'Book' }
 
       it 'returns false' do
-        expect(pub2.is_journal_article?).to eq false
+        expect(pub2.is_journal_article?).to be false
       end
     end
   end
@@ -2843,7 +2843,7 @@ describe Publication, type: :model do
       let(:pub) { FactoryBot.create :publication, status: 'Published' }
 
       it 'returns true' do
-        expect(pub.published?).to eq true
+        expect(pub.published?).to be true
       end
     end
 
@@ -2851,7 +2851,7 @@ describe Publication, type: :model do
       let(:pub) { FactoryBot.create :publication, status: 'In Press' }
 
       it 'returns false' do
-        expect(pub.published?).to eq false
+        expect(pub.published?).to be false
       end
     end
   end
@@ -2861,7 +2861,7 @@ describe Publication, type: :model do
       let(:pub) { FactoryBot.create :publication, publication_type: 'Journal Article' }
 
       it 'returns false' do
-        expect(pub.publication_type_other?).to eq false
+        expect(pub.publication_type_other?).to be false
       end
     end
 
@@ -2869,7 +2869,7 @@ describe Publication, type: :model do
       let(:pub) { FactoryBot.create :publication, publication_type: 'Other' }
 
       it 'returns true' do
-        expect(pub.publication_type_other?).to eq true
+        expect(pub.publication_type_other?).to be true
       end
     end
   end

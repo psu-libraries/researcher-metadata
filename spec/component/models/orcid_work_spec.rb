@@ -40,29 +40,29 @@ describe OrcidWork do
 
       it 'returns a JSON representation of an ORCID work that includes external ids' do
         expect(work.to_json).to eq ({
-          "title": {
-            "title": 'Test Title',
-            "subtitle": 'Secondary Test Title'
+          title: {
+            title: 'Test Title',
+            subtitle: 'Secondary Test Title'
           },
-          "journal-title": 'Test Journal',
-          "short-description": 'Test Abstract',
-          "type": 'journal-article',
-          "publication-date": {
-            "year": date.year,
-            "month": date.month,
-            "day": date.day
+          'journal-title': 'Test Journal',
+          'short-description': 'Test Abstract',
+          type: 'journal-article',
+          'publication-date': {
+            year: date.year,
+            month: date.month,
+            day: date.day
           },
-          "external-ids": {
-            "external-id": [
+          'external-ids': {
+            'external-id': [
               {
-                "external-id-type": 'uri',
-                "external-id-value": 'https://scholarsphere.org',
-                "external-id-relationship": 'self'
+                'external-id-type': 'uri',
+                'external-id-value': 'https://scholarsphere.org',
+                'external-id-relationship': 'self'
               },
               {
-                "external-id-type": 'doi',
-                "external-id-value": '10.0/1234/5678',
-                "external-id-relationship": 'self'
+                'external-id-type': 'doi',
+                'external-id-value': '10.0/1234/5678',
+                'external-id-relationship': 'self'
               }
             ]
           }
@@ -79,34 +79,34 @@ describe OrcidWork do
 
       it 'returns a JSON representation of an ORCID work that includes contributors' do
         expect(work.to_json).to eq ({
-          "title": {
-            "title": 'Test Title',
-            "subtitle": 'Secondary Test Title'
+          title: {
+            title: 'Test Title',
+            subtitle: 'Secondary Test Title'
           },
-          "journal-title": 'Test Journal',
-          "short-description": 'Test Abstract',
-          "type": 'journal-article',
-          "publication-date": {
-            "year": date.year,
-            "month": date.month,
-            "day": date.day
+          'journal-title': 'Test Journal',
+          'short-description': 'Test Abstract',
+          type: 'journal-article',
+          'publication-date': {
+            year: date.year,
+            month: date.month,
+            day: date.day
           },
-          "external-ids": {
-            "external-id": [
+          'external-ids': {
+            'external-id': [
               {
-                "external-id-type": 'uri',
-                "external-id-value": 'https://scholarsphere.org',
-                "external-id-relationship": 'self'
+                'external-id-type': 'uri',
+                'external-id-value': 'https://scholarsphere.org',
+                'external-id-relationship': 'self'
               }
             ]
           },
-          "contributors": {
-            "contributor": [
+          contributors: {
+            contributor: [
               {
-                "credit-name": 'Terry Test McTester'
+                'credit-name': 'Terry Test McTester'
               },
               {
-                "credit-name": 'Jerry Test McTester'
+                'credit-name': 'Jerry Test McTester'
               }
             ]
           }

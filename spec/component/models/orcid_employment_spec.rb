@@ -26,19 +26,19 @@ describe OrcidEmployment do
               region: 'Pennsylvania',
               country: 'US'
             },
-            "disambiguated-organization": {
-              "disambiguated-organization-identifier": 'grid.29857.31',
-              "disambiguation-source": 'GRID'
+            'disambiguated-organization': {
+              'disambiguated-organization-identifier': 'grid.29857.31',
+              'disambiguation-source': 'GRID'
             }
           },
-          "department-name": 'Test Organization',
-          "role-title": 'Test Title',
-          "start-date": {
+          'department-name': 'Test Organization',
+          'role-title': 'Test Title',
+          'start-date': {
             year: 1999,
             month: 12,
             day: 31
           },
-          "end-date": {
+          'end-date': {
             year: 2020,
             month: 1,
             day: 2
@@ -59,14 +59,14 @@ describe OrcidEmployment do
               region: 'Pennsylvania',
               country: 'US'
             },
-            "disambiguated-organization": {
-              "disambiguated-organization-identifier": 'grid.29857.31',
-              "disambiguation-source": 'GRID'
+            'disambiguated-organization': {
+              'disambiguated-organization-identifier': 'grid.29857.31',
+              'disambiguation-source': 'GRID'
             }
           },
-          "department-name": 'Test Organization',
-          "role-title": 'Test Title',
-          "start-date": {
+          'department-name': 'Test Organization',
+          'role-title': 'Test Title',
+          'start-date': {
             year: 1999,
             month: 12,
             day: 31

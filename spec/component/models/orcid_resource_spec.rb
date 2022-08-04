@@ -36,7 +36,7 @@ describe OrcidResource do
       end
 
       it 'returns true' do
-        expect(employment.save!).to eq true
+        expect(employment.save!).to be true
       end
     end
 

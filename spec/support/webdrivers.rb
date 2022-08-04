@@ -46,5 +46,5 @@ Capybara.register_driver :rmd_chrome_headless do |app|
     opts.add_preference(:browser, set_download_behavior: { behavior: 'allow' })
   end
 
-  Capybara::Selenium::Driver.new(app, **Hash[:browser => :chrome, options_key => browser_options])
+  Capybara::Selenium::Driver.new(app, **{ :browser => :chrome, options_key => browser_options })
 end

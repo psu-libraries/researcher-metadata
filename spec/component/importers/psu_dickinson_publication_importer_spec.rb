@@ -128,15 +128,15 @@ describe PSUDickinsonPublicationImporter do
 
       auth1 = pub.authorships.find_by(user: u1)
       expect(auth1.author_number).to eq 1
-      expect(auth1.confirmed).to eq true
+      expect(auth1.confirmed).to be true
 
       auth2 = pub.authorships.find_by(user: u2)
       expect(auth2.author_number).to eq 2
-      expect(auth2.confirmed).to eq false
+      expect(auth2.confirmed).to be false
 
       auth3 = pub.authorships.find_by(user: u3)
       expect(auth3.author_number).to eq 2
-      expect(auth3.confirmed).to eq false
+      expect(auth3.confirmed).to be false
 
       oal = pub.open_access_locations.find_by(source: Source::DICKINSON_IDEAS)
       expect(oal.url).to eq 'https://example.com/article'
@@ -161,11 +161,11 @@ describe PSUDickinsonPublicationImporter do
                                          source_identifier: 'non-existing-identifier')
       pub = import.publication
 
-      expect(pub.visible).to eq false
+      expect(pub.visible).to be false
     end
 
     it 'returns nil' do
-      expect(importer.call).to eq nil
+      expect(importer.call).to be_nil
     end
   end
 end

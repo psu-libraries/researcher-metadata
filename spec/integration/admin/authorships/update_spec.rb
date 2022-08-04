@@ -39,7 +39,7 @@ describe 'updating an authorship via the admin interface', type: :feature do
         reloaded_auth = auth.reload
         expect(reloaded_auth.orcid_resource_identifier).to eq 'Test Orcid Resource Identifier'
         expect(reloaded_auth.author_number).to eq 2
-        expect(reloaded_auth.confirmed).to eq true
+        expect(reloaded_auth.confirmed).to be true
       end
     end
   end

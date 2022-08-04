@@ -17,7 +17,7 @@ describe 'updating a performance via the admin interface', type: :feature do
       end
 
       it "updates the performance's visibility" do
-        expect(perf.reload.visible).to eq true
+        expect(perf.reload.visible).to be true
       end
     end
   end

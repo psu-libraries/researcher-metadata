@@ -14,7 +14,7 @@ describe PublicationMatchOnDoiPolicy do
   describe '#ok_to_merge?' do
     context 'when publication1 and publication2 are exactly the same' do
       it 'returns true' do
-        expect(policy.ok_to_merge?).to eq true
+        expect(policy.ok_to_merge?).to be true
       end
     end
 
@@ -25,7 +25,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -35,7 +35,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -45,7 +45,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -55,7 +55,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -65,7 +65,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -77,7 +77,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -88,7 +88,7 @@ describe PublicationMatchOnDoiPolicy do
           end
 
           it 'returns false' do
-            expect(policy.ok_to_merge?).to eq false
+            expect(policy.ok_to_merge?).to be false
           end
         end
 
@@ -98,7 +98,7 @@ describe PublicationMatchOnDoiPolicy do
           end
 
           it 'returns false' do
-            expect(policy.ok_to_merge?).to eq false
+            expect(policy.ok_to_merge?).to be false
           end
         end
       end
@@ -111,7 +111,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -124,7 +124,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -136,7 +136,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -148,7 +148,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -160,7 +160,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -173,7 +173,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -183,7 +183,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -193,7 +193,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -204,7 +204,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -215,7 +215,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -226,7 +226,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -237,7 +237,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -248,7 +248,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -259,7 +259,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -270,7 +270,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
 
@@ -281,7 +281,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -292,7 +292,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -303,7 +303,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -314,7 +314,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns true' do
-          expect(policy.ok_to_merge?).to eq true
+          expect(policy.ok_to_merge?).to be true
         end
       end
 
@@ -325,7 +325,7 @@ describe PublicationMatchOnDoiPolicy do
         end
 
         it 'returns false' do
-          expect(policy.ok_to_merge?).to eq false
+          expect(policy.ok_to_merge?).to be false
         end
       end
     end

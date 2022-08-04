@@ -61,7 +61,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Penn State Univ' }
 
           it 'returns true' do
-            expect(pub.importable?).to eq true
+            expect(pub.importable?).to be true
           end
         end
 
@@ -69,7 +69,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Penn State University' }
 
           it 'returns true' do
-            expect(pub.importable?).to eq true
+            expect(pub.importable?).to be true
           end
         end
 
@@ -77,7 +77,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Other Univ' }
 
           it 'returns false' do
-            expect(pub.importable?).to eq false
+            expect(pub.importable?).to be false
           end
         end
       end
@@ -89,7 +89,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Penn State Univ' }
 
           it 'returns false' do
-            expect(pub.importable?).to eq false
+            expect(pub.importable?).to be false
           end
         end
 
@@ -97,7 +97,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Penn State University' }
 
           it 'returns false' do
-            expect(pub.importable?).to eq false
+            expect(pub.importable?).to be false
           end
         end
 
@@ -105,7 +105,7 @@ describe WebOfSciencePublication do
           let(:organization) { double 'organization', text: 'Other Univ' }
 
           it 'returns false' do
-            expect(pub.importable?).to eq false
+            expect(pub.importable?).to be false
           end
         end
       end
@@ -126,7 +126,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Penn State Univ' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
 
@@ -134,7 +134,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Penn State University' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
 
@@ -142,7 +142,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Other Univ' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
         end
@@ -154,7 +154,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Penn State Univ' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
 
@@ -162,7 +162,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Penn State University' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
 
@@ -170,7 +170,7 @@ describe WebOfSciencePublication do
             let(:organization) { double 'organization', text: 'Other Univ' }
 
             it 'returns false' do
-              expect(pub.importable?).to eq false
+              expect(pub.importable?).to be false
             end
           end
         end
@@ -199,7 +199,7 @@ describe WebOfSciencePublication do
         let(:doi) { nil }
 
         it 'returns nil' do
-          expect(pub.doi).to eq nil
+          expect(pub.doi).to be_nil
         end
       end
     end
@@ -242,7 +242,7 @@ describe WebOfSciencePublication do
       let(:issn) { nil }
 
       it 'returns nil' do
-        expect(pub.issn).to eq nil
+        expect(pub.issn).to be_nil
       end
     end
   end
@@ -254,7 +254,7 @@ describe WebOfSciencePublication do
       let(:abstracts) { [] }
 
       it 'returns nil' do
-        expect(pub.abstract).to eq nil
+        expect(pub.abstract).to be_nil
       end
     end
 
@@ -306,7 +306,7 @@ describe WebOfSciencePublication do
       let(:issue_attr) { nil }
 
       it 'returns nil' do
-        expect(pub.issue).to eq nil
+        expect(pub.issue).to be_nil
       end
     end
   end
@@ -331,7 +331,7 @@ describe WebOfSciencePublication do
       let(:volume_attr) { nil }
 
       it 'returns nil' do
-        expect(pub.volume).to eq nil
+        expect(pub.volume).to be_nil
       end
     end
   end
@@ -381,7 +381,7 @@ describe WebOfSciencePublication do
       let(:date_attr) { nil }
 
       it 'returns nil' do
-        expect(pub.publication_date).to eq nil
+        expect(pub.publication_date).to be_nil
       end
     end
   end

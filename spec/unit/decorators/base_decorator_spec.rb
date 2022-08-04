@@ -30,6 +30,6 @@ describe BaseDecorator do
   # rubocop:enable RSpec/PredicateMatcher
 
   describe '#instance_of?' do
-    specify { expect(decorator.instance_of?(mock.class)).to eq true }
+    specify { expect(decorator.instance_of?(mock.class)).to be true }
   end
 end

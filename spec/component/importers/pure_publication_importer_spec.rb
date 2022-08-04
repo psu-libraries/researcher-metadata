@@ -72,8 +72,8 @@ describe PurePublicationImporter do
           expect(p3.title).to eq 'Chronic hip pain as a presenting symptom in pelvic congestion syndrome'
 
           expect(p1.secondary_title).to eq 'From Pure'
-          expect(p2.secondary_title).to eq nil
-          expect(p3.secondary_title).to eq nil
+          expect(p2.secondary_title).to be_nil
+          expect(p3.secondary_title).to be_nil
 
           expect(p1.publication_type).to eq 'Academic Journal Article'
           expect(p2.publication_type).to eq 'Academic Journal Article'
@@ -91,9 +91,9 @@ describe PurePublicationImporter do
           expect(p2.issue).to eq '3'
           expect(p3.issue).to eq '5'
 
-          expect(p1.journal).to eq nil
+          expect(p1.journal).to be_nil
           expect(p2.journal).to eq journal
-          expect(p3.journal).to eq nil
+          expect(p3.journal).to be_nil
 
           expect(p1.issn).to eq '0962-1849'
           expect(p2.issn).to eq '0272-4634'
@@ -115,12 +115,12 @@ describe PurePublicationImporter do
           expect(p2.abstract).to eq '<p>This is the third abstract.</p>'
           expect(p3.abstract).to be_nil
 
-          expect(p1.visible).to eq true
-          expect(p2.visible).to eq true
-          expect(p3.visible).to eq true
+          expect(p1.visible).to be true
+          expect(p2.visible).to be true
+          expect(p3.visible).to be true
 
           expect(p1.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
-          expect(p2.doi).to be nil
+          expect(p2.doi).to be_nil
           expect(p3.doi).to eq 'https://doi.org/10.1016/j.jvir.2013.01.004'
         end
 
@@ -224,9 +224,9 @@ describe PurePublicationImporter do
 
           p2 = found_pub2.publication
 
-          expect(p2.visible).to eq true
-          expect(duplicate_pub1.reload.visible).to eq false
-          expect(duplicate_pub2.reload.visible).to eq false
+          expect(p2.visible).to be true
+          expect(duplicate_pub1.reload.visible).to be false
+          expect(duplicate_pub2.reload.visible).to be false
         end
       end
 
@@ -368,7 +368,7 @@ describe PurePublicationImporter do
             expect(updated_pub.published_on).to eq Date.new(1997, 1, 1)
             expect(updated_pub.total_scopus_citations).to eq 2
             expect(updated_pub.abstract).to be_nil
-            expect(updated_pub.visible).to eq true
+            expect(updated_pub.visible).to be true
             expect(updated_pub.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
           end
 
@@ -378,7 +378,7 @@ describe PurePublicationImporter do
             new_pub = found_pub2.publication
 
             expect(new_pub.title).to eq 'Third Test Publication With a Really Unique Title'
-            expect(new_pub.secondary_title).to eq nil
+            expect(new_pub.secondary_title).to be_nil
             expect(new_pub.publication_type).to eq 'Academic Journal Article'
             expect(new_pub.page_range).to eq '665-680'
             expect(new_pub.volume).to eq '30'
@@ -389,7 +389,7 @@ describe PurePublicationImporter do
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
-            expect(new_pub.visible).to eq true
+            expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
           end
 
@@ -407,9 +407,9 @@ describe PurePublicationImporter do
 
             p2 = found_pub2.publication
 
-            expect(p2.visible).to eq true
-            expect(duplicate_pub1.reload.visible).to eq false
-            expect(duplicate_pub2.reload.visible).to eq false
+            expect(p2.visible).to be true
+            expect(duplicate_pub1.reload.visible).to be false
+            expect(duplicate_pub2.reload.visible).to be false
           end
         end
 
@@ -510,7 +510,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
               expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
-              expect(existing_pub_reloaded.visible).to eq false
+              expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.000/existing'
             end
           end
@@ -535,7 +535,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
               expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
-              expect(existing_pub_reloaded.visible).to eq false
+              expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.1016/S0962-1849(05)80014-9'
             end
           end
@@ -546,7 +546,7 @@ describe PurePublicationImporter do
             new_pub = found_pub2.publication
 
             expect(new_pub.title).to eq 'Third Test Publication With a Really Unique Title'
-            expect(new_pub.secondary_title).to eq nil
+            expect(new_pub.secondary_title).to be_nil
             expect(new_pub.publication_type).to eq 'Academic Journal Article'
             expect(new_pub.page_range).to eq '665-680'
             expect(new_pub.volume).to eq '30'
@@ -557,8 +557,8 @@ describe PurePublicationImporter do
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
             expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
-            expect(new_pub.visible).to eq true
-            expect(new_pub.doi).to eq nil
+            expect(new_pub.visible).to be true
+            expect(new_pub.doi).to be_nil
           end
 
           it 'groups possible duplicates of new publication records' do
@@ -575,9 +575,9 @@ describe PurePublicationImporter do
 
             p2 = found_pub2.publication
 
-            expect(p2.visible).to eq true
-            expect(duplicate_pub1.reload.visible).to eq false
-            expect(duplicate_pub2.reload.visible).to eq false
+            expect(p2.visible).to be true
+            expect(duplicate_pub1.reload.visible).to be false
+            expect(duplicate_pub2.reload.visible).to be false
           end
         end
       end

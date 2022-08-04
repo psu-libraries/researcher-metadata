@@ -91,15 +91,15 @@ describe 'updating a user via the admin interface', type: :feature do
       end
 
       it "updates the user record's admin flag" do
-        expect(user.reload.is_admin).to eq true
+        expect(user.reload.is_admin).to be true
       end
 
       it "updates the user record's publication visibility flag" do
-        expect(user.reload.show_all_publications).to eq true
+        expect(user.reload.show_all_publications).to be true
       end
 
       it "updates the user record's contract visibility flag" do
-        expect(user.reload.show_all_contracts).to eq true
+        expect(user.reload.show_all_contracts).to be true
       end
 
       it 'sets the timestamp on the user record to indicate that it was manually updated' do
@@ -205,11 +205,11 @@ describe 'updating a user via the admin interface', type: :feature do
         end
 
         it "updates the user record's publication visibility flag" do
-          expect(user.reload.show_all_publications).to eq true
+          expect(user.reload.show_all_publications).to be true
         end
 
         it "updates the user record's contract visibility flag" do
-          expect(user.reload.show_all_contracts).to eq true
+          expect(user.reload.show_all_contracts).to be true
         end
 
         it 'sets the timestamp on the user record to indicate that it was manually updated' do

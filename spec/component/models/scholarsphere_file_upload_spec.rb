@@ -36,9 +36,9 @@ describe ScholarsphereFileUpload, type: :model do
     let!(:upload) { create :scholarsphere_file_upload }
 
     it 'removes the file from the filesystem' do
-      expect(File.exist?(upload.file.path)).to eq true
+      expect(File.exist?(upload.file.path)).to be true
       upload.destroy
-      expect(File.exist?(upload.file.path)).to eq false
+      expect(File.exist?(upload.file.path)).to be false
     end
   end
 

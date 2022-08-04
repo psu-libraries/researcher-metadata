@@ -81,7 +81,7 @@ describe ExternalPublicationWaiver, type: :model do
       let!(:pub) { create :publication, title: 'A test publication with a long, distinct title of some sort' }
 
       it 'returns true' do
-        expect(waiver.has_matching_publications).to eq true
+        expect(waiver.has_matching_publications).to be true
       end
     end
 
@@ -89,7 +89,7 @@ describe ExternalPublicationWaiver, type: :model do
       let!(:pub) { create :publication, title: 'A publication with a long, but rather different title' }
 
       it 'returns false' do
-        expect(waiver.has_matching_publications).to eq false
+        expect(waiver.has_matching_publications).to be false
       end
     end
   end

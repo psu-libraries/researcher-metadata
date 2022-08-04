@@ -26,8 +26,8 @@ describe UserDecorator do
     let(:user) { build_stubbed :user }
 
     it 'has symmetric ==' do
-      expect(decorator == user).to eq true
-      expect(user == decorator).to eq true
+      expect(decorator == user).to be true
+      expect(user == decorator).to be true
     end
   end
 end

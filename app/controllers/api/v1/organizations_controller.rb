@@ -55,7 +55,7 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -85,7 +85,7 @@ module API::V1
             property :data do
               key :type, :array
               items do
-                key :'$ref', :PublicationV1
+                key :$ref, :PublicationV1
               end
             end
           end
@@ -93,13 +93,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
