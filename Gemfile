@@ -50,6 +50,7 @@ gem 'turbolinks', '~> 5'                # makes navigating your web application 
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
+gem 'net-smtp'
 
 group :development, :test do
   gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
