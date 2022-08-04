@@ -34,7 +34,6 @@ gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
-gem 'mini_racer', platforms: :ruby      # used to minify assets
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record

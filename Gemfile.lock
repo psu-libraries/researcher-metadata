@@ -286,7 +286,6 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libv8-node (16.10.0.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -304,8 +303,6 @@ GEM
     mini_magick (4.11.0)
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
-    mini_racer (0.6.2)
-      libv8-node (~> 16.10.0.0)
     minitest (5.16.2)
     multi_json (1.15.0)
     multi_xml (0.6.0)
@@ -628,7 +625,6 @@ DEPENDENCIES
   jquery-ui-rails
   launchy
   listen (>= 3.0.5, < 3.8)
-  mini_racer
   multi_json
   net-ldap
   net-smtp
