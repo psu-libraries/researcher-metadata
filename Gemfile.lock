@@ -320,7 +320,7 @@ GEM
       digest
       net-protocol
       timeout
-    net-ssh (6.1.0)
+    net-ssh (7.0.0.beta1)
     net-ssh-gateway (2.0.0)
       net-ssh (>= 4.0.0)
     niftany (0.10.1)
@@ -631,6 +631,7 @@ DEPENDENCIES
   multi_json
   net-ldap
   net-smtp
+  net-ssh (= 7.0.0.beta1)
   niftany
   omniauth (~> 2.0)
   omniauth-oauth2 (~> 1.7)
