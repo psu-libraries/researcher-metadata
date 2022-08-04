@@ -53,7 +53,7 @@ gem 'net-smtp'
 gem 'rss'                               # RSS reading and writing
 
 group :development, :test do
-  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
+  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git', branch: 'ruby-3'
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'
