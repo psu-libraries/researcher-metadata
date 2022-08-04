@@ -2,7 +2,7 @@
 
 module API::V1
   class OrganizationSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :name
   end
 end

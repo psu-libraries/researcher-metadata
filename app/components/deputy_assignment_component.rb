@@ -43,7 +43,7 @@ class DeputyAssignmentComponent < ViewComponent::Base
   end
 
   def delete_confirm
-    i18n('delete_confirmation', action: delete_text.downcase)
+    i18n('delete_confirmation')
   end
 
   def delete_class
@@ -61,7 +61,7 @@ class DeputyAssignmentComponent < ViewComponent::Base
     attr_reader :deputy_assignment,
                 :current_user
 
-    def i18n(key, options = {})
-      I18n.t("view_component.#{self.class.name.underscore}.#{key}", options)
+    def i18n(key)
+      I18n.t("view_component.#{self.class.name.underscore}.#{key}")
     end
 end

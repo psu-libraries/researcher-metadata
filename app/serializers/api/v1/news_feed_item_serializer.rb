@@ -2,7 +2,7 @@
 
 module API::V1
   class NewsFeedItemSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :title, :url, :description
 
     attribute :published_on do |object|

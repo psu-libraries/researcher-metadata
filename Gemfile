@@ -25,7 +25,7 @@ gem 'daemons'                           # for running delayed_job daemon (or oth
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
-gem 'fast_jsonapi'                      # a lightning fast JSON:API serializer for Ruby Objects
+gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
@@ -50,6 +50,7 @@ gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScr
 gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
 gem 'net-smtp'
+gem 'rss'                               # RSS reading and writing
 
 group :development, :test do
   gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'

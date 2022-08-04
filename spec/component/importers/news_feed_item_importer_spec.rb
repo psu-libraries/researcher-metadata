@@ -48,8 +48,8 @@ describe NewsFeedItemImporter do
   end
 
   it 'receives xml from rss in the proper format' do
-    rss = RSS::Parser.parse(open('https://news.psu.edu/rss/topic/research').read, false).items
-    html_doc = Nokogiri::HTML(open(rss[0].link))
+    rss = RSS::Parser.parse(URI.open('https://news.psu.edu/rss/topic/research').read, false).items
+    html_doc = Nokogiri::HTML(URI.open(rss[0].link))
     mailto_nodes = html_doc.xpath '//a[starts-with(@href, "mailto:")]/@href'
     tag_nodes = html_doc.xpath '//a[starts-with(@href, "/tag/")]/@href'
     expect(rss[0].link).not_to be_nil

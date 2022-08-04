@@ -7,9 +7,9 @@ class NewsFeedItemImporter
   # parse rss feeds from news.psu.edu
   def call
     rss_feeds.each do |feed|
-      rss = RSS::Parser.parse(open(feed).read, false).items
+      rss = RSS::Parser.parse(URI.open(feed).read, false).items
       rss.each do |result|
-        html_doc = Nokogiri::HTML(open(result.link))
+        html_doc = Nokogiri::HTML(URI.open(result.link))
         mailto_ids = get_access_ids_from_mailto_selector(html_doc)
         mailto_ids.each do |a|
           u = User.find_by(webaccess_id: a)

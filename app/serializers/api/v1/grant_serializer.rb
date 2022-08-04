@@ -2,7 +2,7 @@
 
 module API::V1
   class GrantSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :title, :agency, :abstract, :amount_in_dollars
 
     attribute :start_date do |object|
