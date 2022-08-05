@@ -54,7 +54,7 @@ gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
 
 group :development, :test do
-  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git', branch: 'ruby-3'
+  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'

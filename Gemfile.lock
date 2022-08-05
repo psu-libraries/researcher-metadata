@@ -1,7 +1,6 @@
 GIT
   remote: https://github.com/psu-libraries/apivore.git
-  revision: 044300d833446bb7e6bdc72f98eb39f4206af898
-  branch: ruby-3
+  revision: 73c05c55dd92579c8674ae3b0e3fb5a6cb2c72b8
   specs:
     apivore (1.7.0)
       actionpack (>= 5, < 7)
