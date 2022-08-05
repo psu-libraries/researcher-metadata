@@ -33,7 +33,7 @@ jobs:
       PGPASSWORD: "password"
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
-    steps
+    steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
