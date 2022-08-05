@@ -2,6 +2,7 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.0
   node: circleci/node@2
+  browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
   build:
@@ -32,7 +33,9 @@ jobs:
       PGPASSWORD: "password"
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
-    steps:
+    steps
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
       - node/install-packages:
