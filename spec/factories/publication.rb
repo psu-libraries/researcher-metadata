@@ -30,7 +30,7 @@ FactoryBot.define do
 
     trait :journal_article do
       publication_type {
-        Publication.publication_types.select { |type| /Journal Article/.match?(type) }.sample
+        Publication.publication_types.grep(/Journal Article/).sample
       }
     end
 

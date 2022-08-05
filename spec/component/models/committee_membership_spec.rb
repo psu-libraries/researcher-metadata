@@ -366,7 +366,7 @@ describe CommitteeMembership, type: :model do
   end
 
   describe '#unknown_role_check' do
-    let!(:cm) { FactoryBot.create :committee_membership }
+    let!(:cm) { create :committee_membership }
 
     context 'when updating role with a role in the RANK_LIST' do
       it 'does not trigger bugsnag' do

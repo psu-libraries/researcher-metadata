@@ -48,11 +48,11 @@ class PSUHRUserImporter < CSVImporter
   private
 
     def first_name(row)
-      row[:academic_appointee].split(' ')[0].strip
+      row[:academic_appointee].split[0].strip
     end
 
     def last_name(row)
-      row[:academic_appointee].split(' ')[1].strip
+      row[:academic_appointee].split[1].strip
     end
 
     def organization(row)

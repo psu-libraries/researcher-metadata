@@ -7,7 +7,7 @@ require_relative '../../../app/decorators/base_decorator'
 
 describe BaseDecorator do
   let(:decorator) { described_class.new(mock) }
-  let(:mock) { instance_spy('MockObject') }
+  let(:mock) { instance_spy(Object) }
 
   describe '#class' do
     subject { decorator.class }

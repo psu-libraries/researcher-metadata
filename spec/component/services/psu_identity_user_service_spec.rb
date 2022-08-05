@@ -55,7 +55,7 @@ describe PsuIdentityUserService do
       end
 
       context 'when PsuIdentity raises an error' do
-        let(:mock_psu_identity_client) { instance_spy 'PsuIdentity::SearchService::Client' }
+        let(:mock_psu_identity_client) { instance_spy PsuIdentity::SearchService::Client }
 
         before do
           allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_psu_identity_client)

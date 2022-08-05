@@ -71,7 +71,7 @@ describe PreferredOpenAccessPolicy do
       context 'when an unknown source is present' do
         let(:open_access_locations) { [
           OpenAccessLocation.new(source: Source::USER, url: 'USER url', is_best: false),
-          instance_double('OpenAccessLocation', source: 'wacky', url: 'wacky url', is_best: false)
+          instance_double(OpenAccessLocation, source: 'wacky', url: 'wacky url', is_best: false)
         ]}
 
         it 'is the least preferred option' do

@@ -5,17 +5,17 @@ require 'component/component_spec_helper'
 describe DeputyAssignmentsMailer, type: :model do
   include Rails.application.routes.url_helpers
 
-  let(:primary) { instance_double 'User',
+  let(:primary) { instance_double User,
                                   name: 'Primary User',
                                   webaccess_id: 'abc123',
                                   psu_identity_updated_at: Time.zone.now }
 
-  let(:deputy) { instance_double 'User',
+  let(:deputy) { instance_double User,
                                  name: 'Deputy User',
                                  webaccess_id: 'def456',
                                  psu_identity_updated_at: Time.zone.now }
 
-  let(:deputy_assignment) { instance_double 'DeputyAssignment',
+  let(:deputy_assignment) { instance_double DeputyAssignment,
                                             primary: primary,
                                             deputy: deputy }
 

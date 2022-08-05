@@ -1390,8 +1390,8 @@ describe DuplicatePublicationGroup, type: :model do
           .attributes
           .delete_if { |key, _value| key == 'id' })
       end
-      let!(:import1) { FactoryBot.create :publication_import, publication: pub1 }
-      let!(:import2) { FactoryBot.create :publication_import, publication: pub2 }
+      let!(:import1) { create :publication_import, publication: pub1 }
+      let!(:import2) { create :publication_import, publication: pub2 }
 
       context 'when PublicationMatchOnDoiPolicy returns true for these publications' do
         it 'deletes one publication' do

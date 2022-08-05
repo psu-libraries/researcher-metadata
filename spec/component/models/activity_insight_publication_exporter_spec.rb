@@ -5,36 +5,36 @@ require 'component/component_spec_helper'
 describe ActivityInsightPublicationExporter do
   subject(:exporter) { described_class }
 
-  let!(:user) { FactoryBot.create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
-  let!(:authorship1) { FactoryBot.create :authorship, user: user, publication: publication1 }
-  let!(:authorship2) { FactoryBot.create :authorship, user: user, publication: publication2 }
+  let!(:user) { create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
+  let!(:authorship1) { create :authorship, user: user, publication: publication1 }
+  let!(:authorship2) { create :authorship, user: user, publication: publication2 }
   let!(:publication1) do
-    FactoryBot.create(:publication,
-                      id: 1,
-                      secondary_title: 'Second Title',
-                      status: 'Published',
-                      journal_title: 'Journal Title',
-                      volume: '1',
-                      published_on: Date.parse('01/01/01'),
-                      issue: '2',
-                      edition: '123',
-                      abstract: 'Abstract',
-                      page_range: '1-2',
-                      total_scopus_citations: '3',
-                      authors_et_al: true,
-                      open_access_locations: [
-                        build(:open_access_location, :user, url: 'site.org')
-                      ],
-                      isbn: '123-123-123')
+    create(:publication,
+           id: 1,
+           secondary_title: 'Second Title',
+           status: 'Published',
+           journal_title: 'Journal Title',
+           volume: '1',
+           published_on: Date.parse('01/01/01'),
+           issue: '2',
+           edition: '123',
+           abstract: 'Abstract',
+           page_range: '1-2',
+           total_scopus_citations: '3',
+           authors_et_al: true,
+           open_access_locations: [
+             build(:open_access_location, :user, url: 'site.org')
+           ],
+           isbn: '123-123-123')
   end
-  let!(:publication2) { FactoryBot.create(:publication, id: 2) }
-  let!(:publication3) { FactoryBot.create(:publication, id: 3, exported_to_activity_insight: true) }
+  let!(:publication2) { create(:publication, id: 2) }
+  let!(:publication3) { create(:publication, id: 3, exported_to_activity_insight: true) }
   let!(:ai_import) do
-    FactoryBot.create(:publication_import, publication: publication2,
-                                           source: 'Activity Insight', source_identifier: 'ai_id_1')
+    create(:publication_import, publication: publication2,
+                                source: 'Activity Insight', source_identifier: 'ai_id_1')
   end
-  let!(:contributor_name1) { FactoryBot.create :contributor_name, publication: publication1 }
-  let!(:contributor_name2) { FactoryBot.create :contributor_name, publication: publication2 }
+  let!(:contributor_name1) { create :contributor_name, publication: publication1 }
+  let!(:contributor_name2) { create :contributor_name, publication: publication2 }
 
   describe '#to_xml' do
     it 'generates xml' do

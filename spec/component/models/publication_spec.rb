@@ -649,12 +649,12 @@ describe Publication, type: :model do
   end
 
   describe '.journal_article' do
-    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
-    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
-    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
-    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
-    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
-    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    let(:pub1) { create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { create :publication, publication_type: 'Book' }
+    let(:pub5) { create :publication, publication_type: 'Letter' }
+    let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
 
     it 'returns publications that are journal articles' do
       expect(described_class.journal_article).to match_array [pub1, pub2, pub3]
@@ -662,12 +662,12 @@ describe Publication, type: :model do
   end
 
   describe '.non_journal_article' do
-    let(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
-    let(:pub2) { FactoryBot.create :publication, publication_type: 'Academic Journal Article' }
-    let(:pub3) { FactoryBot.create :publication, publication_type: 'In-house Journal Article' }
-    let(:pub4) { FactoryBot.create :publication, publication_type: 'Book' }
-    let(:pub5) { FactoryBot.create :publication, publication_type: 'Letter' }
-    let(:pub6) { FactoryBot.create :publication, publication_type: 'Conference Proceeding' }
+    let(:pub1) { create :publication, publication_type: 'Journal Article' }
+    let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
+    let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
+    let(:pub4) { create :publication, publication_type: 'Book' }
+    let(:pub5) { create :publication, publication_type: 'Letter' }
+    let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
 
     it 'returns publications that are not journal articles' do
       expect(described_class.non_journal_article).to match_array [pub4, pub5, pub6]
@@ -675,8 +675,8 @@ describe Publication, type: :model do
   end
 
   describe '.published' do
-    let(:pub1) { FactoryBot.create :publication, status: 'Published' }
-    let(:pub2) { FactoryBot.create :publication, status: 'In Press' }
+    let(:pub1) { create :publication, status: 'Published' }
+    let(:pub2) { create :publication, status: 'In Press' }
 
     it 'returns publications that are not journal articles' do
       expect(described_class.published).to match_array [pub1]
@@ -879,7 +879,7 @@ describe Publication, type: :model do
   describe '#preferred_open_access_url' do
     let(:pub) { described_class.new open_access_locations: open_access_locations }
     let(:open_access_locations) { [build_stubbed(:open_access_location)] }
-    let(:policy) { instance_double 'PreferredOpenAccessPolicy', url: 'preferred_url' }
+    let(:policy) { instance_double PreferredOpenAccessPolicy, url: 'preferred_url' }
 
     before { allow(PreferredOpenAccessPolicy).to receive(:new).with(open_access_locations).and_return policy }
 
@@ -2800,7 +2800,7 @@ describe Publication, type: :model do
 
   describe '#is_journal_article?' do
     context 'when publication is a Journal Article' do
-      let!(:pub1) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+      let!(:pub1) { create :publication, publication_type: 'Journal Article' }
 
       it 'returns true' do
         expect(pub1.is_journal_article?).to be true
@@ -2808,7 +2808,7 @@ describe Publication, type: :model do
     end
 
     context 'when publication is a Book' do
-      let!(:pub2) { FactoryBot.create :publication, publication_type: 'Book' }
+      let!(:pub2) { create :publication, publication_type: 'Book' }
 
       it 'returns false' do
         expect(pub2.is_journal_article?).to be false
@@ -2840,7 +2840,7 @@ describe Publication, type: :model do
 
   describe '#published' do
     context "when publication's status is 'Published" do
-      let(:pub) { FactoryBot.create :publication, status: 'Published' }
+      let(:pub) { create :publication, status: 'Published' }
 
       it 'returns true' do
         expect(pub.published?).to be true
@@ -2848,7 +2848,7 @@ describe Publication, type: :model do
     end
 
     context "when publication's status is 'In Press'" do
-      let(:pub) { FactoryBot.create :publication, status: 'In Press' }
+      let(:pub) { create :publication, status: 'In Press' }
 
       it 'returns false' do
         expect(pub.published?).to be false
@@ -2858,7 +2858,7 @@ describe Publication, type: :model do
 
   describe '#publication_type_other?' do
     context "when publication_type is not 'Other'" do
-      let(:pub) { FactoryBot.create :publication, publication_type: 'Journal Article' }
+      let(:pub) { create :publication, publication_type: 'Journal Article' }
 
       it 'returns false' do
         expect(pub.publication_type_other?).to be false
@@ -2866,7 +2866,7 @@ describe Publication, type: :model do
     end
 
     context "when publication_type is 'Other'" do
-      let(:pub) { FactoryBot.create :publication, publication_type: 'Other' }
+      let(:pub) { create :publication, publication_type: 'Other' }
 
       it 'returns true' do
         expect(pub.publication_type_other?).to be true
