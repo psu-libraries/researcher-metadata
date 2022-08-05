@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Users' do
+describe 'API::V1 Users', type: :request do
   let(:h_index) { nil }
   let(:title) { nil }
   let(:website) { nil }

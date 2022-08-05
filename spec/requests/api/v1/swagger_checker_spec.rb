@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Swagger Checker', type: :apivore, order: :defined do
+describe 'API::V1', type: :apivore, order: :defined do
   subject { Apivore::SwaggerChecker.instance_for('/api_docs/swagger_docs/v1/swagger.json') }
 
   context 'has valid paths' do
