@@ -308,6 +308,10 @@ GEM
     multi_xml (0.6.0)
     multipart-post (2.1.1)
     nested_form (0.3.2)
+    net-imap (0.2.3)
+      digest
+      net-protocol
+      strscan
     net-ldap (0.17.0)
     net-pop (0.1.1)
       digest
@@ -550,6 +554,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.7)
+    strscan (3.0.4)
     swagger-blocks (3.0.0)
     temple (0.8.2)
     thor (1.2.1)
@@ -632,6 +637,7 @@ DEPENDENCIES
   launchy
   listen (>= 3.0.5, < 3.8)
   multi_json
+  net-imap
   net-ldap
   net-pop
   net-smtp
