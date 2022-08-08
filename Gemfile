@@ -36,7 +36,8 @@ gem 'jquery-ui-rails'
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
-gem 'net-smtp'
+gem 'net-smtp', require: false
+gem 'net-pop', require: false
 gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
