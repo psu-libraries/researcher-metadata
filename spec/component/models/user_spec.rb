@@ -147,7 +147,7 @@ describe User, type: :model do
       let(:psu_id) { nil }
 
       it 'saves the value as nil' do
-        expect(u.penn_state_identifier).to eq nil
+        expect(u.penn_state_identifier).to be_nil
       end
     end
 
@@ -155,7 +155,7 @@ describe User, type: :model do
       let(:psu_id) { '' }
 
       it 'saves the value as nil' do
-        expect(u.penn_state_identifier).to eq nil
+        expect(u.penn_state_identifier).to be_nil
       end
     end
 
@@ -163,7 +163,7 @@ describe User, type: :model do
       let(:psu_id) { ' ' }
 
       it 'saves the value as nil' do
-        expect(u.penn_state_identifier).to eq nil
+        expect(u.penn_state_identifier).to be_nil
       end
     end
 
@@ -183,7 +183,7 @@ describe User, type: :model do
       let(:pure_id) { nil }
 
       it 'saves the value as nil' do
-        expect(u.pure_uuid).to eq nil
+        expect(u.pure_uuid).to be_nil
       end
     end
 
@@ -191,7 +191,7 @@ describe User, type: :model do
       let(:pure_id) { '' }
 
       it 'saves the value as nil' do
-        expect(u.pure_uuid).to eq nil
+        expect(u.pure_uuid).to be_nil
       end
     end
 
@@ -199,7 +199,7 @@ describe User, type: :model do
       let(:pure_id) { ' ' }
 
       it 'saves the value as nil' do
-        expect(u.pure_uuid).to eq nil
+        expect(u.pure_uuid).to be_nil
       end
     end
 
@@ -219,7 +219,7 @@ describe User, type: :model do
       let(:ai_id) { nil }
 
       it 'saves the value as nil' do
-        expect(u.activity_insight_identifier).to eq nil
+        expect(u.activity_insight_identifier).to be_nil
       end
     end
 
@@ -227,7 +227,7 @@ describe User, type: :model do
       let(:ai_id) { '' }
 
       it 'saves the value as nil' do
-        expect(u.activity_insight_identifier).to eq nil
+        expect(u.activity_insight_identifier).to be_nil
       end
     end
 
@@ -235,7 +235,7 @@ describe User, type: :model do
       let(:ai_id) { ' ' }
 
       it 'saves the value as nil' do
-        expect(u.activity_insight_identifier).to eq nil
+        expect(u.activity_insight_identifier).to be_nil
       end
     end
 
@@ -1041,7 +1041,7 @@ describe User, type: :model do
       before { user.is_admin = true }
 
       it 'returns true' do
-        expect(user.admin?).to eq true
+        expect(user.admin?).to be true
       end
     end
 
@@ -1049,7 +1049,7 @@ describe User, type: :model do
       before { user.is_admin = false }
 
       it 'returns false' do
-        expect(user.admin?).to eq false
+        expect(user.admin?).to be false
       end
     end
   end
@@ -1745,8 +1745,8 @@ describe User, type: :model do
 
         a = Authorship.find_by(user: user, publication: pub)
         expect(a.author_number).to eq 3
-        expect(a.confirmed).to eq false
-        expect(a.claimed_by_user).to eq true
+        expect(a.confirmed).to be false
+        expect(a.claimed_by_user).to be true
       end
 
       it 'returns the new authorship' do
@@ -1777,8 +1777,8 @@ describe User, type: :model do
 
           a = Authorship.find_by(user: user, publication: pub)
           expect(a.author_number).to eq 2
-          expect(a.confirmed).to eq true
-          expect(a.claimed_by_user).to eq false
+          expect(a.confirmed).to be true
+          expect(a.claimed_by_user).to be false
         end
 
         it 'returns the authorship' do
@@ -1801,8 +1801,8 @@ describe User, type: :model do
 
           a = Authorship.find_by(user: user, publication: pub)
           expect(a.author_number).to eq 3
-          expect(a.confirmed).to eq false
-          expect(a.claimed_by_user).to eq true
+          expect(a.confirmed).to be false
+          expect(a.claimed_by_user).to be true
         end
 
         it 'returns the authorship' do

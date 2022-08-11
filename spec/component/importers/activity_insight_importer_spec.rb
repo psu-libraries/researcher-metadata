@@ -184,7 +184,7 @@ describe ActivityInsightImporter do
           expect(p1.refereed).to eq 'Yes'
           expect(p1.abstract).to eq 'An abstract'
           expect(p1.comment).to eq 'Some comments'
-          expect(p1.visible).to eq true
+          expect(p1.visible).to be true
 
           expect(p2.title).to eq "Sally's PAA Presentation"
           expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -197,7 +197,7 @@ describe ActivityInsightImporter do
           expect(p2.refereed).to eq 'No'
           expect(p2.abstract).to eq 'Another abstract'
           expect(p2.comment).to be_nil
-          expect(p2.visible).to eq true
+          expect(p2.visible).to be true
         end
 
         context 'when no included presentation contributions exist in the database' do
@@ -289,7 +289,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to be_nil
             expect(p1.abstract).to be_nil
             expect(p1.comment).to be_nil
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -302,7 +302,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included presentation contributions exist in the database' do
@@ -385,7 +385,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -398,7 +398,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included presentation contributions exist in the database' do
@@ -479,7 +479,7 @@ describe ActivityInsightImporter do
           expect(p1.scope).to eq 'Regional'
           expect(p1.start_on).to eq Date.new(2009, 2, 1)
           expect(p1.end_on).to eq Date.new(2009, 8, 1)
-          expect(p1.visible).to eq true
+          expect(p1.visible).to be true
 
           expect(p2.title).to eq "Sally's Film"
           expect(p2.performance_type).to eq 'Film - Other'
@@ -491,7 +491,7 @@ describe ActivityInsightImporter do
           expect(p2.scope).to eq 'Local'
           expect(p2.start_on).to eq Date.new(2000, 2, 1)
           expect(p2.end_on).to eq Date.new(2000, 8, 1)
-          expect(p2.visible).to eq true
+          expect(p2.visible).to be true
         end
 
         context 'when no included user performances exist in the database' do
@@ -587,7 +587,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to be_nil
             expect(p1.start_on).to be_nil
             expect(p1.end_on).to be_nil
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq 'Film - Other'
@@ -599,7 +599,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included user performances exist in the database' do
@@ -677,7 +677,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq 'Regional'
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq 'Film - Other'
@@ -689,7 +689,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included user performances exist in the database' do
@@ -776,7 +776,7 @@ describe ActivityInsightImporter do
           expect(p1.publisher_name).to eq 'Test Publisher 1'
           expect(p1.secondary_title).to eq 'Subtitle 1'
           expect(p1.status).to eq 'Published'
-          expect(p1.activity_insight_postprint_status).to eq nil
+          expect(p1.activity_insight_postprint_status).to be_nil
           expect(p1.volume).to eq '9'
           expect(p1.issue).to eq '5'
           expect(p1.edition).to eq '10'
@@ -784,49 +784,49 @@ describe ActivityInsightImporter do
           expect(p1.url).to eq 'https://example.com/publication1'
           expect(p1.issn).to eq '6532-1836'
           expect(p1.abstract).to eq 'First publication abstract.'
-          expect(p1.authors_et_al).to eq true
+          expect(p1.authors_et_al).to be true
           expect(p1.published_on).to eq Date.new(2019, 1, 1)
-          expect(p1.updated_by_user_at).to eq nil
+          expect(p1.updated_by_user_at).to be_nil
           expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
           expect(p2.title).to eq 'Second Test Publication'
           expect(p2.publication_type).to eq 'In-house Journal Article'
           expect(p2.journal_title).to eq 'Test Jouranl 2'
-          expect(p2.publisher_name).to eq nil
+          expect(p2.publisher_name).to be_nil
           expect(p2.secondary_title).to eq 'Second Pub Subtitle'
           expect(p2.status).to eq 'Published'
           expect(p2.activity_insight_postprint_status).to eq 'In Progress'
           expect(p2.volume).to eq '7'
-          expect(p2.issue).to eq nil
-          expect(p2.edition).to eq nil
-          expect(p2.page_range).to eq nil
+          expect(p2.issue).to be_nil
+          expect(p2.edition).to be_nil
+          expect(p2.page_range).to be_nil
           expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-          expect(p2.issn).to eq nil
-          expect(p2.abstract).to eq nil
-          expect(p2.authors_et_al).to eq false
+          expect(p2.issn).to be_nil
+          expect(p2.abstract).to be_nil
+          expect(p2.authors_et_al).to be false
           expect(p2.published_on).to eq Date.new(2019, 1, 1)
-          expect(p2.visible).to eq true
-          expect(p2.updated_by_user_at).to eq nil
+          expect(p2.visible).to be true
+          expect(p2.updated_by_user_at).to be_nil
           expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
           expect(p3.title).to eq 'Fifth Test Publication'
           expect(p3.publication_type).to eq 'Book'
           expect(p3.journal_title).to eq 'Some Other Journal'
           expect(p3.publisher_name).to eq 'Some Other Publisher'
-          expect(p3.secondary_title).to eq nil
+          expect(p3.secondary_title).to be_nil
           expect(p3.status).to eq 'Published'
           expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
           expect(p3.volume).to eq '17'
           expect(p3.issue).to eq '8'
           expect(p3.edition).to eq '4'
           expect(p3.page_range).to eq '1276-1288'
-          expect(p3.url).to eq nil
+          expect(p3.url).to be_nil
           expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-          expect(p3.abstract).to eq nil
-          expect(p3.authors_et_al).to eq false
+          expect(p3.abstract).to be_nil
+          expect(p3.authors_et_al).to be false
           expect(p3.published_on).to eq Date.new(2010, 1, 1)
-          expect(p3.visible).to eq true
-          expect(p3.updated_by_user_at).to eq nil
+          expect(p3.visible).to be true
+          expect(p3.updated_by_user_at).to be_nil
           expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
           expect(p4.title).to eq 'Journal Article In Press'
@@ -835,18 +835,18 @@ describe ActivityInsightImporter do
           expect(p4.publisher_name).to eq 'Test Publisher 1'
           expect(p4.secondary_title).to eq 'Subtitle 2'
           expect(p4.status).to eq 'In Press'
-          expect(p4.activity_insight_postprint_status).to eq nil
+          expect(p4.activity_insight_postprint_status).to be_nil
           expect(p4.volume).to eq '10'
           expect(p4.issue).to eq '2'
           expect(p4.edition).to eq '15'
           expect(p4.page_range).to eq '1600-1655'
           expect(p4.issn).to eq '6789-4321'
-          expect(p4.url).to eq nil
+          expect(p4.url).to be_nil
           expect(p4.abstract).to eq 'Abstract.'
-          expect(p4.authors_et_al).to eq true
+          expect(p4.authors_et_al).to be true
           expect(p4.published_on).to eq Date.new(2019, 1, 2)
-          expect(p4.visible).to eq true
-          expect(p4.updated_by_user_at).to eq nil
+          expect(p4.visible).to be true
+          expect(p4.updated_by_user_at).to be_nil
           expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
         end
 
@@ -867,7 +867,7 @@ describe ActivityInsightImporter do
           p1 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190706413568').publication
 
-          expect(p1.visible).to eq false
+          expect(p1.visible).to be false
         end
 
         it 'creates a new authorship record for every faculty author for each imported publication' do
@@ -1037,7 +1037,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
-            expect(p1.activity_insight_postprint_status).to eq nil
+            expect(p1.activity_insight_postprint_status).to be_nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -1045,9 +1045,9 @@ describe ActivityInsightImporter do
             expect(p1.url).to eq 'https://example.com/publication1'
             expect(p1.issn).to eq '6532-1836'
             expect(p1.abstract).to eq 'First publication abstract.'
-            expect(p1.authors_et_al).to eq true
+            expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.updated_by_user_at).to eq nil
+            expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
             expect(p2.title).to eq 'Existing Title'
@@ -1064,9 +1064,9 @@ describe ActivityInsightImporter do
             expect(p2.url).to eq 'existing_url'
             expect(p2.issn).to eq 'existing_ISSN'
             expect(p2.abstract).to eq 'Existing abstract'
-            expect(p2.authors_et_al).to eq true
+            expect(p2.authors_et_al).to be true
             expect(p2.published_on).to eq Date.new(1980, 1, 1)
-            expect(p2.visible).to eq false
+            expect(p2.visible).to be false
             expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
             expect(p2.doi).to eq 'https://doi.org/10.000/existing'
 
@@ -1074,20 +1074,20 @@ describe ActivityInsightImporter do
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
-            expect(p3.secondary_title).to eq nil
+            expect(p3.secondary_title).to be_nil
             expect(p3.status).to eq 'Published'
             expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
-            expect(p3.url).to eq nil
+            expect(p3.url).to be_nil
             expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(p3.abstract).to eq nil
-            expect(p3.authors_et_al).to eq false
+            expect(p3.abstract).to be_nil
+            expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
-            expect(p3.visible).to eq true
-            expect(p3.updated_by_user_at).to eq nil
+            expect(p3.visible).to be true
+            expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -1096,18 +1096,18 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
-            expect(p4.activity_insight_postprint_status).to eq nil
+            expect(p4.activity_insight_postprint_status).to be_nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
             expect(p4.issn).to eq '6789-4321'
-            expect(p4.url).to eq nil
+            expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
-            expect(p4.authors_et_al).to eq true
+            expect(p4.authors_et_al).to be true
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
-            expect(p4.visible).to eq true
-            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.visible).to be true
+            expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
@@ -1128,7 +1128,7 @@ describe ActivityInsightImporter do
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
           end
 
           context 'when authorships already exist for the existing publication' do
@@ -1199,7 +1199,7 @@ describe ActivityInsightImporter do
               expect(a1.author_number).to eq 2
               expect(a1.role).to eq 'Author'
 
-              expect(a2).to eq nil
+              expect(a2).to be_nil
 
               expect(a3.author_number).to eq 2
               expect(a3.role).to eq 'Author'
@@ -1329,7 +1329,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
-            expect(p1.activity_insight_postprint_status).to eq nil
+            expect(p1.activity_insight_postprint_status).to be_nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -1337,49 +1337,49 @@ describe ActivityInsightImporter do
             expect(p1.url).to eq 'https://example.com/publication1'
             expect(p1.issn).to eq '6532-1836'
             expect(p1.abstract).to eq 'First publication abstract.'
-            expect(p1.authors_et_al).to eq true
+            expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.updated_by_user_at).to eq nil
+            expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher_name).to eq nil
+            expect(p2.publisher_name).to be_nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
-            expect(p2.issue).to eq nil
-            expect(p2.edition).to eq nil
-            expect(p2.page_range).to eq nil
+            expect(p2.issue).to be_nil
+            expect(p2.edition).to be_nil
+            expect(p2.page_range).to be_nil
             expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-            expect(p2.issn).to eq nil
-            expect(p2.abstract).to eq nil
-            expect(p2.authors_et_al).to eq false
+            expect(p2.issn).to be_nil
+            expect(p2.abstract).to be_nil
+            expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
-            expect(p2.visible).to eq false
-            expect(p2.updated_by_user_at).to eq nil
+            expect(p2.visible).to be false
+            expect(p2.updated_by_user_at).to be_nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
-            expect(p3.secondary_title).to eq nil
+            expect(p3.secondary_title).to be_nil
             expect(p3.status).to eq 'Published'
             expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
-            expect(p3.url).to eq nil
+            expect(p3.url).to be_nil
             expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(p3.abstract).to eq nil
-            expect(p3.authors_et_al).to eq false
+            expect(p3.abstract).to be_nil
+            expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
-            expect(p3.visible).to eq true
-            expect(p3.updated_by_user_at).to eq nil
+            expect(p3.visible).to be true
+            expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -1388,18 +1388,18 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
-            expect(p4.activity_insight_postprint_status).to eq nil
+            expect(p4.activity_insight_postprint_status).to be_nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
             expect(p4.issn).to eq '6789-4321'
-            expect(p4.url).to eq nil
+            expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
-            expect(p4.authors_et_al).to eq true
+            expect(p4.authors_et_al).to be true
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
-            expect(p4.visible).to eq true
-            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.visible).to be true
+            expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
@@ -1420,7 +1420,7 @@ describe ActivityInsightImporter do
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
           end
 
           context 'when authorships already exist for the existing publication' do
@@ -1763,7 +1763,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
-            expect(p1.visible).to eq true
+            expect(p1.visible).to be true
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1776,7 +1776,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included presentation contributions exist in the database' do
@@ -1872,7 +1872,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to be_nil
               expect(p1.abstract).to be_nil
               expect(p1.comment).to be_nil
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1885,7 +1885,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included presentation contributions exist in the database' do
@@ -1972,7 +1972,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to eq 'Yes'
               expect(p1.abstract).to eq 'An abstract'
               expect(p1.comment).to eq 'Some comments'
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -1985,7 +1985,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included presentation contributions exist in the database' do
@@ -2066,7 +2066,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq 'Regional'
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
-            expect(p1.visible).to eq true
+            expect(p1.visible).to be true
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq 'Film - Other'
@@ -2078,7 +2078,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included user performances exist in the database' do
@@ -2178,7 +2178,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to be_nil
               expect(p1.start_on).to be_nil
               expect(p1.end_on).to be_nil
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq 'Film - Other'
@@ -2190,7 +2190,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included user performances exist in the database' do
@@ -2272,7 +2272,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to eq 'Regional'
               expect(p1.start_on).to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq 'Film - Other'
@@ -2284,7 +2284,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included user performances exist in the database' do
@@ -2371,7 +2371,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
-            expect(p1.activity_insight_postprint_status).to eq nil
+            expect(p1.activity_insight_postprint_status).to be_nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -2379,49 +2379,49 @@ describe ActivityInsightImporter do
             expect(p1.url).to eq 'https://example.com/publication1'
             expect(p1.issn).to eq '6532-1836'
             expect(p1.abstract).to eq 'First publication abstract.'
-            expect(p1.authors_et_al).to eq true
+            expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.updated_by_user_at).to eq nil
+            expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher_name).to eq nil
+            expect(p2.publisher_name).to be_nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
-            expect(p2.issue).to eq nil
-            expect(p2.edition).to eq nil
-            expect(p2.page_range).to eq nil
+            expect(p2.issue).to be_nil
+            expect(p2.edition).to be_nil
+            expect(p2.page_range).to be_nil
             expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-            expect(p2.issn).to eq nil
-            expect(p2.abstract).to eq nil
-            expect(p2.authors_et_al).to eq false
+            expect(p2.issn).to be_nil
+            expect(p2.abstract).to be_nil
+            expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
-            expect(p2.visible).to eq true
-            expect(p2.updated_by_user_at).to eq nil
+            expect(p2.visible).to be true
+            expect(p2.updated_by_user_at).to be_nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
-            expect(p3.secondary_title).to eq nil
+            expect(p3.secondary_title).to be_nil
             expect(p3.status).to eq 'Published'
             expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
-            expect(p3.url).to eq nil
+            expect(p3.url).to be_nil
             expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(p3.abstract).to eq nil
-            expect(p3.authors_et_al).to eq false
+            expect(p3.abstract).to be_nil
+            expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
-            expect(p3.visible).to eq true
-            expect(p3.updated_by_user_at).to eq nil
+            expect(p3.visible).to be true
+            expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -2430,18 +2430,18 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
-            expect(p4.activity_insight_postprint_status).to eq nil
+            expect(p4.activity_insight_postprint_status).to be_nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
             expect(p4.issn).to eq '6789-4321'
-            expect(p4.url).to eq nil
+            expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
-            expect(p4.authors_et_al).to eq true
+            expect(p4.authors_et_al).to be true
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
-            expect(p4.visible).to eq true
-            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.visible).to be true
+            expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
@@ -2462,7 +2462,7 @@ describe ActivityInsightImporter do
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
           end
 
           it 'creates a new authorship record for every faculty author for each imported publication' do
@@ -2633,7 +2633,7 @@ describe ActivityInsightImporter do
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p2.activity_insight_postprint_status).to eq 'In Progress'
-              expect(p1.activity_insight_postprint_status).to eq nil
+              expect(p1.activity_insight_postprint_status).to be_nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -2641,9 +2641,9 @@ describe ActivityInsightImporter do
               expect(p1.url).to eq 'https://example.com/publication1'
               expect(p1.issn).to eq '6532-1836'
               expect(p1.abstract).to eq 'First publication abstract.'
-              expect(p1.authors_et_al).to eq true
+              expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.updated_by_user_at).to eq nil
+              expect(p1.updated_by_user_at).to be_nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
               expect(p2.title).to eq 'Existing Title'
@@ -2659,9 +2659,9 @@ describe ActivityInsightImporter do
               expect(p2.url).to eq 'existing_url'
               expect(p2.issn).to eq 'existing_ISSN'
               expect(p2.abstract).to eq 'Existing abstract'
-              expect(p2.authors_et_al).to eq true
+              expect(p2.authors_et_al).to be true
               expect(p2.published_on).to eq Date.new(1980, 1, 1)
-              expect(p2.visible).to eq false
+              expect(p2.visible).to be false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
               expect(p2.doi).to eq 'https://doi.org/10.000/existing'
 
@@ -2669,20 +2669,20 @@ describe ActivityInsightImporter do
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
-              expect(p3.secondary_title).to eq nil
+              expect(p3.secondary_title).to be_nil
               expect(p3.status).to eq 'Published'
               expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
-              expect(p3.url).to eq nil
+              expect(p3.url).to be_nil
               expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(p3.abstract).to eq nil
-              expect(p3.authors_et_al).to eq false
+              expect(p3.abstract).to be_nil
+              expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
-              expect(p3.visible).to eq true
-              expect(p3.updated_by_user_at).to eq nil
+              expect(p3.visible).to be true
+              expect(p3.updated_by_user_at).to be_nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
               expect(p4.title).to eq 'Journal Article In Press'
@@ -2691,18 +2691,18 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
-              expect(p4.activity_insight_postprint_status).to eq nil
+              expect(p4.activity_insight_postprint_status).to be_nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
               expect(p4.issn).to eq '6789-4321'
-              expect(p4.url).to eq nil
+              expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
-              expect(p4.authors_et_al).to eq true
+              expect(p4.authors_et_al).to be true
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
-              expect(p4.visible).to eq true
-              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.visible).to be true
+              expect(p4.updated_by_user_at).to be_nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
@@ -2723,7 +2723,7 @@ describe ActivityInsightImporter do
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
 
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
             end
 
             context 'when authorhips already exist for the existing publication' do
@@ -2793,7 +2793,7 @@ describe ActivityInsightImporter do
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
 
-                expect(a2).to eq nil
+                expect(a2).to be_nil
 
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
@@ -2925,7 +2925,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
-              expect(p1.activity_insight_postprint_status).to eq nil
+              expect(p1.activity_insight_postprint_status).to be_nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -2933,49 +2933,49 @@ describe ActivityInsightImporter do
               expect(p1.url).to eq 'https://example.com/publication1'
               expect(p1.issn).to eq '6532-1836'
               expect(p1.abstract).to eq 'First publication abstract.'
-              expect(p1.authors_et_al).to eq true
+              expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.updated_by_user_at).to eq nil
+              expect(p1.updated_by_user_at).to be_nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
-              expect(p2.publisher_name).to eq nil
+              expect(p2.publisher_name).to be_nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
               expect(p2.activity_insight_postprint_status).to eq 'In Progress'
               expect(p2.volume).to eq '7'
-              expect(p2.issue).to eq nil
-              expect(p2.edition).to eq nil
-              expect(p2.page_range).to eq nil
+              expect(p2.issue).to be_nil
+              expect(p2.edition).to be_nil
+              expect(p2.page_range).to be_nil
               expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-              expect(p2.issn).to eq nil
-              expect(p2.abstract).to eq nil
-              expect(p2.authors_et_al).to eq false
+              expect(p2.issn).to be_nil
+              expect(p2.abstract).to be_nil
+              expect(p2.authors_et_al).to be false
               expect(p2.published_on).to eq Date.new(2019, 1, 1)
-              expect(p2.visible).to eq false
-              expect(p2.updated_by_user_at).to eq nil
+              expect(p2.visible).to be false
+              expect(p2.updated_by_user_at).to be_nil
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
-              expect(p3.secondary_title).to eq nil
+              expect(p3.secondary_title).to be_nil
               expect(p3.status).to eq 'Published'
               expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
-              expect(p3.url).to eq nil
+              expect(p3.url).to be_nil
               expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(p3.abstract).to eq nil
-              expect(p3.authors_et_al).to eq false
+              expect(p3.abstract).to be_nil
+              expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
-              expect(p3.visible).to eq true
-              expect(p3.updated_by_user_at).to eq nil
+              expect(p3.visible).to be true
+              expect(p3.updated_by_user_at).to be_nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
               expect(p4.title).to eq 'Journal Article In Press'
@@ -2984,18 +2984,18 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
-              expect(p4.activity_insight_postprint_status).to eq nil
+              expect(p4.activity_insight_postprint_status).to be_nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
               expect(p4.issn).to eq '6789-4321'
-              expect(p4.url).to eq nil
+              expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
-              expect(p4.authors_et_al).to eq true
+              expect(p4.authors_et_al).to be true
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
-              expect(p4.visible).to eq true
-              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.visible).to be true
+              expect(p4.updated_by_user_at).to be_nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
@@ -3016,7 +3016,7 @@ describe ActivityInsightImporter do
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
 
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
             end
 
             context 'when authorships already exist for the existing publication' do
@@ -3346,7 +3346,7 @@ describe ActivityInsightImporter do
             expect(p1.refereed).to eq 'Yes'
             expect(p1.abstract).to eq 'An abstract'
             expect(p1.comment).to eq 'Some comments'
-            expect(p1.visible).to eq true
+            expect(p1.visible).to be true
 
             expect(p2.title).to eq "Sally's PAA Presentation"
             expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -3359,7 +3359,7 @@ describe ActivityInsightImporter do
             expect(p2.refereed).to eq 'No'
             expect(p2.abstract).to eq 'Another abstract'
             expect(p2.comment).to be_nil
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included presentation contributions exist in the database' do
@@ -3451,7 +3451,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to be_nil
               expect(p1.abstract).to be_nil
               expect(p1.comment).to be_nil
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -3464,7 +3464,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included presentation contributions exist in the database' do
@@ -3549,7 +3549,7 @@ describe ActivityInsightImporter do
               expect(p1.refereed).to eq 'Yes'
               expect(p1.abstract).to eq 'An abstract'
               expect(p1.comment).to eq 'Some comments'
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's PAA Presentation"
               expect(p2.name).to eq 'Annual Meeting of the Population Association of America'
@@ -3562,7 +3562,7 @@ describe ActivityInsightImporter do
               expect(p2.refereed).to eq 'No'
               expect(p2.abstract).to eq 'Another abstract'
               expect(p2.comment).to be_nil
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included presentation contributions exist in the database' do
@@ -3643,7 +3643,7 @@ describe ActivityInsightImporter do
             expect(p1.scope).to eq 'Regional'
             expect(p1.start_on).to eq Date.new(2009, 2, 1)
             expect(p1.end_on).to eq Date.new(2009, 8, 1)
-            expect(p1.visible).to eq true
+            expect(p1.visible).to be true
 
             expect(p2.title).to eq "Sally's Film"
             expect(p2.performance_type).to eq 'Film - Other'
@@ -3655,7 +3655,7 @@ describe ActivityInsightImporter do
             expect(p2.scope).to eq 'Local'
             expect(p2.start_on).to eq Date.new(2000, 2, 1)
             expect(p2.end_on).to eq Date.new(2000, 8, 1)
-            expect(p2.visible).to eq true
+            expect(p2.visible).to be true
           end
 
           context 'when no included user performances exist in the database' do
@@ -3751,7 +3751,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to be_nil
               expect(p1.start_on).to be_nil
               expect(p1.end_on).to be_nil
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq 'Film - Other'
@@ -3763,7 +3763,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included user performances exist in the database' do
@@ -3845,7 +3845,7 @@ describe ActivityInsightImporter do
               expect(p1.scope).to eq 'Regional'
               expect(p1.start_on).to eq Date.new(2009, 2, 1)
               expect(p1.end_on).to eq Date.new(2009, 8, 1)
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
 
               expect(p2.title).to eq "Sally's Film"
               expect(p2.performance_type).to eq 'Film - Other'
@@ -3857,7 +3857,7 @@ describe ActivityInsightImporter do
               expect(p2.scope).to eq 'Local'
               expect(p2.start_on).to eq Date.new(2000, 2, 1)
               expect(p2.end_on).to eq Date.new(2000, 8, 1)
-              expect(p2.visible).to eq true
+              expect(p2.visible).to be true
             end
 
             context 'when no included user performances exist in the database' do
@@ -3944,7 +3944,7 @@ describe ActivityInsightImporter do
             expect(p1.publisher_name).to eq 'Test Publisher 1'
             expect(p1.secondary_title).to eq 'Subtitle 1'
             expect(p1.status).to eq 'Published'
-            expect(p1.activity_insight_postprint_status).to eq nil
+            expect(p1.activity_insight_postprint_status).to be_nil
             expect(p1.volume).to eq '9'
             expect(p1.issue).to eq '5'
             expect(p1.edition).to eq '10'
@@ -3952,49 +3952,49 @@ describe ActivityInsightImporter do
             expect(p1.url).to eq 'https://example.com/publication1'
             expect(p1.issn).to eq '6532-1836'
             expect(p1.abstract).to eq 'First publication abstract.'
-            expect(p1.authors_et_al).to eq true
+            expect(p1.authors_et_al).to be true
             expect(p1.published_on).to eq Date.new(2019, 1, 1)
-            expect(p1.updated_by_user_at).to eq nil
+            expect(p1.updated_by_user_at).to be_nil
             expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
             expect(p2.title).to eq 'Second Test Publication'
             expect(p2.publication_type).to eq 'In-house Journal Article'
             expect(p2.journal_title).to eq 'Test Jouranl 2'
-            expect(p2.publisher_name).to eq nil
+            expect(p2.publisher_name).to be_nil
             expect(p2.secondary_title).to eq 'Second Pub Subtitle'
             expect(p2.status).to eq 'Published'
             expect(p2.activity_insight_postprint_status).to eq 'In Progress'
             expect(p2.volume).to eq '7'
-            expect(p2.issue).to eq nil
-            expect(p2.edition).to eq nil
-            expect(p2.page_range).to eq nil
+            expect(p2.issue).to be_nil
+            expect(p2.edition).to be_nil
+            expect(p2.page_range).to be_nil
             expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-            expect(p2.issn).to eq nil
-            expect(p2.abstract).to eq nil
-            expect(p2.authors_et_al).to eq false
+            expect(p2.issn).to be_nil
+            expect(p2.abstract).to be_nil
+            expect(p2.authors_et_al).to be false
             expect(p2.published_on).to eq Date.new(2019, 1, 1)
-            expect(p2.visible).to eq true
-            expect(p2.updated_by_user_at).to eq nil
+            expect(p2.visible).to be true
+            expect(p2.updated_by_user_at).to be_nil
             expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
             expect(p3.title).to eq 'Fifth Test Publication'
             expect(p3.publication_type).to eq 'Book'
             expect(p3.journal_title).to eq 'Some Other Journal'
             expect(p3.publisher_name).to eq 'Some Other Publisher'
-            expect(p3.secondary_title).to eq nil
+            expect(p3.secondary_title).to be_nil
             expect(p3.status).to eq 'Published'
             expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
             expect(p3.volume).to eq '17'
             expect(p3.issue).to eq '8'
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
-            expect(p3.url).to eq nil
+            expect(p3.url).to be_nil
             expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(p3.abstract).to eq nil
-            expect(p3.authors_et_al).to eq false
+            expect(p3.abstract).to be_nil
+            expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
-            expect(p3.visible).to eq true
-            expect(p3.updated_by_user_at).to eq nil
+            expect(p3.visible).to be true
+            expect(p3.updated_by_user_at).to be_nil
             expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
             expect(p4.title).to eq 'Journal Article In Press'
@@ -4003,18 +4003,18 @@ describe ActivityInsightImporter do
             expect(p4.publisher_name).to eq 'Test Publisher 1'
             expect(p4.secondary_title).to eq 'Subtitle 2'
             expect(p4.status).to eq 'In Press'
-            expect(p4.activity_insight_postprint_status).to eq nil
+            expect(p4.activity_insight_postprint_status).to be_nil
             expect(p4.volume).to eq '10'
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
             expect(p4.issn).to eq '6789-4321'
-            expect(p4.url).to eq nil
+            expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
-            expect(p4.authors_et_al).to eq true
+            expect(p4.authors_et_al).to be true
             expect(p4.published_on).to eq Date.new(2019, 1, 2)
-            expect(p4.visible).to eq true
-            expect(p4.updated_by_user_at).to eq nil
+            expect(p4.visible).to be true
+            expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
           end
 
@@ -4035,7 +4035,7 @@ describe ActivityInsightImporter do
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
 
-            expect(p1.visible).to eq false
+            expect(p1.visible).to be false
           end
 
           it 'creates a new authorship record for every faculty author for each imported publication' do
@@ -4206,7 +4206,7 @@ describe ActivityInsightImporter do
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
               expect(p2.activity_insight_postprint_status).to eq 'In Progress'
-              expect(p1.activity_insight_postprint_status).to eq nil
+              expect(p1.activity_insight_postprint_status).to be_nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -4214,9 +4214,9 @@ describe ActivityInsightImporter do
               expect(p1.url).to eq 'https://example.com/publication1'
               expect(p1.issn).to eq '6532-1836'
               expect(p1.abstract).to eq 'First publication abstract.'
-              expect(p1.authors_et_al).to eq true
+              expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.updated_by_user_at).to eq nil
+              expect(p1.updated_by_user_at).to be_nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
               expect(p2.title).to eq 'Existing Title'
@@ -4232,9 +4232,9 @@ describe ActivityInsightImporter do
               expect(p2.url).to eq 'existing_url'
               expect(p2.issn).to eq 'existing_ISSN'
               expect(p2.abstract).to eq 'Existing abstract'
-              expect(p2.authors_et_al).to eq true
+              expect(p2.authors_et_al).to be true
               expect(p2.published_on).to eq Date.new(1980, 1, 1)
-              expect(p2.visible).to eq false
+              expect(p2.visible).to be false
               expect(p2.updated_by_user_at).to eq Time.new(2018, 10, 10, 0, 0, 0)
               expect(p2.doi).to eq 'https://doi.org/10.000/existing'
 
@@ -4242,20 +4242,20 @@ describe ActivityInsightImporter do
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
-              expect(p3.secondary_title).to eq nil
+              expect(p3.secondary_title).to be_nil
               expect(p3.status).to eq 'Published'
               expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
-              expect(p3.url).to eq nil
+              expect(p3.url).to be_nil
               expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(p3.abstract).to eq nil
-              expect(p3.authors_et_al).to eq false
+              expect(p3.abstract).to be_nil
+              expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
-              expect(p3.visible).to eq true
-              expect(p3.updated_by_user_at).to eq nil
+              expect(p3.visible).to be true
+              expect(p3.updated_by_user_at).to be_nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
               expect(p4.title).to eq 'Journal Article In Press'
@@ -4264,18 +4264,18 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
-              expect(p4.activity_insight_postprint_status).to eq nil
+              expect(p4.activity_insight_postprint_status).to be_nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
               expect(p4.issn).to eq '6789-4321'
-              expect(p4.url).to eq nil
+              expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
-              expect(p4.authors_et_al).to eq true
+              expect(p4.authors_et_al).to be true
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
-              expect(p4.visible).to eq true
-              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.visible).to be true
+              expect(p4.updated_by_user_at).to be_nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
@@ -4296,7 +4296,7 @@ describe ActivityInsightImporter do
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
 
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
             end
 
             context 'when authorships already exist for the existing publication' do
@@ -4366,7 +4366,7 @@ describe ActivityInsightImporter do
                 expect(a1.author_number).to eq 2
                 expect(a1.role).to eq 'Author'
 
-                expect(a2).to eq nil
+                expect(a2).to be_nil
 
                 expect(a3.author_number).to eq 2
                 expect(a3.role).to eq 'Author'
@@ -4497,7 +4497,7 @@ describe ActivityInsightImporter do
               expect(p1.publisher_name).to eq 'Test Publisher 1'
               expect(p1.secondary_title).to eq 'Subtitle 1'
               expect(p1.status).to eq 'Published'
-              expect(p1.activity_insight_postprint_status).to eq nil
+              expect(p1.activity_insight_postprint_status).to be_nil
               expect(p1.volume).to eq '9'
               expect(p1.issue).to eq '5'
               expect(p1.edition).to eq '10'
@@ -4505,49 +4505,49 @@ describe ActivityInsightImporter do
               expect(p1.url).to eq 'https://example.com/publication1'
               expect(p1.issn).to eq '6532-1836'
               expect(p1.abstract).to eq 'First publication abstract.'
-              expect(p1.authors_et_al).to eq true
+              expect(p1.authors_et_al).to be true
               expect(p1.published_on).to eq Date.new(2019, 1, 1)
-              expect(p1.updated_by_user_at).to eq nil
+              expect(p1.updated_by_user_at).to be_nil
               expect(p1.doi).to eq 'https://doi.org/10.1186/s40168-020-00798-w'
 
               expect(p2.title).to eq 'Second Test Publication'
               expect(p2.publication_type).to eq 'In-house Journal Article'
               expect(p2.journal_title).to eq 'Test Jouranl 2'
-              expect(p2.publisher_name).to eq nil
+              expect(p2.publisher_name).to be_nil
               expect(p2.secondary_title).to eq 'Second Pub Subtitle'
               expect(p2.status).to eq 'Published'
               expect(p2.activity_insight_postprint_status).to eq 'In Progress'
               expect(p2.volume).to eq '7'
-              expect(p2.issue).to eq nil
-              expect(p2.edition).to eq nil
-              expect(p2.page_range).to eq nil
+              expect(p2.issue).to be_nil
+              expect(p2.edition).to be_nil
+              expect(p2.page_range).to be_nil
               expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
-              expect(p2.issn).to eq nil
-              expect(p2.abstract).to eq nil
-              expect(p2.authors_et_al).to eq false
+              expect(p2.issn).to be_nil
+              expect(p2.abstract).to be_nil
+              expect(p2.authors_et_al).to be false
               expect(p2.published_on).to eq Date.new(2019, 1, 1)
-              expect(p2.visible).to eq false
-              expect(p2.updated_by_user_at).to eq nil
+              expect(p2.visible).to be false
+              expect(p2.updated_by_user_at).to be_nil
               expect(p2.doi).to eq 'https://doi.org/10.1001/amajethics.2019.239'
 
               expect(p3.title).to eq 'Fifth Test Publication'
               expect(p3.publication_type).to eq 'Book'
               expect(p3.journal_title).to eq 'Some Other Journal'
               expect(p3.publisher_name).to eq 'Some Other Publisher'
-              expect(p3.secondary_title).to eq nil
+              expect(p3.secondary_title).to be_nil
               expect(p3.status).to eq 'Published'
               expect(p3.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(p3.volume).to eq '17'
               expect(p3.issue).to eq '8'
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
-              expect(p3.url).to eq nil
+              expect(p3.url).to be_nil
               expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(p3.abstract).to eq nil
-              expect(p3.authors_et_al).to eq false
+              expect(p3.abstract).to be_nil
+              expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
-              expect(p3.visible).to eq true
-              expect(p3.updated_by_user_at).to eq nil
+              expect(p3.visible).to be true
+              expect(p3.updated_by_user_at).to be_nil
               expect(p3.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
 
               expect(p4.title).to eq 'Journal Article In Press'
@@ -4556,18 +4556,18 @@ describe ActivityInsightImporter do
               expect(p4.publisher_name).to eq 'Test Publisher 1'
               expect(p4.secondary_title).to eq 'Subtitle 2'
               expect(p4.status).to eq 'In Press'
-              expect(p4.activity_insight_postprint_status).to eq nil
+              expect(p4.activity_insight_postprint_status).to be_nil
               expect(p4.volume).to eq '10'
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
               expect(p4.issn).to eq '6789-4321'
-              expect(p4.url).to eq nil
+              expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
-              expect(p4.authors_et_al).to eq true
+              expect(p4.authors_et_al).to be true
               expect(p4.published_on).to eq Date.new(2019, 1, 2)
-              expect(p4.visible).to eq true
-              expect(p4.updated_by_user_at).to eq nil
+              expect(p4.visible).to be true
+              expect(p4.updated_by_user_at).to be_nil
               expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
             end
 
@@ -4588,7 +4588,7 @@ describe ActivityInsightImporter do
               p1 = PublicationImport.find_by(source: 'Activity Insight',
                                              source_identifier: '190706413568').publication
 
-              expect(p1.visible).to eq false
+              expect(p1.visible).to be false
             end
 
             context 'when authorships exist for the existing publication' do

@@ -4,8 +4,8 @@ require 'component/component_spec_helper'
 
 describe UserDecorator do
   describe 'masquerading?' do
-    let(:mock_user) { instance_double('User') }
-    let(:mock_impersonator) { instance_double('User') }
+    let(:mock_user) { instance_double(User) }
+    let(:mock_impersonator) { instance_double(User) }
 
     context 'when an impersonator is present' do
       subject { described_class.new(user: mock_user, impersonator: mock_impersonator) }
@@ -26,8 +26,8 @@ describe UserDecorator do
     let(:user) { build_stubbed :user }
 
     it 'has symmetric ==' do
-      expect(decorator == user).to eq true
-      expect(user == decorator).to eq true
+      expect(decorator == user).to be true
+      expect(user == decorator).to be true
     end
   end
 end

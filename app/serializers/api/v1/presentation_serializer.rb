@@ -2,7 +2,7 @@
 
 module API::V1
   class PresentationSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :title,
                :activity_insight_identifier,
                :name,

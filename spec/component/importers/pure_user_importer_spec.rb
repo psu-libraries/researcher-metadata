@@ -72,27 +72,27 @@ describe PureUserImporter do
 
               expect(m1.user).to eq u1
               expect(m1.organization).to eq org1
-              expect(m1.primary).to eq false
+              expect(m1.primary).to be false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
               expect(m1.ended_on).to eq Date.new(1990, 8, 14)
-              expect(m1.updated_by_user_at).to eq nil
+              expect(m1.updated_by_user_at).to be_nil
 
               expect(m2.user).to eq u2
               expect(m2.organization).to eq org2
-              expect(m2.primary).to eq false
+              expect(m2.primary).to be false
               expect(m2.position_title).to eq 'Professor'
               expect(m2.started_on).to eq Date.new(1997, 9, 1)
               expect(m2.ended_on).to eq Date.new(2000, 1, 1)
-              expect(m2.updated_by_user_at).to eq nil
+              expect(m2.updated_by_user_at).to be_nil
 
               expect(m3.user).to eq u2
               expect(m3.organization).to eq org3
-              expect(m3.primary).to eq false
+              expect(m3.primary).to be false
               expect(m3.position_title).to eq 'Senior Associate Dean'
               expect(m3.started_on).to eq Date.new(1997, 9, 1)
-              expect(m3.ended_on).to eq nil
-              expect(m3.updated_by_user_at).to eq nil
+              expect(m3.ended_on).to be_nil
+              expect(m3.updated_by_user_at).to be_nil
             end
           end
 
@@ -140,11 +140,11 @@ describe PureUserImporter do
               # This membership was created from the data in the import.
               expect(m1.user).to eq user1
               expect(m1.organization).to eq org1
-              expect(m1.primary).to eq false
+              expect(m1.primary).to be false
               expect(m1.position_title).to eq 'Associate Professor'
               expect(m1.started_on).to eq Date.new(1984, 8, 14)
               expect(m1.ended_on).to eq Date.new(1990, 8, 14)
-              expect(m1.updated_by_user_at).to eq nil
+              expect(m1.updated_by_user_at).to be_nil
 
               # A membership with a matching user, organization, and start date had already
               # been imported from HR data, so overwrite it with the data from Pure
@@ -152,35 +152,35 @@ describe PureUserImporter do
               expect(m2.source_identifier).to eq '21309545'
               expect(m2.user).to eq user2
               expect(m2.organization).to eq org2
-              expect(m2.primary).to eq false
+              expect(m2.primary).to be false
               expect(m2.position_title).to eq 'Professor'
               expect(m2.started_on).to eq Date.new(1997, 9, 1)
               expect(m2.ended_on).to eq Date.new(2000, 1, 1)
-              expect(m2.updated_by_user_at).to eq nil
+              expect(m2.updated_by_user_at).to be_nil
 
               # A membership with this Pure identifier already existed with different
               # data than the data in the import, so it was updated with the data in
               # the import.
               expect(m3.user).to eq user2
               expect(m3.organization).to eq org3
-              expect(m3.primary).to eq false
+              expect(m3.primary).to be false
               expect(m3.position_title).to eq 'Senior Associate Dean'
               expect(m3.started_on).to eq Date.new(1997, 9, 1)
-              expect(m3.ended_on).to eq nil
-              expect(m3.updated_by_user_at).to eq nil
+              expect(m3.ended_on).to be_nil
+              expect(m3.updated_by_user_at).to be_nil
 
               # This membership has the same source identifier as one of the Pure memberships
               # that is being imported, but it does not list Pure as the import source, so it
               # should not be updated.
-              expect(m4.import_source).to eq nil
+              expect(m4.import_source).to be_nil
               expect(m4.source_identifier).to eq '21279128'
               expect(m4.user).to eq other_user
               expect(m4.organization).to eq other_org
-              expect(m4.primary).to eq true
+              expect(m4.primary).to be true
               expect(m4.position_title).to eq 'Existing Title 2'
               expect(m4.started_on).to eq Date.new(1900, 1, 1)
               expect(m4.ended_on).to eq Date.new(2000, 1, 1)
-              expect(m4.updated_by_user_at).to eq nil
+              expect(m4.updated_by_user_at).to be_nil
             end
           end
         end

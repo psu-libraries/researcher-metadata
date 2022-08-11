@@ -7,13 +7,13 @@ class OrcidWork < OrcidResource
         title: publication.title,
         subtitle: publication.secondary_title
       },
-      "journal-title": publication.preferred_journal_title,
-      "short-description": publication.abstract,
+      'journal-title': publication.preferred_journal_title,
+      'short-description': publication.abstract,
       type: publication_type
     }
 
     if published_date.present?
-      work[:"publication-date"] = {
+      work[:'publication-date'] = {
         year: published_date.year,
         month: published_date.month,
         day: published_date.day
@@ -21,20 +21,20 @@ class OrcidWork < OrcidResource
     end
 
     if external_url.present?
-      work[:"external-ids"] = { "external-id": [] } if work[:"external-ids"].blank?
-      work[:"external-ids"][:"external-id"] << {
-        "external-id-type": 'uri',
-        "external-id-value": external_url.to_s,
-        "external-id-relationship": 'self'
+      work[:'external-ids'] = { 'external-id': [] } if work[:'external-ids'].blank?
+      work[:'external-ids'][:'external-id'] << {
+        'external-id-type': 'uri',
+        'external-id-value': external_url.to_s,
+        'external-id-relationship': 'self'
       }
     end
 
     if doi.present?
-      work[:"external-ids"] = { "external-id": [] } if work[:"external-ids"].blank?
-      work[:"external-ids"][:"external-id"] << {
-        "external-id-type": 'doi',
-        "external-id-value": doi,
-        "external-id-relationship": 'self'
+      work[:'external-ids'] = { 'external-id': [] } if work[:'external-ids'].blank?
+      work[:'external-ids'][:'external-id'] << {
+        'external-id-type': 'doi',
+        'external-id-value': doi,
+        'external-id-relationship': 'self'
       }
     end
 
@@ -42,7 +42,7 @@ class OrcidWork < OrcidResource
       middle_name = ext_author.middle_name.present? ? " #{ext_author.middle_name}" : ''
       work[:contributors] = { contributor: [] } if work[:contributors].blank?
       work[:contributors][:contributor] << {
-        "credit-name": ext_author.first_name.to_s + middle_name + " #{ext_author.last_name}"
+        'credit-name': ext_author.first_name.to_s + middle_name + " #{ext_author.last_name}"
       }
     end
 

@@ -2,11 +2,12 @@ version: 2.1
 orbs:
   ruby: circleci/ruby@1.0
   node: circleci/node@2
+  browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
   build:
     docker:
-      - image: cimg/ruby:2.6.6-node
+      - image: cimg/ruby:3.1.2-node
     executor: ruby/default
     steps:
       - checkout
@@ -17,7 +18,7 @@ jobs:
 
   test:
     docker:
-      - image: circleci/ruby:2.6.6-node-browsers
+      - image: cimg/ruby:3.1.2-browsers
       - image: circleci/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
@@ -33,6 +34,8 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
+      - browser-tools/install-chrome
+      - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
       - node/install-packages:

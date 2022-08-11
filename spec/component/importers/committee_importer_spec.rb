@@ -13,7 +13,7 @@ describe CommitteeImporter do
 
       context 'when no etd records exist in the database' do
         it 'does not create any committee memberships' do
-          expect { importer.call }.to change(CommitteeMembership, :count).by 0
+          expect { importer.call }.not_to change(CommitteeMembership, :count)
         end
       end
 

@@ -2,7 +2,7 @@
 
 module API::V1
   class PerformanceSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :title, :activity_insight_id, :performance_type, :sponsor, :description,
                :group_name, :location, :delivery_type, :scope, :start_on, :end_on
 

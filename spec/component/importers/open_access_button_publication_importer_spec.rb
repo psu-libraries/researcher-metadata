@@ -36,7 +36,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/nodata')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fnodata')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab5.json')))
       end
 
@@ -50,7 +50,7 @@ describe OpenAccessButtonPublicationImporter do
                           doi: 'https://doi.org/10.000/doi1' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/doi1')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
       end
 
@@ -98,7 +98,7 @@ describe OpenAccessButtonPublicationImporter do
                           doi: 'https://doi.org/10.000/doi1' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/doi1')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
       end
 
@@ -135,7 +135,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
 
       before do
-        allow(URI).to receive(:encode).and_raise(RuntimeError)
+        allow(CGI).to receive(:escape).and_raise(RuntimeError)
         allow(ImporterErrorLog).to receive(:log_error)
       end
 
@@ -225,7 +225,7 @@ describe OpenAccessButtonPublicationImporter do
       let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/nodata')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fnodata')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab5.json')))
       end
 
@@ -240,7 +240,7 @@ describe OpenAccessButtonPublicationImporter do
                           open_access_button_last_checked_at: last_check }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/doi1')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
       end
 
@@ -306,7 +306,7 @@ describe OpenAccessButtonPublicationImporter do
                           open_access_button_last_checked_at: last_check }
 
       before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000/doi1')
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
       end
 

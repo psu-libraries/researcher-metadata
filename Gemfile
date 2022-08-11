@@ -25,7 +25,6 @@ gem 'daemons'                           # for running delayed_job daemon (or oth
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
-gem 'fast_jsonapi'                      # a lightning fast JSON:API serializer for Ruby Objects
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
@@ -34,17 +33,23 @@ gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
-gem 'mini_racer', platforms: :ruby      # used to minify assets
+gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'multi_json'                        # JSON parser wrapper
+gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
+gem 'net-pop', require: false           # For Ruby 3 and Rails 6 mail compatibility
+gem 'net-smtp', require: false          # For Ruby 3 and Rails 6 mail compatibility
+gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
 gem 'puma', '~> 5.6'                    # use Puma as the app server
+gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
+gem 'strscan', '3.0.1'                  # Must be kept at 3.0.1 to work with bundler 2.3.8
 gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can be turned into JSON
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets

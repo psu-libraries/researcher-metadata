@@ -12,7 +12,7 @@ describe WOSAuthorName do
       let(:name) { 'Author' }
 
       it 'returns nil' do
-        expect(wos_name.first_name).to eq nil
+        expect(wos_name.first_name).to be_nil
       end
     end
 
@@ -20,7 +20,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, S.' }
 
       it 'returns nil' do
-        expect(wos_name.first_name).to eq nil
+        expect(wos_name.first_name).to be_nil
       end
     end
 
@@ -28,7 +28,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, S. A.' }
 
       it 'returns nil' do
-        expect(wos_name.first_name).to eq nil
+        expect(wos_name.first_name).to be_nil
       end
     end
 
@@ -78,7 +78,7 @@ describe WOSAuthorName do
       let(:name) { 'Author' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -86,7 +86,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, S.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -94,7 +94,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, S. A.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -102,7 +102,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -110,7 +110,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -126,7 +126,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A. B.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
 
@@ -134,7 +134,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A., Jr.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_name).to eq nil
+        expect(wos_name.middle_name).to be_nil
       end
     end
   end
@@ -210,7 +210,7 @@ describe WOSAuthorName do
       let(:name) { 'Author' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
 
@@ -234,7 +234,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
 
@@ -242,7 +242,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A.' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
 
@@ -250,7 +250,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally Anne' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
 
@@ -258,7 +258,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A. B.' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
 
@@ -266,7 +266,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally A., Jr.' }
 
       it 'returns nil' do
-        expect(wos_name.first_initial).to eq nil
+        expect(wos_name.first_initial).to be_nil
       end
     end
   end
@@ -276,7 +276,7 @@ describe WOSAuthorName do
       let(:name) { 'Author' }
 
       it 'returns nil' do
-        expect(wos_name.middle_initial).to eq nil
+        expect(wos_name.middle_initial).to be_nil
       end
     end
 
@@ -284,7 +284,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, S.' }
 
       it 'returns nil' do
-        expect(wos_name.middle_initial).to eq nil
+        expect(wos_name.middle_initial).to be_nil
       end
     end
 
@@ -300,7 +300,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally' }
 
       it 'returns nil' do
-        expect(wos_name.middle_initial).to eq nil
+        expect(wos_name.middle_initial).to be_nil
       end
     end
 
@@ -316,7 +316,7 @@ describe WOSAuthorName do
       let(:name) { 'Author, Sally Anne' }
 
       it 'returns nil' do
-        expect(wos_name.middle_initial).to eq nil
+        expect(wos_name.middle_initial).to be_nil
       end
     end
 

@@ -61,7 +61,7 @@ class DeputyAssignmentComponent < ViewComponent::Base
     attr_reader :deputy_assignment,
                 :current_user
 
-    def i18n(key, options = {})
-      I18n.t("view_component.#{self.class.name.underscore}.#{key}", options)
+    def i18n(key, **options)
+      I18n.t("view_component.#{self.class.name.underscore}.#{key}", **options)
     end
 end

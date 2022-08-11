@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Organizations' do
+describe 'API::V1 Organizations', type: :request do
   describe 'GET /v1/organizations' do
     context 'when no authorization header is included in the request' do
       it 'returns 401 Unauthorized' do
@@ -13,7 +13,7 @@ describe 'API::V1 Organizations' do
 
     context 'when an invalid authorization header value is included in the request' do
       it 'returns 401 Unauthorized' do
-        get '/v1/organizations', headers: { "X-API-Key": 'bad-token' }
+        get '/v1/organizations', headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -28,7 +28,7 @@ describe 'API::V1 Organizations' do
       before do
         create :organization_api_permission, api_token: token, organization: org1
         create :organization_api_permission, api_token: token, organization: org2
-        get '/v1/organizations', headers: { "X-API-Key": 'token123' }
+        get '/v1/organizations', headers: { 'X-API-Key': 'token123' }
       end
 
       it 'returns HTTP status 200' do
@@ -96,7 +96,7 @@ describe 'API::V1 Organizations' do
 
     context 'when an invalid authorization header value is included in the request' do
       it 'returns 401 Unauthorized' do
-        get '/v1/organizations', headers: { "X-API-Key": 'bad-token' }
+        get '/v1/organizations', headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
     end

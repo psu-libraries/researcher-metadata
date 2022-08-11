@@ -473,7 +473,7 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context 'given a publication  with a somewhat different title and the same publication date as another publication' do
+    context 'given a publication with a somewhat different title and the same publication date as another publication' do
       let!(:p1) { create :publication,
                          title: 'Utilizing cloud computing to address big geospatial data challenges',
                          published_on: Date.new(2000, 1, 1),
@@ -1043,7 +1043,7 @@ describe DuplicatePublicationGroup, type: :model do
       end
 
       it 'returns false' do
-        expect(group.auto_merge).to eq false
+        expect(group.auto_merge).to be false
       end
     end
 
@@ -1077,7 +1077,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
 
@@ -1106,11 +1106,11 @@ describe DuplicatePublicationGroup, type: :model do
         it "does not change the member publication's imports" do
           group.auto_merge
           expect(pub.reload.imports).to eq [pure_import]
-          expect(pure_import.reload.auto_merged).to eq nil
+          expect(pure_import.reload.auto_merged).to be_nil
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
 
@@ -1139,11 +1139,11 @@ describe DuplicatePublicationGroup, type: :model do
         it "does not change the member publication's imports" do
           group.auto_merge
           expect(pub.reload.imports).to eq [ai_import]
-          expect(ai_import.reload.auto_merged).to eq nil
+          expect(ai_import.reload.auto_merged).to be_nil
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
     end
@@ -1175,7 +1175,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
 
@@ -1206,13 +1206,13 @@ describe DuplicatePublicationGroup, type: :model do
         it "does not change the member publications' imports" do
           group.auto_merge
           expect(pub1.reload.imports).to eq [pure_import1]
-          expect(pure_import1.reload.auto_merged).to eq nil
+          expect(pure_import1.reload.auto_merged).to be_nil
           expect(pub2.reload.imports).to eq [pure_import2]
-          expect(pure_import2.reload.auto_merged).to eq nil
+          expect(pure_import2.reload.auto_merged).to be_nil
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
 
@@ -1243,13 +1243,13 @@ describe DuplicatePublicationGroup, type: :model do
         it "does not change the member publications' imports" do
           group.auto_merge
           expect(pub1.reload.imports).to eq [ai_import1]
-          expect(ai_import1.reload.auto_merged).to eq nil
+          expect(ai_import1.reload.auto_merged).to be_nil
           expect(pub2.reload.imports).to eq [ai_import2]
-          expect(ai_import2.reload.auto_merged).to eq nil
+          expect(ai_import2.reload.auto_merged).to be_nil
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
 
@@ -1281,11 +1281,11 @@ describe DuplicatePublicationGroup, type: :model do
 
         it "marks the Activity Insight publication's import as having been auto merged" do
           group.auto_merge
-          expect(ai_import.reload.auto_merged).to eq true
+          expect(ai_import.reload.auto_merged).to be true
         end
 
         it 'returns true' do
-          expect(group.auto_merge).to eq true
+          expect(group.auto_merge).to be true
         end
       end
     end
@@ -1324,15 +1324,15 @@ describe DuplicatePublicationGroup, type: :model do
         it "does not change the member publications' imports" do
           group.auto_merge
           expect(pub1.reload.imports).to eq [ai_import]
-          expect(ai_import.reload.auto_merged).to eq nil
+          expect(ai_import.reload.auto_merged).to be_nil
           expect(pub2.reload.imports).to eq [pure_import]
-          expect(pure_import.reload.auto_merged).to eq nil
+          expect(pure_import.reload.auto_merged).to be_nil
           expect(pub3.reload.imports).to eq [ai_import2]
-          expect(ai_import2.reload.auto_merged).to eq nil
+          expect(ai_import2.reload.auto_merged).to be_nil
         end
 
         it 'returns false' do
-          expect(group.auto_merge).to eq false
+          expect(group.auto_merge).to be false
         end
       end
     end
@@ -1390,8 +1390,8 @@ describe DuplicatePublicationGroup, type: :model do
           .attributes
           .delete_if { |key, _value| key == 'id' })
       end
-      let!(:import1) { FactoryBot.create :publication_import, publication: pub1 }
-      let!(:import2) { FactoryBot.create :publication_import, publication: pub2 }
+      let!(:import1) { create :publication_import, publication: pub1 }
+      let!(:import2) { create :publication_import, publication: pub2 }
 
       context 'when PublicationMatchOnDoiPolicy returns true for these publications' do
         it 'deletes one publication' do
@@ -1425,7 +1425,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
 
         it 'does not delete the group' do
-          expect { group.auto_merge_on_doi }.to change(described_class, :count).by 0
+          expect { group.auto_merge_on_doi }.not_to change(described_class, :count)
         end
       end
     end

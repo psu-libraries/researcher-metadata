@@ -9,7 +9,6 @@ class ApplicationRecord < ActiveRecord::Base
 
   def self.to_enum_hash(arr)
     arr
-      .map { |sym| [sym.to_sym, sym.to_s] }
-      .to_h
+      .to_h { |sym| [sym.to_sym, sym.to_s] }
   end
 end

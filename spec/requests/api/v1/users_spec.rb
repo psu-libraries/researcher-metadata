@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Users' do
+describe 'API::V1 Users', type: :request do
   let(:h_index) { nil }
   let(:title) { nil }
   let(:website) { nil }
@@ -563,7 +563,7 @@ describe 'API::V1 Users' do
     end
 
     context 'given a set webaccess_id params' do
-      let(:params) { { '_json': %w(abc123 xyz321 def123 cws161 fake123 inaccessible) } }
+      let(:params) { { _json: %w(abc123 xyz321 def123 cws161 fake123 inaccessible) } }
       let(:headers) { { 'X-API-Key' => 'token123' } }
 
       it 'returns HTTP status 200' do

@@ -40,7 +40,7 @@ describe 'Creating an authorship', type: :feature do
         a = Authorship.find_by(user: user, publication: pub)
 
         expect(a.author_number).to eq 2
-        expect(a.confirmed).to eq true
+        expect(a.confirmed).to be true
       end
     end
   end

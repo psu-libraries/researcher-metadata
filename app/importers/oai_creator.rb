@@ -14,7 +14,7 @@ class OAICreator
 
   def first_name
     fn = text.split(',')[1]
-    fn.strip.split(' ').first.strip if fn
+    fn.strip.split.first.strip if fn
   end
 
   def user_match

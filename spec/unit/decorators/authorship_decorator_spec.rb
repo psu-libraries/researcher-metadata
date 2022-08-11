@@ -418,7 +418,7 @@ describe AuthorshipDecorator do
 
         context 'when the authorship is confirmed' do
           it 'returns true' do
-            expect(ad.exportable_to_orcid?).to eq true
+            expect(ad.exportable_to_orcid?).to be true
           end
         end
 
@@ -426,7 +426,7 @@ describe AuthorshipDecorator do
           let(:confirmed) { false }
 
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
       end
@@ -436,7 +436,7 @@ describe AuthorshipDecorator do
 
         context 'when the authorship is confirmed' do
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
 
@@ -444,7 +444,7 @@ describe AuthorshipDecorator do
           let(:confirmed) { false }
 
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
       end
@@ -458,7 +458,7 @@ describe AuthorshipDecorator do
 
         context 'when the authorship is confirmed' do
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
 
@@ -466,7 +466,7 @@ describe AuthorshipDecorator do
           let(:confirmed) { false }
 
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
       end
@@ -476,7 +476,7 @@ describe AuthorshipDecorator do
 
         context 'when the authorship is confirmed' do
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
 
@@ -484,7 +484,7 @@ describe AuthorshipDecorator do
           let(:confirmed) { false }
 
           it 'returns false' do
-            expect(ad.exportable_to_orcid?).to eq false
+            expect(ad.exportable_to_orcid?).to be false
           end
         end
       end

@@ -2,7 +2,7 @@
 
 module API::V1
   class OrganizationMembershipSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
 
     attribute :organization_name do |object|
       object.organization.name

@@ -72,7 +72,7 @@ describe PSULawSchoolOAIRepoRecord do
   describe '#any_user_matches?' do
     context 'when none of the creators from the given metadata match any users' do
       it 'returns false' do
-        expect(psu_rr.any_user_matches?).to eq false
+        expect(psu_rr.any_user_matches?).to be false
       end
     end
 
@@ -80,7 +80,7 @@ describe PSULawSchoolOAIRepoRecord do
       let(:um2) { double 'user' }
 
       it 'returns true' do
-        expect(psu_rr.any_user_matches?).to eq true
+        expect(psu_rr.any_user_matches?).to be true
       end
     end
 
@@ -88,7 +88,7 @@ describe PSULawSchoolOAIRepoRecord do
       let(:aum2) { [double('user1'), double('user2')] }
 
       it 'returns true' do
-        expect(psu_rr.any_user_matches?).to eq true
+        expect(psu_rr.any_user_matches?).to be true
       end
     end
   end

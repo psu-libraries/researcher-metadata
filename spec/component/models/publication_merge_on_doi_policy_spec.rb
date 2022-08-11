@@ -69,7 +69,7 @@ describe PublicationMergeOnDoiPolicy do
 
         it 'sets secondary_title to nil' do
           policy.merge!
-          expect(publication1.reload.secondary_title).to eq nil
+          expect(publication1.reload.secondary_title).to be_nil
         end
       end
 
@@ -94,7 +94,7 @@ describe PublicationMergeOnDoiPolicy do
 
           it 'sets secondary_title to nil' do
             policy.merge!
-            expect(publication1.reload.secondary_title).to eq nil
+            expect(publication1.reload.secondary_title).to be_nil
           end
         end
 
@@ -138,7 +138,7 @@ describe PublicationMergeOnDoiPolicy do
       context 'when a journal has been selected for the merge' do
         it 'sets journal_title to nil' do
           policy.merge!
-          expect(publication1.reload.journal_title).to eq nil
+          expect(publication1.reload.journal_title).to be_nil
         end
       end
 
@@ -165,7 +165,7 @@ describe PublicationMergeOnDoiPolicy do
       context 'when a journal has been selected for the merge' do
         it 'sets publisher_name to nil' do
           policy.merge!
-          expect(publication1.reload.publisher_name).to eq nil
+          expect(publication1.reload.publisher_name).to be_nil
         end
       end
 
@@ -518,7 +518,7 @@ describe PublicationMergeOnDoiPolicy do
 
         it 'picks true' do
           policy.merge!
-          expect(publication1.reload.authors_et_al).to eq true
+          expect(publication1.reload.authors_et_al).to be true
         end
       end
 
@@ -530,7 +530,7 @@ describe PublicationMergeOnDoiPolicy do
 
         it 'picks true' do
           policy.merge!
-          expect(publication1.reload.authors_et_al).to eq true
+          expect(publication1.reload.authors_et_al).to be true
         end
       end
 
@@ -542,7 +542,7 @@ describe PublicationMergeOnDoiPolicy do
 
         it 'picks false' do
           policy.merge!
-          expect(publication1.reload.authors_et_al).to eq false
+          expect(publication1.reload.authors_et_al).to be false
         end
       end
     end

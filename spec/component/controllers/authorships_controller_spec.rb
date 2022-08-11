@@ -91,7 +91,7 @@ describe AuthorshipsController, type: :controller do
           it 'updates the authorship' do
             put :update, params: { id: authorship.id.to_s, authorship: { visible_in_profile: true } }
 
-            expect(authorship.reload.visible_in_profile).to eq true
+            expect(authorship.reload.visible_in_profile).to be true
           end
 
           it 'updates the timestamp on the authorship' do
@@ -155,7 +155,7 @@ describe AuthorshipsController, type: :controller do
           expect(authorship_1.reload.position_in_profile).to eq 3
           expect(authorship_2.reload.position_in_profile).to eq 1
           expect(authorship_3.reload.position_in_profile).to eq 2
-          expect(authorship_4.reload.position_in_profile).to eq nil
+          expect(authorship_4.reload.position_in_profile).to be_nil
         end
 
         it 'updates the timestamp on each authorship that was reordered' do
@@ -166,7 +166,7 @@ describe AuthorshipsController, type: :controller do
           expect(authorship_1.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
           expect(authorship_2.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
           expect(authorship_3.reload.updated_by_owner_at).to be_within(10.seconds).of Time.current
-          expect(authorship_4.reload.updated_by_owner_at).to eq nil
+          expect(authorship_4.reload.updated_by_owner_at).to be_nil
         end
       end
     end

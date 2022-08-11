@@ -14,8 +14,8 @@ if Dir.exists?(downloader.pure_pub_dir) && !Dir.empty?(downloader.pure_pub_dir)
   end
 
 else
-  Dir.mkdir downloader.data_dir unless Dir.exists? downloader.data_dir
-  Dir.mkdir downloader.pure_pub_dir unless Dir.exists? downloader.pure_pub_dir
+  FileUtils.mkdir_p downloader.data_dir
+  FileUtils.mkdir_p downloader.pure_pub_dir
 
   downloader.download_pure_pubs
 end

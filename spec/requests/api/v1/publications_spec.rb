@@ -2,10 +2,10 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Publications' do
+describe 'API::V1 Publications', type: :request do
   describe 'GET /v1/publications' do
     def query_pubs
-      get "/v1/publications#{params}", headers: { "X-API-Key": 'token123' }
+      get "/v1/publications#{params}", headers: { 'X-API-Key': 'token123' }
     end
 
     context 'when no authorization header is included in the request' do
@@ -17,7 +17,7 @@ describe 'API::V1 Publications' do
 
     context 'when an invalid authorization header value is included in the request' do
       it 'returns 401 Unauthorized' do
-        get '/v1/publications', headers: { "X-API-Key": 'bad-token' }
+        get '/v1/publications', headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -198,12 +198,12 @@ describe 'API::V1 Publications' do
       end
 
       it 'returns 401 Unauthorized' do
-        patch '/v1/publications', headers: { "X-API-Key": 'bad-token' }
+        patch '/v1/publications', headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
 
       it 'returns 401 Unauthorized when the provided token does not have write access' do
-        patch '/v1/publications', headers: { "X-API-Key": 'token123' }
+        patch '/v1/publications', headers: { 'X-API-Key': 'token123' }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -214,7 +214,7 @@ describe 'API::V1 Publications' do
           create :api_token, token: 'token123', write_access: true
 
           patch '/v1/publications',
-                headers: { "X-API-Key": 'token123' },
+                headers: { 'X-API-Key': 'token123' },
                 params: {
                   some_key: 'some_value'
                 }
@@ -234,7 +234,7 @@ describe 'API::V1 Publications' do
           create :api_token, token: 'token123', write_access: true
 
           patch '/v1/publications',
-                headers: { "X-API-Key": 'token123' },
+                headers: { 'X-API-Key': 'token123' },
                 params: {
                   scholarsphere_open_access_url: 'new_url',
                   some_key: 'some_value'
@@ -255,7 +255,7 @@ describe 'API::V1 Publications' do
           create :api_token, token: 'token123', write_access: true
 
           patch '/v1/publications',
-                headers: { "X-API-Key": 'token123' },
+                headers: { 'X-API-Key': 'token123' },
                 params: {
                   scholarsphere_open_access_url: 'new_url',
                   doi: '123',
@@ -285,7 +285,7 @@ describe 'API::V1 Publications' do
                   activity_insight_id: activity_insight_id,
                   scholarsphere_open_access_url: scholarsphere_open_access_url
                 },
-                headers: { "X-API-Key": 'token123' }
+                headers: { 'X-API-Key': 'token123' }
         end
 
         context 'with a new open access location' do
@@ -336,7 +336,7 @@ describe 'API::V1 Publications' do
                   doi: doi,
                   scholarsphere_open_access_url: scholarsphere_open_access_url
                 },
-                headers: { "X-API-Key": 'token123' }
+                headers: { 'X-API-Key': 'token123' }
         end
 
         let(:doi) { 'https://doi.org/10.26207/46a7-9981' }
@@ -429,7 +429,7 @@ describe 'API::V1 Publications' do
 
     context 'when an invalid authorization header value is included in the request' do
       it 'returns 401 Unauthorized' do
-        get "/v1/publications/#{pub.id}", headers: { "X-API-Key": 'bad-token' }
+        get "/v1/publications/#{pub.id}", headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -437,7 +437,7 @@ describe 'API::V1 Publications' do
     context 'when a valid authorization header value is included in the request' do
       context 'when requesting a visible publication' do
         before do
-          get "/v1/publications/#{pub.id}", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{pub.id}", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 200' do
@@ -461,7 +461,7 @@ describe 'API::V1 Publications' do
         let(:visible) { false }
 
         before do
-          get "/v1/publications/#{pub.id}", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{pub.id}", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 404' do
@@ -471,7 +471,7 @@ describe 'API::V1 Publications' do
 
       context 'when requesting an inaccessible publication' do
         before do
-          get "/v1/publications/#{inaccessible_pub.id}", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{inaccessible_pub.id}", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 404' do
@@ -511,7 +511,7 @@ describe 'API::V1 Publications' do
 
     context 'when an invalid authorization header value is included in the request' do
       it 'returns 401 Unauthorized' do
-        get "/v1/publications/#{pub.id}/grants", headers: { "X-API-Key": 'bad-token' }
+        get "/v1/publications/#{pub.id}/grants", headers: { 'X-API-Key': 'bad-token' }
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -519,7 +519,7 @@ describe 'API::V1 Publications' do
     context 'when a valid authorization header value is included in the request' do
       context 'when requesting grants for a visible publication' do
         before do
-          get "/v1/publications/#{pub.id}/grants", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{pub.id}/grants", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 200' do
@@ -543,7 +543,7 @@ describe 'API::V1 Publications' do
         let(:visible) { false }
 
         before do
-          get "/v1/publications/#{pub.id}/grants", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{pub.id}/grants", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 404' do
@@ -559,7 +559,7 @@ describe 'API::V1 Publications' do
 
       context 'when requesting an inaccessible publication' do
         before do
-          get "/v1/publications/#{inaccessible_pub.id}/grants", headers: { "X-API-Key": 'token123' }
+          get "/v1/publications/#{inaccessible_pub.id}/grants", headers: { 'X-API-Key': 'token123' }
         end
 
         it 'returns HTTP status 404' do

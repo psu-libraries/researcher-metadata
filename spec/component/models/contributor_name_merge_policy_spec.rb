@@ -4,10 +4,10 @@ require 'component/component_spec_helper'
 
 describe ContributorNameMergePolicy do
   let(:policy) { described_class.new([contributor1, contributor2]) }
-  let!(:publication1) { FactoryBot.create :publication }
-  let!(:publication2) { FactoryBot.create :publication }
-  let!(:user1) { FactoryBot.create :user, id: 1 }
-  let!(:user2) { FactoryBot.create :user, id: 2 }
+  let!(:publication1) { create :publication }
+  let!(:publication2) { create :publication }
+  let!(:user1) { create :user, id: 1 }
+  let!(:user2) { create :user, id: 2 }
 
   describe '#contributor_names_to_keep' do
     context 'when contributors have the same user_id and the user_id is not blank' do
@@ -27,7 +27,7 @@ describe ContributorNameMergePolicy do
       end
 
       context 'when one contributor names comes from pure' do
-        let!(:import) { FactoryBot.create :publication_import, :from_pure, publication: publication1 }
+        let!(:import) { create :publication_import, :from_pure, publication: publication1 }
 
         it 'keeps this record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1
@@ -36,7 +36,7 @@ describe ContributorNameMergePolicy do
       end
 
       context 'when one contributor name comes from activity insight' do
-        let!(:import) { FactoryBot.create :publication_import, :from_activity_insight, publication: publication2 }
+        let!(:import) { create :publication_import, :from_activity_insight, publication: publication2 }
 
         it 'keeps this record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1
@@ -45,8 +45,8 @@ describe ContributorNameMergePolicy do
       end
 
       context 'when one contributor name comes from activity insight and the other from pure' do
-        let!(:import1) { FactoryBot.create :publication_import, :from_pure, publication: publication1 }
-        let!(:import2) { FactoryBot.create :publication_import, :from_activity_insight, publication: publication2 }
+        let!(:import1) { create :publication_import, :from_pure, publication: publication1 }
+        let!(:import2) { create :publication_import, :from_activity_insight, publication: publication2 }
 
         it 'keeps the pure record and discards the rest' do
           expect(policy.contributor_names_to_keep.count).to eq 1

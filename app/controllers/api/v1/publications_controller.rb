@@ -118,13 +118,13 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -155,20 +155,20 @@ module API::V1
             key :required, [:data]
             property :data do
               key :type, :object
-              key :'$ref', :PublicationV1
+              key :$ref, :PublicationV1
             end
           end
         end
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'not found'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -218,7 +218,7 @@ module API::V1
             property :data do
               key :type, :array
               items do
-                key :'$ref', :PublicationV1
+                key :$ref, :PublicationV1
               end
             end
           end
@@ -226,7 +226,7 @@ module API::V1
         response 401 do
           key :description, 'unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do
@@ -250,37 +250,37 @@ module API::V1
           key :description, 'ScholarSphere Open Access Link update requires either a doi or an activity insight id'
           key :required, true
           schema do
-            key :'$ref', :PublicationInput
+            key :$ref, :PublicationInput
           end
         end
         response 200 do
           key :description, 'ScholarSphere Open Access Link successfully updated response'
           schema do
-            key :'$ref', :PublicationPatchResult
+            key :$ref, :PublicationPatchResult
           end
         end
         response 401 do
           key :description, 'Unauthorized'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 404 do
           key :description, 'No publications found response'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 422 do
           key :description, 'ScholarSphere Open Access Link already exists response'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         response 422 do
           key :description, 'Invalid params response'
           schema do
-            key :'$ref', :ErrorModelV1
+            key :$ref, :ErrorModelV1
           end
         end
         security do

@@ -11,8 +11,8 @@ class PureUserImporter < PureImporter
       persons['items'].each do |item|
         if item['externalId'].present?
           first_and_middle_name = item['name']['firstName']
-          first_name = first_and_middle_name.split(' ')[0].try(:strip)
-          middle_name = first_and_middle_name.split(' ')[1].try(:strip)
+          first_name = first_and_middle_name.split[0].try(:strip)
+          middle_name = first_and_middle_name.split[1].try(:strip)
           webaccess_id = item['externalId'].downcase
 
           u = User.find_by(webaccess_id: webaccess_id) || User.new

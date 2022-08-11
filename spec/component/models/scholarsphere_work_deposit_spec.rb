@@ -76,7 +76,7 @@ describe ScholarsphereFileUpload, type: :model do
       before { dep.deposit_agreement = '0' }
 
       it 'sets the deposit_agreement attribute to false' do
-        expect(dep.deposit_agreement).to eq false
+        expect(dep.deposit_agreement).to be false
       end
     end
 
@@ -84,7 +84,7 @@ describe ScholarsphereFileUpload, type: :model do
       before { dep.deposit_agreement = '1' }
 
       it 'sets the deposit_agreement attribute to true' do
-        expect(dep.deposit_agreement).to eq true
+        expect(dep.deposit_agreement).to be true
       end
     end
   end

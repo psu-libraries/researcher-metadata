@@ -10,14 +10,14 @@ class OrcidEmployment < OrcidResource
           region: 'Pennsylvania',
           country: 'US'
         },
-        "disambiguated-organization": {
-          "disambiguated-organization-identifier": 'grid.29857.31',
-          "disambiguation-source": 'GRID'
+        'disambiguated-organization': {
+          'disambiguated-organization-identifier': 'grid.29857.31',
+          'disambiguation-source': 'GRID'
         }
       },
-      "department-name": membership.organization_name,
-      "role-title": membership.position_title,
-      "start-date": {
+      'department-name': membership.organization_name,
+      'role-title': membership.position_title,
+      'start-date': {
         year: membership.started_on.year,
         month: membership.started_on.month,
         day: membership.started_on.day
@@ -25,7 +25,7 @@ class OrcidEmployment < OrcidResource
     }
 
     if membership.ended_on
-      employment[:"end-date"] = {
+      employment[:'end-date'] = {
         year: membership.ended_on.year,
         month: membership.ended_on.month,
         day: membership.ended_on.day

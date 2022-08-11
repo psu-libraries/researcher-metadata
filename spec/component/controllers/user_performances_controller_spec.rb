@@ -37,7 +37,7 @@ describe UserPerformancesController, type: :controller do
           it 'updates the user performance' do
             put :update, params: { id: up.id.to_s, user_performance: { visible_in_profile: true } }
 
-            expect(up.reload.visible_in_profile).to eq true
+            expect(up.reload.visible_in_profile).to be true
           end
         end
 
@@ -95,7 +95,7 @@ describe UserPerformancesController, type: :controller do
           expect(up_1.reload.position_in_profile).to eq 3
           expect(up_2.reload.position_in_profile).to eq 1
           expect(up_3.reload.position_in_profile).to eq 2
-          expect(up_4.reload.position_in_profile).to eq nil
+          expect(up_4.reload.position_in_profile).to be_nil
         end
       end
     end

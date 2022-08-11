@@ -180,7 +180,7 @@ describe Grant, type: :model do
           let(:wos_id) { '' }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
 
@@ -188,7 +188,7 @@ describe Grant, type: :model do
           let(:wos_id) { nil }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
       end
@@ -208,7 +208,7 @@ describe Grant, type: :model do
           let(:wos_id) { '' }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
 
@@ -216,7 +216,7 @@ describe Grant, type: :model do
           let(:wos_id) { nil }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
       end
@@ -268,7 +268,7 @@ describe Grant, type: :model do
           let(:wos_id) { '' }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
 
@@ -276,7 +276,7 @@ describe Grant, type: :model do
           let(:wos_id) { nil }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
       end
@@ -296,7 +296,7 @@ describe Grant, type: :model do
           let(:wos_id) { '' }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
 
@@ -304,7 +304,7 @@ describe Grant, type: :model do
           let(:wos_id) { nil }
 
           it 'returns nil' do
-            expect(grant.name).to eq nil
+            expect(grant.name).to be_nil
           end
         end
       end
@@ -357,7 +357,7 @@ describe Grant, type: :model do
         let(:wos_an) { '' }
 
         it 'returns nil' do
-          expect(grant.agency).to eq nil
+          expect(grant.agency).to be_nil
         end
       end
 
@@ -365,7 +365,7 @@ describe Grant, type: :model do
         let(:wos_an) { nil }
 
         it 'returns nil' do
-          expect(grant.agency).to eq nil
+          expect(grant.agency).to be_nil
         end
       end
     end
@@ -385,7 +385,7 @@ describe Grant, type: :model do
         let(:wos_an) { '' }
 
         it 'returns nil' do
-          expect(grant.agency).to eq nil
+          expect(grant.agency).to be_nil
         end
       end
 
@@ -393,7 +393,7 @@ describe Grant, type: :model do
         let(:wos_an) { nil }
 
         it 'returns nil' do
-          expect(grant.agency).to eq nil
+          expect(grant.agency).to be_nil
         end
       end
     end

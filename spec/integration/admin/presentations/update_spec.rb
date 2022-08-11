@@ -17,7 +17,7 @@ describe 'updating a presentation via the admin interface', type: :feature do
       end
 
       it "updates the presentation's visibility" do
-        expect(pres.reload.visible).to eq true
+        expect(pres.reload.visible).to be true
       end
     end
   end

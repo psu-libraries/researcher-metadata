@@ -11,7 +11,7 @@ describe NSFGrant do
       before { allow(parsed_grant).to receive(:css).with('Institution').and_return [] }
 
       it 'returns false' do
-        expect(grant.importable?).to eq false
+        expect(grant.importable?).to be false
       end
     end
 
@@ -25,7 +25,7 @@ describe NSFGrant do
       end
 
       it 'returns false' do
-        expect(grant.importable?).to eq false
+        expect(grant.importable?).to be false
       end
     end
 
@@ -42,7 +42,7 @@ describe NSFGrant do
       end
 
       it 'returns true' do
-        expect(grant.importable?).to eq true
+        expect(grant.importable?).to be true
       end
     end
   end

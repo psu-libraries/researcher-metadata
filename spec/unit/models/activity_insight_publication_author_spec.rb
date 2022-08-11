@@ -180,7 +180,7 @@ describe ActivityInsightPublicationAuthor do
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }
 
       it 'returns true' do
-        expect(auth == other).to eq true
+        expect(auth == other).to be true
       end
     end
 
@@ -191,7 +191,7 @@ describe ActivityInsightPublicationAuthor do
       before { allow(other_parsed_auth).to receive(:attribute).with('id').and_return(other_id_attr) }
 
       it 'returns false' do
-        expect(auth == other).to eq false
+        expect(auth == other).to be false
       end
     end
 
@@ -199,7 +199,7 @@ describe ActivityInsightPublicationAuthor do
       let(:other) { double 'some object', activity_insight_id: '10' }
 
       it 'returns false' do
-        expect(auth == other).to eq false
+        expect(auth == other).to be false
       end
     end
 
@@ -207,7 +207,7 @@ describe ActivityInsightPublicationAuthor do
       let(:other) { double 'some object', activity_insight_id: '9' }
 
       it 'returns false' do
-        expect(auth == other).to eq false
+        expect(auth == other).to be false
       end
     end
   end
@@ -221,7 +221,7 @@ describe ActivityInsightPublicationAuthor do
       let(:faculty_name_element) { double 'faculty name element', text: '123' }
 
       it 'returns true' do
-        expect(auth.for_imported_user?).to eq true
+        expect(auth.for_imported_user?).to be true
       end
     end
 
@@ -229,7 +229,7 @@ describe ActivityInsightPublicationAuthor do
       let(:faculty_name_element) { double 'faculty name element', text: '456' }
 
       it 'returns false' do
-        expect(auth.for_imported_user?).to eq false
+        expect(auth.for_imported_user?).to be false
       end
     end
 
@@ -237,7 +237,7 @@ describe ActivityInsightPublicationAuthor do
       let(:faculty_name_element) { double 'faculty name element', text: '' }
 
       it 'returns false' do
-        expect(auth.for_imported_user?).to eq false
+        expect(auth.for_imported_user?).to be false
       end
     end
   end

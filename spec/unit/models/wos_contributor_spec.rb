@@ -44,7 +44,7 @@ describe WOSContributor do
       let(:orcid_attr) { nil }
 
       it 'returns nil' do
-        expect(wc.orcid).to eq nil
+        expect(wc.orcid).to be_nil
       end
     end
   end

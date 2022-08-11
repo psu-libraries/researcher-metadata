@@ -25,11 +25,11 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
   end
 
   def foreign_key_exists?
-    if !matched_foreign_key.nil?
-      true
-    else
+    if matched_foreign_key.nil?
       @error_details = "#{model_class} does not have a foreign key constraint on #{expected}"
       false
+    else
+      true
     end
   end
 

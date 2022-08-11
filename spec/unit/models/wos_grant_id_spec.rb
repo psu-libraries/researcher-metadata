@@ -102,7 +102,7 @@ describe WOSGrantID do
         before { allow(parsed_grant_id).to receive(:text).and_return('123456') }
 
         it 'returns nil' do
-          expect(grant_id.value).to eq nil
+          expect(grant_id.value).to be_nil
         end
       end
     end

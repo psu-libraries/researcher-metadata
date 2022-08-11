@@ -37,7 +37,7 @@ describe PresentationContributionsController, type: :controller do
           it 'updates the presentation contribution' do
             put :update, params: { id: contribution.id.to_s, presentation_contribution: { visible_in_profile: true } }
 
-            expect(contribution.reload.visible_in_profile).to eq true
+            expect(contribution.reload.visible_in_profile).to be true
           end
         end
 
@@ -95,7 +95,7 @@ describe PresentationContributionsController, type: :controller do
           expect(contribution_1.reload.position_in_profile).to eq 3
           expect(contribution_2.reload.position_in_profile).to eq 1
           expect(contribution_3.reload.position_in_profile).to eq 2
-          expect(contribution_4.reload.position_in_profile).to eq nil
+          expect(contribution_4.reload.position_in_profile).to be_nil
         end
       end
     end

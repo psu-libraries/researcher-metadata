@@ -141,7 +141,7 @@ describe Authorship, type: :model do
 
       it 'returns a value of updated_by_owner_at that can be compared to a null time' do
         expect(a.updated_by_owner).to eq timestamp
-        expect(a.updated_by_owner > NullTime.new).to eq true
+        expect(a.updated_by_owner > NullTime.new).to be true
       end
     end
 

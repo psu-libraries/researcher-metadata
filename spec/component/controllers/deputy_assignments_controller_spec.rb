@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe DeputyAssignmentsController, type: :controller do
-  let(:mock_mailer) { instance_spy 'ActionMailer::MessageDelivery' }
+  let(:mock_mailer) { instance_spy ActionMailer::MessageDelivery }
 
   describe '#index' do
     let(:perform_request) { get :index }
@@ -22,8 +22,8 @@ describe DeputyAssignmentsController, type: :controller do
 
     context 'when authenticated' do
       let(:user) { create :user }
-      let(:mock_form) { instance_spy('NewDeputyAssignmentForm') }
-      let(:mock_assignment) { instance_spy('DeputyAssignment') }
+      let(:mock_form) { instance_spy(NewDeputyAssignmentForm) }
+      let(:mock_assignment) { instance_spy(DeputyAssignment) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)

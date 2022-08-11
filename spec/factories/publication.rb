@@ -30,13 +30,13 @@ FactoryBot.define do
 
     trait :journal_article do
       publication_type {
-        Publication.publication_types.map { |type| type if /Journal Article/.match?(type) }.compact.sample
+        Publication.publication_types.grep(/Journal Article/).sample
       }
     end
 
     trait :other_work do
       publication_type {
-        Publication.publication_types.map { |type| type if type.exclude?('Journal Article') }.compact.sample
+        Publication.publication_types.select { |type| type.exclude?('Journal Article') }.sample
       }
     end
 

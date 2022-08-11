@@ -2,7 +2,7 @@
 
 module API::V1
   class PublicationSerializer
-    include FastJsonapi::ObjectSerializer
+    include JSONAPI::Serializer
     attributes :title, :secondary_title, :publication_type, :status, :volume, :issue,
                :edition, :page_range, :authors_et_al, :abstract, :doi, :preferred_open_access_url
 

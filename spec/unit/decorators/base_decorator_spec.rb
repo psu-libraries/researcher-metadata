@@ -7,7 +7,7 @@ require_relative '../../../app/decorators/base_decorator'
 
 describe BaseDecorator do
   let(:decorator) { described_class.new(mock) }
-  let(:mock) { instance_spy('MockObject') }
+  let(:mock) { instance_spy(Object) }
 
   describe '#class' do
     subject { decorator.class }
@@ -30,6 +30,6 @@ describe BaseDecorator do
   # rubocop:enable RSpec/PredicateMatcher
 
   describe '#instance_of?' do
-    specify { expect(decorator.instance_of?(mock.class)).to eq true }
+    specify { expect(decorator.instance_of?(mock.class)).to be true }
   end
 end

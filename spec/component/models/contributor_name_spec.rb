@@ -53,7 +53,7 @@ describe ContributorName, type: :model do
       let(:fn) { 'first' }
 
       it 'is valid' do
-        expect(cn.valid?).to eq true
+        expect(cn.valid?).to be true
       end
     end
 
@@ -61,7 +61,7 @@ describe ContributorName, type: :model do
       let(:mn) { 'middle' }
 
       it 'is valid' do
-        expect(cn.valid?).to eq true
+        expect(cn.valid?).to be true
       end
     end
 
@@ -69,13 +69,13 @@ describe ContributorName, type: :model do
       let(:ln) { 'last' }
 
       it 'is valid' do
-        expect(cn.valid?).to eq true
+        expect(cn.valid?).to be true
       end
     end
 
     context "when all of the contributor's names are nil" do
       it 'is invalid' do
-        expect(cn.valid?).to eq false
+        expect(cn.valid?).to be false
         expect(cn.errors[:base]).to include 'At least one name must be present.'
       end
     end
@@ -86,7 +86,7 @@ describe ContributorName, type: :model do
       let(:ln) { '' }
 
       it 'is invalid' do
-        expect(cn.valid?).to eq false
+        expect(cn.valid?).to be false
         expect(cn.errors[:base]).to include 'At least one name must be present.'
       end
     end
@@ -97,7 +97,7 @@ describe ContributorName, type: :model do
       let(:ln) { ' ' }
 
       it 'is invalid' do
-        expect(cn.valid?).to eq false
+        expect(cn.valid?).to be false
         expect(cn.errors[:base]).to include 'At least one name must be present.'
       end
     end
