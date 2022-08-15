@@ -47,170 +47,162 @@ class ActivityInsightImporter
       end
 
       details.education_history_items.each do |item|
-        begin
-          i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
-            EducationHistoryItem.new
+        i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
+          EducationHistoryItem.new
 
-          i.activity_insight_identifier = item.activity_insight_id if i.new_record?
-          i.user = u
-          i.degree = item.degree
-          i.explanation_of_other_degree = item.explanation_of_other_degree
-          i.institution = item.institution
-          i.school = item.school
-          i.location_of_institution = item.location_of_institution
-          i.emphasis_or_major = item.emphasis_or_major
-          i.supporting_areas_of_emphasis = item.supporting_areas_of_emphasis
-          i.dissertation_or_thesis_title = item.dissertation_or_thesis_title
-          i.is_highest_degree_earned = item.is_highest_degree_earned
-          i.honor_or_distinction = item.honor_or_distinction
-          i.description = item.description
-          i.comments = item.comments
-          i.start_year = item.start_year
-          i.end_year = item.end_year
-          i.save!
-        rescue StandardError => e
-          log_error(item, e, u)
-        end
+        i.activity_insight_identifier = item.activity_insight_id if i.new_record?
+        i.user = u
+        i.degree = item.degree
+        i.explanation_of_other_degree = item.explanation_of_other_degree
+        i.institution = item.institution
+        i.school = item.school
+        i.location_of_institution = item.location_of_institution
+        i.emphasis_or_major = item.emphasis_or_major
+        i.supporting_areas_of_emphasis = item.supporting_areas_of_emphasis
+        i.dissertation_or_thesis_title = item.dissertation_or_thesis_title
+        i.is_highest_degree_earned = item.is_highest_degree_earned
+        i.honor_or_distinction = item.honor_or_distinction
+        i.description = item.description
+        i.comments = item.comments
+        i.start_year = item.start_year
+        i.end_year = item.end_year
+        i.save!
+      rescue StandardError => e
+        log_error(item, e, u)
       end
 
       details.presentations.each do |pres|
-        begin
-          p = Presentation.find_by(activity_insight_identifier: pres.activity_insight_id) ||
-            Presentation.new
+        p = Presentation.find_by(activity_insight_identifier: pres.activity_insight_id) ||
+          Presentation.new
 
-          if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
-            p.activity_insight_identifier = pres.activity_insight_id if p.new_record?
-            p.title = pres.title
-            p.name = pres.name
-            p.organization = pres.organization
-            p.location = pres.location
-            p.presentation_type = pres.type
-            p.meet_type = pres.meet_type
-            p.scope = pres.scope
-            p.attendance = pres.attendance
-            p.refereed = pres.refereed
-            p.abstract = pres.abstract
-            p.comment = pres.comment
+        if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
+          p.activity_insight_identifier = pres.activity_insight_id if p.new_record?
+          p.title = pres.title
+          p.name = pres.name
+          p.organization = pres.organization
+          p.location = pres.location
+          p.presentation_type = pres.type
+          p.meet_type = pres.meet_type
+          p.scope = pres.scope
+          p.attendance = pres.attendance
+          p.refereed = pres.refereed
+          p.abstract = pres.abstract
+          p.comment = pres.comment
 
-            p.save!
-          end
+          p.save!
+        end
 
-          pres.contributors.each_with_index do |cont, index|
-            if cont.activity_insight_user_id
-              contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
+        pres.contributors.each_with_index do |cont, index|
+          if cont.activity_insight_user_id
+            contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
 
-              if contributor
-                c = PresentationContribution.find_by(activity_insight_identifier: cont.activity_insight_id) ||
-                  PresentationContribution.new
+            if contributor
+              c = PresentationContribution.find_by(activity_insight_identifier: cont.activity_insight_id) ||
+                PresentationContribution.new
 
-                c.activity_insight_identifier = cont.activity_insight_id if c.new_record?
-                c.user = contributor
-                c.presentation = p
-                c.role = cont.role
-                c.position = index + 1
+              c.activity_insight_identifier = cont.activity_insight_id if c.new_record?
+              c.user = contributor
+              c.presentation = p
+              c.role = cont.role
+              c.position = index + 1
 
-                c.save!
-              end
+              c.save!
             end
           end
-        rescue StandardError => e
-          log_error(pres, e, u)
         end
+      rescue StandardError => e
+        log_error(pres, e, u)
       end
 
       details.performances.each do |perf|
-        begin
-          p = Performance.find_by(activity_insight_id: perf.activity_insight_id) || Performance.new
+        p = Performance.find_by(activity_insight_id: perf.activity_insight_id) || Performance.new
 
-          if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
-            p.activity_insight_id = perf.activity_insight_id if p.new_record?
-            p.title = perf.title
-            p.performance_type = perf.type
-            p.sponsor = perf.sponsor
-            p.description = perf.description
-            p.group_name = perf.name
-            p.location = perf.location
-            p.delivery_type = perf.delivery_type
-            p.scope = perf.scope
-            p.start_on = perf.start_on
-            p.end_on = perf.end_on
+        if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
+          p.activity_insight_id = perf.activity_insight_id if p.new_record?
+          p.title = perf.title
+          p.performance_type = perf.type
+          p.sponsor = perf.sponsor
+          p.description = perf.description
+          p.group_name = perf.name
+          p.location = perf.location
+          p.delivery_type = perf.delivery_type
+          p.scope = perf.scope
+          p.start_on = perf.start_on
+          p.end_on = perf.end_on
 
-            p.save!
-          end
+          p.save!
+        end
 
-          perf.contributors.each do |cont|
-            if cont.activity_insight_user_id
-              contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
+        perf.contributors.each do |cont|
+          if cont.activity_insight_user_id
+            contributor = User.find_by(activity_insight_identifier: cont.activity_insight_user_id)
 
-              if contributor
-                up = UserPerformance.find_by(activity_insight_id: cont.activity_insight_id) ||
-                  UserPerformance.new
+            if contributor
+              up = UserPerformance.find_by(activity_insight_id: cont.activity_insight_id) ||
+                UserPerformance.new
 
-                up.activity_insight_id = cont.activity_insight_id if up.new_record?
-                up.user = contributor
-                up.performance = p
-                up.contribution = cont.contribution
+              up.activity_insight_id = cont.activity_insight_id if up.new_record?
+              up.user = contributor
+              up.performance = p
+              up.contribution = cont.contribution
 
-                up.save!
-              end
+              up.save!
             end
           end
-        rescue StandardError => e
-          log_error(perf, e, u)
         end
+      rescue StandardError => e
+        log_error(perf, e, u)
       end
 
       details.publications.each do |pub|
-        begin
-          if pub.importable?
-            pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
-              PublicationImport.new(source: IMPORT_SOURCE,
-                                    source_identifier: pub.activity_insight_id,
-                                    publication: Publication.create!(pub_attrs(pub)))
-            pub_record = pi.publication
+        if pub.importable?
+          pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
+            PublicationImport.new(source: IMPORT_SOURCE,
+                                  source_identifier: pub.activity_insight_id,
+                                  publication: Publication.create!(pub_attrs(pub)))
+          pub_record = pi.publication
 
-            if pi.persisted?
-              update_pub_record(pub_record, pub)
-            else
-              pi.save!
+          if pi.persisted?
+            update_pub_record(pub_record, pub)
+          else
+            pi.save!
+          end
+
+          if pub_record.updated_by_user_at.blank?
+            authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
+
+            if authorship.new_record?
+              authorship.user = u
+              authorship.publication = pub_record
             end
 
-            if pub_record.updated_by_user_at.blank?
-              authorship = Authorship.find_by(user: u, publication: pub_record) || Authorship.new
+            authorship.author_number = pub.contributors.index(pub.faculty_author) + 1
+            authorship.role = pub.faculty_author.role
 
-              if authorship.new_record?
-                authorship.user = u
-                authorship.publication = pub_record
-              end
+            authorship.save!
 
-              authorship.author_number = pub.contributors.index(pub.faculty_author) + 1
-              authorship.role = pub.faculty_author.role
-
-              authorship.save!
-
-              pub_record.contributor_names.delete_all
-              pub.contributors.each_with_index do |cont, i|
-                c = ContributorName.new
-                c.publication = pub_record
-                c.first_name = cont.first_name
-                c.middle_name = cont.middle_name
-                c.last_name = cont.last_name
-                c.role = cont.role
-                c.position = i + 1
-                c.user = u if cont.for_imported_user?
-                c.save!
-              end
-            end
-
-            DuplicatePublicationGroup.group_duplicates_of(pub_record)
-
-            if pub_record.reload.duplicate_group
-              pub_record.update!(visible: false)
+            pub_record.contributor_names.delete_all
+            pub.contributors.each_with_index do |cont, i|
+              c = ContributorName.new
+              c.publication = pub_record
+              c.first_name = cont.first_name
+              c.middle_name = cont.middle_name
+              c.last_name = cont.last_name
+              c.role = cont.role
+              c.position = i + 1
+              c.user = u if cont.for_imported_user?
+              c.save!
             end
           end
-        rescue StandardError => e
-          log_error(pub, e, u)
+
+          DuplicatePublicationGroup.group_duplicates_of(pub_record)
+
+          if pub_record.reload.duplicate_group
+            pub_record.update!(visible: false)
+          end
         end
+      rescue StandardError => e
+        log_error(pub, e, u)
       end
     end
 
