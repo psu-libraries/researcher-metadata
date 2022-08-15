@@ -554,7 +554,7 @@ GEM
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
     ssrf_filter (1.0.7)
-    strscan (3.0.1)
+    strscan (3.0.4)
     swagger-blocks (3.0.0)
     temple (0.8.2)
     thor (1.2.1)
@@ -668,7 +668,7 @@ DEPENDENCIES
   spring
   spring-commands-rspec
   spring-watcher-listen (~> 2.0.0)
-  strscan (= 3.0.1)
+  strscan (= 3.0.4)
   swagger-blocks
   turbolinks (~> 5)
   uglifier (>= 1.3.0)
