@@ -17,8 +17,8 @@ class ActivityInsightImporter
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
       details = ai_user_detail(aiu.raw_webaccess_id)
 
-      begin
-        if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
+      if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
+        begin
           u.first_name = aiu.first_name
           u.middle_name = aiu.middle_name
           u.last_name = aiu.last_name
@@ -41,9 +41,13 @@ class ActivityInsightImporter
           u.ai_research_interests = details.research_interests
 
           u.save!
+        rescue StandardError => e
+          log_error(u, e, u)
         end
+      end
 
-        details.education_history_items.each do |item|
+      details.education_history_items.each do |item|
+        begin
           i = EducationHistoryItem.find_by(activity_insight_identifier: item.activity_insight_id) ||
             EducationHistoryItem.new
 
@@ -64,9 +68,13 @@ class ActivityInsightImporter
           i.start_year = item.start_year
           i.end_year = item.end_year
           i.save!
+        rescue StandardError => e
+          log_error(item, e, u)
         end
+      end
 
-        details.presentations.each do |pres|
+      details.presentations.each do |pres|
+        begin
           p = Presentation.find_by(activity_insight_identifier: pres.activity_insight_id) ||
             Presentation.new
 
@@ -105,9 +113,13 @@ class ActivityInsightImporter
               end
             end
           end
+        rescue StandardError => e
+          log_error(pres, e, u)
         end
+      end
 
-        details.performances.each do |perf|
+      details.performances.each do |perf|
+        begin
           p = Performance.find_by(activity_insight_id: perf.activity_insight_id) || Performance.new
 
           if p.new_record? || (p.persisted? && p.updated_by_user_at.blank?)
@@ -143,9 +155,13 @@ class ActivityInsightImporter
               end
             end
           end
+        rescue StandardError => e
+          log_error(perf, e, u)
         end
+      end
 
-        details.publications.each do |pub|
+      details.publications.each do |pub|
+        begin
           if pub.importable?
             pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
               PublicationImport.new(source: IMPORT_SOURCE,
@@ -192,9 +208,9 @@ class ActivityInsightImporter
               pub_record.update!(visible: false)
             end
           end
+        rescue StandardError => e
+          log_error(pub, e, u)
         end
-      rescue Exception => e
-        errors << e
       end
     end
 
@@ -202,6 +218,18 @@ class ActivityInsightImporter
   end
 
   private
+
+    def log_error(imported_object, error, user)
+      ImporterErrorLog.log_error(
+        importer_class: self.class,
+        error: error,
+        metadata: {
+          user_id: user.webaccess_id,
+          ai_data_model: imported_object.class.to_s,
+          details: imported_object&.to_json
+        }
+      )
+    end
 
     def update_pub_record(pub_record, ai_pub)
       if pub_record.updated_by_user_at.blank?
