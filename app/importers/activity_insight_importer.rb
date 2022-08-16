@@ -16,6 +16,7 @@ class ActivityInsightImporter
       pbar.increment
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
       details = ai_user_detail(aiu.raw_webaccess_id)
+      next if details.nil?
 
       if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
         begin
@@ -299,6 +300,7 @@ class ActivityInsightImporter
           user_detail_xml: user_detail_xml&.to_s
         }
       )
+      nil
     end
 end
 
