@@ -219,7 +219,7 @@ class ActivityInsightImporter
         metadata: {
           user_id: user.webaccess_id,
           ai_data_model: imported_object.class.to_s,
-          details: imported_object&.to_json
+          meta_details: imported_object&.to_json
         }
       )
     end
