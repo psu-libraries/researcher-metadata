@@ -3,12 +3,6 @@
 class ActivityInsightImporter
   IMPORT_SOURCE = 'Activity Insight'
 
-  def initialize
-    @errors = []
-  end
-
-  attr_reader :errors
-
   def call
     pbar = ProgressBarTTY.create(title: 'Importing Activity Insight Data', total: ai_users.count)
 
@@ -217,7 +211,7 @@ class ActivityInsightImporter
         importer_class: self.class,
         error: error,
         metadata: {
-          user_id: user.webaccess_id,
+          user_id: user&.webaccess_id,
           ai_data_model: imported_object.class.to_s,
           meta_details: imported_object&.to_json
         }
