@@ -335,7 +335,7 @@ class ActivityInsightDetailUser
   end
 
   def ai_title
-    user.css('ADMIN').first.css('RANK').text.strip.presence
+    user.css('ADMIN')&.first&.css('RANK')&.text&.strip.presence
   end
 
   def webaccess_id
