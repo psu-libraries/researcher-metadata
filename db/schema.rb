@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2021_11_17_144654) do
+ActiveRecord::Schema.define(version: 2022_08_17_195021) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -599,8 +599,6 @@ ActiveRecord::Schema.define(version: 2021_11_17_144654) do
     t.boolean "show_all_contracts", default: false
     t.integer "scopus_h_index"
     t.string "ai_title"
-    t.string "ai_rank"
-    t.string "ai_endowed_title"
     t.string "orcid_identifier"
     t.string "ai_alt_name"
     t.string "ai_building"
