@@ -13,7 +13,6 @@ describe 'Admin user detail page', type: :feature do
                        penn_state_identifier: 'psu345678',
                        scopus_h_index: 724,
                        ai_title: 'Test Title',
-                       ai_rank: 'Test Rank', ai_endowed_title: 'Test Endowed Title',
                        orcid_identifier: 'Test Orcid ID',
                        ai_alt_name: 'Test Alt Name',
                        ai_building: 'Test Building',
@@ -126,14 +125,6 @@ describe 'Admin user detail page', type: :feature do
 
       it "shows the user's title" do
         expect(page).to have_content 'Test Title'
-      end
-
-      it "shows the user's rank" do
-        expect(page).to have_content 'Test Rank'
-      end
-
-      it "shows the user's endowed title" do
-        expect(page).to have_content 'Test Endowed Title'
       end
 
       it "shows the user's Orcid ID" do

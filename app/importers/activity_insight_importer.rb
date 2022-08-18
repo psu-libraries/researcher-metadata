@@ -26,6 +26,7 @@ class ActivityInsightImporter
           u.penn_state_identifier = aiu.penn_state_id
           u.activity_insight_identifier = aiu.activity_insight_id
 
+          u.ai_title = details.ai_title
           u.ai_building = details.building
           u.ai_alt_name = details.alt_name
           u.ai_room_number = details.room_number
@@ -331,6 +332,10 @@ end
 class ActivityInsightDetailUser
   def initialize(parsed_user)
     @parsed_user = parsed_user
+  end
+
+  def ai_title
+    user.css('ADMIN')&.first&.css('RANK')&.text&.strip.presence
   end
 
   def webaccess_id

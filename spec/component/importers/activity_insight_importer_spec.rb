@@ -40,6 +40,7 @@ describe ActivityInsightImporter do
         expect(u1.last_name).to eq 'Testuser'
         expect(u1.activity_insight_identifier).to eq '1649499'
         expect(u1.penn_state_identifier).to eq '976567444'
+        expect(u1.ai_title).to eq 'Associate Professor'
         expect(u1.ai_building).to eq "Sally's Building"
         expect(u1.ai_room_number).to eq '123'
         expect(u1.ai_office_area_code).to eq '444'
@@ -1619,6 +1620,7 @@ describe ActivityInsightImporter do
           expect(u1.last_name).to eq 'User'
           expect(u1.activity_insight_identifier).to eq '1649499'
           expect(u1.penn_state_identifier).to eq '999999999'
+          expect(u1.ai_title).to be_nil
           expect(u1.ai_building).to be_nil
           expect(u1.ai_room_number).to be_nil
           expect(u1.ai_office_area_code).to be_nil
@@ -3202,6 +3204,7 @@ describe ActivityInsightImporter do
           expect(u1.last_name).to eq 'Testuser'
           expect(u1.activity_insight_identifier).to eq '1649499'
           expect(u1.penn_state_identifier).to eq '976567444'
+          expect(u1.ai_title).to eq 'Associate Professor'
           expect(u1.ai_building).to eq "Sally's Building"
           expect(u1.ai_room_number).to eq '123'
           expect(u1.ai_office_area_code).to eq '444'
