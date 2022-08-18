@@ -127,14 +127,6 @@ describe 'Admin user detail page', type: :feature do
         expect(page).to have_content 'Test Title'
       end
 
-      it "shows the user's rank" do
-        expect(page).to have_content 'Test Rank'
-      end
-
-      it "shows the user's endowed title" do
-        expect(page).to have_content 'Test Endowed Title'
-      end
-
       it "shows the user's Orcid ID" do
         expect(page).to have_link 'Test Orcid ID', href: 'Test Orcid ID'
       end
