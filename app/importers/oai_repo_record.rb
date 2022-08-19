@@ -34,7 +34,7 @@ class OAIRepoRecord
   end
 
   def source
-    metadata.xpath('//metadata//oai_dc:dc//dc:source', *namespace)[0].text
+    metadata.xpath('//metadata//oai_dc:dc//dc:source', *namespace)[0].try(:text)
   end
 
   def any_user_matches?
