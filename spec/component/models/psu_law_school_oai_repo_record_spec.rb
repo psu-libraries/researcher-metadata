@@ -91,5 +91,15 @@ describe PSULawSchoolOAIRepoRecord do
         expect(psu_rr.any_user_matches?).to be true
       end
     end
+
+    context 'when the source attribute does not exists in the given metadata' do
+      let(:metadata_xml_fixture) { File.read(Rails.root.join('spec', 'fixtures', 'oai_record_metadata8.xml')) }
+
+      describe '#source' do
+        it 'returns nil as the source value' do
+          expect(psu_rr.source).to be_nil
+        end
+      end
+    end
   end
 end
