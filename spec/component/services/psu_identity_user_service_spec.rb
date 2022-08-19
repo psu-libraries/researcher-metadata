@@ -8,8 +8,8 @@ describe PsuIdentityUserService do
   # cassettes and send new requests.
   let(:webaccess_id) { 'abc123' }
 
-  describe '.find_or_initialize_user' do
-    subject(:call) { described_class.find_or_initialize_user(webaccess_id: webaccess_id) }
+  describe '.update_or_initialize_user' do
+    subject(:call) { described_class.update_or_initialize_user(webaccess_id: webaccess_id) }
 
     context 'when the User exists in the database' do
       let!(:user) { create :user, :with_psu_identity, webaccess_id: webaccess_id }

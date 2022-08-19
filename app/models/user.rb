@@ -65,7 +65,7 @@ class User < ApplicationRecord
   #      * PsuIdentityUserService returns a successful response, but that response is
   #        invalid per User's validations (e.g. first or last name is blank)
   def self.from_omniauth(auth)
-    user = PsuIdentityUserService.find_or_initialize_user(webaccess_id: auth.uid)
+    user = PsuIdentityUserService.update_or_initialize_user(webaccess_id: auth.uid)
     user&.save
     user
   end
@@ -155,11 +155,6 @@ class User < ApplicationRecord
       .active
       .confirmed
       .any?
-  end
-
-  # TODO update PsuIdentityUserService to be able to do this
-  def update_psu_identity
-    update(psu_identity: psu_identity_data, psu_identity_updated_at: Time.zone.now)
   end
 
   def old_potential_open_access_publications

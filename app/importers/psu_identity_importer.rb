@@ -5,7 +5,7 @@ class PsuIdentityImporter
 
   def call
     User.find_each do |user|
-      user.update_psu_identity
+      PsuIdentityUserService.update_or_initialize_user(webaccess_id: user.webaccess_id)
       progress_bar.increment
       sleep DEFAULT_WAIT_TIME
     rescue StandardError => e
