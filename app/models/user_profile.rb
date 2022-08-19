@@ -183,6 +183,6 @@ class UserProfile
     def update_identity_data
       return if user.psu_identity_updated_at.present?
 
-      user.update_psu_identity
+      PsuIdentityUserService.update_or_initialize_user(webaccess_id: user.webaccess_id)
     end
 end
