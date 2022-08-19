@@ -4826,24 +4826,34 @@ describe ActivityInsightImporter do
     context 'when no errors have occurred during an import' do
       before { importer.call }
 
-      it 'returns an empty array' do
-        expect(importer.errors).to eq []
+      it 'does not log errors in ImporterErrorLog' do
+        expect { importer.call }.not_to change(ImporterErrorLog, :count)
       end
     end
 
-    context 'when errors occur during an import' do
-      let(:user) { instance_spy(User) }
-      let(:error) { RuntimeError.new }
+    %w[User EducationHistoryItem Presentation Performance Publication].each do |import|
+      context "when errors occur during #{import} data import" do
+        let(:error) { RuntimeError.new }
 
-      before do
-        allow(User).to receive(:find_by).with(webaccess_id: 'abc123').and_return(user)
-        allow(User).to receive(:find_by).with(webaccess_id: 'def45')
-        allow(user).to receive(:save!).and_raise(error)
-        importer.call
-      end
+        before do
+          allow_any_instance_of(import.constantize).to receive(:save!).and_raise(error)
+        end
 
-      it 'returns an array of the errors' do
-        expect(importer.errors).to eq [error]
+        it 'logs errors to ImporterErrorLog' do
+          if import == 'Publication'
+            expect { importer.call }.to change(ImporterErrorLog, :count).by 4
+          else
+            expect { importer.call }.to change(ImporterErrorLog, :count).by 2
+          end
+          expect(ImporterErrorLog.first.importer_type).to eq 'ActivityInsightImporter'
+          expect(ImporterErrorLog.first.error_type).to eq 'RuntimeError'
+          expect(ImporterErrorLog.first.metadata['user_id']).to eq 'abc123'
+          if import == 'User'
+            expect(ImporterErrorLog.first.metadata['ai_data_model']).to eq import
+          else
+            expect(ImporterErrorLog.first.metadata['ai_data_model']).to eq "ActivityInsight#{import}"
+          end
+        end
       end
     end
   end
