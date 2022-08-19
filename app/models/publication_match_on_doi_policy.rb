@@ -15,7 +15,6 @@ class PublicationMatchOnDoiPolicy
       standard_pass?(:issue) &&
       standard_pass?(:edition) &&
       page_range_pass? &&
-      issn_pass? &&
       publication_type_pass?
 
     false
@@ -63,15 +62,6 @@ class PublicationMatchOnDoiPolicy
       pages1 = publication1.page_range
       pages2 = publication2.page_range
       one_value_present?(pages1, pages2) || (pages1&.split('-')&.first == pages2&.split('-')&.first)
-    end
-
-    def issn_pass?
-      issn1 = publication1.issn
-      issn2 = publication2.issn
-      one_value_present?(issn1, issn2) ||
-        (issn1.blank? && issn2.blank?) ||
-        issn1&.gsub(/[^0-9xX]/, '')&.include?(issn2&.gsub(/[^0-9xX]/, '')) ||
-        issn2&.gsub(/[^0-9xX]/, '')&.include?(issn1&.gsub(/[^0-9xX]/, ''))
     end
 
     def publication_type_pass?
