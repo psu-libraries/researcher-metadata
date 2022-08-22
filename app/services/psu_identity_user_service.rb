@@ -10,7 +10,7 @@ class PsuIdentityUserService
 
       if user.persisted?
         identity = query_psu_identity(webaccess_id)
-        return nil if identity.blank?
+        return user if identity.blank?
 
         user.update attrs(identity)
       end
