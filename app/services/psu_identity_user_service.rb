@@ -4,7 +4,7 @@ class PsuIdentityUserService
   class IdentityServiceError < StandardError; end
 
   class << self
-    def update_or_initialize_user(webaccess_id:)
+    def find_or_initialize_user(webaccess_id:)
       user = User.find_by(webaccess_id: webaccess_id) ||
         initialize_user_from_psu_identity(webaccess_id)
 
@@ -13,8 +13,9 @@ class PsuIdentityUserService
         return nil if identity.blank?
 
         user.update attrs(identity)
-        user.save!
       end
+      user.save
+      user
     end
 
     private

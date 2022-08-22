@@ -37,7 +37,7 @@ class NewDeputyAssignmentForm
   private
 
     def find_or_initialize_deputy(webaccess_id:)
-      user = PsuIdentityUserService.update_or_initialize_user(webaccess_id: webaccess_id)
+      user = PsuIdentityUserService.find_or_initialize_user(webaccess_id: webaccess_id)
 
       if user.blank?
         errors.add(:deputy_webaccess_id, :not_found)

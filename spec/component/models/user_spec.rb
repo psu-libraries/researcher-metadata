@@ -1612,7 +1612,7 @@ describe User, type: :model do
     context 'when identity data is present' do
       let(:user) { create(:user, webaccess_id: 'agw13') }
 
-      before { PsuIdentityUserService.update_or_initialize_user(webaccess_id: user.webaccess_id) }
+      before { PsuIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id) }
 
       it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
       its(:surname) { is_expected.to eq('Wead') }
