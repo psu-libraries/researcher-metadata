@@ -253,7 +253,7 @@ describe ActivityInsightPublication do
   end
 
   describe '#status' do
-    context 'when a singel status element is present' do
+    context 'when a single status element is present' do
       before { allow(parsed_pub).to receive(:css).with('STATUS').and_return([status_element]) }
 
       context 'when the status element in the given data is empty' do
