@@ -18,7 +18,7 @@ describe PsuIdentityImporter do
 
   describe '#call' do
     context 'when there are no errors' do
-      it "no errors are logged and all users are updated" do
+      it 'no errors are logged and all users are updated' do
         importer.call
 
         expect(mock_client).to have_received(:userid).with(user_1.webaccess_id)
@@ -47,7 +47,6 @@ describe PsuIdentityImporter do
         end
       end
     end
-
 
     context 'when a user fails to update' do
       before do
