@@ -2,7 +2,53 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/user5074
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.8.0
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Tue, 23 Aug 2022 16:22:00 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '121'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=5WclNP40EfW0zfu6N4341xsxvr853O2_ypoaADpm.search-service-5bdcf97bc4-8pv7k;
+        path=/search-service
+      X-Request-Id:
+      - 72aacb255cad02b8d9b2026cf0fad859
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - 72aacb255cad02b8d9b2026cf0fad859
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
+        matched the input userid: user5074"],"link":null}'
+  recorded_at: Tue, 23 Aug 2022 16:22:00 GMT
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/ajk5603
     body:
       encoding: US-ASCII
       string: ''
@@ -19,31 +65,31 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 11 Nov 2021 19:24:03 GMT
+      - Tue, 23 Aug 2022 16:22:01 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
-      - '357'
+      - '359'
       Connection:
       - keep-alive
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=Y1D83rCOTI5DqcTnJA4xElUSswPMUbjIK764DEdm.search-service-77488f987b-hfzhk;
+      - JSESSIONID=HaeTaV_ezII592tHZRIGtDUE2nOZhtM7yA5kw_uG.search-service-5bdcf97bc4-vhx2k;
         path=/search-service
       X-Request-Id:
-      - deed4dd23bf7f3b6f320c9b06a96255e
+      - 2c7ab77cf4d70066b342be7d3efdc7aa
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - fd6314a4-8fb5-445c-a433-121103bdee72
+      - 2c7ab77cf4d70066b342be7d3efdc7aa
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Thu, 11 Nov 2021 19:24:03 GMT
-recorded_with: VCR 6.0.0
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","familyName":"Kiessling","preferredGivenName":"Alex","preferredFamilyName":"Kiessling","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"link":{"href":"https://dev.apps.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}'
+  recorded_at: Tue, 23 Aug 2022 16:22:01 GMT
+recorded_with: VCR 6.1.0

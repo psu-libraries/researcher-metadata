@@ -1607,17 +1607,17 @@ describe User, type: :model do
   end
 
   describe '#psu_identity', :vcr do
-    subject { user.psu_identity }
+    subject { user.reload.psu_identity }
 
     context 'when identity data is present' do
-      let(:user) { create(:user, webaccess_id: 'agw13') }
+      let(:user) { create(:user, webaccess_id: 'ajk5603') }
 
       before { PsuIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id) }
 
       it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
-      its(:surname) { is_expected.to eq('Wead') }
-      its(:given_name) { is_expected.to eq('Adam') }
-      its(:user_id) { is_expected.to eq('agw13') }
+      its(:surname) { is_expected.to eq('Kiessling') }
+      its(:given_name) { is_expected.to eq('Alexander') }
+      its(:user_id) { is_expected.to eq('ajk5603') }
     end
 
     context 'when identity data is not present' do

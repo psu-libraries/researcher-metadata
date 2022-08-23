@@ -26,7 +26,6 @@ describe PsuIdentityUserService do
         context 'when the user in PsuIdentity has no preferred names', vcr: true do
           it 'returns a User initialized with data from PsuIdentity' do
             # Note this relies on an edited VCR cassette
-            expect(user).not_to be_persisted
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'Firstname'
             expect(user.last_name).to eq 'Lastname'
@@ -38,7 +37,6 @@ describe PsuIdentityUserService do
         context 'when the user in PsuIdentity has preferred names', vcr: true do
           it 'returns a User initialized with data from PsuIdentity' do
             # Note this relies on an edited VCR cassette
-            expect(user).not_to be_persisted
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'PreferredFirstname'
             expect(user.last_name).to eq 'PreferredLastname'

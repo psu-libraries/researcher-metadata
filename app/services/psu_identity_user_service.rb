@@ -8,13 +8,15 @@ class PsuIdentityUserService
       user = User.find_by(webaccess_id: webaccess_id) ||
         initialize_user_from_psu_identity(webaccess_id)
 
+      return nil if user.nil?
+
       if user.persisted?
         identity = query_psu_identity(webaccess_id)
         return user if identity.blank?
 
         user.update attrs(identity)
       end
-      user.save
+      user.save!
       user
     end
 
