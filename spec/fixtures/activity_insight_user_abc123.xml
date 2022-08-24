@@ -40,6 +40,88 @@
       <UPLOAD_PHOTO/>
       <UPLOAD_CV>abc123/pci/test-cv-5.pdf</UPLOAD_CV>
     </PCI>
+    <ADMIN id="222201395200" dmd:originalSource="MANUAL" dmd:created="2021-07-01T08:23:40" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2022-08-17T12:14:35" dmd:startDate="2021-07-01" dmd:endDate="2022-06-30" dmd:primaryKey="2021-2022">
+			<AC_YEAR>2021-2022</AC_YEAR>
+			<YEAR_START>2021-07-01</YEAR_START>
+			<YEAR_END>2022-06-30</YEAR_END>
+			<CAMPUS/>
+			<CAMPUS_NAME>University Park</CAMPUS_NAME>
+			<COLLEGE>UL</COLLEGE>
+			<COLLEGE_NAME/>
+			<SCHOOL/>
+			<DIVISION/>
+			<INSTITUTE/>
+			<ADMIN_DEP id="222201395205">
+				<DEP/>
+				<DEP_OTHER/>
+				<LIBRARY/>
+			</ADMIN_DEP>
+			<TITLE>Associate Professor</TITLE>
+			<RANK>Associate Professor</RANK>
+			<TENURE></TENURE>
+			<ENDPOS/>
+			<GRADUATE></GRADUATE>
+			<LEAVE/>
+			<LEAVE_OTHER/>
+			<DTM_START/>
+			<DTD_START/>
+			<DTY_START/>
+			<START_START></START_START>
+			<START_END></START_END>
+			<DTM_END/>
+			<DTD_END/>
+			<DTY_END/>
+			<END_START></END_START>
+			<END_END></END_END>
+			<RESULT_SABB/>
+			<TIME_STATUS>Full Time</TIME_STATUS>
+			<HR_CODE>ACT</HR_CODE>
+			<MD_EMPLOYER>Penn State University</MD_EMPLOYER>
+			<FTE/>
+			<FTE_EXTERN/>
+			<DEDMISS/>
+		</ADMIN>
+    <ADMIN id="222201395200" dmd:originalSource="MANUAL" dmd:created="2021-07-01T08:23:40" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2022-08-17T12:14:35" dmd:startDate="2021-07-01" dmd:endDate="2022-06-30" dmd:primaryKey="2021-2022">
+			<AC_YEAR>2020-2021</AC_YEAR>
+			<YEAR_START>2020-07-01</YEAR_START>
+			<YEAR_END>2021-06-30</YEAR_END>
+			<CAMPUS/>
+			<CAMPUS_NAME>University Park</CAMPUS_NAME>
+			<COLLEGE>UL</COLLEGE>
+			<COLLEGE_NAME/>
+			<SCHOOL/>
+			<DIVISION/>
+			<INSTITUTE/>
+			<ADMIN_DEP id="222201395206">
+				<DEP/>
+				<DEP_OTHER/>
+				<LIBRARY/>
+			</ADMIN_DEP>
+			<TITLE>Lecturer</TITLE>
+			<RANK>Lecturer</RANK>
+			<TENURE></TENURE>
+			<ENDPOS/>
+			<GRADUATE></GRADUATE>
+			<LEAVE/>
+			<LEAVE_OTHER/>
+			<DTM_START/>
+			<DTD_START/>
+			<DTY_START/>
+			<START_START></START_START>
+			<START_END></START_END>
+			<DTM_END/>
+			<DTD_END/>
+			<DTY_END/>
+			<END_START></END_START>
+			<END_END></END_END>
+			<RESULT_SABB/>
+			<TIME_STATUS>Full Time</TIME_STATUS>
+			<HR_CODE>ACT</HR_CODE>
+			<MD_EMPLOYER>Penn State University</MD_EMPLOYER>
+			<FTE/>
+			<FTE_EXTERN/>
+			<DEDMISS/>
+		</ADMIN>
     <EDUCATION id="70766815232" dmd:originalSource="MANUAL" dmd:created="2013-04-12T10:00:41" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2013-04-12T10:00:41" dmd:startDate="2006-09-27" dmd:endDate="2009-12-18">
       <DEG>Ph D</DEG>
       <DEGOTHER/>
@@ -265,7 +347,7 @@
         <MNAME>A.</MNAME>
         <LNAME>Testauthor</LNAME>
         <INSTITUTION/>
-        <STATUS/>
+        <STATUS>Graduate Student</STATUS>
         <ROLE>Author</ROLE>
         <PERCENT/>
       </INTELLCONT_AUTH>

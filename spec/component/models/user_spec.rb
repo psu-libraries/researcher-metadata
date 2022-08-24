@@ -23,8 +23,6 @@ describe 'the users table', type: :model do
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_by_user_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:ai_title).of_type(:string) }
-  it { is_expected.to have_db_column(:ai_rank).of_type(:string) }
-  it { is_expected.to have_db_column(:ai_endowed_title).of_type(:string) }
   it { is_expected.to have_db_column(:orcid_identifier).of_type(:string) }
   it { is_expected.to have_db_column(:ai_alt_name).of_type(:string) }
   it { is_expected.to have_db_column(:ai_building).of_type(:string) }

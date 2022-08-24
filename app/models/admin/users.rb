@@ -91,8 +91,6 @@ module Admin::Users
         field(:psu_identity_updated_at) { label 'Identity Updated On' }
         field(:scopus_h_index) { label 'H-Index' }
         field(:ai_title) { label 'Title' }
-        field(:ai_rank) { label 'Rank' }
-        field(:ai_endowed_title) { label 'Endowed Title' }
         field(:orcid_identifier) do
           label 'ORCID ID'
           pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }

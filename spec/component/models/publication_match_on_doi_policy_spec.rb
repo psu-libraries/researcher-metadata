@@ -296,6 +296,17 @@ describe PublicationMatchOnDoiPolicy do
         end
       end
 
+      context "the numbers in publication1's issn are different than the numbers in publication2's issn" do
+        before do
+          publication1.update issn: '1234-4321'
+          publication2.update issn: '5678-8765'
+        end
+
+        it 'returns true' do
+          expect(policy.ok_to_merge?).to be true
+        end
+      end
+
       context "publication1's publication_type is a journal article and publication2's publication_type is a different type of journal article" do
         before do
           publication1.update publication_type: 'Journal Article'

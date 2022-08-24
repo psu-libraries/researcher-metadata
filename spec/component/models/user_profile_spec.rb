@@ -7,7 +7,7 @@ describe UserProfile do
 
   let!(:user) { create :user,
                        webaccess_id: 'abc123',
-                       ai_title: 'test title',
+                       ai_title: 'ai test title',
                        ai_website: 'www.test.com',
                        ai_bio: 'test bio',
                        show_all_publications: true,
@@ -50,8 +50,40 @@ describe UserProfile do
   end
 
   describe '#title' do
-    it "returns the given user's title from Activity Insight" do
-      expect(profile.title).to eq 'test title'
+    context 'when ai_title is present for user' do
+      it "returns the given user's title from Activity Insight" do
+        expect(profile.title).to eq 'ai test title'
+      end
+    end
+
+    context 'when ai_title is not present for user but multiple organization position_title from Pure are' do
+      let!(:user_organization_membership1) do
+        create :user_organization_membership, user: user, started_on: Date.yesterday, position_title: 'Title 1'
+      end
+      let!(:user_organization_membership2) do
+        create :user_organization_membership, user: user, started_on: Date.today, position_title: 'Title 2'
+      end
+
+      before do
+        user.update ai_title: nil
+        user.save!
+      end
+
+      context 'when one of the postition titles is `primary`' do
+        before do
+          user_organization_membership1.update primary: true
+        end
+
+        it "returns the given user's title from Pure" do
+          expect(profile.title).to eq user_organization_membership1.position_title
+        end
+      end
+
+      context 'when no postion_title is `primary`' do
+        it 'returns the most recent position title' do
+          expect(profile.title).to eq user_organization_membership2.position_title
+        end
+      end
     end
   end
 

@@ -20,7 +20,9 @@ class UserProfile
            to: :user
 
   def title
-    user.ai_title
+    user.ai_title ||
+      user.user_organization_memberships.where(primary: true).first&.position_title ||
+      user.user_organization_memberships.order('started_on').last&.position_title
   end
 
   def email
