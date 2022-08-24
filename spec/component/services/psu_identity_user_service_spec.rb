@@ -12,13 +12,19 @@ describe PsuIdentityUserService, vcr: true do
     subject(:call) { described_class.find_or_initialize_user(webaccess_id: webaccess_id) }
 
     context 'when the User exists in the database' do
-      let!(:user) { create :user, webaccess_id: webaccess_id, first_name: 'FName', last_name: 'LName' }
+      let!(:user) do
+        create :user, webaccess_id: webaccess_id,
+                      first_name: 'FName',
+                      last_name: 'LName',
+                      middle_name: 'MName'
+      end
 
       context 'when identity data is found' do
         it 'returns the User updated with data from PsuIdentity' do
           expect(call).to eq user
           user.reload
           expect(user.first_name).to eq 'Firstname'
+          expect(user.middle_name).to eq 'Middlename'
           expect(user.last_name).to eq 'Lastname'
           expect(user.psu_identity.present?).to be true
         end
@@ -29,6 +35,7 @@ describe PsuIdentityUserService, vcr: true do
           expect(call).to eq user
           user.reload
           expect(user.first_name).to eq 'FName'
+          expect(user.middle_name).to eq 'MName'
           expect(user.last_name).to eq 'LName'
           expect(user.psu_identity.present?).to be false
         end
@@ -44,6 +51,7 @@ describe PsuIdentityUserService, vcr: true do
             # Note this relies on an edited VCR cassette
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'Firstname'
+            expect(user.middle_name).to eq 'Middlename'
             expect(user.last_name).to eq 'Lastname'
             expect(user.psu_identity).to be_an_instance_of(PsuIdentity::SearchService::Person)
             expect(user.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
@@ -55,6 +63,7 @@ describe PsuIdentityUserService, vcr: true do
             # Note this relies on an edited VCR cassette
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'PreferredFirstname'
+            expect(user.middle_name).to eq 'PreferredMiddlename'
             expect(user.last_name).to eq 'PreferredLastname'
             expect(user.psu_identity).to be_an_instance_of(PsuIdentity::SearchService::Person)
             expect(user.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)

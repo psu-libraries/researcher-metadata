@@ -18,10 +18,15 @@ class ActivityInsightImporter
       details = ai_user_detail(aiu.raw_webaccess_id)
 
       begin
-        if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
+        # The identity service imports should be the authority on
+        # names so only import names for new records.
+        if u.new_record?
           u.first_name = aiu.first_name
           u.middle_name = aiu.middle_name
           u.last_name = aiu.last_name
+        end
+
+        if u.new_record? || (u.persisted? && u.updated_by_user_at.blank?)
           u.webaccess_id = aiu.webaccess_id
           u.penn_state_identifier = aiu.penn_state_id
           u.activity_insight_identifier = aiu.activity_insight_id

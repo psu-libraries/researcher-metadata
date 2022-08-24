@@ -17,18 +17,16 @@ class PureUserImporter < PureImporter
 
           u = User.find_by(webaccess_id: webaccess_id) || User.new
 
-          # Create the user with Pure data if we don't have a record at all, and update
-          # it with new Pure data if we've never imported the user from Activity Insight
-          # and it's never been updated manually. We assume that Activity Insight
-          # and manual entry are both better sources of user data than Pure.
           u.scopus_h_index = item['scopusHIndex']
           u.pure_uuid = item['uuid']
 
-          if u.new_record? || (u.activity_insight_identifier.blank? && u.updated_by_user_at.blank?)
+          # The identity service imports should be the authority on 
+          # names so only import names for new records.
+          if u.new_record?
             u.first_name = first_name
             u.middle_name = middle_name
             u.last_name = item['name']['lastName']
-            u.webaccess_id = webaccess_id if u.new_record?
+            u.webaccess_id = webaccess_id
           end
 
           u.save!
