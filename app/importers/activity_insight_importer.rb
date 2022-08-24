@@ -745,7 +745,7 @@ class ActivityInsightPublication
   end
 
   def status
-    text_for('STATUS')
+    parsed_publication.css('STATUS').first&.text&.strip.presence
   end
 
   def importable?

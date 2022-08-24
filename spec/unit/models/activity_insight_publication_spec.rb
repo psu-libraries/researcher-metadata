@@ -253,27 +253,40 @@ describe ActivityInsightPublication do
   end
 
   describe '#status' do
-    before { allow(parsed_pub).to receive(:css).with('STATUS').and_return status_element }
+    context 'when a single status element is present' do
+      before { allow(parsed_pub).to receive(:css).with('STATUS').and_return([status_element]) }
 
-    context 'when the status element in the given data is empty' do
-      let(:status_element) { double 'status element', text: '' }
+      context 'when the status element in the given data is empty' do
+        let(:status_element) { double 'status element', text: '' }
 
-      it 'returns nil' do
-        expect(pub.status).to be_nil
+        it 'returns nil' do
+          expect(pub.status).to be_nil
+        end
+      end
+
+      context 'when the status element in the given data contains text' do
+        let(:status_element) { double 'status element', text: "\n     Status  \n   " }
+
+        it 'returns the text with surrounding whitespace removed' do
+          expect(pub.status).to eq 'Status'
+        end
       end
     end
 
-    context 'when the status element in the given data contains text' do
-      let(:status_element) { double 'status element', text: "\n     Status  \n   " }
+    context 'when multiple status elements are present' do
+      let(:status_element1) { double 'status element', text: "\n     Published  \n   " }
+      let(:status_element2) { double 'status element', text: 'Graduate Student' }
 
-      it 'returns the text with surrounding whitespace removed' do
-        expect(pub.status).to eq 'Status'
+      before { allow(parsed_pub).to receive(:css).with('STATUS').and_return([status_element1, status_element2]) }
+
+      it 'returns the first status element' do
+        expect(pub.status).to eq 'Published'
       end
     end
   end
 
   describe '#importable?' do
-    before { allow(parsed_pub).to receive(:css).with('STATUS').and_return status_element }
+    before { allow(parsed_pub).to receive(:css).with('STATUS').and_return([status_element]) }
 
     before { allow(parsed_pub).to receive(:css).with('RMD_ID').and_return rmd_id_element }
 
