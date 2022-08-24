@@ -20,7 +20,7 @@ class PureUserImporter < PureImporter
           u.scopus_h_index = item['scopusHIndex']
           u.pure_uuid = item['uuid']
 
-          # The identity service imports should be the authority on 
+          # The identity service imports should be the authority on
           # names so only import names for new records.
           if u.new_record?
             u.first_name = first_name

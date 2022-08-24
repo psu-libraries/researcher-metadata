@@ -41,3 +41,11 @@ RSpec/LeakyConstantDeclaration:
 Style/Semicolon:
   Exclude:
     - 'lib/tasks/database_data.rake'
+
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/importers/activity_insight_importer.rb'
+
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/importers/activity_insight_importer.rb'
