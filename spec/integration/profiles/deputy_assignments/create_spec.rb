@@ -12,7 +12,7 @@ describe 'Creating a new proxy', type: :feature do
   end
 
   context 'when logged in', :vcr do
-    let!(:user) { create :user }
+    let!(:user) { create :user, webaccess_id: 'abc123' }
 
     before do
       authenticate_as(user)
