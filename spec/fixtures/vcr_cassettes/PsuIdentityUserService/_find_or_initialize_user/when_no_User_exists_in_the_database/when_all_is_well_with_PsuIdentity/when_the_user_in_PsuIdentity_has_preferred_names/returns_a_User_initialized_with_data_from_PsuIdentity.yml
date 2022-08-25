@@ -43,7 +43,7 @@ http_interactions:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"abc123","cprid":"2784093","givenName":"Firstname","middleName":"Garner","familyName":"Lastname","preferredGivenName":"PreferredFirstname","preferredFamilyName":"PreferredLastname","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"PreferredFirstname
+      string: '{"userid":"abc123","cprid":"2784093","givenName":"Firstname","middleName":"Garner","familyName":"Lastname","preferredGivenName":"PreferredFirstname","preferredFamilyName":"PreferredLastname","preferredMiddleName":"PreferredMiddlename","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"PreferredFirstname
         PreferredLastname","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
   recorded_at: Thu, 18 Nov 2021 18:24:48 GMT
 recorded_with: VCR 6.0.0

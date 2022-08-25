@@ -3193,15 +3193,15 @@ describe ActivityInsightImporter do
       context 'when the existing user has not been updated by an admin' do
         let(:updated) { nil }
 
-        it 'creates any new users and updates the existing user' do
+        it 'creates any new users and updates the existing user (except name)' do
           expect { importer.call }.to change(User, :count).by 1
 
           u1 = User.find_by(webaccess_id: 'abc123')
           u2 = User.find_by(webaccess_id: 'def45')
 
-          expect(u1.first_name).to eq 'Sally'
-          expect(u1.middle_name).to be_nil
-          expect(u1.last_name).to eq 'Testuser'
+          expect(u1.first_name).to eq 'Existing'
+          expect(u1.middle_name).to eq 'T.'
+          expect(u1.last_name).to eq 'User'
           expect(u1.activity_insight_identifier).to eq '1649499'
           expect(u1.penn_state_identifier).to eq '976567444'
           expect(u1.ai_title).to eq 'Associate Professor'

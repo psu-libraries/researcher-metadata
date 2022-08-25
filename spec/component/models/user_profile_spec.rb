@@ -28,14 +28,14 @@ describe UserProfile do
   it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
 
   describe '::new' do
-    before { allow(user).to receive(:update_psu_identity) }
+    before { allow(PsuIdentityUserService).to receive(:find_or_initialize_user) }
 
     context 'when the user has data from the identity management service' do
       let(:user) { build(:user, :with_psu_identity) }
 
       it 'does NOT update their identity' do
         described_class.new(user)
-        expect(user).not_to have_received(:update_psu_identity)
+        expect(PsuIdentityUserService).not_to have_received(:find_or_initialize_user)
       end
     end
 
@@ -44,7 +44,7 @@ describe UserProfile do
 
       it 'updates their identity' do
         described_class.new(user)
-        expect(user).to have_received(:update_psu_identity)
+        expect(PsuIdentityUserService).to have_received(:find_or_initialize_user)
       end
     end
   end

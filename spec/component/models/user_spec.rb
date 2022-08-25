@@ -1604,47 +1604,18 @@ describe User, type: :model do
     end
   end
 
-  describe '#update_psu_identity', :vcr do
-    context 'when the user exists at Penn State' do
-      let(:user) { create(:user, webaccess_id: 'agw13') }
-
-      it "updates the user with data from Penn State's identity management service" do
-        expect {
-          user.update_psu_identity
-        }.to change { user.psu_identity.present? }.from(false).to(true)
-          .and change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
-      end
-    end
-
-    context 'when the user does NOT exist at Penn State' do
-      let(:user) { create(:user, webaccess_id: 'idonotexist') }
-
-      it 'does not update the psu_identity attribute' do
-        expect {
-          user.update_psu_identity
-        }.not_to change(user, :psu_identity)
-      end
-
-      it 'updates the psu_identity timestamp' do
-        expect {
-          user.update_psu_identity
-        }.to change(user, :psu_identity_updated_at).from(nil).to(be_within(1.minute).of(Time.zone.now))
-      end
-    end
-  end
-
   describe '#psu_identity', :vcr do
-    subject { user.psu_identity }
+    subject { user.reload.psu_identity }
 
     context 'when identity data is present' do
-      let(:user) { create(:user, webaccess_id: 'agw13') }
+      let(:user) { create(:user, webaccess_id: 'ajk5603') }
 
-      before { user.update_psu_identity }
+      before { PsuIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id) }
 
       it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
-      its(:surname) { is_expected.to eq('Wead') }
-      its(:given_name) { is_expected.to eq('Adam') }
-      its(:user_id) { is_expected.to eq('agw13') }
+      its(:surname) { is_expected.to eq('Kiessling') }
+      its(:given_name) { is_expected.to eq('Alexander') }
+      its(:user_id) { is_expected.to eq('ajk5603') }
     end
 
     context 'when identity data is not present' do

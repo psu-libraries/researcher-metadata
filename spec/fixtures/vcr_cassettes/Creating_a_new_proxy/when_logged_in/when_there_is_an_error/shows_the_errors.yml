@@ -19,7 +19,7 @@ http_interactions:
       message: Not Found
     headers:
       Date:
-      - Tue, 23 Aug 2022 16:22:01 GMT
+      - Tue, 23 Aug 2022 14:42:35 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
@@ -29,26 +29,26 @@ http_interactions:
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=5HdpMd_i7F3moZpjOKN4UYsmeVgC3gWNtvG2ShI8.search-service-5bdcf97bc4-8pv7k;
+      - JSESSIONID=ERyDopcGlJM9Qzjn8B2NkoTz7Hf1Wd2inAtSVrxy.search-service-5bdcf97bc4-vhx2k;
         path=/search-service
       X-Request-Id:
-      - '0925a90fe46445c0a932776db0ac6676'
+      - 8740a868bf8b0708b8041e7f42a567dd
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - '0925a90fe46445c0a932776db0ac6676'
+      - 8740a868bf8b0708b8041e7f42a567dd
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
       string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
-        matched the input userid: user5075"],"link":null}'
-  recorded_at: Tue, 23 Aug 2022 16:22:01 GMT
+        matched the input userid: user5076"],"link":null}'
+  recorded_at: Tue, 23 Aug 2022 14:42:35 GMT
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/ajk5603
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
     body:
       encoding: US-ASCII
       string: ''
@@ -61,35 +61,35 @@ http_interactions:
       - "*/*"
   response:
     status:
-      code: 200
-      message: OK
+      code: 404
+      message: Not Found
     headers:
       Date:
-      - Tue, 23 Aug 2022 16:22:02 GMT
+      - Tue, 23 Aug 2022 14:42:35 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
-      - '359'
+      - '118'
       Connection:
       - keep-alive
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=5gAWUPtYzD54ZhrpnWtpjv2SH07sprdeyYtUWHPO.search-service-5bdcf97bc4-vhx2k;
+      - JSESSIONID=T3deSWDhmI1iNsLZKlsBFDOjxQh6qckOp4PcZLXJ.search-service-5bdcf97bc4-vhx2k;
         path=/search-service
       X-Request-Id:
-      - 545bf908ad7f6cac5997ba3e50e7de39
+      - 612baa417e02e4392d44b4a8c3abf29a
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - 545bf908ad7f6cac5997ba3e50e7de39
+      - 612baa417e02e4392d44b4a8c3abf29a
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","familyName":"Kiessling","preferredGivenName":"Alex","preferredFamilyName":"Kiessling","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"link":{"href":"https://dev.apps.psu.edu/cpr/resources/2460424"},"displayName":"Alex
-        Kiessling"}'
-  recorded_at: Tue, 23 Aug 2022 16:22:02 GMT
+      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
+        matched the input userid: agw13"],"link":null}'
+  recorded_at: Tue, 23 Aug 2022 14:42:35 GMT
 recorded_with: VCR 6.1.0

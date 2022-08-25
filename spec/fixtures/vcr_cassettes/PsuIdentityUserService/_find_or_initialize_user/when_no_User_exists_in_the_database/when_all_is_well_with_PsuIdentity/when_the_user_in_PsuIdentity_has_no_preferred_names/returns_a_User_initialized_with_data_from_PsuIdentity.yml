@@ -43,7 +43,7 @@ http_interactions:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"abc123","cprid":"7489945","givenName":"Firstname","familyName":"Lastname","active":true,"confHold":false,"serviceAccount":false,"affiliation":["MEMBER"],"displayName":"Firstname
+      string: '{"userid":"abc123","cprid":"7489945","givenName":"Firstname","familyName":"Lastname","middleName":"Middlename","active":true,"confHold":false,"serviceAccount":false,"affiliation":["MEMBER"],"displayName":"Firstname
         Lastname","link":{"href":"https://dev.apps.psu.edu/cpr/resources/7489945"}}'
   recorded_at: Thu, 18 Nov 2021 18:13:26 GMT
 recorded_with: VCR 6.0.0

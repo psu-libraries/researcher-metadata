@@ -12,7 +12,7 @@ describe 'Creating a new proxy', type: :feature do
   end
 
   context 'when logged in', :vcr do
-    let!(:user) { create :user }
+    let!(:user) { create :user, webaccess_id: 'abc123' }
 
     before do
       authenticate_as(user)
@@ -21,19 +21,19 @@ describe 'Creating a new proxy', type: :feature do
 
     context 'when all goes well' do
       before do
-        fill_in 'new_deputy_assignment_form_deputy_webaccess_id', with: 'agw13'
+        fill_in 'new_deputy_assignment_form_deputy_webaccess_id', with: 'ajk5603'
         click_button I18n.t!('helpers.submit.new_deputy_assignment_form.create')
       end
 
       it 'creates a DeputyAssignment' do
         da = DeputyAssignment.active.where(primary: user).last
         expect(da).to be_present
-        expect(da.deputy.webaccess_id).to eq 'agw13'
+        expect(da.deputy.webaccess_id).to eq 'ajk5603'
         expect(page).to have_content da.deputy.name
       end
 
       it 'emails the deputy of the assignment' do
-        open_email('agw13@psu.edu')
+        open_email('ajk5603@psu.edu')
         expect(current_email.subject).to match(/proxy assignment request/i)
       end
     end

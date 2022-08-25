@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PsuIdentityUserService do
+describe PsuIdentityUserService, vcr: true do
   # Note this spec uses VCR to mock HTTP requests to the actual PSU identity
   # server. If you change this value, you will will invalidate the VCR
   # cassettes and send new requests.
@@ -12,10 +12,33 @@ describe PsuIdentityUserService do
     subject(:call) { described_class.find_or_initialize_user(webaccess_id: webaccess_id) }
 
     context 'when the User exists in the database' do
-      let!(:user) { create :user, :with_psu_identity, webaccess_id: webaccess_id }
+      let!(:user) do
+        create :user, webaccess_id: webaccess_id,
+                      first_name: 'FName',
+                      last_name: 'LName',
+                      middle_name: 'MName'
+      end
 
-      it 'returns the User' do
-        expect(call).to eq user
+      context 'when identity data is found' do
+        it 'returns the User updated with data from PsuIdentity' do
+          expect(call).to eq user
+          user.reload
+          expect(user.first_name).to eq 'Firstname'
+          expect(user.middle_name).to eq 'Middlename'
+          expect(user.last_name).to eq 'Lastname'
+          expect(user.psu_identity.present?).to be true
+        end
+      end
+
+      context 'when no identity data is found' do
+        it 'returns the User without updated identity data' do
+          expect(call).to eq user
+          user.reload
+          expect(user.first_name).to eq 'FName'
+          expect(user.middle_name).to eq 'MName'
+          expect(user.last_name).to eq 'LName'
+          expect(user.psu_identity.present?).to be false
+        end
       end
     end
 
@@ -23,31 +46,31 @@ describe PsuIdentityUserService do
       context 'when all is well with PsuIdentity' do
         let(:user) { call }
 
-        context 'when the user in PsuIdentity has no preferred names', vcr: true do
+        context 'when the user in PsuIdentity has no preferred names' do
           it 'returns a User initialized with data from PsuIdentity' do
             # Note this relies on an edited VCR cassette
-            expect(user).not_to be_persisted
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'Firstname'
+            expect(user.middle_name).to eq 'Middlename'
             expect(user.last_name).to eq 'Lastname'
             expect(user.psu_identity).to be_an_instance_of(PsuIdentity::SearchService::Person)
             expect(user.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
           end
         end
 
-        context 'when the user in PsuIdentity has preferred names', vcr: true do
+        context 'when the user in PsuIdentity has preferred names' do
           it 'returns a User initialized with data from PsuIdentity' do
             # Note this relies on an edited VCR cassette
-            expect(user).not_to be_persisted
             expect(user.webaccess_id).to eq webaccess_id
             expect(user.first_name).to eq 'PreferredFirstname'
+            expect(user.middle_name).to eq 'PreferredMiddlename'
             expect(user.last_name).to eq 'PreferredLastname'
             expect(user.psu_identity).to be_an_instance_of(PsuIdentity::SearchService::Person)
             expect(user.psu_identity_updated_at).to be_within(2.seconds).of(Time.zone.now)
           end
         end
 
-        context 'when there are no users found', vcr: true do
+        context 'when there are no users found' do
           it 'returns nil' do
             expect(user).to be_nil
           end

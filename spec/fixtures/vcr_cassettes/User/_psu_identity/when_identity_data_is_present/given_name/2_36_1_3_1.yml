@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/agw13
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/ajk5603
     body:
       encoding: US-ASCII
       string: ''
@@ -19,31 +19,31 @@ http_interactions:
       message: OK
     headers:
       Date:
-      - Thu, 21 Oct 2021 17:01:55 GMT
+      - Tue, 23 Aug 2022 17:56:52 GMT
       Content-Type:
       - application/vnd-psu.edu-v1+json
       Content-Length:
-      - '357'
+      - '359'
       Connection:
       - keep-alive
       X-Content-Security-Policy:
       - frame-ancestors 'none'
       Set-Cookie:
-      - JSESSIONID=JizacMZqPy8tvc4Y5ceBn-5Z56gvMYv-pTkJIm14.search-service-7fb749d9-vwt2r;
+      - JSESSIONID=Quj2Le_LKVIJt7izMjPNDKKCBmXv_3nhixXqghBj.search-service-5bdcf97bc4-vhx2k;
         path=/search-service
       X-Request-Id:
-      - f43152d42a18e1640c7acbfa904d3863
+      - 65c1b4162d496f1d04a9c8115dff22ac
       X-Frame-Options:
       - DENY
       Content-Security-Policy:
       - frame-ancestors 'none'
       Uniqueid:
-      - cb0da0c8-51ae-4142-be91-35542a69bd2d
+      - 65c1b4162d496f1d04a9c8115dff22ac
       Strict-Transport-Security:
       - max-age=15724800; includeSubDomains
     body:
       encoding: UTF-8
-      string: '{"userid":"agw13","cprid":"2784093","givenName":"Adam","middleName":"Garner","familyName":"Wead","preferredGivenName":"Adam","preferredFamilyName":"Wead","active":true,"confHold":false,"universityEmail":"agw13@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"displayName":"Adam
-        Wead","link":{"href":"https://dev.apps.psu.edu/cpr/resources/2784093"}}'
-  recorded_at: Thu, 21 Oct 2021 17:01:55 GMT
-recorded_with: VCR 6.0.0
+      string: '{"userid":"ajk5603","cprid":"2460424","givenName":"Alexander","familyName":"Kiessling","preferredGivenName":"Alex","preferredFamilyName":"Kiessling","active":true,"confHold":false,"universityEmail":"ajk5603@psu.edu","serviceAccount":false,"affiliation":["STAFF"],"link":{"href":"https://dev.apps.psu.edu/cpr/resources/2460424"},"displayName":"Alex
+        Kiessling"}'
+  recorded_at: Tue, 23 Aug 2022 17:56:52 GMT
+recorded_with: VCR 6.1.0

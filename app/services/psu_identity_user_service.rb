@@ -5,8 +5,19 @@ class PsuIdentityUserService
 
   class << self
     def find_or_initialize_user(webaccess_id:)
-      User.find_by(webaccess_id: webaccess_id) ||
+      user = User.find_by(webaccess_id: webaccess_id) ||
         initialize_user_from_psu_identity(webaccess_id)
+
+      return nil if user.nil?
+
+      if user.persisted?
+        identity = query_psu_identity(webaccess_id)
+        return user if identity.blank?
+
+        user.update attrs(identity)
+      end
+      user.save!
+      user
     end
 
     private
@@ -15,13 +26,7 @@ class PsuIdentityUserService
         identity = query_psu_identity(webaccess_id)
         return nil if identity.blank?
 
-        User.new(
-          webaccess_id: webaccess_id,
-          first_name: (identity.preferred_given_name.presence || identity.given_name),
-          last_name: (identity.preferred_family_name.presence || identity.family_name),
-          psu_identity: identity,
-          psu_identity_updated_at: Time.zone.now
-        )
+        User.new(attrs(identity).merge!(webaccess_id: webaccess_id))
       end
 
       def query_psu_identity(webaccess_id)
@@ -30,6 +35,16 @@ class PsuIdentityUserService
         nil
       rescue StandardError
         raise IdentityServiceError
+      end
+
+      def attrs(identity)
+        {
+          first_name: (identity.preferred_given_name.presence || identity.given_name),
+          middle_name: (identity.preferred_middle_name.presence || identity.middle_name),
+          last_name: (identity.preferred_family_name.presence || identity.family_name),
+          psu_identity: identity,
+          psu_identity_updated_at: Time.zone.now
+        }
       end
   end
 end
