@@ -12,5 +12,7 @@ task import_scholarsphere_oals_json: :environment do
   json = JSON.parse(file)
   json.each do |oal|
     OpenAccessLocation.create(oal.except('source').merge('source' => 'scholarsphere'))
+  rescue ActiveRecord::RecordNotUnique
+    next
   end
 end
