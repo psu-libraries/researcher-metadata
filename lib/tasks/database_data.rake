@@ -57,7 +57,7 @@ namespace :database_data do
     filename = File.basename(Dir["#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz"].first, '.gz')
 
     # Get local db config
-    db_config = YAML.load_file("#{Rails.root}/config/database.yml")
+    db_config = YAML.safe_load(File.open("#{Rails.root}/config/database.yml"), aliases: true)
 
     # Unzip production data file
     `gunzip #{Rails.root}/tmp/#{filename}.gz`
