@@ -1,3 +1,13 @@
+// PSU colors
+$pa-link: #005fa9;
+$perpetual-wonder: #491d70;
+$nittany-navy: #001e44;
+$limestone: #e4e5e7;
+
+// Bootstrap overrides
+$blue: $pa-link;
+$link-hover-color: $perpetual-wonder;
+
 @import 'bootstrap';
 @import 'font-awesome';
 @import 'profile/shared';
@@ -6,6 +16,12 @@ body {
   font-family: "Open Sans", "Helvetica Neue", Helvetica, Roboto, Arial, sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+  background-color: $nittany-navy;
+  color: #fff;
 }
 
 .manage-profile-nav {
@@ -76,7 +92,7 @@ table.legend {
 }
 
 #icon-key {
-  background-color: lightgrey;
+  background-color: $limestone;
   border-radius: 10px;
   margin-bottom: 20px;
   padding: 16px;
