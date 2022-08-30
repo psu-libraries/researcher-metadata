@@ -181,6 +181,32 @@ describe UnpaywallPublicationImporter, :vcr do
           end
         end
       end
+
+      context 'when the publication DOI has brackets' do
+        let!(:pub) { create :publication,
+                            doi: 'https://doi.org/10.1641/0006-3568(2005)055[0851:POTAPF]2.0.CO;2' }
+
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.reload.open_access_locations.count }.by 1
+        end
+
+        it 'assigns the metadata from Unpaywall to the new open access location' do
+          importer.import_all
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+          expect(oal.url).to eq 'https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf'
+        end
+
+        it 'updates Unpaywall check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the open access status on the publication' do
+          importer.import_all
+          pub.reload
+          expect(pub.open_access_status).to eq 'bronze'
+        end
+      end
     end
 
     context 'when an existing publication has a DOI that does not correspond to an available article listed with Unpaywall' do

@@ -1,0 +1,75 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://api.unpaywall.org/v2/10.1641/0006-3568(2005)055%5B0851:POTAPF%5D2.0.CO;2?email=openaccess@psu.edu
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Server:
+      - gunicorn
+      Date:
+      - Tue, 30 Aug 2022 19:17:06 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '727'
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE, PATCH
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, x-requested-with
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: ASCII-8BIT
+      string: '{"doi": "10.1641/0006-3568(2005)055[0851:potapf]2.0.co;2", "doi_url":
+        "https://doi.org/10.1641/0006-3568(2005)055[0851:potapf]2.0.co;2", "title":
+        "Principles of the Atmospheric Pathway for Invasive Species Applied to Soybean
+        Rust", "genre": "journal-article", "is_paratext": false, "published_date":
+        "2005-01-01", "year": 2005, "journal_name": "BioScience", "journal_issns":
+        "0006-3568", "journal_issn_l": "0006-3568", "journal_is_oa": false, "journal_is_in_doaj":
+        false, "publisher": "Oxford University Press (OUP)", "is_oa": true, "oa_status":
+        "bronze", "has_repository_copy": false, "best_oa_location": {"updated": "2018-12-15T23:45:09.667812",
+        "url": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_pdf": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_landing_page": "https://doi.org/10.1641/0006-3568(2005)055[0851:potapf]2.0.co;2",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}, "first_oa_location":
+        {"updated": "2018-12-15T23:45:09.667812", "url": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_pdf": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_landing_page": "https://doi.org/10.1641/0006-3568(2005)055[0851:potapf]2.0.co;2",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}, "oa_locations": [{"updated":
+        "2018-12-15T23:45:09.667812", "url": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_pdf": "https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf",
+        "url_for_landing_page": "https://doi.org/10.1641/0006-3568(2005)055[0851:potapf]2.0.co;2",
+        "evidence": "open (via free pdf)", "license": null, "version": "publishedVersion",
+        "host_type": "publisher", "is_best": true, "pmh_id": null, "endpoint_id":
+        null, "repository_institution": null, "oa_date": null}], "oa_locations_embargoed":
+        [], "updated": "2021-01-17T19:40:14.824234", "data_standard": 2, "z_authors":
+        [{"given": "SCOTT A.", "family": "ISARD", "sequence": "first"}, {"given":
+        "STUART H.", "family": "GAGE", "sequence": "additional"}, {"given": "PAUL",
+        "family": "COMTOIS", "sequence": "additional"}, {"given": "JOSEPH M.", "family":
+        "RUSSO", "sequence": "additional"}]}'
+  recorded_at: Tue, 30 Aug 2022 19:17:06 GMT
+recorded_with: VCR 6.1.0
