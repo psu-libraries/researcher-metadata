@@ -89,7 +89,8 @@ class UnpaywallPublicationImporter
     end
 
     def query_unpaywall_for(publication)
-      find_url = URI::DEFAULT_PARSER.escape("https://api.unpaywall.org/v2/#{publication.doi_url_path}?email=openaccess@psu.edu")
+      doi_url_path = Addressable::URI.encode(publication.doi_url_path)
+      find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
       JSON.parse(HttpService.get(find_url))
     end
 
