@@ -219,6 +219,7 @@ describe 'Profile page', type: :feature do
         expect(page).to have_content 'First Publication, Journal 1, 2010'
         expect(page).to have_content 'Second Publication, Journal 2, 2011'
         expect(page).to have_link 'Second Publication', href: 'https://example.org/pubs/123.pdf'
+        expect(page).to have_content 'Fourth Publication, Journal 4, 2010'
       end
     end
 
@@ -280,8 +281,8 @@ describe 'Profile page', type: :feature do
         expect(page).to have_content 'Books'
         expect(page).not_to have_content 'Letters'
         expect(page).to have_content 'Third Publication, Journal 3, 2013'
-        expect(page).to have_content 'Conference Proceedings'
-        expect(page).to have_content 'Fourth Publication, Journal 4, 2010'
+        expect(page).not_to have_content 'Conference Proceedings'
+        expect(page).not_to have_content 'Fourth Publication, Journal 4, 2010'
       end
     end
   end
