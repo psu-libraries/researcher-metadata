@@ -130,7 +130,7 @@ class UserProfile
   end
 
   def other_publication_records
-    user_query.publications.non_journal_article
+    user_query.publications.non_oa_publication_types
       .order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 

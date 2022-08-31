@@ -658,7 +658,7 @@ describe Publication, type: :model do
     let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
 
     it 'returns publications that have open access publication types' do
-      expect(described_class.journal_article).to match_array [pub1, pub2, pub3, pub6]
+      expect(described_class.oa_publication_types).to match_array [pub1, pub2, pub3, pub6]
     end
   end
 
@@ -671,8 +671,8 @@ describe Publication, type: :model do
     let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
     let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
 
-    it 'returns publications that does not have open access publication types' do
-      expect(described_class.non_journal_article).to match_array [pub4, pub5, pub7]
+    it 'returns publications that do not have open access publication types' do
+      expect(described_class.non_oa_publication_types).to match_array [pub4, pub5, pub7]
     end
   end
 
