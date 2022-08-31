@@ -2,8 +2,8 @@
 
 class StatisticsSnapshot < ApplicationRecord
   def self.record
-    create(total_article_count: Publication.journal_article.count,
-           open_access_article_count: Publication.journal_article.open_access.count)
+    create(total_article_count: Publication.oa_publication_types.count,
+           open_access_article_count: Publication.oa_publication_types.open_access.count)
   end
 
   def percent_open_access

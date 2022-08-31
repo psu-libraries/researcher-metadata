@@ -52,7 +52,7 @@ class UserProfile
   end
 
   def public_publication_records
-    user_query.publications.journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.oa_publication_types.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def publication_records
