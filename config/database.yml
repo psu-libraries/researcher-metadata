@@ -10,3 +10,4 @@ development:
 test: &test
   <<: *common
   database: psu_research_metadata_test
+

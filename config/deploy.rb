@@ -28,6 +28,7 @@ set :shared, %w{
   config/activity_insight.yml
   config/orcid.yml
   config/pure.yml
+  config/datadog.yml
   config/scholarsphere-client.yml
   config/azure_ad_oauth.yml
   db/data
