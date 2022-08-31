@@ -59,7 +59,7 @@ class UserProfile
     user_query
       .publications(include_unconfirmed: true)
       .where(%{(authorships.claimed_by_user IS TRUE AND authorships.confirmed IS FALSE) OR authorships.confirmed IS TRUE})
-      .journal_article.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+      .ao_publication_types.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants
