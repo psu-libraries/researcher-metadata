@@ -1,17 +1,12 @@
 common: &common
   adapter: postgresql
   encoding: unicode
-  host: db
-  username: rmd
-  password: rmd
-  database: rmd
-  port: 5432
   pool: 5
 
 development:
   <<: *common
-  database: rmd_development
+  database: psu_research_metadata_development
 
 test: &test
   <<: *common
-  database: rmd_test
+  database: psu_research_metadata_test
