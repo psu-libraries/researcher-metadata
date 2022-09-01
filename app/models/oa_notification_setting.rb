@@ -1,28 +1,33 @@
 class OaNotificationSetting < ApplicationRecord
-  # There should only be one OaNotificationSetting record
-  validate :one_record_validation
+  # The "singleton_guard" column is a unique column which must always be set to '0'
+  # This ensures that only one OaNotificationSettings row is created
+  validates :singleton_guard, inclusion: { in: [0] }
 
-  def self.email_cap
-    first.email_cap
-  end
-
-  def self.is_active
-    first.is_active
-  end
-
-  def self.is_not_active
-    !first.is_active
-  end
-
-  def self.seed
-    return if count > 0
-
-    create email_cap: 300, is_active: true
-  end
-
-  private
-
-    def one_record_validation
-      errors.add(:a_record_exists, ', there can only be one OaNotificationSetting record') if self.class.count > 0
+  class << self
+    def email_cap
+      instance.email_cap
     end
+
+    def is_not_active
+      !instance.is_active
+    end
+
+    def instance
+      first_or_create!(singleton_guard: 0, email_cap: 100, is_active: true)
+    end
+  end
+
+  rails_admin do
+    edit do
+      field(:singleton_guard) { visible false }
+      field(:email_cap)
+      field(:is_active)
+    end
+
+    show do
+      field(:singleton_guard) { visible false }
+      field(:email_cap)
+      field(:is_active)
+    end
+  end
 end

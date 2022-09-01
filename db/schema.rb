@@ -298,10 +298,12 @@ ActiveRecord::Schema.define(version: 2022_08_31_151648) do
   end
 
   create_table "oa_notification_settings", force: :cascade do |t|
+    t.integer "singleton_guard"
     t.integer "email_cap"
     t.boolean "is_active"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["singleton_guard"], name: "index_oa_notification_settings_on_singleton_guard", unique: true
   end
 
   create_table "open_access_locations", force: :cascade do |t|
