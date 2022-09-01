@@ -31,7 +31,6 @@
 # Ignore config files that contain secrets
 /config/activity_insight.yml
 /config/orcid.yml
-/config/datadog.yml
 /config/pure.yml
 /config/scholarsphere-client.yml
 /config/azure_ad_oauth.yml
