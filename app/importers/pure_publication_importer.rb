@@ -111,9 +111,11 @@ class PurePublicationImporter < PureImporter
   private
 
     def pub_attrs(publication)
+      subtitle = publication['subTitle'].try('[]', 'value')
+      subtitle = subtitle.present? ? ": #{subtitle}" : ''
       {
-        title: publication['title']['value'],
-        secondary_title: publication['subTitle'].try('[]', 'value'),
+        title: publication['title']['value'] + subtitle,
+        secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
                                                   .find { |t| t['locale'] == 'en_US' }['value']),
         page_range: publication['pages'],
