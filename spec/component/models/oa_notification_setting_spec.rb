@@ -49,9 +49,16 @@ RSpec.describe OaNotificationSetting, type: :model do
 
   describe 'validation' do
     context 'when creating a record when another already exists' do
-      it 'raises an error' do
+      it 'raises a RecordNotUnique error' do
         described_class.instance
-        described_class.create email_cap: 100, is_active: true
+        expect { described_class.create email_cap: 100, is_active: true, singleton_guard: 0 }
+          .to raise_error ActiveRecord::RecordNotUnique
+      end
+    end
+
+    context 'when creating a record with a singleton_guard that is not 0' do
+      it 'raises a RecordInvalid error' do
+        expect(described_class.create(email_cap: 100, is_active: true, singleton_guard: 1).valid?).to be false
       end
     end
   end
