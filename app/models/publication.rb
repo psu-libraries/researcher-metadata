@@ -22,7 +22,7 @@ class Publication < ApplicationRecord
     ]
   end
 
-  def self.oa_contribution_types
+  def self.oa_publication_types
     [
       'Academic Journal Article',
       'Conference Proceeding',
@@ -100,8 +100,8 @@ class Publication < ApplicationRecord
             .distinct(:id)
         }
 
-  scope :subject_to_open_access_policy, -> { oa_publication_types.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
-  scope :claimable_by, ->(user) { oa_publication_types.visible.where.not(id: user.authorships.unclaimable.map(&:publication_id)) }
+  scope :subject_to_open_access_policy, -> { oa_publication.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+  scope :claimable_by, ->(user) { oa_publication.visible.where.not(id: user.authorships.unclaimable.map(&:publication_id)) }
 
   scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }
   scope :scholarsphere_open_access, -> { open_access.where(open_access_locations: { source: Source::SCHOLARSPHERE }) }
@@ -109,9 +109,8 @@ class Publication < ApplicationRecord
   scope :oab_open_access, -> { open_access.where(open_access_locations: { source: Source::OPEN_ACCESS_BUTTON }) }
   scope :unpaywall_open_access, -> { open_access.where(open_access_locations: { source: Source::UNPAYWALL }) }
 
-  scope :oa_publication_types, -> { where(publication_type: oa_contribution_types) }
-
-  scope :non_oa_publication_types, -> { where.not(publication_type: oa_contribution_types) }
+  scope :oa_publication, -> { where(publication_type: oa_publication_types) }
+  scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
@@ -549,8 +548,8 @@ class Publication < ApplicationRecord
     doi.present? || url.present? || preferred_open_access_url.present?
   end
 
-  def is_journal_article?
-    publication_type.include? 'Journal Article'
+  def is_oa_publication?
+    Publication.oa_publication_types.include? publication_type
   end
 
   def publication_type_other?

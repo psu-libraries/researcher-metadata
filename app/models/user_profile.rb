@@ -52,14 +52,14 @@ class UserProfile
   end
 
   def public_publication_records
-    user_query.publications.oa_publication_types.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+    user_query.publications.oa_publication.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def publication_records
     user_query
       .publications(include_unconfirmed: true)
       .where(%{(authorships.claimed_by_user IS TRUE AND authorships.confirmed IS FALSE) OR authorships.confirmed IS TRUE})
-      .oa_publication_types.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
+      .oa_publication.order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 
   def grants
@@ -130,7 +130,7 @@ class UserProfile
   end
 
   def other_publication_records
-    user_query.publications.non_oa_publication_types
+    user_query.publications.non_oa_publication
       .order('authorships.position_in_profile ASC NULLS FIRST, published_on DESC')
   end
 

@@ -8,7 +8,7 @@ class OpenAccessWorkflowController < UserController
   private
 
     def publication
-      @publication ||= current_user.confirmed_publications.oa_publication_types.published.find(params[:id])
+      @publication ||= current_user.confirmed_publications.oa_publication.published.find(params[:id])
     end
 
     def redirect_if_inaccessible
