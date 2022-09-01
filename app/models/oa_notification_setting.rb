@@ -21,13 +21,16 @@ class OaNotificationSetting < ApplicationRecord
 
   rails_admin do
     edit do
-      field(:singleton_guard) { visible false }
       field(:email_cap)
       field(:is_active)
     end
 
     show do
-      field(:singleton_guard) { visible false }
+      field(:email_cap)
+      field(:is_active)
+    end
+
+    list do
       field(:email_cap)
       field(:is_active)
     end
