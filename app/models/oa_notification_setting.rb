@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class OaNotificationSetting < ApplicationRecord
   # The "singleton_guard" column is a unique column which must always be set to '0'
   # This ensures that only one OaNotificationSettings row is created
@@ -8,7 +10,7 @@ class OaNotificationSetting < ApplicationRecord
       instance.email_cap
     end
 
-    def is_not_active
+    def not_active?
       !instance.is_active
     end
 
