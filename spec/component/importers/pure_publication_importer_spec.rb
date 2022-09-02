@@ -67,11 +67,11 @@ describe PurePublicationImporter do
           p2 = found_pub2.publication
           p3 = found_pub3.publication
 
-          expect(p1.title).to eq 'The First Publication'
+          expect(p1.title).to eq 'The First Publication: From Pure'
           expect(p2.title).to eq 'Third Test Publication With a Really Unique Title'
           expect(p3.title).to eq 'Chronic hip pain as a presenting symptom in pelvic congestion syndrome'
 
-          expect(p1.secondary_title).to eq 'From Pure'
+          expect(p1.secondary_title).to be_nil
           expect(p2.secondary_title).to be_nil
           expect(p3.secondary_title).to be_nil
 
@@ -356,8 +356,8 @@ describe PurePublicationImporter do
 
             updated_pub = existing_pub.reload
 
-            expect(updated_pub.title).to eq 'The First Publication'
-            expect(updated_pub.secondary_title).to eq 'From Pure'
+            expect(updated_pub.title).to eq 'The First Publication: From Pure'
+            expect(updated_pub.secondary_title).to be_nil
             expect(updated_pub.publication_type).to eq 'Academic Journal Article'
             expect(updated_pub.page_range).to eq '91-95'
             expect(updated_pub.volume).to eq '6'

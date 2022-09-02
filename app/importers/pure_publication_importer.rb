@@ -112,8 +112,8 @@ class PurePublicationImporter < PureImporter
 
     def pub_attrs(publication)
       {
-        title: publication['title']['value'],
-        secondary_title: publication['subTitle'].try('[]', 'value'),
+        title: publication['title']['value'] + subtitle(publication),
+        secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
                                                   .find { |t| t['locale'] == 'en_US' }['value']),
         page_range: publication['pages'],
@@ -130,6 +130,10 @@ class PurePublicationImporter < PureImporter
         visible: true,
         doi: doi(publication)
       }
+    end
+
+    def subtitle(publication)
+      publication['subTitle'].try('[]', 'value').present? ? ": #{publication['subTitle'].try('[]', 'value')}" : ''
     end
 
     def issn(publication)
