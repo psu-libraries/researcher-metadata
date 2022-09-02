@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_17_195021) do
+ActiveRecord::Schema.define(version: 2022_08_31_151648) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -295,6 +295,15 @@ ActiveRecord::Schema.define(version: 2022_08_17_195021) do
   create_table "non_duplicate_publication_groups", force: :cascade do |t|
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+  end
+
+  create_table "oa_notification_settings", force: :cascade do |t|
+    t.integer "singleton_guard"
+    t.integer "email_cap"
+    t.boolean "is_active"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["singleton_guard"], name: "index_oa_notification_settings_on_singleton_guard", unique: true
   end
 
   create_table "open_access_locations", force: :cascade do |t|

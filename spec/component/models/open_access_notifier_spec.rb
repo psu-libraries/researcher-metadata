@@ -137,7 +137,7 @@ describe OpenAccessNotifier do
     end
   end
 
-  describe '#send_first_five_notifications' do
+  describe '#send_notifications_with_cap' do
     let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2, user3, user4, user5, user6] }
     let(:user3) { double 'user 3',
                          old_potential_open_access_publications: pubs1,
@@ -208,7 +208,7 @@ describe OpenAccessNotifier do
       expect(email5).to receive(:deliver_now)
       expect(email6).not_to receive(:deliver_now)
 
-      notifier.send_first_five_notifications
+      notifier.send_notifications_with_cap(5)
     end
 
     it 'records the notification for each of the first five users' do
@@ -219,7 +219,7 @@ describe OpenAccessNotifier do
       expect(user5).to receive(:record_open_access_notification)
       expect(user6).not_to receive(:record_open_access_notification)
 
-      notifier.send_first_five_notifications
+      notifier.send_notifications_with_cap(5)
     end
 
     it 'records the notification for each authorship for the first five users' do
@@ -236,7 +236,7 @@ describe OpenAccessNotifier do
       expect(auth11).not_to receive(:record_open_access_notification)
       expect(auth12).not_to receive(:record_open_access_notification)
 
-      notifier.send_first_five_notifications
+      notifier.send_notifications_with_cap(5)
     end
 
     context 'when an error is raised while sending an email' do
@@ -250,7 +250,7 @@ describe OpenAccessNotifier do
         expect(email5).to receive(:deliver_now)
         expect(email6).not_to receive(:deliver_now)
 
-        notifier.send_first_five_notifications
+        notifier.send_notifications_with_cap(5)
       end
 
       it 'records only the successful notifications for each of the first five users' do
@@ -261,7 +261,7 @@ describe OpenAccessNotifier do
         expect(user5).to receive(:record_open_access_notification)
         expect(user6).not_to receive(:record_open_access_notification)
 
-        notifier.send_first_five_notifications
+        notifier.send_notifications_with_cap(5)
       end
 
       it 'records only the successful notifications for each authorship for the first five users' do
@@ -278,13 +278,13 @@ describe OpenAccessNotifier do
         expect(auth11).not_to receive(:record_open_access_notification)
         expect(auth12).not_to receive(:record_open_access_notification)
 
-        notifier.send_first_five_notifications
+        notifier.send_notifications_with_cap(5)
       end
 
       it 'records the error' do
         expect(EmailError).to receive(:create!).with(message: 'The error message', user: user1)
 
-        notifier.send_first_five_notifications
+        notifier.send_notifications_with_cap(5)
       end
     end
   end

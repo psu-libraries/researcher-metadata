@@ -6,6 +6,14 @@ namespace :email_notifications do
     OpenAccessNotifier.new.send_notifications
   end
 
+  desc 'Send reminder emails about potential open access publications to applicable users up to the number passed as an argument (or the configured number as default)'
+  task :send_capped_open_access_reminders, [:cap] => :environment do |_task, args|
+    return 'Notifications are turned off' if OaNotificationSetting.not_active?
+
+    cap = (args[:cap] || OaNotificationSetting.email_cap).to_i
+    OpenAccessNotifier.new.send_notifications_with_cap(cap)
+  end
+
   desc 'Send reminder emails about potential open access publications only to applicable users in the Penn State University Libraries'
   task send_library_open_access_reminders: :environment do
     psu_libraries = Organization.find_by(pure_external_identifier: 'CAMPUS-UL')
@@ -26,7 +34,7 @@ namespace :email_notifications do
   task :send_first_five_open_access_reminders_for_org, [:org_name] => :environment do |_task, args|
     org = Organization.find_by(pure_external_identifier: args[:org_name])
     if org
-      OpenAccessNotifier.new(org.all_users).send_first_five_notifications
+      OpenAccessNotifier.new(org.all_users).send_notifications_with_cap(5)
     else
       raise "Couldn't find an organization with Pure external identifier #{args[:org_name]}"
     end

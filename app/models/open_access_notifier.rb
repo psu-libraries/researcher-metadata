@@ -11,8 +11,8 @@ class OpenAccessNotifier
     end
   end
 
-  def send_first_five_notifications
-    first_five_users.each do |u|
+  def send_notifications_with_cap(cap)
+    users.first(cap).each do |u|
       send_notification_to_user(u)
     end
   end
@@ -21,10 +21,6 @@ class OpenAccessNotifier
 
     def users
       @users.needs_open_access_notification
-    end
-
-    def first_five_users
-      users.first(5)
     end
 
     def send_notification_to_user(user)
