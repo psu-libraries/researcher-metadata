@@ -50,7 +50,9 @@
           <p>
             If an open access version of your publication is already available anywhere on the public web,
             then please submit the URL here. This should be a full and valid URL that points directly
-            to a publicly accessible copy of your publication.
+            to a publicly accessible copy of your publication. Not sure whether your URL is publicly accessible?
+            Use <a href="https://openaccessbutton.org">Open Access Button</a> to check, and
+            <a href="https://github.com/psu-libraries/researcher-metadata/issues/openaccess@psu.edu">contact us</a> with questions.
           </p>
 
           <%= simple_form_for @form, url: open_access_publication_path(publication), method: :patch, id: 'open-access' do |f| %>
