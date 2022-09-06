@@ -324,16 +324,16 @@ What constitues a "match" for the sake of finding and updating existing records 
 example, we uniquely identify users by their Penn State WebAccess ID. For most other records, we record their unique
 ID within the data source.
 
-### Journal Article vs. Non-Article Publications
-All publication types are imported during the publication import from Activity Insight and Pure.  Conference proceedings, 
-books, editorials, abstracts, and many others are being imported as publications along with journal articles.  A journal article 
-is defined as any publication that contains the string "Journal Article" in its publication_type.  Non-article publications 
-(which are sometimes referred to as "Other Works" in the UI and other_publications in the code) are defined as any publication 
-that does not have the string "Journal Article" in its publication_type.  Journal articles and non-article publications are 
-displayed in separate interfaces of the user profile interface, public profile interface, and profile API endpoint.  All 
-publications are displayed together in the publication API endpoint.  Non-article publications are not included in the 
-open access workflow.  However, they can be exported to ORCiD if they have a url.  All publications behave the same in the Admin 
-interface.
+### Open Access Publication vs. Non-open Access Publications
+All publication types are imported during the publication import from Activity Insight and Pure.  Journal articles, 
+conference proceedings, books, editorials, abstracts, and many others are being imported as publications. An open access 
+publication is defined as any publication that has a publication_type to which Open Access policy applies. Non-open access 
+publications (which are sometimes referred to as "Other Works" in the UI and other_publications in the code) are defined 
+as any publication that does not have a publication_type to which Open Access policy applies.
+Open Access and Non-open Access publications are displayed in separate interfaces of the user profile interface, public 
+profile interface, and profile API endpoint.  All publications are displayed together in the publication API endpoint.  
+Non-open access publications are not included in the open access workflow. However, they can be exported to ORCiD if 
+they have a url.  All publications behave the same in the Admin interface.
 
 ### Activity Insight Publication Export
 Admins can export publications to Activity Insight through the "Organizations" resource.  To do this, admins must go to the organizations 
