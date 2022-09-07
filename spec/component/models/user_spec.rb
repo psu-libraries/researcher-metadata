@@ -622,7 +622,7 @@ describe User, type: :model do
                                publication: ou_pub_12,
                                confirmed: true }
 
-    # Filtered out due to publication not being a journal article
+    # Filtered out due to publication not being a open access publication
     let!(:other_user_13) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_13' }
     let!(:ou_mem_13) { create :user_organization_membership,
                               user: other_user_13,

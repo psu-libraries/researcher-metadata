@@ -16,7 +16,7 @@ describe AuthorshipDecorator do
                       scholarsphere_upload_failed?: failed,
                       open_access_waived?: waived,
                       no_open_access_information?: no_info,
-                      is_journal_article?: true,
+                      is_oa_publication?: true,
                       publication: pub,
                       published?: published,
                       confirmed: confirmed,
@@ -212,7 +212,7 @@ describe AuthorshipDecorator do
       context 'when the given object has a title' do
         let(:title) { 'Test Title' }
 
-        before { allow(auth).to receive(:is_journal_article?).and_return false }
+        before { allow(auth).to receive(:is_oa_publication?).and_return false }
 
         it 'returns a label for the given object with the publication title' do
           expect(ad.profile_management_label).to eq %{<span class="publication-title">Test Title</span>}

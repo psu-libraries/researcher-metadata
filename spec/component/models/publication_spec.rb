@@ -253,6 +253,14 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.oa_contribution_types' do
+    it 'returns the list of valid open access contribution types' do
+      expect(described_class.oa_publication_types).to eq ['Academic Journal Article', 'Conference Proceeding',
+                                                          'Journal Article', 'In-house Journal Article',
+                                                          'Professional Journal Article']
+    end
+  end
+
   describe '.open_access_statuses' do
     it 'returns the list of valid values for open access status' do
       expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed']
@@ -648,29 +656,31 @@ describe Publication, type: :model do
     end
   end
 
-  describe '.journal_article' do
+  describe '.oa_publication' do
     let(:pub1) { create :publication, publication_type: 'Journal Article' }
     let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
     let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
     let(:pub4) { create :publication, publication_type: 'Book' }
     let(:pub5) { create :publication, publication_type: 'Letter' }
     let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
+    let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
 
-    it 'returns publications that are journal articles' do
-      expect(described_class.journal_article).to match_array [pub1, pub2, pub3]
+    it 'returns publications that have open access publication types' do
+      expect(described_class.oa_publication).to match_array [pub1, pub2, pub3, pub6]
     end
   end
 
-  describe '.non_journal_article' do
+  describe '.non_oa_publication_types' do
     let(:pub1) { create :publication, publication_type: 'Journal Article' }
     let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
     let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
     let(:pub4) { create :publication, publication_type: 'Book' }
     let(:pub5) { create :publication, publication_type: 'Letter' }
     let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
+    let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
 
-    it 'returns publications that are not journal articles' do
-      expect(described_class.non_journal_article).to match_array [pub4, pub5, pub6]
+    it 'returns publications that do not have open access publication types' do
+      expect(described_class.non_oa_publication).to match_array [pub4, pub5, pub7]
     end
   end
 
@@ -2798,12 +2808,12 @@ describe Publication, type: :model do
     end
   end
 
-  describe '#is_journal_article?' do
-    context 'when publication is a Journal Article' do
+  describe '#is_oa_publication?' do
+    context 'when publication is a open access publication' do
       let!(:pub1) { create :publication, publication_type: 'Journal Article' }
 
       it 'returns true' do
-        expect(pub1.is_journal_article?).to be true
+        expect(pub1.is_oa_publication?).to be true
       end
     end
 
@@ -2811,7 +2821,7 @@ describe Publication, type: :model do
       let!(:pub2) { create :publication, publication_type: 'Book' }
 
       it 'returns false' do
-        expect(pub2.is_journal_article?).to be false
+        expect(pub2.is_oa_publication?).to be false
       end
     end
   end

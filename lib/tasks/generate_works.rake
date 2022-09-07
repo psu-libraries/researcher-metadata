@@ -3,32 +3,32 @@
 require_relative '../utilities/works_generator'
 
 namespace :generate do
-  task :journal_article_no_open_access_location, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_no_open_access_location
+  task :oa_publication_no_open_access_location, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_no_open_access_location
   end
 
-  task :journal_article_with_open_access_location, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_with_open_access_location
+  task :oa_publication_with_open_access_location, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_with_open_access_location
   end
 
-  task :journal_article_in_press, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_in_press
+  task :oa_publication_in_press, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_in_press
   end
 
   task :other_work, [:webaccess_id] => :environment do |_task, args|
     WorksGenerator.new(args[:webaccess_id]).other_work
   end
 
-  task :journal_article_from_activity_insight, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_from_activity_insight
+  task :oa_publication_from_activity_insight, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_from_activity_insight
   end
 
-  task :journal_article_duplicate_group, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_duplicate_group
+  task :oa_publication_duplicate_group, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_duplicate_group
   end
 
-  task :journal_article_non_duplicate_group, [:webaccess_id] => :environment do |_task, args|
-    WorksGenerator.new(args[:webaccess_id]).journal_article_non_duplicate_group
+  task :oa_publication_non_duplicate_group, [:webaccess_id] => :environment do |_task, args|
+    WorksGenerator.new(args[:webaccess_id]).oa_publication_non_duplicate_group
   end
 
   task :presentation, [:webaccess_id] => :environment do |_task, args|

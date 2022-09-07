@@ -28,15 +28,15 @@ FactoryBot.define do
       end
     end
 
-    trait :journal_article do
+    trait :oa_publication do
       publication_type {
-        Publication.publication_types.grep(/Journal Article/).sample
+        Publication.oa_publication_types.sample
       }
     end
 
     trait :other_work do
       publication_type {
-        Publication.publication_types.select { |type| type.exclude?('Journal Article') }.sample
+        Publication.publication_types.reject { |type| Publication.oa_publication_types.include?(type) }.sample
       }
     end
 
@@ -67,7 +67,7 @@ FactoryBot.define do
 
       after :create do |pub|
         create :sample_publication,
-               :journal_article,
+               :oa_publication,
                :from_activity_insight,
                title: pub.title,
                doi: pub.doi,
@@ -80,7 +80,7 @@ FactoryBot.define do
 
       after :create do |pub|
         pub2 = create :sample_publication,
-                      :journal_article,
+                      :oa_publication,
                       :from_activity_insight,
                       title: pub.title,
                       doi: pub.doi,

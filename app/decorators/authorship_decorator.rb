@@ -47,7 +47,7 @@ class AuthorshipDecorator < BaseDecorator
     end
 
     def profile_management_pub_title
-      if no_open_access_information? && is_journal_article? && published? && confirmed
+      if no_open_access_information? && is_oa_publication? && published? && confirmed
         view_context.link_to title, view_context.edit_open_access_publication_path(publication)
       else
         title

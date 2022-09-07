@@ -24,7 +24,7 @@ class Authorship < ApplicationRecord
            :scholarsphere_upload_failed?,
            :open_access_waived?,
            :no_open_access_information?,
-           :is_journal_article?,
+           :is_oa_publication?,
            :published_on,
            :secondary_title,
            :preferred_publisher_name,

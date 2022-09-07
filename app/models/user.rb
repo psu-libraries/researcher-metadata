@@ -119,7 +119,7 @@ class User < ApplicationRecord
     joins(:authorships, :user_organization_memberships, :publications)
       .joins('LEFT OUTER JOIN open_access_locations ON open_access_locations.publication_id = publications.id')
       .where(publications: { status: Publication::PUBLISHED_STATUS })
-      .where("publications.publication_type ~* 'Journal Article'")
+      .where("publications.publication_type IN (#{User.oa_publication_type_params})", *Publication.oa_publication_types)
       .where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))')
       .where(%{publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Pending'))})
       .where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago)
@@ -129,6 +129,10 @@ class User < ApplicationRecord
       .where('publications.visible = true')
       .where("open_access_locations.id IS NULL OR open_access_locations.url = ''")
       .distinct(:id)
+  end
+
+  def self.oa_publication_type_params
+    Array.new(Publication.oa_publication_types.length) { '?' }.join(', ')
   end
 
   def psu_identity

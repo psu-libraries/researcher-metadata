@@ -21,23 +21,23 @@ describe WorksGenerator do
     end
   end
 
-  describe '#journal_article_no_open_access_location' do
+  describe '#oa_publication_no_open_access_location' do
     it 'generates a journal article with no open access url' do
-      expect { generator.journal_article_no_open_access_location }.to change(Publication, :count).by 1
+      expect { generator.oa_publication_no_open_access_location }.to change(Publication, :count).by 1
       expect(Publication.last.open_access_locations.count).to eq 0
     end
   end
 
-  describe '#journal_article_with_open_access_location' do
+  describe '#oa_publication_with_open_access_location' do
     it 'generates a journal article with one open access url' do
-      expect { generator.journal_article_with_open_access_location }.to change(Publication, :count).by 1
+      expect { generator.oa_publication_with_open_access_location }.to change(Publication, :count).by 1
       expect(Publication.last.open_access_locations.count).to eq 1
     end
   end
 
-  describe '#journal_article_in_press' do
+  describe '#oa_publication_in_press' do
     it 'generates a journal article with a status of "In Press"' do
-      expect { generator.journal_article_in_press }.to change(Publication, :count).by 1
+      expect { generator.oa_publication_in_press }.to change(Publication, :count).by 1
       expect(Publication.last.status).to eq 'In Press'
     end
   end
@@ -49,23 +49,23 @@ describe WorksGenerator do
     end
   end
 
-  describe '#journal_article_from_activity_insight' do
+  describe '#oa_publication_from_activity_insight' do
     it 'generates a journal article whos publication import source is Activity Insight' do
       expect { generator.other_work }.to change(Publication, :count).by 1
       expect(Publication.last.publication_type).not_to match(/Journal Article/)
     end
   end
 
-  describe '#journal_article_duplicate_group' do
+  describe '#oa_publication_duplicate_group' do
     it 'generates a journal article that is part of a duplicate group' do
-      expect { generator.journal_article_duplicate_group }.to change(Publication, :count).by 2
+      expect { generator.oa_publication_duplicate_group }.to change(Publication, :count).by 2
       expect(Publication.last.duplicate_group.publications.count).to eq 2
     end
   end
 
-  describe '#journal_article_non_duplicate_group' do
+  describe '#oa_publication_non_duplicate_group' do
     it 'generates a journal article that is part of a duplicate group that is also a non duplicate group' do
-      expect { generator.journal_article_non_duplicate_group }.to change(Publication, :count).by 2
+      expect { generator.oa_publication_non_duplicate_group }.to change(Publication, :count).by 2
       expect(Publication.last.non_duplicate_groups.count).to eq 1
       expect(Publication.last.duplicate_group.publications.sort).to eq Publication.last.non_duplicate_groups.first.publications.sort
     end
