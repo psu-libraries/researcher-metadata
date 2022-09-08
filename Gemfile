@@ -22,6 +22,7 @@ gem 'carrierwave'                       # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
+gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs

@@ -178,6 +178,12 @@ GEM
       activerecord (>= 5.a)
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
+    ddtrace (1.4.0)
+      debase-ruby_core_source (= 0.10.16)
+      libdatadog (~> 0.7.0.1.1)
+      libddwaf (~> 1.3.0.2.0)
+      msgpack
+    debase-ruby_core_source (0.10.16)
     delayed_job (4.1.10)
       activesupport (>= 3.0, < 8.0)
     delayed_job_active_record (4.1.7)
@@ -286,6 +292,9 @@ GEM
     kaminari-core (1.2.1)
     launchy (2.5.0)
       addressable (~> 2.7)
+    libdatadog (0.7.0.1.1)
+    libddwaf (1.3.0.2.0)
+      ffi (~> 1.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -304,6 +313,7 @@ GEM
     mini_mime (1.1.2)
     mini_portile2 (2.8.0)
     minitest (5.16.2)
+    msgpack (1.5.6)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -621,6 +631,7 @@ DEPENDENCIES
   coffee-rails (~> 5)
   daemons
   database_cleaner
+  ddtrace (~> 1.4)
   delayed_job_active_record
   devise (~> 4.8)
   ed25519
