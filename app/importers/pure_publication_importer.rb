@@ -31,6 +31,10 @@ class PurePublicationImporter < PureImporter
               attrs = {
                 total_scopus_citations: publication['totalScopusCitations'],
                 journal: journal_present?(publication) ? journal(publication) : nil
+                if !p.published?
+                  status: status_value(publication)
+                end
+                title: title(publication)
               }
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
@@ -112,7 +116,7 @@ class PurePublicationImporter < PureImporter
 
     def pub_attrs(publication)
       {
-        title: publication['title']['value'] + subtitle(publication),
+        title: title(publication),
         secondary_title: nil,
         publication_type: PurePublicationTypeMapIn.map(publication['type']['term']['text']
                                                   .find { |t| t['locale'] == 'en_US' }['value']),
@@ -130,6 +134,10 @@ class PurePublicationImporter < PureImporter
         visible: true,
         doi: doi(publication)
       }
+    end
+
+    def title(publication)
+      publication['title']['value'] + subtitle(publication)
     end
 
     def subtitle(publication)

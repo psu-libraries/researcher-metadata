@@ -237,6 +237,12 @@ class ActivityInsightImporter
     def always_update_pub_attrs(pub)
       {
         activity_insight_postprint_status: pub.activity_insight_postprint_status
+        if pub.published?
+          status: pub.status
+        end
+        title: pub.title
+                #check if published, if so don't update; otherwise update
+                #instead check if import pub status is published?
       }
     end
 
