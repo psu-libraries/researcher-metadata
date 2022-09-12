@@ -15,10 +15,10 @@ describe PurePublishersImporter do
   let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
 
   before do
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/publishers?navigationLink=false&size=1&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/publishers?navigationLink=false&size=1&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/publishers?navigationLink=false&size=1000&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/publishers?navigationLink=false&size=1000&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
   end
 
@@ -49,10 +49,10 @@ describe PurePublishersImporter do
 
     context 'when the API endpoint is not found' do
       before do
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/publishers?navigationLink=false&size=1&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/publishers?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/publishers?navigationLink=false&size=1000&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/publishers?navigationLink=false&size=1000&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)

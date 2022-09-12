@@ -23,10 +23,10 @@ describe PurePublicationImporter do
                           pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f' }
 
   before do
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=1&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=1&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=500&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=500&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
   end
 
@@ -585,10 +585,10 @@ describe PurePublicationImporter do
 
     context 'when the API endpoint is not found' do
       before do
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=1&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/520/research-outputs?navigationLink=false&size=500&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=500&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)
