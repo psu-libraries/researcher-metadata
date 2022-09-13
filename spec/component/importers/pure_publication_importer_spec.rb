@@ -238,10 +238,10 @@ describe PurePublicationImporter do
                                         source_updated_at: Time.new(1999, 12, 31, 23, 59, 59),
                                         publication: existing_pub }
         let!(:existing_import2) { create :publication_import,
-                                        source: 'Pure',
-                                        source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b',
-                                        source_updated_at: Time.new(1999, 12, 30, 23, 59, 59),
-                                        publication: existing_pub2 }
+                                         source: 'Pure',
+                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b',
+                                         source_updated_at: Time.new(1999, 12, 30, 23, 59, 59),
+                                         publication: existing_pub2 }
         let(:existing_pub) { create :publication,
                                     updated_by_user_at: updated_ts,
                                     title: 'Existing Title',
@@ -259,21 +259,21 @@ describe PurePublicationImporter do
                                     visible: false,
                                     doi: doi }
         let(:existing_pub2) { create :publication,
-                                    updated_by_user_at: updated_ts,
-                                    title: 'Existing Title2',
-                                    secondary_title: 'Existing Subtitle2',
-                                    publication_type: 'Journal Article',
-                                    journal: existing_journal,
-                                    page_range: 'existing range2',
-                                    volume: 'existing volume2',
-                                    issue: 'existing issue2',
-                                    issn: 'existing issn2',
-                                    status: 'Published',
-                                    published_on: Date.new(2018, 9, 22),
-                                    total_scopus_citations: 1,
-                                    abstract: 'existing abstract2',
-                                    visible: false,
-                                    doi: doi2 }
+                                     updated_by_user_at: updated_ts,
+                                     title: 'Existing Title2',
+                                     secondary_title: 'Existing Subtitle2',
+                                     publication_type: 'Journal Article',
+                                     journal: existing_journal,
+                                     page_range: 'existing range2',
+                                     volume: 'existing volume2',
+                                     issue: 'existing issue2',
+                                     issn: 'existing issn2',
+                                     status: 'Published',
+                                     published_on: Date.new(2018, 9, 22),
+                                     total_scopus_citations: 1,
+                                     abstract: 'existing abstract2',
+                                     visible: false,
+                                     doi: doi2 }
         let(:doi) { 'https://doi.org/10.000/existing' }
         let(:doi2) { 'https://doi.org/10.000/existing2' }
         let(:existing_journal) { create :journal }
@@ -537,7 +537,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.000/existing'
 
-              expect(existing_pub2_reloaded.status).to eq 'Published' 
+              expect(existing_pub2_reloaded.status).to eq 'Published'
             end
           end
 

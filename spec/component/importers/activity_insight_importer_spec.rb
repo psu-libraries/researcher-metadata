@@ -986,9 +986,9 @@ describe ActivityInsightImporter do
                                         source_identifier: '171620739072',
                                         publication: existing_pub}
         let!(:existing_import_two) { create :publication_import,
-                                        source: 'Activity Insight',
-                                        source_identifier: '271620739072',
-                                        publication: existing_pub2}
+                                            source: 'Activity Insight',
+                                            source_identifier: '271620739072',
+                                            publication: existing_pub2}
         let(:existing_pub) { create :publication,
                                     title: 'Existing Title',
                                     publication_type: 'Trade Journal Article',
@@ -1010,25 +1010,25 @@ describe ActivityInsightImporter do
                                     visible: false,
                                     doi: 'https://doi.org/10.000/existing' }
         let(:existing_pub2) { create :publication,
-                                    title: 'Existing Title 2',
-                                    publication_type: 'Trade Journal Article',
-                                    journal_title: 'Existing Journal 2',
-                                    publisher_name: 'Existing Publisher 2',
-                                    secondary_title: 'Existing Subtitle 2',
-                                    status: 'Published',
-                                    activity_insight_postprint_status: 'Cannot Deposit',
-                                    volume: '112',
-                                    issue: '223',
-                                    edition: '334',
-                                    page_range: '444-556',
-                                    url: 'existing_url2',
-                                    issn: 'existing_ISSN2',
-                                    abstract: 'Existing abstract2',
-                                    authors_et_al: true,
-                                    published_on: Date.new(1980, 2, 2),
-                                    updated_by_user_at: timestamp,
-                                    visible: false,
-                                    doi: 'https://doi.org/10.000/existing2' }
+                                     title: 'Existing Title 2',
+                                     publication_type: 'Trade Journal Article',
+                                     journal_title: 'Existing Journal 2',
+                                     publisher_name: 'Existing Publisher 2',
+                                     secondary_title: 'Existing Subtitle 2',
+                                     status: 'Published',
+                                     activity_insight_postprint_status: 'Cannot Deposit',
+                                     volume: '112',
+                                     issue: '223',
+                                     edition: '334',
+                                     page_range: '444-556',
+                                     url: 'existing_url2',
+                                     issn: 'existing_ISSN2',
+                                     abstract: 'Existing abstract2',
+                                     authors_et_al: true,
+                                     published_on: Date.new(1980, 2, 2),
+                                     updated_by_user_at: timestamp,
+                                     visible: false,
+                                     doi: 'https://doi.org/10.000/existing2' }
 
         context 'when the existing publication has been modified by an admin user' do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
@@ -1056,7 +1056,7 @@ describe ActivityInsightImporter do
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
             p5 = PublicationImport.find_by(source: 'Activity Insight',
-                                          source_identifier: '271620739072').publication
+                                           source_identifier: '271620739072').publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1137,8 +1137,7 @@ describe ActivityInsightImporter do
             expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
 
-            #testing that an 'in press' publication does not update status
-            #byebug
+            # testing that an 'in press' publication does not update status
             expect(p5.status).to eq 'Published'
           end
 

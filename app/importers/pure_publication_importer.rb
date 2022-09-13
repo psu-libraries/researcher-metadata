@@ -35,7 +35,7 @@ class PurePublicationImporter < PureImporter
                 attrs[:status] = status_value(publication)
               end
               attrs[:title] = title(publication)
-              
+
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
             else
