@@ -28,14 +28,14 @@ class PurePublicationImporter < PureImporter
 
           if pi.persisted?
             if p.updated_by_user_at.present?
-              attrs = {
-                total_scopus_citations: publication['totalScopusCitations'],
-                journal: journal_present?(publication) ? journal(publication) : nil
-                if !p.published?
-                  status: status_value(publication)
-                end
-                title: title(publication)
-              }
+              attrs = {}
+              attrs[:total_scopus_citations] = publication['totalScopusCitations']
+              attrs[:journal] = journal_present?(publication) ? journal(publication) : nil
+              if !p.published?
+                attrs[:status] = status_value(publication)
+              end
+              attrs[:title] = title(publication)
+              
               attrs = attrs.merge(doi: doi(publication)) if p.doi.blank?
               pi.publication.update!(attrs)
             else
