@@ -10,12 +10,8 @@ class PublicationMatchOnDoiPolicy
   def ok_to_merge?
     return true if doi_pass? &&
       title_pass? &&
-      journal_pass? &&
-      standard_pass?(:volume) &&
-      standard_pass?(:issue) &&
-      standard_pass?(:edition) &&
-      page_range_pass? &&
       publication_type_pass?
+      #byebug
 
     false
   end
@@ -47,9 +43,9 @@ class PublicationMatchOnDoiPolicy
     def title_pass?
       title1 = publication1.title.to_s + publication1.secondary_title.to_s
       title2 = publication2.title.to_s + publication2.secondary_title.to_s
-      one_value_present?(title1, title2) ||
-        title1&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title2&.downcase&.gsub(/[^a-z0-9]/, '')) ||
-        title2&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title1&.downcase&.gsub(/[^a-z0-9]/, ''))
+      search = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6},"#{publication1.title}#{publication1.secondary_title}")
+      #byebug
+      one_value_present?(title1, title2) || search.include?(publication2)
     end
 
     def journal_pass?
