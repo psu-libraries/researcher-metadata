@@ -11,7 +11,6 @@ class PublicationMatchOnDoiPolicy
     return true if doi_pass? &&
       title_pass? &&
       publication_type_pass?
-      #byebug
 
     false
   end
@@ -43,8 +42,7 @@ class PublicationMatchOnDoiPolicy
     def title_pass?
       title1 = publication1.title.to_s + publication1.secondary_title.to_s
       title2 = publication2.title.to_s + publication2.secondary_title.to_s
-      search = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6},"#{publication1.title}#{publication1.secondary_title}")
-      #byebug
+      search = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6}, "#{publication1.title}#{publication1.secondary_title}")
       one_value_present?(title1, title2) || search.include?(publication2)
     end
 
