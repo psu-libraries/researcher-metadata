@@ -104,7 +104,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   private
 
     def doi_format_is_valid
-      if !doi.nil? && !doi.empty?
+      if doi.present?
         unless doi == DOISanitizer.new(doi).url
           errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
         end
