@@ -48,6 +48,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   validates :title, :description, :published_date, :rights, presence: true
   validate :at_least_one_file_upload
   validate :agreed_to_deposit_agreement
+  validate :doi_format_is_valid
 
   accepts_nested_attributes_for :file_uploads
 
@@ -101,6 +102,14 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   end
 
   private
+
+    def doi_format_is_valid
+      if !doi.nil? && !doi.empty?
+        unless doi == DOISanitizer.new(doi).url
+          errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
+        end
+      end
+    end
 
     def at_least_one_file_upload
       if file_uploads.blank? && status == 'Pending'

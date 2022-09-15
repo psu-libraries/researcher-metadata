@@ -547,4 +547,34 @@ describe ScholarsphereFileUpload, type: :model do
       expect(dep.files).to match_array [file1, file2]
     end
   end
+
+  describe 'validating doi' do
+    let!(:dep) { build :scholarsphere_work_deposit }
+
+    context 'when doi is present' do
+      context 'when doi is not properly formatted' do
+        before { dep.doi = '10.1234/abcd.098876' }
+
+        it 'is not valid' do
+          expect(dep).not_to be_valid
+        end
+      end
+
+      context 'when doi is properly fomratted' do
+        before { dep.doi = 'https://doi.org/10.1234/abcd.098876' }
+
+        it 'is valid' do
+          expect(dep).to be_valid
+        end
+      end
+    end
+
+    context 'when doi is not present' do
+      before { dep.doi = nil }
+
+      it 'is valid' do
+        expect(dep).to be_valid
+      end
+    end
+  end
 end
