@@ -36,7 +36,9 @@ class OabPermissionsService
     end
 
     def all_permissions
-      JSON.parse(get_permissions)['all_permissions']
+      JSON.parse(permissions_response)['all_permissions']
+    rescue JSON::ParserError
+      nil
     end
 
     def permissions_response
@@ -44,7 +46,7 @@ class OabPermissionsService
     end
 
     def oab_permissions_w_doi_url
-      oab_permissions_base_url + doi.to_s
+      oab_permissions_base_url + CGI.escape(doi.to_s)
     end
 
     def oab_permissions_base_url
