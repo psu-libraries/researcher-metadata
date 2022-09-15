@@ -43,6 +43,8 @@ class OabPermissionsService
 
     def permissions_response
       HttpService.get(oab_permissions_w_doi_url)
+    rescue Net::ReadTimeout, Net::OpenTimeout
+      ''
     end
 
     def oab_permissions_w_doi_url
