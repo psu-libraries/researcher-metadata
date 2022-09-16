@@ -526,8 +526,49 @@ describe DuplicatePublicationGroup, type: :model do
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
-
         expect(p2.reload.duplicate_group).to eq group
+      end
+    end
+
+    context 'given a publication with a similar title to another publication and a different publication date but the year is within +/-2' do
+      let!(:p1) { create :publication,
+                         title: 'A Typical Title',
+                         published_on: Date.new(2000, 5, 20),
+                         doi: nil }
+
+      let!(:p2) { create :publication,
+                         title: 'The Typical Title',
+                         published_on: Date.new(2002, 1, 1),
+                         doi: nil }
+      let!(:p3) { create :publication,
+                         title: 'The Typical Title 3',
+                         published_on: Date.new(2000, 5, 20),
+                         doi: nil }
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+        expect(p2.reload.duplicate_group).to eq group
+      end
+    end
+
+    context 'given a publication with a similar title to another publication and a different publication date but the year is more than +/-2' do
+      let!(:p1) { create :publication,
+                         title: 'A Typical Title',
+                         published_on: Date.new(2000, 5, 20),
+                         doi: nil }
+
+      let!(:p2) { create :publication,
+                         title: 'The Typical Title',
+                         published_on: Date.new(2003, 1, 1),
+                         doi: nil }
+      let!(:p3) { create :publication,
+                         title: 'The Typical Title 3',
+                         published_on: Date.new(2000, 5, 20),
+                         doi: nil }
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+        expect(p2.reload.duplicate_group).not_to eq group
       end
     end
 
