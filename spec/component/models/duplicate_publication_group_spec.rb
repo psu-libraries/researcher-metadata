@@ -544,6 +544,7 @@ describe DuplicatePublicationGroup, type: :model do
                          title: 'The Typical Title 3',
                          published_on: Date.new(2000, 5, 20),
                          doi: nil }
+
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
@@ -565,6 +566,7 @@ describe DuplicatePublicationGroup, type: :model do
                          title: 'The Typical Title 3',
                          published_on: Date.new(2000, 5, 20),
                          doi: nil }
+
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
