@@ -230,17 +230,19 @@ class ActivityInsightImporter
       else
         # If the publication has been updated by an admin, we only want to
         # overwrite a subset of its attributes.
-        pub_record.update!(always_update_pub_attrs(ai_pub))
+        pub_record.update!(always_update_pub_attrs(ai_pub, pub_record))
       end
     end
 
-    def always_update_pub_attrs(pub)
+    def always_update_pub_attrs(pub, pub_record)
       attrs = {}
       attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
       if pub.status == 'Published'
         attrs[:status] = pub.status
       end
-      attrs[:title] = pub.title
+      if pub_record.has_single_import_from_ai?
+        attrs[:title] = pub.title
+      end
       attrs
     end
 
