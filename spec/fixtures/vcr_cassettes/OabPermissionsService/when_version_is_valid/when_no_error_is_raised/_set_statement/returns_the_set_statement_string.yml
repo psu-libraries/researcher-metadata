@@ -55,5 +55,5 @@ http_interactions:
       - h3=":443"; ma=86400, h3-29=":443"; ma=86400
     body:
       encoding: UTF-8
-      string: "{\n \"all_permissions\": [\n {\n \"version\":\"acceptedVersion\",\n  \"licence\":\"cc-by\",\n  \"embargo_end_date\":\"2017-01-01\",\n  \"deposit_statement\":\"Statement\"}\n  ]\n }"
+      string: '{\n "all_permissions": [\n {\n "version":"acceptedVersion",\n  "licence":"cc-by",\n  "embargo_end_date":"2017-01-01",\n  "deposit_statement":"Statement"}\n  ]\n }'
   recorded_at: Thu, 15 Sep 2022 21:14:29 GMT
