@@ -24,6 +24,7 @@ gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
+gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
@@ -40,6 +41,7 @@ gem 'net-ldap'                          # lightweight Directory Access Protocol 
 gem 'net-pop', require: false           # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-smtp', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
+gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API

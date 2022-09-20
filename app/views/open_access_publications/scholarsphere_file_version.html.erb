@@ -1,0 +1,27 @@
+<div class="container">
+  <div class="row">
+    <% if @file_version.nil? %>
+        <p>We have not been able to determine automatically which version of the article this is. 
+        Please select the correct article version so we can fetch the sharing rules for the article.</p>
+    <% else %>
+        <p>This looks like the <strong><%= @file_version.titlecase %></strong> version of the article. 
+        Please update the correct article version if this is not the correct article version
+        so we can fetch the sharing rules for the article.</p>
+    <% end %>
+
+    <%= form_for :scholarsphere_work_deposit, url: scholarsphere_deposit_form_path, method: :post do |f| %>
+      <div class='form-group'>
+        <div class="form-check">
+            <%= f.radio_button :file_version, "acceptedVersion", class: 'form-check-input', checked: @file_version == 'acceptedVersion' %>
+            <%= f.label :file_version, 'Accepted Version', class: 'form-check-label' %>
+        </div>
+        <div class="form-check">
+            <%= f.radio_button :file_version, "publishedVersion", class: 'form-check-input', checked: @file_version == 'publishedVersion' %>
+            <%= f.label :file_version, 'Published Version', class: 'form-check-label' %>
+        </div>
+      </div> 
+
+      <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
+    <% end %>
+    </div>
+</div>
