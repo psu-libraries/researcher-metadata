@@ -35,6 +35,22 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     end
   end
 
+  def scholarsphere_file_version
+    uploads = params['scholarsphere_work_deposit']['file_uploads_attributes']
+    @temp_files = ExifUploads.temp_files(uploads)
+    @file_version = ExifUploads.version(uploads: uploads, publication: publication)
+
+    render :scholarsphere_file_version
+  end
+
+  def scholarsphere_deposit_form
+    @temp_files = params[:scholarsphere_work_deposit][:temp_files]
+    @authorship = Authorship.find_by(user: current_user, publication: publication)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
+    @deposit.file_uploads.build
+    render :scholarsphere_deposit_form
+  end
+
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     extra_params = { authorship: @authorship, deputy_user_id: current_user.deputy.id }
@@ -74,6 +90,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :doi,
                                                          :subtitle,
                                                          :publisher,
+                                                         :file_version,
+                                                         temp_files: [],
                                                          file_uploads_attributes: [:file, :file_cache])
     end
 end

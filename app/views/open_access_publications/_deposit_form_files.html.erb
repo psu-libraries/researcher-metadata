@@ -1,0 +1,9 @@
+<div class="nested-fields file-upload-fields">
+  <div class="file-group">
+      <div class="form-group file required file-display">
+      <% @temp_files.values.each do |temp_file| %>
+        <%= link_to temp_file[:original_filename], temp_file[:temp_path], target: '_blank', class: 'form-control disabled' %>
+      <% end %>
+      </div>
+  </div>
+</div>
