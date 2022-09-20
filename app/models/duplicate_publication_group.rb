@@ -30,7 +30,6 @@ class DuplicatePublicationGroup < ApplicationRecord
                                      publication.doi)
                      .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
                  end
-#byebug
     group_publications(duplicates)
   end
 
@@ -75,7 +74,7 @@ class DuplicatePublicationGroup < ApplicationRecord
       pure_pub = publications.find(&:has_single_import_from_pure?)
       ai_pub = publications.find(&:has_single_import_from_ai?)
 
-      if !pure_pub.nil? && !ai_pub.nil? 
+      if !pure_pub.nil? && !ai_pub.nil?
         search = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6}, "#{pure_pub.title}#{pure_pub.secondary_title}")
         if search.include?(ai_pub)
           ActiveRecord::Base.transaction do

@@ -1255,7 +1255,6 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
 
-      
       context 'when one publication has only an import from Activity Insight and the other has only an import from Pure and titles are similar' do
         let(:pub1_imports) { [ai_import] }
         let(:pub2_imports) { [pure_import] }
