@@ -469,6 +469,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
@@ -508,6 +509,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
@@ -527,6 +529,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
@@ -565,7 +568,8 @@ describe DuplicatePublicationGroup, type: :model do
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
-
+byebug
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
 
@@ -573,7 +577,8 @@ describe DuplicatePublicationGroup, type: :model do
         it 'groups the publications' do
           described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
-
+byebug
+          expect(group).not_to be_nil
           expect(p1.reload.duplicate_group).to eq group
         end
       end
@@ -596,6 +601,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
 
@@ -604,6 +610,7 @@ describe DuplicatePublicationGroup, type: :model do
           described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
+          expect(group).not_to be_nil
           expect(p1.reload.duplicate_group).to eq group
         end
       end
@@ -656,6 +663,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
 
@@ -664,6 +672,7 @@ describe DuplicatePublicationGroup, type: :model do
           described_class.group_duplicates_of(p2)
           group = p2.reload.duplicate_group
 
+          expect(group).not_to be_nil
           expect(p1.reload.duplicate_group).to eq group
         end
       end
@@ -782,6 +791,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to be_nil
         expect(p3.reload.duplicate_group).to eq group
         expect(p4.reload.duplicate_group).to eq group
@@ -803,6 +813,7 @@ describe DuplicatePublicationGroup, type: :model do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
@@ -825,7 +836,8 @@ describe DuplicatePublicationGroup, type: :model do
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
-
+byebug
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
@@ -1149,8 +1161,8 @@ describe DuplicatePublicationGroup, type: :model do
     end
 
     context 'when the group has 2 publications' do
-      let!(:pub1) { create :publication, duplicate_group: group, imports: pub1_imports }
-      let!(:pub2) { create :publication, duplicate_group: group, imports: pub2_imports }
+      let!(:pub1) { create :publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports }
+      let!(:pub2) { create :publication, title: 'The Generic Title', duplicate_group: group, imports: pub2_imports }
 
       context 'when both of the publications have no imports' do
         let(:pub1_imports) { [] }
@@ -1253,7 +1265,8 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
 
-      context 'when one publication has only an import from Activity Insight and the other has only an import from Pure' do
+      
+      context 'when one publication has only an import from Activity Insight and the other has only an import from Pure and titles are similar' do
         let(:pub1_imports) { [ai_import] }
         let(:pub2_imports) { [pure_import] }
         let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
@@ -1287,6 +1300,45 @@ describe DuplicatePublicationGroup, type: :model do
         it 'returns true' do
           expect(group.auto_merge).to be true
         end
+      end
+    end
+
+    context 'when one publication has only an import from Activity Insight and the other has only an import from Pure and titles are not similar' do
+      let!(:pub1) { create :publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports }
+      let!(:pub2) { create :publication, title: 'Something Different', duplicate_group: group, imports: pub2_imports }
+      let(:pub1_imports) { [ai_import] }
+      let(:pub2_imports) { [pure_import] }
+      let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
+      let(:pure_import) { create(:publication_import, source: 'Pure') }
+
+      it 'does not change the number of publications in the database' do
+        expect { group.auto_merge }.not_to change(Publication, :count)
+      end
+
+      it 'does not change the number of duplicate publication groups in the database' do
+        expect { group.auto_merge }.not_to change(described_class, :count)
+      end
+
+      it 'does not delete the group' do
+        group.auto_merge
+        expect { group.reload }.not_to raise_error
+      end
+
+      it 'does not change the group membership' do
+        group.auto_merge
+        expect(group.reload.publications).to match_array [pub1, pub2]
+      end
+
+      it "does not change the member publications' imports" do
+        group.auto_merge
+        expect(pub1.reload.imports).to eq [ai_import]
+        expect(ai_import.reload.auto_merged).to be_nil
+        expect(pub2.reload.imports).to eq [pure_import]
+        expect(pure_import.reload.auto_merged).to be_nil
+      end
+
+      it 'returns false' do
+        expect(group.auto_merge).to be false
       end
     end
 
