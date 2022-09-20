@@ -568,19 +568,9 @@ describe DuplicatePublicationGroup, type: :model do
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
-byebug
+
         expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
-      end
-
-      context 'given the other publication' do
-        it 'groups the publications' do
-          described_class.group_duplicates_of(p2)
-          group = p2.reload.duplicate_group
-byebug
-          expect(group).not_to be_nil
-          expect(p1.reload.duplicate_group).to eq group
-        end
       end
     end
 
@@ -834,11 +824,11 @@ byebug
                                   publication: p2}
 
       it 'groups the publications' do
-        described_class.group_duplicates_of(p1)
-        group = p1.reload.duplicate_group
-byebug
+        described_class.group_duplicates_of(p2)
+        group = p2.reload.duplicate_group
+
         expect(group).not_to be_nil
-        expect(p2.reload.duplicate_group).to eq group
+        expect(p1.reload.duplicate_group).to eq group
       end
     end
 
