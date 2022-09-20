@@ -181,7 +181,7 @@ describe OabPermissionsService do
     let(:doi) { '10.1231/abcd.54321' }
 
     it 'raises and error' do
-      expect{ service }.to raise_error OabPermissionsService::InvalidVersion
+      expect { service }.to raise_error OabPermissionsService::InvalidVersion
     end
   end
 end
