@@ -6,7 +6,7 @@ class PublicationMatchOnDoiPolicy
     @publication2 = publication2
   end
 
-  # if ok_to_merge returns true, these publications can be merged by PublicationMergeOnDoiPolicy
+  # if ok_to_merge returns true, these publications can be merged by PublicationMergeOnMatchingPolicy
   def ok_to_merge?
     return true if doi_pass? &&
       title_pass? &&
