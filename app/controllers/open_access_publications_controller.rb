@@ -42,7 +42,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def scholarsphere_deposit_form
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
+    @permissions = OabPermissionsService.new(@authorship.doi_url_path, params["scholarsphere_work_deposit"]["file_version"])
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship, { rights: @permissions.licence, embargoed_until: @permissions.embargo_end_date, publisher_statement: @permissions.set_statement })
     @deposit.file_uploads.build
     render :scholarsphere_deposit_form
   end

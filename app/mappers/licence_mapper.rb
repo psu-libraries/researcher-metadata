@@ -2,10 +2,12 @@
 
 class LicenceMapper
   def self.map(string)
+    return nil if string.nil?
+
     case string.downcase
     when 'cc-by', 'cc-by 3.0', 'cc-by 4.0'
       ScholarsphereWorkDeposit.rights[0]
-    when 'cc-by-nc 4.0'
+    when 'cc-by-nc'
       ScholarsphereWorkDeposit.rights[2]
     when 'cc-by-nc-nd'
       ScholarsphereWorkDeposit.rights[4]

@@ -54,14 +54,14 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   delegate :title, to: :publication, prefix: true
   delegate :scholarsphere_open_access_url, to: :publication, prefix: false
 
-  def self.new_from_authorship(authorship)
-    new(authorship: authorship,
+  def self.new_from_authorship(authorship, extra_attrs = {})
+    new({authorship: authorship,
         title: authorship.title,
         description: authorship.abstract,
         published_date: authorship.published_on,
         doi: authorship.doi,
         subtitle: authorship.secondary_title,
-        publisher: authorship.preferred_journal_title)
+        publisher: authorship.preferred_journal_title}.merge(extra_attrs))
   end
 
   def record_success(url)

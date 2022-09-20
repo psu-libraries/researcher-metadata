@@ -2,7 +2,7 @@
 
 class OabPermissionsService
   class InvalidVersion < StandardError; end
-  attr_reader :doi, :version
+  attr_reader :doi, :version, :permissions
 
   VALID_VERSIONS = ['acceptedVersion', 'publishedVersion'].freeze
 
@@ -11,18 +11,23 @@ class OabPermissionsService
 
     @doi = doi
     @version = version
+    @permissions = this_versions_perms
   end
 
   def set_statement
-    this_versions_perms['deposit_statement'].presence
+    permissions['deposit_statement'].presence
   end
 
   def embargo_end_date
-    this_versions_perms['embargo_end'].present? ? Date.parse(this_versions_perms['embargo_end'], '%Y-%m-%d') : nil
+    if permissions['embargo_end'].present? && (Date.parse(permissions['embargo_end'], '%Y-%m-%d') > Date.today)
+       Date.parse(this_versions_perms['embargo_end'], '%Y-%m-%d')
+     else
+       nil
+     end
   end
 
   def licence
-    this_versions_perms['licence'].presence
+    LicenceMapper.map(permissions['licence'].presence)
   end
 
   private

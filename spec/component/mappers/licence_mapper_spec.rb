@@ -21,9 +21,9 @@ describe LicenceMapper do
     end
   end
 
-  context 'when cc-by-nc 4.0' do
+  context 'when cc-by-nc' do
     it 'returns https://creativecommons.org/licenses/by-nc/4.0/' do
-      expect(described_class.map('cc-by-nc 4.0')).to eq 'https://creativecommons.org/licenses/by-nc/4.0/'
+      expect(described_class.map('cc-by-nc')).to eq 'https://creativecommons.org/licenses/by-nc/4.0/'
     end
   end
 

@@ -60,7 +60,7 @@
             <%= f.input :rights,
                         label: 'License',
                         collection: ScholarsphereWorkDeposit.rights_options,
-                        selected: 'https://rightsstatements.org/page/InC/1.0/',
+                        include_blank: false,
                         hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
             <%= f.input :embargoed_until,
                         label: 'Embargoed until',
