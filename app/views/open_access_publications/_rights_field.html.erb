@@ -1,11 +1,11 @@
-<% if flash[:rights] %>
+<% if permissions.licence.present? %>
 <section>
   <div class="alert alert-info">
     <%= f.input :rights,
                 label: 'License',
                 collection: ScholarsphereWorkDeposit.rights_options,
                 include_blank: false,
-                hint: flash[:rights] %>
+                hint: t('simple_form.hints.rights.oab_permission_found') %>
   </div>
 </section>
 <% else %>

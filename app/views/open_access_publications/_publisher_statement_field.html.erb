@@ -1,10 +1,10 @@
-<% if flash[:publisher_statement] %>
+<% if permissions.set_statement.present? %>
 <section>
   <div class="alert alert-info">
     <%= f.input :publisher_statement,
                 label: 'Publisher Statement',
                 input_html: { rows: 7 },
-                hint: flash[:publisher_statement] %>
+                hint: t('simple_form.hints.publisher_statement.oab_permission_found') %>
   </div>
 </section>
 <% else %>

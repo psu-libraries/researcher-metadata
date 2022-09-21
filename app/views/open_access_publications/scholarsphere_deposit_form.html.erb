@@ -32,13 +32,15 @@
       <div class="open-access-actions">
         <div class="open-access-action">
           <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
-            <% if flash[:info] %>
-              <section>
-                <div class="alert alert-info">
-                  <%= flash[:info] %>
-                </div>
-              </section>
-            <% end %>
+            <section>
+              <div class="alert alert-info">
+                <% if @permissions.permissions.present? %>
+                  <%= t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found') %>
+                <% else %>
+                  <%= t('simple_form.scholarsphere_deposit_flashes.sharing_rules_not_found') %>
+                <% end %>
+              </div>
+            </section>
 
             <%= f.input :title, label: 'Title' %>
             <%= f.input :subtitle, label: 'Subtitle' %>
@@ -49,12 +51,12 @@
               <% end %>
             </ul>
             <%= f.input :description, label: 'Description', hint: "Include the work abstract if available. Otherwise, provide a brief summary." %>
-            <%= render partial: 'publisher_statement_field', locals: { f: f } %>
+            <%= render partial: 'publisher_statement_field', locals: { f: f, permissions: @permissions } %>
             <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year + 2 %>
             <%= f.input :publisher, label: 'Journal Name' %>
             <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>
-            <%= render partial: 'rights_field', locals: { f: f } %>
-            <%= render partial: 'embargoed_until_field', locals: { f: f } %>
+            <%= render partial: 'rights_field', locals: { f: f, permissions: @permissions } %>
+            <%= render partial: 'embargoed_until_field', locals: { f: f, permissions: @permissions } %>
             <%= f.input :deposit_agreement,
                         as: :boolean,
                         required: true,

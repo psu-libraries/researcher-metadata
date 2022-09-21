@@ -43,7 +43,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def scholarsphere_deposit_form
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     @permissions = OabPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
-    scholarsphere_deposit_flashes(@permissions)
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                             { rights: @permissions.licence,
                                                               embargoed_until: embargo_end_date_display(@permissions.embargo_end_date),
@@ -93,23 +92,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :publisher,
                                                          :file_version,
                                                          file_uploads_attributes: [:file, :file_cache])
-    end
-
-    def scholarsphere_deposit_flashes(permissions)
-      if permissions.permissions.present?
-        flash[:info] = t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found')
-      else
-        return flash[:info] = t('simple_form.scholarsphere_deposit_flashes.sharing_rules_not_found')
-      end
-      flash[:rights] = t('simple_form.hints.rights.oab_permission_found') if permissions.licence.present?
-      flash[:publisher_statement] = t('simple_form.hints.publisher_statement.oab_permission_found') if permissions.set_statement.present?
-      if permissions.embargo_end_date.present?
-        flash[:embargoed_until] = if permissions.embargo_end_date < Date.today
-                                    t('simple_form.hints.embargoed_until.oab_permission_found_expired')
-                                  else
-                                    t('simple_form.hints.embargoed_until.oab_permission_found')
-                                  end
-      end
     end
 
     def embargo_end_date_display(embargo_end_date)
