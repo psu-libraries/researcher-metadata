@@ -32,7 +32,7 @@ class DuplicatePublicationGroup < ApplicationRecord
                                      publication.doi)
                      .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
                  end
-                       
+
     group_publications(duplicates)
   end
 

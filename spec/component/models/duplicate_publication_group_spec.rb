@@ -572,7 +572,7 @@ describe DuplicatePublicationGroup, type: :model do
         expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
-    end  
+    end
 
     context 'given a publication with different DOIs. titles, and publication years' do
       let!(:p1) { create :publication,
@@ -592,7 +592,8 @@ describe DuplicatePublicationGroup, type: :model do
         expect(group).to be_nil
         expect(p2.reload.duplicate_group).to be_nil
       end
-    end  
+    end
+
     context 'given a publication with the same title as another publication where only one has a DOI and publication date' do
       let!(:p1) { create :publication,
                          title: 'A Publication That Matches Another Publication',
@@ -873,12 +874,12 @@ describe DuplicatePublicationGroup, type: :model do
 
     context 'given a publication that has the same DOI but different title and year and the other has only an Activity Insight import' do
       let!(:p1) { create :publication,
-                         title: "A match with only one import from Activity Insight",
+                         title: 'A match with only one import from Activity Insight',
                          published_on: Date.new(1989, 1, 1),
                          doi: 'https://doi.org/10.000/some-doi-457472486' }
 
       let!(:p2) { create :publication,
-                         title: "A Different Title",
+                         title: 'A Different Title',
                          published_on: Date.new(1986, 1, 1),
                          doi: 'https://doi.org/10.000/some-doi-457472486' }
 
@@ -894,6 +895,7 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p1.reload.duplicate_group).to eq group
       end
     end
+
     context 'given a publication that matches another publication except for DOI and the other has both an Activity Insight import and a Pure import' do
       let!(:p1) { create :publication,
                          title: 'consider DOI because AI is not the only import',
