@@ -19,11 +19,11 @@ class OabPermissionsService
   end
 
   def embargo_end_date
-    if permissions['embargo_end'].present? && (Date.parse(permissions['embargo_end'], '%Y-%m-%d') > Date.today)
-       Date.parse(this_versions_perms['embargo_end'], '%Y-%m-%d')
-     else
-       nil
-     end
+    if permissions['embargo_end'].present?
+      Date.parse(this_versions_perms['embargo_end'], '%Y-%m-%d')
+    else
+      nil
+    end
   end
 
   def licence

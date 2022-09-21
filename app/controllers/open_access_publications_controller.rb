@@ -43,7 +43,11 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def scholarsphere_deposit_form
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     @permissions = OabPermissionsService.new(@authorship.doi_url_path, params["scholarsphere_work_deposit"]["file_version"])
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship, { rights: @permissions.licence, embargoed_until: @permissions.embargo_end_date, publisher_statement: @permissions.set_statement })
+    set_scholarsphere_deposit_flashes(@permissions)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
+                                                            { rights: @permissions.licence,
+                                                              embargoed_until: embargo_end_date_display(@permissions.embargo_end_date),
+                                                              publisher_statement: @permissions.set_statement })
     @deposit.file_uploads.build
     render :scholarsphere_deposit_form
   end
@@ -89,5 +93,28 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :publisher,
                                                          :file_version,
                                                          file_uploads_attributes: [:file, :file_cache])
+    end
+
+    def set_scholarsphere_deposit_flashes(permissions)
+      if permissions.permissions.present?
+        flash[:info] = "We found sharing rules for your work and filled out the fields in blue below for you.  Please change them if they are not correct."
+      else
+        return flash[:info] =  "We could not find sharing rules for your work.  Please fill out any missing information below."
+      end
+      flash[:rights] = "We found the license for your work." if permissions.licence.present?
+      flash[:publisher_statement] = "We found the set statement for your work." if permissions.set_statement.present?
+      if permissions.embargo_end_date.present?
+        if permissions.embargo_end_date < Date.today
+          flash[:embargoed_until] = "We found the embargo end date for your work but it is before the current date, so we left this blank."
+        else
+          flash[:embargoed_until] = "We found the embargo end date for your work."
+        end
+      end
+    end
+
+    def embargo_end_date_display(embargo_end_date)
+      return embargo_end_date if embargo_end_date.present? && embargo_end_date > Date.today
+
+      nil
     end
 end

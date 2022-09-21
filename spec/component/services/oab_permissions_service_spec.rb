@@ -15,7 +15,7 @@ describe OabPermissionsService do
       it 'returns nils and defaults' do
         expect(service.set_statement).to be_nil
         expect(service.embargo_end_date).to be_nil
-        expect(service.licence).to eq 'https://rightsstatements.org/page/InC/1.0/'
+        expect(service.licence).to be_nil
       end
     end
 
@@ -28,7 +28,7 @@ describe OabPermissionsService do
       it 'returns nils and defaults' do
         expect(service.set_statement).to be_nil
         expect(service.embargo_end_date).to be_nil
-        expect(service.licence).to eq 'https://rightsstatements.org/page/InC/1.0/'
+        expect(service.licence).to be_nil
       end
     end
 
@@ -163,18 +163,8 @@ describe OabPermissionsService do
       end
 
       describe '#embargo_end_date' do
-        context 'when the embargo end date is in the future' do
-          it 'returns the embargo_end_date data' do
-            expect(service.embargo_end_date).to eq Date.parse('2024-09-01', '%Y-%m-%d')
-          end
-        end
-
-        context 'when the embargo end date is in the past' do
-          before { allow(service).to receive(:permissions).and_return({ "embargo_end" => Date.yesterday.strftime('%Y-%m-%d') }) }
-
-          it 'returns nil' do
-            expect(service.embargo_end_date).to eq nil
-          end
+        it 'returns the embargo_end_date data' do
+          expect(service.embargo_end_date).to eq Date.parse('2024-09-01', '%Y-%m-%d')
         end
       end
 

@@ -3,6 +3,12 @@
 require 'component/component_spec_helper'
 
 describe LicenceMapper do
+  context 'when nil' do
+    it 'returns nil' do
+      expect(described_class.map(nil)).to eq nil
+    end
+  end
+
   context 'when cc-by' do
     it 'returns https://creativecommons.org/licenses/by/4.0/' do
       expect(described_class.map('cc-by')).to eq 'https://creativecommons.org/licenses/by/4.0/'

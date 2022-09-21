@@ -1,0 +1,18 @@
+<% if flash[:rights] %>
+<section>
+  <div class="alert alert-info">
+    <%= f.input :rights,
+                label: 'License',
+                collection: ScholarsphereWorkDeposit.rights_options,
+                include_blank: false,
+                hint: flash[:rights]  %>
+  </div>
+</section>
+<% else %>
+  <%= f.input :rights,
+              label: 'License',
+              collection: ScholarsphereWorkDeposit.rights_options,
+              include_blank: false,
+              selected: 'https://rightsstatements.org/page/InC/1.0/',
+              hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
+<% end %>

@@ -32,17 +32,13 @@
       <div class="open-access-actions">
         <div class="open-access-action">
           <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
-            <div class="file-uploads">
-              <%= f.simple_fields_for :file_uploads do |sfu| %>
-                <%= f.error_notification message: f.object.errors[:file_uploads].to_sentence %>
-                <%= render 'file_upload_fields', f: sfu %>
-              <% end %>
-
-              <div class="cocoon-links">
-                <%= link_to_add_association 'Add Another File', f, :file_uploads, association: :file_uploads,
-                                            class: 'button-default add-button' %>
-              </div>
-            </div>
+            <% if flash[:info] %>
+              <section>
+                <div class="alert alert-info">
+                  <%= flash[:info] %>
+                </div>
+              </section>
+            <% end %>
 
             <%= f.input :title, label: 'Title' %>
             <%= f.input :subtitle, label: 'Subtitle' %>
@@ -53,20 +49,12 @@
               <% end %>
             </ul>
             <%= f.input :description, label: 'Description', hint: "Include the work abstract if available. Otherwise, provide a brief summary." %>
-            <%= f.input :publisher_statement, label: 'Publisher Statement', hint: "If the original publisher requires a set statement to upload this work to ScholarSphere, include it here." %>
+            <%= render partial: 'publisher_statement_field', locals: { f: f } %>
             <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year + 2 %>
             <%= f.input :publisher, label: 'Journal Name' %>
             <%= f.input :doi, label: 'DOI', readonly: @deposit.doi.present? ? true : false %>
-            <%= f.input :rights,
-                        label: 'License',
-                        collection: ScholarsphereWorkDeposit.rights_options,
-                        include_blank: false,
-                        hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
-            <%= f.input :embargoed_until,
-                        label: 'Embargoed until',
-                        include_blank: true,
-                        start_year: Date.today.year,
-                        end_year: Date.today.year + 10 %>
+            <%= render partial: 'rights_field', locals: { f: f } %>
+            <%= render partial: 'embargoed_until_field', locals: { f: f } %>
             <%= f.input :deposit_agreement,
                         as: :boolean,
                         required: true,
