@@ -12,10 +12,10 @@ describe OabPermissionsService do
     context 'when a network error is raised' do
       before { allow(HttpService).to receive(:get).and_raise Net::ReadTimeout }
 
-      it 'returns nils' do
+      it 'returns nils and defaults' do
         expect(service.set_statement).to be_nil
         expect(service.embargo_end_date).to be_nil
-        expect(service.licence).to be_nil
+        expect(service.licence).to eq 'https://rightsstatements.org/page/InC/1.0/'
       end
     end
 
@@ -25,10 +25,10 @@ describe OabPermissionsService do
         allow(JSON).to receive(:parse).and_raise JSON::ParserError
       end
 
-      it 'returns nils' do
+      it 'returns nils and defaults' do
         expect(service.set_statement).to be_nil
         expect(service.embargo_end_date).to be_nil
-        expect(service.licence).to be_nil
+        expect(service.licence).to eq 'https://rightsstatements.org/page/InC/1.0/'
       end
     end
 
