@@ -14,11 +14,21 @@ en:
       # html: '<abbr title="required">*</abbr>'
     error_notification:
       default_message: "Please review the problems below:"
+    scholarsphere_deposit_flashes:
+      sharing_rules_found: We found sharing rules for your work and filled out the fields in blue below for you.  Please change them if they are not correct.
+      sharing_rules_not_found: We could not find sharing rules for your work.  Please fill out any missing information below.
     hints:
       new_deputy_assignment_form:
         deputy_webaccess_id: Enter the Penn State Access ID of a person to whom you'd like to grant proxy access. Only people with Access IDs can have proxy access.
       waiver:
         reason_for_waiver: Please explain why you are getting this waiver. This is optional but encouraged.
+      rights:
+        oab_permission_found: We found the license for your work.
+      publisher_statement:
+        oab_permission_found: We found the set statement for your work.
+      embargoed_until:
+        oab_permission_found: We found the embargo end date for your work.
+        oab_permission_found_expired: We found the embargo end date for your work but it is before the current date, so we left this blank.
     labels:
       waiver:
         doi: Digital Object Identifier (DOI)

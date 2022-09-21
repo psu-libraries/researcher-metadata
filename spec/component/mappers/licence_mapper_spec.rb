@@ -5,7 +5,7 @@ require 'component/component_spec_helper'
 describe LicenceMapper do
   context 'when nil' do
     it 'returns nil' do
-      expect(described_class.map(nil)).to eq nil
+      expect(described_class.map(nil)).to be_nil
     end
   end
 
