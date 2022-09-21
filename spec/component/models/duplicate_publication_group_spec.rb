@@ -540,14 +540,12 @@ describe DuplicatePublicationGroup, type: :model do
                          title: 'The Typical Title',
                          published_on: Date.new(2002, 1, 1),
                          doi: nil }
-      let!(:p3) { create :publication,
-                         title: 'The Typical Title 3',
-                         published_on: Date.new(2000, 5, 20),
-                         doi: nil }
 
       it 'groups the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
+
+        expect(group).not_to be_nil
         expect(p2.reload.duplicate_group).to eq group
       end
     end
