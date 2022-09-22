@@ -10,6 +10,10 @@
     <% end %>
 
     <%= form_for :scholarsphere_work_deposit, url: scholarsphere_deposit_form_path, method: :post do |f| %>
+    <% @temp_files.each_with_index do |temp_file, key| %>
+      <%= f.hidden_field "temp_files[#{key}][original_filename]", value: temp_file[:original_filename] %>
+      <%= f.hidden_field "temp_files[#{key}][temp_path]", value: temp_file[:temp_path] %>
+    <% end %>
       <div class='form-group'>
         <div class="form-check">
             <%= f.radio_button :file_version, "acceptedVersion", class: 'form-check-input', checked: @file_version == 'acceptedVersion' %>

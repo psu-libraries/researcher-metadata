@@ -4,29 +4,38 @@ require 'pdf-reader'
 require 'exiftool_vendored'
 
 class ExifFileVersion
-  def initialize(file)
-    @file_path = file.path
+  def initialize(file_path, journal)
+    @file_path = file_path
+    @journal = journal
   end
 
+  ACCEPTED_VERSION = 'acceptedVersion'
+  PUBLISHED_VERSION = 'publishedVersion'
+  PUBLISHED_VERSION_CREATORS = ['indesign', 'arbortext', 'elsevier', 'springer'].freeze
+
   def version
-    if accepted_manuscript?
-      'acceptedVersion'
-    elsif final_published_version?
-      'publishedVersion'
-    end
+    @version ||= if accepted?
+                   ACCEPTED_VERSION
+                 elsif published?
+                   PUBLISHED_VERSION
+                 end
+  end
+
+  def accepted_version?
+    version == ACCEPTED_VERSION
   end
 
   private
 
     def exif
-      @exif || Exiftool.new(@file_path).to_hash
+      @exif ||= Exiftool.new(@file_path).to_hash
     end
 
-    def accepted_manuscript?
+    def accepted?
       exif[:journal_article_version]&.downcase == 'am'
     end
 
-    def final_published_version?
+    def published?
       exif[:journal_article_version]&.downcase == 'p' ||
         exif[:journal_article_version]&.downcase == 'vor' ||
         rights_en_gb? ||
@@ -47,9 +56,8 @@ class ExifFileVersion
       !exif[:wps_journaldoi].nil?
     end
 
-    # TODO: include [name of journal] check
     def subject?
-      !exif[:subject].nil? and ['downloaded from', 'journal pre-proof'].any? { |s| exif[:subject].downcase.include? s }
+      !exif[:subject].nil? and ['downloaded from', 'journal pre-proof', @journal].any? { |s| exif[:subject].downcase.include? s }
     end
 
     def rendition_class?
@@ -57,11 +65,11 @@ class ExifFileVersion
     end
 
     def creator?
-      !exif[:creator].nil? and ['indesign', 'arbortext', 'elsevier', 'springer'].any? { |c| exif[:creator].downcase.include? c }
+      !exif[:creator].nil? and PUBLISHED_VERSION_CREATORS.any? { |c| exif[:creator].downcase.include? c }
     end
 
     def creator_tool?
-      !exif[:creator_tool].nil? and ['indesign', 'arbortext', 'elsevier', 'springer'].any? { |ct| exif[:creator_tool].downcase.include? ct }
+      !exif[:creator_tool].nil? and PUBLISHED_VERSION_CREATORS.any? { |ct| exif[:creator_tool].downcase.include? ct }
     end
 
     def producer?

@@ -34,14 +34,8 @@
           <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
             <div class="file-uploads">
               <%= f.simple_fields_for :file_uploads do |sfu| %>
-                <%= f.error_notification message: f.object.errors[:file_uploads].to_sentence %>
-                <%= render 'file_upload_fields', f: sfu %>
+                <%= render 'deposit_form_files', f: sfu %>
               <% end %>
-
-              <div class="cocoon-links">
-                <%= link_to_add_association 'Add Another File', f, :file_uploads, association: :file_uploads,
-                                            class: 'button-default add-button' %>
-              </div>
             </div>
 
             <%= f.input :title, label: 'Title' %>
