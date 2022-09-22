@@ -45,14 +45,14 @@ describe WorksGenerator do
   describe '#other_work' do
     it 'generates a non oa policy publication' do
       expect { generator.other_work }.to change(Publication, :count).by 1
-      expect(Publication.last.publication_type).not_to match(/Journal Article/)
+      expect(Publication.oa_publication_types.exclude?(Publication.last.publication_type)).to be true
     end
   end
 
   describe '#oa_publication_from_activity_insight' do
     it 'generates an oa policy publication whos publication import source is Activity Insight' do
-      expect { generator.other_work }.to change(Publication, :count).by 1
-      expect(Publication.oa_publication_types.exclude?(Publication.last.publication_type)).to be true
+      expect { generator.oa_publication_from_activity_insight }.to change(Publication, :count).by 1
+      expect(Publication.last.imports.first.source).to eq 'Activity Insight'
     end
   end
 
