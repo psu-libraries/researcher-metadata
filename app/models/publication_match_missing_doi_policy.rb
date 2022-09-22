@@ -67,7 +67,7 @@ class PublicationMatchMissingDoiPolicy
       type1 = publication1.publication_type
       type2 = publication2.publication_type
       one_value_present?(type1, type2) ||
-        (publication1.is_oa_publication? && publication2.is_oa_publication?) ||
+        (publication1.is_journal_publication? && publication2.is_journal_publication?) ||
         (publication1.publication_type_other? || publication2.publication_type_other?) ||
         eql_values?(type1, type2)
     end
