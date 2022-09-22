@@ -130,8 +130,7 @@ class DuplicatePublicationGroup < ApplicationRecord
               pub.imports.each do |i|
                 i.update!(auto_merged: true)
               end
-              pub_primary.merge_on_doi!(pub)
-              # search for all uses
+              pub_primary.merge_on_matching!(pub)
             end
           rescue Publication::NonDuplicateMerge; end
         end

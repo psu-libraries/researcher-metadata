@@ -1393,7 +1393,7 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:import1) { create :publication_import, publication: pub1 }
       let!(:import2) { create :publication_import, publication: pub2 }
 
-      context 'when both DOIs are present and equal' do
+      context 'when both DOIs are present and equal and PublicationMatchOnDoiPolicy returns true for these publications' do
         it 'deletes one publication' do
           expect { group.auto_merge_matching }.to change(Publication, :count).by -1
         end
@@ -1409,7 +1409,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
 
-      context 'when one DOI is missing' do
+      context 'when one DOI is missing and PublicationMatchMissingDoiPolicy returns true for these publications' do
         before do
           pub1.update doi: nil
         end
@@ -1429,7 +1429,7 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
 
-      context 'when both publications are missing a DOI' do
+      context 'when both publications are missing a DOI and PublicationMatchMissingDoiPolicy returns true for these publications' do
         before do
           pub1.update doi: nil
           pub2.update doi: nil
@@ -1451,7 +1451,7 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
-    context 'when the group has 3 publications' do
+    context 'when the group has 3 publications and PublicationMatchMissingDoiPolicy and PublicationMatchOnDoiPolicy returns false for these publications' do
       let!(:pub1) { create :sample_publication, duplicate_group: group }
       let!(:pub2) do
         Publication.create(pub1
