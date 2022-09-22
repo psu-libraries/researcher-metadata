@@ -158,6 +158,28 @@ describe PublicationMatchOnDoiPolicy do
           expect(policy.ok_to_merge?).to be false
         end
       end
+
+      context "publications' publication_type are both from merge_allowed? list" do
+        before do
+          publication1.update publication_type: 'Journal Article'
+          publication2.update publication_type: 'Editorial'
+        end
+
+        it 'returns true' do
+          expect(policy.ok_to_merge?).to be true
+        end
+      end
+
+      context "one publication's publication_type is from the merge_allowed? list but the other is not" do
+        before do
+          publication1.update publication_type: 'Journal Article'
+          publication2.update publication_type: 'Manuscript'
+        end
+
+        it 'returns false' do
+          expect(policy.ok_to_merge?).to be false
+        end
+      end
     end
   end
 end
