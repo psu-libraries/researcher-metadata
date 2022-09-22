@@ -18,6 +18,7 @@ describe PurePublicationImporter do
   let(:found_pub1) { PublicationImport.find_by(source: 'Pure', source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a') }
   let(:found_pub2) { PublicationImport.find_by(source: 'Pure', source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64') }
   let(:found_pub3) { PublicationImport.find_by(source: 'Pure', source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0') }
+  let(:found_pub4) { PublicationImport.find_by(source: 'Pure', source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b') }
 
   let!(:journal) { create :journal,
                           pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f' }
@@ -37,19 +38,19 @@ describe PurePublicationImporter do
     context 'when the API endpoint is found' do
       context 'when no publication import records exist in the database' do
         it 'creates a new publication import record for each Published or Accepted/In press publication in the imported data' do
-          expect { importer.call }.to change(PublicationImport, :count).by 3
+          expect { importer.call }.to change(PublicationImport, :count).by 4
         end
 
         it 'creates a new publication record for each Published or Accepted/In press publication in the imported data' do
-          expect { importer.call }.to change(Publication, :count).by 3
+          expect { importer.call }.to change(Publication, :count).by 4
         end
 
         it 'creates a new contributor name record for each author on each publication' do
-          expect { importer.call }.to change(ContributorName, :count).by 11
+          expect { importer.call }.to change(ContributorName, :count).by 13
         end
 
         it 'creates a new authorship record for each author who is a Penn State user on each publication' do
-          expect { importer.call }.to change(Authorship, :count).by 3
+          expect { importer.call }.to change(Authorship, :count).by 4
         end
 
         it 'saves the correct data for each publication import' do
@@ -236,6 +237,11 @@ describe PurePublicationImporter do
                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a',
                                         source_updated_at: Time.new(1999, 12, 31, 23, 59, 59),
                                         publication: existing_pub }
+        let!(:existing_import2) { create :publication_import,
+                                         source: 'Pure',
+                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b',
+                                         source_updated_at: Time.new(1999, 12, 30, 23, 59, 59),
+                                         publication: existing_pub2 }
         let(:existing_pub) { create :publication,
                                     updated_by_user_at: updated_ts,
                                     title: 'Existing Title',
@@ -252,7 +258,24 @@ describe PurePublicationImporter do
                                     abstract: 'existing abstract',
                                     visible: false,
                                     doi: doi }
+        let(:existing_pub2) { create :publication,
+                                     updated_by_user_at: updated_ts,
+                                     title: 'Existing Title2',
+                                     secondary_title: 'Existing Subtitle2',
+                                     publication_type: 'Journal Article',
+                                     journal: existing_journal,
+                                     page_range: 'existing range2',
+                                     volume: 'existing volume2',
+                                     issue: 'existing issue2',
+                                     issn: 'existing issn2',
+                                     status: 'Published',
+                                     published_on: Date.new(2018, 9, 22),
+                                     total_scopus_citations: 1,
+                                     abstract: 'existing abstract2',
+                                     visible: false,
+                                     doi: doi2 }
         let(:doi) { 'https://doi.org/10.000/existing' }
+        let(:doi2) { 'https://doi.org/10.000/existing2' }
         let(:existing_journal) { create :journal }
 
         context 'when the existing publication record has not been manually updated' do
@@ -268,7 +291,7 @@ describe PurePublicationImporter do
 
           context 'when no contributor records exist' do
             it 'creates a new contributor record for each author on each publication' do
-              expect { importer.call }.to change(ContributorName, :count).by 11
+              expect { importer.call }.to change(ContributorName, :count).by 13
               expect(existing_pub.contributor_names.count).to eq 2
 
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
@@ -293,7 +316,7 @@ describe PurePublicationImporter do
                                                  publication: existing_pub }
 
             it 'replaces the existing contributor records with new records from the import data' do
-              expect { importer.call }.to change(ContributorName, :count).by 10
+              expect { importer.call }.to change(ContributorName, :count).by 12
               expect(existing_pub.contributor_names.count).to eq 2
 
               expect(existing_pub.contributor_names.find_by(first_name: 'Firstpub R.',
@@ -311,7 +334,7 @@ describe PurePublicationImporter do
 
           context 'when no authorship records exist' do
             it 'creates a new authorship record for each author who is a Penn State user on each publication' do
-              expect { importer.call }.to change(Authorship, :count).by 3
+              expect { importer.call }.to change(Authorship, :count).by 4
 
               expect(Authorship.find_by(publication: found_pub1.publication,
                                         user: pub1auth1,
@@ -337,7 +360,7 @@ describe PurePublicationImporter do
                                           author_number: 6 }
 
             it 'does not create a new authorship record' do
-              expect { importer.call }.to change(Authorship, :count).by 2
+              expect { importer.call }.to change(Authorship, :count).by 3
             end
 
             it 'updates the existing authorship record with the new authorship data' do
@@ -493,12 +516,13 @@ describe PurePublicationImporter do
           end
 
           context 'when the existing publication already has a DOI' do
-            it 'updates only the Scopus citation count on the existing publication' do
+            it 'updates only the Scopus citation count, title, and status on the existing publication' do
               importer.call
 
               existing_pub_reloaded = existing_pub.reload
+              existing_pub2_reloaded = existing_pub2.reload
 
-              expect(existing_pub_reloaded.title).to eq 'Existing Title'
+              expect(existing_pub_reloaded.title).to eq 'The First Publication: From Pure'
               expect(existing_pub_reloaded.secondary_title).to eq 'Existing Subtitle'
               expect(existing_pub_reloaded.publication_type).to eq 'Journal Article'
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
@@ -506,12 +530,14 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
               expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
-              expect(existing_pub_reloaded.status).to eq 'In Press'
+              expect(existing_pub_reloaded.status).to eq 'Published'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
               expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
               expect(existing_pub_reloaded.visible).to be false
               expect(existing_pub_reloaded.doi).to eq 'https://doi.org/10.000/existing'
+
+              expect(existing_pub2_reloaded.status).to eq 'Published'
             end
           end
 
@@ -523,7 +549,7 @@ describe PurePublicationImporter do
 
               existing_pub_reloaded = existing_pub.reload
 
-              expect(existing_pub_reloaded.title).to eq 'Existing Title'
+              expect(existing_pub_reloaded.title).to eq 'The First Publication: From Pure'
               expect(existing_pub_reloaded.secondary_title).to eq 'Existing Subtitle'
               expect(existing_pub_reloaded.publication_type).to eq 'Journal Article'
               expect(existing_pub_reloaded.page_range).to eq 'existing range'
@@ -531,7 +557,7 @@ describe PurePublicationImporter do
               expect(existing_pub_reloaded.issue).to eq 'existing issue'
               expect(existing_pub_reloaded.journal).to eq new_journal
               expect(existing_pub_reloaded.issn).to eq 'existing issn'
-              expect(existing_pub_reloaded.status).to eq 'In Press'
+              expect(existing_pub_reloaded.status).to eq 'Published'
               expect(existing_pub_reloaded.published_on).to eq Date.new(2018, 8, 22)
               expect(existing_pub_reloaded.total_scopus_citations).to eq 2
               expect(existing_pub_reloaded.abstract).to eq 'existing abstract'
