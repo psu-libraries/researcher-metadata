@@ -97,12 +97,12 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
   end
 
-  def self.auto_merge_on_doi
+  def self.auto_merge_matching
     pbar = ProgressBarTTY.create(title: 'Auto-merging duplicate groups on doi',
                                  total: count)
 
     find_each do |g|
-      g.auto_merge_on_doi
+      g.auto_merge_matching
       pbar.increment
     end
 
@@ -110,7 +110,7 @@ class DuplicatePublicationGroup < ApplicationRecord
     nil
   end
 
-  def auto_merge_on_doi
+  def auto_merge_matching
     publications.each do |pub_primary|
       publications.each do |pub|
         next if pub_primary.id == pub.id
@@ -123,14 +123,18 @@ class DuplicatePublicationGroup < ApplicationRecord
           next
         end
 
-        match_policy = PublicationMatchOnDoiPolicy.new(pub_primary, pub)
+        match_policy = if pub_primary.doi.present? && pub.doi.present?
+                         PublicationMatchOnDoiPolicy.new(pub_primary, pub)
+                       else
+                         PublicationMatchMissingDoiPolicy.new(pub_primary, pub)
+                       end
         if match_policy.ok_to_merge?
           begin
             ActiveRecord::Base.transaction do
               pub.imports.each do |i|
                 i.update!(auto_merged: true)
               end
-              pub_primary.merge_on_doi!(pub)
+              pub_primary.merge_on_matching!(pub)
             end
           rescue Publication::NonDuplicateMerge; end
         end

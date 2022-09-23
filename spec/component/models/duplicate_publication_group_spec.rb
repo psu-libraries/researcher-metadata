@@ -1419,20 +1419,20 @@ describe DuplicatePublicationGroup, type: :model do
     end
   end
 
-  describe '#auto_merge_on_doi' do
+  describe '#auto_merge_matching' do
     let!(:group) { create :duplicate_publication_group }
 
     context 'when the group has no publications' do
       it 'does not change the number of publications in the database' do
-        expect { group.auto_merge_on_doi }.not_to change(Publication, :count)
+        expect { group.auto_merge_matching }.not_to change(Publication, :count)
       end
 
       it 'does not change the number of duplicate publication groups in the database' do
-        expect { group.auto_merge_on_doi }.not_to change(described_class, :count)
+        expect { group.auto_merge_matching }.not_to change(described_class, :count)
       end
 
       it 'does not delete the group' do
-        group.auto_merge_on_doi
+        group.auto_merge_matching
         expect { group.reload }.not_to raise_error
       end
     end
@@ -1441,25 +1441,25 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:pub) { create :publication, duplicate_group: group }
 
       it 'does not change the number of publications in the database' do
-        expect { group.auto_merge_on_doi }.not_to change(Publication, :count)
+        expect { group.auto_merge_matching }.not_to change(Publication, :count)
       end
 
       it 'does not change the number of duplicate publication groups in the database' do
-        expect { group.auto_merge_on_doi }.not_to change(described_class, :count)
+        expect { group.auto_merge_matching }.not_to change(described_class, :count)
       end
 
       it 'does not delete the group' do
-        group.auto_merge_on_doi
+        group.auto_merge_matching
         expect { group.reload }.not_to raise_error
       end
 
       it 'does not change the group membership' do
-        group.auto_merge_on_doi
+        group.auto_merge_matching
         expect(group.reload.publications).to eq [pub]
       end
 
       it "does not change the member publication's imports" do
-        group.auto_merge_on_doi
+        group.auto_merge_matching
         expect(pub.reload.imports).to eq []
       end
     end
@@ -1474,24 +1474,65 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:import1) { create :publication_import, publication: pub1 }
       let!(:import2) { create :publication_import, publication: pub2 }
 
-      context 'when PublicationMatchOnDoiPolicy returns true for these publications' do
+      context 'when both DOIs are present and equal and PublicationMatchOnDoiPolicy returns true for these publications' do
         it 'deletes one publication' do
-          expect { group.auto_merge_on_doi }.to change(Publication, :count).by -1
+          expect { group.auto_merge_matching }.to change(Publication, :count).by -1
         end
 
         it 'deletes the group' do
-          expect { group.auto_merge_on_doi }.to change(described_class, :count).by -1
+          expect { group.auto_merge_matching }.to change(described_class, :count).by -1
           expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it "marks one publication's import as having been auto merged" do
-          group.auto_merge_on_doi
+          group.auto_merge_matching
+          expect([import1.reload.auto_merged, import2.reload.auto_merged].compact).to eq [true]
+        end
+      end
+
+      context 'when one DOI is missing and PublicationMatchMissingDoiPolicy returns true for these publications' do
+        before do
+          pub1.update doi: nil
+        end
+
+        it 'deletes one publication' do
+          expect { group.auto_merge_matching }.to change(Publication, :count).by -1
+        end
+
+        it 'deletes the group' do
+          expect { group.auto_merge_matching }.to change(described_class, :count).by -1
+          expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "marks one publication's import as having been auto merged" do
+          group.auto_merge_matching
+          expect([import1.reload.auto_merged, import2.reload.auto_merged].compact).to eq [true]
+        end
+      end
+
+      context 'when both publications are missing a DOI and PublicationMatchMissingDoiPolicy returns true for these publications' do
+        before do
+          pub1.update doi: nil
+          pub2.update doi: nil
+        end
+
+        it 'deletes one publication' do
+          expect { group.auto_merge_matching }.to change(Publication, :count).by -1
+        end
+
+        it 'deletes the group' do
+          expect { group.auto_merge_matching }.to change(described_class, :count).by -1
+          expect { group.reload }.to raise_error ActiveRecord::RecordNotFound
+        end
+
+        it "marks one publication's import as having been auto merged" do
+          group.auto_merge_matching
           expect([import1.reload.auto_merged, import2.reload.auto_merged].compact).to eq [true]
         end
       end
     end
 
-    context 'when the group has 3 publications' do
+    context 'when the group has 3 publications and PublicationMatchMissingDoiPolicy and PublicationMatchOnDoiPolicy returns false for these publications' do
       let!(:pub1) { create :sample_publication, duplicate_group: group }
       let!(:pub2) do
         Publication.create(pub1
@@ -1502,11 +1543,11 @@ describe DuplicatePublicationGroup, type: :model do
 
       context 'when PublicationMatchOnDoiPolicy returns true for only two of publications' do
         it 'deletes one publication' do
-          expect { group.auto_merge_on_doi }.to change(Publication, :count).by -1
+          expect { group.auto_merge_matching }.to change(Publication, :count).by -1
         end
 
         it 'does not delete the group' do
-          expect { group.auto_merge_on_doi }.not_to change(described_class, :count)
+          expect { group.auto_merge_matching }.not_to change(described_class, :count)
         end
       end
     end
