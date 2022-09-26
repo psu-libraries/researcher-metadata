@@ -36,7 +36,7 @@ FactoryBot.define do
 
     trait :other_work do
       publication_type {
-        Publication.publication_types.reject { |type| Publication.journal_types.include?(type) }.sample
+        Publication.publication_types.reject { |type| Publication.oa_publication_types.include?(type) }.sample
       }
     end
 
