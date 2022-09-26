@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PublicationMergeOnDoiPolicy do
+describe PublicationMergeOnMatchingPolicy do
   let(:policy) { described_class.new publication1, publication2 }
   let!(:publication1) { create :sample_publication }
   let!(:publication2) { create :sample_publication }
@@ -569,6 +569,44 @@ describe PublicationMergeOnDoiPolicy do
         it 'picks either total_scopus_citations' do
           policy.merge!
           expect(publication1.reload.total_scopus_citations.to_s).to match /5|6/
+        end
+      end
+    end
+
+    describe 'doi merging' do
+      context 'when both DOIs are present' do
+        before do
+          publication1.update doi: 'https://doi.org/10.1000/abc123'
+          publication2.update doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        it 'picks the first doi' do
+          policy.merge!
+          expect(publication1.reload.doi).to eq 'https://doi.org/10.1000/abc123'
+        end
+      end
+
+      context 'when one DOI is missing' do
+        before do
+          publication1.update doi: nil
+          publication2.update doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        it 'picks the doi that is present' do
+          policy.merge!
+          expect(publication1.reload.doi).to eq 'https://doi.org/10.1000/abc123'
+        end
+      end
+
+      context 'when both DOIs are missing' do
+        before do
+          publication1.update doi: nil
+          publication2.update doi: nil
+        end
+
+        it 'picks the doi that is present' do
+          policy.merge!
+          expect(publication1.reload.doi).to be_nil
         end
       end
     end

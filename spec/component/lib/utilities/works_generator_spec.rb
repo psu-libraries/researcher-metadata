@@ -22,49 +22,49 @@ describe WorksGenerator do
   end
 
   describe '#oa_publication_no_open_access_location' do
-    it 'generates a journal article with no open access url' do
+    it 'generates an oa policy publication with no open access url' do
       expect { generator.oa_publication_no_open_access_location }.to change(Publication, :count).by 1
       expect(Publication.last.open_access_locations.count).to eq 0
     end
   end
 
   describe '#oa_publication_with_open_access_location' do
-    it 'generates a journal article with one open access url' do
+    it 'generates an oa policy publication with one open access url' do
       expect { generator.oa_publication_with_open_access_location }.to change(Publication, :count).by 1
       expect(Publication.last.open_access_locations.count).to eq 1
     end
   end
 
   describe '#oa_publication_in_press' do
-    it 'generates a journal article with a status of "In Press"' do
+    it 'generates an oa policy publication with a status of "In Press"' do
       expect { generator.oa_publication_in_press }.to change(Publication, :count).by 1
       expect(Publication.last.status).to eq 'In Press'
     end
   end
 
   describe '#other_work' do
-    it 'generates a non journal article publication' do
+    it 'generates a non oa policy publication' do
       expect { generator.other_work }.to change(Publication, :count).by 1
-      expect(Publication.last.publication_type).not_to match(/Journal Article/)
+      expect(Publication.oa_publication_types.exclude?(Publication.last.publication_type)).to be true
     end
   end
 
   describe '#oa_publication_from_activity_insight' do
-    it 'generates a journal article whos publication import source is Activity Insight' do
-      expect { generator.other_work }.to change(Publication, :count).by 1
-      expect(Publication.last.publication_type).not_to match(/Journal Article/)
+    it 'generates an oa policy publication whos publication import source is Activity Insight' do
+      expect { generator.oa_publication_from_activity_insight }.to change(Publication, :count).by 1
+      expect(Publication.last.imports.first.source).to eq 'Activity Insight'
     end
   end
 
   describe '#oa_publication_duplicate_group' do
-    it 'generates a journal article that is part of a duplicate group' do
+    it 'generates an oa policy publication that is part of a duplicate group' do
       expect { generator.oa_publication_duplicate_group }.to change(Publication, :count).by 2
       expect(Publication.last.duplicate_group.publications.count).to eq 2
     end
   end
 
   describe '#oa_publication_non_duplicate_group' do
-    it 'generates a journal article that is part of a duplicate group that is also a non duplicate group' do
+    it 'generates an oa policy publication that is part of a duplicate group that is also a non duplicate group' do
       expect { generator.oa_publication_non_duplicate_group }.to change(Publication, :count).by 2
       expect(Publication.last.non_duplicate_groups.count).to eq 1
       expect(Publication.last.duplicate_group.publications.sort).to eq Publication.last.non_duplicate_groups.first.publications.sort
