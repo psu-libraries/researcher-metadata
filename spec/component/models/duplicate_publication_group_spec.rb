@@ -585,7 +585,7 @@ describe DuplicatePublicationGroup, type: :model do
                          published_on: Date.new(2003, 1, 1),
                          doi: 'https://doi.org/10.000/some-doi-22357534' }
 
-      it 'groups the publications' do
+      it 'does not group the publications' do
         described_class.group_duplicates_of(p1)
         group = p1.reload.duplicate_group
 
