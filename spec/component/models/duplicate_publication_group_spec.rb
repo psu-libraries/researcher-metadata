@@ -246,7 +246,7 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p15_1) { create :publication,
                             title: 'A Perfect Title Match Where a DOI is blank',
                             published_on: Date.new(2000, 1, 1),
-                            doi: 'https://doi.org/10.000/some-doi-22357534' }
+                            doi: 'https://doi.org/10.000/some-doi-22357543' }
 
       let!(:p15_2) { create :publication,
                             title: 'A Perfect Title Match Where a DOI is blank',
@@ -257,12 +257,12 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p16_1) { create :publication,
                             title: "A match where there's a junk DOI from Activity Insight",
                             published_on: Date.new(1986, 1, 1),
-                            doi: 'https://doi.org/10.000/some-doi-457472486' }
+                            doi: 'https://doi.org/10.000/some-doi-457472487' }
 
       let!(:p16_2) { create :publication,
                             title: "A match where there's a junk DOI from Activity Insight",
                             published_on: Date.new(1986, 1, 1),
-                            doi: 'https://doi.org/10.000/junk' }
+                            doi: 'https://doi.org/10.000/junk1' }
 
       let!(:p16_2_import_1) { create :publication_import,
                                      source: 'Activity Insight',
@@ -272,12 +272,12 @@ describe DuplicatePublicationGroup, type: :model do
       let!(:p17_1) { create :publication,
                             title: 'consider DOI because AI is not the only import',
                             published_on: Date.new(1987, 1, 1),
-                            doi: 'https://doi.org/10.000/some-doi-457472486' }
+                            doi: 'https://doi.org/10.000/some-doi-457472488' }
 
       let!(:p17_2) { create :publication,
                             title: 'consider DOI because AI is not the only import',
                             published_on: Date.new(1987, 1, 1),
-                            doi: 'https://doi.org/10.000/junk' }
+                            doi: 'https://doi.org/10.000/junk2' }
 
       let!(:p17_2_import_1) { create :publication_import,
                                      source: 'Activity Insight',
@@ -594,6 +594,46 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
+    context 'given a publication with the same DOI as another publication but with different titles and publication date' do
+      let!(:p1) { create :publication,
+                         title: 'A Generic Title',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-22357634' }
+
+      let!(:p2) { create :publication,
+                         title: 'A Different One',
+                         published_on: Date.new(2003, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-22357634' }
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+
+        expect(group).not_to be_nil
+        expect(p2.reload.duplicate_group).to eq group
+      end
+    end
+
+    context 'given a publication with different DOIs. titles, and publication years' do
+      let!(:p1) { create :publication,
+                         title: 'A Generic Title',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-22357535' }
+
+      let!(:p2) { create :publication,
+                         title: 'A Different One',
+                         published_on: Date.new(2003, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-22357534' }
+
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+
+        expect(group).to be_nil
+        expect(p2.reload.duplicate_group).to be_nil
+      end
+    end
+
     context 'given a publication with the same title as another publication where only one has a DOI and publication date' do
       let!(:p1) { create :publication,
                          title: 'A Publication That Matches Another Publication',
@@ -858,6 +898,30 @@ describe DuplicatePublicationGroup, type: :model do
                          title: "A match where there's a junk DOI from Activity Insight",
                          published_on: Date.new(1986, 1, 1),
                          doi: 'https://doi.org/10.000/junk' }
+
+      let!(:p2_import_1) { create :publication_import,
+                                  source: 'Activity Insight',
+                                  publication: p2}
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p2)
+        group = p2.reload.duplicate_group
+
+        expect(group).not_to be_nil
+        expect(p1.reload.duplicate_group).to eq group
+      end
+    end
+
+    context 'given a publication that has the same DOI but different title and year and the other has only an Activity Insight import' do
+      let!(:p1) { create :publication,
+                         title: 'A match with only one import from Activity Insight',
+                         published_on: Date.new(1989, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-457472486' }
+
+      let!(:p2) { create :publication,
+                         title: 'A Different Title',
+                         published_on: Date.new(1986, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-457472486' }
 
       let!(:p2_import_1) { create :publication_import,
                                   source: 'Activity Insight',
