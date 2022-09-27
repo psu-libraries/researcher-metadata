@@ -37,7 +37,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def scholarsphere_file_version
     extra_params = { journal: publication.journal.title }
-    exif_uploads = ExifUploads.new(deposit_params.merge(extra_params))
+    exif_uploads = ScholarsphereExifUploads.new(deposit_params.merge(extra_params))
     @cache_files = exif_uploads.cache_files
     @file_version = exif_uploads.version
 
@@ -52,16 +52,9 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_deposit_form
+    @cache_files = params[:scholarsphere_work_deposit][:cache_files]
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
-
-    @cache_files = params[:scholarsphere_work_deposit][:cache_files]
-    # @cache_files.each do |index, file|
-    #   byebug
-    #   file_upload = ScholarsphereFileUpload.new( { file: File.new(file[:cache_path]) } )
-    #   @deposit.file_uploads.build(file: file_upload)
-    # end
-
     @deposit.file_uploads.build
     render :scholarsphere_deposit_form
   rescue StandardError
@@ -72,6 +65,15 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     extra_params = { authorship: @authorship, deputy_user_id: current_user.deputy.id }
     @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
+    @deposit.file_uploads = []
+
+    files = params[:scholarsphere_work_deposit][:file_uploads_attributes]
+    files.each do |index, file|
+      ss_file_upload = ScholarsphereFileUpload.new
+      ss_file_upload.file = File.new(file[:cache_path])
+      ss_file_upload.save!
+      @deposit.file_uploads << ss_file_upload
+    end
 
     ActiveRecord::Base.transaction do
       @deposit.save!

@@ -3,7 +3,7 @@
 require 'pdf-reader'
 require 'exiftool_vendored'
 
-class ExifFileVersion
+class ScholarsphereExifFileVersion
   def initialize(file_path:, journal:)
     @file_path = file_path
     @journal = journal
