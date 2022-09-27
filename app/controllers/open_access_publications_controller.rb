@@ -36,19 +36,36 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    uploads = params['scholarsphere_work_deposit']['file_uploads_attributes']
-    @temp_files = ExifUploads.temp_files(uploads)
-    @file_version = ExifUploads.version(uploads: uploads, publication: publication)
+    extra_params = { journal: publication.journal.title }
+    exif_uploads = ExifUploads.new(deposit_params.merge(extra_params))
+    @cache_files = exif_uploads.cache_files
+    @file_version = exif_uploads.version
 
     render :scholarsphere_file_version
-  end
-
-  def scholarsphere_deposit_form
-    @temp_files = params[:scholarsphere_work_deposit][:temp_files]
+  rescue ActionController::ParameterMissing
+    flash[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+    @form = OpenAccessURLForm.new
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
     @deposit.file_uploads.build
+    render :edit
+  end
+
+  def scholarsphere_deposit_form
+    @authorship = Authorship.find_by(user: current_user, publication: publication)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
+
+    @cache_files = params[:scholarsphere_work_deposit][:cache_files]
+    # @cache_files.each do |index, file|
+    #   byebug
+    #   file_upload = ScholarsphereFileUpload.new( { file: File.new(file[:cache_path]) } )
+    #   @deposit.file_uploads.build(file: file_upload)
+    # end
+
+    @deposit.file_uploads.build
     render :scholarsphere_deposit_form
+  rescue StandardError
+    flash[:error] = 'File upload failed!!!!'
   end
 
   def create_scholarsphere_deposit
@@ -91,7 +108,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :subtitle,
                                                          :publisher,
                                                          :file_version,
-                                                         temp_files: [],
+                                                         :journal,
+                                                         cache_files: [],
                                                          file_uploads_attributes: [:file, :file_cache])
     end
 end

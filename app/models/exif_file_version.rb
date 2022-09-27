@@ -4,7 +4,7 @@ require 'pdf-reader'
 require 'exiftool_vendored'
 
 class ExifFileVersion
-  def initialize(file_path, journal)
+  def initialize(file_path:, journal:)
     @file_path = file_path
     @journal = journal
   end
@@ -33,7 +33,7 @@ class ExifFileVersion
 
     def accepted?
       exif[:journal_article_version]&.downcase == 'am' ||
-        exif[:producer] == 'pdfTeX-1.40.19' #just for testing
+        exif[:producer] == 'pdfTeX-1.40.19' # just for testing
     end
 
     def published?
@@ -46,7 +46,7 @@ class ExifFileVersion
         creator? ||
         creator_tool? ||
         producer? ||
-        exif[:producer] == 'pdfTeX-1.40.21' #just for testing
+        exif[:producer] == 'pdfTeX-1.40.21' # just for testing
     end
 
     def rights_en_gb?
