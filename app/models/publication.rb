@@ -32,6 +32,24 @@ class Publication < ApplicationRecord
     ]
   end
 
+  def self.journal_types
+    [
+      'Academic Journal Article',
+      'In-house Journal Article',
+      'Professional Journal Article',
+      'Trade Journal Article',
+      'Journal Article'
+    ]
+  end
+
+  def self.merge_allowed
+    [
+      'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article', 'Trade Journal Article',
+      'Journal Article', 'Review Article', 'Chapter', 'Conference Proceeding', 'Encyclopedia/Dictionary Entry',
+      'Magazine/Trade Publication', 'Comment/Debate', 'Editorial', 'Letter', 'Paper'
+    ]
+  end
+
   def self.postprint_statuses
     [
       'Already Openly Available',
@@ -550,6 +568,14 @@ class Publication < ApplicationRecord
 
   def is_oa_publication?
     Publication.oa_publication_types.include? publication_type
+  end
+
+  def is_journal_publication?
+    Publication.journal_types.include? publication_type
+  end
+
+  def is_merge_allowed?
+    Publication.merge_allowed.include? publication_type
   end
 
   def publication_type_other?

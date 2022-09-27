@@ -138,6 +138,17 @@ class PublicationMergeOnMatchingPolicy
     def publication_type
       if [publication1, publication2].map(&:publication_type_other?).count(true) == 1
         [publication1, publication2].reject(&:publication_type_other?).first.publication_type
+      elsif publication1.is_journal_publication? && publication2.is_journal_publication?
+        'Journal Article'
+      elsif (publication1.doi == publication2.doi) && (publication1.is_merge_allowed? && publication2.is_merge_allowed?)
+        if publication1.pure_import_identifiers.present? || publication2.pure_import_identifiers.present?
+          return publication1.publication_type if publication2.pure_import_identifiers.blank?
+
+        else
+          return publication1.publication_type unless publication1.updated_at < publication2.updated_at
+
+        end
+        publication2.publication_type
       else
         longer_value(:publication_type)
       end
