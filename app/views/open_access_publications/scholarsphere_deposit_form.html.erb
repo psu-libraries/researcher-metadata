@@ -41,6 +41,11 @@
                 <% end %>
               </div>
             </section>
+            <div class="file-uploads">
+              <%= f.simple_fields_for :file_uploads do |sfu| %>
+                <%= render 'deposit_form_files', f: sfu %>
+              <% end %>
+            </div>
 
             <%= f.input :title, label: 'Title' %>
             <%= f.input :subtitle, label: 'Subtitle' %>
