@@ -26,7 +26,7 @@ class OpenAccessButtonPublicationImporter
   private
 
     def all_pubs
-      Publication.where.not(doi: nil).where.not(doi: '')
+      Publication.all
     end
 
     def new_pubs
@@ -35,7 +35,11 @@ class OpenAccessButtonPublicationImporter
 
     def query_open_access_button_for(publication)
       oab_json = nil
-      find_url = "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
+      if !publication.doi.blank?
+        find_url = "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
+      else
+        find_url = "https://api.openaccessbutton.org/find?title=#{CGI.escape(publication.title)}"
+      end
       oab_json = JSON.parse(HttpService.get(find_url))
 
       existing_oa_location = publication.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)

@@ -4,7 +4,7 @@ class UnpaywallPublicationImporter
   def import_all
     pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
                                  total: all_pubs.count)
-
+#byebug
     all_pubs.find_each do |p|
       import_from_unpaywall(p)
       pbar.increment
@@ -26,7 +26,7 @@ class UnpaywallPublicationImporter
   private
 
     def all_pubs
-      Publication.where.not(doi: nil).where.not(doi: '').includes(:open_access_locations)
+      Publication.all
     end
 
     def new_pubs
@@ -34,6 +34,7 @@ class UnpaywallPublicationImporter
     end
 
     def import_from_unpaywall(publication)
+  #byebug
       unpaywall_json = query_unpaywall_for(publication)
       update_publication(publication, unpaywall_json)
 
@@ -53,7 +54,18 @@ class UnpaywallPublicationImporter
     end
 
     def update_publication(publication, unpaywall_json)
-      unpaywall_locations = unpaywall_json['oa_locations'].presence || []
+  #byebug
+      if !publication.doi.blank?
+        unpaywall_locations = unpaywall_json['oa_locations'].presence || []
+      else
+        unpaywall_title = unpaywall_json['results'].first['response']['title']
+        if title_match?(unpaywall_title, publication.title)
+          unpaywall_locations = unpaywall_json['results'].first['response']['oa_locations'].presence || []
+        else
+          unpaywall_locations = []
+        end
+      end  
+      
       existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
 
       existing_locations_by_url = existing_locations.index_by(&:url)
@@ -81,16 +93,27 @@ class UnpaywallPublicationImporter
         locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
         locations_to_delete.each(&:destroy)
 
-        publication.open_access_status = unpaywall_json['oa_status']
+        if !publication.doi.blank?
+          publication.open_access_status = unpaywall_json['oa_status']
+        else
+          publication.open_access_status = unpaywall_json['results'].first['response']['oa_status']
+        end 
         publication.unpaywall_last_checked_at = Time.zone.now
 
-        publication.save!
+        if !publication.doi.blank? || title_match?(unpaywall_title, publication.title)
+          publication.save!
+        end
       end
     end
 
     def query_unpaywall_for(publication)
-      doi_url_path = Addressable::URI.encode(publication.doi_url_path)
-      find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
+      if !publication.doi.blank?
+        doi_url_path = Addressable::URI.encode(publication.doi_url_path)
+        find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
+      else
+        find_url = "https://api.unpaywall.org/v2/search/?query=#{publication.title}&email=openaccess@psu.edu"
+      end
+  #byebug  
       JSON.parse(HttpService.get(find_url))
     end
 
@@ -109,5 +132,10 @@ class UnpaywallPublicationImporter
 
     def build_new_oal(publication, url)
       publication.open_access_locations.build(source: Source::UNPAYWALL, url: url)
+    end
+
+    def title_match?(title1, title2)
+      title1&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title2&.downcase&.gsub(/[^a-z0-9]/, '')) &&
+        title2&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title1&.downcase&.gsub(/[^a-z0-9]/, ''))
     end
 end
