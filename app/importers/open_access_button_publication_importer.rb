@@ -53,7 +53,7 @@ class OpenAccessButtonPublicationImporter
       else
         existing_oa_location.try(:destroy)
       end
-      publication.open_access_button_last_checked_at = Time.zone.now
+      publication.open_access_button_last_checked_at = Time.zone.now     
       publication.save!
 
       # Open Access Button does not enforce any rate limits for their API, but they ask

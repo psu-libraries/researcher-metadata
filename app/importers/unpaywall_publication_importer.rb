@@ -4,7 +4,7 @@ class UnpaywallPublicationImporter
   def import_all
     pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
                                  total: all_pubs.count)
-#byebug
+
     all_pubs.find_each do |p|
       import_from_unpaywall(p)
       pbar.increment
@@ -34,7 +34,6 @@ class UnpaywallPublicationImporter
     end
 
     def import_from_unpaywall(publication)
-  #byebug
       unpaywall_json = query_unpaywall_for(publication)
       update_publication(publication, unpaywall_json)
 
@@ -54,7 +53,6 @@ class UnpaywallPublicationImporter
     end
 
     def update_publication(publication, unpaywall_json)
-  #byebug
       if !publication.doi.blank?
         unpaywall_locations = unpaywall_json['oa_locations'].presence || []
       else
@@ -113,7 +111,7 @@ class UnpaywallPublicationImporter
       else
         find_url = "https://api.unpaywall.org/v2/search/?query=#{publication.title}&email=openaccess@psu.edu"
       end
-  #byebug  
+
       JSON.parse(HttpService.get(find_url))
     end
 
