@@ -53,17 +53,17 @@ class UnpaywallPublicationImporter
     end
 
     def update_publication(publication, unpaywall_json)
-      if !publication.doi.blank?
+      if publication.doi.present?
         unpaywall_locations = unpaywall_json['oa_locations'].presence || []
       else
         unpaywall_title = unpaywall_json['results'].first['response']['title']
-        if title_match?(unpaywall_title, publication.title)
-          unpaywall_locations = unpaywall_json['results'].first['response']['oa_locations'].presence || []
-        else
-          unpaywall_locations = []
-        end
-      end  
-      
+        unpaywall_locations = if title_match?(unpaywall_title, publication.title)
+                                unpaywall_json['results'].first['response']['oa_locations'].presence || []
+                              else
+                                []
+                              end
+      end
+
       existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
 
       existing_locations_by_url = existing_locations.index_by(&:url)
@@ -91,21 +91,21 @@ class UnpaywallPublicationImporter
         locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
         locations_to_delete.each(&:destroy)
 
-        if !publication.doi.blank?
-          publication.open_access_status = unpaywall_json['oa_status']
-        else
-          publication.open_access_status = unpaywall_json['results'].first['response']['oa_status']
-        end 
+        publication.open_access_status = if publication.doi.present?
+                                           unpaywall_json['oa_status']
+                                         else
+                                           unpaywall_json['results'].first['response']['oa_status']
+                                         end
         publication.unpaywall_last_checked_at = Time.zone.now
 
-        if !publication.doi.blank? || title_match?(unpaywall_title, publication.title)
+        if publication.doi.present? || title_match?(unpaywall_title, publication.title)
           publication.save!
         end
       end
     end
 
     def query_unpaywall_for(publication)
-      if !publication.doi.blank?
+      if publication.doi.present?
         doi_url_path = Addressable::URI.encode(publication.doi_url_path)
         find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
       else

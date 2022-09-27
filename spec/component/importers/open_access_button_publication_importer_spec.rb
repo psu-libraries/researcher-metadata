@@ -7,7 +7,7 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil, title: "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes" }
+      let!(:pub) { create :publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
@@ -25,7 +25,7 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', title: "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes" }
+      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
@@ -206,8 +206,8 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil, title: "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes" }
-      
+      let!(:pub) { create :publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
@@ -224,8 +224,8 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', title: "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes" }
-     
+      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
           .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))

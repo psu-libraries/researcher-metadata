@@ -35,11 +35,11 @@ class OpenAccessButtonPublicationImporter
 
     def query_open_access_button_for(publication)
       oab_json = nil
-      if !publication.doi.blank?
-        find_url = "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
-      else
-        find_url = "https://api.openaccessbutton.org/find?title=#{CGI.escape(publication.title)}"
-      end
+      find_url = if publication.doi.present?
+                   "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
+                 else
+                   "https://api.openaccessbutton.org/find?title=#{CGI.escape(publication.title)}"
+                 end
       oab_json = JSON.parse(HttpService.get(find_url))
 
       existing_oa_location = publication.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
@@ -53,7 +53,7 @@ class OpenAccessButtonPublicationImporter
       else
         existing_oa_location.try(:destroy)
       end
-      publication.open_access_button_last_checked_at = Time.zone.now     
+      publication.open_access_button_last_checked_at = Time.zone.now
       publication.save!
 
       # Open Access Button does not enforce any rate limits for their API, but they ask
