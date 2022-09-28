@@ -56,7 +56,7 @@ class UnpaywallPublicationImporter
       if publication.doi.present?
         unpaywall_locations = unpaywall_json['oa_locations'].presence || []
       else
-        unpaywall_title = unpaywall_json['results'].first['response']['title']
+        unpaywall_title = unpaywall_json['results'].nil? ? '' : unpaywall_json['results'].first['response']['title']
         unpaywall_locations = if title_match?(unpaywall_title, publication.title)
                                 unpaywall_json['results'].first['response']['oa_locations'].presence || []
                               else
@@ -94,7 +94,7 @@ class UnpaywallPublicationImporter
         publication.open_access_status = if publication.doi.present?
                                            unpaywall_json['oa_status']
                                          else
-                                           unpaywall_json['results'].first['response']['oa_status']
+                                           unpaywall_json['results'].nil? ? nil : unpaywall_json['results'].first['response']['oa_status']
                                          end
         publication.unpaywall_last_checked_at = Time.zone.now
 
@@ -133,7 +133,6 @@ class UnpaywallPublicationImporter
     end
 
     def title_match?(title1, title2)
-      title1&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title2&.downcase&.gsub(/[^a-z0-9]/, '')) &&
-        title2&.downcase&.gsub(/[^a-z0-9]/, '')&.include?(title1&.downcase&.gsub(/[^a-z0-9]/, ''))
+      title1&.downcase&.gsub(/[^a-z0-9]/, '') == (title2&.downcase&.gsub(/[^a-z0-9]/, ''))
     end
 end
