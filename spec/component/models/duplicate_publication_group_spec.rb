@@ -634,6 +634,26 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
+    context 'given a publication with empty string DOIs and different titles and publication years' do
+      let!(:p1) { create :publication,
+                         title: 'A Generic Title',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: '' }
+
+      let!(:p2) { create :publication,
+                         title: 'A Different One',
+                         published_on: Date.new(2003, 1, 1),
+                         doi: '' }
+
+      it 'does not group the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+
+        expect(group).to be_nil
+        expect(p2.reload.duplicate_group).to be_nil
+      end
+    end
+
     context 'given a publication with the same title as another publication where only one has a DOI and publication date' do
       let!(:p1) { create :publication,
                          title: 'A Publication That Matches Another Publication',
