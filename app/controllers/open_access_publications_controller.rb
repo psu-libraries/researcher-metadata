@@ -62,7 +62,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @deposit.file_uploads.build
     render :scholarsphere_deposit_form
   rescue StandardError
-    flash[:error] = 'File upload failed!!!!'
+    flash[:error] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
   end
 
   def create_scholarsphere_deposit
@@ -72,11 +72,13 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @deposit.file_uploads = []
 
     files = params[:scholarsphere_work_deposit][:file_uploads_attributes]
-    files.each do |index, file|
-      ss_file_upload = ScholarsphereFileUpload.new
-      ss_file_upload.file = File.new(file[:cache_path])
-      ss_file_upload.save!
-      @deposit.file_uploads << ss_file_upload
+    if files.present?
+      files.each do |_index, file|
+        ss_file_upload = ScholarsphereFileUpload.new
+        ss_file_upload.file = File.new(file[:cache_path])
+        ss_file_upload.save!
+        @deposit.file_uploads << ss_file_upload
+      end
     end
 
     ActiveRecord::Base.transaction do

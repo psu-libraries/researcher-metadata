@@ -409,7 +409,11 @@ describe OpenAccessPublicationsController, type: :controller do
 
       context 'when given the ID for a publication that belongs to the user and is not open access' do
         let(:pub_id) { pub.id }
-        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
+        let(:file_upload_attrs) do
+          {
+            file_uploads_attributes: { '0' => { cache_path: 'spec/fixtures/test_file.pdf' } }
+          }
+        end
         let(:params) {
           {
             id: pub_id,
@@ -418,9 +422,8 @@ describe OpenAccessPublicationsController, type: :controller do
               description: 'test',
               published_date: '2021-03-30',
               rights: 'https://creativecommons.org/licenses/by/4.0/',
-              deposit_agreement: '1',
-              file_uploads_attributes: [file: file]
-            }
+              deposit_agreement: '1'
+            }.merge(file_upload_attrs)
           }
         }
 
@@ -437,7 +440,7 @@ describe OpenAccessPublicationsController, type: :controller do
 
             expect(found_deposit.file_uploads.count).to eq 1
             expect(found_deposit.status).to eq 'Pending'
-            expect(found_deposit.file_uploads.first.file.identifier).to eq file.original_filename
+            expect(found_deposit.file_uploads.first.file.identifier).to eq 'test_file.pdf'
           end
 
           it "sets the modification timestamp on the user's authorship of the publication" do
@@ -471,8 +474,8 @@ describe OpenAccessPublicationsController, type: :controller do
           end
         end
 
-        context 'when given no file param for the scholarsphere work deposit' do
-          let(:file) { nil }
+        context 'when given no cache_path for the scholarsphere work deposit' do
+          let(:file_upload_attrs) { { file_uploads_attributes: [] } }
 
           it 'does not create a new scholarsphere work deposit' do
             expect do
