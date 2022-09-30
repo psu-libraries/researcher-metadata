@@ -129,6 +129,7 @@ class User < ApplicationRecord
       .where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
       .where('authorships.confirmed IS TRUE')
       .where('publications.visible = true')
+      .where('publications.activity_insight_postprint_status IS NULL OR publications.activity_insight_postprint_status != ?', 'In Progress')
       .where("open_access_locations.id IS NULL OR open_access_locations.url = ''")
       .distinct(:id)
   end

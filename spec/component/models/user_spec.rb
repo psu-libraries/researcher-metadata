@@ -429,7 +429,7 @@ describe User, type: :model do
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:eu_pub_1) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:eu_pub_1) { create :publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit' }
     let!(:eu_auth_1) { create :authorship,
                               user: email_user_1,
                               publication: eu_pub_1,
@@ -443,7 +443,7 @@ describe User, type: :model do
                              user: email_user_2,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil }
-    let!(:eu_pub_2) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:eu_pub_2) { create :publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit' }
     let!(:eu_auth_2) { create :authorship,
                               user: email_user_2,
                               publication: eu_pub_2,
@@ -457,7 +457,7 @@ describe User, type: :model do
                              user: email_user_3,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: Date.new(2020, 7, 2) }
-    let!(:eu_pub_3) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:eu_pub_3) { create :publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit' }
     let!(:eu_auth_3) { create :authorship,
                               user: email_user_3,
                               publication: eu_pub_3,
@@ -473,7 +473,8 @@ describe User, type: :model do
                              ended_on: nil }
     let!(:eu_pub_4) { create :publication,
                              published_on: Date.new(2020, 7, 1),
-                             open_access_locations: [] }
+                             open_access_locations: [],
+                             activity_insight_postprint_status: nil }
     let!(:eu_auth_4) { create :authorship,
                               user: email_user_4,
                               publication: eu_pub_4,
@@ -702,6 +703,17 @@ describe User, type: :model do
     let!(:ou_auth_17) { create :authorship,
                                user: other_user_17,
                                publication: ou_pub_17,
+
+    # filtered out due to the publication being in process of deposit to Scholarsphere via AI (activity_insight_postprint_status is 'In Progress')
+    let!(:other_user_18) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_18' }
+    let!(:ou_mem_18) { create :user_organization_membership,
+                              user: other_user_18,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: nil}
+    let!(:ou_pub_18) { create :publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'In Progress' }
+    let!(:ou_auth_18) { create :authorship,
+                               user: other_user_18,
+                               publication: ou_pub_18,
                                confirmed: true }
 
     it 'returns only users who should currently receive an email reminder about open access publications' do
