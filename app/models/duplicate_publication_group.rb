@@ -19,13 +19,13 @@ class DuplicatePublicationGroup < ApplicationRecord
 
   def self.group_duplicates_of(publication)
     duplicates = if publication.imports.count == 1 && publication.imports.find { |i| i.source == 'Activity Insight' }
-                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL)) OR doi = ?},
+                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL)) OR (doi = ? AND doi != '')},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year),
                                      publication.doi)
                      .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
                  else
-                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)) OR doi = ?},
+                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)) OR (doi = ? AND doi != '')},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year),
                                      publication.doi,
