@@ -39,9 +39,9 @@ RSpec/LeakyConstantDeclaration:
     - 'spec/component/models/concerns/null_object_pattern_spec.rb'
 
 RSpec/MultipleMemoizedHelpers:
-   Exclude:
-     - 'spec/component/models/user_spec.rb'
-     
+  Exclude:
+    - 'spec/component/models/user_spec.rb'
+
 Style/Semicolon:
   Exclude:
     - 'lib/tasks/database_data.rake'

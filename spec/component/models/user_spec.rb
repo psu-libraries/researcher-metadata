@@ -421,7 +421,21 @@ describe User, type: :model do
 
   describe '.needs_open_access_notification' do
     # Users who meet all of the criteria to receive an email
-    let!(:email_user_1) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_1' }
+    let!(:email_user_1) { create :user,
+                                 open_access_notification_sent_at: 1.year.ago,
+                                 first_name: 'email_user_1',
+                                 psu_identity: { 'data' => { 'link' => '',
+                                                             'cprid' => '',
+                                                             'active' => true,
+                                                             'userid' => '',
+                                                             'confHold' => false,
+                                                             'givenName' => '',
+                                                             'familyName' => '',
+                                                             'affiliation' => ['FACULTY', 'MEMBER'],
+                                                             'displayName' => '',
+                                                             'serviceAccount' => false,
+                                                             'universityEmail' => '' } }
+    }
     let!(:eu_mem_1) { create :user_organization_membership,
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
@@ -432,7 +446,20 @@ describe User, type: :model do
                               publication: eu_pub_1,
                               confirmed: true }
 
-    let!(:email_user_2) { create :user, open_access_notification_sent_at: nil, first_name: 'email_user_2' }
+    let!(:email_user_2) { create :user,
+                                 open_access_notification_sent_at: nil,
+                                 first_name: 'email_user_2',
+                                 psu_identity: { 'data' => { 'link' => '',
+                                                             'cprid' => '',
+                                                             'active' => true,
+                                                             'userid' => '',
+                                                             'confHold' => false,
+                                                             'givenName' => '',
+                                                             'familyName' => '',
+                                                             'affiliation' => ['FACULTY', 'MEMBER'],
+                                                             'displayName' => '',
+                                                             'serviceAccount' => false,
+                                                             'universityEmail' => '' } } }
     let!(:eu_mem_2) { create :user_organization_membership,
                              user: email_user_2,
                              started_on: Date.new(2019, 1, 1),
@@ -443,7 +470,20 @@ describe User, type: :model do
                               publication: eu_pub_2,
                               confirmed: true }
 
-    let!(:email_user_3) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_3' }
+    let!(:email_user_3) { create :user,
+                                 open_access_notification_sent_at: 1.year.ago,
+                                 first_name: 'email_user_3',
+                                 psu_identity: { 'data' => { 'link' => '',
+                                                             'cprid' => '',
+                                                             'active' => true,
+                                                             'userid' => '',
+                                                             'confHold' => false,
+                                                             'givenName' => '',
+                                                             'familyName' => '',
+                                                             'affiliation' => ['FACULTY', 'MEMBER'],
+                                                             'displayName' => '',
+                                                             'serviceAccount' => false,
+                                                             'universityEmail' => '' } } }
     let!(:eu_mem_3) { create :user_organization_membership,
                              user: email_user_3,
                              started_on: Date.new(2019, 1, 1),
@@ -454,7 +494,20 @@ describe User, type: :model do
                               publication: eu_pub_3,
                               confirmed: true }
 
-    let!(:email_user_4) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'email_user_4' }
+    let!(:email_user_4) { create :user,
+                                 open_access_notification_sent_at: 1.year.ago,
+                                 first_name: 'email_user_4',
+                                 psu_identity: { 'data' => { 'link' => '',
+                                                             'cprid' => '',
+                                                             'active' => true,
+                                                             'userid' => '',
+                                                             'confHold' => false,
+                                                             'givenName' => '',
+                                                             'familyName' => '',
+                                                             'affiliation' => ['FACULTY', 'MEMBER'],
+                                                             'displayName' => '',
+                                                             'serviceAccount' => false,
+                                                             'universityEmail' => '' } } }
     let!(:eu_mem_4) { create :user_organization_membership,
                              user: email_user_4,
                              started_on: Date.new(2019, 1, 1),
@@ -661,6 +714,46 @@ describe User, type: :model do
     let!(:ou_auth_15) { create :authorship,
                                user: other_user_15,
                                publication: ou_pub_15,
+                               confirmed: true }
+
+    # filtered out due to the user's psu_identity being nil (not active user)
+    let!(:other_user_16) { create :user,
+                                  open_access_notification_sent_at: 1.year.ago,
+                                  first_name: 'other_user_16',
+                                  psu_identity: nil }
+    let!(:ou_mem_16) { create :user_organization_membership,
+                              user: other_user_16,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: Date.new(2020, 7, 2) }
+    let!(:ou_pub_16) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:ou_auth_16) { create :authorship,
+                               user: other_user_16,
+                               publication: ou_pub_16,
+                               confirmed: true }
+
+    # filtered out due to the user's psu_identity affiliation only contains member (not active user)
+    let!(:other_user_17) { create :user,
+                                  open_access_notification_sent_at: 1.year.ago,
+                                  first_name: 'other_user_17',
+                                  psu_identity: { 'data' => { 'link' => '',
+                                                              'cprid' => '',
+                                                              'active' => true,
+                                                              'userid' => '',
+                                                              'confHold' => false,
+                                                              'givenName' => '',
+                                                              'familyName' => '',
+                                                              'affiliation' => ['MEMBER'],
+                                                              'displayName' => '',
+                                                              'serviceAccount' => false,
+                                                              'universityEmail' => '' } } }
+    let!(:ou_mem_17) { create :user_organization_membership,
+                              user: other_user_17,
+                              started_on: Date.new(2019, 1, 1),
+                              ended_on: Date.new(2020, 7, 2) }
+    let!(:ou_pub_17) { create :publication, published_on: Date.new(2020, 7, 1) }
+    let!(:ou_auth_17) { create :authorship,
+                               user: other_user_17,
+                               publication: ou_pub_17,
                                confirmed: true }
 
     # filtered out due to the publication being in process of deposit to Scholarsphere via AI (activity_insight_postprint_status is 'In Progress')
