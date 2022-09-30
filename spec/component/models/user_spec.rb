@@ -703,6 +703,7 @@ describe User, type: :model do
     let!(:ou_auth_17) { create :authorship,
                                user: other_user_17,
                                publication: ou_pub_17,
+                               confirmed: true }
 
     # filtered out due to the publication being in process of deposit to Scholarsphere via AI (activity_insight_postprint_status is 'In Progress')
     let!(:other_user_18) { create :user, open_access_notification_sent_at: 1.year.ago, first_name: 'other_user_18' }
