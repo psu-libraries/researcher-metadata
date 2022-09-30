@@ -7,38 +7,90 @@ describe UnpaywallPublicationImporter, :vcr do
 
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil, open_access_status: nil }
+      context 'when the title exactly matches an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+        end
+
+        it 'assigns the metadata from Unpaywall to the new open access location' do
+          importer.import_all
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+          expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
+        end
+
+        it 'updates Unpaywall check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to eq 'green'
+        end
       end
 
-      it "does not update the publication's Unpaywall check timestamp" do
-        importer.import_all
-        expect(pub.reload.unpaywall_last_checked_at).to be_nil
-      end
+      context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
 
-      it 'does not update the open access status on the publication' do
-        importer.import_all
-        expect(pub.reload.open_access_status).to be_nil
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to be_nil
+        end
       end
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', open_access_status: nil }
+      context 'when the title exactly matches an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+        end
+
+        it 'assigns the metadata from Unpaywall to the new open access location' do
+          importer.import_all
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+          expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
+        end
+
+        it 'updates Unpaywall check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to eq 'green'
+        end
       end
 
-      it "does not update the publication's Unpaywall check timestamp" do
-        importer.import_all
-        expect(pub.reload.unpaywall_last_checked_at).to be_nil
-      end
+      context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
 
-      it 'does not update the open access status on the publication' do
-        importer.import_all
-        expect(pub.reload.open_access_status).to be_nil
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to be_nil
+        end
       end
     end
 
@@ -359,38 +411,90 @@ describe UnpaywallPublicationImporter, :vcr do
 
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil, open_access_status: nil }
+      context 'when the title exactly matches an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+        end
+
+        it 'assigns the metadata from Unpaywall to the new open access location' do
+          importer.import_all
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+          expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
+        end
+
+        it 'updates Unpaywall check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to eq 'green'
+        end
       end
 
-      it "does not update the publication's Unpaywall check timestamp" do
-        importer.import_new
-        expect(pub.reload.unpaywall_last_checked_at).to be_nil
-      end
+      context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
 
-      it 'does not update the open access status on the publication' do
-        importer.import_new
-        expect(pub.reload.open_access_status).to be_nil
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to be_nil
+        end
       end
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', open_access_status: nil }
+      context 'when the title exactly matches an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+        end
+
+        it 'assigns the metadata from Unpaywall to the new open access location' do
+          importer.import_all
+          oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
+          expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
+        end
+
+        it 'updates Unpaywall check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to eq 'green'
+        end
       end
 
-      it "does not update the publication's Unpaywall check timestamp" do
-        importer.import_new
-        expect(pub.reload.unpaywall_last_checked_at).to be_nil
-      end
+      context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
+        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
 
-      it 'does not update the open access status on the publication' do
-        importer.import_new
-        expect(pub.reload.open_access_status).to be_nil
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_all
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_status).to be_nil
+        end
       end
     end
 
