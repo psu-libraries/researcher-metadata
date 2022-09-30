@@ -424,7 +424,19 @@ describe User, type: :model do
     let!(:email_user_1) { create :user,
                                  open_access_notification_sent_at: 1.year.ago,
                                  first_name: 'email_user_1',
-                                 psu_identity: { 'data' => { 'link' => '', 'cprid' => '', 'active' => true, 'userid' => '', 'confHold' => false, 'givenName' => '', 'familyName' => '', 'affiliation' => ['FACULTY', 'MEMBER'], 'displayName' => '', 'serviceAccount' => false, 'universityEmail' => '' } } }
+ psu_identity: { 'data' => { 'link' => '', 
+                              'cprid' => '', 
+                              'active' => true, 
+                              'userid' => '', 
+                              'confHold' => false, 
+                              'givenName' => '', 
+                              'familyName' => '', 
+                              'affiliation' => ['FACULTY', 'MEMBER'], 
+                              'displayName' => '', 
+                              'serviceAccount' => false, 
+                              'universityEmail' => '' }
+                     } 
+               }
     let!(:eu_mem_1) { create :user_organization_membership,
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
