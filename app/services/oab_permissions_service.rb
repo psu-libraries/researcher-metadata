@@ -4,8 +4,8 @@ class OabPermissionsService
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version, :permissions
 
-  ACCEPTED_VERSION = 'acceptedVersion'.freeze
-  PUBLISHED_VERSION = 'publishedVersion'.freeze
+  ACCEPTED_VERSION = 'acceptedVersion'
+  PUBLISHED_VERSION = 'publishedVersion'
   VALID_VERSIONS = [ACCEPTED_VERSION, PUBLISHED_VERSION].freeze
 
   def initialize(doi, version)
@@ -38,13 +38,13 @@ class OabPermissionsService
     false
   end
 
+  def this_version
+    return accepted_version if accepted_version['version'] == version
+
+    published_version
+  end
+
   private
-
-    def this_version
-      return accepted_version if accepted_version['version'] == version
-
-      published_version
-    end
 
     def accepted_version
       if permissions.present?

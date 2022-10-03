@@ -1,14 +1,4 @@
-<% if permissions.set_statement.present? %>
-<section>
-  <div class="alert alert-info">
-    <%= f.input :publisher_statement,
-                label: 'Publisher Statement',
-                input_html: { rows: 7 },
-                hint: t('simple_form.hints.publisher_statement.oab_permission_found') %>
-  </div>
-</section>
-<% else %>
-    <%= f.input :publisher_statement,
-                label: 'Publisher Statement',
-                hint: "If the original publisher requires a set statement to upload this work to ScholarSphere, include it here." %>
-<% end %>
+<%= f.input :publisher_statement,
+            label: 'Publisher Statement',
+            input_html: set_statement_input_html,
+            hint: set_statement_hint %>

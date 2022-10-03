@@ -17,6 +17,7 @@ en:
     scholarsphere_deposit_flashes:
       sharing_rules_found: We found sharing rules for your work and filled out the fields in blue below for you.  Please change them if they are not correct.
       sharing_rules_not_found: We could not find sharing rules for your work.  Please fill out any missing information below.
+      other_version_preferred_html: We could not find sharing rules for the %{this_version} of this work, only the %{other_version}. To upload the %{other_version}, please <a href=%{url}>return to the file upload page</a> and upload your %{other_version} there. If you are sure you want to upload the %{this_version}, please fill out any missing information below. With questions, contact <a href="openaccess@psu.edu">openaccess@psu.edu</a>.
     hints:
       new_deputy_assignment_form:
         deputy_webaccess_id: Enter the Penn State Access ID of a person to whom you'd like to grant proxy access. Only people with Access IDs can have proxy access.
@@ -24,8 +25,10 @@ en:
         reason_for_waiver: Please explain why you are getting this waiver. This is optional but encouraged.
       rights:
         oab_permission_found: We found the license for your work.
+        default_html: For help determining License and Embargo, see this %{link}
       publisher_statement:
         oab_permission_found: We found the set statement for your work.
+        default: If the original publisher requires a set statement to upload this work to ScholarSphere, include it here.
       embargoed_until:
         oab_permission_found: We found the embargo end date for your work.
         oab_permission_found_expired: We found the embargo end date for your work but it is before the current date, so we left this blank.

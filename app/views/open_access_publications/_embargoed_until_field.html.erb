@@ -1,22 +1,6 @@
-<% if permissions.embargo_end_date.present? %>
-<section>
-  <div class="alert alert-info">
-    <%= f.input :embargoed_until,
-                label: 'Embargoed until',
-                include_blank: true,
-                start_year: Date.today.year,
-                end_year: Date.today.year + 10,
-                hint: if permissions.embargo_end_date < Date.today
-                        t('simple_form.hints.embargoed_until.oab_permission_found_expired')
-                      else
-                        t('simple_form.hints.embargoed_until.oab_permission_found')
-                      end %>
-  </div>
-</section>
-<% else %>
-  <%= f.input :embargoed_until,
-              label: 'Embargoed until',
-              include_blank: true,
-              start_year: Date.today.year,
-              end_year: Date.today.year + 10 %>
-<% end %>
+<%= f.input :embargoed_until,
+            label: 'Embargoed until',
+            include_blank: true,
+            start_year: Date.today.year,
+            end_year: Date.today.year + 10,
+            hint: embargo_hint %>

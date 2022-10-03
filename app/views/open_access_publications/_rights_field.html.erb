@@ -1,18 +1,6 @@
-<% if permissions.licence.present? %>
-<section>
-  <div class="alert alert-info">
-    <%= f.input :rights,
-                label: 'License',
-                collection: ScholarsphereWorkDeposit.rights_options,
-                include_blank: false,
-                hint: t('simple_form.hints.rights.oab_permission_found') %>
-  </div>
-</section>
-<% else %>
-  <%= f.input :rights,
-              label: 'License',
-              collection: ScholarsphereWorkDeposit.rights_options,
-              include_blank: false,
-              selected: 'https://rightsstatements.org/page/InC/1.0/',
-              hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
-<% end %>
+<%= f.input :rights,
+            label: 'License',
+            collection: ScholarsphereWorkDeposit.rights_options,
+            include_blank: false,
+            selected: rights_selected,
+            hint: rights_hint %>
