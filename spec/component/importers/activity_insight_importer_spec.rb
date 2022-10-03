@@ -843,7 +843,7 @@ describe ActivityInsightImporter do
           expect(p4.volume).to eq '10'
           expect(p4.issue).to eq '2'
           expect(p4.edition).to eq '15'
-          expect(p4.page_range).to eq '1600-1655'    
+          expect(p4.page_range).to eq '1600-1655'
           expect(p4.issn).to be_nil
           expect(p4.isbn).to eq '978-0-596-52068-7'
           expect(p4.url).to be_nil
@@ -1454,7 +1454,7 @@ describe ActivityInsightImporter do
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
             expect(p4.issn).to be_nil
-            expect(p4.isbn).to eq '978-0-596-52068-7'            
+            expect(p4.isbn).to eq '978-0-596-52068-7'
             expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
             expect(p4.authors_et_al).to be true
