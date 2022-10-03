@@ -770,6 +770,8 @@ describe ActivityInsightImporter do
                                          source_identifier: '92747188475').publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190707482930').publication
+          p5 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '271620739072').publication
 
           expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
           expect(p1.publication_type).to eq 'Journal Article'
@@ -803,6 +805,7 @@ describe ActivityInsightImporter do
           expect(p2.page_range).to be_nil
           expect(p2.url).to eq 'https://doi.org/10.1001/amajethics.2019.239'
           expect(p2.issn).to be_nil
+          expect(p2.isbn).to be_nil
           expect(p2.abstract).to be_nil
           expect(p2.authors_et_al).to be false
           expect(p2.published_on).to eq Date.new(2019, 1, 1)
@@ -822,7 +825,7 @@ describe ActivityInsightImporter do
           expect(p3.edition).to eq '4'
           expect(p3.page_range).to eq '1276-1288'
           expect(p3.url).to be_nil
-          expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+          expect(p3.issn).to be_nil
           expect(p3.abstract).to be_nil
           expect(p3.authors_et_al).to be false
           expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -840,8 +843,9 @@ describe ActivityInsightImporter do
           expect(p4.volume).to eq '10'
           expect(p4.issue).to eq '2'
           expect(p4.edition).to eq '15'
-          expect(p4.page_range).to eq '1600-1655'
-          expect(p4.issn).to eq '6789-4321'
+          expect(p4.page_range).to eq '1600-1655'    
+          expect(p4.issn).to be_nil
+          expect(p4.isbn).to eq '978-0-596-52068-7'
           expect(p4.url).to be_nil
           expect(p4.abstract).to eq 'Abstract.'
           expect(p4.authors_et_al).to be true
@@ -849,6 +853,10 @@ describe ActivityInsightImporter do
           expect(p4.visible).to be true
           expect(p4.updated_by_user_at).to be_nil
           expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+
+          expect(p5.issn).to eq '1234-9876'
+          expect(p5.isbn).to eq '978-0-596-52068-7'
+          expect(p5.doi).to eq 'https://doi.org/10.1186/s40543-020-00348-w'
         end
 
         it 'groups duplicates of new publication records' do
@@ -1137,7 +1145,7 @@ describe ActivityInsightImporter do
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
             expect(p3.url).to be_nil
-            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.issn).to be_nil
             expect(p3.abstract).to be_nil
             expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -1426,7 +1434,7 @@ describe ActivityInsightImporter do
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
             expect(p3.url).to be_nil
-            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.issn).to be_nil
             expect(p3.abstract).to be_nil
             expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -1445,7 +1453,8 @@ describe ActivityInsightImporter do
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
-            expect(p4.issn).to eq '6789-4321'
+            expect(p4.issn).to be_nil
+            expect(p4.isbn).to eq '978-0-596-52068-7'            
             expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
             expect(p4.authors_et_al).to be true
@@ -2469,7 +2478,7 @@ describe ActivityInsightImporter do
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
             expect(p3.url).to be_nil
-            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.issn).to be_nil
             expect(p3.abstract).to be_nil
             expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -2488,7 +2497,8 @@ describe ActivityInsightImporter do
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
-            expect(p4.issn).to eq '6789-4321'
+            expect(p4.issn).to be_nil
+            expect(p4.isbn).to eq '978-0-596-52068-7'
             expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
             expect(p4.authors_et_al).to be true
@@ -2730,7 +2740,7 @@ describe ActivityInsightImporter do
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
               expect(p3.url).to be_nil
-              expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.issn).to be_nil
               expect(p3.abstract).to be_nil
               expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -2749,7 +2759,8 @@ describe ActivityInsightImporter do
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
-              expect(p4.issn).to eq '6789-4321'
+              expect(p4.issn).to be_nil
+              expect(p4.isbn).to eq '978-0-596-52068-7'
               expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
               expect(p4.authors_et_al).to be true
@@ -3023,7 +3034,7 @@ describe ActivityInsightImporter do
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
               expect(p3.url).to be_nil
-              expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.issn).to be_nil
               expect(p3.abstract).to be_nil
               expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -3042,7 +3053,8 @@ describe ActivityInsightImporter do
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
-              expect(p4.issn).to eq '6789-4321'
+              expect(p4.issn).to be_nil
+              expect(p4.isbn).to eq '978-0-596-52068-7'
               expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
               expect(p4.authors_et_al).to be true
@@ -4043,7 +4055,7 @@ describe ActivityInsightImporter do
             expect(p3.edition).to eq '4'
             expect(p3.page_range).to eq '1276-1288'
             expect(p3.url).to be_nil
-            expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+            expect(p3.issn).to be_nil
             expect(p3.abstract).to be_nil
             expect(p3.authors_et_al).to be false
             expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -4062,7 +4074,8 @@ describe ActivityInsightImporter do
             expect(p4.issue).to eq '2'
             expect(p4.edition).to eq '15'
             expect(p4.page_range).to eq '1600-1655'
-            expect(p4.issn).to eq '6789-4321'
+            expect(p4.issn).to be_nil
+            expect(p4.isbn).to eq '978-0-596-52068-7'
             expect(p4.url).to be_nil
             expect(p4.abstract).to eq 'Abstract.'
             expect(p4.authors_et_al).to be true
@@ -4304,7 +4317,7 @@ describe ActivityInsightImporter do
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
               expect(p3.url).to be_nil
-              expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.issn).to be_nil
               expect(p3.abstract).to be_nil
               expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -4323,7 +4336,8 @@ describe ActivityInsightImporter do
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
-              expect(p4.issn).to eq '6789-4321'
+              expect(p4.issn).to be_nil
+              expect(p4.isbn).to eq '978-0-596-52068-7'
               expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
               expect(p4.authors_et_al).to be true
@@ -4596,7 +4610,7 @@ describe ActivityInsightImporter do
               expect(p3.edition).to eq '4'
               expect(p3.page_range).to eq '1276-1288'
               expect(p3.url).to be_nil
-              expect(p3.issn).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(p3.issn).to be_nil
               expect(p3.abstract).to be_nil
               expect(p3.authors_et_al).to be false
               expect(p3.published_on).to eq Date.new(2010, 1, 1)
@@ -4615,7 +4629,8 @@ describe ActivityInsightImporter do
               expect(p4.issue).to eq '2'
               expect(p4.edition).to eq '15'
               expect(p4.page_range).to eq '1600-1655'
-              expect(p4.issn).to eq '6789-4321'
+              expect(p4.issn).to be_nil
+              expect(p4.isbn).to eq '978-0-596-52068-7'
               expect(p4.url).to be_nil
               expect(p4.abstract).to eq 'Abstract.'
               expect(p4.authors_et_al).to be true

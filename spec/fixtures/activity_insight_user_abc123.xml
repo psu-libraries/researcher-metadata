@@ -466,7 +466,7 @@
       <WEB_ADDRESS>https://doi.org/10.1001/amajethics.2019.239</WEB_ADDRESS>
       <FORMAT/>
       <EDITORS/>
-      <ISBNISSN/>
+      <ISBNISSN>12345678</ISBNISSN>
       <PMCID/>
       <PROCEED_LOCATION/>
       <ABSTRACT/>
@@ -554,10 +554,11 @@
       <EDITION/>
       <PAGENUM/>
       <PUB_PAGENUM/>
-      <WEB_ADDRESS>https://doi.org/10.1001/amajethics.2019.239</WEB_ADDRESS>
+      <DOI>10.1186/s40543-020-00348-w</DOI>
+      <WEB_ADDRESS>1234-9876</WEB_ADDRESS>
       <FORMAT/>
       <EDITORS/>
-      <ISBNISSN/>
+      <ISBNISSN>978-0-596-52068-7</ISBNISSN>
       <PMCID/>
       <PROCEED_LOCATION/>
       <ABSTRACT/>
@@ -884,7 +885,7 @@
       <WEB_ADDRESS/>
       <FORMAT/>
       <EDITORS/>
-      <ISBNISSN>6789-4321</ISBNISSN>
+      <ISBNISSN>978-0-596-52068-7</ISBNISSN>
       <PMCID/>
       <PROCEED_LOCATION/>
       <ABSTRACT>
