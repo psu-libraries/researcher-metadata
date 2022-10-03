@@ -71,7 +71,7 @@ describe OabPermissionsService do
                 }
               ],
               "provenance": {
-                "oa_evidence": "In DOAJ"
+                "oa_evidence": ""
               },
               "score": 1234
             },
@@ -171,6 +171,53 @@ describe OabPermissionsService do
       describe '#licence' do
         it 'returns the licence string' do
           expect(service.licence).to eq 'https://creativecommons.org/licenses/by/4.0/'
+        end
+      end
+
+      describe '#other_version_preferred?' do
+        context 'when this_version is present' do
+          before { allow(service).to receive(:this_version).and_return({ 'version' => 'acceptedVersion' }) }
+
+          it 'returns false' do
+            expect(service.other_version_preferred?).to be false
+          end
+        end
+
+        context 'when this version is not present' do
+          before { allow(service).to receive(:this_version).and_return({}) }
+
+          context 'when accepted version is present and published version is not' do
+            before do
+              allow(service).to receive(:accepted_version).and_return({ 'version' => 'acceptedVersion' })
+              allow(service).to receive(:published_version).and_return({})
+            end
+
+            it 'returns true' do
+              expect(service.other_version_preferred?).to be true
+            end
+          end
+
+          context 'when published version is present and accepted version is not' do
+            before do
+              allow(service).to receive(:accepted_version).and_return({})
+              allow(service).to receive(:published_version).and_return({ 'version' => 'publishedVersion' })
+            end
+
+            it 'returns true' do
+              expect(service.other_version_preferred?).to be true
+            end
+          end
+
+          context 'when no version is present' do
+            before do
+              allow(service).to receive(:accepted_version).and_return({})
+              allow(service).to receive(:published_version).and_return({})
+            end
+
+            it 'returns false' do
+              expect(service.other_version_preferred?).to be false
+            end
+          end
         end
       end
     end
