@@ -2,9 +2,10 @@
   <div class="file-group">
       <div class="form-group file required file-display">
       <% @cache_files.each do |key, file| %>
-        <%= f.hidden_field "original_filename", value: file[:original_filename] %>
-        <%= f.hidden_field "cache_path", value: file[:cache_path] %>
-        <%= link_to file[:original_filename], file[:cache_path], target: '_blank', class: 'form-control disabled' %>
+        <button type="button" class="btn btn-link">
+          <%= f.hidden_field "cache_path", value: file[:cache_path] %>
+          <%= link_to file[:original_filename], scholarsphere_file_serve_path(filename: file[:cache_path]), target: '_blank', class: 'form-control disabled' %>
+        </button>
       <% end %>
       </div>
   </div>

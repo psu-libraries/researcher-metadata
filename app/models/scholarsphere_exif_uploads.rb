@@ -38,15 +38,20 @@ class ScholarsphereExifUploads
 
     @file_uploads.map do |file_upload|
       uploader.cache!(file_upload)
-
-      {
-        original_filename: file_upload.original_filename,
-        cache_path: uploader.file.path
-      }
+      cached_file_info(file_upload, uploader)
     end
   end
 
   private
+
+    def cached_file_info(file_upload, uploader)
+      cache_dir = uploader.cache_dir.relative_path_from(Rails.root)
+
+      {
+        original_filename: file_upload.original_filename,
+        cache_path: cache_dir + uploader.cache_name
+      }
+    end
 
     def at_least_one_file_upload
       if @file_uploads.blank?
