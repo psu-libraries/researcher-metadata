@@ -5,14 +5,14 @@ require 'component/component_spec_helper'
 RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   let(:oab_permissions) do
     Struct.new('OabPermissionsService', :permissions,
-                                        :version,
-                                        :this_version,
-                                        :licence,
-                                        :embargo_end_date,
-                                        :set_statement,
-                                        :other_version_preferred?)
+               :version,
+               :this_version,
+               :licence,
+               :embargo_end_date,
+               :set_statement,
+               :other_version_preferred?)
   end
-  let!(:publication) { FactoryBot.create :sample_publication }
+  let!(:publication) { create :sample_publication }
   let(:op) do
     op = oab_permissions.new
     op.version = 'acceptedVersion'
@@ -122,7 +122,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
           view_render
           expect(page).to have_text('We found the embargo end date for your work')
           expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: Date.tomorrow.year)
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: Date.tomorrow.strftime("%B"))
+          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: Date.tomorrow.strftime('%B'))
           expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: Date.tomorrow.day)
         end
       end

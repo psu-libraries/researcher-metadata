@@ -72,7 +72,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     render :scholarsphere_deposit_form
   rescue StandardError
     flash[:error] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
-
   end
 
   def create_scholarsphere_deposit
