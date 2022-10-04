@@ -57,7 +57,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @permissions = OabPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                             { rights: @permissions.licence,
-                                                              embargoed_until: embargo_end_date_display(@permissions.embargo_end_date),
+                                                              embargoed_until: @permissions.embargo_end_date,
                                                               publisher_statement: @permissions.set_statement })
     @deposit.file_uploads.build
     render :scholarsphere_deposit_form
@@ -119,11 +119,5 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :journal,
                                                          cache_files: [],
                                                          file_uploads_attributes: [:file, :file_cache])
-    end
-
-    def embargo_end_date_display(embargo_end_date)
-      return embargo_end_date if embargo_end_date.present? && embargo_end_date > Date.today
-
-      nil
     end
 end

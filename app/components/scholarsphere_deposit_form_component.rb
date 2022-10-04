@@ -23,8 +23,8 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
   end
 
-  def rights_field(field)
-    partial = render(partial: 'rights_field', locals: { f: field,
+  def rights_field(form)
+    partial = render(partial: 'rights_field', locals: { f: form,
                                                         rights_selected: rights_selected,
                                                         rights_hint: rights_hint })
     if licence_present?
@@ -34,8 +34,10 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
   end
 
-  def embargoed_until_field(field)
-    partial = render(partial: 'embargoed_until_field', locals: { f: field, embargo_hint: embargo_hint })
+  def embargoed_until_field(form)
+    partial = render(partial: 'embargoed_until_field', locals: { f: form,
+                                                                 embargo_hint: embargo_hint,
+                                                                 embargo_selected: embargo_selected })
     if embargo_end_date_present?
       content_tag(:section, content_tag(:div, partial, class: 'alert alert-info'))
     else
@@ -43,9 +45,9 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
   end
 
-  def publisher_statement_field(field)
+  def publisher_statement_field(form)
     partial = render(partial: 'publisher_statement_field',
-                     locals: { f: field,
+                     locals: { f: form,
                                set_statement_input_html: set_statement_input_html,
                                set_statement_hint: set_statement_hint })
     if set_statement_present?
@@ -80,6 +82,16 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
           t('simple_form.hints.embargoed_until.oab_permission_found_expired')
         else
           t('simple_form.hints.embargoed_until.oab_permission_found')
+        end
+      end
+    end
+
+    def embargo_selected
+      if embargo_end_date_present?
+        if @permissions.embargo_end_date < Date.today
+          nil
+        else
+          @permissions.embargo_end_date
         end
       end
     end
