@@ -32,7 +32,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
                                                                                             publisher_statement: op.set_statement })
     with_controller_class OpenAccessPublicationsController do
       allow_any_instance_of(ActionDispatch::Request).to receive(:path_parameters).and_return({ id: publication.id })
-      render_inline(ScholarsphereDepositFormComponent.new(deposit, op))
+      render_inline(described_class.new(deposit, op))
     end
   end
 
