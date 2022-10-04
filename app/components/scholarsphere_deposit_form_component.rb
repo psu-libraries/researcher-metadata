@@ -13,7 +13,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
   def permissions_alert
     if this_version_present?
       t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found')
-    elsif other_version_present?
+    elsif other_version_preferred?
       t('simple_form.scholarsphere_deposit_flashes.other_version_preferred_html',
         this_version: this_version_text,
         other_version: other_version_text,
@@ -128,7 +128,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
       @permissions.this_version.present?
     end
 
-    def other_version_present?
+    def other_version_preferred?
       @permissions.other_version_preferred?
     end
 

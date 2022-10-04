@@ -41,7 +41,9 @@ class OabPermissionsService
   def this_version
     return accepted_version if accepted_version['version'] == version
 
-    published_version
+    return published_version if published_version['version'] == version
+
+    {}
   end
 
   private
