@@ -19,8 +19,10 @@ class ScholarsphereExifUploads
 
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
-      @exif_file_versions.push(ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal))
-      @file_uploads.push(file)
+      unless file.nil?
+        @exif_file_versions.push(ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal))
+        @file_uploads.push(file)
+      end
     end
   end
 

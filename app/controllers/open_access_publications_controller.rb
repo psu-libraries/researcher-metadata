@@ -75,7 +75,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
     files = params[:scholarsphere_work_deposit][:file_uploads_attributes]
     files.each do |_index, file|
-      unless file.nil?
+
+      unless file.empty? || file[:cache_path].empty?
         ss_file_upload = ScholarsphereFileUpload.new
         ss_file_upload.file = File.new(file[:cache_path])
         ss_file_upload.save!
