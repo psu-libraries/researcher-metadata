@@ -43,4 +43,32 @@ describe AdminNotificationsMailer, type: :model do
       end
     end
   end
+
+  describe '#pure_import_error' do
+    subject(:email) { described_class.pure_import_error }
+
+    before do
+      allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
+    end
+
+    it 'sends the email to the correct admin email address' do
+      expect(email.to).to eq ['rmd-admin@psu.edu']
+    end
+
+    it 'sends the email from the correct address' do
+      expect(email.from).to eq ['openaccess@psu.edu']
+    end
+
+    it 'sends the email with the correct subject' do
+      expect(email.subject).to eq 'Pure Import Error'
+    end
+
+    describe 'the message body' do
+      let(:body) { email.body.raw_source }
+
+      it 'names the error' do
+        expect(body).to match('404 Service Not Found')
+      end
+    end
+  end
 end
