@@ -57,7 +57,9 @@ class ScholarsphereExifFileVersion
     end
 
     def subject?
-      !exif[:subject].nil? and ['downloaded from', 'journal pre-proof', @journal].any? { |s| exif[:subject].downcase.include? s }
+      subjects = ['downloaded from', 'journal pre-proof']
+      subjects << @journal unless @journal.nil?
+      !exif[:subject].empty? and subjects.any? { |s| exif[:subject].downcase.include? s }
     end
 
     def rendition_class?

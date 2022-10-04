@@ -36,7 +36,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    extra_params = { journal: publication.journal.title }
+    extra_params = { journal: publication&.journal&.title }
     exif_uploads = ScholarsphereExifUploads.new(deposit_params.merge(extra_params))
     @cache_files = exif_uploads.cache_files
     @file_version = exif_uploads.version
@@ -52,10 +52,10 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def file_serve
-    extension = params[:format].prepend '.'
-    send_file(Rails.root + "#{params[:filename]}#{extension}",
+    extension = File.extname(params[:filename])
+    send_file(Rails.root + params[:filename],
               disposition: 'inline',
-              type: Rack::Mime.mime_type(params[:format]),
+              type: Rack::Mime.mime_type(extension),
               x_sendfile: true)
   end
 
@@ -75,10 +75,12 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
     files = params[:scholarsphere_work_deposit][:file_uploads_attributes]
     files.each do |_index, file|
-      ss_file_upload = ScholarsphereFileUpload.new
-      ss_file_upload.file = File.new(file[:cache_path])
-      ss_file_upload.save!
-      @deposit.file_uploads << ss_file_upload
+      unless file.nil?
+        ss_file_upload = ScholarsphereFileUpload.new
+        ss_file_upload.file = File.new(file[:cache_path])
+        ss_file_upload.save!
+        @deposit.file_uploads << ss_file_upload
+      end
     end
 
     ActiveRecord::Base.transaction do
