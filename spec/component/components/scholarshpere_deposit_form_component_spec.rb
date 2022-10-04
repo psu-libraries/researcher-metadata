@@ -25,7 +25,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     op
   end
 
-  def view_render
+  let(:view_render) do
     # Trying to mimic what the OpenAccessPublicationsController#scholarsphere_deposit_form does
     deposit = ScholarsphereWorkDeposit.new_from_authorship(publication.authorships.first, { rights: op.licence,
                                                                                             embargoed_until: op.embargo_end_date,
@@ -39,7 +39,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   context 'when doi is present in the publication' do
     it 'renders doi field readonly' do
       view_render
-      expect(page).to have_field('DOI', readonly: true)
+      expect(rendered_component).to have_field('DOI', readonly: true)
     end
   end
 
@@ -51,22 +51,22 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
     it 'renders editable doi field' do
       view_render
-      expect(page).not_to have_field('DOI', readonly: true)
-      expect(page).to have_field('DOI')
+      expect(rendered_component).not_to have_field('DOI', readonly: true)
+      expect(rendered_component).to have_field('DOI')
     end
   end
 
   context 'when our version is found from oab permissions api' do
     it 'renders an alert saying sharing rules have been found' do
       view_render
-      expect(page).to have_text('We found sharing rules for your work')
+      expect(rendered_component).to have_text('We found sharing rules for your work')
     end
 
     context 'when a license is found' do
       it 'renders a notice saying a license has been found' do
         view_render
-        expect(page).to have_text('We found the license for your work')
-        expect(page).to have_field('License', with: 'https://creativecommons.org/licenses/by/4.0/')
+        expect(rendered_component).to have_text('We found the license for your work')
+        expect(rendered_component).to have_field('License', with: 'https://creativecommons.org/licenses/by/4.0/')
       end
     end
 
@@ -77,16 +77,16 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'renders no notice and defaults to "All Rights Reserved"' do
         view_render
-        expect(page).not_to have_text('We found the license for your work')
-        expect(page).to have_field('License', with: 'https://rightsstatements.org/page/InC/1.0/')
+        expect(rendered_component).not_to have_text('We found the license for your work')
+        expect(rendered_component).to have_field('License', with: 'https://rightsstatements.org/page/InC/1.0/')
       end
     end
 
     context 'when a set statement is found' do
       it 'renders a notice saying a set statement has been found and prefills data' do
         view_render
-        expect(page).to have_text('We found the set statement for your work')
-        expect(page).to have_field('Publisher Statement', with: 'Statement')
+        expect(rendered_component).to have_text('We found the set statement for your work')
+        expect(rendered_component).to have_field('Publisher Statement', with: 'Statement')
       end
     end
 
@@ -97,8 +97,8 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'does not render any notice and does not prefill data' do
         view_render
-        expect(page).not_to have_text('We found the set statement for your work')
-        expect(page).to have_field('Publisher Statement', with: '')
+        expect(rendered_component).not_to have_text('We found the set statement for your work')
+        expect(rendered_component).to have_field('Publisher Statement', with: '')
       end
     end
 
@@ -110,20 +110,20 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
       context 'when the embargo date is before today' do
         it 'renders a notice saying an embargo date was found but it is before today so it is blank' do
           view_render
-          expect(page).to have_text('We found the embargo end date for your work but it is before the current date, so we left this blank.')
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: '')
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: '')
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: '')
+          expect(rendered_component).to have_text('We found the embargo end date for your work but it is before the current date, so we left this blank.')
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: '')
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: '')
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: '')
         end
       end
 
       context 'when the embargo date is after today' do
         it 'renders a notice saying an embargo date has been found and prefills data' do
           view_render
-          expect(page).to have_text('We found the embargo end date for your work')
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: Date.tomorrow.year)
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: Date.tomorrow.strftime('%B'))
-          expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: Date.tomorrow.day)
+          expect(rendered_component).to have_text('We found the embargo end date for your work')
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: Date.tomorrow.year)
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: Date.tomorrow.strftime('%B'))
+          expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: Date.tomorrow.day)
         end
       end
     end
@@ -135,10 +135,10 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'does not render any notice and does not prefill data' do
         view_render
-        expect(page).not_to have_text('We found the embargo end date for your work')
-        expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: '')
-        expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: '')
-        expect(page).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: '')
+        expect(rendered_component).not_to have_text('We found the embargo end date for your work')
+        expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: '')
+        expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: '')
+        expect(rendered_component).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: '')
       end
     end
   end
@@ -152,7 +152,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when a published version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(page).to have_text('We could not find sharing rules for the acccepted manuscript of this work, only the final published version')
+        expect(rendered_component).to have_text('We could not find sharing rules for the acccepted manuscript of this work, only the final published version')
       end
     end
 
@@ -163,7 +163,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'renders an alert saying no sharing rules were found' do
         view_render
-        expect(page).to have_text('We could not find sharing rules for your work.')
+        expect(rendered_component).to have_text('We could not find sharing rules for your work.')
       end
     end
   end
@@ -178,7 +178,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when an accepted version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(page).to have_text('We could not find sharing rules for the final published version of this work, only the acccepted manuscript')
+        expect(rendered_component).to have_text('We could not find sharing rules for the final published version of this work, only the acccepted manuscript')
       end
     end
 
@@ -189,7 +189,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'renders an alert saying no sharing rules were found' do
         view_render
-        expect(page).to have_text('We could not find sharing rules for your work.')
+        expect(rendered_component).to have_text('We could not find sharing rules for your work.')
       end
     end
   end
