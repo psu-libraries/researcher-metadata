@@ -20,6 +20,7 @@ class PureImporter
     def total_records
       response = get_records(type: record_type, page_size: 1, offset: 0)
       if response['status'] == 404
+        AdminNotificationsMailer.pure_import_error.deliver_now
         raise ServiceNotFound.new("The requested Pure API endpoint was not found. The version #{api_version} may no longer be supported. Consider using a newer version.")
       else
         response['count']
