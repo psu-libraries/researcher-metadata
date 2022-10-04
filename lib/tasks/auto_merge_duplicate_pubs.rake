@@ -6,8 +6,8 @@ namespace :auto_merge do
     DuplicatePublicationGroup.auto_merge
   end
 
-  desc 'Merge all groups of duplicate publication records that can be automatically merged on doi'
+  desc 'Merge all matching groups of duplicate publication records that can be automatically merged'
   task duplicate_pubs_on_doi: :environment do
-    DuplicatePublicationGroup.auto_merge_on_doi
+    DuplicatePublicationGroup.auto_merge_matching
   end
 end

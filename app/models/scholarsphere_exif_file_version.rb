@@ -32,8 +32,7 @@ class ScholarsphereExifFileVersion
     end
 
     def accepted?
-      exif[:journal_article_version]&.downcase == 'am' ||
-        exif[:producer] == 'pdfTeX-1.40.19' # just for testing
+      exif[:journal_article_version]&.downcase == 'am'
     end
 
     def published?
@@ -45,8 +44,7 @@ class ScholarsphereExifFileVersion
         rendition_class? ||
         creator? ||
         creator_tool? ||
-        producer? ||
-        exif[:producer] == 'pdfTeX-1.40.21' # just for testing
+        producer?
     end
 
     def rights_en_gb?

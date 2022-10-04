@@ -51,9 +51,18 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     render :edit
   end
 
+  def file_serve
+    extension = params[:format].prepend '.'
+    send_file(Rails.root + "#{params[:filename]}#{extension}",
+              disposition: 'inline',
+              type: Rack::Mime.mime_type(params[:format]),
+              x_sendfile: true)
+  end
+
   def scholarsphere_deposit_form
     @cache_files = params[:scholarsphere_work_deposit][:cache_files]
     @authorship = Authorship.find_by(user: current_user, publication: publication)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
     @permissions = OabPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                             { rights: @permissions.licence,
@@ -63,6 +72,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     render :scholarsphere_deposit_form
   rescue StandardError
     flash[:error] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
+
   end
 
   def create_scholarsphere_deposit

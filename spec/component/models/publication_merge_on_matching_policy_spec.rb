@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PublicationMergeOnDoiPolicy do
+describe PublicationMergeOnMatchingPolicy do
   let(:policy) { described_class.new publication1, publication2 }
   let!(:publication1) { create :sample_publication }
   let!(:publication2) { create :sample_publication }
@@ -470,13 +470,56 @@ describe PublicationMergeOnDoiPolicy do
         end
       end
 
-      context "when none of the publication types is 'Other'" do
+      context "when both publication types are journal types'" do
         before do
-          publication1.update publication_type: 'Journal Article'
-          publication2.update publication_type: 'Academic Journal Article'
+          publication1.update publication_type: 'Academic Journal Article'
+          publication2.update publication_type: 'Journal Article'
         end
 
-        it 'picks the publication_type that is longer' do
+        it 'picks "Journal Article"' do
+          policy.merge!
+          expect(publication1.reload.publication_type).to eq 'Journal Article'
+        end
+      end
+
+      context "when DOIs match and both are a 'merge_allowed?' publication_type" do
+        before do
+          publication1.update publication_type: 'Journal Article', doi: 'https://doi.org/10.1000/abc123'
+          publication2.update publication_type: 'Editorial', doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        context 'and one is a pure import' do
+          before do
+            create :publication_import, :from_pure, publication: publication2
+            publication2.save
+          end
+
+          it 'picks the pure import type' do
+            policy.merge!
+            expect(publication1.reload.publication_type).to eq publication2.publication_type
+          end
+        end
+
+        context 'and both are Activity Insight imports' do
+          before do
+            publication1.update updated_at: (Date.today - 1.year)
+            publication2.update updated_at: Date.today
+          end
+
+          it 'picks the one that has been updated more recently' do
+            policy.merge!
+            expect(publication1.reload.publication_type).to eq publication2.publication_type
+          end
+        end
+      end
+
+      context 'when neither publication_type is other, DOIs do not match, and at least one is not a journal type' do
+        before do
+          publication1.update publication_type: 'Editorial', doi: 'https://doi.org/10.1000/xyz123'
+          publication2.update publication_type: 'Journal Article', doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        it 'picks the longer one' do
           policy.merge!
           expect(publication1.reload.publication_type).to eq publication2.publication_type
         end
@@ -569,6 +612,44 @@ describe PublicationMergeOnDoiPolicy do
         it 'picks either total_scopus_citations' do
           policy.merge!
           expect(publication1.reload.total_scopus_citations.to_s).to match /5|6/
+        end
+      end
+    end
+
+    describe 'doi merging' do
+      context 'when both DOIs are present' do
+        before do
+          publication1.update doi: 'https://doi.org/10.1000/abc123'
+          publication2.update doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        it 'picks the first doi' do
+          policy.merge!
+          expect(publication1.reload.doi).to eq 'https://doi.org/10.1000/abc123'
+        end
+      end
+
+      context 'when one DOI is missing' do
+        before do
+          publication1.update doi: nil
+          publication2.update doi: 'https://doi.org/10.1000/abc123'
+        end
+
+        it 'picks the doi that is present' do
+          policy.merge!
+          expect(publication1.reload.doi).to eq 'https://doi.org/10.1000/abc123'
+        end
+      end
+
+      context 'when both DOIs are missing' do
+        before do
+          publication1.update doi: nil
+          publication2.update doi: nil
+        end
+
+        it 'picks nil' do
+          policy.merge!
+          expect(publication1.reload.doi).to be_nil
         end
       end
     end

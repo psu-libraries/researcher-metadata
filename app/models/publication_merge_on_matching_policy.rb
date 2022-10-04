@@ -1,13 +1,13 @@
 # frozen_string_literal: true
 
-class PublicationMergeOnDoiPolicy
+class PublicationMergeOnMatchingPolicy
   def initialize(publication1, publication2)
     @publication1 = publication1
     @publication2 = publication2
   end
 
   # merge! is meant to only be applied to publications that return true
-  # when analyzed with PublicationMatchOnDoiPolicy's #ok_to_merge? method
+  # when analyzed with PublicationMatchOnDoiPolicy's or PublicationMatchMissingDoiPolicy's #ok_to_merge? method
   def merge!
     publication1.update attributes
     publication1.contributor_names = contributor_names_to_keep
@@ -40,24 +40,25 @@ class PublicationMergeOnDoiPolicy
         publication_type: publication_type,
         abstract: longer_value(:abstract),
         authors_et_al: authors_et_al,
-        total_scopus_citations: either_value(:total_scopus_citations)
+        total_scopus_citations: either_value(:total_scopus_citations),
+        doi: doi
       }
     end
 
     def most_distant_value(attribute)
-      [publication1.send(attribute), publication2.send(attribute)].reject(&:blank?).min
+      [publication1.send(attribute), publication2.send(attribute)].compact_blank.min
     end
 
     def either_value(attribute)
-      [publication1.send(attribute), publication2.send(attribute)].uniq.reject(&:blank?).sample
+      [publication1.send(attribute), publication2.send(attribute)].uniq.compact_blank.sample
     end
 
     def select_value(attribute)
-      [publication1.send(attribute), publication2.send(attribute)].uniq.reject(&:blank?).first
+      [publication1.send(attribute), publication2.send(attribute)].uniq.compact_blank.first
     end
 
     def longer_value(attribute)
-      [publication1.send(attribute), publication2.send(attribute)].reject(&:blank?).max_by(&:length)
+      [publication1.send(attribute), publication2.send(attribute)].compact_blank.max_by(&:length)
     end
 
     def title
@@ -123,7 +124,7 @@ class PublicationMergeOnDoiPolicy
         nil
       else
         [publication1.issn, publication2.issn]
-          .reject(&:blank?)
+          .compact_blank
           .min_by(&:length)
           .gsub(/[^0-9xX]/, '')[0..7]
           .insert(4, '-')
@@ -131,14 +132,35 @@ class PublicationMergeOnDoiPolicy
     end
 
     def authors_et_al
-      [publication1.authors_et_al, publication2.authors_et_al].include?(true) ? true : false
+      [publication1.authors_et_al, publication2.authors_et_al].include?(true)
     end
 
     def publication_type
       if [publication1, publication2].map(&:publication_type_other?).count(true) == 1
         [publication1, publication2].reject(&:publication_type_other?).first.publication_type
+      elsif publication1.is_journal_publication? && publication2.is_journal_publication?
+        'Journal Article'
+      elsif (publication1.doi == publication2.doi) && (publication1.is_merge_allowed? && publication2.is_merge_allowed?)
+        if publication1.pure_import_identifiers.present? || publication2.pure_import_identifiers.present?
+          return publication1.publication_type if publication2.pure_import_identifiers.blank?
+
+        else
+          return publication1.publication_type unless publication1.updated_at < publication2.updated_at
+
+        end
+        publication2.publication_type
       else
         longer_value(:publication_type)
+      end
+    end
+
+    def doi
+      if publication1.doi.blank? && publication2.doi.blank?
+        nil
+      elsif publication1.doi.present?
+        publication1.doi
+      else
+        publication2.doi
       end
     end
 

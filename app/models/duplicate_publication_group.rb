@@ -19,14 +19,16 @@ class DuplicatePublicationGroup < ApplicationRecord
 
   def self.group_duplicates_of(publication)
     duplicates = if publication.imports.count == 1 && publication.imports.find { |i| i.source == 'Activity Insight' }
-                   Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL)},
-                                     "#{publication.title}#{publication.secondary_title}",
-                                     publication.published_on.try(:year))
-                     .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
-                 else
-                   Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (EXTRACT(YEAR FROM published_on) = ? OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)},
+                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL)) OR doi = ?},
                                      "#{publication.title}#{publication.secondary_title}",
                                      publication.published_on.try(:year),
+                                     publication.doi)
+                     .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
+                 else
+                   Publication.where(%{(similarity(CONCAT(title, secondary_title), ?) >= 0.6 AND (? BETWEEN EXTRACT(YEAR FROM published_on)-2 AND EXTRACT(YEAR FROM published_on)+2 OR published_on IS NULL) AND (doi = ? OR doi = '' OR doi IS NULL)) OR doi = ?},
+                                     "#{publication.title}#{publication.secondary_title}",
+                                     publication.published_on.try(:year),
+                                     publication.doi,
                                      publication.doi)
                      .where.not(id: publication.non_duplicate_groups.map { |g| g.memberships.map(&:publication_id) }.flatten).or(Publication.where(id: publication.id))
                  end
@@ -75,16 +77,21 @@ class DuplicatePublicationGroup < ApplicationRecord
       pure_pub = publications.find(&:has_single_import_from_pure?)
       ai_pub = publications.find(&:has_single_import_from_ai?)
 
-      if pure_pub && ai_pub
-        ActiveRecord::Base.transaction do
-          ai_pub.imports.each do |i|
-            i.update!(auto_merged: true)
+      if !pure_pub.nil? && !ai_pub.nil?
+        search = Publication.where(%{similarity(CONCAT(title, secondary_title), ?) >= 0.6}, "#{pure_pub.title}#{pure_pub.secondary_title}")
+        if search.include?(ai_pub)
+          ActiveRecord::Base.transaction do
+            ai_pub.imports.each do |i|
+              i.update!(auto_merged: true)
+            end
+            pure_pub.merge!([ai_pub])
+            pure_pub.update!(duplicate_group: nil)
+            destroy
           end
-          pure_pub.merge!([ai_pub])
-          pure_pub.update!(duplicate_group: nil)
-          destroy
+          true
+        else
+          false
         end
-        true
       else
         false
       end
@@ -93,12 +100,12 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
   end
 
-  def self.auto_merge_on_doi
+  def self.auto_merge_matching
     pbar = ProgressBarTTY.create(title: 'Auto-merging duplicate groups on doi',
                                  total: count)
 
     find_each do |g|
-      g.auto_merge_on_doi
+      g.auto_merge_matching
       pbar.increment
     end
 
@@ -106,7 +113,7 @@ class DuplicatePublicationGroup < ApplicationRecord
     nil
   end
 
-  def auto_merge_on_doi
+  def auto_merge_matching
     publications.each do |pub_primary|
       publications.each do |pub|
         next if pub_primary.id == pub.id
@@ -119,14 +126,18 @@ class DuplicatePublicationGroup < ApplicationRecord
           next
         end
 
-        match_policy = PublicationMatchOnDoiPolicy.new(pub_primary, pub)
+        match_policy = if pub_primary.doi.present? && pub.doi.present?
+                         PublicationMatchOnDoiPolicy.new(pub_primary, pub)
+                       else
+                         PublicationMatchMissingDoiPolicy.new(pub_primary, pub)
+                       end
         if match_policy.ok_to_merge?
           begin
             ActiveRecord::Base.transaction do
               pub.imports.each do |i|
                 i.update!(auto_merged: true)
               end
-              pub_primary.merge_on_doi!(pub)
+              pub_primary.merge_on_matching!(pub)
             end
           rescue Publication::NonDuplicateMerge; end
         end
