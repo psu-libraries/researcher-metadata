@@ -17,11 +17,11 @@
       <div class='form-group'>
         <div class="form-check">
             <%= f.radio_button :file_version, "acceptedVersion", class: 'form-check-input', checked: @file_version == 'acceptedVersion', required: true %>
-            <%= f.label :file_version, 'Accepted Version', class: 'form-check-label' %>
+            <%= f.label :file_version, 'Accepted Manuscript', class: 'form-check-label' %>
         </div>
         <div class="form-check">
             <%= f.radio_button :file_version, "publishedVersion", class: 'form-check-input', checked: @file_version == 'publishedVersion' %>
-            <%= f.label :file_version, 'Published Version', class: 'form-check-label' %>
+            <%= f.label :file_version, 'Final Published Version', class: 'form-check-label' %>
         </div>
       </div>
 
