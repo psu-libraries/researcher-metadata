@@ -166,7 +166,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         describe 'viewing the form to deposit a publication in ScholarSphere' do
           it 'shows metadata from the publication and pre-fills the form fields with the correct values' do
             within '#new_scholarsphere_work_deposit' do
-              expect(page).to have_link("test_file.pdf").twice
+              expect(page).to have_link('test_file.pdf').twice
               expect(find_field('Title').value).to eq 'Test Publication'
               expect(find_field('Subtitle').value).to eq 'The Subtitle'
               expect(page).to have_content 'Creators'
