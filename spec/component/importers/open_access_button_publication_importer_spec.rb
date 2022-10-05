@@ -40,6 +40,13 @@ describe OpenAccessButtonPublicationImporter do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
+
+      context 'when OA Button has a valid DOI' do
+        it 'updates the publication DOI' do
+          importer.import_new
+          expect(pub.reload.doi).to eq "https://doi.org/10.1103/PhysRevLett.80.3915"
+        end
+      end 
     end
 
     context "when an existing publication's DOI does not return usable data" do
