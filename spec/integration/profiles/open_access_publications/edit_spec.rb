@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
-describe 'visiting the page to edit the open acess status of a publication' do
+describe 'visiting the page to edit the open acess status of a publication', type: :feature do
   let(:user) { create :user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author' }
   let(:pub) { create :publication,
                      title: 'Test Publication',
@@ -150,9 +150,14 @@ describe 'visiting the page to edit the open acess status of a publication' do
         end
       end
 
-      describe 'completing the workflow' do
+      describe 'completing the workflow', js: true do
         before do
-          attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+          click_on 'Add Another File'
+          sleep 0.5
+          file_elements = find_all('input[type="file"]')
+          file_elements.each do |file|
+            file.attach_file("#{Rails.root}/spec/fixtures/test_file.pdf")
+          end
           click_on 'Submit Files'
           choose 'scholarsphere_work_deposit_file_version_acceptedversion'
           click_on 'Submit'
@@ -161,6 +166,7 @@ describe 'visiting the page to edit the open acess status of a publication' do
         describe 'viewing the form to deposit a publication in ScholarSphere' do
           it 'shows metadata from the publication and pre-fills the form fields with the correct values' do
             within '#new_scholarsphere_work_deposit' do
+              expect(page).to have_link("test_file.pdf").twice
               expect(find_field('Title').value).to eq 'Test Publication'
               expect(find_field('Subtitle').value).to eq 'The Subtitle'
               expect(page).to have_content 'Creators'
@@ -237,7 +243,7 @@ describe 'visiting the page to edit the open acess status of a publication' do
                                             })
               expect(args[:depositor]).to eq 'xyz123'
               expect(args[:files]).to be_an Array
-              expect(args[:files].length).to eq 1
+              expect(args[:files].length).to eq 2
               expect(args[:files].first).to be_a File
             end
             expect(ingest).to have_received(:publish)
@@ -269,23 +275,6 @@ describe 'visiting the page to edit the open acess status of a publication' do
               expect(page).not_to have_link pub.title
             end
           end
-        end
-      end
-
-      describe 'attempting to submit an invalid form to deposit a publication in Scholarsphere' do
-        before do
-          within '#new_scholarsphere_work_deposit' do
-            click_button 'Submit Files'
-          end
-        end
-
-        it 'shows the form again' do
-          expect(page).to have_field 'Title'
-          expect(page).to have_field 'File'
-        end
-
-        it 'shows an error message' do
-          expect(page).to have_content "file can't be blank"
         end
       end
 
