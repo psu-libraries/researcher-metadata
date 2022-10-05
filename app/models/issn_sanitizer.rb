@@ -8,7 +8,8 @@ class ISSNSanitizer
   def issn
     return nil if ISBNSanitizer.new(value).isbn || DOISanitizer.new(value).url
 
-    /(ISSN |eISSN )?\S{4}-\S{4}/.match(value)
+    match = /(ISSN |eISSN )?\d{4}-\d{3}(\d|x|X)/.match(value)
+    match[0] if match
   end
 
   private
