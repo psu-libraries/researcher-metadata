@@ -15,9 +15,9 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   let!(:publication) { create :sample_publication }
   let(:op) do
     op = oab_permissions.new
-    op.version = t("file_versions.accepted_version")
-    op.this_version = { 'version' => t("file_versions.accepted_version") }
-    op.permissions = { 'version' => t("file_versions.accepted_version") }
+    op.version = t('file_versions.accepted_version')
+    op.this_version = { 'version' => t('file_versions.accepted_version') }
+    op.permissions = { 'version' => t('file_versions.accepted_version') }
     op.licence = 'https://creativecommons.org/licenses/by/4.0/'
     op.embargo_end_date = Date.tomorrow
     op.set_statement = 'Statement'

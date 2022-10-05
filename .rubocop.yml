@@ -34,6 +34,7 @@ RSpec/AnyInstance:
     - 'spec/component/models/scholarsphere_work_deposit_spec.rb'
     - 'spec/component/importers/activity_insight_importer_spec.rb'
     - 'spec/component/components/scholarshpere_deposit_form_component_spec.rb'
+    - 'spec/integration/profiles/open_access_publications/edit_spec.rb'
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
