@@ -55,9 +55,11 @@ class UnpaywallPublicationImporter
     def update_publication(publication, unpaywall_json)
       if publication.doi.present?
         unpaywall_locations = unpaywall_json['oa_locations'].presence || []
+        existing_doi = true
       else
         unpaywall_title = unpaywall_json['results'].nil? ? '' : unpaywall_json['results'].first['response']['title']
         unpaywall_locations = if title_match?(unpaywall_title, publication.title)
+                                publication.doi = DOISanitizer.new(unpaywall_json['results'].first['response']['doi']).url
                                 unpaywall_json['results'].first['response']['oa_locations'].presence || []
                               else
                                 []
@@ -91,7 +93,7 @@ class UnpaywallPublicationImporter
         locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
         locations_to_delete.each(&:destroy)
 
-        publication.open_access_status = if publication.doi.present?
+        publication.open_access_status = if existing_doi
                                            unpaywall_json['oa_status']
                                          else
                                            unpaywall_json['results'].nil? ? nil : unpaywall_json['results'].first['response']['oa_status']

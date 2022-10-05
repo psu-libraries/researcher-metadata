@@ -29,10 +29,15 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.open_access_status).to eq 'green'
         end
+
+        it 'assigns the DOI from Unpaywall to the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Economic Development' }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -46,6 +51,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the open access status on the publication' do
           importer.import_all
           expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI on the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to be_nil
         end
       end
     end
@@ -73,6 +83,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.open_access_status).to eq 'green'
         end
+
+        it 'assigns the DOI from Unpaywall to the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -90,6 +105,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the open access status on the publication' do
           importer.import_all
           expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI on the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq ''
         end
       end
     end
@@ -433,10 +453,15 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.open_access_status).to eq 'green'
         end
+
+        it 'assigns the DOI from Unpaywall to the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Economic Development' }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -450,6 +475,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the open access status on the publication' do
           importer.import_all
           expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI on the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to be_nil
         end
       end
     end
@@ -477,6 +507,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.open_access_status).to eq 'green'
         end
+
+        it 'assigns the DOI from Unpaywall to the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -494,6 +529,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the open access status on the publication' do
           importer.import_all
           expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI from Unpaywall to the publication' do
+          importer.import_all
+          expect(pub.reload.doi).to eq ''
         end
       end
     end
