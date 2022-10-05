@@ -209,3 +209,9 @@ en:
     submit:
       new_deputy_assignment_form:
         create: Add a New Proxy
+
+  file_versions:
+    accepted_version: 'acceptedVersion'
+    accepted_version_display: 'Accepted Manuscript'
+    published_version: 'publishedVersion'
+    published_version_display: 'Final Published Version'

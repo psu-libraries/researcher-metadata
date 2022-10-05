@@ -150,6 +150,38 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         end
       end
 
+      describe 'file upload and version check' do
+        context 'when acceptedVersion is found' do
+          it 'preselects Accepted Manuscript' do
+            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.accepted_version'))
+            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+            click_on 'Submit Files'
+            expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+          end
+        end
+
+        context 'when publishedVersion is found' do
+          it 'preselects Final Published Version' do
+            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.published_version'))
+            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+            click_on 'Submit Files'
+            expect(page).to have_content('This looks like the Final Published Version of the article.')
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+          end
+        end
+
+        context 'when nothing is found' do
+          it 'does not preselect anything' do
+            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+            click_on 'Submit Files'
+            expect(page).to have_content('We have not been able to determine automatically which version of the article this is.')
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+          end
+        end
+      end
+
       describe 'completing the workflow', js: true do
         before do
           click_on 'Add Another File'

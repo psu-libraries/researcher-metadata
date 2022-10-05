@@ -141,10 +141,10 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
 
     def version_text(version)
-      if version == OabPermissionsService::ACCEPTED_VERSION
-        'accepted manuscript'
+      if version == I18n.t('file_versions.accepted_version')
+        I18n.t('file_versions.accepted_version_display')
       else
-        'final published version'
+        I18n.t('file_versions.published_version_display')
       end
     end
 end

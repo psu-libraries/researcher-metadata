@@ -42,6 +42,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     if exif_uploads.valid?
       @cache_files = exif_uploads.cache_files
       @file_version = exif_uploads.version
+      @file_version_display = exif_uploads.version_display
       render :scholarsphere_file_version
     else
       flash.now[:alert] = "Validation failed:  #{exif_uploads.errors.full_messages.join(', ')}"

@@ -35,6 +35,14 @@ class ScholarsphereExifUploads
     end.compact.uniq.first
   end
 
+  def version_display
+    if version == I18n.t('file_versions.accepted_version')
+      I18n.t('file_versions.accepted_version_display')
+    elsif version == I18n.t('file_versions.published_version')
+      I18n.t('file_versions.published_version_display')
+    end
+  end
+
   def cache_files
     uploader = ScholarsphereFileUploader.new
 

@@ -9,20 +9,18 @@ class ScholarsphereExifFileVersion
     @journal = journal
   end
 
-  ACCEPTED_VERSION = 'acceptedVersion'
-  PUBLISHED_VERSION = 'publishedVersion'
   PUBLISHED_VERSION_CREATORS = ['indesign', 'arbortext', 'elsevier', 'springer'].freeze
 
   def version
     @version ||= if accepted?
-                   ACCEPTED_VERSION
+                   I18n.t('file_versions.accepted_version')
                  elsif published?
-                   PUBLISHED_VERSION
+                   I18n.t('file_versions.published_version')
                  end
   end
 
   def accepted_version?
-    version == ACCEPTED_VERSION
+    version == I18n.t('file_versions.accepted_version')
   end
 
   private

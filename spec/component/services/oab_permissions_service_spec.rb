@@ -6,7 +6,7 @@ describe OabPermissionsService do
   let(:service) { described_class.new(doi, version) }
 
   context 'when version is valid' do
-    let(:version) { 'publishedVersion' }
+    let(:version) { I18n.t('file_versions.published_version') }
     let(:doi) { '10.1231/abcd.54321' }
 
     context 'when a network error is raised' do
@@ -176,7 +176,7 @@ describe OabPermissionsService do
 
       describe '#other_version_preferred?' do
         context 'when this_version is present' do
-          before { allow(service).to receive(:this_version).and_return({ 'version' => 'acceptedVersion' }) }
+          before { allow(service).to receive(:this_version).and_return({ 'version' => I18n.t('file_versions.accepted_version') }) }
 
           it 'returns false' do
             expect(service.other_version_preferred?).to be false
@@ -188,7 +188,7 @@ describe OabPermissionsService do
 
           context 'when accepted version is present and published version is not' do
             before do
-              allow(service).to receive(:accepted_version).and_return({ 'version' => 'acceptedVersion' })
+              allow(service).to receive(:accepted_version).and_return({ 'version' => I18n.t('file_versions.accepted_version') })
               allow(service).to receive(:published_version).and_return({})
             end
 
@@ -200,7 +200,7 @@ describe OabPermissionsService do
           context 'when published version is present and accepted version is not' do
             before do
               allow(service).to receive(:accepted_version).and_return({})
-              allow(service).to receive(:published_version).and_return({ 'version' => 'publishedVersion' })
+              allow(service).to receive(:published_version).and_return({ 'version' => I18n.t('file_versions.published_version') })
             end
 
             it 'returns true' do

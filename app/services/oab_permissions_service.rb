@@ -4,9 +4,7 @@ class OabPermissionsService
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version, :permissions
 
-  ACCEPTED_VERSION = 'acceptedVersion'
-  PUBLISHED_VERSION = 'publishedVersion'
-  VALID_VERSIONS = [ACCEPTED_VERSION, PUBLISHED_VERSION].freeze
+  VALID_VERSIONS = [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
 
   def initialize(doi, version)
     raise InvalidVersion if VALID_VERSIONS.exclude?(version)
@@ -50,7 +48,7 @@ class OabPermissionsService
 
     def accepted_version
       if permissions.present?
-        permissions.map { |perm| perm if perm['version'] == ACCEPTED_VERSION }.first.presence || {}
+        permissions.map { |perm| perm if perm['version'] == I18n.t('file_versions.accepted_version') }.first.presence || {}
       else
         {}
       end
@@ -58,7 +56,7 @@ class OabPermissionsService
 
     def published_version
       if permissions.present?
-        permissions.map { |perm| perm if perm['version'] == PUBLISHED_VERSION }.first.presence || {}
+        permissions.map { |perm| perm if perm['version'] == I18n.t('file_versions.published_version') }.first.presence || {}
       else
         {}
       end

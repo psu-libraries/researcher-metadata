@@ -118,7 +118,7 @@ describe UnpaywallPublicationImporter, :vcr do
             expect(oal.license).to be_nil
             expect(oal.oa_date).to be_nil
             expect(oal.source_updated_at).to eq '2019-12-26T19:24:13.434842'.to_datetime
-            expect(oal.version).to eq 'publishedVersion'
+            expect(oal.version).to eq I18n.t('file_versions.published_version')
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
@@ -160,7 +160,7 @@ describe UnpaywallPublicationImporter, :vcr do
             expect(oal.license).to be_nil
             expect(oal.oa_date).to be_nil
             expect(oal.source_updated_at).to eq '2019-12-26T19:24:13.434842'.to_datetime
-            expect(oal.version).to eq 'publishedVersion'
+            expect(oal.version).to eq I18n.t('file_versions.published_version')
           end
 
           it 'removes the existing open access location from RMD' do

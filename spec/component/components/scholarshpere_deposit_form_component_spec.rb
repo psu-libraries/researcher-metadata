@@ -15,9 +15,9 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   let!(:publication) { create :sample_publication }
   let(:op) do
     op = oab_permissions.new
-    op.version = 'acceptedVersion'
-    op.this_version = { 'version' => 'acceptedVersion' }
-    op.permissions = { 'version' => 'acceptedVersion' }
+    op.version = t("file_versions.accepted_version")
+    op.this_version = { 'version' => t("file_versions.accepted_version") }
+    op.permissions = { 'version' => t("file_versions.accepted_version") }
     op.licence = 'https://creativecommons.org/licenses/by/4.0/'
     op.embargo_end_date = Date.tomorrow
     op.set_statement = 'Statement'
@@ -66,8 +66,8 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
     context 'when a published version' do
       before do
-        op.version = 'publishedVersion'
-        op.this_version = { 'version' => 'publishedVersion' }
+        op.version = I18n.t('file_versions.published_version')
+        op.this_version = { 'version' => I18n.t('file_versions.published_version') }
       end
 
       it 'renders an alert saying sharing rules have been found' do
@@ -184,7 +184,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
   context 'when our published version is not found' do
     before do
-      op.version = 'publishedVersion'
+      op.version = I18n.t('file_versions.published_version')
       op.this_version = {}
       op[:other_version_preferred?] = true
     end
