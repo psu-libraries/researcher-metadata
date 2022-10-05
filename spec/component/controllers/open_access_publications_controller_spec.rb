@@ -422,10 +422,19 @@ describe OpenAccessPublicationsController, type: :controller do
               description: 'test',
               published_date: '2021-03-30',
               rights: 'https://creativecommons.org/licenses/by/4.0/',
-              deposit_agreement: '1'
-            }.merge(file_upload_attrs)
+              deposit_agreement: '1',
+              file_uploads_attributes: { '0' => { cache_path: cache_path } }
+            }
           }
         }
+        let(:exif_params) { { file_uploads_attributes: { '0' => { file: file, journal: nil } } } }
+        let(:exif_uploads) { ScholarsphereExifUploads.new(exif_params) }
+        let(:cache_files)  { exif_uploads.cache_files }
+        let(:cache_path) do
+          return nil if cache_files.empty?
+
+          cache_files.first[:cache_path]
+        end
 
         context 'when given valid params' do
           it 'creates a new scholarsphere work deposit' do
