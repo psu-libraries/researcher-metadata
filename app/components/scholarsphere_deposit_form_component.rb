@@ -12,7 +12,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
   def permissions_alert
     if this_version_present?
-      t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found')
+      t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found', this_version: this_version_text)
     elsif other_version_preferred?
       t('simple_form.scholarsphere_deposit_flashes.other_version_preferred_html',
         this_version: this_version_text,
@@ -142,7 +142,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
     def version_text(version)
       if version == OabPermissionsService::ACCEPTED_VERSION
-        'acccepted manuscript'
+        'accepted manuscript'
       else
         'final published version'
       end

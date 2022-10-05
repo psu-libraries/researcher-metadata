@@ -57,9 +57,23 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   end
 
   context 'when our version is found from oab permissions api' do
-    it 'renders an alert saying sharing rules have been found' do
-      view_render
-      expect(rendered_component).to have_text('We found sharing rules for your work')
+    context 'when an accepted version' do
+      it 'renders an alert saying sharing rules have been found' do
+        view_render
+        expect(rendered_component).to have_text('We found sharing rules for your accepted manuscript')
+      end
+    end
+
+    context 'when a published version' do
+      before do
+        op.version = 'publishedVersion'
+        op.this_version = { 'version' => 'publishedVersion' }
+      end
+
+      it 'renders an alert saying sharing rules have been found' do
+        view_render
+        expect(rendered_component).to have_text('We found sharing rules for your final published version')
+      end
     end
 
     context 'when a license is found' do
@@ -152,7 +166,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when a published version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(rendered_component).to have_text('We could not find sharing rules for the acccepted manuscript of this work, only the final published version')
+        expect(rendered_component).to have_text('We could not find sharing rules for the accepted manuscript of this work, only the final published version')
       end
     end
 
@@ -178,7 +192,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when an accepted version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(rendered_component).to have_text('We could not find sharing rules for the final published version of this work, only the acccepted manuscript')
+        expect(rendered_component).to have_text('We could not find sharing rules for the final published version of this work, only the accepted manuscript')
       end
     end
 
