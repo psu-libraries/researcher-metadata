@@ -38,12 +38,17 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def scholarsphere_file_version
     extra_params = { journal: publication&.journal&.title }
     exif_uploads = ScholarsphereExifUploads.new(deposit_params.merge(extra_params))
-    @cache_files = exif_uploads.cache_files
-    @file_version = exif_uploads.version
 
-    render :scholarsphere_file_version
+    if exif_uploads.valid?
+      @cache_files = exif_uploads.cache_files
+      @file_version = exif_uploads.version
+      render :scholarsphere_file_version
+    else
+      flash.now[:alert] = "Validation failed:  #{exif_uploads.errors.full_messages.join(', ')}"
+      render :edit
+    end
   rescue ActionController::ParameterMissing
-    flash[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+    flash.now[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
     @form = OpenAccessURLForm.new
     @authorship = Authorship.find_by(user: current_user, publication: publication)
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
@@ -60,16 +65,22 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_deposit_form
-    @cache_files = params[:scholarsphere_work_deposit][:cache_files]
-    @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
-    @permissions = OabPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
-                                                            { rights: @permissions.licence,
-                                                              embargoed_until: @permissions.embargo_end_date,
-                                                              publisher_statement: @permissions.set_statement })
-    @deposit.file_uploads.build
-    render :scholarsphere_deposit_form
+    @cache_files = params.dig(:scholarsphere_work_deposit, :cache_files)
+    if @cache_files.nil?
+      flash.now[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+      render :edit
+    else
+      @cache_files = params[:scholarsphere_work_deposit][:cache_files]
+      @authorship = Authorship.find_by(user: current_user, publication: publication)
+      @permissions = OabPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
+      @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
+                                                              { rights: @permissions.licence,
+                                                                embargoed_until: @permissions.embargo_end_date,
+                                                                publisher_statement: @permissions.set_statement })
+
+      @deposit.file_uploads.build
+      render :scholarsphere_deposit_form
+    end
   rescue StandardError
     flash[:error] = I18n.t('profile.open_access_publications.create_scholarsphere_deposit.fail')
   end
@@ -80,15 +91,13 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
     @deposit.file_uploads = []
 
-    files = params[:scholarsphere_work_deposit][:file_uploads_attributes]
-    if files.present?
-      files.each do |_index, file|
-        unless file.empty? || file[:cache_path].empty?
-          ss_file_upload = ScholarsphereFileUpload.new
-          ss_file_upload.file = File.new(file[:cache_path])
-          ss_file_upload.save!
-          @deposit.file_uploads << ss_file_upload
-        end
+    files = params.dig(:scholarsphere_work_deposit, :file_uploads_attributes)
+    files&.each do |_index, file|
+      if file.present? && file[:cache_path].present?
+        ss_file_upload = ScholarsphereFileUpload.new
+        ss_file_upload.file = File.new(file[:cache_path])
+        ss_file_upload.save!
+        @deposit.file_uploads << ss_file_upload
       end
     end
 
@@ -128,7 +137,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :publisher,
                                                          :file_version,
                                                          :journal,
-                                                         cache_files: [],
+                                                         cache_files: [:cache_path, :original_filename],
                                                          file_uploads_attributes: [:file, :file_cache])
     end
 end

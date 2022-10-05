@@ -19,7 +19,7 @@ class ScholarsphereExifUploads
 
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
-      unless file.nil?
+      if file.present?
         @exif_file_versions.push(ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal))
         @file_uploads.push(file)
       end
@@ -57,7 +57,7 @@ class ScholarsphereExifUploads
 
     def at_least_one_file_upload
       if @file_uploads.blank?
-        flash[:error] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+        errors.add(:file_uploads, I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence'))
       end
     end
 end
