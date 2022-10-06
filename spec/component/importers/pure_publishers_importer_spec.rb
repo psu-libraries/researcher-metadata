@@ -24,6 +24,17 @@ describe PurePublishersImporter do
 
   describe '#call' do
     context 'when the API endpoint is found' do
+      let(:email) { spy 'notification email' }
+
+      before do
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
+      end
+
+      it 'does not send a notification email to RMD admins' do
+        importer.call
+        expect(email).not_to have_received(:deliver_now)
+      end
+
       context 'when no publishers already exist in the database' do
         it 'creates new publisher records for every publisher in the imported data' do
           expect { importer.call }.to change(Publisher, :count).by 2
@@ -48,6 +59,8 @@ describe PurePublishersImporter do
     end
 
     context 'when the API endpoint is not found' do
+      let(:email) { spy 'notification email' }
+
       before do
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/publishers?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
@@ -56,6 +69,7 @@ describe PurePublishersImporter do
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
       end
 
       it 'captures and logs the error' do
@@ -66,6 +80,11 @@ describe PurePublishersImporter do
           error: an_instance_of(PureImporter::ServiceNotFound),
           metadata: {}
         )
+      end
+
+      it 'sends a notification email to RMD admins' do
+        importer.call
+        expect(email).to have_received(:deliver_now)
       end
     end
 

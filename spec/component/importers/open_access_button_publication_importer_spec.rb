@@ -7,28 +7,48 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil }
+      let!(:pub) { create :publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+      before do
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
       end
 
-      it "does not update the publication's Open Access Button check timestamp" do
-        importer.import_all
-        expect(pub.reload.open_access_button_last_checked_at).to be_nil
+      it 'creates a new open access location for the publication' do
+        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
+      end
+
+      it 'updates Open Access Button check timestamp on the publication' do
+        importer.import_new
+        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
       end
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '' }
+      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+      before do
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
       end
 
-      it "does not update the publication's Open Access Button check timestamp" do
-        importer.import_all
-        expect(pub.reload.open_access_button_last_checked_at).to be_nil
+      it 'creates a new open access location for the publication' do
+        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
+      end
+
+      it 'updates Open Access Button check timestamp on the publication' do
+        importer.import_new
+        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
       end
     end
 
@@ -196,28 +216,38 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil }
+      let!(:pub) { create :publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
+      before do
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
       end
 
-      it "does not update the publication's Open Access Button check timestamp" do
+      it 'creates a new open access location for the publication' do
+        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
+      end
+
+      it 'updates Open Access Button check timestamp on the publication' do
         importer.import_new
-        expect(pub.reload.open_access_button_last_checked_at).to be_nil
+        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '' }
+      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
-      it 'does not create any open access locations for the publication' do
-        expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
+      before do
+        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
       end
 
-      it "does not update the publication's Open Access Button check timestamp" do
+      it 'creates a new open access location for the publication' do
+        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
+      end
+
+      it 'updates Open Access Button check timestamp on the publication' do
         importer.import_new
-        expect(pub.reload.open_access_button_last_checked_at).to be_nil
+        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 

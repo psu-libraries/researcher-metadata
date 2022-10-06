@@ -36,6 +36,17 @@ describe PurePublicationImporter do
     let!(:duplicate_pub2) { create :publication, title: 'Third Test Publication With a Really Unique Title', visible: true }
 
     context 'when the API endpoint is found' do
+      let(:email) { spy 'notification email' }
+
+      before do
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
+      end
+
+      it 'does not send a notification email to RMD admins' do
+        importer.call
+        expect(email).not_to have_received(:deliver_now)
+      end
+
       context 'when no publication import records exist in the database' do
         it 'creates a new publication import record for each Published or Accepted/In press publication in the imported data' do
           expect { importer.call }.to change(PublicationImport, :count).by 4
@@ -610,13 +621,15 @@ describe PurePublicationImporter do
     end
 
     context 'when the API endpoint is not found' do
+      let(:email) { spy 'notification email' }
+
       before do
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=500&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
-
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
         allow(ImporterErrorLog).to receive(:log_error)
       end
 
@@ -628,6 +641,11 @@ describe PurePublicationImporter do
           error: an_instance_of(PureImporter::ServiceNotFound),
           metadata: {}
         )
+      end
+
+      it 'sends a notification email to RMD admins' do
+        importer.call
+        expect(email).to have_received(:deliver_now)
       end
     end
 

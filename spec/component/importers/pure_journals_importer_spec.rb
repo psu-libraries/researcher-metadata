@@ -25,6 +25,17 @@ describe PureJournalsImporter do
 
   describe '#call' do
     context 'when the API endpoint is found' do
+      let(:email) { spy 'notification email' }
+
+      before do
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
+      end
+
+      it 'does not send a notification email to RMD admins' do
+        importer.call
+        expect(email).not_to have_received(:deliver_now)
+      end
+
       context 'when no journals already exist in the database' do
         it 'creates new journal records for every journal in the imported data' do
           expect { importer.call }.to change(Journal, :count).by 2
@@ -87,6 +98,8 @@ describe PureJournalsImporter do
     end
 
     context 'when the API endpoint is not found' do
+      let(:email) { spy 'notification email' }
+
       before do
         allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/journals?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
@@ -95,6 +108,7 @@ describe PureJournalsImporter do
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)
+        allow(AdminNotificationsMailer).to receive(:pure_import_error).and_return email
       end
 
       it 'captures and logs the error' do
@@ -105,6 +119,11 @@ describe PureJournalsImporter do
           error: an_instance_of(PureImporter::ServiceNotFound),
           metadata: {}
         )
+      end
+
+      it 'sends a notification email to RMD admins' do
+        importer.call
+        expect(email).to have_received(:deliver_now)
       end
     end
 

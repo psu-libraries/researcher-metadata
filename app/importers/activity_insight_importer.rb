@@ -261,6 +261,7 @@ class ActivityInsightImporter
         page_range: pub.page_range,
         url: pub.url,
         issn: pub.issn,
+        isbn: pub.isbn,
         abstract: pub.abstract,
         authors_et_al: pub.authors_et_al,
         published_on: pub.published_on,
@@ -814,7 +815,11 @@ class ActivityInsightPublication
   end
 
   def issn
-    text_for('ISBNISSN')
+    ISSNSanitizer.new(isbnissn_element).issn || ISSNSanitizer.new(doi_element).issn || ISSNSanitizer.new(url).issn
+  end
+
+  def isbn
+    ISBNSanitizer.new(isbnissn_element).isbn || ISBNSanitizer.new(doi_element).isbn || ISBNSanitizer.new(url).isbn
   end
 
   def abstract
@@ -830,7 +835,7 @@ class ActivityInsightPublication
   end
 
   def doi
-    DOISanitizer.new(doi_element).url || DOISanitizer.new(url).url || DOISanitizer.new(issn).url
+    DOISanitizer.new(doi_element).url || DOISanitizer.new(url).url || DOISanitizer.new(isbnissn_element).url
   end
 
   def faculty_author
@@ -863,6 +868,10 @@ class ActivityInsightPublication
 
     def doi_element
       text_for('DOI')
+    end
+
+    def isbnissn_element
+      text_for('ISBNISSN')
     end
 
     def text_for(element)
