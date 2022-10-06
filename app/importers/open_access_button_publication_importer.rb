@@ -73,8 +73,4 @@ class OpenAccessButtonPublicationImporter
         }
       )
     end
-
-    def doi
-      DOISanitizer.new(doi_element).url || DOISanitizer.new(url).url || DOISanitizer.new(issn).url
-    end
 end
