@@ -15,9 +15,9 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   let!(:publication) { create :sample_publication }
   let(:op) do
     op = oab_permissions.new
-    op.version = t('file_versions.accepted_version')
-    op.this_version = { 'version' => t('file_versions.accepted_version') }
-    op.permissions = { 'version' => t('file_versions.accepted_version') }
+    op.version = I18n.t("file_versions.accepted_version")
+    op.this_version = { 'version' => I18n.t("file_versions.accepted_version") }
+    op.permissions = { 'version' => I18n.t("file_versions.accepted_version") }
     op.licence = 'https://creativecommons.org/licenses/by/4.0/'
     op.embargo_end_date = Date.tomorrow
     op.set_statement = 'Statement'
@@ -60,7 +60,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when an accepted version' do
       it 'renders an alert saying sharing rules have been found' do
         view_render
-        expect(rendered_component).to have_text('We found sharing rules for your accepted manuscript')
+        expect(rendered_component).to have_text('We found sharing rules for your Accepted Manuscript')
       end
     end
 
@@ -72,7 +72,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'renders an alert saying sharing rules have been found' do
         view_render
-        expect(rendered_component).to have_text('We found sharing rules for your final published version')
+        expect(rendered_component).to have_text('We found sharing rules for your Final Published Version')
       end
     end
 
@@ -166,7 +166,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when a published version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(rendered_component).to have_text('We could not find sharing rules for the accepted manuscript of this work, only the final published version')
+        expect(rendered_component).to have_text('We could not find sharing rules for the Accepted Manuscript of this work, only the Final Published Version')
       end
     end
 
@@ -192,7 +192,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     context 'when an accepted version exists' do
       it 'renders an alert saying the published version is preferred' do
         view_render
-        expect(rendered_component).to have_text('We could not find sharing rules for the final published version of this work, only the accepted manuscript')
+        expect(rendered_component).to have_text('We could not find sharing rules for the Final Published Version of this work, only the Accepted Manuscript')
       end
     end
 
