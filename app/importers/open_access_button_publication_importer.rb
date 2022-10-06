@@ -44,6 +44,8 @@ class OpenAccessButtonPublicationImporter
 
       existing_oa_location = publication.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
 
+      publication.doi = DOISanitizer.new(oab_json['metadata']['doi']).url if publication.doi.blank?
+
       if oab_json['url']
         if existing_oa_location
           existing_oa_location.update!(url: oab_json['url'])
@@ -53,6 +55,7 @@ class OpenAccessButtonPublicationImporter
       else
         existing_oa_location.try(:destroy)
       end
+
       publication.open_access_button_last_checked_at = Time.zone.now
       publication.save!
 

@@ -22,6 +22,11 @@ describe OpenAccessButtonPublicationImporter do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -39,6 +44,11 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates Open Access Button check timestamp on the publication' do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
       end
     end
 
