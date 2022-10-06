@@ -18,7 +18,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
     op.version = I18n.t('file_versions.accepted_version')
     op.this_version = { 'version' => I18n.t('file_versions.accepted_version') }
     op.permissions = { 'version' => I18n.t('file_versions.accepted_version') }
-    op.licence = 'https://creativecommons.org/licenses/by/4.0/'
+    op.licence = 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
     op.embargo_end_date = Date.tomorrow
     op.set_statement = 'Statement'
     op[:other_version_preferred?] = false
@@ -80,7 +80,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
       it 'renders a notice saying a license has been found' do
         view_render
         expect(rendered_component).to have_text('We found the license for your work')
-        expect(rendered_component).to have_field('License', with: 'https://creativecommons.org/licenses/by/4.0/')
+        expect(rendered_component).to have_field('License', with: 'https://creativecommons.org/licenses/by-nc-nd/4.0/')
       end
     end
 

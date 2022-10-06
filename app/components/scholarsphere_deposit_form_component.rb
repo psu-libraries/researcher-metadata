@@ -70,7 +70,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
     def rights_selected
       if licence_present?
-        nil
+        @permissions.licence
       else
         'https://rightsstatements.org/page/InC/1.0/'
       end
