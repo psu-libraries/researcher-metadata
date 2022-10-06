@@ -6,6 +6,7 @@
           <%= permissions_alert %>
         </div>
       </section>
+      <%= f.label 'Files:', required: true %>
       <div class="file-uploads">
         <%= f.simple_fields_for :file_uploads do |sfu| %>
           <%= render 'deposit_form_files', f: sfu %>
