@@ -5,6 +5,8 @@ require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/importers/activity_insight_importer'
 require_relative '../../../app/models/doi_sanitizer'
+require_relative '../../../app/models/issn_sanitizer'
+require_relative '../../../app/models/isbn_sanitizer'
 require_relative '../../../app/mappers/activity_insight_publication_type_map_in'
 
 describe ActivityInsightPublication do
@@ -683,21 +685,227 @@ describe ActivityInsightPublication do
   end
 
   describe '#issn' do
-    before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return issn_element }
+    before do
+      allow(ISSNSanitizer).to receive(:new).with('ISSN web address').and_return successful_wa_sanitizer
+      allow(ISSNSanitizer).to receive(:new).with('non-ISSN web address').and_return unsuccessful_wa_sanitizer
+      allow(ISSNSanitizer).to receive(:new).with('ISSN in ISBNISSN').and_return successful_issn_sanitizer
+      allow(ISSNSanitizer).to receive(:new).with('non-ISSN in ISBNISSN').and_return unsuccessful_issn_sanitizer
+      allow(ISSNSanitizer).to receive(:new).with('ISSN in DOI').and_return successful_doi_sanitizer
+      allow(ISSNSanitizer).to receive(:new).with('non-ISSN in DOI').and_return unsuccessful_doi_sanitizer
+    end
 
-    context 'when the issn element in the given data is empty' do
-      let(:issn_element) { double 'issn element', text: '' }
+    let(:successful_wa_sanitizer) { double 'ISSN sanitizer', issn: 'wa ISSN' }
+    let(:unsuccessful_wa_sanitizer) { double 'ISSN sanitizer', issn: nil }
+    let(:successful_issn_sanitizer) { double 'ISSN sanitizer', issn: 'ISSN' }
+    let(:unsuccessful_issn_sanitizer) { double 'ISSN sanitizer', issn: nil }
+    let(:successful_doi_sanitizer) { double 'ISSN sanitizer', issn: 'doi ISSN' }
+    let(:unsuccessful_doi_sanitizer) { double 'ISSN sanitizer', issn: nil }
 
-      it 'returns nil' do
-        expect(pub.issn).to be_nil
+    let(:issn_web_address_element) { double 'ISSN web address element', text: 'ISSN web address' }
+    let(:non_issn_web_address_element) { double 'non-ISSN web address element', text: 'non-ISSN web address' }
+    let(:issn_isbnissn_element) { double 'ISSN isbnissn element', text: 'ISSN in ISBNISSN' }
+    let(:non_issn_isbnissn_element) { double 'non-ISSN isbnissn element', text: 'non-ISSN in ISBNISSN' }
+    let(:issn_doi_element) { double 'ISSN in doi element', text: 'ISSN in DOI' }
+    let(:non_issn_doi_element) { double 'non-ISSN in doi element', text: 'non-ISSN in DOI' }
+
+    context 'when ISSN can be parsed out of the web address element in the given data' do
+      before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return issn_web_address_element }
+
+      context 'when ISSN can be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return issn_doi_element }
+
+        context 'when ISSN can be parsed out of the ISBN/ISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return issn_isbnissn_element }
+
+          it 'returns the ISSN from the ISBNISSN element' do
+            expect(pub.issn).to eq 'ISSN'
+          end
+        end
+
+        context 'when ISSN cannot be parsed out of the ISBN/ISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_issn_isbnissn_element }
+
+          it 'returns the ISSN from the doi element' do
+            expect(pub.issn).to eq 'doi ISSN'
+          end
+        end
+      end
+
+      context 'when ISSN cannot be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return non_issn_doi_element }
+
+        context 'when ISSN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return issn_isbnissn_element }
+
+          it 'returns the ISSN from the ISBNISSN element' do
+            expect(pub.issn).to eq 'ISSN'
+          end
+        end
+
+        context 'when a ISSN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_issn_isbnissn_element }
+
+          it 'returns the ISSN from the web_address element' do
+            expect(pub.issn).to eq 'wa ISSN'
+          end
+        end
       end
     end
 
-    context 'when the issn element in the given data contains text' do
-      let(:issn_element) { double 'issn element', text: "\n     ISSN  \n   " }
+    context 'when ISSN cannot be parsed out of the web_address element in the given data' do
+      before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return non_issn_web_address_element }
 
-      it 'returns the text with surrounding whitespace removed' do
-        expect(pub.issn).to eq 'ISSN'
+      context 'when ISSN can be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return issn_doi_element }
+
+        context 'when ISSN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return issn_isbnissn_element }
+
+          it 'returns the ISSN from the ISBNISSN element' do
+            expect(pub.issn).to eq 'ISSN'
+          end
+        end
+
+        context 'when ISSN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_issn_isbnissn_element }
+
+          it 'returns the ISSN from the doi element' do
+            expect(pub.issn).to eq 'doi ISSN'
+          end
+        end
+      end
+
+      context 'when ISSN cannot be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return non_issn_doi_element }
+
+        context 'when ISSN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return issn_isbnissn_element }
+
+          it 'returns the ISSN from the ISBNISSN element' do
+            expect(pub.issn).to eq 'ISSN'
+          end
+        end
+
+        context 'when ISSN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_issn_isbnissn_element }
+
+          it 'returns nil' do
+            expect(pub.issn).to be_nil
+          end
+        end
+      end
+    end
+  end
+
+  describe '#isbn' do
+    before do
+      allow(ISBNSanitizer).to receive(:new).with('ISBN web address').and_return successful_wa_sanitizer
+      allow(ISBNSanitizer).to receive(:new).with('non-ISBN web address').and_return unsuccessful_wa_sanitizer
+      allow(ISBNSanitizer).to receive(:new).with('ISBN in ISBNISSN').and_return successful_issn_sanitizer
+      allow(ISBNSanitizer).to receive(:new).with('non-ISBN in ISBNISSN').and_return unsuccessful_issn_sanitizer
+      allow(ISBNSanitizer).to receive(:new).with('ISBN in DOI').and_return successful_doi_sanitizer
+      allow(ISBNSanitizer).to receive(:new).with('non-ISBN in DOI').and_return unsuccessful_doi_sanitizer
+    end
+
+    let(:successful_wa_sanitizer) { double 'ISBN sanitizer', isbn: 'wa ISBN' }
+    let(:unsuccessful_wa_sanitizer) { double 'ISBN sanitizer', isbn: nil }
+    let(:successful_issn_sanitizer) { double 'ISBN sanitizer', isbn: 'ISBN' }
+    let(:unsuccessful_issn_sanitizer) { double 'ISBN sanitizer', isbn: nil }
+    let(:successful_doi_sanitizer) { double 'ISBN sanitizer', isbn: 'doi ISBN' }
+    let(:unsuccessful_doi_sanitizer) { double 'ISBN sanitizer', isbn: nil }
+
+    let(:isbn_web_address_element) { double 'ISBN web address element', text: 'ISBN web address' }
+    let(:non_isbn_web_address_element) { double 'non-ISBN web address element', text: 'non-ISBN web address' }
+    let(:isbn_isbnissn_element) { double 'ISBN isbnissn element', text: 'ISBN in ISBNISSN' }
+    let(:non_isbn_isbnissn_element) { double 'non-ISBN isbnissn element', text: 'non-ISBN in ISBNISSN' }
+    let(:isbn_doi_element) { double 'ISBN in doi element', text: 'ISBN in DOI' }
+    let(:non_isbn_doi_element) { double 'non-ISBN in doi element', text: 'non-ISBN in DOI' }
+
+    context 'when ISBN can be parsed out of the web address element in the given data' do
+      before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return isbn_web_address_element }
+
+      context 'when ISBN can be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return isbn_doi_element }
+
+        context 'when ISBN can be parsed out of the ISBN/ISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return isbn_isbnissn_element }
+
+          it 'returns the ISBN from the ISBNISSN element' do
+            expect(pub.isbn).to eq 'ISBN'
+          end
+        end
+
+        context 'when ISBN cannot be parsed out of the ISBN/ISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_isbn_isbnissn_element }
+
+          it 'returns the ISBN from the doi element' do
+            expect(pub.isbn).to eq 'doi ISBN'
+          end
+        end
+      end
+
+      context 'when ISBN cannot be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return non_isbn_doi_element }
+
+        context 'when ISBN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return isbn_isbnissn_element }
+
+          it 'returns the ISBN from the ISBNISSN element' do
+            expect(pub.isbn).to eq 'ISBN'
+          end
+        end
+
+        context 'when a ISBN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_isbn_isbnissn_element }
+
+          it 'returns the ISBN from the web_address element' do
+            expect(pub.isbn).to eq 'wa ISBN'
+          end
+        end
+      end
+    end
+
+    context 'when ISBN cannot be parsed out of the web_address element in the given data' do
+      before { allow(parsed_pub).to receive(:css).with('WEB_ADDRESS').and_return non_isbn_web_address_element }
+
+      context 'when ISBN can be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return isbn_doi_element }
+
+        context 'when ISBN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return isbn_isbnissn_element }
+
+          it 'returns the ISBN from the ISBNISSN element' do
+            expect(pub.isbn).to eq 'ISBN'
+          end
+        end
+
+        context 'when ISBN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_isbn_isbnissn_element }
+
+          it 'returns the ISBN from the doi element' do
+            expect(pub.isbn).to eq 'doi ISBN'
+          end
+        end
+      end
+
+      context 'when ISBN cannot be parsed out of the doi element in the given data' do
+        before { allow(parsed_pub).to receive(:css).with('DOI').and_return non_isbn_doi_element }
+
+        context 'when ISBN can be parsed out of the ISBNISSN element in the given data' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return isbn_isbnissn_element }
+
+          it 'returns the ISBN from the ISBNISSN element' do
+            expect(pub.isbn).to eq 'ISBN'
+          end
+        end
+
+        context 'when ISBN cannot be parsed out of the ISBNISSN element' do
+          before { allow(parsed_pub).to receive(:css).with('ISBNISSN').and_return non_isbn_isbnissn_element }
+
+          it 'returns nil' do
+            expect(pub.isbn).to be_nil
+          end
+        end
       end
     end
   end
