@@ -12,14 +12,14 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
   def permissions_alert
     if this_version_present?
-     I18n.t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found', this_version: this_version_text)
+      I18n.t('simple_form.scholarsphere_deposit_flashes.sharing_rules_found', this_version: this_version_text)
     elsif other_version_preferred?
-     I18n.t('simple_form.scholarsphere_deposit_flashes.other_version_preferred_html',
-        this_version: this_version_text,
-        other_version: other_version_text,
-        url: edit_open_access_publication_url(@deposit.publication)).html_safe
+      I18n.t('simple_form.scholarsphere_deposit_flashes.other_version_preferred_html',
+             this_version: this_version_text,
+             other_version: other_version_text,
+             url: edit_open_access_publication_url(@deposit.publication)).html_safe
     else
-     I18n.t('simple_form.scholarsphere_deposit_flashes.sharing_rules_not_found_html').html_safe
+      I18n.t('simple_form.scholarsphere_deposit_flashes.sharing_rules_not_found_html').html_safe
     end
   end
 
@@ -62,9 +62,9 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     def rights_hint
       link = link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank', rel: 'noopener'
       if licence_present?
-       I18n.t('simple_form.hints.rights.oab_permission_found')
+        I18n.t('simple_form.hints.rights.oab_permission_found')
       else
-       I18n.t('simple_form.hints.rights.default_html', link: link).html_safe
+        I18n.t('simple_form.hints.rights.default_html', link: link).html_safe
       end
     end
 
@@ -79,9 +79,9 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     def embargo_hint
       if embargo_end_date_present?
         if @permissions.embargo_end_date < Date.today
-         I18n.t('simple_form.hints.embargoed_until.oab_permission_found_expired')
+          I18n.t('simple_form.hints.embargoed_until.oab_permission_found_expired')
         else
-         I18n.t('simple_form.hints.embargoed_until.oab_permission_found')
+          I18n.t('simple_form.hints.embargoed_until.oab_permission_found')
         end
       end
     end
@@ -106,9 +106,9 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
 
     def set_statement_hint
       if set_statement_present?
-       I18n.t('simple_form.hints.publisher_statement.oab_permission_found')
+        I18n.t('simple_form.hints.publisher_statement.oab_permission_found')
       else
-       I18n.t('simple_form.hints.publisher_statement.default')
+        I18n.t('simple_form.hints.publisher_statement.default')
       end
     end
 
