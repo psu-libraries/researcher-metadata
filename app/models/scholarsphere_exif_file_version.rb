@@ -10,17 +10,16 @@ class ScholarsphereExifFileVersion
   end
 
   PUBLISHED_VERSION_CREATORS = ['indesign', 'arbortext', 'elsevier', 'springer'].freeze
+  RIGHTS_EN_GB_TEXT = 'Not for further distribution unless allowed by the License or with the express written permission of Cambridge University Press.'
 
   def version
-    @version ||= if accepted?
+    @version ||= if exif.blank?
+                   nil
+                 elsif accepted?
                    I18n.t('file_versions.accepted_version')
                  elsif published?
                    I18n.t('file_versions.published_version')
                  end
-  end
-
-  def accepted_version?
-    version == I18n.t('file_versions.accepted_version')
   end
 
   private
@@ -47,7 +46,7 @@ class ScholarsphereExifFileVersion
 
     def rights_en_gb?
       !exif[:rights_en_gb].nil? and
-        exif[:rights_en_gb] == 'Not for further distribution unless allowed by the License or with the express written permission of Cambridge University Press.'
+        exif[:rights_en_gb] == RIGHTS_EN_GB_TEXT
     end
 
     def wps_journaldoi?
