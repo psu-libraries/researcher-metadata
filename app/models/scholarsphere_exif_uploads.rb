@@ -28,7 +28,7 @@ class ScholarsphereExifUploads
 
   def version
     @exif_file_versions.map do |exif|
-      return exif.version if exif.accepted_version?
+      return exif.version if exif.version == I18n.t('file_versions.accepted_version')
 
       # Either Published Version or nil
       exif.version
