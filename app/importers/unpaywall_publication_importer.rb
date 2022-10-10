@@ -99,8 +99,6 @@ class UnpaywallPublicationImporter
                                          elsif title_match?(unpaywall_title, publication.title)
                                            unpaywall_result = unpaywall_json['results'].nil? ? nil : unpaywall_json['results'].first
                                            unpaywall_result.present? ? unpaywall_result['response']['oa_status'] : nil
-                                         else
-                                           nil
                                          end
         publication.unpaywall_last_checked_at = Time.zone.now
 
