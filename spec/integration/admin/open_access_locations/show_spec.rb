@@ -14,7 +14,7 @@ describe 'Admin open access location detail page', type: :feature do
                       url: 'https://nature.com/articles/testpub123',
                       landing_page_url: 'https://nature.com/articles/testpub123/info',
                       pdf_url: 'https://nature.com/articles/testpub123/pdf',
-                      version: I18n.t('file_versions.published_version') }
+                      version: 'publishedVersion' }
 
   let(:pub) { create :publication, title: 'Test Pub' }
 
@@ -63,7 +63,7 @@ describe 'Admin open access location detail page', type: :feature do
       end
 
       it "shows the location's version" do
-        expect(page).to have_content I18n.t('file_versions.published_version')
+        expect(page).to have_content 'publishedVersion'
       end
     end
 
