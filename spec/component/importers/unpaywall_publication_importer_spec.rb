@@ -43,9 +43,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
-        it "does not update the publication's Unpaywall check timestamp" do
+        it "updates the publication's Unpaywall check timestamp" do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
@@ -97,9 +97,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
-        it "does not update the publication's Unpaywall check timestamp" do
+        it "updates the publication's Unpaywall check timestamp" do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
@@ -467,9 +467,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
-        it "does not update the publication's Unpaywall check timestamp" do
+        it "updates the publication's Unpaywall check timestamp" do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
@@ -521,9 +521,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
         end
 
-        it "does not update the publication's Unpaywall check timestamp" do
+        it "updates the publication's Unpaywall check timestamp" do
           importer.import_all
-          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
