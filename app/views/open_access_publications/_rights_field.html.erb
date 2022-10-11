@@ -1,0 +1,6 @@
+<%= f.input :rights,
+            label: 'License',
+            collection: ScholarsphereWorkDeposit.rights_options,
+            include_blank: false,
+            selected: rights_selected,
+            hint: rights_hint %>

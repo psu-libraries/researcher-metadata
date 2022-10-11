@@ -30,6 +30,7 @@ class Authorship < ApplicationRecord
            :preferred_publisher_name,
            :preferred_journal_title,
            :published?,
+           :doi_url_path,
            to: :publication,
            prefix: false
   delegate :webaccess_id, :name, to: :user, prefix: true

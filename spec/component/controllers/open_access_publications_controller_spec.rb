@@ -330,6 +330,143 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
+  describe '#scholarsphere_file_version' do
+    let(:perform_request) { post :scholarsphere_file_version, params: { id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
+
+    context 'when authenticated' do
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+
+      context 'when is not open access' do
+        let(:pub_id) { pub.id }
+        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
+        let(:params) {
+          {
+            id: pub_id,
+            scholarsphere_work_deposit: {
+              file_uploads_attributes: { '0' => { file: file, journal: nil } }
+            }
+          }
+        }
+
+        context 'when given valid params' do
+          it 'render the scholarsphere file version form' do
+            post :scholarsphere_file_version, params: params
+            expect(response).to render_template :scholarsphere_file_version
+          end
+        end
+
+        context 'when given no scholarsphere_work_deposit param' do
+          let(:params) { { id: pub_id } }
+
+          it 'sets an error message' do
+            post :scholarsphere_file_version, params: params
+            expect(flash.now[:alert]).not_to be_empty
+          end
+
+          it 'rerenders the edit form' do
+            post :scholarsphere_file_version, params: params
+            expect(response).to render_template :edit
+          end
+        end
+
+        context 'when given no file param for the scholarsphere work deposit' do
+          let(:file) { nil }
+
+          it 'sets an error message' do
+            post :scholarsphere_file_version, params: params
+            expect(flash.now[:alert]).not_to be_empty
+          end
+
+          it 'rerenders the edit form' do
+            post :scholarsphere_file_version, params: params
+            expect(response).to render_template :edit
+          end
+        end
+      end
+    end
+  end
+
+  describe '#scholarsphere_deposit_form' do
+    let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
+
+    context 'when authenticated' do
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+
+      context 'when is not open access' do
+        let(:pub_id) { pub.id }
+        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
+        let(:params) {
+          {
+            id: pub_id,
+            scholarsphere_work_deposit: {
+              cache_files: { '0' => { cache_path: file.path, original_filename: file.original_filename } }
+            }
+          }
+        }
+
+        context 'when given valid params' do
+          it 'render the scholarsphere deposit form' do
+            post :scholarsphere_deposit_form, params: params
+            expect(response).to render_template :scholarsphere_deposit_form
+          end
+        end
+
+        context 'when given no cache file param for the scholarsphere work deposit' do
+          let(:params) { { id: pub_id } }
+
+          it 'sets an error message' do
+            post :scholarsphere_deposit_form, params: params
+            expect(flash.now[:alert]).not_to be_empty
+          end
+
+          it 'rerenders the edit form' do
+            post :scholarsphere_deposit_form, params: params
+            expect(response).to render_template :edit
+          end
+        end
+      end
+    end
+  end
+
+  describe '#file_serve' do
+    let(:perform_request) { post :scholarsphere_deposit_form, params: { id: 1 } }
+
+    it_behaves_like 'an unauthenticated controller'
+
+    context 'when authenticated' do
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+
+      context 'when is not open access' do
+        let(:pub_id) { pub.id }
+        let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
+        let(:exif_params) { { file_uploads_attributes: { '0' => { file: file, journal: nil } } } }
+        let(:exif_uploads) { ScholarsphereExifUploads.new(exif_params) }
+        let(:cache_files)  { exif_uploads.cache_files }
+        let(:cache_path) { cache_files.first[:cache_path] }
+        let(:params) { { id: pub_id, filename: cache_path } }
+
+        it 'renders the requested file' do
+          post :file_serve, params: params
+          expect(response.header['Content-Type']).to eq('application/pdf')
+          expect(response.header['Content-Disposition']).to eq('inline; filename="test_file.pdf"; filename*=UTF-8\'\'test_file.pdf')
+        end
+      end
+    end
+  end
+
   describe '#create_scholarsphere_deposit' do
     let(:found_deposit) { ScholarsphereWorkDeposit.find_by(authorship: auth) }
     let(:perform_request) { post :create_scholarsphere_deposit, params: { id: 1 } }
@@ -419,10 +556,22 @@ describe OpenAccessPublicationsController, type: :controller do
               published_date: '2021-03-30',
               rights: 'https://creativecommons.org/licenses/by/4.0/',
               deposit_agreement: '1',
-              file_uploads_attributes: [file: file]
+              file_uploads_attributes: { '0' => { cache_path: cache_path } }
             }
           }
         }
+        let(:exif_params) {
+          {
+            file_uploads_attributes: { '0' => { file: file, journal: nil } }
+          }
+        }
+        let(:exif_uploads) { ScholarsphereExifUploads.new(exif_params) }
+        let(:cache_files)  { exif_uploads.cache_files }
+        let(:cache_path) do
+          return nil if cache_files.empty?
+
+          cache_files.first[:cache_path]
+        end
 
         context 'when given valid params' do
           it 'creates a new scholarsphere work deposit' do
@@ -471,8 +620,8 @@ describe OpenAccessPublicationsController, type: :controller do
           end
         end
 
-        context 'when given no file param for the scholarsphere work deposit' do
-          let(:file) { nil }
+        context 'when given no cache_path for the scholarsphere work deposit' do
+          let(:cache_path) { '' }
 
           it 'does not create a new scholarsphere work deposit' do
             expect do

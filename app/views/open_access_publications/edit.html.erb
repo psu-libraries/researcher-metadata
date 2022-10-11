@@ -66,19 +66,18 @@
         <div class="open-access-action">
           <h5>Upload to ScholarSphere</h5>
           <p>
-            If there isn't already an open access version of your work available on the web, please
-            consider uploading the <a href="https://psu.libanswers.com/faq/279953" target="_blank">accepted
-            manuscript version</a> to ScholarSphere. Please review the information about your
-            publication below for accuracy, make any necessary corrections, and fill in any required
-            fields that are blank. You can attach as many files as needed, but you must attach at least one.
+            If there isn’t already an open access version of your work available on the web, please
+            consider uploading the <a href="https://psu.libanswers.com/faq/279953" target="_blank">Accepted
+            Manuscript</a> to ScholarSphere. You can attach as many files as needed, but you must attach at least one.
           </p>
           <p>
-            Most journals do not allow authors to deposit the final published version of an article to ScholarSphere.
-            If you wish to deposit the final published version, please contact the Office of Scholarly
-            Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a> for a review of the journal’s policy.
+            Most journals do not allow authors to deposit the Final Published Version of an article to ScholarSphere,
+            but we will try to find the sharing rules for whichever version you submit here. If we cannot find sharing
+            rules, you will have a chance to change this file. With questions, please contact the Office of Scholarly
+            Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>.
           </p>
 
-          <%= simple_form_for @deposit, url: scholarsphere_deposit_path, method: :post do |f| %>
+          <%= simple_form_for @deposit, url: scholarsphere_file_version_path, method: :post do |f| %>
             <div class="file-uploads">
               <%= f.simple_fields_for :file_uploads do |sfu| %>
                 <%= render 'file_upload_fields', f: sfu %>
@@ -89,34 +88,6 @@
                                             class: 'button-default add-button' %>
               </div>
             </div>
-
-            <%= f.input :title, label: 'Title' %>
-            <%= f.input :subtitle, label: 'Subtitle' %>
-            <span>Creators:</span>
-            <ul>
-              <% publication.contributor_names.order('position ASC').each do |cn| %>
-                <li><%= cn.name %></li>
-              <% end %>
-            </ul>
-            <%= f.input :description, label: 'Description', hint: "Include the work abstract if available. Otherwise, provide a brief summary." %>
-            <%= f.input :publisher_statement, label: 'Publisher Statement', hint: "If the original publisher requires a set statement to upload this work to ScholarSphere, include it here." %>
-            <%= f.input :published_date, label: 'Date of publication', start_year: 2000, end_year: Date.today.year + 2 %>
-            <%= f.input :publisher, label: 'Journal Name' %>
-            <%= f.input :doi, label: 'DOI', readonly: @authorship.doi.present? ? true : false %>
-            <%= f.input :rights,
-                        label: 'License',
-                        collection: ScholarsphereWorkDeposit.rights_options,
-                        selected: 'https://rightsstatements.org/page/InC/1.0/',
-                        hint: "For help determining License and Embargo, see this #{link_to 'FAQ', 'https://psu.libanswers.com/faq/279046', target: '_blank' }".html_safe %>
-            <%= f.input :embargoed_until,
-                        label: 'Embargoed until',
-                        include_blank: true,
-                        start_year: Date.today.year,
-                        end_year: Date.today.year + 10 %>
-            <%= f.input :deposit_agreement,
-                        as: :boolean,
-                        required: true,
-                        label: "I have read and agree to #{link_to 'the deposit agreement', 'https://scholarsphere.psu.edu/agreement', target: '_blank'}.".html_safe %>
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>

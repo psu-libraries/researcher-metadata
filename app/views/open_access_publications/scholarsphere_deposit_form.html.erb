@@ -1,0 +1,35 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xl">
+      <div class="oa-publication-details">
+        <h4>Publication Details</h4>
+        <table>
+          <tr>
+            <td><strong>Title:</strong></td>
+            <td><%= publication.title %></td>
+          </tr>
+          <tr>
+            <td><strong>Journal:</strong></td>
+            <td><%= publication.published_by %></td>
+          </tr>
+          <tr>
+            <td><strong>Volume:</strong></td>
+            <td><%= publication.volume %></td>
+          </tr>
+          <tr>
+            <td><strong>Issue:</strong></td>
+            <td><%= publication.issue %></td>
+          </tr>
+          <tr>
+            <td><strong>Pages:</strong></td>
+            <td><%= publication.page_range %></td>
+          <tr>
+            <td><strong>Year Published:</strong></td>
+            <td><%= publication.year %></td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <%= render(ScholarsphereDepositFormComponent.new(@deposit, @permissions)) %>
+</div>

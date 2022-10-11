@@ -60,6 +60,9 @@ Rails.application.routes.draw do
     post 'bio/orcid/employments/:membership_id' => 'orcid_employments#create', as: :orcid_employments
     post 'bio/orcid/works' => 'orcid_works#create', as: :orcid_works
     get 'publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
+    post 'publications/:id/open_access/scholarsphere_file_version' => 'open_access_publications#scholarsphere_file_version', as: :scholarsphere_file_version
+    post 'publications/:id/open_access/scholarsphere_deposit_form' => 'open_access_publications#scholarsphere_deposit_form', as: :scholarsphere_deposit_form
+    get 'publications/:id/open_access/scholarsphere_file_serve/*filename' => 'open_access_publications#file_serve', as: :scholarsphere_file_serve, constraints: { filename: /.*/ }
     patch 'publications/:id/open_access' => 'open_access_publications#update', as: :open_access_publication
     post 'publications/:id/open_access/scholarsphere_deposit' => 'open_access_publications#create_scholarsphere_deposit', as: :scholarsphere_deposit
     get 'publications/:id/open_access/waivers/new' => 'internal_publication_waivers#new', as: :new_internal_publication_waiver

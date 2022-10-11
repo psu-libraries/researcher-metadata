@@ -13,6 +13,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
+    Ascii85 (1.1.0)
     actioncable (6.1.6.1)
       actionpack (= 6.1.6.1)
       activesupport (= 6.1.6.1)
@@ -80,6 +81,7 @@ GEM
       zeitwerk (~> 2.3)
     addressable (2.8.1)
       public_suffix (>= 2.0.2, < 6.0)
+    afm (0.2.2)
     ast (2.4.2)
     autoprefixer-rails (10.4.7.0)
       execjs (~> 2)
@@ -209,6 +211,10 @@ GEM
       smart_properties
     erubi (1.11.0)
     execjs (2.8.1)
+    exiftool (1.2.4)
+      json
+    exiftool_vendored (12.42.0)
+      exiftool (>= 0.7.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
     factory_bot_rails (6.2.0)
@@ -251,6 +257,7 @@ GEM
       temple (>= 0.8.0)
       tilt
     hashdiff (1.0.1)
+    hashery (2.1.2)
     hashie (3.6.0)
     highline (2.0.3)
     html_tokenizer (0.0.7)
@@ -373,6 +380,12 @@ GEM
     parallel (1.22.1)
     parser (3.1.2.0)
       ast (~> 2.4.1)
+    pdf-reader (2.10.0)
+      Ascii85 (~> 1.0)
+      afm (~> 0.2.1)
+      hashery (~> 2.0)
+      ruby-rc4
+      ttfunk
     pg (1.2.3)
     popper_js (1.16.0)
     progressbar (1.11.0)
@@ -504,6 +517,7 @@ GEM
     rubocop-rspec (2.12.1)
       rubocop (~> 1.31)
     ruby-progressbar (1.11.0)
+    ruby-rc4 (0.1.5)
     ruby-vips (2.1.4)
       ffi (~> 1.12)
     ruby2_keywords (0.0.5)
@@ -570,6 +584,7 @@ GEM
     thor (1.2.1)
     tilt (2.0.11)
     timeout (0.3.0)
+    ttfunk (1.7.0)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -635,6 +650,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (~> 4.8)
   ed25519
+  exiftool_vendored (~> 12.33)
   factory_bot_rails
   ffaker
   fieldhand (~> 0.12)
@@ -657,6 +673,7 @@ DEPENDENCIES
   omniauth (~> 2.0)
   omniauth-oauth2 (~> 1.7)
   omniauth-rails_csrf_protection (~> 1.0)
+  pdf-reader
   pg (>= 0.18, < 2.0)
   progressbar
   pry-byebug

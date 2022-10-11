@@ -290,6 +290,7 @@ Rails/OutputSafety:
     - 'app/models/open_access_location.rb'
     - 'app/models/organization.rb'
     - 'app/models/publication.rb'
+    - 'app/components/scholarsphere_deposit_form_component.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).

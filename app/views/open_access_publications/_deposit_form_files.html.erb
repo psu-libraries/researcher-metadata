@@ -1,0 +1,14 @@
+<div class="nested-fields file-upload-fields">
+  <div class="file-group">
+      <div class="form-group file required file-display">
+      <% @cache_files.each do |key, file| %>
+        <button type="button" class="btn btn-link">
+          <%= f.hidden_field "cache_path", value: file[:cache_path],
+                                           name: "scholarsphere_work_deposit[file_uploads_attributes][#{key}][cache_path]",
+                                           id: "scholarsphere_work_deposit_file_uploads_attributes_#{key}_cache_path" %>
+          <%= link_to file[:original_filename], scholarsphere_file_serve_path(filename: file[:cache_path]), target: '_blank', class: 'form-control disabled' %>
+        </button>
+      <% end %>
+      </div>
+  </div>
+</div>
