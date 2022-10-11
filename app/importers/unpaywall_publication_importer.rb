@@ -57,7 +57,8 @@ class UnpaywallPublicationImporter
         unpaywall_locations = unpaywall_json['oa_locations'].presence || []
         existing_doi = true
       else
-        unpaywall_title = unpaywall_json['results'].nil? ? '' : unpaywall_json['results'].first['response']['title']
+        unpaywall_result = unpaywall_json['results'].nil? ? '' : unpaywall_json['results'].first
+        unpaywall_title = unpaywall_result.present? ? unpaywall_result['response']['title'] : ''
         unpaywall_locations = if title_match?(unpaywall_title, publication.title)
                                 publication.doi = DOISanitizer.new(unpaywall_json['results'].first['response']['doi']).url
                                 unpaywall_json['results'].first['response']['oa_locations'].presence || []
@@ -95,14 +96,13 @@ class UnpaywallPublicationImporter
 
         publication.open_access_status = if existing_doi
                                            unpaywall_json['oa_status']
-                                         else
-                                           unpaywall_json['results'].nil? ? nil : unpaywall_json['results'].first['response']['oa_status']
+                                         elsif title_match?(unpaywall_title, publication.title)
+                                           unpaywall_result = unpaywall_json['results'].nil? ? nil : unpaywall_json['results'].first
+                                           unpaywall_result.present? ? unpaywall_result['response']['oa_status'] : nil
                                          end
         publication.unpaywall_last_checked_at = Time.zone.now
 
-        if publication.doi.present? || title_match?(unpaywall_title, publication.title)
-          publication.save!
-        end
+        publication.save!
       end
     end
 
@@ -111,7 +111,7 @@ class UnpaywallPublicationImporter
         doi_url_path = Addressable::URI.encode(publication.doi_url_path)
         find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
       else
-        find_url = "https://api.unpaywall.org/v2/search/?query=#{publication.title}&email=openaccess@psu.edu"
+        find_url = "https://api.unpaywall.org/v2/search/?query=#{CGI.escape(publication.title)}&email=openaccess@psu.edu"
       end
 
       JSON.parse(HttpService.get(find_url))
