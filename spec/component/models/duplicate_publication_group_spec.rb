@@ -400,6 +400,40 @@ describe DuplicatePublicationGroup, type: :model do
         expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
         expect(p16_1.reload.duplicate_group.publications).to match_array [p16_1, p16_2]
       end
+
+      it "sets grouped publications' visible statuses to false when publication was not already grouped before process started" do
+        described_class.group_duplicates
+
+        expect(p1_1.reload.duplicate_group.publications.map(&:visible)).to match_array [true, false, false, false]
+        expect(p2_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p3_1.reload.visible).to be true
+        expect(p3_2.reload.visible).to be true
+        expect(p4_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p5_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p6_1.reload.visible).to be true
+        expect(p6_2.reload.visible).to be true
+        expect(p7_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p8_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p9_1.reload.visible).to be true
+        expect(p9_2.reload.visible).to be true
+        expect(p10_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p11_1.reload.visible).to be true
+        expect(p11_2.reload.visible).to be true
+        expect(p11_3.reload.visible).to be true
+        expect(p12_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
+        expect(p12_2.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
+        expect(p12_3.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
+        expect(p13_1.reload.visible).to be true
+        expect(p13_2.reload.visible).to be true
+        expect(p14_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_2.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_3.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_4.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p15_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p16_1.reload.duplicate_group.publications.map(&:visible)).to match_array [true, false]
+        expect(p17_1.reload.visible).to be true
+        expect(p17_2.reload.visible).to be true
+      end
     end
   end
 

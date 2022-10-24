@@ -167,6 +167,11 @@ class ActivityInsightImporter
             update_pub_record(pub_record, pub)
           else
             pi.save!
+
+            DuplicatePublicationGroup.group_duplicates_of(pub_record)
+            if pub_record.reload.duplicate_group
+              pub_record.update!(visible: false)
+            end
           end
 
           if pub_record.updated_by_user_at.blank?
@@ -194,12 +199,6 @@ class ActivityInsightImporter
               c.user = u if cont.for_imported_user?
               c.save!
             end
-          end
-
-          DuplicatePublicationGroup.group_duplicates_of(pub_record)
-
-          if pub_record.reload.duplicate_group
-            pub_record.update!(visible: false)
           end
         end
       rescue StandardError => e
