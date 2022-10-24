@@ -8,8 +8,13 @@ class DuplicatePublicationGroup < ApplicationRecord
                                  total: Publication.count)
 
     Publication.find_each do |p|
+      already_grouped = p.duplicate_group.present?
       group_duplicates_of(p)
 
+      group = p.reload.duplicate_group
+      if !already_grouped && group
+        p.update!(visible: false)
+      end
       pbar.increment
     end
     pbar.finish

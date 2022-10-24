@@ -1179,7 +1179,7 @@ describe ActivityInsightImporter do
           end
 
           it 'groups duplicates of new publication records' do
-            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
@@ -1465,7 +1465,7 @@ describe ActivityInsightImporter do
           end
 
           it 'groups duplicates of new publication records' do
-            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 2
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
             p1 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190706413568').publication
