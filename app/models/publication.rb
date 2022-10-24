@@ -705,6 +705,10 @@ class Publication < ApplicationRecord
         end
 
         update!(updated_by_user_at: Time.current, visible: true)
+      # TODO: We should catch more than just ActiveRecord::RecordNotSaved
+      # We should also log any errors caught to the ImporterErrorLog
+      rescue ActiveRecord::RecordNotSaved
+        nil
       end
     end
 

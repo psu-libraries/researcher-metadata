@@ -123,11 +123,13 @@ class PublicationMergeOnMatchingPolicy
       if publication1.issn.blank? && publication2.issn.blank?
         nil
       else
-        [publication1.issn, publication2.issn]
+        issn_clean = [publication1.issn, publication2.issn]
           .compact_blank
           .min_by(&:length)
           .gsub(/[^0-9xX]/, '')[0..7]
-          .insert(4, '-')
+        if issn_clean.length > 5
+          issn_clean.insert(4, '-')
+        end
       end
     end
 
