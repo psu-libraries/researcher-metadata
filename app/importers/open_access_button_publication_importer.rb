@@ -38,7 +38,7 @@ class OpenAccessButtonPublicationImporter
       find_url = if publication.doi.present?
                    "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
                  else
-                   "https://api.openaccessbutton.org/find?title=#{CGI.escape(publication.cleaned_title)}"
+                   "https://api.openaccessbutton.org/find?title=#{CGI.escape(cleaned_title(publication))}"
                  end
       oab_json = JSON.parse(HttpService.get(find_url))
 
@@ -76,7 +76,7 @@ class OpenAccessButtonPublicationImporter
 
     # Open Access Button will block requests that they detect as "bot behavior"
     # We strip some special characters here to not get flagged as a bot and blocked
-    def cleaned_title
+    def cleaned_title(publication)
       publication.title.tr("<>'", '')
     end
 end
