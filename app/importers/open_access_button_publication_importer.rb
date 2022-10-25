@@ -73,4 +73,10 @@ class OpenAccessButtonPublicationImporter
         }
       )
     end
+
+    # Open Access Button will block requests that they detect as "bot behavior"
+    # We strip some special characters here to not get flagged as a bot a blocked
+    def stripped_title
+      publication.title.strip
+    end
 end
