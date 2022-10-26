@@ -103,6 +103,8 @@ class DuplicatePublicationGroup < ApplicationRecord
     else
       false
     end
+  rescue StandardError => e
+    Rails.logger.error e.message
   end
 
   def self.auto_merge_matching
@@ -152,6 +154,8 @@ class DuplicatePublicationGroup < ApplicationRecord
           destroy
         end
       end
+    rescue StandardError => e
+      Rails.logger.error e.message
     end
   end
 

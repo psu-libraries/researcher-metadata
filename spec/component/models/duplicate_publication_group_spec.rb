@@ -1535,6 +1535,25 @@ describe DuplicatePublicationGroup, type: :model do
         end
       end
     end
+
+    context 'when an error is raised' do
+      let!(:pub1) { create :publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports }
+      let!(:pub2) { create :publication, title: 'The Generic Title', duplicate_group: group, imports: pub2_imports }
+      let(:pub1_imports) { [ai_import] }
+      let(:pub2_imports) { [pure_import] }
+      let(:ai_import) { create(:publication_import, source: 'Activity Insight') }
+      let(:pure_import) { create(:publication_import, source: 'Pure') }
+
+      before do
+        allow_any_instance_of(Publication).to receive(:merge!).and_raise ActiveRecord::RecordNotSaved
+      end
+
+      it 'rescues error and logs error' do
+        expect(Rails.logger).to receive(:error).with('ActiveRecord::RecordNotSaved')
+        expect { group.auto_merge }.not_to change(Publication, :count)
+        expect { pub1.reload }.not_to raise_error ActiveRecord::RecordNotFound
+      end
+    end
   end
 
   describe '#auto_merge_matching' do
@@ -1667,6 +1686,27 @@ describe DuplicatePublicationGroup, type: :model do
         it 'does not delete the group' do
           expect { group.auto_merge_matching }.not_to change(described_class, :count)
         end
+      end
+    end
+
+    context 'when an error is raised' do
+      let!(:pub1) { create :sample_publication, duplicate_group: group }
+      let!(:pub2) do
+        Publication.create(pub1
+          .attributes
+          .delete_if { |key, _value| key == 'id' })
+      end
+      let!(:import1) { create :publication_import, publication: pub1 }
+      let!(:import2) { create :publication_import, publication: pub2 }
+
+      before do
+        allow_any_instance_of(Publication).to receive(:merge_on_matching!).and_raise ActiveRecord::RecordNotSaved
+      end
+
+      it 'rescues error and logs error' do
+        expect(Rails.logger).to receive(:error).with('ActiveRecord::RecordNotSaved').twice
+        expect { group.auto_merge_matching }.not_to change(Publication, :count)
+        expect { pub1.reload }.not_to raise_error ActiveRecord::RecordNotFound
       end
     end
   end

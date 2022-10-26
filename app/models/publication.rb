@@ -706,6 +706,12 @@ class Publication < ApplicationRecord
 
         update!(updated_by_user_at: Time.current, visible: true)
       end
+    # TODO: This is just a temporary solution to prevent errors from stopping the auto
+    # deduplication processes.  The returned error is rescued in the code for running
+    # those processes. The error will still be raised when manually deduping.
+    # Ideally, these errors should be logged somewhere like the ImporterErrorLog.
+    rescue StandardError => e
+      (raise e)
     end
 
     def preferred_journal_info_policy
