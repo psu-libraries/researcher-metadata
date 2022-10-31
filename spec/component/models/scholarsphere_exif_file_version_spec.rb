@@ -33,7 +33,7 @@ describe ScholarsphereExifFileVersion do
         let(:exif_data) { { creator: 1 } }
 
         it 'returns nil' do
-          expect(exif_file_version.version).to eq nil
+          expect(exif_file_version.version).to be_nil
         end
       end
 
@@ -41,7 +41,7 @@ describe ScholarsphereExifFileVersion do
         let(:exif_data) { { creator_tool: 1 } }
 
         it 'returns nil' do
-          expect(exif_file_version.version).to eq nil
+          expect(exif_file_version.version).to be_nil
         end
       end
 

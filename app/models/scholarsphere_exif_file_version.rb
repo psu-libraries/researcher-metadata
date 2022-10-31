@@ -56,9 +56,9 @@ class ScholarsphereExifFileVersion
     def subject?
       subjects = ['downloaded from', 'journal pre-proof']
       subjects << @journal unless @journal.nil?
-      if exif[:subject].present? and exif[:subject].is_a?(Array)
+      if exif[:subject].present? && exif[:subject].is_a?(Array)
         subjects.any? { |s| exif[:subject]&.any? { |exs| exs.to_s.downcase.include? s } }
-      elsif exif[:subject].present? and exif[:subject].is_a?(String)
+      elsif exif[:subject].present? && exif[:subject].is_a?(String)
         subjects.any? { |s| exif[:subject].downcase.include? s }
       else
         false
