@@ -37,6 +37,14 @@ describe ScholarsphereExifFileVersion do
         end
       end
 
+      context 'when creator_tool field contains an integer' do
+        let(:exif_data) { { creator_tool: 1 } }
+
+        it 'returns nil' do
+          expect(exif_file_version.version).to eq nil
+        end
+      end
+
       context 'when exif data validates both Accepted Manuscript and Final Publshed Version' do
         let(:exif_data) { { journal_article_version: 'am', subject: 'downloaded from' } }
 
