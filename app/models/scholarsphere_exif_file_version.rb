@@ -56,7 +56,13 @@ class ScholarsphereExifFileVersion
     def subject?
       subjects = ['downloaded from', 'journal pre-proof']
       subjects << @journal unless @journal.nil?
-      exif[:subject].present? and subjects.any? { |s| exif[:subject].downcase.include? s }
+      if exif[:subject].present? and exif[:subject].is_a?(Array)
+        subjects.any? { |s| exif[:subject]&.any? { |exs| exs.to_s.downcase.include? s } }
+      elsif exif[:subject].present? and exif[:subject].is_a?(String)
+        subjects.any? { |s| exif[:subject].downcase.include? s }
+      else
+        false
+      end
     end
 
     def rendition_class?
@@ -64,11 +70,11 @@ class ScholarsphereExifFileVersion
     end
 
     def creator?
-      !exif[:creator].nil? and PUBLISHED_VERSION_CREATORS.any? { |c| exif[:creator].downcase.include? c }
+      !exif[:creator].nil? and PUBLISHED_VERSION_CREATORS.any? { |c| exif[:creator].to_s.downcase.include? c }
     end
 
     def creator_tool?
-      !exif[:creator_tool].nil? and PUBLISHED_VERSION_CREATORS.any? { |ct| exif[:creator_tool].downcase.include? ct }
+      !exif[:creator_tool].nil? and PUBLISHED_VERSION_CREATORS.any? { |ct| exif[:creator_tool].to_s.downcase.include? ct }
     end
 
     def producer?
