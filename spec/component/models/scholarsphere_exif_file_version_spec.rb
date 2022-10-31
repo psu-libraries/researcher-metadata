@@ -29,6 +29,22 @@ describe ScholarsphereExifFileVersion do
         end
       end
 
+      context 'when creator field contains an integer' do
+        let(:exif_data) { { creator: 1 } }
+
+        it 'returns nil' do
+          expect(exif_file_version.version).to be_nil
+        end
+      end
+
+      context 'when creator_tool field contains an integer' do
+        let(:exif_data) { { creator_tool: 1 } }
+
+        it 'returns nil' do
+          expect(exif_file_version.version).to be_nil
+        end
+      end
+
       context 'when exif data validates both Accepted Manuscript and Final Publshed Version' do
         let(:exif_data) { { journal_article_version: 'am', subject: 'downloaded from' } }
 
@@ -99,6 +115,14 @@ describe ScholarsphereExifFileVersion do
 
         context 'when subject field is "journal pre-proof"' do
           let(:exif_data) { { subject: 'journal pre-proof' } }
+
+          it 'returns Final Published Version' do
+            expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+          end
+        end
+
+        context 'when subject field is an Array that contains "journal pre-proof"' do
+          let(:exif_data) { { subject: ['other', 'journal pre-proof'] } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
