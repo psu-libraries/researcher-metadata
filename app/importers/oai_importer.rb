@@ -11,13 +11,13 @@ class OAIImporter
 
       if rr.any_user_matches?
         ActiveRecord::Base.transaction do
-          existing_import = PublicationImport.find_by(source: import_source,
-                                                      source_identifier: rr.identifier)
+          pi = PublicationImport.find_by(source: import_source, source_identifier: rr.identifier) ||
+            PublicationImport.new
 
           # For now we don't anticipate that source data that we've already imported
           # will change, so we only need to create new records, and we don't need to
           # update existing records.
-          unless existing_import
+          unless pi.persisted?
             p = Publication.new
             p.title = rr.title
             p.journal_title = rr.source
@@ -28,7 +28,6 @@ class OAIImporter
             p.status = 'Published'
             p.save!
 
-            pi = PublicationImport.new
             pi.publication = p
             pi.source = import_source
             pi.source_identifier = rr.identifier
@@ -62,17 +61,21 @@ class OAIImporter
               end
             end
 
-            oal = OpenAccessLocation.new
-            oal.publication = p
-            oal.url = rr.url
-            oal.source = location_source # TODO return to import_source once import sources are refactored
-            oal.save!
-
             DuplicatePublicationGroup.group_duplicates_of(p)
 
             if p.reload.duplicate_group
               p.update!(visible: false)
             end
+          end
+
+          pub = pi.reload.publication
+
+          if OpenAccessLocation.find_by(publication: pub, source: location_source).blank?
+            oal = OpenAccessLocation.new
+            oal.publication = pub
+            oal.url = rr.url
+            oal.source = location_source # TODO return to import_source once import sources are refactored
+            oal.save!
           end
         end
       end
