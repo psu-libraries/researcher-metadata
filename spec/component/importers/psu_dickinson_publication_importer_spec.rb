@@ -16,7 +16,8 @@ describe PSUDickinsonPublicationImporter do
                     any_user_matches?: true,
                     identifier: 'existing-identifier',
                     publisher: 'Test Publisher',
-                    source: 'Test Source' }
+                    source: 'Test Source',
+                    url: 'https://example.com/article' }
   let(:r3) { double 'record 3',
                     any_user_matches?: true,
                     identifier: 'non-existing-identifier',
@@ -74,8 +75,8 @@ describe PSUDickinsonPublicationImporter do
       expect { importer.call }.to change(ContributorName, :count).by 2
     end
 
-    it "creates new open access locations for records that are importable and that don't already exist" do
-      expect { importer.call }.to change(OpenAccessLocation, :count).by 1
+    it 'creates new open access locations for records that are importable' do
+      expect { importer.call }.to change(OpenAccessLocation, :count).by 2
     end
 
     it 'is idempotent in terms of creating publication imports' do
