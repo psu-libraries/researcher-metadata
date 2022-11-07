@@ -389,4 +389,60 @@ describe OpenAccessButtonPublicationImporter do
       end
     end
   end
+
+  describe '#import_with_doi' do
+    let!(:pub1) do
+      create :publication,
+             doi: 'https://doi.org/10.000/doi1',
+             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes'
+    end
+    let!(:pub2) do
+      create :publication,
+             doi: nil,
+             title: 'Publication 2'
+    end
+
+    before do
+      allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
+        .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+    end
+
+    it 'creates a new open access location for the publication' do
+      expect { importer.import_with_doi }.to change(OpenAccessLocation, :count).by 1
+      expect(pub1.reload.open_access_locations.count).to eq 1
+    end
+
+    it 'updates Open Access Button check timestamp on the publication' do
+      importer.import_with_doi
+      expect(pub1.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+    end
+  end
+
+  describe '#import_without_doi' do
+    let!(:pub1) do
+      create :publication,
+             doi: '',
+             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes'
+    end
+    let!(:pub2) do
+      create :publication,
+             doi: 'https://doi.org/10.000/doi1',
+             title: 'Publication 2'
+    end
+
+    before do
+      allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+        .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+    end
+
+    it 'creates a new open access location for the publication' do
+      expect { importer.import_without_doi }.to change(OpenAccessLocation, :count).by 1
+      expect(pub1.reload.open_access_locations.count).to eq 1
+    end
+
+    it 'updates Open Access Button check timestamp on the publication' do
+      importer.import_without_doi
+      expect(pub1.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+    end
+  end
 end
