@@ -41,7 +41,7 @@ class OpenAccessButtonPublicationImporter
     no_doi_pubs.find_each do |p|
       query_open_access_button_for(p)
       pbar.increment
-      sleep 1
+      sleep 1 unless Rails.env.test?
     end
     pbar.finish
   end
