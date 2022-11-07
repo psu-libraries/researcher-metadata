@@ -7,7 +7,7 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
-      # Tests that the <, >, and ' characters are stripped from title when querying OAB title endpoint
+      # Tests that the " and ' characters are stripped from title when querying OAB title endpoint
       let!(:pub) { create :publication, doi: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'" }
 
       before do
