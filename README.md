@@ -112,16 +112,19 @@ following types of records from NSF:
     - researcher_funds
 
 1. **Open Access Button** - We import information about open access copies of publications that is provided by
-Open Access Button via their web [API](https://openaccessbutton.org/api). We only look up publications in
-Open Access Button by DOI, so this import only creates records for existing publications in our database that have
-DOIs. A cron job automatically runs this import in production once per week beginning at around 8:00 AM on
-Sunday. This import can sometimes take more than a day to finish. We import the following types of records from
-Open Access Button:
+Open Access Button via their web [API](https://openaccessbutton.org/api). There are two different importers
+configured to run with cron.  One imports Open Access Button metadata for publications with DOIs using Open Access
+Button's DOI search endpoint.  The other gathers metadata using Open Access Button's title search endpoint.  Searching by DOI is
+faster, so the import with DOIs only takes several days to complete.  This process is run every Sunday at 8:00am.  Searching by title
+can be slow, so this process runs on the 1st and 15th day of every month.  It sometimes takes more than a week to complete.
+We import the following types of records from Open Access Button:
     - open_access_locations
 
 1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
-publications from Unpaywall's web [API](https://unpaywall.org/products/api). Again, we only query Unpaywall by
-DOI. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
+publications from Unpaywall's web [API](https://unpaywall.org/products/api). Like the Open Access Button
+import, we search Unpaywall by DOI or title (if the publication has no DOI).  However, this is not 
+split into two imports like the Open Access Button import, since the title search for Unpaywall is much
+faster. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
 source may provide some metadata that is not provided by the other. In general, Unpaywall provides richer
 metadata than Open Access Button. In addition to importing metadata about any open access copies of a
 publication, this import also updates the open access status on publication records in RMD. In production,
