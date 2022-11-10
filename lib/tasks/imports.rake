@@ -34,6 +34,16 @@ namespace :import do
     OpenAccessButtonPublicationImporter.new.import_new
   end
 
+  desc 'Import Open Access Button publication URLs for publications that have a DOI'
+  task with_doi_open_access_button: :environment do
+    OpenAccessButtonPublicationImporter.new.import_with_doi
+  end
+
+  desc 'Import Open Access Button publication URLs for publications that do not have a DOI'
+  task without_doi_open_access_button: :environment do
+    OpenAccessButtonPublicationImporter.new.import_without_doi
+  end
+
   desc 'Import Unpaywall publication metadata'
   task unpaywall: :environment do
     UnpaywallPublicationImporter.new.import_all

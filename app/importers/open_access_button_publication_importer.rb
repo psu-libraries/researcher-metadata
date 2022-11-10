@@ -23,6 +23,29 @@ class OpenAccessButtonPublicationImporter
     pbar.finish
   end
 
+  def import_with_doi
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                 total: doi_pubs.count)
+
+    doi_pubs.find_each do |p|
+      query_open_access_button_for(p)
+      pbar.increment
+    end
+    pbar.finish
+  end
+
+  def import_without_doi
+    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                 total: no_doi_pubs.count)
+
+    no_doi_pubs.find_each do |p|
+      query_open_access_button_for(p)
+      pbar.increment
+      sleep 1 unless Rails.env.test?
+    end
+    pbar.finish
+  end
+
   private
 
     def all_pubs
@@ -31,6 +54,14 @@ class OpenAccessButtonPublicationImporter
 
     def new_pubs
       all_pubs.where(open_access_button_last_checked_at: nil)
+    end
+
+    def doi_pubs
+      all_pubs.where("doi IS NOT NULL AND doi <> ''")
+    end
+
+    def no_doi_pubs
+      all_pubs.where("doi IS NULL OR doi = ''")
     end
 
     def query_open_access_button_for(publication)
