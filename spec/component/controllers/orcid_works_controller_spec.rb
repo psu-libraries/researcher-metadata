@@ -12,7 +12,7 @@ describe OrcidWorksController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when the user is authenticated' do
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
       let(:work) { double 'ORCID work', save!: nil, location: 'the_location' }
       let(:now) { Time.new(2021, 1, 13, 11, 26, 0) }
 

@@ -23,7 +23,7 @@ describe UserDecorator do
   describe 'equality' do
     subject(:decorator) { described_class.new(user: user) }
 
-    let(:user) { build_stubbed :user }
+    let(:user) { build_stubbed(:user) }
 
     it 'has symmetric ==' do
       expect(decorator == user).to be true

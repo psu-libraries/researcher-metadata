@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :presentation do
     transient do
-      user { create :sample_user }
+      user { create(:sample_user) }
     end
 
     sequence(:activity_insight_identifier) { |n| "ai_#{n}" }
@@ -23,9 +23,9 @@ FactoryBot.define do
       scope { ['National', 'International', 'Regional', 'Local'].sample }
 
       after :create do |perf, options|
-        create :presentation_contribution,
+        create(:presentation_contribution,
                presentation: perf,
-               user: options.user
+               user: options.user)
       end
     end
   end

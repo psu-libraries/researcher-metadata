@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin importer log bunerror detail page', type: :feature do
-  let!(:error) { create :importer_error_log, error_message: 'Test Message', metadata: { 'key' => 'val' }, stacktrace: '["stack", "trace"]' }
+  let!(:error) { create(:importer_error_log, error_message: 'Test Message', metadata: { 'key' => 'val' }, stacktrace: '["stack", "trace"]') }
 
   context 'when the current user is an admin' do
     before do

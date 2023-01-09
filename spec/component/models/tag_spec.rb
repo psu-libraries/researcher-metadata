@@ -36,7 +36,7 @@ describe Tag, type: :model do
   end
 
   describe 'saving a value for name' do
-    let(:t) { create :tag, name: tag_name }
+    let(:t) { create(:tag, name: tag_name) }
 
     context 'when the value contains upper and lowercase letters' do
       let(:tag_name) { 'ABC DeF ghi' }

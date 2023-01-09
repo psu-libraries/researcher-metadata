@@ -13,8 +13,8 @@ describe ScholarsphereUploadJob, type: :job do
   describe '#perform' do
     ActiveJob::Base.queue_adapter = :test
     let(:job) { described_class.new }
-    let(:user) { create :user }
-    let(:deposit) { create :scholarsphere_work_deposit }
+    let(:user) { create(:user) }
+    let(:deposit) { create(:scholarsphere_work_deposit) }
     let(:service) { double 'scholarsphere deposit service' }
     let(:profile) { double 'user profile' }
 

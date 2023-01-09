@@ -7,9 +7,9 @@ describe PsuIdentityImporter do
   let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
   let(:mock_person) { instance_spy(PsuIdentity::SearchService::Person) }
 
-  let!(:user_1) { create :user, webaccess_id: 'abc1' }
-  let!(:user_2) { create :user, webaccess_id: 'def2' }
-  let!(:user_3) { create :user, webaccess_id: 'ghi3' }
+  let!(:user_1) { create(:user, webaccess_id: 'abc1') }
+  let!(:user_2) { create(:user, webaccess_id: 'def2') }
+  let!(:user_3) { create(:user, webaccess_id: 'ghi3') }
 
   before do
     allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(mock_client)

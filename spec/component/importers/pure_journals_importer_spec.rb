@@ -7,7 +7,7 @@ describe PureJournalsImporter do
   let(:importer) { described_class.new }
   let(:found_journal_1) { Journal.find_by(pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d') }
   let(:found_journal_2) { Journal.find_by(pure_uuid: '68edd4d0-f54f-423c-9548-f0b7032e5b50') }
-  let!(:publisher) { create :publisher, pure_uuid: '435826f4-a25d-4005-b9da-47d3507834ff' }
+  let!(:publisher) { create(:publisher, pure_uuid: '435826f4-a25d-4005-b9da-47d3507834ff') }
   let(:http_response_1) { File.read(filename_1) }
   let(:http_response_2) { File.read(filename_2) }
   let(:http_error_response) { File.read(error_filename) }
@@ -48,11 +48,11 @@ describe PureJournalsImporter do
       end
 
       context 'when a journal matching the imported data already exists in the database' do
-        let(:existing_publisher) { create :publisher }
-        let!(:existing_journal) { create :journal,
+        let(:existing_publisher) { create(:publisher) }
+        let!(:existing_journal) { create(:journal,
                                          pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d',
                                          title: 'existing title',
-                                         publisher: existing_publisher }
+                                         publisher: existing_publisher) }
 
         it 'creates new journal records for every new journal in the imported data and updates existing publishers' do
           expect { importer.call }.to change(Journal, :count).by 1
@@ -79,11 +79,11 @@ describe PureJournalsImporter do
         end
 
         context 'when a journal matching the imported data already exists in the database' do
-          let(:existing_publisher) { create :publisher }
-          let!(:existing_journal) { create :journal,
+          let(:existing_publisher) { create(:publisher) }
+          let!(:existing_journal) { create(:journal,
                                            pure_uuid: 'b387416f-17e0-4ee3-a030-2f15b890380d',
                                            title: 'existing title',
-                                           publisher: existing_publisher }
+                                           publisher: existing_publisher) }
 
           it 'creates new journal records for every new journal in the imported data and updates existing publishers' do
             expect { importer.call }.to change(Journal, :count).by 1

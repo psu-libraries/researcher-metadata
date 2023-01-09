@@ -10,15 +10,15 @@ describe 'updating an authorship via the admin interface', type: :feature do
            last_name: 'Testuser')
   end
 
-  let!(:pub) { create :publication, title: 'Test Publication' }
+  let!(:pub) { create(:publication, title: 'Test Publication') }
 
   let!(:auth) do
-    create :authorship,
+    create(:authorship,
            publication: pub,
            user: user,
            author_number: 5,
            orcid_resource_identifier: nil,
-           confirmed: false
+           confirmed: false)
   end
 
   context 'when the current user is an admin' do

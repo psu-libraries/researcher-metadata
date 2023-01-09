@@ -23,7 +23,7 @@ describe 'Destroying a Proxy', type: :feature do
     end
 
     context 'when the DeputyAssignment is deactivated, but not destroyed in the db' do
-      let!(:deputy_assignment) { create :deputy_assignment, :confirmed, :active }
+      let!(:deputy_assignment) { create(:deputy_assignment, :confirmed, :active) }
       let!(:user) { deputy_assignment.primary }
       let!(:other) { deputy_assignment.deputy }
       let(:destroy_button) { I18n.t!('view_component.deputy_assignment_component.delete_as_primary') }
@@ -40,7 +40,7 @@ describe 'Destroying a Proxy', type: :feature do
     end
 
     context 'when the DeputyAssignment is actually destroyed in the db' do
-      let!(:deputy_assignment) { create :deputy_assignment, :unconfirmed, :active }
+      let!(:deputy_assignment) { create(:deputy_assignment, :unconfirmed, :active) }
       let!(:user) { deputy_assignment.deputy }
       let!(:other) { deputy_assignment.primary }
       let(:destroy_button) { I18n.t!('view_component.deputy_assignment_component.delete_as_deputy_unconfirmed') }

@@ -13,8 +13,8 @@ describe 'Confirming a Proxy', type: :feature do
   end
 
   context 'when logged in' do
-    let!(:user) { create :user }
-    let!(:deputy_assignment) { create :deputy_assignment, :unconfirmed, :active, deputy: user }
+    let!(:user) { create(:user) }
+    let!(:deputy_assignment) { create(:deputy_assignment, :unconfirmed, :active, deputy: user) }
 
     let(:accept_button) { I18n.t!('view_component.deputy_assignment_component.accept') }
 

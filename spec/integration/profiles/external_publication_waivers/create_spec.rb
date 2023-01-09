@@ -4,10 +4,10 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'submitting an open access waiver for a publication that is not in the database' do
-  let(:user) { create :user,
+  let(:user) { create(:user,
                       webaccess_id: 'test123',
                       first_name: 'Test',
-                      last_name: 'User' }
+                      last_name: 'User') }
 
   context 'with an authenticated primary user' do
     before do

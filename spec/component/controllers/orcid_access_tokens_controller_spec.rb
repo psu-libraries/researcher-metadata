@@ -12,7 +12,7 @@ describe OrcidAccessTokensController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when the user is authenticated' do
-      let!(:user) { create :user, orcid_access_token: token }
+      let!(:user) { create(:user, orcid_access_token: token) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
@@ -54,7 +54,7 @@ describe OrcidAccessTokensController, type: :controller do
 
     context 'when the user is authenticated' do
       let(:client) { double 'ORCID Oauth client' }
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
       let(:response) { double 'ORCID Oauth response',
                               code: response_code,
                               content_type: nil,

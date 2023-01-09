@@ -32,9 +32,9 @@ describe DeputyAssignment, type: :model do
 
   describe 'scopes' do
     describe '.active' do
-      let!(:active) { create :deputy_assignment, is_active: true }
+      let!(:active) { create(:deputy_assignment, is_active: true) }
 
-      before { create :deputy_assignment, is_active: false }
+      before { create(:deputy_assignment, is_active: false) }
 
       it 'returns active models' do
         expect(described_class.active).to contain_exactly(active)
@@ -42,9 +42,9 @@ describe DeputyAssignment, type: :model do
     end
 
     describe '.confirmed' do
-      let!(:confirmed) { create :deputy_assignment, confirmed_at: 1.day.ago }
+      let!(:confirmed) { create(:deputy_assignment, confirmed_at: 1.day.ago) }
 
-      before { create :deputy_assignment, confirmed_at: nil }
+      before { create(:deputy_assignment, confirmed_at: nil) }
 
       it 'returns confirmed models' do
         expect(described_class.confirmed).to contain_exactly(confirmed)
@@ -154,7 +154,7 @@ describe DeputyAssignment, type: :model do
   end
 
   describe '#confirm!' do
-    let(:assignment) { create :deputy_assignment, :unconfirmed }
+    let(:assignment) { create(:deputy_assignment, :unconfirmed) }
 
     it 'sets the appropriate flags to confirm an assignment' do
       expect {
@@ -165,7 +165,7 @@ describe DeputyAssignment, type: :model do
   end
 
   describe '#deactivate!' do
-    let(:assignment) { create :deputy_assignment, is_active: is_active }
+    let(:assignment) { create(:deputy_assignment, is_active: is_active) }
 
     context 'when is_active: true' do
       let(:is_active) { true }

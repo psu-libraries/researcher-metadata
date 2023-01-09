@@ -4,9 +4,9 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::PublicationMergesController, type: :controller do
-  let!(:group) { create :duplicate_publication_group }
-  let!(:pub1) { create :publication, duplicate_group: group }
-  let!(:pub2) { create :publication, duplicate_group: group }
+  let!(:group) { create(:duplicate_publication_group) }
+  let!(:pub1) { create(:publication, duplicate_group: group) }
+  let!(:pub2) { create(:publication, duplicate_group: group) }
 
   describe '#create' do
     let(:perform_request) do

@@ -5,8 +5,8 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin user organization membership detail page', type: :feature do
   let(:user) { create(:user, first_name: 'Bob', last_name: 'Testuser') }
-  let(:org) { create :organization, name: 'Test Org' }
-  let!(:membership) { create :user_organization_membership,
+  let(:org) { create(:organization, name: 'Test Org') }
+  let!(:membership) { create(:user_organization_membership,
                              user: user,
                              organization: org,
                              import_source: 'Pure',
@@ -14,7 +14,7 @@ describe 'Admin user organization membership detail page', type: :feature do
                              position_title: 'test position',
                              started_on: Date.new(2000, 1, 1),
                              ended_on: Date.new(2010, 2, 2),
-                             updated_by_user_at: Time.zone.local(2018, 11, 1, 11, 26, 0) }
+                             updated_by_user_at: Time.zone.local(2018, 11, 1, 11, 26, 0)) }
 
   context 'when the current user is an admin' do
     before do

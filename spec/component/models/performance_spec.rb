@@ -38,8 +38,8 @@ describe Performance, type: :model do
   end
 
   describe 'deleting a performance with user_performances' do
-    let(:p) { create :performance }
-    let!(:up) { create :user_performance, performance: p }
+    let(:p) { create(:performance) }
+    let!(:up) { create(:user_performance, performance: p) }
 
     it "also deletes the performance's user_performances" do
       p.destroy
@@ -48,9 +48,9 @@ describe Performance, type: :model do
   end
 
   describe '.visible' do
-    let(:visible_performance1) { create :performance, visible: true }
-    let(:visible_performance2) { create :performance, visible: true }
-    let(:invisible_performance) { create :performance, visible: false }
+    let(:visible_performance1) { create(:performance, visible: true) }
+    let(:visible_performance2) { create(:performance, visible: true) }
+    let(:invisible_performance) { create(:performance, visible: false) }
 
     it 'returns the performances that are marked as visible' do
       expect(described_class.visible).to match_array [visible_performance1, visible_performance2]

@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Deleting an Authorship', type: :feature do
-  let!(:auth) { create :authorship }
+  let!(:auth) { create(:authorship) }
 
   context 'when the current user is an admin' do
     before do

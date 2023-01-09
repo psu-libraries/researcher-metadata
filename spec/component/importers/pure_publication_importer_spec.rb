@@ -11,17 +11,17 @@ describe PurePublicationImporter do
   let(:filename_2) { Rails.root.join('spec', 'fixtures', 'pure_publications_2.json') }
   let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
 
-  let!(:pub1auth1) { create :user, pure_uuid: '5ec8ce05-0912-4d68-8633-c5618a3cf15d' }
-  let!(:pub2auth4) { create :user, pure_uuid: 'dc40be59-e778-404c-aaed-eddb9a992cb8' }
-  let!(:pub3auth2) { create :user, pure_uuid: '82195bc6-c5cd-479e-b6f8-545f0f0555ba' }
+  let!(:pub1auth1) { create(:user, pure_uuid: '5ec8ce05-0912-4d68-8633-c5618a3cf15d') }
+  let!(:pub2auth4) { create(:user, pure_uuid: 'dc40be59-e778-404c-aaed-eddb9a992cb8') }
+  let!(:pub3auth2) { create(:user, pure_uuid: '82195bc6-c5cd-479e-b6f8-545f0f0555ba') }
 
   let(:found_pub1) { PublicationImport.find_by(source: 'Pure', source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a') }
   let(:found_pub2) { PublicationImport.find_by(source: 'Pure', source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64') }
   let(:found_pub3) { PublicationImport.find_by(source: 'Pure', source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0') }
   let(:found_pub4) { PublicationImport.find_by(source: 'Pure', source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b') }
 
-  let!(:journal) { create :journal,
-                          pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f' }
+  let!(:journal) { create(:journal,
+                          pure_uuid: '6bd3ad47-c2bf-44cb-9d79-85d9fe14550f') }
 
   before do
     allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/523/research-outputs?navigationLink=false&size=1&offset=0',
@@ -32,8 +32,8 @@ describe PurePublicationImporter do
   end
 
   describe '#call' do
-    let!(:duplicate_pub1) { create :publication, title: 'Third Test Publication With a Really Unique Title', visible: true }
-    let!(:duplicate_pub2) { create :publication, title: 'Third Test Publication With a Really Unique Title', visible: true }
+    let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
+    let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
     context 'when the API endpoint is found' do
       let(:email) { spy 'notification email' }
@@ -243,17 +243,17 @@ describe PurePublicationImporter do
       end
 
       context 'when a publication record and a publication import record already exist for one of the publications in the imported data' do
-        let!(:existing_import) { create :publication_import,
+        let!(:existing_import) { create(:publication_import,
                                         source: 'Pure',
                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a',
                                         source_updated_at: Time.new(1999, 12, 31, 23, 59, 59),
-                                        publication: existing_pub }
-        let!(:existing_import2) { create :publication_import,
+                                        publication: existing_pub) }
+        let!(:existing_import2) { create(:publication_import,
                                          source: 'Pure',
                                          source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b',
                                          source_updated_at: Time.new(1999, 12, 30, 23, 59, 59),
-                                         publication: existing_pub2 }
-        let(:existing_pub) { create :publication,
+                                         publication: existing_pub2) }
+        let(:existing_pub) { create(:publication,
                                     updated_by_user_at: updated_ts,
                                     title: 'Existing Title',
                                     secondary_title: 'Existing Subtitle',
@@ -268,8 +268,8 @@ describe PurePublicationImporter do
                                     total_scopus_citations: 1,
                                     abstract: 'existing abstract',
                                     visible: false,
-                                    doi: doi }
-        let(:existing_pub2) { create :publication,
+                                    doi: doi) }
+        let(:existing_pub2) { create(:publication,
                                      updated_by_user_at: updated_ts,
                                      title: 'Existing Title2',
                                      secondary_title: 'Existing Subtitle2',
@@ -284,10 +284,10 @@ describe PurePublicationImporter do
                                      total_scopus_citations: 1,
                                      abstract: 'existing abstract2',
                                      visible: false,
-                                     doi: doi2 }
+                                     doi: doi2) }
         let(:doi) { 'https://doi.org/10.000/existing' }
         let(:doi2) { 'https://doi.org/10.000/existing2' }
-        let(:existing_journal) { create :journal }
+        let(:existing_journal) { create(:journal) }
 
         context 'when the existing publication record has not been manually updated' do
           let(:updated_ts) { nil }
@@ -319,12 +319,12 @@ describe PurePublicationImporter do
           end
 
           context 'when contributor records already exist for the existing publication' do
-            let!(:existing_contributor) { create :contributor_name,
+            let!(:existing_contributor) { create(:contributor_name,
                                                  first_name: 'An',
                                                  middle_name: 'Existing',
                                                  last_name: 'Contributor',
                                                  position: 3,
-                                                 publication: existing_pub }
+                                                 publication: existing_pub) }
 
             it 'replaces the existing contributor records with new records from the import data' do
               expect { importer.call }.to change(ContributorName, :count).by 12
@@ -365,10 +365,10 @@ describe PurePublicationImporter do
           end
 
           context 'when an authorship record already exists for the existing publication and user' do
-            let!(:existing_auth) { create :authorship,
+            let!(:existing_auth) { create(:authorship,
                                           user: pub1auth1,
                                           publication: existing_pub,
-                                          author_number: 6 }
+                                          author_number: 6) }
 
             it 'does not create a new authorship record' do
               expect { importer.call }.to change(Authorship, :count).by 3
@@ -449,8 +449,8 @@ describe PurePublicationImporter do
 
         context 'when the existing publication record has been manually updated' do
           let(:updated_ts) { Time.now }
-          let!(:new_journal) { create :journal,
-                                      pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad' }
+          let!(:new_journal) { create(:journal,
+                                      pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
 
           it 'creates a new publication import record for each new Published or Accepted/In press publication in the imported data' do
             expect { importer.call }.to change(PublicationImport, :count).by 2
@@ -468,12 +468,12 @@ describe PurePublicationImporter do
           end
 
           context 'when contributor records already exist for the existing publication' do
-            let!(:existing_contributor) { create :contributor_name,
+            let!(:existing_contributor) { create(:contributor_name,
                                                  first_name: 'An',
                                                  middle_name: 'Existing',
                                                  last_name: 'Contributor',
                                                  position: 3,
-                                                 publication: existing_pub }
+                                                 publication: existing_pub) }
 
             it 'does not modify existing contributor records on the existing publication' do
               expect { importer.call }.to change(ContributorName, :count).by 9
@@ -506,10 +506,10 @@ describe PurePublicationImporter do
           end
 
           context 'when an authorship record already exists for the existing publication and user' do
-            let!(:existing_auth) { create :authorship,
+            let!(:existing_auth) { create(:authorship,
                                           user: pub1auth1,
                                           publication: existing_pub,
-                                          author_number: 6 }
+                                          author_number: 6) }
 
             it 'does not create a new authorship record' do
               expect { importer.call }.to change(Authorship, :count).by 2

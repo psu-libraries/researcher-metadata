@@ -12,14 +12,14 @@ describe UserPerformancesController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:up) { create :user_performance,
+      let!(:up) { create(:user_performance,
                          user: user,
                          visible_in_profile: false,
-                         activity_insight_id: 5 }
-      let!(:other_up) { create :user_performance, user: other_user }
+                         activity_insight_id: 5) }
+      let!(:other_up) { create(:user_performance, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
@@ -58,14 +58,14 @@ describe UserPerformancesController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:up_1) { create :user_performance, user: user }
-      let!(:up_2) { create :user_performance, user: user }
-      let!(:up_3) { create :user_performance, user: user }
-      let!(:up_4) { create :user_performance, user: user }
-      let!(:other_up) { create :user_performance, user: other_user }
+      let!(:up_1) { create(:user_performance, user: user) }
+      let!(:up_2) { create(:user_performance, user: user) }
+      let!(:up_3) { create(:user_performance, user: user) }
+      let!(:up_4) { create(:user_performance, user: user) }
+      let!(:other_up) { create(:user_performance, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)

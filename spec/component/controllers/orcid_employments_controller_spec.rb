@@ -12,7 +12,7 @@ describe OrcidEmploymentsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when the user is authenticated' do
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
       let(:employment) { double 'ORCID employment', save!: nil, location: 'the_location' }
       let(:membership_collection) { double 'membership collection' }
 

@@ -11,7 +11,7 @@ describe 'Admin publication detail page', type: :feature do
                         first_name: 'Susan',
                         last_name: 'Tester') }
 
-  let!(:pub) { create :publication,
+  let!(:pub) { create(:publication,
                       title: "Bob's Publication",
                       journal_title: 'Prestigious Journal',
                       publisher_name: 'The Publisher',
@@ -28,65 +28,65 @@ describe 'Admin publication detail page', type: :feature do
                       journal: journal,
                       published_on: Date.new(2018, 8, 1),
                       open_access_button_last_checked_at: Time.new(2021, 7, 15, 13, 15, 0, '-00:00'),
-                      open_access_status: 'gold' }
+                      open_access_status: 'gold') }
 
-  let!(:auth1) { create :authorship,
+  let!(:auth1) { create(:authorship,
                         publication: pub,
-                        user: user1 }
+                        user: user1) }
 
-  let!(:auth2) { create :authorship,
+  let!(:auth2) { create(:authorship,
                         publication: pub,
-                        user: user2 }
+                        user: user2) }
 
-  let!(:con1) { create :contributor_name,
+  let!(:con1) { create(:contributor_name,
                        publication: pub,
                        first_name: 'Jill',
-                       last_name: 'Author' }
+                       last_name: 'Author') }
 
-  let!(:con2) { create :contributor_name,
+  let!(:con2) { create(:contributor_name,
                        publication: pub,
                        first_name: 'Jack',
-                       last_name: 'Contributor' }
+                       last_name: 'Contributor') }
 
-  let!(:imp1) { create :publication_import,
-                       publication: pub }
+  let!(:imp1) { create(:publication_import,
+                       publication: pub) }
 
-  let!(:imp2) { create :publication_import,
-                       publication: pub }
+  let!(:imp2) { create(:publication_import,
+                       publication: pub) }
 
-  let!(:grant1) { create :grant,
+  let!(:grant1) { create(:grant,
                          wos_agency_name: 'Test Agency1',
-                         wos_identifier: 'GRANT-ID-123'}
+                         wos_identifier: 'GRANT-ID-123')}
 
-  let!(:grant2) { create :grant,
+  let!(:grant2) { create(:grant,
                          wos_agency_name: 'Test Agency2',
-                         wos_identifier: 'GRANT-ID-456'}
+                         wos_identifier: 'GRANT-ID-456')}
 
-  let!(:rf1) { create :research_fund,
+  let!(:rf1) { create(:research_fund,
                       grant: grant1,
-                      publication: pub }
+                      publication: pub) }
 
-  let!(:rf2) { create :research_fund,
+  let!(:rf2) { create(:research_fund,
                       grant: grant2,
-                      publication: pub }
+                      publication: pub) }
 
-  let!(:oal_user) { create :open_access_location,
+  let!(:oal_user) { create(:open_access_location,
                            publication: pub,
                            source: Source::USER,
-                           url: 'https://example.com/oal1' }
+                           url: 'https://example.com/oal1') }
 
-  let!(:oal_ss) { create :open_access_location,
+  let!(:oal_ss) { create(:open_access_location,
                          publication: pub,
                          source: Source::SCHOLARSPHERE,
-                         url: 'https://scholarsphere.psu.edu/oal2' }
+                         url: 'https://scholarsphere.psu.edu/oal2') }
 
-  let!(:oal_oab) { create :open_access_location,
+  let!(:oal_oab) { create(:open_access_location,
                           publication: pub,
                           source: Source::OPEN_ACCESS_BUTTON,
-                          url: 'https://openaccess.org/publications/oal3' }
+                          url: 'https://openaccess.org/publications/oal3') }
 
-  let!(:journal) { create :journal,
-                          title: 'Test Journal Record' }
+  let!(:journal) { create(:journal,
+                          title: 'Test Journal Record') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

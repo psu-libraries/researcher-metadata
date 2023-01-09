@@ -4,8 +4,8 @@ require 'component/component_spec_helper'
 
 describe PublicationMergeOnMatchingPolicy do
   let(:policy) { described_class.new publication1, publication2 }
-  let!(:publication1) { create :sample_publication }
-  let!(:publication2) { create :sample_publication }
+  let!(:publication1) { create(:sample_publication) }
+  let!(:publication2) { create(:sample_publication) }
 
   describe '#merge!' do
     describe 'title merging' do
@@ -23,7 +23,7 @@ describe PublicationMergeOnMatchingPolicy do
 
       context 'when one publication was imported from Pure' do
         before do
-          create :publication_import, :from_pure, publication: publication2
+          create(:publication_import, :from_pure, publication: publication2)
           publication2.save
         end
 
@@ -63,7 +63,7 @@ describe PublicationMergeOnMatchingPolicy do
     describe 'secondary_title merging' do
       context 'when one or both publications were imported from Pure' do
         before do
-          create :publication_import, :from_pure, publication: publication2
+          create(:publication_import, :from_pure, publication: publication2)
           publication2.save
         end
 
@@ -490,7 +490,7 @@ describe PublicationMergeOnMatchingPolicy do
 
         context 'and one is a pure import' do
           before do
-            create :publication_import, :from_pure, publication: publication2
+            create(:publication_import, :from_pure, publication: publication2)
             publication2.save
           end
 

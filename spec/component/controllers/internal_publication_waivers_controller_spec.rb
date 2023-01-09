@@ -7,43 +7,43 @@ describe InternalPublicationWaiversController, type: :controller do
   let!(:assignment) { create(:deputy_assignment) }
   let!(:user) { UserDecorator.new(user: assignment.primary, impersonator: deputy) }
   let!(:deputy) { nil }
-  let!(:other_user) { create :user }
-  let!(:pub) { create :publication }
-  let!(:oa_pub) { create :publication, open_access_locations: [build(:open_access_location, :open_access_button)] }
-  let!(:uoa_pub) { create :publication, open_access_locations: [build(:open_access_location, :user)] }
-  let!(:other_pub) { create :publication }
-  let!(:uploaded_pub) { create :publication }
-  let!(:other_uploaded_pub) { create :publication }
-  let!(:auth) { create :authorship, user: user, publication: pub }
-  let!(:waived_pub) { create :publication }
-  let!(:other_waived_pub) { create :publication }
-  let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
-  let!(:other_waived_auth) { create :authorship, user: other_user, publication: other_waived_pub }
-  let!(:uploaded_auth) { create :authorship, user: user, publication: uploaded_pub }
-  let!(:other_uploaded_auth) { create :authorship, user: other_user, publication: other_uploaded_pub }
-  let!(:unconfirmed_pub) { create :publication }
+  let!(:other_user) { create(:user) }
+  let!(:pub) { create(:publication) }
+  let!(:oa_pub) { create(:publication, open_access_locations: [build(:open_access_location, :open_access_button)]) }
+  let!(:uoa_pub) { create(:publication, open_access_locations: [build(:open_access_location, :user)]) }
+  let!(:other_pub) { create(:publication) }
+  let!(:uploaded_pub) { create(:publication) }
+  let!(:other_uploaded_pub) { create(:publication) }
+  let!(:auth) { create(:authorship, user: user, publication: pub) }
+  let!(:waived_pub) { create(:publication) }
+  let!(:other_waived_pub) { create(:publication) }
+  let!(:waived_auth) { create(:authorship, user: user, publication: waived_pub) }
+  let!(:other_waived_auth) { create(:authorship, user: other_user, publication: other_waived_pub) }
+  let!(:uploaded_auth) { create(:authorship, user: user, publication: uploaded_pub) }
+  let!(:other_uploaded_auth) { create(:authorship, user: other_user, publication: other_uploaded_pub) }
+  let!(:unconfirmed_pub) { create(:publication) }
 
   before do
-    create :authorship, user: user, publication: oa_pub
-    create :authorship, user: user, publication: uoa_pub
-    create :authorship,
+    create(:authorship, user: user, publication: oa_pub)
+    create(:authorship, user: user, publication: uoa_pub)
+    create(:authorship,
            user: user,
-           publication: other_uploaded_pub
-    create :authorship,
+           publication: other_uploaded_pub)
+    create(:authorship,
            user: user,
-           publication: other_waived_pub
-    create :authorship,
+           publication: other_waived_pub)
+    create(:authorship,
            user: user,
            publication: unconfirmed_pub,
-           confirmed: false
+           confirmed: false)
 
-    create :scholarsphere_work_deposit, authorship: uploaded_auth, status: 'Pending'
-    create :scholarsphere_work_deposit, authorship: other_uploaded_auth, status: 'Pending'
+    create(:scholarsphere_work_deposit, authorship: uploaded_auth, status: 'Pending')
+    create(:scholarsphere_work_deposit, authorship: other_uploaded_auth, status: 'Pending')
 
-    create :internal_publication_waiver,
-           authorship: waived_auth
-    create :internal_publication_waiver,
-           authorship: other_waived_auth
+    create(:internal_publication_waiver,
+           authorship: waived_auth)
+    create(:internal_publication_waiver,
+           authorship: other_waived_auth)
   end
 
   describe '#new' do

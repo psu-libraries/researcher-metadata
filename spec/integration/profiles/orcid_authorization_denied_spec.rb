@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 
 describe 'The landing page that a user sees when they deny authorization to connect to ORCID', type: :feature do
-  let!(:user) { create :user }
+  let!(:user) { create(:user) }
 
   before do
     authenticate_as(user)

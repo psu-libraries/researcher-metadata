@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 
 describe API::V1::PresentationSerializer do
-  let(:presentation) { create :presentation,
+  let(:presentation) { create(:presentation,
                               title: 'A Presentation',
                               activity_insight_identifier: '123456789',
                               name: 'A Name',
@@ -18,7 +18,7 @@ describe API::V1::PresentationSerializer do
                               refereed: 'No',
                               abstract: 'An Abstract',
                               comment: 'A Comment',
-                              scope: 'Local' }
+                              scope: 'Local') }
 
   describe 'data attributes' do
     subject { serialized_data_attributes(presentation) }
@@ -44,21 +44,21 @@ describe API::V1::PresentationSerializer do
     end
 
     context 'when the presentation has contributions' do
-      let(:u1) { create :user, webaccess_id: 'abc123' }
-      let(:u2) { create :user, webaccess_id: 'def456' }
+      let(:u1) { create(:user, webaccess_id: 'abc123') }
+      let(:u2) { create(:user, webaccess_id: 'def456') }
 
       before do
-        create :presentation_contribution,
+        create(:presentation_contribution,
                presentation: presentation,
                user: u1,
                visible_in_profile: true,
-               position_in_profile: 4
+               position_in_profile: 4)
 
-        create :presentation_contribution,
+        create(:presentation_contribution,
                presentation: presentation,
                user: u2,
                visible_in_profile: false,
-               position_in_profile: nil
+               position_in_profile: nil)
       end
 
       it { expect(subject).to include(profile_preferences: [{ user_id: u1.id,

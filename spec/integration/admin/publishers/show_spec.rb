@@ -4,9 +4,9 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin publisher detail page', type: :feature do
-  let!(:publisher) { create :publisher,
+  let!(:publisher) { create(:publisher,
                             name: 'Test Publisher',
-                            pure_uuid: 'pure-abc-123' }
+                            pure_uuid: 'pure-abc-123') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

@@ -200,11 +200,11 @@ describe ContributorName, type: :model do
   end
 
   describe '#to_scholarsphere_creator' do
-    let(:cn) { create :contributor_name,
+    let(:cn) { create(:contributor_name,
                       user: user,
                       first_name: fn,
                       middle_name: mn,
-                      last_name: ln }
+                      last_name: ln) }
 
     context "when the contributor name doesn't have an associated user" do
       context 'when the contributor has a first name' do
