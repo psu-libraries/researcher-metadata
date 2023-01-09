@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe API::V::PublicationsController do
+describe API::V1::PublicationsController do
   describe 'GET /v1/publications' do
     def query_pubs
       get "/v1/publications#{params}", headers: { 'X-API-Key': 'token123' }
