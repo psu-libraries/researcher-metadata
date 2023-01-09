@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Deleting an API Token', type: :feature do
-  let!(:token) { create :api_token }
+  let!(:token) { create(:api_token) }
 
   context 'when the current user is an admin' do
     before do

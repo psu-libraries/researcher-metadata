@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 
 describe 'Profile page', type: :feature do
-  let!(:user) { create :user,
+  let!(:user) { create(:user,
                        :with_psu_identity,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
@@ -19,14 +19,14 @@ describe 'Profile page', type: :feature do
                        show_all_contracts: true,
                        ai_office_area_code: '123',
                        ai_office_phone_1: '456',
-                       ai_office_phone_2: '7890'}
-  let!(:pub1) { create :publication,
+                       ai_office_phone_2: '7890')}
+  let!(:pub1) { create(:publication,
                        total_scopus_citations: 5,
                        visible: true,
                        title: 'First Publication',
                        journal_title: 'Journal 1',
-                       published_on: Date.new(2010, 1, 1) }
-  let!(:pub2) { create :publication,
+                       published_on: Date.new(2010, 1, 1)) }
+  let!(:pub2) { create(:publication,
                        total_scopus_citations: 17,
                        visible: true,
                        title: 'Second Publication',
@@ -34,106 +34,106 @@ describe 'Profile page', type: :feature do
                        published_on: Date.new(2011, 1, 1),
                        open_access_locations: [build(:open_access_location,
                                                      source: Source::OPEN_ACCESS_BUTTON,
-                                                     url: 'https://example.org/pubs/123.pdf')] }
-  let!(:pub3) { create :publication,
+                                                     url: 'https://example.org/pubs/123.pdf')]) }
+  let!(:pub3) { create(:publication,
                        publication_type: 'Book',
                        visible: true,
                        title: 'Third Publication',
                        journal_title: 'Journal 3',
-                       published_on: Date.new(2013, 1, 1) }
-  let!(:pub4) { create :publication,
+                       published_on: Date.new(2013, 1, 1)) }
+  let!(:pub4) { create(:publication,
                        publication_type: 'Conference Proceeding',
                        visible: true,
                        title: 'Fourth Publication',
                        journal_title: 'Journal 4',
-                       published_on: Date.new(2010, 1, 1) }
-  let!(:pres1) { create :presentation,
+                       published_on: Date.new(2010, 1, 1)) }
+  let!(:pres1) { create(:presentation,
                         visible: true,
                         title: 'First Presentation',
                         organization: 'Organization 1',
-                        location: 'Location 1' }
-  let!(:pres2) { create :presentation,
+                        location: 'Location 1') }
+  let!(:pres2) { create(:presentation,
                         visible: true,
                         title: 'Second Presentation',
                         organization: 'Organization 2',
-                        location: 'Location 2' }
-  let!(:perf1) { create :performance,
+                        location: 'Location 2') }
+  let!(:perf1) { create(:performance,
                         visible: true,
                         title: 'First Performance',
                         location: 'Location 1',
-                        start_on: Date.new(2018, 1, 2) }
-  let!(:perf2) { create :performance,
+                        start_on: Date.new(2018, 1, 2)) }
+  let!(:perf2) { create(:performance,
                         visible: true,
                         title: 'Second Performance',
                         location: 'Location 2',
-                        start_on: Date.new(2019, 1, 2) }
-  let!(:etd1) { create :etd,
+                        start_on: Date.new(2019, 1, 2)) }
+  let!(:etd1) { create(:etd,
                        title: 'First Thesis',
                        author_first_name: 'Anne',
                        author_last_name: 'Author',
-                       year: 1998, submission_type: 'Master Thesis' }
-  let!(:etd2) { create :etd,
+                       year: 1998, submission_type: 'Master Thesis') }
+  let!(:etd2) { create(:etd,
                        title: 'Second Thesis',
                        author_first_name: 'Another',
                        author_last_name: 'Author',
-                       year: 1999, submission_type: 'Dissertation' }
-  let!(:org) { create :organization, name: 'Test Organization' }
-  let!(:grant1) { create :grant,
+                       year: 1999, submission_type: 'Dissertation') }
+  let!(:org) { create(:organization, name: 'Test Organization') }
+  let!(:grant1) { create(:grant,
                          title: 'First Grant',
                          agency_name: 'National Science Foundation',
                          start_date: Date.new(2001, 2, 3),
-                         end_date: Date.new(2004, 5, 6) }
-  let!(:grant2) { create :grant,
+                         end_date: Date.new(2004, 5, 6)) }
+  let!(:grant2) { create(:grant,
                          identifier: 'Grant123',
                          wos_agency_name: 'Agency 2',
                          start_date: Date.new(2010, 1, 1),
-                         end_date: Date.new(2015, 2, 2) }
+                         end_date: Date.new(2015, 2, 2)) }
 
   before do
-    create :authorship, user: user, publication: pub1
-    create :authorship, user: user, publication: pub2
-    create :authorship, user: user, publication: pub3
-    create :authorship, user: user, publication: pub4
+    create(:authorship, user: user, publication: pub1)
+    create(:authorship, user: user, publication: pub2)
+    create(:authorship, user: user, publication: pub3)
+    create(:authorship, user: user, publication: pub4)
 
-    create :presentation_contribution, user: user, presentation: pres1
-    create :presentation_contribution, user: user, presentation: pres2
+    create(:presentation_contribution, user: user, presentation: pres1)
+    create(:presentation_contribution, user: user, presentation: pres2)
 
-    create :user_performance, user: user, performance: perf1
-    create :user_performance, user: user, performance: perf2
+    create(:user_performance, user: user, performance: perf1)
+    create(:user_performance, user: user, performance: perf2)
 
-    create :education_history_item,
+    create(:education_history_item,
            user: user,
            degree: 'MS',
            institution: 'Institution 1',
            emphasis_or_major: 'Major 1',
-           end_year: 2000
-    create :education_history_item,
+           end_year: 2000)
+    create(:education_history_item,
            user: user,
            degree: 'PhD',
            institution: 'Institution 2',
            emphasis_or_major: 'Major 2',
-           end_year: 2005
+           end_year: 2005)
 
-    create :committee_membership, user: user, etd: etd1, role: 'Committee Member'
-    create :committee_membership, user: user, etd: etd2, role: 'Committee Chair'
+    create(:committee_membership, user: user, etd: etd1, role: 'Committee Member')
+    create(:committee_membership, user: user, etd: etd2, role: 'Committee Chair')
 
-    create :news_feed_item,
+    create(:news_feed_item,
            user: user,
            title: 'First Story',
-           published_on: Date.new(2016, 1, 2)
-    create :news_feed_item,
+           published_on: Date.new(2016, 1, 2))
+    create(:news_feed_item,
            user: user,
            title: 'Second Story',
-           published_on: Date.new(2017, 3, 4)
+           published_on: Date.new(2017, 3, 4))
 
-    create :user_organization_membership,
+    create(:user_organization_membership,
            user: user,
            organization: org,
            import_source: 'Pure',
-           source_identifier: 'pure123'
+           source_identifier: 'pure123')
 
-    create :researcher_fund, grant: grant1, user: user
-    create :researcher_fund, grant: grant2, user: user
+    create(:researcher_fund, grant: grant1, user: user)
+    create(:researcher_fund, grant: grant2, user: user)
   end
 
   context 'when the profile is active' do

@@ -12,7 +12,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
                :set_statement,
                :other_version_preferred?)
   end
-  let!(:publication) { create :sample_publication }
+  let!(:publication) { create(:sample_publication) }
   let(:op) do
     op = oab_permissions.new
     op.version = I18n.t('file_versions.accepted_version')

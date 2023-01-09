@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin duplicate publication group detail page', type: :feature do
-  let!(:pub1) { create :publication,
+  let!(:pub1) { create(:publication,
                        title: 'Duplicate Publication',
                        secondary_title: 'subtitle1',
                        journal_title: 'journal1',
@@ -18,9 +18,9 @@ describe 'Admin duplicate publication group detail page', type: :feature do
                        issn: 'issn1',
                        doi: 'https://doi.org/10.000/doi1',
                        publication_type: 'Trade Journal Article',
-                       duplicate_group: pub1_group }
+                       duplicate_group: pub1_group) }
 
-  let!(:pub2) { create :publication,
+  let!(:pub2) { create(:publication,
                        title: 'A duplicate publication',
                        secondary_title: 'subtitle2',
                        journal_title: 'journal2',
@@ -34,47 +34,47 @@ describe 'Admin duplicate publication group detail page', type: :feature do
                        issn: 'issn2',
                        doi: 'https://doi.org/10.000/doi2',
                        publication_type: 'Academic Journal Article',
-                       duplicate_group: pub2_group }
+                       duplicate_group: pub2_group) }
 
-  let!(:nd_pub1) { create :publication }
-  let!(:nd_pub2) { create :publication }
+  let!(:nd_pub1) { create(:publication) }
+  let!(:nd_pub2) { create(:publication) }
 
   let(:pub1_group) { nil }
   let(:pub2_group) { nil }
 
-  let(:group) { create :duplicate_publication_group }
+  let(:group) { create(:duplicate_publication_group) }
 
-  let(:user1) { create :user, first_name: 'Test1', last_name: 'User1' }
-  let(:user2) { create :user, first_name: 'Test2', last_name: 'User2' }
-  let(:user3) { create :user, first_name: 'Test3', last_name: 'User3' }
+  let(:user1) { create(:user, first_name: 'Test1', last_name: 'User1') }
+  let(:user2) { create(:user, first_name: 'Test2', last_name: 'User2') }
+  let(:user3) { create(:user, first_name: 'Test3', last_name: 'User3') }
 
-  let!(:con1) { create :contributor_name,
+  let!(:con1) { create(:contributor_name,
                        first_name: 'Test1',
                        last_name: 'Contributor1',
                        publication: pub1,
-                       position: 2 }
-  let!(:con2) { create :contributor_name,
+                       position: 2) }
+  let!(:con2) { create(:contributor_name,
                        first_name: 'Test2',
                        last_name: 'Contributor2',
                        publication: pub1,
-                       position: 1 }
-  let!(:con3) { create :contributor_name,
+                       position: 1) }
+  let!(:con3) { create(:contributor_name,
                        first_name: 'Test3',
                        last_name: 'Contributor3',
                        publication: pub2,
-                       position: 1 }
+                       position: 1) }
 
   before do
-    create :authorship, publication: pub1, user: user1
-    create :authorship, publication: pub2, user: user2
-    create :authorship, publication: pub2, user: user3
+    create(:authorship, publication: pub1, user: user1)
+    create(:authorship, publication: pub2, user: user2)
+    create(:authorship, publication: pub2, user: user3)
 
-    create :publication_import, publication: pub1, source: 'Pure', source_identifier: 'pure-abc123'
-    create :publication_import, publication: pub1, source: 'Pure', source_identifier: 'pure-xyz789'
-    create :publication_import, publication: pub2, source: 'Activity Insight', source_identifier: 'ai-abc123'
-    create :publication_import, publication: pub2, source: 'Activity Insight', source_identifier: 'ai-xyz789'
+    create(:publication_import, publication: pub1, source: 'Pure', source_identifier: 'pure-abc123')
+    create(:publication_import, publication: pub1, source: 'Pure', source_identifier: 'pure-xyz789')
+    create(:publication_import, publication: pub2, source: 'Activity Insight', source_identifier: 'ai-abc123')
+    create(:publication_import, publication: pub2, source: 'Activity Insight', source_identifier: 'ai-xyz789')
 
-    create :non_duplicate_publication_group, publications: [pub1, nd_pub1, nd_pub2]
+    create(:non_duplicate_publication_group, publications: [pub1, nd_pub1, nd_pub2])
   end
 
   context 'when the current user is an admin' do

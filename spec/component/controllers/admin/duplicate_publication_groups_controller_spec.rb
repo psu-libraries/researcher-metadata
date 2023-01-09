@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::DuplicatePublicationGroupsController, type: :controller do
-  let!(:group) { create :duplicate_publication_group }
+  let!(:group) { create(:duplicate_publication_group) }
 
   describe '#delete' do
     let(:perform_request) { delete :delete, params: { id: 1 } }
@@ -19,7 +19,7 @@ describe Admin::DuplicatePublicationGroupsController, type: :controller do
       end
 
       context 'when the group has one publication' do
-        let!(:pub1) { create :publication, duplicate_publication_group_id: group.id }
+        let!(:pub1) { create(:publication, duplicate_publication_group_id: group.id) }
 
         it 'removes the publication from the group' do
           delete :delete, params: { id: group.id }
@@ -47,8 +47,8 @@ describe Admin::DuplicatePublicationGroupsController, type: :controller do
       end
 
       context 'when the group has two publications' do
-        let!(:pub1) { create :publication, duplicate_group: group }
-        let!(:pub2) { create :publication, duplicate_group: group }
+        let!(:pub1) { create(:publication, duplicate_group: group) }
+        let!(:pub2) { create(:publication, duplicate_group: group) }
 
         it "doesn't remove the publications from the group" do
           delete :delete, params: { id: group.id }

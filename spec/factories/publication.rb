@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :publication do
     transient do
-      user { create :sample_user }
+      user { create(:sample_user) }
     end
 
     title { 'Test' }
@@ -23,8 +23,8 @@ FactoryBot.define do
       published_on { Date.today - 6.months }
 
       after :create do |pub, options|
-        create :sample_contributor_name, publication: pub
-        create :authorship, publication: pub, user: options.user
+        create(:sample_contributor_name, publication: pub)
+        create(:authorship, publication: pub, user: options.user)
       end
     end
 
@@ -42,7 +42,7 @@ FactoryBot.define do
 
     trait :with_open_access_location do
       after :create do |pub|
-        create :sample_open_access_location, publication: pub
+        create(:sample_open_access_location, publication: pub)
       end
     end
 
@@ -52,47 +52,47 @@ FactoryBot.define do
 
     trait :from_activity_insight do
       after :create do |pub|
-        create :publication_import, :from_activity_insight, publication: pub
+        create(:publication_import, :from_activity_insight, publication: pub)
       end
     end
 
     trait :from_pure do
       after :create do |pub|
-        create :publication_import, :from_pure, publication: pub
+        create(:publication_import, :from_pure, publication: pub)
       end
     end
 
     trait :with_duplicate_group do
-      duplicate_publication_group_id { (create :duplicate_publication_group).id }
+      duplicate_publication_group_id { create(:duplicate_publication_group).id }
 
       after :create do |pub|
-        create :sample_publication,
+        create(:sample_publication,
                :oa_publication,
                :from_activity_insight,
                title: pub.title,
                doi: pub.doi,
-               duplicate_publication_group_id: pub.duplicate_publication_group_id
+               duplicate_publication_group_id: pub.duplicate_publication_group_id)
       end
     end
 
     trait :with_non_duplicate_group do
-      duplicate_publication_group_id { (create :duplicate_publication_group).id }
+      duplicate_publication_group_id { create(:duplicate_publication_group).id }
 
       after :create do |pub|
-        pub2 = create :sample_publication,
+        pub2 = create(:sample_publication,
                       :oa_publication,
                       :from_activity_insight,
                       title: pub.title,
                       doi: pub.doi,
-                      duplicate_publication_group_id: pub.duplicate_publication_group_id
+                      duplicate_publication_group_id: pub.duplicate_publication_group_id)
 
-        create :non_duplicate_publication_group_membership,
+        create(:non_duplicate_publication_group_membership,
                publication: pub,
-               non_duplicate_publication_group_id: (create :non_duplicate_publication_group).id
+               non_duplicate_publication_group_id: create(:non_duplicate_publication_group).id)
 
-        create :non_duplicate_publication_group_membership,
+        create(:non_duplicate_publication_group_membership,
                publication: pub2,
-               non_duplicate_publication_group_id: pub.non_duplicate_groups.first.id
+               non_duplicate_publication_group_id: pub.non_duplicate_groups.first.id)
       end
     end
   end

@@ -3,9 +3,9 @@
 require 'component/component_spec_helper'
 
 RSpec.describe DeputyAssignmentComponent, type: :component do
-  let(:deputy_assignment) { build_stubbed :deputy_assignment, primary: primary, deputy: deputy, confirmed_at: confirmed_at }
-  let(:primary) { build_stubbed :user, first_name: 'Primary', last_name: 'User', webaccess_id: 'pri123' }
-  let(:deputy) { build_stubbed :user, first_name: 'Deputy', last_name: 'User', webaccess_id: 'dep456' }
+  let(:deputy_assignment) { build_stubbed(:deputy_assignment, primary: primary, deputy: deputy, confirmed_at: confirmed_at) }
+  let(:primary) { build_stubbed(:user, first_name: 'Primary', last_name: 'User', webaccess_id: 'pri123') }
+  let(:deputy) { build_stubbed(:user, first_name: 'Deputy', last_name: 'User', webaccess_id: 'dep456') }
   let(:confirmed_at) { nil }
 
   before do

@@ -8,11 +8,11 @@ describe OpenAccessButtonPublicationImporter do
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       # Tests that the " and ' characters are stripped from title when querying OAB title endpoint
-      let!(:pub) { create :publication, doi: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'" }
+      let!(:pub) { create(:publication, doi: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'") }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
       end
 
       it 'creates a new open access location for the publication' do
@@ -31,11 +31,11 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+      let!(:pub) { create(:publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
       end
 
       it 'creates a new open access location for the publication' do
@@ -54,11 +54,11 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context "when an existing publication's DOI does not return usable data" do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fnodata')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab5.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
       end
 
       it 'does not raise an error' do
@@ -67,12 +67,12 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a DOI that corresponds to an available article listed with Open Access Button' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.000/doi1' }
+      let!(:pub) { create(:publication,
+                          doi: 'https://doi.org/10.000/doi1') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab1.json').read)
       end
 
       context 'when the publication has no open access locations' do
@@ -93,10 +93,10 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       context 'when the publication already has an open access location from Open Access Button' do
-        let!(:oal) { create :open_access_location,
+        let!(:oal) { create(:open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: Source::OPEN_ACCESS_BUTTON}
+                            source: Source::OPEN_ACCESS_BUTTON)}
 
         it 'does not create any new open access locations' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -115,12 +115,12 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a DOI that does not correspond to an available article listed with Open Access Button' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.000/doi1' }
+      let!(:pub) { create(:publication,
+                          doi: 'https://doi.org/10.000/doi1') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab2.json').read)
       end
 
       context 'when the publication has no open access locations' do
@@ -135,10 +135,10 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       context 'when the publication already has an open access location' do
-        let!(:oal) { create :open_access_location,
+        let!(:oal) { create(:open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: Source::OPEN_ACCESS_BUTTON}
+                            source: Source::OPEN_ACCESS_BUTTON)}
 
         it 'removes the existing open access location' do
           expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
@@ -153,7 +153,7 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an error is raised' do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       before do
         allow(CGI).to receive(:escape).and_raise(RuntimeError)
@@ -177,14 +177,14 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       it 'continues with the import' do
-        create :publication, doi: 'https://doi.org/10.000/nodata'
+        create(:publication, doi: 'https://doi.org/10.000/nodata')
         importer.import_all
         expect(ImporterErrorLog).to have_received(:log_error).twice
       end
     end
 
     context 'when the API request times out too many times' do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       before do
         allow(HTTParty).to receive(:get).and_raise(Net::ReadTimeout)
@@ -208,7 +208,7 @@ describe OpenAccessButtonPublicationImporter do
       end
 
       it 'continues with the import' do
-        create :publication, doi: 'https://doi.org/10.000/nodata'
+        create(:publication, doi: 'https://doi.org/10.000/nodata')
         importer.import_all
         expect(ImporterErrorLog).to have_received(:log_error).twice
       end
@@ -217,11 +217,11 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
-      let!(:pub) { create :publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+      let!(:pub) { create(:publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
       end
 
       it 'creates a new open access location for the publication' do
@@ -235,11 +235,11 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a blank DOI' do
-      let!(:pub) { create :publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+      let!(:pub) { create(:publication, doi: '', title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
       end
 
       it 'creates a new open access location for the publication' do
@@ -253,11 +253,11 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context "when an existing publication's DOI does not return usable data" do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fnodata')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab5.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
       end
 
       it 'does not raise an error' do
@@ -266,13 +266,13 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a DOI that corresponds to an available article listed with Open Access Button' do
-      let!(:pub) { create :publication,
+      let!(:pub) { create(:publication,
                           doi: 'https://doi.org/10.000/doi1',
-                          open_access_button_last_checked_at: last_check }
+                          open_access_button_last_checked_at: last_check) }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab1.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab1.json').read)
       end
 
       context 'when the publication has been checked in Open Access Button before' do
@@ -290,10 +290,10 @@ describe OpenAccessButtonPublicationImporter do
         end
 
         context 'when the publication already has an open access location' do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: Source::OPEN_ACCESS_BUTTON}
+                              source: Source::OPEN_ACCESS_BUTTON)}
 
           it 'does not create any new open access locations' do
             expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
@@ -332,13 +332,13 @@ describe OpenAccessButtonPublicationImporter do
     end
 
     context 'when an existing publication has a DOI that does not correspond to an available article listed with Open Access Button' do
-      let!(:pub) { create :publication,
+      let!(:pub) { create(:publication,
                           doi: 'https://doi.org/10.000/doi1',
-                          open_access_button_last_checked_at: last_check }
+                          open_access_button_last_checked_at: last_check) }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
-          .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab2.json')))
+          .and_return(Rails.root.join('spec', 'fixtures', 'oab2.json').read)
       end
 
       context 'when the publication has been checked in Open Access Button before' do
@@ -356,10 +356,10 @@ describe OpenAccessButtonPublicationImporter do
         end
 
         context 'when the publication already has an open access location' do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: Source::OPEN_ACCESS_BUTTON}
+                              source: Source::OPEN_ACCESS_BUTTON)}
 
           it 'removes the existing open access location' do
             expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
@@ -392,19 +392,19 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_with_doi' do
     let!(:pub1) do
-      create :publication,
+      create(:publication,
              doi: 'https://doi.org/10.000/doi1',
-             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes'
+             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes')
     end
     let!(:pub2) do
-      create :publication,
+      create(:publication,
              doi: nil,
-             title: 'Publication 2'
+             title: 'Publication 2')
     end
 
     before do
       allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?id=10.000%2Fdoi1')
-        .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+        .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
     end
 
     it 'creates a new open access location for the publication' do
@@ -420,19 +420,19 @@ describe OpenAccessButtonPublicationImporter do
 
   describe '#import_without_doi' do
     let!(:pub1) do
-      create :publication,
+      create(:publication,
              doi: '',
-             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes'
+             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes')
     end
     let!(:pub2) do
-      create :publication,
+      create(:publication,
              doi: 'https://doi.org/10.000/doi1',
-             title: 'Publication 2'
+             title: 'Publication 2')
     end
 
     before do
       allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-        .and_return(File.read(Rails.root.join('spec', 'fixtures', 'oab3.json')))
+        .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
     end
 
     it 'creates a new open access location for the publication' do

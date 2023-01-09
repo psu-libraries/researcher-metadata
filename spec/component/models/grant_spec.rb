@@ -400,8 +400,8 @@ describe Grant, type: :model do
   end
 
   describe 'deleting a grant with research funds' do
-    let(:g) { create :grant }
-    let!(:rf) { create :research_fund, grant: g }
+    let(:g) { create(:grant) }
+    let!(:rf) { create(:research_fund, grant: g) }
 
     it "also deletes the grant's research funds" do
       g.destroy
@@ -410,8 +410,8 @@ describe Grant, type: :model do
   end
 
   describe 'deleting a grant with researcher funds' do
-    let(:g) { create :grant }
-    let!(:rf) { create :researcher_fund, grant: g }
+    let(:g) { create(:grant) }
+    let!(:rf) { create(:researcher_fund, grant: g) }
 
     it "also deletes the grant's researcher funds" do
       g.destroy

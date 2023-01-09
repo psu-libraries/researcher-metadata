@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin open access location detail page', type: :feature do
-  let!(:oal) { create :open_access_location,
+  let!(:oal) { create(:open_access_location,
                       publication: pub,
                       host_type: 'publisher',
                       license: 'cc-by-nc',
@@ -14,9 +14,9 @@ describe 'Admin open access location detail page', type: :feature do
                       url: 'https://nature.com/articles/testpub123',
                       landing_page_url: 'https://nature.com/articles/testpub123/info',
                       pdf_url: 'https://nature.com/articles/testpub123/pdf',
-                      version: 'publishedVersion' }
+                      version: 'publishedVersion') }
 
-  let(:pub) { create :publication, title: 'Test Pub' }
+  let(:pub) { create(:publication, title: 'Test Pub') }
 
   context 'when the current user is an admin' do
     before do

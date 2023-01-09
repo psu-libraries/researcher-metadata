@@ -4,21 +4,21 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin API token detail page', type: :feature do
-  let!(:token) { create :api_token,
+  let!(:token) { create(:api_token,
                         token: 'secret_token_1',
                         app_name: 'Test Application',
                         admin_email: 'admin123@psu.edu',
                         write_access: true,
                         total_requests: 472,
-                        last_used_at: Time.zone.local(2019, 8, 14, 16, 44, 0) }
+                        last_used_at: Time.zone.local(2019, 8, 14, 16, 44, 0)) }
 
-  let!(:org1) { create :organization, name: 'Organization One' }
-  let!(:org2) { create :organization, name: 'Organization Two' }
+  let!(:org1) { create(:organization, name: 'Organization One') }
+  let!(:org2) { create(:organization, name: 'Organization Two') }
 
   context 'when the current user is an admin' do
     before do
-      create :organization_api_permission, api_token: token, organization: org1
-      create :organization_api_permission, api_token: token, organization: org2
+      create(:organization_api_permission, api_token: token, organization: org1)
+      create(:organization_api_permission, api_token: token, organization: org2)
       authenticate_admin_user
     end
 

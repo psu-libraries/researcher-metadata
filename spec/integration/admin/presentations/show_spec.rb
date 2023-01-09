@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin presentation detail page', type: :feature do
-  let!(:pres) { create :presentation,
+  let!(:pres) { create(:presentation,
                        activity_insight_identifier: 'ai_abc123',
                        name: 'Test Name',
                        title: 'Test Title',
@@ -19,16 +19,16 @@ describe 'Admin presentation detail page', type: :feature do
                        refereed: 'Yes',
                        abstract: 'Test Abstract',
                        comment: 'Test Comment',
-                       scope: 'Test Scope' }
+                       scope: 'Test Scope') }
 
-  let!(:user1) { create :user, first_name: 'Susan', last_name: 'Testuser' }
-  let!(:user2) { create :user, first_name: 'Bob', last_name: 'Tester' }
+  let!(:user1) { create(:user, first_name: 'Susan', last_name: 'Testuser') }
+  let!(:user2) { create(:user, first_name: 'Bob', last_name: 'Tester') }
 
   context 'when the current user is an admin' do
     before do
       authenticate_admin_user
-      create :presentation_contribution, user: user1, presentation: pres
-      create :presentation_contribution, user: user2, presentation: pres
+      create(:presentation_contribution, user: user1, presentation: pres)
+      create(:presentation_contribution, user: user2, presentation: pres)
     end
 
     describe 'the page content' do

@@ -8,37 +8,37 @@ describe 'Admin list of publications by organization', type: :feature do
   context 'when the current user is an admin', js: true do
     before { authenticate_admin_user }
 
-    let(:user1) { create :user }
-    let(:user2) { create :user }
+    let(:user1) { create(:user) }
+    let(:user2) { create(:user) }
 
-    let(:pub1) { create :publication, title: 'Pub One', published_on: Date.new(2000, 1, 1) }
-    let(:pub2) { create :publication, title: 'Pub Two', published_on: Date.new(2000, 1, 1) }
-    let(:pub3) { create :publication, title: 'Pub Three' }
-    let(:pub4) { create :publication, title: 'Pub Four', published_on: Date.new(2020, 1, 1) }
-    let(:pub5) { create :publication, title: 'Pub Five', published_on: Date.new(1980, 1, 1) }
+    let(:pub1) { create(:publication, title: 'Pub One', published_on: Date.new(2000, 1, 1)) }
+    let(:pub2) { create(:publication, title: 'Pub Two', published_on: Date.new(2000, 1, 1)) }
+    let(:pub3) { create(:publication, title: 'Pub Three') }
+    let(:pub4) { create(:publication, title: 'Pub Four', published_on: Date.new(2020, 1, 1)) }
+    let(:pub5) { create(:publication, title: 'Pub Five', published_on: Date.new(1980, 1, 1)) }
 
-    let(:org) { create :organization }
-    let(:child_org) { create :organization, parent: org }
-    let(:other_org) { create :organization }
+    let(:org) { create(:organization) }
+    let(:child_org) { create(:organization, parent: org) }
+    let(:other_org) { create(:organization) }
 
-    let!(:mem1) { create :user_organization_membership,
+    let!(:mem1) { create(:user_organization_membership,
                          user: user1,
                          organization: org,
                          started_on: Date.new(1990, 1, 1),
-                         ended_on: Date.new(2010, 1, 1) }
-    let!(:mem2) { create :user_organization_membership,
+                         ended_on: Date.new(2010, 1, 1)) }
+    let!(:mem2) { create(:user_organization_membership,
                          user: user2,
                          organization: child_org,
-                         started_on: Date.new(1990, 1, 1) }
-    let!(:mem3) { create :user_organization_membership,
+                         started_on: Date.new(1990, 1, 1)) }
+    let!(:mem3) { create(:user_organization_membership,
                          user: user1,
                          organization: other_org,
-                         started_on: Date.new(1970, 1, 1) }
+                         started_on: Date.new(1970, 1, 1)) }
 
-    let!(:auth1) { create :authorship, user: user1, publication: pub1 }
-    let!(:auth2) { create :authorship, user: user2, publication: pub2 }
-    let!(:auth3) { create :authorship, user: user1, publication: pub4 }
-    let!(:auth4) { create :authorship, user: user1, publication: pub5 }
+    let!(:auth1) { create(:authorship, user: user1, publication: pub1) }
+    let!(:auth2) { create(:authorship, user: user2, publication: pub2) }
+    let!(:auth3) { create(:authorship, user: user1, publication: pub4) }
+    let!(:auth4) { create(:authorship, user: user1, publication: pub5) }
 
     describe 'navigating to the publication list from an organization' do
       before do
@@ -97,8 +97,8 @@ describe 'Admin list of publications by organization', type: :feature do
     describe 'pagination of the list' do
       before do
         (3..26).each do |i|
-          pub = create :publication, title: "Pub #{i}", published_on: Date.new(2000, 1, 1)
-          create :authorship, user: user1, publication: pub
+          pub = create(:publication, title: "Pub #{i}", published_on: Date.new(2000, 1, 1))
+          create(:authorship, user: user1, publication: pub)
           visit_index
         end
       end

@@ -4,9 +4,9 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin API token edit page', type: :feature do
-  let!(:token) { create :api_token,
+  let!(:token) { create(:api_token,
                         app_name: 'Test Application',
-                        admin_email: 'admin123@psu.edu' }
+                        admin_email: 'admin123@psu.edu') }
 
   context 'when the current user is an admin' do
     before do

@@ -67,8 +67,8 @@ describe ETD, type: :model do
   it { is_expected.to accept_nested_attributes_for(:committee_memberships).allow_destroy(true) }
 
   describe 'deleting a etd with committee_memberships' do
-    let(:etd) { create :etd }
-    let!(:cm) { create :committee_membership, etd: etd }
+    let(:etd) { create(:etd) }
+    let!(:cm) { create(:committee_membership, etd: etd) }
 
     it "also deletes the etd's committee_memberships" do
       etd.destroy

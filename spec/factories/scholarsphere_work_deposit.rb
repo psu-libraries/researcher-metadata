@@ -2,7 +2,7 @@
 
 FactoryBot.define do
   factory :scholarsphere_work_deposit do
-    authorship { create :authorship }
+    authorship { create(:authorship) }
     status { 'Pending' }
     title { 'Test Title' }
     description { 'Test description.' }

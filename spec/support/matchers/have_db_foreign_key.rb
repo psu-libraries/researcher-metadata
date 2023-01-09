@@ -60,7 +60,7 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
   end
 
   def foreign_keys
-    ::ActiveRecord::Base.connection.foreign_keys(table_name)
+    ActiveRecord::Base.connection.foreign_keys(table_name)
   end
 
   def model_class

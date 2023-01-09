@@ -4,8 +4,8 @@ require 'component/component_spec_helper'
 
 describe CommitteeImporter do
   let(:importer) { described_class.new(filename: filename) }
-  let!(:user_abc1) { create :user, webaccess_id: 'abc1' }
-  let!(:user_abc2) { create :user, webaccess_id: 'abc2' }
+  let!(:user_abc1) { create(:user, webaccess_id: 'abc1') }
+  let!(:user_abc2) { create(:user, webaccess_id: 'abc2') }
 
   describe '#call' do
     context 'when given a well-formed .csv file of valid etd committee data' do
@@ -19,7 +19,7 @@ describe CommitteeImporter do
 
       context 'when etd records exist in the database' do
         let!(:etd_1) {
-          create :etd,
+          create(:etd,
                  webaccess_id: 'bbt2',
                  author_first_name: 'Robert',
                  author_middle_name: 'B',
@@ -30,7 +30,7 @@ describe CommitteeImporter do
                  submission_type: 'Dissertation',
                  external_identifier: '22222',
                  access_level: 'open_access',
-                 updated_by_user_at: nil
+                 updated_by_user_at: nil)
         }
 
         context 'when no etd committee membership records exist in the database' do
@@ -50,7 +50,7 @@ describe CommitteeImporter do
         end
 
         context 'when a committee membership in the .csv file already exists in the database' do
-          let!(:cm) { create :committee_membership, etd: etd_1, user: user_abc1, role: 'Dissertation Advisor' }
+          let!(:cm) { create(:committee_membership, etd: etd_1, user: user_abc1, role: 'Dissertation Advisor') }
 
           it 'creates new records for the new committee memberships and does not update the existing membership' do
             expect { importer.call }.to change(CommitteeMembership, :count).by 2

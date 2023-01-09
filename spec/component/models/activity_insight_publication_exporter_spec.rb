@@ -5,9 +5,9 @@ require 'component/component_spec_helper'
 describe ActivityInsightPublicationExporter do
   subject(:exporter) { described_class }
 
-  let!(:user) { create :user, webaccess_id: 'abc123', activity_insight_identifier: '123456' }
-  let!(:authorship1) { create :authorship, user: user, publication: publication1 }
-  let!(:authorship2) { create :authorship, user: user, publication: publication2 }
+  let!(:user) { create(:user, webaccess_id: 'abc123', activity_insight_identifier: '123456') }
+  let!(:authorship1) { create(:authorship, user: user, publication: publication1) }
+  let!(:authorship2) { create(:authorship, user: user, publication: publication2) }
   let!(:publication1) do
     create(:publication,
            id: 1,
@@ -33,8 +33,8 @@ describe ActivityInsightPublicationExporter do
     create(:publication_import, publication: publication2,
                                 source: 'Activity Insight', source_identifier: 'ai_id_1')
   end
-  let!(:contributor_name1) { create :contributor_name, publication: publication1 }
-  let!(:contributor_name2) { create :contributor_name, publication: publication2 }
+  let!(:contributor_name1) { create(:contributor_name, publication: publication1) }
+  let!(:contributor_name2) { create(:contributor_name, publication: publication2) }
 
   describe '#to_xml' do
     it 'generates xml' do

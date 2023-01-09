@@ -4,15 +4,15 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin external publication waiver detail page', type: :feature do
-  let!(:waiver) { create :external_publication_waiver,
+  let!(:waiver) { create(:external_publication_waiver,
                          user: user,
                          publication_title: 'A Publication with a Distinct Title of Some Sort',
                          reason_for_waiver: 'Just because.',
                          abstract: 'What this publication is all about.',
                          doi: 'https://doi.org/the-doi',
                          journal_title: 'Test Journal',
-                         publisher: 'Test Publisher' }
-  let!(:user) { create :user, first_name: 'Joe', last_name: 'Testerson' }
+                         publisher: 'Test Publisher') }
+  let!(:user) { create(:user, first_name: 'Joe', last_name: 'Testerson') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }
@@ -53,25 +53,25 @@ describe 'Admin external publication waiver detail page', type: :feature do
       end
 
       context 'when there are publications in the database that match the title in the waiver' do
-        let!(:user1) { create :user, first_name: 'Author', last_name: 'One' }
-        let!(:user2) { create :user, first_name: 'Author', last_name: 'Two' }
-        let!(:user3) { create :user, first_name: 'Author', last_name: 'Three' }
-        let!(:pub1) { create :publication,
+        let!(:user1) { create(:user, first_name: 'Author', last_name: 'One') }
+        let!(:user2) { create(:user, first_name: 'Author', last_name: 'Two') }
+        let!(:user3) { create(:user, first_name: 'Author', last_name: 'Three') }
+        let!(:pub1) { create(:publication,
                              title: 'A test publication with a long, distinct title of some sort',
                              published_on: Date.new(2011, 1, 1),
-                             journal_title: 'Some Journal' }
-        let!(:pub2) { create :publication,
+                             journal_title: 'Some Journal') }
+        let!(:pub2) { create(:publication,
                              title: 'Another publication',
                              secondary_title: 'with a longer, distinct title of some sort',
                              published_on: Date.new(1999, 1, 1),
-                             journal_title: 'Another Journal' }
-        let!(:pub3) { create :publication,
-                             title: 'Some Other Publication' }
+                             journal_title: 'Another Journal') }
+        let!(:pub3) { create(:publication,
+                             title: 'Some Other Publication') }
 
-        let!(:auth1) { create :authorship, user: user, publication: pub1 }
-        let!(:auth2) { create :authorship, user: user1, publication: pub1 }
-        let!(:auth3) { create :authorship, user: user2, publication: pub1 }
-        let!(:auth4) { create :authorship, user: user3, publication: pub2 }
+        let!(:auth1) { create(:authorship, user: user, publication: pub1) }
+        let!(:auth2) { create(:authorship, user: user1, publication: pub1) }
+        let!(:auth3) { create(:authorship, user: user2, publication: pub1) }
+        let!(:auth4) { create(:authorship, user: user3, publication: pub2) }
 
         context 'when the waiver has not already been linked to a publication' do
           before { visit rails_admin.show_path(model_name: :external_publication_waiver, id: waiver.id) }
@@ -116,7 +116,7 @@ describe 'Admin external publication waiver detail page', type: :feature do
         end
 
         context 'when the waiver has already been linked to a publication' do
-          let!(:int_waiver) { create :internal_publication_waiver, authorship: auth1 }
+          let!(:int_waiver) { create(:internal_publication_waiver, authorship: auth1) }
 
           before do
             waiver.update!(internal_publication_waiver: int_waiver)

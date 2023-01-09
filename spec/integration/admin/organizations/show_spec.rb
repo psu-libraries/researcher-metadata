@@ -4,26 +4,26 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin organization detail page', type: :feature do
-  let!(:org) { create :organization,
+  let!(:org) { create(:organization,
                       pure_uuid: 'pure-uuid-001',
                       name: 'Test Org',
                       organization_type: 'College',
                       pure_external_identifier: 'EXT-ID',
-                      parent: parent_org }
+                      parent: parent_org) }
 
-  let(:parent_org) { create :organization, name: 'Test Parent Org' }
-  let!(:child_org1) { create :organization, name: 'Test Child Org 1', parent: org }
-  let!(:child_org2) { create :organization, name: 'Test Child Org 2', parent: org }
+  let(:parent_org) { create(:organization, name: 'Test Parent Org') }
+  let!(:child_org1) { create(:organization, name: 'Test Child Org 1', parent: org) }
+  let!(:child_org2) { create(:organization, name: 'Test Child Org 2', parent: org) }
 
-  let(:user1) { create :user, first_name: 'Susan', last_name: 'Testuser' }
-  let(:user2) { create :user, first_name: 'Bob', last_name: 'Tester' }
+  let(:user1) { create(:user, first_name: 'Susan', last_name: 'Testuser') }
+  let(:user2) { create(:user, first_name: 'Bob', last_name: 'Tester') }
 
   context 'when the current user is an admin' do
     before do
       authenticate_admin_user
 
-      create :user_organization_membership, organization: org, user: user1
-      create :user_organization_membership, organization: org, user: user2
+      create(:user_organization_membership, organization: org, user: user1)
+      create(:user_organization_membership, organization: org, user: user2)
     end
 
     describe 'the page content' do

@@ -5,7 +5,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Creating an external publication waiver', type: :feature do
   context 'when the current user is an admin' do
-    let!(:user) { create :user, first_name: 'Emily', last_name: 'Tester' }
+    let!(:user) { create(:user, first_name: 'Emily', last_name: 'Tester') }
 
     before do
       authenticate_admin_user

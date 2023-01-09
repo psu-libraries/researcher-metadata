@@ -44,9 +44,9 @@ describe ExternalPublicationWaiver, type: :model do
   end
 
   describe '.not_linked' do
-    let!(:w1) { create :external_publication_waiver }
-    let!(:w2) { create :external_publication_waiver, internal_publication_waiver: int_waiver }
-    let(:int_waiver) { create :internal_publication_waiver }
+    let!(:w1) { create(:external_publication_waiver) }
+    let!(:w2) { create(:external_publication_waiver, internal_publication_waiver: int_waiver) }
+    let(:int_waiver) { create(:internal_publication_waiver) }
 
     it 'returns external publication waivers that are not associated with an internal publication waiver' do
       expect(described_class.not_linked).to eq [w1]
@@ -63,11 +63,11 @@ describe ExternalPublicationWaiver, type: :model do
 
   describe '#matching_publications' do
     let(:waiver) { described_class.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
-    let!(:pub1) { create :publication, title: 'A test publication with a long, distinct title of some sort' }
-    let!(:pub2) { create :publication, title: 'Another publication', secondary_title: 'with a longer, distinct title of some sort' }
-    let!(:pub3) { create :publication, title: 'Some Other Publication' }
-    let!(:pub4) { create :publication, title: 'A publication with a long, but rather different title' }
-    let!(:pub5) { create :publication, title: 'A Publication with a Distinct Title of Some Sort' }
+    let!(:pub1) { create(:publication, title: 'A test publication with a long, distinct title of some sort') }
+    let!(:pub2) { create(:publication, title: 'Another publication', secondary_title: 'with a longer, distinct title of some sort') }
+    let!(:pub3) { create(:publication, title: 'Some Other Publication') }
+    let!(:pub4) { create(:publication, title: 'A publication with a long, but rather different title') }
+    let!(:pub5) { create(:publication, title: 'A Publication with a Distinct Title of Some Sort') }
 
     it 'returns all publications with a title that closely matches the title in the waiver' do
       expect(waiver.matching_publications).to match_array [pub1, pub2, pub5]
@@ -78,7 +78,7 @@ describe ExternalPublicationWaiver, type: :model do
     let(:waiver) { described_class.new(publication_title: 'A Publication with a Distinct Title of Some Sort') }
 
     context 'when there is a publication with a title that closely matches the title in the waiver' do
-      let!(:pub) { create :publication, title: 'A test publication with a long, distinct title of some sort' }
+      let!(:pub) { create(:publication, title: 'A test publication with a long, distinct title of some sort') }
 
       it 'returns true' do
         expect(waiver.has_matching_publications).to be true
@@ -86,7 +86,7 @@ describe ExternalPublicationWaiver, type: :model do
     end
 
     context 'when there are no publications with a title that closely matches the title in the waiver' do
-      let!(:pub) { create :publication, title: 'A publication with a long, but rather different title' }
+      let!(:pub) { create(:publication, title: 'A publication with a long, but rather different title') }
 
       it 'returns false' do
         expect(waiver.has_matching_publications).to be false

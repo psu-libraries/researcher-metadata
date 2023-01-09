@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 require_relative '../../../../lib/utilities/works_generator'
 
 describe WorksGenerator do
-  let!(:user) { create :user, webaccess_id: 'abc123' }
+  let!(:user) { create(:user, webaccess_id: 'abc123') }
   let(:generator) { described_class.new(user.webaccess_id) }
 
   context 'when Rails.env is production' do

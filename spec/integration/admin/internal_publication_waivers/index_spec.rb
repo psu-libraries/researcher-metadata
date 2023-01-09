@@ -8,14 +8,14 @@ describe 'Admin internal publication waivers list', type: :feature do
     before { authenticate_admin_user }
 
     describe 'the page content' do
-      let!(:waiver1) { create :internal_publication_waiver, authorship: auth1 }
-      let!(:waiver2) { create :internal_publication_waiver, authorship: auth2 }
-      let!(:auth1) { create :authorship, publication: pub1, user: user1 }
-      let!(:auth2) { create :authorship, publication: pub2, user: user2 }
-      let!(:user1) { create :user, first_name: 'Joe', last_name: 'Testerson' }
-      let!(:user2) { create :user, first_name: 'Beth', last_name: 'Testuser' }
-      let!(:pub1) { create :publication, title: 'Publication One' }
-      let!(:pub2) { create :publication, title: 'Publication Two' }
+      let!(:waiver1) { create(:internal_publication_waiver, authorship: auth1) }
+      let!(:waiver2) { create(:internal_publication_waiver, authorship: auth2) }
+      let!(:auth1) { create(:authorship, publication: pub1, user: user1) }
+      let!(:auth2) { create(:authorship, publication: pub2, user: user2) }
+      let!(:user1) { create(:user, first_name: 'Joe', last_name: 'Testerson') }
+      let!(:user2) { create(:user, first_name: 'Beth', last_name: 'Testuser') }
+      let!(:pub1) { create(:publication, title: 'Publication One') }
+      let!(:pub2) { create(:publication, title: 'Publication Two') }
 
       before { visit rails_admin.index_path(model_name: :internal_publication_waiver) }
 

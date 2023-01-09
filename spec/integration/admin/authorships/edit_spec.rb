@@ -10,14 +10,14 @@ describe 'Admin authorship edit page', type: :feature do
            last_name: 'Testuser')
   end
 
-  let!(:pub) { create :publication, title: 'A Test Publication' }
+  let!(:pub) { create(:publication, title: 'A Test Publication') }
 
   let!(:auth) do
-    create :authorship,
+    create(:authorship,
            publication: pub,
            user: user,
            author_number: 5,
-           orcid_resource_identifier: 'identifier-12345'
+           orcid_resource_identifier: 'identifier-12345')
   end
 
   context 'when the current user is an admin' do

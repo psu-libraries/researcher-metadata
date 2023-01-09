@@ -40,15 +40,15 @@ describe PSUDickinsonPublicationImporter do
                     user_match: nil,
                     ambiguous_user_matches: [u2, u3] }
 
-  let!(:u1) { create :user }
-  let!(:u2) { create :user }
-  let!(:u3) { create :user }
+  let!(:u1) { create(:user) }
+  let!(:u2) { create(:user) }
+  let!(:u3) { create(:user) }
 
-  let!(:existing_import) { create :publication_import,
+  let!(:existing_import) { create(:publication_import,
                                   source: 'Dickinson Law IDEAS Repo',
-                                  source_identifier: 'existing-identifier' }
+                                  source_identifier: 'existing-identifier') }
 
-  let!(:duplicate_pub) { create :publication, title: 'A Penn State Law Article' }
+  let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
 
   before do
     allow(Fieldhand::Repository).to receive(:new).with('https://ideas.dickinsonlaw.psu.edu/do/oai').and_return dickinson_law_repo

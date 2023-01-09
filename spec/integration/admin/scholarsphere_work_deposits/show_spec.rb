@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin ScholarSphere work deposit detail page', type: :feature do
-  let!(:deposit) { create :scholarsphere_work_deposit,
+  let!(:deposit) { create(:scholarsphere_work_deposit,
                           authorship: auth,
                           status: 'Success',
                           error_message: 'No errors occurred.',
@@ -13,9 +13,9 @@ describe 'Admin ScholarSphere work deposit detail page', type: :feature do
                           description: 'A description',
                           published_date: Date.new(2020, 12, 20),
                           embargoed_until: Date.new(2022, 1, 1),
-                          rights: 'https://rightsstatements.org/page/InC/1.0/' }
-  let!(:auth) { create :authorship }
-  let!(:upload) { create :scholarsphere_file_upload, work_deposit: deposit }
+                          rights: 'https://rightsstatements.org/page/InC/1.0/') }
+  let!(:auth) { create(:authorship) }
+  let!(:upload) { create(:scholarsphere_file_upload, work_deposit: deposit) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

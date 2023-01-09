@@ -4,11 +4,11 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin email error detail page', type: :feature do
-  let!(:error) { create :email_error,
+  let!(:error) { create(:email_error,
                         user: u,
-                        message: 'Test Message' }
+                        message: 'Test Message') }
 
-  let!(:u) { create :user, first_name: 'Test', last_name: 'User' }
+  let!(:u) { create(:user, first_name: 'Test', last_name: 'User') }
 
   context 'when the current user is an admin' do
     before do

@@ -11,14 +11,14 @@ describe 'Admin dashboard', type: :feature do
 
     describe 'the page content' do
       before do
-        create_list :publication, 3
-        create_list :user, 3
-        create_list :duplicate_publication_group, 3
-        create_list :presentation, 7
-        create_list :etd, 8
-        create_list :organization, 2
-        create_list :performance, 6
-        create_list :grant, 5
+        create_list(:publication, 3)
+        create_list(:user, 3)
+        create_list(:duplicate_publication_group, 3)
+        create_list(:presentation, 7)
+        create_list(:etd, 8)
+        create_list(:organization, 2)
+        create_list(:performance, 6)
+        create_list(:grant, 5)
 
         visit rails_admin.dashboard_path
       end

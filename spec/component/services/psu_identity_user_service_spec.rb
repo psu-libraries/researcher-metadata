@@ -13,10 +13,10 @@ describe PsuIdentityUserService, vcr: true do
 
     context 'when the User exists in the database' do
       let!(:user) do
-        create :user, webaccess_id: webaccess_id,
+        create(:user, webaccess_id: webaccess_id,
                       first_name: 'FName',
                       last_name: 'LName',
-                      middle_name: 'MName'
+                      middle_name: 'MName')
       end
 
       context 'when identity data is found' do
