@@ -11,7 +11,8 @@ gem 'rails_admin_toggleable'
 
 # Support for Penn State Azure Active Directory authentication
 gem 'omniauth', '~> 2.0'
-gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth-oauth2', '~> 1.7.0'
+gem 'oauth2', '~> 1.4.0'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
@@ -45,7 +46,7 @@ gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Ca
 gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
-gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
+gem 'psu_identity', '0.2'               # connect to Penn State's identity API
 gem 'puma', '~> 5.6'                    # use Puma as the app server
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
