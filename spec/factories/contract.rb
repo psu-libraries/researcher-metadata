@@ -7,7 +7,7 @@ FactoryBot.define do
     sponsor { 'Test Sponsor' }
     status { 'Awarded' }
     amount { 1000 }
-    sequence(:ospkey) { |n| 123450 + n }
+    sequence(:ospkey) { |n| n + 123450 }
     award_start_on { '9-5-18' }
     award_end_on { '9-5-19' }
   end

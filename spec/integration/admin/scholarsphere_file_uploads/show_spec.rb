@@ -4,9 +4,9 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin ScholarSphere file upload detail page', type: :feature do
-  let!(:upload) { create :scholarsphere_file_upload,
-                         work_deposit: deposit }
-  let!(:deposit) { create :scholarsphere_work_deposit, title: 'Test Deposit' }
+  let!(:upload) { create(:scholarsphere_file_upload,
+                         work_deposit: deposit) }
+  let!(:deposit) { create(:scholarsphere_work_deposit, title: 'Test Deposit') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

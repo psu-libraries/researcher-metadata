@@ -10,16 +10,16 @@ describe 'Admin authorship detail page', type: :feature do
            last_name: 'Testuser')
   end
 
-  let!(:pub) { create :publication, title: 'A Test Publication' }
+  let!(:pub) { create(:publication, title: 'A Test Publication') }
 
   let!(:auth) do
-    create :authorship,
+    create(:authorship,
            publication: pub,
            user: user,
-           author_number: 5
+           author_number: 5)
   end
 
-  let!(:dep) { create :scholarsphere_work_deposit, title: 'Test Deposit', authorship: auth }
+  let!(:dep) { create(:scholarsphere_work_deposit, title: 'Test Deposit', authorship: auth) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

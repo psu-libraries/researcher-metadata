@@ -11,7 +11,7 @@ describe 'Admin contract detail page', type: :feature do
                         first_name: 'Susan',
                         last_name: 'Tester') }
 
-  let!(:contract) { create :contract,
+  let!(:contract) { create(:contract,
                            title: "Bob's Contract",
                            contract_type: 'Grant',
                            sponsor: 'Government Organization',
@@ -19,23 +19,23 @@ describe 'Admin contract detail page', type: :feature do
                            amount: 10000,
                            ospkey: 123456,
                            award_start_on: Date.new(2018, 9, 24),
-                           award_end_on: Date.new(2018, 9, 25) }
+                           award_end_on: Date.new(2018, 9, 25)) }
 
-  let!(:user_contract1) { create :user_contract,
+  let!(:user_contract1) { create(:user_contract,
                                  contract: contract,
-                                 user: user1 }
+                                 user: user1) }
 
-  let!(:user_contract2) { create :user_contract,
+  let!(:user_contract2) { create(:user_contract,
                                  contract: contract,
-                                 user: user2 }
+                                 user: user2) }
 
-  let!(:imp1) { create :contract_import,
+  let!(:imp1) { create(:contract_import,
                        activity_insight_id: 7654321,
-                       contract: contract }
+                       contract: contract) }
 
-  let!(:imp2) { create :contract_import,
+  let!(:imp2) { create(:contract_import,
                        activity_insight_id: 8765432,
-                       contract: contract }
+                       contract: contract) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

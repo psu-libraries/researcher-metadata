@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::DuplicatePublicationGroupingsController, type: :controller do
-  let!(:user) { create :user }
+  let!(:user) { create(:user) }
 
   describe '#create' do
     let(:perform_request) { post :create, params: { user_id: user.id } }

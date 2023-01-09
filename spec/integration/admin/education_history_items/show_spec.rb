@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin education history item detail page', type: :feature do
-  let!(:item) { create :education_history_item,
+  let!(:item) { create(:education_history_item,
                        user: user,
                        activity_insight_identifier: '1234567890',
                        degree: 'Test Degree',
@@ -21,9 +21,9 @@ describe 'Admin education history item detail page', type: :feature do
                        description: 'Test description',
                        comments: 'Test comments',
                        start_year: 2000,
-                       end_year: 2005 }
+                       end_year: 2005) }
 
-  let(:user) { create :user, first_name: 'Jane', last_name: 'Testuser' }
+  let(:user) { create(:user, first_name: 'Jane', last_name: 'Testuser') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

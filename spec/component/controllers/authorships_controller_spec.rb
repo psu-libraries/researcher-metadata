@@ -12,7 +12,7 @@ describe AuthorshipsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
       let(:pub) { double 'publication', id: 3, title: 'Test Title' }
       let(:service) { spy 'authorship claim service' }
 
@@ -39,7 +39,7 @@ describe AuthorshipsController, type: :controller do
       end
 
       context 'when a validation error occurs' do
-        let(:auth) { build :authorship }
+        let(:auth) { build(:authorship) }
         let(:errors) { double 'validation errors', full_messages: ['bad data!'] }
 
         before do
@@ -66,14 +66,14 @@ describe AuthorshipsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:authorship) { create :authorship,
+      let!(:authorship) { create(:authorship,
                                  user: user,
                                  visible_in_profile: false,
-                                 author_number: 1 }
-      let!(:other_authorship) { create :authorship, user: other_user }
+                                 author_number: 1) }
+      let!(:other_authorship) { create(:authorship, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
@@ -118,14 +118,14 @@ describe AuthorshipsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:authorship_1) { create :authorship, user: user }
-      let!(:authorship_2) { create :authorship, user: user }
-      let!(:authorship_3) { create :authorship, user: user }
-      let!(:authorship_4) { create :authorship, user: user }
-      let!(:other_authorship) { create :authorship, user: other_user }
+      let!(:authorship_1) { create(:authorship, user: user) }
+      let!(:authorship_2) { create(:authorship, user: user) }
+      let!(:authorship_3) { create(:authorship, user: user) }
+      let!(:authorship_4) { create(:authorship, user: user) }
+      let!(:other_authorship) { create(:authorship, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)

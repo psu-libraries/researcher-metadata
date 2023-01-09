@@ -4,12 +4,12 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating an internal publication waiver via the admin interface', type: :feature do
-  let!(:waiver) { create :internal_publication_waiver,
+  let!(:waiver) { create(:internal_publication_waiver,
                          authorship: authorship,
-                         reason_for_waiver: 'because' }
-  let!(:authorship) { create :authorship, user: user, publication: pub }
-  let!(:user) { create :user, first_name: 'James', last_name: 'Testington' }
-  let!(:pub) { create :publication, title: 'A Test Publication' }
+                         reason_for_waiver: 'because') }
+  let!(:authorship) { create(:authorship, user: user, publication: pub) }
+  let!(:user) { create(:user, first_name: 'James', last_name: 'Testington') }
+  let!(:pub) { create(:publication, title: 'A Test Publication') }
 
   context 'when the current user is an admin' do
     before do

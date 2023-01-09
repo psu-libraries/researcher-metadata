@@ -4,11 +4,11 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'visiting the page to submit an open access waiver for a publication' do
-  let(:user) { create :user,
+  let(:user) { create(:user,
                       webaccess_id: 'test123',
                       first_name: 'Test',
-                      last_name: 'User' }
-  let(:pub) { create :publication,
+                      last_name: 'User') }
+  let(:pub) { create(:publication,
                      title: 'Test Publication',
                      abstract: 'This is the abstract.',
                      doi: 'https://doi.org/10.000/1234',
@@ -16,22 +16,22 @@ describe 'visiting the page to submit an open access waiver for a publication' d
                      issue: '583',
                      volume: '971',
                      page_range: '478-483',
-                     published_on: Date.new(2019, 1, 1) }
-  let(:other_pub) { create :publication }
-  let(:oa_pub) { create :publication, open_access_locations: [build(:open_access_location, :open_access_button, url: 'a URL')] }
-  let(:uoa_pub) { create :publication, open_access_locations: [build(:open_access_location, :user, url: 'user URL')] }
-  let!(:auth) { create :authorship, user: user, publication: pub }
+                     published_on: Date.new(2019, 1, 1)) }
+  let(:other_pub) { create(:publication) }
+  let(:oa_pub) { create(:publication, open_access_locations: [build(:open_access_location, :open_access_button, url: 'a URL')]) }
+  let(:uoa_pub) { create(:publication, open_access_locations: [build(:open_access_location, :user, url: 'user URL')]) }
+  let!(:auth) { create(:authorship, user: user, publication: pub) }
 
   before do
-    create :authorship, user: user, publication: oa_pub
-    create :authorship, user: user, publication: uoa_pub
+    create(:authorship, user: user, publication: oa_pub)
+    create(:authorship, user: user, publication: uoa_pub)
   end
 
   context 'when the user is not signed in' do
     before { visit new_internal_publication_waiver_path(pub) }
 
     it 'does not allow them to visit the page' do
-      expect(page).to have_no_current_path new_internal_publication_waiver_path(pub), ignore_query: true
+      expect(page).not_to have_current_path new_internal_publication_waiver_path(pub), ignore_query: true
     end
   end
 

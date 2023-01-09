@@ -8,8 +8,8 @@ describe 'Admin duplicate publication group list', type: :feature do
     before { authenticate_admin_user }
 
     describe 'the page content' do
-      let!(:group1) { create :duplicate_publication_group }
-      let!(:group2) { create :duplicate_publication_group }
+      let!(:group1) { create(:duplicate_publication_group) }
+      let!(:group2) { create(:duplicate_publication_group) }
 
       before { visit rails_admin.index_path(model_name: :duplicate_publication_group) }
 

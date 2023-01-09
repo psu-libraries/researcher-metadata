@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 require 'support/webdrivers'
 
-describe 'API documentation home page', type: :feature, js: true do
+describe 'API documentation home page', js: true, type: :feature do
   context 'when the user is logged in' do
     before do
       authenticate_user

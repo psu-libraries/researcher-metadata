@@ -50,7 +50,7 @@ describe ETDCSVImporter do
       end
 
       context 'when a ETD in the .csv file already exists in the database' do
-        let!(:existing_etd) { create :etd,
+        let!(:existing_etd) { create(:etd,
                                      webaccess_id: 'bbt2',
                                      author_first_name: 'Robert',
                                      author_middle_name: 'B',
@@ -61,7 +61,7 @@ describe ETDCSVImporter do
                                      submission_type: 'Master Thesis',
                                      external_identifier: '2',
                                      access_level: 'restricted_to_institution',
-                                     updated_by_user_at: timestamp }
+                                     updated_by_user_at: timestamp) }
 
         context 'when the existing ETD has been updated by a human' do
           let(:timestamp) { Time.zone.now }

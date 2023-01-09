@@ -4,25 +4,25 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe "grouping publications from a user's list of publications", type: :feature do
-  let!(:user) { create :user }
+  let!(:user) { create(:user) }
 
-  let!(:pub1) { create :publication, duplicate_group: group1 }
-  let!(:pub2) { create :publication, duplicate_group: group1 }
-  let!(:pub3) { create :publication, duplicate_group: group2 }
-  let!(:pub4) { create :publication, duplicate_group: group2 }
-  let!(:pub5) { create :publication }
-  let!(:pub6) { create :publication }
+  let!(:pub1) { create(:publication, duplicate_group: group1) }
+  let!(:pub2) { create(:publication, duplicate_group: group1) }
+  let!(:pub3) { create(:publication, duplicate_group: group2) }
+  let!(:pub4) { create(:publication, duplicate_group: group2) }
+  let!(:pub5) { create(:publication) }
+  let!(:pub6) { create(:publication) }
 
-  let(:group1) { create :duplicate_publication_group }
-  let(:group2) { create :duplicate_publication_group }
+  let(:group1) { create(:duplicate_publication_group) }
+  let(:group2) { create(:duplicate_publication_group) }
 
   before do
-    create :authorship, user: user, publication: pub1
-    create :authorship, user: user, publication: pub2
-    create :authorship, user: user, publication: pub3
-    create :authorship, user: user, publication: pub4
-    create :authorship, user: user, publication: pub5
-    create :authorship, user: user, publication: pub6
+    create(:authorship, user: user, publication: pub1)
+    create(:authorship, user: user, publication: pub2)
+    create(:authorship, user: user, publication: pub3)
+    create(:authorship, user: user, publication: pub4)
+    create(:authorship, user: user, publication: pub5)
+    create(:authorship, user: user, publication: pub6)
   end
 
   context 'when the current user is an admin' do

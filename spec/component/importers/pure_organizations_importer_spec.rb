@@ -59,12 +59,12 @@ describe PureOrganizationsImporter do
 
       context 'when an organization matching the imported data already exists in the database' do
         before do
-          create :organization,
+          create(:organization,
                  name: 'existing name',
                  pure_uuid: 'pure-uuid-002',
                  pure_external_identifier: 'existing id',
                  organization_type: 'existing type',
-                 parent: create(:organization, pure_uuid: 'something')
+                 parent: create(:organization, pure_uuid: 'something'))
         end
 
         it 'creates new organization records for every new organization in the imported data and updates existing organizations' do

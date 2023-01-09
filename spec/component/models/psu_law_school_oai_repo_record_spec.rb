@@ -5,7 +5,7 @@ require 'component/component_spec_helper'
 describe PSULawSchoolOAIRepoRecord do
   let(:psu_rr) { described_class.new(record) }
   let(:record) { double 'fieldhand record', metadata: metadata_xml_fixture, header: header }
-  let(:metadata_xml_fixture) { File.read(Rails.root.join('spec', 'fixtures', 'oai_record_metadata.xml')) }
+  let(:metadata_xml_fixture) { Rails.root.join('spec', 'fixtures', 'oai_record_metadata.xml').read }
   let(:header) { double 'fieldhand header', identifier: 'the-identifier', datestamp: Time.new(2013, 11, 20, 13, 33, 11, 0) }
 
   let(:creator1) { double 'creator', user_match: um1, ambiguous_user_matches: aum1 }
@@ -93,7 +93,7 @@ describe PSULawSchoolOAIRepoRecord do
     end
 
     context 'when the source attribute does not exists in the given metadata' do
-      let(:metadata_xml_fixture) { File.read(Rails.root.join('spec', 'fixtures', 'oai_record_metadata8.xml')) }
+      let(:metadata_xml_fixture) { Rails.root.join('spec', 'fixtures', 'oai_record_metadata8.xml').read }
 
       describe '#source' do
         it 'returns nil as the source value' do

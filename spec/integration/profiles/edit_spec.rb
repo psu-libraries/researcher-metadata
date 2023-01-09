@@ -4,46 +4,46 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'editing profile preferences' do
-  let!(:user) { create :user,
+  let!(:user) { create(:user,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
                        last_name: 'Testuser',
                        ai_bio: "Bob's bio info",
                        show_all_publications: true,
                        orcid_identifier: orcid_id,
-                       orcid_access_token: orcid_token }
-  let!(:other_user) { create :user, webaccess_id: 'xyz789' }
+                       orcid_access_token: orcid_token) }
+  let!(:other_user) { create(:user, webaccess_id: 'xyz789') }
 
-  let!(:pres1) { create :presentation,
+  let!(:pres1) { create(:presentation,
                         title: "Bob's Presentation",
                         organization: 'Penn State',
                         location: 'University Park, PA',
-                        visible: true }
-  let!(:pres2) { create :presentation,
+                        visible: true) }
+  let!(:pres2) { create(:presentation,
                         title: "Bob's Other Presentation",
-                        visible: false }
-  let!(:cont_1) { create :presentation_contribution,
+                        visible: false) }
+  let!(:cont_1) { create(:presentation_contribution,
                          presentation: pres1,
                          user: user,
-                         visible_in_profile: false }
-  let!(:cont_2) { create :presentation_contribution,
+                         visible_in_profile: false) }
+  let!(:cont_2) { create(:presentation_contribution,
                          presentation: pres2,
                          user: user,
-                         visible_in_profile: false }
-  let!(:perf_1) { create :performance,
+                         visible_in_profile: false) }
+  let!(:perf_1) { create(:performance,
                          title: "Bob's Performance",
                          location: 'University Park, PA',
                          start_on: Date.new(2000, 1, 1),
-                         visible: true }
-  let!(:perf_2) { create :performance,
+                         visible: true) }
+  let!(:perf_2) { create(:performance,
                          title: "Bob's Other Performance",
-                         visible: true }
-  let!(:up_1) { create :user_performance,
+                         visible: true) }
+  let!(:up_1) { create(:user_performance,
                        performance: perf_1,
-                       user: user }
-  let!(:up_2) { create :user_performance,
+                       user: user) }
+  let!(:up_2) { create(:user_performance,
                        performance: perf_2,
-                       user: user }
+                       user: user) }
   let(:orcid_id) { nil }
   let(:orcid_token) { nil }
 
@@ -226,48 +226,48 @@ describe 'editing profile preferences' do
       end
 
       context 'when the user has publications' do
-        let!(:pub_1) { create :publication,
+        let!(:pub_1) { create(:publication,
                               title: "Bob's Publication",
                               visible: true,
                               journal_title: 'The Journal',
-                              published_on: Date.new(2007, 1, 1) }
-        let!(:pub_2) { create :publication,
+                              published_on: Date.new(2007, 1, 1)) }
+        let!(:pub_2) { create(:publication,
                               title: "Bob's Other Publication",
-                              visible: false }
-        let!(:pub_3) { create :publication,
+                              visible: false) }
+        let!(:pub_3) { create(:publication,
                               title: "Bob's Open Access Publication",
                               visible: true,
                               open_access_locations: [build(:open_access_location,
                                                             source: Source::OPEN_ACCESS_BUTTON,
-                                                            url: 'https://example.org/pubs/1')] }
-        let!(:pub_4) { create :publication,
+                                                            url: 'https://example.org/pubs/1')]) }
+        let!(:pub_4) { create(:publication,
                               title: "Bob's Other Open Access Publication",
                               visible: true,
                               open_access_locations: [build(:open_access_location,
                                                             source: Source::OPEN_ACCESS_BUTTON,
-                                                            url: 'https://example.org/pubs/2')] }
-        let!(:pub_5) { create :publication,
+                                                            url: 'https://example.org/pubs/2')]) }
+        let!(:pub_5) { create(:publication,
                               title: "Bob's Non-Open Access Publication",
-                              visible: true }
-        let!(:pub_6) { create :publication,
+                              visible: true) }
+        let!(:pub_6) { create(:publication,
                               title: "Bob's Pending Scholarsphere Publication",
-                              visible: true }
-        let!(:pub_7) { create :publication,
+                              visible: true) }
+        let!(:pub_7) { create(:publication,
                               title: "Bob's In Press Publication",
                               status: 'In Press',
-                              visible: true }
-        let!(:auth_1) { create :authorship, publication: pub_1, user: user, visible_in_profile: false }
-        let!(:auth_2) { create :authorship, publication: pub_2, user: user, visible_in_profile: false }
-        let!(:auth_3) { create :authorship, publication: pub_3, user: user, visible_in_profile: false }
-        let!(:auth_4) { create :authorship, publication: pub_4, user: user, visible_in_profile: false }
-        let!(:auth_5) { create :authorship, publication: pub_5, user: user, visible_in_profile: false }
-        let!(:auth_6) { create :authorship,
+                              visible: true) }
+        let!(:auth_1) { create(:authorship, publication: pub_1, user: user, visible_in_profile: false) }
+        let!(:auth_2) { create(:authorship, publication: pub_2, user: user, visible_in_profile: false) }
+        let!(:auth_3) { create(:authorship, publication: pub_3, user: user, visible_in_profile: false) }
+        let!(:auth_4) { create(:authorship, publication: pub_4, user: user, visible_in_profile: false) }
+        let!(:auth_5) { create(:authorship, publication: pub_5, user: user, visible_in_profile: false) }
+        let!(:auth_6) { create(:authorship,
                                publication: pub_6,
                                user: user,
-                               visible_in_profile: false }
-        let!(:auth_7) { create :authorship, publication: pub_7, user: user, visible_in_profile: false }
-        let!(:swd) { create :scholarsphere_work_deposit, authorship: auth_6, status: 'Pending' }
-        let!(:waiver) { create :internal_publication_waiver, authorship: auth_5 }
+                               visible_in_profile: false) }
+        let!(:auth_7) { create(:authorship, publication: pub_7, user: user, visible_in_profile: false) }
+        let!(:swd) { create(:scholarsphere_work_deposit, authorship: auth_6, status: 'Pending') }
+        let!(:waiver) { create(:internal_publication_waiver, authorship: auth_5) }
 
         before { visit edit_profile_publications_path }
 
@@ -343,14 +343,14 @@ describe 'editing profile preferences' do
       end
 
       context 'when the user has external publication waivers' do
-        let!(:waiver1) { create :external_publication_waiver,
+        let!(:waiver1) { create(:external_publication_waiver,
                                 user: user,
                                 publication_title: 'Waived Publication',
-                                journal_title: 'Example Journal' }
-        let!(:waiver2) { create :external_publication_waiver,
+                                journal_title: 'Example Journal') }
+        let!(:waiver2) { create(:external_publication_waiver,
                                 user: user,
                                 publication_title: 'Another Waived Publication',
-                                journal_title: 'Other Journal' }
+                                journal_title: 'Other Journal') }
 
         before { visit edit_profile_publications_path }
 
@@ -374,7 +374,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_publications_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).to have_no_current_path edit_profile_publications_path, ignore_query: true
+        expect(page).not_to have_current_path edit_profile_publications_path, ignore_query: true
       end
     end
   end
@@ -393,25 +393,25 @@ describe 'editing profile preferences' do
       end
 
       context 'when the user has other publications' do
-        let!(:pub_1) { create :publication,
+        let!(:pub_1) { create(:publication,
                               publication_type: 'Chapter',
                               title: 'Title 1',
                               visible: true,
-                              published_on: Date.new(2007, 1, 1) }
-        let!(:pub_2) { create :publication,
+                              published_on: Date.new(2007, 1, 1)) }
+        let!(:pub_2) { create(:publication,
                               publication_type: 'Chapter',
                               title: 'Title 2',
                               visible: false,
-                              published_on: Date.new(2008, 1, 1) }
-        let!(:pub_3) { create :publication,
+                              published_on: Date.new(2008, 1, 1)) }
+        let!(:pub_3) { create(:publication,
                               publication_type: 'Letter',
                               title: 'Title 1',
                               visible: true,
                               journal_title: 'Journal 1',
-                              published_on: Date.new(2008, 1, 1) }
-        let!(:auth_1) { create :authorship, publication: pub_1, user: user }
-        let!(:auth_2) { create :authorship, publication: pub_2, user: user }
-        let!(:auth_3) { create :authorship, publication: pub_3, user: user }
+                              published_on: Date.new(2008, 1, 1)) }
+        let!(:auth_1) { create(:authorship, publication: pub_1, user: user) }
+        let!(:auth_2) { create(:authorship, publication: pub_2, user: user) }
+        let!(:auth_3) { create(:authorship, publication: pub_3, user: user) }
 
         before { visit edit_profile_other_publications_path }
 
@@ -429,7 +429,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_other_publications_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).to have_no_current_path edit_profile_other_publications_path, ignore_query: true
+        expect(page).not_to have_current_path edit_profile_other_publications_path, ignore_query: true
       end
     end
   end
@@ -457,7 +457,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_presentations_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).to have_no_current_path edit_profile_presentations_path, ignore_query: true
+        expect(page).not_to have_current_path edit_profile_presentations_path, ignore_query: true
       end
     end
   end
@@ -485,7 +485,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_performances_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).to have_no_current_path edit_profile_performances_path, ignore_query: true
+        expect(page).not_to have_current_path edit_profile_performances_path, ignore_query: true
       end
     end
   end
@@ -514,14 +514,14 @@ describe 'editing profile preferences' do
       end
 
       context 'when the user belongs to organizations' do
-        let(:org1) { create :organization, name: 'Biology' }
-        let(:org2) { create :organization, name: 'Life Sciences Institute' }
+        let(:org1) { create(:organization, name: 'Biology') }
+        let(:org2) { create(:organization, name: 'Life Sciences Institute') }
         let(:employment_button_text) { 'Add to my ORCID Record' }
         let(:connect_orcid_button_text) { 'Connect your ORCID iD' }
         let(:orcid_employment_id) { nil }
 
         let!(:mem1) {
-          create :user_organization_membership,
+          create(:user_organization_membership,
                  user: user,
                  organization: org1,
                  position_title: 'Professor',
@@ -529,16 +529,16 @@ describe 'editing profile preferences' do
                  ended_on: Date.new(2015, 12, 31),
                  import_source: 'Pure',
                  source_identifier: '123456789',
-                 orcid_resource_identifier: orcid_employment_id
+                 orcid_resource_identifier: orcid_employment_id)
         }
 
         let!(:mem2) {
-          create :user_organization_membership,
+          create(:user_organization_membership,
                  user: user,
                  organization: org2,
                  position_title: 'Director',
                  started_on: Date.new(2012, 1, 1),
-                 ended_on: Date.new(2015, 12, 31)
+                 ended_on: Date.new(2015, 12, 31))
         }
 
         before { visit profile_bio_path }
@@ -631,7 +631,7 @@ describe 'editing profile preferences' do
       before { visit profile_bio_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).to have_no_current_path profile_bio_path, ignore_query: true
+        expect(page).not_to have_current_path profile_bio_path, ignore_query: true
       end
     end
   end

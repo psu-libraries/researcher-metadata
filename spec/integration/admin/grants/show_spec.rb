@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin grant detail page', type: :feature do
-  let!(:grant) { create :grant,
+  let!(:grant) { create(:grant,
                         wos_agency_name: 'Test Agency',
                         wos_identifier: 'GRANT-ID-123',
                         agency_name: 'National Science Foundation',
@@ -12,19 +12,19 @@ describe 'Admin grant detail page', type: :feature do
                         title: 'Test Grant',
                         abstract: 'A description of the grant.',
                         start_date: Date.new(2000, 1, 1),
-                        end_date: Date.new(2005, 2, 20), amount_in_dollars: 50123 }
-  let!(:pub1) { create :publication, title: 'Publication1' }
-  let!(:pub2) { create :publication, title: 'Publication2' }
-  let!(:user1) { create :user, first_name: 'Test', last_name: 'User1' }
-  let!(:user2) { create :user, first_name: 'Test', last_name: 'User2' }
-  let!(:rf1) { create :research_fund,
+                        end_date: Date.new(2005, 2, 20), amount_in_dollars: 50123) }
+  let!(:pub1) { create(:publication, title: 'Publication1') }
+  let!(:pub2) { create(:publication, title: 'Publication2') }
+  let!(:user1) { create(:user, first_name: 'Test', last_name: 'User1') }
+  let!(:user2) { create(:user, first_name: 'Test', last_name: 'User2') }
+  let!(:rf1) { create(:research_fund,
                       grant: grant,
-                      publication: pub1 }
-  let!(:rf2) { create :research_fund,
+                      publication: pub1) }
+  let!(:rf2) { create(:research_fund,
                       grant: grant,
-                      publication: pub2 }
-  let!(:f1) { create :researcher_fund, grant: grant, user: user1 }
-  let!(:f2) { create :researcher_fund, grant: grant, user: user2 }
+                      publication: pub2) }
+  let!(:f1) { create(:researcher_fund, grant: grant, user: user1) }
+  let!(:f2) { create(:researcher_fund, grant: grant, user: user2) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

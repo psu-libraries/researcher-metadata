@@ -4,9 +4,9 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating an open access location via the admin interface', type: :feature do
-  let!(:oal) { create :open_access_location,
+  let!(:oal) { create(:open_access_location,
                       source: Source::OPEN_ACCESS_BUTTON,
-                      url: 'https://example.com/test' }
+                      url: 'https://example.com/test') }
 
   context 'when the current user is an admin' do
     before do

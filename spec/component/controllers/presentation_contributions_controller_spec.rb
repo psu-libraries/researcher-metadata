@@ -12,14 +12,14 @@ describe PresentationContributionsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:contribution) { create :presentation_contribution,
+      let!(:contribution) { create(:presentation_contribution,
                                    user: user,
                                    visible_in_profile: false,
-                                   role: 'existing role' }
-      let!(:other_contribution) { create :presentation_contribution, user: other_user }
+                                   role: 'existing role') }
+      let!(:other_contribution) { create(:presentation_contribution, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
@@ -58,14 +58,14 @@ describe PresentationContributionsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let!(:user) { create :user }
-      let!(:other_user) { create :user }
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
 
-      let!(:contribution_1) { create :presentation_contribution, user: user }
-      let!(:contribution_2) { create :presentation_contribution, user: user }
-      let!(:contribution_3) { create :presentation_contribution, user: user }
-      let!(:contribution_4) { create :presentation_contribution, user: user }
-      let!(:other_contribution) { create :presentation_contribution, user: other_user }
+      let!(:contribution_1) { create(:presentation_contribution, user: user) }
+      let!(:contribution_2) { create(:presentation_contribution, user: user) }
+      let!(:contribution_3) { create(:presentation_contribution, user: user) }
+      let!(:contribution_4) { create(:presentation_contribution, user: user) }
+      let!(:other_contribution) { create(:presentation_contribution, user: other_user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)

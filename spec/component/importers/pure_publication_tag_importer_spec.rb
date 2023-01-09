@@ -49,17 +49,17 @@ describe PurePublicationTagImporter do
       end
 
       context 'when publications in the database match the publication data being imported' do
-        let!(:imp1) { create :publication_import,
+        let!(:imp1) { create(:publication_import,
                              source: 'Pure',
                              source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a',
-                             publication: pub1 }
-        let!(:imp2) { create :publication_import,
+                             publication: pub1) }
+        let!(:imp2) { create(:publication_import,
                              source: 'Pure',
                              source_identifier: '890420eb-eff9-4cbc-8e1b-20f68460f4eb',
-                             publication: pub2 }
+                             publication: pub2) }
 
-        let!(:pub1) { create :publication }
-        let!(:pub2) { create :publication }
+        let!(:pub1) { create(:publication) }
+        let!(:pub2) { create(:publication) }
 
         let(:found_tag1) { Tag.find_by(name: 'Psychotherapy') }
         let(:found_tag2) { Tag.find_by(name: 'Metal Spinning') }
@@ -103,7 +103,7 @@ describe PurePublicationTagImporter do
         end
 
         context 'when a matching tag already exists' do
-          let!(:tag) { create :tag, name: 'Simulation' }
+          let!(:tag) { create(:tag, name: 'Simulation') }
 
           it 'only creates new tags for new terms in the given fingerprint data' do
             expect { importer.call }.to change(Tag, :count).by 2
@@ -137,7 +137,7 @@ describe PurePublicationTagImporter do
           end
 
           context 'when a matching tagging already exists' do
-            before { create :publication_tagging, tag: tag, publication: pub2, rank: 3.0 }
+            before { create(:publication_tagging, tag: tag, publication: pub2, rank: 3.0) }
 
             it 'does not duplicate the existing tagging' do
               expect { importer.call }.to change(PublicationTagging, :count).by 2

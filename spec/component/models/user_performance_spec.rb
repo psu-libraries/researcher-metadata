@@ -28,8 +28,8 @@ describe UserPerformance, type: :model do
   end
 
   describe 'deleting a performance with user_performances' do
-    let(:p) { create :performance }
-    let!(:up) { create :user_performance, performance: p }
+    let(:p) { create(:performance) }
+    let!(:up) { create(:user_performance, performance: p) }
 
     it "also deletes the performance's user_performances" do
       p.destroy

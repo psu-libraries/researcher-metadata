@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 
 describe API::V1::PerformanceSerializer do
-  let(:performance) { create :performance,
+  let(:performance) { create(:performance,
                              title: 'Performance 1',
                              activity_insight_id: 123456789,
                              performance_type: 'Other',
@@ -14,7 +14,7 @@ describe API::V1::PerformanceSerializer do
                              delivery_type: 'Competition',
                              scope: 'Local',
                              start_on: Date.new(2018, 12, 4),
-                             end_on: Date.new(2018, 12, 5) }
+                             end_on: Date.new(2018, 12, 5)) }
 
   describe 'data attributes' do
     subject { serialized_data_attributes(performance) }
@@ -39,8 +39,8 @@ describe API::V1::PerformanceSerializer do
       subject { serialized_data_attributes(performance) }
 
       before do
-        create :performance_screening, name: 'Screening 1', screening_type: 'Movie', location: 'Town', performance: performance
-        create :performance_screening, name: 'Screening 2', screening_type: 'Invited', location: 'City', performance: performance
+        create(:performance_screening, name: 'Screening 1', screening_type: 'Movie', location: 'Town', performance: performance)
+        create(:performance_screening, name: 'Screening 2', screening_type: 'Invited', location: 'City', performance: performance)
       end
 
       it { expect(subject).to include(performance_screenings: [{ name: 'Screening 1', screening_type: 'Movie', location: 'Town' },
@@ -53,33 +53,33 @@ describe API::V1::PerformanceSerializer do
     end
 
     context 'when the performance has user_performances' do
-      let(:u1) { create :user,
+      let(:u1) { create(:user,
                         webaccess_id: 'abc123',
                         first_name: 'Test',
-                        last_name: 'User' }
-      let(:u2) { create :user,
+                        last_name: 'User') }
+      let(:u2) { create(:user,
                         webaccess_id: 'def456',
                         first_name: 'Another',
-                        last_name: 'User' }
+                        last_name: 'User') }
 
       before do
-        create :user_performance,
+        create(:user_performance,
                performance: performance,
                user: u1,
                visible_in_profile: true,
                position_in_profile: 4,
                contribution: 'Performer',
                student_level: 'Graduate',
-               role_other: nil
+               role_other: nil)
 
-        create :user_performance,
+        create(:user_performance,
                performance: performance,
                user: u2,
                visible_in_profile: false,
                position_in_profile: nil,
                contribution: nil,
                student_level: nil,
-               role_other: nil
+               role_other: nil)
       end
 
       it { expect(subject).to include(profile_preferences: [{ user_id: u1.id,

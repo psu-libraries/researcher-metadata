@@ -5,10 +5,10 @@ require 'component/component_spec_helper'
 describe LDAPImporter do
   let(:importer) { described_class.new }
 
-  let!(:user_1) { create :user, webaccess_id: 'abc1' }
-  let!(:user_2) { create :user, webaccess_id: 'def2' }
-  let!(:user_3) { create :user, webaccess_id: 'ghi3' }
-  let!(:user_4) { create :user, webaccess_id: 'jkl4', orcid_identifier: 'existing-orcid' }
+  let!(:user_1) { create(:user, webaccess_id: 'abc1') }
+  let!(:user_2) { create(:user, webaccess_id: 'def2') }
+  let!(:user_3) { create(:user, webaccess_id: 'ghi3') }
+  let!(:user_4) { create(:user, webaccess_id: 'jkl4', orcid_identifier: 'existing-orcid') }
 
   let(:user_1_filter) { double 'user 1 filter' }
   let(:user_2_filter) { double 'user 2 filter' }

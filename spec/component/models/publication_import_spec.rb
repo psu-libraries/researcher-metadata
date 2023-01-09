@@ -34,7 +34,7 @@ describe PublicationImport, type: :model do
   it { is_expected.to validate_inclusion_of(:source).in_array(described_class.sources) }
 
   context 'given an otherwise valid record' do
-    subject { build :publication_import }
+    subject { build(:publication_import) }
 
     it { is_expected.to validate_uniqueness_of(:source_identifier).scoped_to(:source) }
   end

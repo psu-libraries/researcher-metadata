@@ -37,8 +37,8 @@ describe APIToken, type: :model do
   end
 
   describe 'deleting a token' do
-    let(:token) { create :api_token }
-    let!(:permission) { create :organization_api_permission, api_token: token }
+    let(:token) { create(:api_token) }
+    let!(:permission) { create(:organization_api_permission, api_token: token) }
 
     it 'also deletes any associated organization API permissions' do
       token.destroy
@@ -47,9 +47,9 @@ describe APIToken, type: :model do
   end
 
   describe '#increment_request_count' do
-    let(:token) { create :api_token,
+    let(:token) { create(:api_token,
                          total_requests: 2,
-                         last_used_at: Time.zone.local(2000, 1, 1, 8, 0, 0) }
+                         last_used_at: Time.zone.local(2000, 1, 1, 8, 0, 0)) }
 
     before do
       allow(Time).to receive(:current).and_return(Time.zone.local(2017, 11, 3, 9, 45, 0))
@@ -67,13 +67,13 @@ describe APIToken, type: :model do
   end
 
   describe '#organization_count' do
-    let!(:token) { create :api_token }
-    let!(:org1) { create :organization }
-    let!(:org2) { create :organization }
+    let!(:token) { create(:api_token) }
+    let!(:org1) { create(:organization) }
+    let!(:org2) { create(:organization) }
 
     before do
-      create :organization_api_permission, organization: org1, api_token: token
-      create :organization_api_permission, organization: org2, api_token: token
+      create(:organization_api_permission, organization: org1, api_token: token)
+      create(:organization_api_permission, organization: org2, api_token: token)
     end
 
     it 'returns the number of organization with which the API token is associated' do

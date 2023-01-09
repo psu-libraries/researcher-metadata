@@ -60,7 +60,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_inclusion_of(:activity_insight_postprint_status).in_array(described_class.postprint_statuses).allow_nil }
 
     describe 'validating DOI format' do
-      let(:pub) { build :publication, doi: doi }
+      let(:pub) { build(:publication, doi: doi) }
 
       context 'when given a nil DOI' do
         let(:doi) { nil }
@@ -169,8 +169,8 @@ describe Publication, type: :model do
   it { is_expected.to accept_nested_attributes_for(:open_access_locations).allow_destroy(true) }
 
   describe 'deleting a publication with authorships' do
-    let(:p) { create :publication }
-    let!(:a) { create :authorship, publication: p }
+    let(:p) { create(:publication) }
+    let!(:a) { create(:authorship, publication: p) }
 
     it "also deletes the publication's authorships" do
       p.destroy
@@ -179,8 +179,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with contributor names' do
-    let(:p) { create :publication }
-    let!(:c) { create :contributor_name, publication: p }
+    let(:p) { create(:publication) }
+    let!(:c) { create(:contributor_name, publication: p) }
 
     it "also deletes the publication's authorships" do
       p.destroy
@@ -189,8 +189,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with taggings' do
-    let(:p) { create :publication }
-    let!(:pt) { create :publication_tagging, publication: p }
+    let(:p) { create(:publication) }
+    let!(:pt) { create(:publication_tagging, publication: p) }
 
     it "also deletes the publication's taggings" do
       p.destroy
@@ -199,8 +199,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with research funds' do
-    let(:p) { create :publication }
-    let!(:rf) { create :research_fund, publication: p }
+    let(:p) { create(:publication) }
+    let!(:rf) { create(:research_fund, publication: p) }
 
     it "also deletes the publication's research funds" do
       p.destroy
@@ -209,8 +209,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with non-duplicate group memberships' do
-    let(:p) { create :publication }
-    let!(:ndpgm) { create :non_duplicate_publication_group_membership, publication: p }
+    let(:p) { create(:publication) }
+    let!(:ndpgm) { create(:non_duplicate_publication_group_membership, publication: p) }
 
     it "also deletes the publication's non-duplicate publication group memberships" do
       p.destroy
@@ -219,8 +219,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with imports' do
-    let(:p) { create :publication }
-    let!(:pi) { create :publication_import, publication: p }
+    let(:p) { create(:publication) }
+    let!(:pi) { create(:publication_import, publication: p) }
 
     it "also deletes the publication's imports" do
       p.destroy
@@ -229,8 +229,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with open access locations' do
-    let(:p) { create :publication }
-    let!(:oal) { create :open_access_location, publication: p }
+    let(:p) { create(:publication) }
+    let!(:oal) { create(:open_access_location, publication: p) }
 
     it "also deletes the publication's open access locations" do
       p.destroy
@@ -278,9 +278,9 @@ describe Publication, type: :model do
   end
 
   describe '.visible' do
-    let(:visible_pub1) { create :publication, visible: true }
-    let(:visible_pub2) { create :publication, visible: true }
-    let(:invisible_pub) { create :publication, visible: false }
+    let(:visible_pub1) { create(:publication, visible: true) }
+    let(:visible_pub2) { create(:publication, visible: true) }
+    let(:invisible_pub) { create(:publication, visible: false) }
 
     it 'returns the publications that are marked as visible' do
       expect(described_class.visible).to match_array [visible_pub1, visible_pub2]
@@ -288,49 +288,49 @@ describe Publication, type: :model do
   end
 
   describe '.published_during_membership' do
-    let!(:org) { create :organization }
-    let!(:other_org) { create :organization }
-    let!(:user_1) { create :user }
-    let!(:user_2) { create :user }
-    let!(:user_3) { create :user }
+    let!(:org) { create(:organization) }
+    let!(:other_org) { create(:organization) }
+    let!(:user_1) { create(:user) }
+    let!(:user_2) { create(:user) }
+    let!(:user_3) { create(:user) }
 
-    let!(:pub_1) { create :publication, visible: true, published_on: Date.new(2000, 1, 1) }
-    let!(:pub_2) { create :publication, visible: true, published_on: Date.new(2005, 1, 2) }
-    let!(:pub_3) { create :publication, visible: true, published_on: Date.new(1999, 12, 30) }
-    let!(:pub_4) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_5) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_6) { create :publication, visible: true, published_on: Date.new(2001, 1, 1) }
-    let!(:pub_7) { create :publication, visible: true, published_on: Date.new(2019, 1, 1) }
-    let!(:pub_8) { create :publication, visible: false, published_on: Date.new(2019, 1, 1) }
+    let!(:pub_1) { create(:publication, visible: true, published_on: Date.new(2000, 1, 1)) }
+    let!(:pub_2) { create(:publication, visible: true, published_on: Date.new(2005, 1, 2)) }
+    let!(:pub_3) { create(:publication, visible: true, published_on: Date.new(1999, 12, 30)) }
+    let!(:pub_4) { create(:publication, visible: true, published_on: Date.new(2001, 1, 1)) }
+    let!(:pub_5) { create(:publication, visible: true, published_on: Date.new(2001, 1, 1)) }
+    let!(:pub_6) { create(:publication, visible: true, published_on: Date.new(2001, 1, 1)) }
+    let!(:pub_7) { create(:publication, visible: true, published_on: Date.new(2019, 1, 1)) }
+    let!(:pub_8) { create(:publication, visible: false, published_on: Date.new(2019, 1, 1)) }
 
     before do
-      create :authorship, user: user_1, publication: pub_1 # authored by an org member during their first membership
-      create :authorship, user: user_2, publication: pub_1 # also authored by second org member during their membership
-      create :authorship, user: user_1, publication: pub_2 # authored by an org member after their membership
-      create :authorship, user: user_2, publication: pub_3 # authored by an org member before their membership
-      create :authorship, user: user_1, publication: pub_4 # authored by an org member during their first membership
-      create :authorship, user: user_2, publication: pub_5 # authored by an org member during their membership
-      create :authorship, user: user_3, publication: pub_6 # authored by an org member during their membership
-      create :authorship, user: user_1, publication: pub_7 # authored by an org member during their second membership
-      create :authorship, user: user_1, publication: pub_8 # authored by an org member during their second membership, but invisible
+      create(:authorship, user: user_1, publication: pub_1) # authored by an org member during their first membership
+      create(:authorship, user: user_2, publication: pub_1) # also authored by second org member during their membership
+      create(:authorship, user: user_1, publication: pub_2) # authored by an org member after their membership
+      create(:authorship, user: user_2, publication: pub_3) # authored by an org member before their membership
+      create(:authorship, user: user_1, publication: pub_4) # authored by an org member during their first membership
+      create(:authorship, user: user_2, publication: pub_5) # authored by an org member during their membership
+      create(:authorship, user: user_3, publication: pub_6) # authored by an org member during their membership
+      create(:authorship, user: user_1, publication: pub_7) # authored by an org member during their second membership
+      create(:authorship, user: user_1, publication: pub_8) # authored by an org member during their second membership, but invisible
 
-      create :user_organization_membership,
+      create(:user_organization_membership,
              user: user_1,
              organization: org,
              started_on: Date.new(1990, 1, 1),
-             ended_on: Date.new(2005, 1, 1)
-      create :user_organization_membership,
+             ended_on: Date.new(2005, 1, 1))
+      create(:user_organization_membership,
              user: user_1,
              organization: org,
-             started_on: Date.new(2015, 1, 1)
-      create :user_organization_membership,
+             started_on: Date.new(2015, 1, 1))
+      create(:user_organization_membership,
              user: user_2,
              organization: org,
-             started_on: Date.new(1999, 12, 31)
-      create :user_organization_membership,
+             started_on: Date.new(1999, 12, 31))
+      create(:user_organization_membership,
              user: user_3,
              organization: other_org,
-             started_on: Date.new(1980, 1, 1)
+             started_on: Date.new(1980, 1, 1))
     end
 
     it 'returns visible, unique publications by users who were members of an organization when they were published' do
@@ -339,18 +339,18 @@ describe Publication, type: :model do
   end
 
   describe '.claimable_by' do
-    let!(:user) { create :user }
-    let!(:pub1) { create :publication, visible: false }
-    let!(:pub2) { create :publication, visible: true }
-    let!(:pub3) { create :publication, visible: true }
-    let!(:pub4) { create :publication, visible: true }
-    let!(:pub5) { create :publication, visible: true }
-    let!(:pub6) { create :publication, visible: true, publication_type: 'Book' }
+    let!(:user) { create(:user) }
+    let!(:pub1) { create(:publication, visible: false) }
+    let!(:pub2) { create(:publication, visible: true) }
+    let!(:pub3) { create(:publication, visible: true) }
+    let!(:pub4) { create(:publication, visible: true) }
+    let!(:pub5) { create(:publication, visible: true) }
+    let!(:pub6) { create(:publication, visible: true, publication_type: 'Book') }
 
     before do
-      create :authorship, user: user, publication: pub3, confirmed: false, claimed_by_user: true
-      create :authorship, user: user, publication: pub4, confirmed: true, claimed_by_user: false
-      create :authorship, user: user, publication: pub5, confirmed: false, claimed_by_user: false
+      create(:authorship, user: user, publication: pub3, confirmed: false, claimed_by_user: true)
+      create(:authorship, user: user, publication: pub4, confirmed: true, claimed_by_user: false)
+      create(:authorship, user: user, publication: pub5, confirmed: false, claimed_by_user: false)
     end
 
     it 'returns the publications that can be claimed by the given user' do
@@ -374,11 +374,11 @@ describe Publication, type: :model do
   end
 
   describe '.subject_to_open_access_policy' do
-    let!(:pub1) { create :publication, published_on: Date.new(2020, 6, 30) }
-    let!(:pub2) { create :publication, published_on: Date.new(2020, 7, 1) }
-    let!(:pub3) { create :publication, published_on: Date.new(2020, 7, 2) }
-    let!(:pub4) { create :publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter' }
-    let!(:pub5) { create :publication, published_on: Date.new(2020, 7, 2), status: 'In Press' }
+    let!(:pub1) { create(:publication, published_on: Date.new(2020, 6, 30)) }
+    let!(:pub2) { create(:publication, published_on: Date.new(2020, 7, 1)) }
+    let!(:pub3) { create(:publication, published_on: Date.new(2020, 7, 2)) }
+    let!(:pub4) { create(:publication, published_on: Date.new(2020, 7, 2), publication_type: 'Chapter') }
+    let!(:pub5) { create(:publication, published_on: Date.new(2020, 7, 2), status: 'In Press') }
 
     it "returns publications that were published after Penn State's open access policy went into effect and have a status of 'Published'" do
       expect(described_class.subject_to_open_access_policy).to match_array [pub2, pub3]
@@ -386,36 +386,36 @@ describe Publication, type: :model do
   end
 
   describe 'open access scopes' do
-    let!(:pub1) { create :publication,
+    let!(:pub1) { create(:publication,
                          title: 'pub1',
-                         open_access_locations: [] }
-    let!(:pub2) { create :publication,
+                         open_access_locations: []) }
+    let!(:pub2) { create(:publication,
                          title: 'pub2',
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
-                         ]
+                         ])
     }
-    let!(:pub3) { create :publication,
+    let!(:pub3) { create(:publication,
                          title: 'pub3',
                          open_access_locations: [
                            build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
                            build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-                         ]
+                         ])
     }
-    let!(:pub4) { create :publication,
+    let!(:pub4) { create(:publication,
                          title: 'pub4',
                          open_access_locations: [
                            build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
-                         ]
+                         ])
     }
-    let!(:pub5) { create :publication,
+    let!(:pub5) { create(:publication,
                          title: 'pub5',
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
                            build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
                            build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
                            build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-                         ]
+                         ])
     }
 
     describe '.open_access' do
@@ -454,26 +454,26 @@ describe Publication, type: :model do
                            doi: doi,
                            title: title,
                            publication_date: date }
-    let!(:pub1) { create :publication,
+    let!(:pub1) { create(:publication,
                          doi: nil,
                          title: 'Another Publication',
-                         published_on: Date.new(2000, 1, 1) }
-    let!(:pub2) { create :publication,
+                         published_on: Date.new(2000, 1, 1)) }
+    let!(:pub2) { create(:publication,
                          doi: 'https://doi.org/10.000/DOI123',
                          title: 'Some Text Before The Title Some Text After',
-                         published_on: Date.new(2000, 1, 1) }
-    let!(:pub3) { create :publication,
+                         published_on: Date.new(2000, 1, 1)) }
+    let!(:pub3) { create(:publication,
                          doi: 'https://doi.org/10.000/DOI456',
                          title: 'Some Text Before The Title Some Text After',
-                         published_on: Date.new(2001, 2, 2) }
-    let!(:pub4) { create :publication,
+                         published_on: Date.new(2001, 2, 2)) }
+    let!(:pub4) { create(:publication,
                          doi: 'https://doi.org/10.000/DOI111',
                          title: 'Another Publication',
-                         published_on: Date.new(2001, 2, 2) }
-    let!(:pub5) { create :publication,
+                         published_on: Date.new(2001, 2, 2)) }
+    let!(:pub5) { create(:publication,
                          doi: 'https://doi.org/10.000/DOI222',
                          title: 'Another Publication',
-                         published_on: Date.new(2000, 1, 1) }
+                         published_on: Date.new(2000, 1, 1)) }
 
     context 'when given publication data with no DOI' do
       let(:doi) { nil }
@@ -657,13 +657,13 @@ describe Publication, type: :model do
   end
 
   describe '.oa_publication' do
-    let(:pub1) { create :publication, publication_type: 'Journal Article' }
-    let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
-    let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
-    let(:pub4) { create :publication, publication_type: 'Book' }
-    let(:pub5) { create :publication, publication_type: 'Letter' }
-    let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
-    let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
+    let(:pub1) { create(:publication, publication_type: 'Journal Article') }
+    let(:pub2) { create(:publication, publication_type: 'Academic Journal Article') }
+    let(:pub3) { create(:publication, publication_type: 'In-house Journal Article') }
+    let(:pub4) { create(:publication, publication_type: 'Book') }
+    let(:pub5) { create(:publication, publication_type: 'Letter') }
+    let(:pub6) { create(:publication, publication_type: 'Conference Proceeding') }
+    let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
 
     it 'returns publications that have open access publication types' do
       expect(described_class.oa_publication).to match_array [pub1, pub2, pub3, pub6]
@@ -671,13 +671,13 @@ describe Publication, type: :model do
   end
 
   describe '.non_oa_publication_types' do
-    let(:pub1) { create :publication, publication_type: 'Journal Article' }
-    let(:pub2) { create :publication, publication_type: 'Academic Journal Article' }
-    let(:pub3) { create :publication, publication_type: 'In-house Journal Article' }
-    let(:pub4) { create :publication, publication_type: 'Book' }
-    let(:pub5) { create :publication, publication_type: 'Letter' }
-    let(:pub6) { create :publication, publication_type: 'Conference Proceeding' }
-    let(:pub7) { create :publication, publication_type: 'Trade Journal Article' }
+    let(:pub1) { create(:publication, publication_type: 'Journal Article') }
+    let(:pub2) { create(:publication, publication_type: 'Academic Journal Article') }
+    let(:pub3) { create(:publication, publication_type: 'In-house Journal Article') }
+    let(:pub4) { create(:publication, publication_type: 'Book') }
+    let(:pub5) { create(:publication, publication_type: 'Letter') }
+    let(:pub6) { create(:publication, publication_type: 'Conference Proceeding') }
+    let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
 
     it 'returns publications that do not have open access publication types' do
       expect(described_class.non_oa_publication).to match_array [pub4, pub5, pub7]
@@ -685,8 +685,8 @@ describe Publication, type: :model do
   end
 
   describe '.published' do
-    let(:pub1) { create :publication, status: 'Published' }
-    let(:pub2) { create :publication, status: 'In Press' }
+    let(:pub1) { create(:publication, status: 'Published') }
+    let(:pub2) { create(:publication, status: 'In Press') }
 
     it 'returns publications that are not journal articles' do
       expect(described_class.published).to match_array [pub1]
@@ -694,9 +694,9 @@ describe Publication, type: :model do
   end
 
   describe '#confirmed_authorships' do
-    let!(:pub) { create :publication }
-    let!(:a1) { create :authorship, publication: pub, confirmed: false }
-    let!(:a2) { create :authorship, publication: pub, confirmed: true }
+    let!(:pub) { create(:publication) }
+    let!(:a1) { create(:authorship, publication: pub, confirmed: false) }
+    let!(:a2) { create(:authorship, publication: pub, confirmed: true) }
 
     it "returns only the publication's authorships that are confirmed" do
       expect(pub.confirmed_authorships).to eq [a2]
@@ -704,11 +704,11 @@ describe Publication, type: :model do
   end
 
   describe '#confirmed_users' do
-    let(:u1) { create :user }
-    let(:u2) { create :user }
-    let!(:pub) { create :publication }
-    let!(:a1) { create :authorship, publication: pub, confirmed: false, user: u1 }
-    let!(:a2) { create :authorship, publication: pub, confirmed: true, user: u2 }
+    let(:u1) { create(:user) }
+    let(:u2) { create(:user) }
+    let!(:pub) { create(:publication) }
+    let!(:a1) { create(:authorship, publication: pub, confirmed: false, user: u1) }
+    let!(:a2) { create(:authorship, publication: pub, confirmed: true, user: u2) }
 
     it "returns only the publication's users that have confirmed authorships" do
       expect(pub.confirmed_users).to eq [u2]
@@ -716,10 +716,10 @@ describe Publication, type: :model do
   end
 
   describe '#contributors' do
-    let(:pub) { create :publication }
-    let!(:c1) { create :contributor_name, position: 2, publication: pub }
-    let!(:c2) { create :contributor_name, position: 3, publication: pub }
-    let!(:c3) { create :contributor_name, position: 1, publication: pub }
+    let(:pub) { create(:publication) }
+    let!(:c1) { create(:contributor_name, position: 2, publication: pub) }
+    let!(:c2) { create(:contributor_name, position: 3, publication: pub) }
+    let!(:c3) { create(:contributor_name, position: 1, publication: pub) }
 
     it "returns the publication's contributors in order by position" do
       expect(pub.contributor_names).to eq [c3, c1, c2]
@@ -727,12 +727,12 @@ describe Publication, type: :model do
   end
 
   describe '#ai_import_identifiers' do
-    let(:pub) { create :publication }
+    let(:pub) { create(:publication) }
 
-    before { create :publication_import,
+    before { create(:publication_import,
                     source: 'Pure',
                     source_identifier: 'pure-abc123',
-                    publication: pub }
+                    publication: pub) }
 
     context 'when the publication does not have imports from Activity Insight' do
       it 'returns an empty array' do
@@ -742,14 +742,14 @@ describe Publication, type: :model do
 
     context 'when the publication has imports from Activity Insight' do
       before do
-        create :publication_import,
+        create(:publication_import,
                source: 'Activity Insight',
                source_identifier: 'ai-abc123',
-               publication: pub
-        create :publication_import,
+               publication: pub)
+        create(:publication_import,
                source: 'Activity Insight',
                source_identifier: 'ai-xyz789',
-               publication: pub
+               publication: pub)
       end
 
       it "returns an array of the source identifiers from the publication's Activity Insight imports" do
@@ -759,12 +759,12 @@ describe Publication, type: :model do
   end
 
   describe '#pure_import_identifiers' do
-    let(:pub) { create :publication }
+    let(:pub) { create(:publication) }
 
-    before { create :publication_import,
+    before { create(:publication_import,
                     source: 'Activity Insight',
                     source_identifier: 'ai-abc123',
-                    publication: pub }
+                    publication: pub) }
 
     context 'when the publication does not have imports from Pure' do
       it 'returns an empty array' do
@@ -774,14 +774,14 @@ describe Publication, type: :model do
 
     context 'when the publication has imports from Pure' do
       before do
-        create :publication_import,
+        create(:publication_import,
                source: 'Pure',
                source_identifier: 'pure-abc123',
-               publication: pub
-        create :publication_import,
+               publication: pub)
+        create(:publication_import,
                source: 'Pure',
                source_identifier: 'pure-xyz789',
-               publication: pub
+               publication: pub)
       end
 
       it "returns an array of the source identifiers from the publication's Pure imports" do
@@ -949,8 +949,8 @@ describe Publication, type: :model do
   end
 
   describe '#scholarsphere_upload_pending?' do
-    let(:pub) { create :publication }
-    let(:auth) { create :authorship, publication: pub }
+    let(:pub) { create(:publication) }
+    let(:auth) { create(:authorship, publication: pub) }
 
     context 'when the publication has no authorships with a pending ScholarSphere deposit' do
       it 'returns false' do
@@ -960,7 +960,7 @@ describe Publication, type: :model do
 
     context 'when the publication has an authorship with a pending ScholarSphere deposit' do
       before do
-        create :scholarsphere_work_deposit, authorship: auth, status: 'Pending'
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Pending')
       end
 
       it 'returns true' do
@@ -970,7 +970,7 @@ describe Publication, type: :model do
 
     context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
       before do
-        create :scholarsphere_work_deposit, authorship: auth, status: 'Success'
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Success')
       end
 
       it 'returns false' do
@@ -980,8 +980,8 @@ describe Publication, type: :model do
   end
 
   describe '#scholarsphere_upload_failed?' do
-    let(:pub) { create :publication }
-    let(:auth) { create :authorship, publication: pub }
+    let(:pub) { create(:publication) }
+    let(:auth) { create(:authorship, publication: pub) }
 
     context 'when the publication has no authorships with a failed ScholarSphere deposit' do
       it 'returns false' do
@@ -991,7 +991,7 @@ describe Publication, type: :model do
 
     context 'when the publication has an authorship with a failed ScholarSphere deposit' do
       before do
-        create :scholarsphere_work_deposit, authorship: auth, status: 'Failed'
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Failed')
       end
 
       it 'returns true' do
@@ -1001,7 +1001,7 @@ describe Publication, type: :model do
 
     context 'when the publication has an authorship with a non-failed ScholarSphere deposit' do
       before do
-        create :scholarsphere_work_deposit, authorship: auth, status: 'Success'
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Success')
       end
 
       it 'returns false' do
@@ -1011,9 +1011,9 @@ describe Publication, type: :model do
   end
 
   describe '#open_access_waived?' do
-    let(:pub) { create :publication }
-    let!(:auth1) { create :authorship, publication: pub }
-    let!(:auth2) { create :authorship, publication: pub }
+    let(:pub) { create(:publication) }
+    let!(:auth1) { create(:authorship, publication: pub) }
+    let!(:auth2) { create(:authorship, publication: pub) }
 
     context "when none of the publication's authorships have a waiver" do
       it 'returns false' do
@@ -1022,7 +1022,7 @@ describe Publication, type: :model do
     end
 
     context "when one of the publication's authorships has a waiver" do
-      before { create :internal_publication_waiver, authorship: auth2 }
+      before { create(:internal_publication_waiver, authorship: auth2) }
 
       it 'returns true' do
         expect(pub.open_access_waived?).to be true
@@ -1031,9 +1031,9 @@ describe Publication, type: :model do
   end
 
   describe '#no_open_access_information?' do
-    let!(:pub) { create :publication }
-    let!(:auth1) { create :authorship, publication: pub }
-    let!(:auth2) { create :authorship, publication: pub }
+    let!(:pub) { create(:publication) }
+    let!(:auth1) { create(:authorship, publication: pub) }
+    let!(:auth2) { create(:authorship, publication: pub) }
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
 
@@ -1057,7 +1057,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
@@ -1075,7 +1075,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
@@ -1094,7 +1094,7 @@ describe Publication, type: :model do
     end
 
     context "when one of the publication's authorships has a waiver" do
-      before { create :internal_publication_waiver, authorship: auth2 }
+      before { create(:internal_publication_waiver, authorship: auth2) }
 
       context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
         context 'when there is not a preferred open access URL for the publication' do
@@ -1113,7 +1113,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
@@ -1131,7 +1131,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
@@ -1151,9 +1151,9 @@ describe Publication, type: :model do
   end
 
   describe '#has_open_access_information?' do
-    let!(:pub) { create :publication }
-    let!(:auth1) { create :authorship, publication: pub }
-    let!(:auth2) { create :authorship, publication: pub }
+    let!(:pub) { create(:publication) }
+    let!(:auth1) { create(:authorship, publication: pub) }
+    let!(:auth2) { create(:authorship, publication: pub) }
     let(:policy) { double 'open access policy', url: url }
     let(:url) { nil }
 
@@ -1177,7 +1177,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
@@ -1195,7 +1195,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns false' do
@@ -1214,7 +1214,7 @@ describe Publication, type: :model do
     end
 
     context "when one of the publication's authorships has a waiver" do
-      before { create :internal_publication_waiver, authorship: auth2 }
+      before { create(:internal_publication_waiver, authorship: auth2) }
 
       context 'when the publication has no authorships that have been uploaded to ScholarSphere' do
         context 'when there is not a preferred open access URL for the publication' do
@@ -1233,7 +1233,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Pending' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
@@ -1251,7 +1251,7 @@ describe Publication, type: :model do
       end
 
       context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
-        before { create :scholarsphere_work_deposit, authorship: auth1, status: 'Success' }
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
 
         context 'when there is not a preferred open access URL for the publication' do
           it 'returns true' do
@@ -1271,36 +1271,36 @@ describe Publication, type: :model do
   end
 
   describe '#merge!' do
-    let!(:user1) { create :user }
-    let!(:user2) { create :user }
-    let!(:user3) { create :user }
+    let!(:user1) { create(:user) }
+    let!(:user2) { create(:user) }
+    let!(:user3) { create(:user) }
 
-    let!(:pub1) { create :publication, updated_by_user_at: nil, visible: visibility }
-    let!(:pub2) { create :publication }
-    let!(:pub3) { create :publication }
-    let!(:pub4) { create :publication }
+    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility) }
+    let!(:pub2) { create(:publication) }
+    let!(:pub3) { create(:publication) }
+    let!(:pub4) { create(:publication) }
 
-    let!(:pub1_import1) { create :publication_import, publication: pub1 }
-    let!(:pub2_import1) { create :publication_import, publication: pub2 }
-    let!(:pub2_import2) { create :publication_import, publication: pub2 }
-    let!(:pub3_import1) { create :publication_import, publication: pub3 }
+    let!(:pub1_import1) { create(:publication_import, publication: pub1) }
+    let!(:pub2_import1) { create(:publication_import, publication: pub2) }
+    let!(:pub2_import2) { create(:publication_import, publication: pub2) }
+    let!(:pub3_import1) { create(:publication_import, publication: pub3) }
 
-    let!(:open_access_location1) { create :open_access_location, url: 'example1.edu', publication: pub1 }
-    let!(:open_access_location2) { create :open_access_location, url: 'example2.edu', publication: pub2 }
-    let!(:open_access_location3) { create :open_access_location, url: 'example3.edu', publication: pub2 }
-    let!(:open_access_location4) { create :open_access_location, url: 'example4.edu', publication: pub4 }
+    let!(:open_access_location1) { create(:open_access_location, url: 'example1.edu', publication: pub1) }
+    let!(:open_access_location2) { create(:open_access_location, url: 'example2.edu', publication: pub2) }
+    let!(:open_access_location3) { create(:open_access_location, url: 'example3.edu', publication: pub2) }
+    let!(:open_access_location4) { create(:open_access_location, url: 'example4.edu', publication: pub4) }
 
-    let(:waiver1) { build :internal_publication_waiver }
-    let(:waiver2) { build :internal_publication_waiver }
+    let(:waiver1) { build(:internal_publication_waiver) }
+    let(:waiver2) { build(:internal_publication_waiver) }
 
-    let(:deposit1) { build :scholarsphere_work_deposit }
-    let(:deposit2) { build :scholarsphere_work_deposit }
-    let(:deposit3) { build :scholarsphere_work_deposit }
+    let(:deposit1) { build(:scholarsphere_work_deposit) }
+    let(:deposit2) { build(:scholarsphere_work_deposit) }
+    let(:deposit3) { build(:scholarsphere_work_deposit) }
 
     let(:visibility) { false }
 
     before do
-      create :authorship,
+      create(:authorship,
              publication: pub1,
              user: user1,
              author_number: 1,
@@ -1310,9 +1310,9 @@ describe Publication, type: :model do
              updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
              visible_in_profile: true,
              position_in_profile: nil,
-             scholarsphere_work_deposits: [deposit3]
+             scholarsphere_work_deposits: [deposit3])
 
-      create :authorship,
+      create(:authorship,
              publication: pub2,
              user: user1,
              author_number: 1,
@@ -1324,17 +1324,17 @@ describe Publication, type: :model do
              waiver: waiver1,
              visible_in_profile: false,
              position_in_profile: 2,
-             scholarsphere_work_deposits: [deposit1, deposit2]
-      create :authorship,
+             scholarsphere_work_deposits: [deposit1, deposit2])
+      create(:authorship,
              publication: pub2,
              user: user2,
              author_number: 2,
              confirmed: false,
              role: 'co-author',
              orcid_resource_identifier: 'newer-orcid-identifier-2',
-             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0)
+             updated_by_owner_at: Time.new(2021, 1, 1, 0, 0, 0))
 
-      create :authorship,
+      create(:authorship,
              publication: pub3,
              user: user3,
              author_number: 3,
@@ -1342,9 +1342,9 @@ describe Publication, type: :model do
              role: nil,
              orcid_resource_identifier: nil,
              updated_by_owner_at: Time.new(2020, 1, 1, 0, 0, 0),
-             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0)
+             open_access_notification_sent_at: Time.new(2000, 1, 1, 0, 0, 0))
 
-      create :authorship,
+      create(:authorship,
              publication: pub4,
              user: user1,
              author_number: 1,
@@ -1353,16 +1353,16 @@ describe Publication, type: :model do
              orcid_resource_identifier: nil,
              updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
              waiver: waiver2,
-             position_in_profile: 1
-      create :authorship,
+             position_in_profile: 1)
+      create(:authorship,
              publication: pub4,
              user: user2,
              author_number: 2,
              confirmed: false,
              role: nil,
              orcid_resource_identifier: 'older-orcid-identifier-2',
-             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0)
-      create :authorship,
+             updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0))
+      create(:authorship,
              publication: pub4,
              user: user3,
              author_number: 3,
@@ -1370,7 +1370,7 @@ describe Publication, type: :model do
              role: nil,
              orcid_resource_identifier: 'orcid-identifier-3',
              updated_by_owner_at: Time.new(2019, 1, 1, 0, 0, 0),
-             open_access_notification_sent_at: Time.new(2010, 1, 1, 0, 0, 0)
+             open_access_notification_sent_at: Time.new(2010, 1, 1, 0, 0, 0))
     end
 
     it 'reassigns all of the imports from the given publications to the publication' do
@@ -1725,7 +1725,7 @@ describe Publication, type: :model do
     end
 
     context 'when one of the given publications is in a non-duplicate group' do
-      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub2] }
+      let!(:ndpg) { create(:non_duplicate_publication_group, publications: [pub2]) }
 
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub2, pub3, pub4])
@@ -1901,8 +1901,8 @@ describe Publication, type: :model do
     end
 
     context 'when two of the given publications are in two different non-duplicate groups' do
-      let!(:ndpg1) { create :non_duplicate_publication_group, publications: [pub2] }
-      let!(:ndpg2) { create :non_duplicate_publication_group, publications: [pub4] }
+      let!(:ndpg1) { create(:non_duplicate_publication_group, publications: [pub2]) }
+      let!(:ndpg2) { create(:non_duplicate_publication_group, publications: [pub4]) }
 
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub2, pub3, pub4])
@@ -2079,7 +2079,7 @@ describe Publication, type: :model do
     end
 
     context 'when two of the given publications are in the same non-duplicate group' do
-      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
+      let!(:ndpg) { create(:non_duplicate_publication_group, publications: [pub2, pub4]) }
 
       it 'raises an error' do
         expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
@@ -2232,8 +2232,8 @@ describe Publication, type: :model do
     end
 
     context 'when two of the given publications are both in two different non-duplicate group' do
-      let!(:ndpg1) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
-      let!(:ndpg2) { create :non_duplicate_publication_group, publications: [pub2, pub4] }
+      let!(:ndpg1) { create(:non_duplicate_publication_group, publications: [pub2, pub4]) }
+      let!(:ndpg2) { create(:non_duplicate_publication_group, publications: [pub2, pub4]) }
 
       it 'raises an error' do
         expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
@@ -2387,7 +2387,7 @@ describe Publication, type: :model do
     end
 
     context 'when one of the given publications is in the same non-duplicate group as the publication' do
-      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub1, pub3] }
+      let!(:ndpg) { create(:non_duplicate_publication_group, publications: [pub1, pub3]) }
 
       it 'raises an error' do
         expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
@@ -2540,7 +2540,7 @@ describe Publication, type: :model do
     end
 
     context 'when all of the publications are in the same non-duplicate group' do
-      let!(:ndpg) { create :non_duplicate_publication_group, publications: [pub1, pub2, pub3, pub4] }
+      let!(:ndpg) { create(:non_duplicate_publication_group, publications: [pub1, pub2, pub3, pub4]) }
 
       it 'raises an error' do
         expect { pub1.merge!([pub2, pub3, pub4]) }.to raise_error Publication::NonDuplicateMerge
@@ -2696,7 +2696,7 @@ describe Publication, type: :model do
   describe '#merge_on_matching!' do
     # merge_on_matching! uses the exact same code as merge! except it includes
     # a block that incorporates the PublicationMergeOnMatchingPolicy during the merge
-    let!(:pub1) { create :sample_publication }
+    let!(:pub1) { create(:sample_publication) }
     let!(:pub2) do
       described_class.create(pub1
         .attributes
@@ -2716,15 +2716,15 @@ describe Publication, type: :model do
   end
 
   describe '#all_non_duplicate_ids' do
-    let!(:pub) { create :publication }
+    let!(:pub) { create(:publication) }
 
-    let!(:nd1) { create :publication, id: 900000 }
-    let!(:nd2) { create :publication, id: 800000 }
-    let!(:nd3) { create :publication }
+    let!(:nd1) { create(:publication, id: 900000) }
+    let!(:nd2) { create(:publication, id: 800000) }
+    let!(:nd3) { create(:publication) }
 
     before do
-      create :non_duplicate_publication_group, publications: [pub, nd1, nd2]
-      create :non_duplicate_publication_group, publications: [pub, nd2]
+      create(:non_duplicate_publication_group, publications: [pub, nd1, nd2])
+      create(:non_duplicate_publication_group, publications: [pub, nd2])
     end
 
     it 'returns the IDs of all publications that are known to not be duplicates of the publication' do
@@ -2733,12 +2733,12 @@ describe Publication, type: :model do
   end
 
   describe '#has_single_import_from_pure?' do
-    let(:pure_import) { build :publication_import, source: 'Pure' }
-    let(:other_pure_import) { build :publication_import, source: 'Pure' }
-    let(:ai_import) { build :publication_import, source: 'Activity Insight' }
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:other_pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
 
     context 'when the publication has an import from Pure' do
-      let(:pub) { create :publication, imports: [pure_import] }
+      let(:pub) { create(:publication, imports: [pure_import]) }
 
       it 'returns true' do
         expect(pub.has_single_import_from_pure?).to be true
@@ -2746,7 +2746,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication has two imports from Pure' do
-      let(:pub) { create :publication, imports: [pure_import, other_pure_import] }
+      let(:pub) { create(:publication, imports: [pure_import, other_pure_import]) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_pure?).to be false
@@ -2754,7 +2754,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication has an import from Pure and an import from another source' do
-      let(:pub) { create :publication, imports: [pure_import, ai_import] }
+      let(:pub) { create(:publication, imports: [pure_import, ai_import]) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_pure?).to be false
@@ -2762,7 +2762,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication does not have any imports' do
-      let(:pub) { create :publication }
+      let(:pub) { create(:publication) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_pure?).to be false
@@ -2771,12 +2771,12 @@ describe Publication, type: :model do
   end
 
   describe '#has_single_import_from_ai?' do
-    let(:ai_import) { build :publication_import, source: 'Activity Insight' }
-    let(:other_ai_import) { build :publication_import, source: 'Activity Insight' }
-    let(:pure_import) { build :publication_import, source: 'Pure' }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+    let(:other_ai_import) { build(:publication_import, source: 'Activity Insight') }
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
 
     context 'when the publication has an import from Activity Insight' do
-      let(:pub) { create :publication, imports: [ai_import] }
+      let(:pub) { create(:publication, imports: [ai_import]) }
 
       it 'returns true' do
         expect(pub.has_single_import_from_ai?).to be true
@@ -2784,7 +2784,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication two imports from Activity Insight' do
-      let(:pub) { create :publication, imports: [ai_import, other_ai_import] }
+      let(:pub) { create(:publication, imports: [ai_import, other_ai_import]) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_ai?).to be false
@@ -2792,7 +2792,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication has an import from Activity Insight and an import from another source' do
-      let(:pub) { create :publication, imports: [ai_import, pure_import] }
+      let(:pub) { create(:publication, imports: [ai_import, pure_import]) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_ai?).to be false
@@ -2800,7 +2800,7 @@ describe Publication, type: :model do
     end
 
     context 'when the publication does not have any imports' do
-      let(:pub) { create :publication }
+      let(:pub) { create(:publication) }
 
       it 'returns false' do
         expect(pub.has_single_import_from_ai?).to be false
@@ -2810,7 +2810,7 @@ describe Publication, type: :model do
 
   describe '#is_oa_publication?' do
     context 'when publication is a open access publication' do
-      let!(:pub1) { create :publication, publication_type: 'Journal Article' }
+      let!(:pub1) { create(:publication, publication_type: 'Journal Article') }
 
       it 'returns true' do
         expect(pub1.is_oa_publication?).to be true
@@ -2818,7 +2818,7 @@ describe Publication, type: :model do
     end
 
     context 'when publication is a Book' do
-      let!(:pub2) { create :publication, publication_type: 'Book' }
+      let!(:pub2) { create(:publication, publication_type: 'Book') }
 
       it 'returns false' do
         expect(pub2.is_oa_publication?).to be false
@@ -2850,7 +2850,7 @@ describe Publication, type: :model do
 
   describe '#published' do
     context "when publication's status is 'Published" do
-      let(:pub) { create :publication, status: 'Published' }
+      let(:pub) { create(:publication, status: 'Published') }
 
       it 'returns true' do
         expect(pub.published?).to be true
@@ -2858,7 +2858,7 @@ describe Publication, type: :model do
     end
 
     context "when publication's status is 'In Press'" do
-      let(:pub) { create :publication, status: 'In Press' }
+      let(:pub) { create(:publication, status: 'In Press') }
 
       it 'returns false' do
         expect(pub.published?).to be false
@@ -2868,7 +2868,7 @@ describe Publication, type: :model do
 
   describe '#publication_type_other?' do
     context "when publication_type is not 'Other'" do
-      let(:pub) { create :publication, publication_type: 'Journal Article' }
+      let(:pub) { create(:publication, publication_type: 'Journal Article') }
 
       it 'returns false' do
         expect(pub.publication_type_other?).to be false
@@ -2876,7 +2876,7 @@ describe Publication, type: :model do
     end
 
     context "when publication_type is 'Other'" do
-      let(:pub) { create :publication, publication_type: 'Other' }
+      let(:pub) { create(:publication, publication_type: 'Other') }
 
       it 'returns true' do
         expect(pub.publication_type_other?).to be true

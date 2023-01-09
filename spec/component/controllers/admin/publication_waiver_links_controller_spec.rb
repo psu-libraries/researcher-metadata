@@ -4,9 +4,9 @@ require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
 describe Admin::PublicationWaiverLinksController, type: :controller do
-  let!(:waiver) { create :external_publication_waiver, user: user, reason_for_waiver: 'The reason' }
-  let!(:pub) { create :publication }
-  let!(:user) { create :user }
+  let!(:waiver) { create(:external_publication_waiver, user: user, reason_for_waiver: 'The reason') }
+  let!(:pub) { create(:publication) }
+  let!(:user) { create(:user) }
 
   describe '#create' do
     let(:perform_request) { post :create, params: { external_publication_waiver_id: 1 } }
@@ -21,10 +21,10 @@ describe Admin::PublicationWaiverLinksController, type: :controller do
       end
 
       context 'when an authorship matches the given waiver and publication' do
-        let!(:auth) { create :authorship, publication: pub, user: user }
+        let!(:auth) { create(:authorship, publication: pub, user: user) }
 
         context 'when a waiver is already associated with the authorship' do
-          let!(:int_waiver) { create :internal_publication_waiver, authorship: auth }
+          let!(:int_waiver) { create(:internal_publication_waiver, authorship: auth) }
 
           it 'sets a flash error message' do
             post :create, params: { external_publication_waiver_id: waiver.id, publication_id: pub.id }

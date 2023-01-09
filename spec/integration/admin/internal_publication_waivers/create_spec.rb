@@ -5,7 +5,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Creating an internal publication waiver', type: :feature do
   context 'when the current user is an admin' do
-    let!(:auth) { create :authorship }
+    let!(:auth) { create(:authorship) }
 
     before do
       authenticate_admin_user

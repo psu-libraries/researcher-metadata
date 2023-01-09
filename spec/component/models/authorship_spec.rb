@@ -70,10 +70,10 @@ describe Authorship, type: :model do
   it { is_expected.to accept_nested_attributes_for(:waiver) }
 
   describe '.unclaimable' do
-    let!(:auth1) { create :authorship, claimed_by_user: false, confirmed: false }
-    let!(:auth2) { create :authorship, claimed_by_user: true, confirmed: false }
-    let!(:auth3) { create :authorship, claimed_by_user: false, confirmed: true }
-    let!(:auth4) { create :authorship, claimed_by_user: true, confirmed: true }
+    let!(:auth1) { create(:authorship, claimed_by_user: false, confirmed: false) }
+    let!(:auth2) { create(:authorship, claimed_by_user: true, confirmed: false) }
+    let!(:auth3) { create(:authorship, claimed_by_user: false, confirmed: true) }
+    let!(:auth4) { create(:authorship, claimed_by_user: true, confirmed: true) }
 
     it 'only returns authorships that are either confirmed or already claimed by a user' do
       expect(described_class.unclaimable).to match_array [auth2, auth3, auth4]
@@ -81,8 +81,8 @@ describe Authorship, type: :model do
   end
 
   describe '.confirmed' do
-    let!(:auth1) { create :authorship, confirmed: false }
-    let!(:auth2) { create :authorship, confirmed: true }
+    let!(:auth1) { create(:authorship, confirmed: false) }
+    let!(:auth2) { create(:authorship, confirmed: true) }
 
     it 'only returns authorships that are confirmed' do
       expect(described_class.confirmed).to eq [auth2]
@@ -90,10 +90,10 @@ describe Authorship, type: :model do
   end
 
   describe '.claimed_and_unconfirmed' do
-    let!(:auth1) { create :authorship, claimed_by_user: false, confirmed: false }
-    let!(:auth2) { create :authorship, claimed_by_user: true, confirmed: false }
-    let!(:auth3) { create :authorship, claimed_by_user: false, confirmed: true }
-    let!(:auth4) { create :authorship, claimed_by_user: true, confirmed: true }
+    let!(:auth1) { create(:authorship, claimed_by_user: false, confirmed: false) }
+    let!(:auth2) { create(:authorship, claimed_by_user: true, confirmed: false) }
+    let!(:auth3) { create(:authorship, claimed_by_user: false, confirmed: true) }
+    let!(:auth4) { create(:authorship, claimed_by_user: true, confirmed: true) }
 
     it 'only returns authorships that are both claimed by a user and unconfirmed' do
       expect(described_class.claimed_and_unconfirmed).to match_array [auth2]
@@ -101,8 +101,8 @@ describe Authorship, type: :model do
   end
 
   describe '#description' do
-    let(:u) { create :user, first_name: 'Bob', last_name: 'Testerson' }
-    let(:p) { create :publication, title: 'Example Pub' }
+    let(:u) { create(:user, first_name: 'Bob', last_name: 'Testerson') }
+    let(:p) { create(:publication, title: 'Example Pub') }
 
     context 'when the authorship is not persisted' do
       let(:a) { described_class.new }
@@ -113,7 +113,7 @@ describe Authorship, type: :model do
     end
 
     context 'when the authorship is persisted' do
-      let(:a) { create :authorship, user: u, publication: p }
+      let(:a) { create(:authorship, user: u, publication: p) }
 
       it 'returns a string describing the record' do
         expect(a.description).to eq "##{a.id} (Bob Testerson - Example Pub)"
@@ -122,7 +122,7 @@ describe Authorship, type: :model do
   end
 
   describe '#record_open_access_notification' do
-    let(:a) { create :authorship }
+    let(:a) { create(:authorship) }
     let(:now) { Time.new(2020, 6, 12, 15, 21, 0) }
 
     before { allow(Time).to receive(:current).and_return(now) }

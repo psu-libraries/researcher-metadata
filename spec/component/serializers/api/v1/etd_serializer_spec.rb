@@ -4,12 +4,12 @@ require 'component/component_spec_helper'
 
 describe API::V1::ETDSerializer do
   let(:etd) {
-    create :etd,
+    create(:etd,
            title: 'etd 1',
            year: 2018,
            author_last_name: 'Developer',
            author_middle_name: 'Q',
-           author_first_name: 'Joe'
+           author_first_name: 'Joe')
   }
 
   describe 'data attributes' do

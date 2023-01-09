@@ -9,24 +9,24 @@ describe ActivityInsightImporter do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
                                           basic_auth: { username: 'test',
                                                         password: 'secret' }).and_return(
-                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_users.xml'))
+                                                          Rails.root.join('spec', 'fixtures', 'activity_insight_users.xml').read
                                                         )
 
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:ABC123',
                                           basic_auth: { username: 'test',
                                                         password: 'secret' }).and_return(
-                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_abc123.xml'))
+                                                          Rails.root.join('spec', 'fixtures', 'activity_insight_user_abc123.xml').read
                                                         )
 
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:def45',
                                           basic_auth: { username: 'test',
                                                         password: 'secret' }).and_return(
-                                                          File.read(Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml'))
+                                                          Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml').read
                                                         )
   end
 
   describe '#call' do
-    let!(:duplicate_pub) { create :publication, title: 'First Test Publication With a Really Unique Title' }
+    let!(:duplicate_pub) { create(:publication, title: 'First Test Publication With a Really Unique Title') }
 
     context 'when the users being imported do not exist in the database' do
       it 'creates new user records for each imported user' do
@@ -104,10 +104,10 @@ describe ActivityInsightImporter do
       end
 
       context 'when an included education history item exists in the database' do
-        let(:other_user) { create :user }
+        let(:other_user) { create(:user) }
 
         before do
-          create :education_history_item,
+          create(:education_history_item,
                  activity_insight_identifier: '70766815232',
                  user: other_user,
                  degree: 'Existing Degree',
@@ -123,7 +123,7 @@ describe ActivityInsightImporter do
                  description: 'Existing Description',
                  comments: 'Existing Comments',
                  start_year: '1990',
-                 end_year: '1995'
+                 end_year: '1995')
         end
 
         it 'creates any new items and updates the existing item' do
@@ -226,15 +226,15 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included presentation contribution exists in the database' do
-          let(:other_user) { create :user }
-          let(:other_presentation) { create :presentation }
+          let(:other_user) { create(:user) }
+          let(:other_presentation) { create(:presentation) }
 
           before do
-            create :presentation_contribution,
+            create(:presentation_contribution,
                    activity_insight_identifier: '83890556929',
                    user: other_user,
                    presentation: other_presentation,
-                   role: 'Existing Role'
+                   role: 'Existing Role')
           end
 
           it 'creates any new contributions and updates the existing contribution' do
@@ -263,11 +263,11 @@ describe ActivityInsightImporter do
 
       context 'when an included presentation exists in the database' do
         before do
-          create :presentation,
+          create(:presentation,
                  activity_insight_identifier: '83890556928',
                  updated_by_user_at: updated,
                  title: 'Existing Title',
-                 visible: false
+                 visible: false)
         end
 
         context 'when the existing presentation has been updated by an admin' do
@@ -331,15 +331,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included presentation contribution exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_presentation) { create :presentation }
+            let(:other_user) { create(:user) }
+            let(:other_presentation) { create(:presentation) }
 
             before do
-              create :presentation_contribution,
+              create(:presentation_contribution,
                      activity_insight_identifier: '83890556929',
                      user: other_user,
                      presentation: other_presentation,
-                     role: 'Existing Role'
+                     role: 'Existing Role')
             end
 
             it 'creates any new contributions and updates the existing contribution' do
@@ -427,15 +427,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included presentation contribution exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_presentation) { create :presentation }
+            let(:other_user) { create(:user) }
+            let(:other_presentation) { create(:presentation) }
 
             before do
-              create :presentation_contribution,
+              create(:presentation_contribution,
                      activity_insight_identifier: '83890556929',
                      user: other_user,
                      presentation: other_presentation,
-                     role: 'Existing Role'
+                     role: 'Existing Role')
             end
 
             it 'creates any new contributions and updates the existing contribution' do
@@ -518,15 +518,15 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included user performance exists in the database' do
-          let(:other_user) { create :user }
-          let(:other_performance) { create :performance }
+          let(:other_user) { create(:user) }
+          let(:other_performance) { create(:performance) }
 
           before do
-            create :user_performance,
+            create(:user_performance,
                    activity_insight_id: '126500763649',
                    user: other_user,
                    performance: other_performance,
-                   contribution: 'Existing Contribution'
+                   contribution: 'Existing Contribution')
           end
 
           it 'creates any new user performances and updates the existing user performances' do
@@ -553,7 +553,7 @@ describe ActivityInsightImporter do
 
       context 'when an included performance exists in the database' do
         before do
-          create :performance,
+          create(:performance,
                  activity_insight_id: '126500763648',
                  updated_by_user_at: updated,
                  title: 'Existing Title',
@@ -566,7 +566,7 @@ describe ActivityInsightImporter do
                  scope: nil,
                  start_on: nil,
                  end_on: nil,
-                 visible: false
+                 visible: false)
         end
 
         context 'when the existing performance has been updated by an admin' do
@@ -626,15 +626,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included user performance exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_performance) { create :performance }
+            let(:other_user) { create(:user) }
+            let(:other_performance) { create(:performance) }
 
             before do
-              create :user_performance,
+              create(:user_performance,
                      activity_insight_id: '126500763649',
                      user: other_user,
                      performance: other_performance,
-                     contribution: 'Existing Contribution'
+                     contribution: 'Existing Contribution')
             end
 
             it 'creates any new user performances and updates the existing user performances' do
@@ -716,15 +716,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included user performance exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_performance) { create :performance }
+            let(:other_user) { create(:user) }
+            let(:other_performance) { create(:performance) }
 
             before do
-              create :user_performance,
+              create(:user_performance,
                      activity_insight_id: '126500763649',
                      user: other_user,
                      performance: other_performance,
-                     contribution: 'Existing Contribution'
+                     contribution: 'Existing Contribution')
             end
 
             it 'creates any new user performances and updates the existing user performances' do
@@ -989,23 +989,23 @@ describe ActivityInsightImporter do
       end
 
       context 'when an included publication exists in the database' do
-        let!(:existing_import) { create :publication_import,
+        let!(:existing_import) { create(:publication_import,
                                         source: 'Activity Insight',
                                         source_identifier: '171620739072',
-                                        publication: existing_pub}
-        let!(:existing_import_two) { create :publication_import,
+                                        publication: existing_pub)}
+        let!(:existing_import_two) { create(:publication_import,
                                             source: 'Activity Insight',
                                             source_identifier: '271620739072',
-                                            publication: existing_pub2}
-        let!(:existing_import_three) { create :publication_import,
+                                            publication: existing_pub2)}
+        let!(:existing_import_three) { create(:publication_import,
                                               source: 'Activity Insight',
                                               source_identifier: '190707482930',
-                                              publication: existing_pub3}
-        let!(:existing_import_three_p2) { create :publication_import,
+                                              publication: existing_pub3)}
+        let!(:existing_import_three_p2) { create(:publication_import,
                                                  source: 'Activity Insight',
                                                  source_identifier: '190707482928',
-                                                 publication: existing_pub3}
-        let(:existing_pub) { create :publication,
+                                                 publication: existing_pub3)}
+        let(:existing_pub) { create(:publication,
                                     title: 'Existing Title',
                                     publication_type: 'Trade Journal Article',
                                     journal_title: 'Existing Journal',
@@ -1024,8 +1024,8 @@ describe ActivityInsightImporter do
                                     published_on: Date.new(1980, 1, 1),
                                     updated_by_user_at: timestamp,
                                     visible: false,
-                                    doi: 'https://doi.org/10.000/existing' }
-        let(:existing_pub2) { create :publication,
+                                    doi: 'https://doi.org/10.000/existing') }
+        let(:existing_pub2) { create(:publication,
                                      title: 'Existing Title 2',
                                      publication_type: 'Trade Journal Article',
                                      journal_title: 'Existing Journal 2',
@@ -1044,8 +1044,8 @@ describe ActivityInsightImporter do
                                      published_on: Date.new(1980, 2, 2),
                                      updated_by_user_at: timestamp,
                                      visible: false,
-                                     doi: 'https://doi.org/10.000/existing2' }
-        let(:existing_pub3) { create :publication,
+                                     doi: 'https://doi.org/10.000/existing2') }
+        let(:existing_pub3) { create(:publication,
                                      title: 'Existing Title 3',
                                      publication_type: 'Journal Article',
                                      journal_title: 'Test Journal 1',
@@ -1064,13 +1064,13 @@ describe ActivityInsightImporter do
                                      published_on: Date.new(2019, 1, 2),
                                      updated_by_user_at: timestamp,
                                      visible: true,
-                                     doi: 'https://doi.org/10.1186/s40543-020-00345-w' }
+                                     doi: 'https://doi.org/10.1186/s40543-020-00345-w') }
 
         context 'when the existing publication has been modified by an admin user' do
           let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+          let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+          let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
           it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
             expect { importer.call }.to change(PublicationImport, :count).by 2
@@ -1199,12 +1199,12 @@ describe ActivityInsightImporter do
           end
 
           context 'when authorships already exist for the existing publication' do
-            let!(:existing_authorship1) { create :authorship,
+            let!(:existing_authorship1) { create(:authorship,
                                                  user: user,
                                                  publication: existing_pub,
                                                  role: 'Existing Role',
-                                                 author_number: 6 }
-            let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+                                                 author_number: 6) }
+            let(:user) { create(:user, activity_insight_identifier: '1649499', webaccess_id: 'abc123') }
 
             it 'creates new authorship records for every new faculty author for each new imported publication' do
               expect { importer.call }.to change(Authorship, :count).by 2
@@ -1359,9 +1359,9 @@ describe ActivityInsightImporter do
 
         context 'when the existing publication has not been modified by an admin user' do
           let(:timestamp) { nil }
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+          let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-          let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+          let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
           it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
             expect { importer.call }.to change(PublicationImport, :count).by 2
@@ -1485,12 +1485,12 @@ describe ActivityInsightImporter do
           end
 
           context 'when authorships already exist for the existing publication' do
-            let!(:existing_authorship1) { create :authorship,
+            let!(:existing_authorship1) { create(:authorship,
                                                  user: user,
                                                  publication: existing_pub,
                                                  role: 'Existing Role',
-                                                 author_number: 6 }
-            let(:user) { create :user, activity_insight_identifier: '1649499', webaccess_id: 'abc123' }
+                                                 author_number: 6) }
+            let(:user) { create(:user, activity_insight_identifier: '1649499', webaccess_id: 'abc123') }
 
             it 'creates new authorship records for every new faculty author for each new imported publication' do
               expect { importer.call }.to change(Authorship, :count).by 4
@@ -1656,14 +1656,14 @@ describe ActivityInsightImporter do
 
     context 'when a user that is being imported already exists in the database' do
       let!(:existing_user) do
-        create :user,
+        create(:user,
                webaccess_id: 'abc123',
                first_name: 'Existing',
                middle_name: 'T.',
                last_name: 'User',
                activity_insight_identifier: '1649499',
                penn_state_identifier: '999999999',
-               updated_by_user_at: updated
+               updated_by_user_at: updated)
       end
 
       context 'when the existing user has been updated by an admin' do
@@ -1744,10 +1744,10 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included education history item exists in the database' do
-          let(:other_user) { create :user }
+          let(:other_user) { create(:user) }
 
           before do
-            create :education_history_item,
+            create(:education_history_item,
                    activity_insight_identifier: '70766815232',
                    user: other_user,
                    degree: 'Existing Degree',
@@ -1763,7 +1763,7 @@ describe ActivityInsightImporter do
                    description: 'Existing Description',
                    comments: 'Existing Comments',
                    start_year: '1990',
-                   end_year: '1995'
+                   end_year: '1995')
           end
 
           it 'creates any new items and updates the existing item' do
@@ -1868,15 +1868,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included presentation contribution exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_presentation) { create :presentation }
+            let(:other_user) { create(:user) }
+            let(:other_presentation) { create(:presentation) }
 
             before do
-              create :presentation_contribution,
+              create(:presentation_contribution,
                      activity_insight_identifier: '83890556929',
                      user: other_user,
                      presentation: other_presentation,
-                     role: 'Existing Role'
+                     role: 'Existing Role')
             end
 
             context 'when a user that matches the contribution exists' do
@@ -1907,11 +1907,11 @@ describe ActivityInsightImporter do
 
         context 'when an included presentation exists in the database' do
           before do
-            create :presentation,
+            create(:presentation,
                    activity_insight_identifier: '83890556928',
                    updated_by_user_at: updated,
                    title: 'Existing Title',
-                   visible: false
+                   visible: false)
           end
 
           context 'when the existing presentation has been updated by an admin' do
@@ -1977,15 +1977,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included presentation contribution exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_presentation) { create :presentation }
+              let(:other_user) { create(:user) }
+              let(:other_presentation) { create(:presentation) }
 
               before do
-                create :presentation_contribution,
+                create(:presentation_contribution,
                        activity_insight_identifier: '83890556929',
                        user: other_user,
                        presentation: other_presentation,
-                       role: 'Existing Role'
+                       role: 'Existing Role')
               end
 
               context 'when a user that matches the contribution exists' do
@@ -2075,15 +2075,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included presentation contribution exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_presentation) { create :presentation }
+              let(:other_user) { create(:user) }
+              let(:other_presentation) { create(:presentation) }
 
               before do
-                create :presentation_contribution,
+                create(:presentation_contribution,
                        activity_insight_identifier: '83890556929',
                        user: other_user,
                        presentation: other_presentation,
-                       role: 'Existing Role'
+                       role: 'Existing Role')
               end
 
               it 'creates any new contributions and updates the existing contribution' do
@@ -2168,15 +2168,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included user performance exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_performance) { create :performance }
+            let(:other_user) { create(:user) }
+            let(:other_performance) { create(:performance) }
 
             before do
-              create :user_performance,
+              create(:user_performance,
                      activity_insight_id: '126500763649',
                      user: other_user,
                      performance: other_performance,
-                     contribution: 'Existing Contribution'
+                     contribution: 'Existing Contribution')
             end
 
             context 'when a user that matches the contribution exists' do
@@ -2205,7 +2205,7 @@ describe ActivityInsightImporter do
 
         context 'when an included performance exists in the database' do
           before do
-            create :performance,
+            create(:performance,
                    activity_insight_id: '126500763648',
                    updated_by_user_at: updated,
                    title: 'Existing Title',
@@ -2218,7 +2218,7 @@ describe ActivityInsightImporter do
                    scope: nil,
                    start_on: nil,
                    end_on: nil,
-                   visible: false
+                   visible: false)
           end
 
           context 'when the existing performance has been updated by an admin' do
@@ -2280,15 +2280,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included user performance exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_performance) { create :performance }
+              let(:other_user) { create(:user) }
+              let(:other_performance) { create(:performance) }
 
               before do
-                create :user_performance,
+                create(:user_performance,
                        activity_insight_id: '126500763649',
                        user: other_user,
                        performance: other_performance,
-                       contribution: 'Existing Contribution'
+                       contribution: 'Existing Contribution')
               end
 
               context 'when a user that matches the contribution exists' do
@@ -2372,15 +2372,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included user performance exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_performance) { create :performance }
+              let(:other_user) { create(:user) }
+              let(:other_performance) { create(:performance) }
 
               before do
-                create :user_performance,
+                create(:user_performance,
                        activity_insight_id: '126500763649',
                        user: other_user,
                        performance: other_performance,
-                       contribution: 'Existing Contribution'
+                       contribution: 'Existing Contribution')
               end
 
               it 'creates any new user performances and updates the existing user performances' do
@@ -2638,11 +2638,11 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included publication exists in the database' do
-          let!(:existing_import) { create :publication_import,
+          let!(:existing_import) { create(:publication_import,
                                           source: 'Activity Insight',
                                           source_identifier: '171620739072',
-                                          publication: existing_pub }
-          let(:existing_pub) { create :publication,
+                                          publication: existing_pub) }
+          let(:existing_pub) { create(:publication,
                                       title: 'Existing Title',
                                       publication_type: 'Trade Journal Article',
                                       journal_title: 'Existing Journal',
@@ -2661,13 +2661,13 @@ describe ActivityInsightImporter do
                                       published_on: Date.new(1980, 1, 1),
                                       updated_by_user_at: timestamp,
                                       visible: false,
-                                      doi: 'https://doi.org/10.000/existing' }
+                                      doi: 'https://doi.org/10.000/existing') }
 
           context 'when the existing publication has been modified by an admin user' do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
             it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
               expect { importer.call }.to change(PublicationImport, :count).by 4
@@ -2791,11 +2791,11 @@ describe ActivityInsightImporter do
             end
 
             context 'when authorhips already exist for the existing publication' do
-              let!(:existing_authorship1) { create :authorship,
+              let!(:existing_authorship1) { create(:authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
-                                                   author_number: 6 }
+                                                   author_number: 6) }
 
               it 'creates new authorship records for every new faculty author for each new imported publication' do
                 expect { importer.call }.to change(Authorship, :count).by 4
@@ -2959,9 +2959,9 @@ describe ActivityInsightImporter do
 
           context 'when the existing publication has not been modified by an admin user' do
             let(:timestamp) { nil }
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
             it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
               expect { importer.call }.to change(PublicationImport, :count).by 4
@@ -3085,11 +3085,11 @@ describe ActivityInsightImporter do
             end
 
             context 'when authorships already exist for the existing publication' do
-              let!(:existing_authorship1) { create :authorship,
+              let!(:existing_authorship1) { create(:authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
-                                                   author_number: 6 }
+                                                   author_number: 6) }
 
               it 'creates new authorship records for every new faculty author for each new imported publication' do
                 expect { importer.call }.to change(Authorship, :count).by 4
@@ -3331,10 +3331,10 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included education history item exists in the database' do
-          let(:other_user) { create :user }
+          let(:other_user) { create(:user) }
 
           before do
-            create :education_history_item,
+            create(:education_history_item,
                    activity_insight_identifier: '70766815232',
                    user: other_user,
                    degree: 'Existing Degree',
@@ -3350,7 +3350,7 @@ describe ActivityInsightImporter do
                    description: 'Existing Description',
                    comments: 'Existing Comments',
                    start_year: '1990',
-                   end_year: '1995'
+                   end_year: '1995')
           end
 
           it 'creates any new items and updates the existing item' do
@@ -3453,15 +3453,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included presentation contribution exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_presentation) { create :presentation }
+            let(:other_user) { create(:user) }
+            let(:other_presentation) { create(:presentation) }
 
             before do
-              create :presentation_contribution,
+              create(:presentation_contribution,
                      activity_insight_identifier: '83890556929',
                      user: other_user,
                      presentation: other_presentation,
-                     role: 'Existing Role'
+                     role: 'Existing Role')
             end
 
             it 'creates any new contributions and updates the existing contribution' do
@@ -3490,11 +3490,11 @@ describe ActivityInsightImporter do
 
         context 'when an included presentation exists in the database' do
           before do
-            create :presentation,
+            create(:presentation,
                    activity_insight_identifier: '83890556928',
                    updated_by_user_at: updated,
                    title: 'Existing Title',
-                   visible: false
+                   visible: false)
           end
 
           context 'when the existing presentation has been updated by an admin' do
@@ -3558,15 +3558,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included presentation contribution exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_presentation) { create :presentation }
+              let(:other_user) { create(:user) }
+              let(:other_presentation) { create(:presentation) }
 
               before do
-                create :presentation_contribution,
+                create(:presentation_contribution,
                        activity_insight_identifier: '83890556929',
                        user: other_user,
                        presentation: other_presentation,
-                       role: 'Existing Role'
+                       role: 'Existing Role')
               end
 
               context 'when a user that matches the contribution exists' do
@@ -3656,15 +3656,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included presentation contribution exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_presentation) { create :presentation }
+              let(:other_user) { create(:user) }
+              let(:other_presentation) { create(:presentation) }
 
               before do
-                create :presentation_contribution,
+                create(:presentation_contribution,
                        activity_insight_identifier: '83890556929',
                        user: other_user,
                        presentation: other_presentation,
-                       role: 'Existing Role'
+                       role: 'Existing Role')
               end
 
               it 'creates any new contributions and updates the existing contribution' do
@@ -3747,15 +3747,15 @@ describe ActivityInsightImporter do
           end
 
           context 'when an included user performance exists in the database' do
-            let(:other_user) { create :user }
-            let(:other_performance) { create :performance }
+            let(:other_user) { create(:user) }
+            let(:other_performance) { create(:performance) }
 
             before do
-              create :user_performance,
+              create(:user_performance,
                      activity_insight_id: '126500763649',
                      user: other_user,
                      performance: other_performance,
-                     contribution: 'Existing Contribution'
+                     contribution: 'Existing Contribution')
             end
 
             it 'creates any new user performances and updates the existing user performances' do
@@ -3782,7 +3782,7 @@ describe ActivityInsightImporter do
 
         context 'when an included performance exists in the database' do
           before do
-            create :performance,
+            create(:performance,
                    activity_insight_id: '126500763648',
                    updated_by_user_at: updated,
                    title: 'Existing Title',
@@ -3795,7 +3795,7 @@ describe ActivityInsightImporter do
                    scope: nil,
                    start_on: nil,
                    end_on: nil,
-                   visible: false
+                   visible: false)
           end
 
           context 'when the existing performance has been updated by an admin' do
@@ -3857,15 +3857,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included user performance exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_performance) { create :performance }
+              let(:other_user) { create(:user) }
+              let(:other_performance) { create(:performance) }
 
               before do
-                create :user_performance,
+                create(:user_performance,
                        activity_insight_id: '126500763649',
                        user: other_user,
                        performance: other_performance,
-                       contribution: 'Existing Contribution'
+                       contribution: 'Existing Contribution')
               end
 
               context 'when a user that matches the contribution exists' do
@@ -3949,15 +3949,15 @@ describe ActivityInsightImporter do
             end
 
             context 'when an included user performance exists in the database' do
-              let(:other_user) { create :user }
-              let(:other_performance) { create :performance }
+              let(:other_user) { create(:user) }
+              let(:other_performance) { create(:performance) }
 
               before do
-                create :user_performance,
+                create(:user_performance,
                        activity_insight_id: '126500763649',
                        user: other_user,
                        performance: other_performance,
-                       contribution: 'Existing Contribution'
+                       contribution: 'Existing Contribution')
               end
 
               it 'creates any new user performances and updates the existing user performances' do
@@ -4215,11 +4215,11 @@ describe ActivityInsightImporter do
         end
 
         context 'when an included publication exists in the database' do
-          let!(:existing_import) { create :publication_import,
+          let!(:existing_import) { create(:publication_import,
                                           source: 'Activity Insight',
                                           source_identifier: '171620739072',
-                                          publication: existing_pub }
-          let(:existing_pub) { create :publication,
+                                          publication: existing_pub) }
+          let(:existing_pub) { create(:publication,
                                       title: 'Existing Title',
                                       publication_type: 'Trade Journal Article',
                                       journal_title: 'Existing Journal',
@@ -4238,13 +4238,13 @@ describe ActivityInsightImporter do
                                       published_on: Date.new(1980, 1, 1),
                                       updated_by_user_at: timestamp,
                                       visible: false,
-                                      doi: 'https://doi.org/10.000/existing' }
+                                      doi: 'https://doi.org/10.000/existing') }
 
           context 'when the existing publication has been modified by an admin user' do
             let(:timestamp) { Time.new(2018, 10, 10, 0, 0, 0) }
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
             it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
               expect { importer.call }.to change(PublicationImport, :count).by 4
@@ -4368,11 +4368,11 @@ describe ActivityInsightImporter do
             end
 
             context 'when authorships already exist for the existing publication' do
-              let!(:existing_authorship1) { create :authorship,
+              let!(:existing_authorship1) { create(:authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
-                                                   author_number: 6 }
+                                                   author_number: 6) }
 
               it 'creates new authorship records for every new faculty author for each new imported publication' do
                 expect { importer.call }.to change(Authorship, :count).by 4
@@ -4535,9 +4535,9 @@ describe ActivityInsightImporter do
 
           context 'when the existing publication has not been modified by an admin user' do
             let(:timestamp) { nil }
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            let!(:existing_cont) { create :contributor_name, publication: existing_pub }
+            let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
             it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
               expect { importer.call }.to change(PublicationImport, :count).by 4
@@ -4661,11 +4661,11 @@ describe ActivityInsightImporter do
             end
 
             context 'when authorships exist for the existing publication' do
-              let!(:existing_authorship1) { create :authorship,
+              let!(:existing_authorship1) { create(:authorship,
                                                    user: existing_user,
                                                    publication: existing_pub,
                                                    role: 'Existing Role',
-                                                   author_number: 6 }
+                                                   author_number: 6) }
 
               it 'creates new authorship records for every new faculty author for each new imported publication' do
                 expect { importer.call }.to change(Authorship, :count).by 4

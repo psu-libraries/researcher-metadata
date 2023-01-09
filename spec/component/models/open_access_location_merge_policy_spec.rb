@@ -3,50 +3,50 @@
 require 'component/component_spec_helper'
 
 describe OpenAccessLocationMergePolicy do
-  let!(:publication1) { create :publication }
-  let!(:publication2) { create :publication }
-  let!(:publication3) { create :publication }
+  let!(:publication1) { create(:publication) }
+  let!(:publication2) { create(:publication) }
+  let!(:publication3) { create(:publication) }
   let!(:open_access_location1) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'example.edu',
            source: Source::USER,
-           publication_id: publication1.id
+           publication_id: publication1.id)
   end
   let!(:open_access_location2) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'example.edu',
            source: Source::OPEN_ACCESS_BUTTON,
-           publication_id: publication2.id
+           publication_id: publication2.id)
   end
   let!(:open_access_location3) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'example.edu',
            source: Source::USER,
-           publication_id: publication3.id
+           publication_id: publication3.id)
   end
   let!(:open_access_location4) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'scholarsphere.edu',
            source: Source::SCHOLARSPHERE,
-           publication_id: publication1.id
+           publication_id: publication1.id)
   end
   let!(:open_access_location5) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'scholarsphere.edu',
            source: Source::SCHOLARSPHERE,
-           publication_id: publication2.id
+           publication_id: publication2.id)
   end
   let!(:open_access_location6) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'scholarsphere.edu',
            source: Source::UNPAYWALL,
-           publication_id: publication3.id
+           publication_id: publication3.id)
   end
   let!(:open_access_location7) do
-    create :open_access_location,
+    create(:open_access_location,
            url: 'site.edu',
            source: Source::UNPAYWALL,
-           publication_id: publication3.id
+           publication_id: publication3.id)
   end
 
   describe '#open_access_lcoations_to_keep' do

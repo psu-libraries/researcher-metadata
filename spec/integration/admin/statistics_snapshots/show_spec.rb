@@ -4,10 +4,10 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin statistics snapshot detail page', type: :feature do
-  let!(:stats) { create :statistics_snapshot,
+  let!(:stats) { create(:statistics_snapshot,
                         total_article_count: 3841,
                         open_access_article_count: 592,
-                        created_at: Time.new(2021, 1, 21, 23, 39, 0, 0) }
+                        created_at: Time.new(2021, 1, 21, 23, 39, 0, 0)) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

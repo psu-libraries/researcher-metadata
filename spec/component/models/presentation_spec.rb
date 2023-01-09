@@ -38,15 +38,15 @@ describe Presentation, type: :model do
   it { is_expected.to have_many(:users).through(:presentation_contributions) }
 
   context 'given an otherwise valid presentation' do
-    subject { build :presentation }
+    subject { build(:presentation) }
 
     it { is_expected.to validate_uniqueness_of(:activity_insight_identifier) }
   end
 
   describe '.visible' do
-    let(:visible_pres1) { create :presentation, visible: true }
-    let(:visible_pres2) { create :presentation, visible: true }
-    let(:invisible_pres) { create :presentation, visible: false }
+    let(:visible_pres1) { create(:presentation, visible: true) }
+    let(:visible_pres2) { create(:presentation, visible: true) }
+    let(:invisible_pres) { create(:presentation, visible: false) }
 
     it 'returns the presentations that are marked as visible' do
       expect(described_class.visible).to match_array [visible_pres1, visible_pres2]
@@ -65,7 +65,7 @@ describe Presentation, type: :model do
   end
 
   describe '#label_name' do
-    let(:p) { create :presentation, name: name, title: title }
+    let(:p) { create(:presentation, name: name, title: title) }
 
     context 'when the presentation has no title or name' do
       let(:title) { nil }
@@ -110,7 +110,7 @@ describe Presentation, type: :model do
   end
 
   describe '#label' do
-    let(:p) { create :presentation, name: name, title: title }
+    let(:p) { create(:presentation, name: name, title: title) }
 
     context 'when the presentation has no title or name' do
       let(:title) { nil }

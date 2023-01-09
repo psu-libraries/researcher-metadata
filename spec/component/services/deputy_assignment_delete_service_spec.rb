@@ -8,7 +8,7 @@ describe DeputyAssignmentDeleteService do
 
     context 'when the DeputyAssignment is active' do
       context 'when the DeputyAssignment has not been confirmed' do
-        let(:deputy_assignment) { create :deputy_assignment, :active, :unconfirmed }
+        let(:deputy_assignment) { create(:deputy_assignment, :active, :unconfirmed) }
 
         it 'deletes the record from the database' do
           call
@@ -19,7 +19,7 @@ describe DeputyAssignmentDeleteService do
       end
 
       context 'when the DeputyAssignment has been confirmed' do
-        let(:deputy_assignment) { create :deputy_assignment, :active, :confirmed }
+        let(:deputy_assignment) { create(:deputy_assignment, :active, :confirmed) }
 
         it 'marks the record as inactive' do
           call
@@ -35,7 +35,7 @@ describe DeputyAssignmentDeleteService do
       end
 
       context 'when the DeputyAssignment has not been confirmed' do
-        let(:deputy_assignment) { create :deputy_assignment, :inactive, :unconfirmed }
+        let(:deputy_assignment) { create(:deputy_assignment, :inactive, :unconfirmed) }
 
         it 'does nothing' do
           call
@@ -45,7 +45,7 @@ describe DeputyAssignmentDeleteService do
       end
 
       context 'when the DeputyAssignment has been confirmed' do
-        let(:deputy_assignment) { create :deputy_assignment, :inactive, :confirmed }
+        let(:deputy_assignment) { create(:deputy_assignment, :inactive, :confirmed) }
 
         it 'does nothing' do
           call

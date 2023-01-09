@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :performance do
     transient do
-      user { create :sample_user }
+      user { create(:sample_user) }
     end
 
     title { 'Test' }
@@ -32,10 +32,10 @@ FactoryBot.define do
       scope { ['National', 'International', 'Regional', 'Local'].sample }
 
       after :create do |perf, options|
-        create :user_performance,
+        create(:user_performance,
                activity_insight_id: perf.activity_insight_id,
                performance: perf,
-               user: options.user
+               user: options.user)
       end
     end
   end

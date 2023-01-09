@@ -45,9 +45,9 @@ describe PurePublishersImporter do
       end
 
       context 'when a publisher matching the imported data already exists in the database' do
-        let!(:existing_pub) { create :publisher,
+        let!(:existing_pub) { create(:publisher,
                                      pure_uuid: '435826f4-a25d-4005-b9da-47d3507834ff',
-                                     name: 'existing name' }
+                                     name: 'existing name') }
 
         it 'creates new publisher records for every new publisher in the imported data and updates existing publishers' do
           expect { importer.call }.to change(Publisher, :count).by 1

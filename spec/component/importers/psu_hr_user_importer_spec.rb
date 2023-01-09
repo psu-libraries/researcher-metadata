@@ -6,8 +6,8 @@ describe PSUHRUserImporter do
   let(:importer) { described_class.new(filename: filename) }
 
   describe '#call' do
-    let!(:dickinson) { create :organization, pure_external_identifier: 'CAMPUS-DN' }
-    let!(:psu_law) { create :organization, pure_external_identifier: 'COLLEGE-PL' }
+    let!(:dickinson) { create(:organization, pure_external_identifier: 'CAMPUS-DN') }
+    let!(:psu_law) { create(:organization, pure_external_identifier: 'COLLEGE-PL') }
     let(:found_user1) { User.find_by(webaccess_id: 'eat123') }
     let(:found_user2) { User.find_by(webaccess_id: 'jbt456') }
 
@@ -42,14 +42,14 @@ describe PSUHRUserImporter do
       end
 
       context 'when a person listed in the import data exists as a user in the database' do
-        let!(:eat123) { create :user,
+        let!(:eat123) { create(:user,
                                webaccess_id: 'eat123',
                                first_name: 'existing first name',
                                last_name: 'existing last name',
-                               penn_state_identifier: 'existing ID' }
+                               penn_state_identifier: 'existing ID') }
 
         context 'when the existing user already has an organization membership' do
-          before { create :user_organization_membership, user: eat123 }
+          before { create(:user_organization_membership, user: eat123) }
 
           it 'creates new user records for other people in the import data' do
             expect { importer.call }.to change(User, :count).by 1

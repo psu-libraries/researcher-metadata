@@ -4,25 +4,25 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'claiming authorship of a publication' do
-  let(:user) { create :user, webaccess_id: 'abc123', first_name: 'Test', last_name: 'Claimer' }
-  let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication' }
-  let(:pub2) { create :publication,
+  let(:user) { create(:user, webaccess_id: 'abc123', first_name: 'Test', last_name: 'Claimer') }
+  let!(:pub1) { create(:publication, title: 'Researcher Metadata Database Test Publication') }
+  let(:pub2) { create(:publication,
                       title: 'Another Researcher Metadata Database Test Publication',
                       doi: 'https://doi.org/10.000/some-doi-457472486',
                       journal: journal,
                       volume: '101',
                       issue: '102',
                       page_range: '103',
-                      published_on: Date.new(2021, 1, 1) }
-  let(:pub3) { create :publication, title: 'Non-matching Pub' }
-  let(:pub2_author1) { create :user, first_name: 'Paula', last_name: 'Paperauthor' }
-  let(:pub2_author2) { create :user, first_name: 'Robert', last_name: 'Researcher' }
-  let(:journal) { create :journal, title: 'Test Journal' }
+                      published_on: Date.new(2021, 1, 1)) }
+  let(:pub3) { create(:publication, title: 'Non-matching Pub') }
+  let(:pub2_author1) { create(:user, first_name: 'Paula', last_name: 'Paperauthor') }
+  let(:pub2_author2) { create(:user, first_name: 'Robert', last_name: 'Researcher') }
+  let(:journal) { create(:journal, title: 'Test Journal') }
 
   before do
-    create :contributor_name, first_name: 'Susanna', last_name: 'scientist', publication: pub1
-    create :authorship, publication: pub2, user: pub2_author1
-    create :authorship, publication: pub2, user: pub2_author2
+    create(:contributor_name, first_name: 'Susanna', last_name: 'scientist', publication: pub1)
+    create(:authorship, publication: pub2, user: pub2_author1)
+    create(:authorship, publication: pub2, user: pub2_author2)
   end
 
   context 'when the user is signed in' do
@@ -53,8 +53,8 @@ describe 'claiming authorship of a publication' do
         end
 
         context 'when matching publications are not visible' do
-          let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication', visible: false }
-          let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication', visible: false }
+          let!(:pub1) { create(:publication, title: 'Researcher Metadata Database Test Publication', visible: false) }
+          let!(:pub2) { create(:publication, title: 'Another Researcher Metadata Database Test Publication', visible: false) }
 
           before { do_title_search }
 
@@ -68,8 +68,8 @@ describe 'claiming authorship of a publication' do
         end
 
         context 'when matching publications are not journal articles' do
-          let!(:pub1) { create :publication, title: 'Researcher Metadata Database Test Publication', publication_type: 'Book' }
-          let!(:pub2) { create :publication, title: 'Another Researcher Metadata Database Test Publication', publication_type: 'Book' }
+          let!(:pub1) { create(:publication, title: 'Researcher Metadata Database Test Publication', publication_type: 'Book') }
+          let!(:pub2) { create(:publication, title: 'Another Researcher Metadata Database Test Publication', publication_type: 'Book') }
 
           before { do_title_search }
 
@@ -88,8 +88,8 @@ describe 'claiming authorship of a publication' do
 
         context 'when the user is already a known author of matching publications' do
           before do
-            create :authorship, publication: pub1, user: user
-            create :authorship, publication: pub2, user: user
+            create(:authorship, publication: pub1, user: user)
+            create(:authorship, publication: pub2, user: user)
             do_title_search
           end
 

@@ -57,3 +57,10 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Exclude:
     - 'app/importers/activity_insight_importer.rb'
+
+RSpec/PendingWithoutReason:
+  Exclude:
+    - 'spec/unit/decorators/authorship_decorator_spec.rb'
+    - 'spec/component/models/publisher_spec.rb'
+    - 'spec/component/models/organization_spec.rb'
+    - 'spec/component/models/journal_spec.rb'
