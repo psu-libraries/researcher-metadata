@@ -21,6 +21,7 @@ gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave'                       # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
+gem 'config', '~> 4.1'
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
