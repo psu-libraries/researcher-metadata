@@ -10,4 +10,5 @@ RSpec.describe ActivityInsightOaFile, type: :model do
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
 
   it { is_expected.to have_db_foreign_key(:publication_id) }
+  it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
 end

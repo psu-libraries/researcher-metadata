@@ -2,5 +2,5 @@
 
 class ActivityInsightOaFile < ApplicationRecord
   belongs_to :publication,
-             inverse_of: :activity_insight_oa_file
+             inverse_of: :activity_insight_oa_files
 end
