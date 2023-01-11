@@ -36,6 +36,9 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
+      - run:
+          name: Remove Cruft
+          command: rm * 
       - checkout
       - ruby/install-deps
       - node/install-packages:
