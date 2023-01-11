@@ -1,3 +1,0 @@
-SS4_ENDPOINT:            "http://scholarsphere/api/v1"
-SS_CLIENT_SSL:           "true"
-SS_CLIENT_KEY:           "your-scholarsphere-api-key"
