@@ -11,9 +11,9 @@ module OmniAuth
              domain_hint: 'psu.edu'
 
       option :client_options,
-             site: Rails.configuration.x.azure_ad_oauth['oauth_app_url'],
-             token_url: Rails.configuration.x.azure_ad_oauth['oauth_token_url'],
-             authorize_url: Rails.configuration.x.azure_ad_oauth['oauth_authorize_url']
+             site: Settings.azure_ad_oauth.oauth_app_url,
+             token_url: Settings.azure_ad_oauth.oauth_token_url,
+             authorize_url: Settings.azure_ad_oauth.oauth_authorize_url
 
       uid do
         raw_info['upn'].split('@')[0]
