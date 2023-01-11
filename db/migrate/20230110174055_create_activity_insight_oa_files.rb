@@ -2,6 +2,7 @@ class CreateActivityInsightOaFiles < ActiveRecord::Migration[6.1]
   def change
     create_table :activity_insight_oa_files do |t|
       t.string :location
+      t.string :checksum
       t.bigint :publication_id, null: false
 
       t.timestamps

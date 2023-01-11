@@ -46,6 +46,7 @@ ActiveRecord::Schema.define(version: 2023_01_10_174055) do
 
   create_table "activity_insight_oa_files", force: :cascade do |t|
     t.string "location"
+    t.string "checksum"
     t.bigint "publication_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
