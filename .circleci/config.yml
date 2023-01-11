@@ -36,6 +36,10 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
+      # Chromedriver leaves a license file that needs cleaned up before checkout will work
+      - run:
+          name: Clear Cruft
+          command: rm LICENSE.chromedriver
       - checkout
       - ruby/install-deps
       - node/install-packages:
