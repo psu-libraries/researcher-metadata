@@ -239,6 +239,16 @@ describe Publication, type: :model do
     end
   end
 
+  describe 'deleting a publication with activity insight oa files' do
+    let(:p) { create :publication }
+    let!(:aif) { create :activity_insight_oa_file, publication: p }
+
+    it "also deletes the publication's activity insight oa files" do
+      p.destroy
+      expect { aif.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
   describe '.publication_types' do
     it 'returns the list of valid publication types' do
       expect(described_class.publication_types).to eq ['Academic Journal Article', 'In-house Journal Article',
