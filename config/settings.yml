@@ -4,6 +4,10 @@
 # To have environment specific overrides edit `config/settings/#{environment}.local.yml`
 # Test environment does not read `config/settings.local.yml` settings for test should be put in `config/settings/test.yml`
 
+lograge:
+  enabled: false
+  json: false
+
 activity_insight:
   username:
   password:
