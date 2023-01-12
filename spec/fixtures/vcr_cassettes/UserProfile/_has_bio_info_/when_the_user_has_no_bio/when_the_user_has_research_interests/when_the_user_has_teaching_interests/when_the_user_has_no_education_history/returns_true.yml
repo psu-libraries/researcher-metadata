@@ -1,0 +1,55 @@
+---
+http_interactions:
+- request:
+    method: get
+    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/user53
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      User-Agent:
+      - Faraday v1.8.0
+      X-Datadog-Trace-Id:
+      - '1408004072857020110'
+      X-Datadog-Parent-Id:
+      - '3855542887763288408'
+      X-Datadog-Sampling-Priority:
+      - '1'
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 404
+      message: Not Found
+    headers:
+      Date:
+      - Thu, 12 Jan 2023 19:14:55 GMT
+      Content-Type:
+      - application/vnd-psu.edu-v1+json
+      Content-Length:
+      - '119'
+      Connection:
+      - keep-alive
+      X-Content-Security-Policy:
+      - frame-ancestors 'none'
+      Set-Cookie:
+      - JSESSIONID=mk9JF0NZZ5zQbW076WSVpclf_SbBIOkrMcvTWCa1.search-service-74779fc84b-x8pnw;
+        path=/search-service
+      X-Request-Id:
+      - 37fb73edc5b51188b193a6c472e4ae8c
+      X-Frame-Options:
+      - DENY
+      Content-Security-Policy:
+      - frame-ancestors 'none'
+      Uniqueid:
+      - 37fb73edc5b51188b193a6c472e4ae8c
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+    body:
+      encoding: UTF-8
+      string: '{"status":{"code":404,"message":"NOT_FOUND"},"errorMessage":["No person
+        matched the input userid: user53"],"link":null}'
+  recorded_at: Thu, 12 Jan 2023 19:14:55 GMT
+recorded_with: VCR 6.1.0

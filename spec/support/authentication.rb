@@ -5,6 +5,7 @@ module StubbedAuthenticationHelper
   # (pass in the entire user object, not just a username).
 
   def sign_in_as(user)
+    allow(PsuIdentityUserService).to receive(:find_or_initialize_user).and_return(user)
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new({
                                                                        provider: 'azure_oauth',
@@ -53,3 +54,4 @@ end
 def current_admin_user
   @current_admin_user ||= create(:user, is_admin: true)
 end
+

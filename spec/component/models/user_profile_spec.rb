@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe UserProfile do
+describe UserProfile, vcr: true do
   subject(:profile) { described_class.new(user) }
 
   let!(:user) { create(:user,
