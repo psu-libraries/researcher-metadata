@@ -5,7 +5,9 @@ module StubbedAuthenticationHelper
   # (pass in the entire user object, not just a username).
 
   def sign_in_as(user)
-    allow(PsuIdentityUserService).to receive(:find_or_initialize_user).and_return(user)
+    # It should be safe to mock User#from_omniauth since it is used only for authentication
+    # We do not want live calls to PsuIdentity during every stubbed sign in
+    allow(User).to receive(:from_omniauth).and_return(user)
     OmniAuth.config.test_mode = true
     OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new({
                                                                        provider: 'azure_oauth',
