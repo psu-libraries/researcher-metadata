@@ -284,14 +284,14 @@ class ActivityInsightImporter
 
     def ai_users_xml
       @xml ||= HTTParty.get('https://webservices.digitalmeasures.com/login/service/v4/User',
-                            basic_auth: { username: Rails.configuration.x.activity_insight['username'],
-                                          password: Rails.configuration.x.activity_insight['password'] }).to_s
+                            basic_auth: { username: Settings.activity_insight.username,
+                                          password: Settings.activity_insight.password }).to_s
     end
 
     def ai_user_detail_xml(id)
       HTTParty.get("https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University/USERNAME:#{id}",
-                   basic_auth: { username: Rails.configuration.x.activity_insight['username'],
-                                 password: Rails.configuration.x.activity_insight['password'] }).to_s
+                   basic_auth: { username: Settings.activity_insight.username,
+                                 password: Settings.activity_insight.password }).to_s
     end
 
     def ai_user_detail(id)

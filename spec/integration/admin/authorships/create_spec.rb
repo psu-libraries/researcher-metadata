@@ -4,8 +4,8 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Creating an authorship', type: :feature do
-  let!(:user) { create :user, first_name: 'Emily', last_name: 'Researcher' }
-  let!(:pub) { create :publication, title: 'New Scientific Research' }
+  let!(:user) { create(:user, first_name: 'Emily', last_name: 'Researcher') }
+  let!(:pub) { create(:publication, title: 'New Scientific Research') }
 
   context 'when the current user is an admin' do
     before do

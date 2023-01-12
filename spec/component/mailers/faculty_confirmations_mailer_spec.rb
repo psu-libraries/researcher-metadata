@@ -10,9 +10,9 @@ describe FacultyConfirmationsMailer, type: :model do
   describe '#open_access_waiver_confirmation' do
     subject(:email) { described_class.open_access_waiver_confirmation(user, waiver) }
 
-    let(:waiver) { build :external_publication_waiver,
+    let(:waiver) { build(:external_publication_waiver,
                          publication_title: 'Test Pub',
-                         journal_title: 'Test Journal' }
+                         journal_title: 'Test Journal') }
 
     before do
       allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
@@ -66,12 +66,12 @@ describe FacultyConfirmationsMailer, type: :model do
   describe '#scholarsphere_deposit_confirmation' do
     subject(:email) { described_class.scholarsphere_deposit_confirmation(user, deposit) }
 
-    let(:deposit) { build :scholarsphere_work_deposit, publication: pub }
-    let(:pub) { build :publication,
+    let(:deposit) { build(:scholarsphere_work_deposit, publication: pub) }
+    let(:pub) { build(:publication,
                       open_access_locations: [
                         build(:open_access_location, :scholarsphere, url: 'https://scholarsphere.test/abc123')
                       ],
-                      title: 'Open Access Test Publication' }
+                      title: 'Open Access Test Publication') }
 
     it "sends the email to the given user's email address" do
       expect(email.to).to eq ['test123@psu.edu']

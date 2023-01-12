@@ -4,9 +4,9 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin journal detail page', type: :feature do
-  let!(:journal) { create :journal,
+  let!(:journal) { create(:journal,
                           title: 'Test Journal',
-                          pure_uuid: 'pure-abc-123' }
+                          pure_uuid: 'pure-abc-123') }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

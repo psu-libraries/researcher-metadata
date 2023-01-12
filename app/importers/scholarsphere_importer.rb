@@ -39,8 +39,8 @@ class ScholarsphereImporter
 
     def response
       @response ||= HTTParty.get(
-        "#{Rails.application.config.x.scholarsphere['SS4_ENDPOINT']}dois",
-        headers: { 'X-API-KEY' => Rails.application.config.x.scholarsphere['SS_CLIENT_KEY'] }
+        "#{Settings.scholarsphere.endpoint}dois",
+        headers: { 'X-API-KEY' => Settings.scholarsphere.client_key }
       )
     end
 

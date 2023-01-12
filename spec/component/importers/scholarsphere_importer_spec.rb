@@ -10,28 +10,22 @@ describe ScholarsphereImporter do
     let(:json_data) { fixture_file_open('scholarsphere_dois.json').read }
 
     before do
-      allow(Rails).to receive_message_chain(
-        :application, :config, :x, :scholarsphere, :[]
-      ).with('SS4_ENDPOINT').and_return 'https://scholarsphere.test/api/'
-      allow(Rails).to receive_message_chain(
-        :application, :config, :x, :scholarsphere, :[]
-      ).with('SS_CLIENT_KEY').and_return 'secret_key'
       allow(HTTParty).to receive(:get).with('https://scholarsphere.test/api/dois',
                                             headers: { 'X-API-KEY' => 'secret_key' }).and_return(response)
       allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'
     end
 
     context 'when a publications exist in the database that match an incoming DOI' do
-      let!(:pub1) { create :publication,
-                           doi: 'https://doi.org/10.1109/5.771073' }
-      let!(:pub2) { create :publication,
-                           doi: 'https://doi.org/10.1109/5.771073' }
+      let!(:pub1) { create(:publication,
+                           doi: 'https://doi.org/10.1109/5.771073') }
+      let!(:pub2) { create(:publication,
+                           doi: 'https://doi.org/10.1109/5.771073') }
 
       context 'when one of the publications already has an open access location that matches a URL from ScholarSphere' do
-        let!(:oal) { create :open_access_location,
+        let!(:oal) { create(:open_access_location,
                             source: Source::SCHOLARSPHERE,
                             publication: pub1,
-                            url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc'}
+                            url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc')}
 
         it 'creates new open access locations only for new URLs from ScholarSphere for each publication' do
           expect { importer.call }.to change(OpenAccessLocation, :count).by 5
@@ -102,9 +96,9 @@ describe ScholarsphereImporter do
     end
 
     context 'when there is an error within the inner loop' do
-      let!(:pub) { create :publication,
+      let!(:pub) { create(:publication,
                           doi: 'https://doi.org/10.1016/j.scitotenv.2021.145145',
-                          open_access_locations: [] }
+                          open_access_locations: []) }
 
       before do
         allow(ActiveRecord::Base).to receive(:transaction).and_raise(ZeroDivisionError)

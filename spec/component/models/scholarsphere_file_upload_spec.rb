@@ -33,7 +33,7 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '#destroy' do
-    let!(:upload) { create :scholarsphere_file_upload }
+    let!(:upload) { create(:scholarsphere_file_upload) }
 
     it 'removes the file from the filesystem' do
       expect(File.exist?(upload.file.path)).to be true

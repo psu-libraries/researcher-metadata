@@ -25,11 +25,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user that is not in one of the law schools' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'OTHER' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'OTHER') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns nil' do
@@ -38,11 +38,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user in the Dickinson law school' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'CAMPUS-DN' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'CAMPUS-DN') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns the matching user' do
@@ -51,11 +51,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user in the PSU law school' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'COLLEGE-PL' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'COLLEGE-PL') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns the matching user' do
@@ -64,13 +64,13 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of two users in the PSU law school' do
-      let!(:user1) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:user2) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'COLLEGE-PL' }
+      let!(:user1) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:user2) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'COLLEGE-PL') }
 
       before do
-        create :user_organization_membership, user: user1, organization: org
-        create :user_organization_membership, user: user2, organization: org
+        create(:user_organization_membership, user: user1, organization: org)
+        create(:user_organization_membership, user: user2, organization: org)
       end
 
       it 'returns nil' do
@@ -87,11 +87,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user that is not in one of the law schools' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'OTHER' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'OTHER') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns an empty array' do
@@ -100,11 +100,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user in the Dickinson law school' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'CAMPUS-DN' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'CAMPUS-DN') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns an empty array' do
@@ -113,11 +113,11 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of a user in the PSU law school' do
-      let!(:user) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'COLLEGE-PL' }
+      let!(:user) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'COLLEGE-PL') }
 
       before do
-        create :user_organization_membership, user: user, organization: org
+        create(:user_organization_membership, user: user, organization: org)
       end
 
       it 'returns an empty array' do
@@ -126,13 +126,13 @@ describe PSULawSchoolOAICreator do
     end
 
     context 'when the given text matches the name of two users in the PSU law school' do
-      let!(:user1) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:user2) { create :user, first_name: 'Sue', last_name: 'Tester' }
-      let!(:org) { create :organization, pure_external_identifier: 'COLLEGE-PL' }
+      let!(:user1) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:user2) { create(:user, first_name: 'Sue', last_name: 'Tester') }
+      let!(:org) { create(:organization, pure_external_identifier: 'COLLEGE-PL') }
 
       before do
-        create :user_organization_membership, user: user1, organization: org
-        create :user_organization_membership, user: user2, organization: org
+        create(:user_organization_membership, user: user1, organization: org)
+        create(:user_organization_membership, user: user2, organization: org)
       end
 
       it 'returns the matching users' do

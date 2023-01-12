@@ -80,7 +80,7 @@ class Organization < ApplicationRecord
     def descendant_ids
       ActiveRecord::Base.connection.execute(
         %{WITH RECURSIVE org_tree AS (SELECT id, name, parent_id FROM organizations WHERE id = #{id} UNION SELECT child.id, child.name, child.parent_id FROM organizations AS child JOIN org_tree AS parent ON parent.id = child.parent_id) SELECT * FROM org_tree;}
-      ).to_a.map { |row| row['id'] }
+      ).to_a.pluck('id')
     end
 
     def all_user_ids

@@ -19,7 +19,7 @@ jobs:
   test:
     docker:
       - image: cimg/ruby:3.1.2-browsers
-      - image: circleci/postgres:12.7
+      - image: cimg/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
           POSTGRES_DB: psu_research_metadata_test
@@ -36,23 +36,14 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      # Chromedriver leaves a license file that needs cleaned up before checkout will work
       - run:
-          name: Clear Cruft
-          command: rm LICENSE.chromedriver
+          name: Remove Cruft
+          command: rm * 
       - checkout
       - ruby/install-deps
       - node/install-packages:
           pkg-manager: yarn
           cache-key: "yarn.lock"
-      - run:
-          name: Install secrets config files
-          command: |
-            mv config/activity_insight.yml.ci config/activity_insight.yml
-            mv config/azure_ad_oauth.yml.ci config/azure_ad_oauth.yml
-            mv config/orcid.yml.ci config/orcid.yml
-            mv config/pure.yml.ci config/pure.yml
-            mv config/scholarsphere-client.yml.ci config/scholarsphere-client.yml
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:

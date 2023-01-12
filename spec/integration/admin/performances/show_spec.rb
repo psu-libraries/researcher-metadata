@@ -11,7 +11,7 @@ describe 'Admin performance detail page', type: :feature do
                         first_name: 'Susan',
                         last_name: 'Tester') }
 
-  let!(:performance) { create :performance,
+  let!(:performance) { create(:performance,
                               title: "Bob's Performance",
                               performance_type: 'Film - Documentary',
                               sponsor: 'Penn State',
@@ -21,21 +21,21 @@ describe 'Admin performance detail page', type: :feature do
                               delivery_type: 'Invitation',
                               scope: 'Local',
                               start_on: Date.new(2018, 9, 24),
-                              end_on: Date.new(2018, 9, 25) }
+                              end_on: Date.new(2018, 9, 25)) }
 
-  let!(:user_performance1) { create :user_performance,
+  let!(:user_performance1) { create(:user_performance,
                                     performance: performance,
-                                    user: user1 }
+                                    user: user1) }
 
-  let!(:user_performance2) { create :user_performance,
+  let!(:user_performance2) { create(:user_performance,
                                     performance: performance,
-                                    user: user2 }
+                                    user: user2) }
 
-  let!(:performance_screening1) { create :performance_screening,
-                                         performance: performance }
+  let!(:performance_screening1) { create(:performance_screening,
+                                         performance: performance) }
 
-  let!(:performance_screening2) { create :performance_screening,
-                                         performance: performance }
+  let!(:performance_screening2) { create(:performance_screening,
+                                         performance: performance) }
 
   context 'when the current user is an admin' do
     before { authenticate_admin_user }

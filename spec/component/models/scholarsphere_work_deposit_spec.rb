@@ -37,7 +37,7 @@ describe ScholarsphereWorkDeposit, type: :model do
 end
 
 describe ScholarsphereFileUpload, type: :model do
-  subject(:dep) { build :scholarsphere_work_deposit }
+  subject(:dep) { build(:scholarsphere_work_deposit) }
 
   it_behaves_like 'an application record'
 
@@ -90,7 +90,7 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe 'validating file upload association' do
-    let(:dep) { build :scholarsphere_work_deposit, file_uploads: [], status: status }
+    let(:dep) { build(:scholarsphere_work_deposit, file_uploads: [], status: status) }
 
     context "when the deposit's status is 'Pending'" do
       let(:status) { 'Pending' }
@@ -112,7 +112,7 @@ describe ScholarsphereFileUpload, type: :model do
 
   describe 'validating the deposit agreement' do
     context "when the deposit hasn't been saved yet" do
-      let!(:dep) { build :scholarsphere_work_deposit }
+      let!(:dep) { build(:scholarsphere_work_deposit) }
 
       context 'when deposit_agreement is false' do
         before { dep.deposit_agreement = false }
@@ -137,7 +137,7 @@ describe ScholarsphereFileUpload, type: :model do
     end
 
     context 'when the deposit has already been saved' do
-      let!(:dep) { create :scholarsphere_work_deposit }
+      let!(:dep) { create(:scholarsphere_work_deposit) }
 
       context 'when deposit_agreement is false' do
         before { dep.deposit_agreement = false }
@@ -165,7 +165,7 @@ describe ScholarsphereFileUpload, type: :model do
     end
 
     context 'when the deposit is persisted' do
-      let!(:dep) { create :scholarsphere_work_deposit, status: 'Success' }
+      let!(:dep) { create(:scholarsphere_work_deposit, status: 'Success') }
 
       it "does not set the deposit's status to 'Pending'" do
         expect(ScholarsphereWorkDeposit.find(dep.id).status).to eq 'Success'
@@ -212,15 +212,15 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '.new_from_authorship' do
-    let(:auth) { create :authorship, publication: pub }
-    let(:pub) { create :publication,
+    let(:auth) { create(:authorship, publication: pub) }
+    let(:pub) { create(:publication,
                        title: 'a test title',
                        abstract: 'a test description',
                        published_on: Date.new(2021, 3, 30),
                        doi: 'https://doi.org/10.000/test',
                        secondary_title: 'a subtitle',
-                       journal: journal }
-    let(:journal) { create :journal, title: 'test journal' }
+                       journal: journal) }
+    let(:journal) { create(:journal, title: 'test journal') }
 
     it 'returns a new instance of a deposit populated with data from the given authorship' do
       dep = ScholarsphereWorkDeposit.new_from_authorship(auth)
@@ -236,12 +236,12 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '#record_success' do
-    let!(:dep) { create :scholarsphere_work_deposit, file_uploads: [upload1, upload2], authorship: auth }
-    let!(:auth) { create :authorship, publication: pub }
-    let!(:pub) { create :publication, open_access_locations: open_access_locations }
+    let!(:dep) { create(:scholarsphere_work_deposit, file_uploads: [upload1, upload2], authorship: auth) }
+    let!(:auth) { create(:authorship, publication: pub) }
+    let!(:pub) { create(:publication, open_access_locations: open_access_locations) }
     let(:now) { Time.new(2021, 3, 28, 22, 8, 0) }
-    let(:upload1) { create :scholarsphere_file_upload }
-    let(:upload2) { create :scholarsphere_file_upload }
+    let(:upload1) { create(:scholarsphere_file_upload) }
+    let(:upload2) { create(:scholarsphere_file_upload) }
     let(:open_access_locations) { [] }
 
     before { allow(Time).to receive(:current).and_return now }
@@ -358,7 +358,7 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '#record_failure' do
-    let(:dep) { create :scholarsphere_work_deposit }
+    let(:dep) { create(:scholarsphere_work_deposit) }
 
     it "sets the deposit's status to 'Failed'" do
       dep.record_failure('a message')
@@ -380,25 +380,25 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '#metadata' do
-    let!(:auth) { create :authorship, publication: pub }
-    let!(:pub) { create :publication }
-    let!(:cn1) { create :contributor_name,
+    let!(:auth) { create(:authorship, publication: pub) }
+    let!(:pub) { create(:publication) }
+    let!(:cn1) { create(:contributor_name,
                         publication: pub,
                         first_name: 'Test',
                         last_name: 'Author',
-                        position: 2 }
-    let!(:cn2) { create :contributor_name,
+                        position: 2) }
+    let!(:cn2) { create(:contributor_name,
                         publication: pub,
                         first_name: 'Another',
                         last_name: 'Contributor',
-                        position: 3 }
-    let!(:cn3) { create :contributor_name,
+                        position: 3) }
+    let!(:cn3) { create(:contributor_name,
                         publication: pub,
                         first_name: 'A.',
                         last_name: 'Researcher',
                         position: 1,
-                        user: user }
-    let!(:user) { create :user, webaccess_id: 'abc123', orcid_identifier: 'https://orcid.org/orcid-id-456' }
+                        user: user) }
+    let!(:user) { create(:user, webaccess_id: 'abc123', orcid_identifier: 'https://orcid.org/orcid-id-456') }
     let(:dep) {
       ScholarsphereWorkDeposit.new(
         title: 'test title',
@@ -532,8 +532,8 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe '#files' do
-    let(:upload1) { build :scholarsphere_file_upload }
-    let(:upload2) { build :scholarsphere_file_upload }
+    let(:upload1) { build(:scholarsphere_file_upload) }
+    let(:upload2) { build(:scholarsphere_file_upload) }
     let(:file1) { double 'file' }
     let(:file2) { double 'file' }
     let(:dep) { ScholarsphereWorkDeposit.new(file_uploads: [upload1, upload2]) }
@@ -549,7 +549,7 @@ describe ScholarsphereFileUpload, type: :model do
   end
 
   describe 'validating doi' do
-    let!(:dep) { build :scholarsphere_work_deposit }
+    let!(:dep) { build(:scholarsphere_work_deposit) }
 
     context 'when doi is present' do
       context 'when doi is not properly formatted' do

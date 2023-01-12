@@ -1,0 +1,40 @@
+# Default Settings for RMD 
+# Copy this file into `config/settings.local.yml` to override defaults
+# To set environment specific defaults edit `config/settings/#{environment}.yml`
+# To have environment specific overrides edit `config/settings/#{environment}.local.yml`
+# Test environment does not read `config/settings.local.yml` settings for test should be put in `config/settings/test.yml`
+
+activity_insight:
+  username:
+  password:
+
+azure_ad_oauth:
+  client_id:
+  client_secret:
+  oauth_app_url:
+  oauth_token_url:
+  oauth_authorize_url:
+
+datadog:
+  enabled: false
+  env: dev
+
+orcid:
+  client_id:
+
+
+postgres:
+  database: psu_research_metadata 
+  # username: nil 
+  # password: nil 
+  # port: nil
+  # host: nil 
+
+pure:
+  api_key: 
+
+scholarsphere:
+  endpoint: 
+  client_key: 
+
+

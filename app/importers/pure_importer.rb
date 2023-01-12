@@ -14,7 +14,7 @@ class PureImporter
     end
 
     def pure_api_key
-      Rails.configuration.x.pure['api_key']
+      Settings.pure.api_key
     end
 
     def total_records

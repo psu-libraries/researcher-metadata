@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating a user via the admin interface', type: :feature do
-  let!(:user) { create :user,
+  let!(:user) { create(:user,
                        first_name: 'Bob',
                        middle_name: 'A.',
                        last_name: 'Testuser',
@@ -15,16 +15,16 @@ describe 'updating a user via the admin interface', type: :feature do
                        is_admin: false,
                        show_all_publications: false,
                        show_all_contracts: false,
-                       scopus_h_index: 649 }
-  let!(:user_org) { create :organization,
+                       scopus_h_index: 649) }
+  let!(:user_org) { create(:organization,
                            owner: user,
-                           name: "User's Organization" }
+                           name: "User's Organization") }
 
   context 'when the current user is an admin' do
-    let!(:member_org) { create :organization, name: 'Test Org' }
+    let!(:member_org) { create(:organization, name: 'Test Org') }
 
     before do
-      create :user_organization_membership, user: user, organization: member_org
+      create(:user_organization_membership, user: user, organization: member_org)
       authenticate_admin_user
       visit rails_admin.edit_path(model_name: :user, id: user.id)
     end
@@ -114,10 +114,10 @@ describe 'updating a user via the admin interface', type: :feature do
 
   context 'when the current user is not an admin' do
     context 'when the current user manages an organization of the user that is being edited' do
-      let!(:member_org) { create :organization, owner: current_user, name: 'Test Org' }
+      let!(:member_org) { create(:organization, owner: current_user, name: 'Test Org') }
 
       before do
-        create :user_organization_membership, user: user, organization: member_org
+        create(:user_organization_membership, user: user, organization: member_org)
         authenticate_user
         visit rails_admin.edit_path(model_name: :user, id: user.id)
       end

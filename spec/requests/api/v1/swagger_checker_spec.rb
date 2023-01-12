@@ -2,14 +2,14 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1', type: :apivore, order: :defined do
+describe 'API::V1', order: :defined, type: :apivore do
   subject { Apivore::SwaggerChecker.instance_for('/api_docs/swagger_docs/v1/swagger.json') }
 
   context 'has valid paths' do
-    let!(:org) { create :organization, visible: true }
-    let!(:publication_1) { create :publication, visible: true }
-    let!(:publication_with_grants) { create :publication, visible: true }
-    let!(:pub_to_patch) { create :publication, doi: 'https://doi.org/10.26207/46a7-9981', open_access_locations: open_access_locations }
+    let!(:org) { create(:organization, visible: true) }
+    let!(:publication_1) { create(:publication, visible: true) }
+    let!(:publication_with_grants) { create(:publication, visible: true) }
+    let!(:pub_to_patch) { create(:publication, doi: 'https://doi.org/10.26207/46a7-9981', open_access_locations: open_access_locations) }
     let!(:open_access_locations) { [build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'existing_url')] }
     let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
     let!(:user_with_grants) { create(:user_with_grants, webaccess_id: 'grant123', grants_count: 10) }
@@ -18,8 +18,8 @@ describe 'API::V1', type: :apivore, order: :defined do
     let!(:user_with_news_feed_items) { create(:user_with_news_feed_items, webaccess_id: 'nfi123', news_feed_items_count: 10) }
     let!(:user_with_performances) { create(:user_with_performances, webaccess_id: 'per123', performances_count: 10) }
     let!(:user_with_organization_memberships) { create(:user_with_organization_memberships, webaccess_id: 'org123') }
-    let!(:api_token) { create :api_token, token: 'token123' }
-    let!(:grant) { create :grant }
+    let!(:api_token) { create(:api_token, token: 'token123') }
+    let!(:grant) { create(:grant) }
     let(:publications_params) { { query_string: 'limit=1', '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:organizations_params) { { '_headers' => { 'X-API-Key' => 'token123' } } }
     let(:organization_publication_params) { { 'id' => org.id, '_headers' => { 'X-API-Key' => 'token123' } } }
@@ -152,18 +152,18 @@ describe 'API::V1', type: :apivore, order: :defined do
     }
 
     before do
-      create :organization_api_permission, api_token: api_token, organization: org
-      create :user_organization_membership, organization: org, user: user
-      create :user_organization_membership, organization: org, user: user_with_presentations
-      create :user_organization_membership, organization: org, user: user_with_grants
-      create :user_organization_membership, organization: org, user: user_with_committee_memberships
-      create :user_organization_membership, organization: org, user: user_with_news_feed_items
-      create :user_organization_membership, organization: org, user: user_with_performances
-      create :user_organization_membership, organization: org, user: user_with_organization_memberships
-      create :authorship, user: user, publication: publication_1
-      create :authorship, user: user, publication: publication_with_grants
-      create :research_fund, grant: grant, publication: publication_with_grants
-      create :api_token, token: 'token456', write_access: true
+      create(:organization_api_permission, api_token: api_token, organization: org)
+      create(:user_organization_membership, organization: org, user: user)
+      create(:user_organization_membership, organization: org, user: user_with_presentations)
+      create(:user_organization_membership, organization: org, user: user_with_grants)
+      create(:user_organization_membership, organization: org, user: user_with_committee_memberships)
+      create(:user_organization_membership, organization: org, user: user_with_news_feed_items)
+      create(:user_organization_membership, organization: org, user: user_with_performances)
+      create(:user_organization_membership, organization: org, user: user_with_organization_memberships)
+      create(:authorship, user: user, publication: publication_1)
+      create(:authorship, user: user, publication: publication_with_grants)
+      create(:research_fund, grant: grant, publication: publication_with_grants)
+      create(:api_token, token: 'token456', write_access: true)
     end
 
     it { is_expected.to validate(:get, '/v1/publications', 200, publications_params) }

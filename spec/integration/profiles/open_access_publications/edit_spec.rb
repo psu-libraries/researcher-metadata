@@ -4,8 +4,8 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'visiting the page to edit the open acess status of a publication', type: :feature do
-  let(:user) { create :user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author' }
-  let(:pub) { create :publication,
+  let(:user) { create(:user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author') }
+  let(:pub) { create(:publication,
                      title: 'Test Publication',
                      secondary_title: 'The Subtitle',
                      issue: '583',
@@ -14,20 +14,20 @@ describe 'visiting the page to edit the open acess status of a publication', typ
                      published_on: Date.new(2019, 3, 17),
                      doi: 'https://doi.org/10.1109/5.771073',
                      abstract: 'An abstract of the test publication',
-                     journal: journal }
-  let!(:auth) { create :authorship, user: user, publication: pub }
-  let!(:journal) { create :journal,
-                          title: 'A Prestegious Journal' }
-  let!(:name) { create :contributor_name,
+                     journal: journal) }
+  let!(:auth) { create(:authorship, user: user, publication: pub) }
+  let!(:journal) { create(:journal,
+                          title: 'A Prestegious Journal') }
+  let!(:name) { create(:contributor_name,
                        publication: pub,
                        user: user,
                        position: 1,
                        first_name: 'Bob',
-                       last_name: 'Author' }
-  let(:other_pub) { create :publication }
-  let(:non_article_pub) { create :publication,
-                                 publication_type: 'Book' }
-  let(:oa_pub) { create :publication,
+                       last_name: 'Author') }
+  let(:other_pub) { create(:publication) }
+  let(:non_article_pub) { create(:publication,
+                                 publication_type: 'Book') }
+  let(:oa_pub) { create(:publication,
                         title: 'Open Access Publication',
                         journal_title: 'Open Access Journal',
                         issue: '834',
@@ -36,32 +36,32 @@ describe 'visiting the page to edit the open acess status of a publication', typ
                         published_on: Date.new(2020, 1, 1),
                         open_access_locations: [build(:open_access_location,
                                                       source: Source::OPEN_ACCESS_BUTTON,
-                                                      url: 'a_url')] }
-  let(:ss_pub) { create :publication,
+                                                      url: 'a_url')]) }
+  let(:ss_pub) { create(:publication,
                         title: 'Scholarsphere Publication',
                         journal_title: 'Another Journal',
                         issue: '54',
                         volume: '16',
                         page_range: '63-81',
-                        published_on: Date.new(2018, 1, 1) }
-  let(:waived_pub) { create :publication,
+                        published_on: Date.new(2018, 1, 1)) }
+  let(:waived_pub) { create(:publication,
                             title: 'Waived Publication',
                             journal_title: 'Closed Access Journal',
                             issue: '89',
                             volume: '27',
                             page_range: '160-173',
-                            published_on: Date.new(2017, 1, 1) }
+                            published_on: Date.new(2017, 1, 1)) }
   let(:response) { double 'response' }
 
-  let!(:waived_auth) { create :authorship, user: user, publication: waived_pub }
-  let!(:ss_deposited_auth) { create :authorship, user: user, publication: ss_pub }
-  let!(:swd) { create :scholarsphere_work_deposit, authorship: ss_deposited_auth, status: 'Pending' }
+  let!(:waived_auth) { create(:authorship, user: user, publication: waived_pub) }
+  let!(:ss_deposited_auth) { create(:authorship, user: user, publication: ss_pub) }
+  let!(:swd) { create(:scholarsphere_work_deposit, authorship: ss_deposited_auth, status: 'Pending') }
 
   before do
-    create :authorship, user: user, publication: oa_pub
+    create(:authorship, user: user, publication: oa_pub)
 
-    create :authorship, user: user, publication: non_article_pub
-    create :internal_publication_waiver, authorship: waived_auth
+    create(:authorship, user: user, publication: non_article_pub)
+    create(:internal_publication_waiver, authorship: waived_auth)
 
     allow(HTTParty).to receive(:head).and_return(response)
     allow(response).to receive(:code).and_return 200
@@ -71,7 +71,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
     before { visit edit_open_access_publication_path(pub) }
 
     it 'does not allow them to visit the page' do
-      expect(page).to have_no_current_path edit_open_access_publication_path(pub), ignore_query: true
+      expect(page).not_to have_current_path edit_open_access_publication_path(pub), ignore_query: true
     end
   end
 

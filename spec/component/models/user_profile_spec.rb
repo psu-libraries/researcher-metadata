@@ -5,7 +5,7 @@ require 'component/component_spec_helper'
 describe UserProfile do
   subject(:profile) { described_class.new(user) }
 
-  let!(:user) { create :user,
+  let!(:user) { create(:user,
                        webaccess_id: 'abc123',
                        ai_title: 'ai test title',
                        ai_website: 'www.test.com',
@@ -13,7 +13,7 @@ describe UserProfile do
                        show_all_publications: true,
                        show_all_contracts: true,
                        ai_teaching_interests: 'test teaching interests',
-                       ai_research_interests: 'test research interests' }
+                       ai_research_interests: 'test research interests') }
 
   it { is_expected.to delegate_method(:active?).to(:user) }
   it { is_expected.to delegate_method(:available_deputy?).to(:user) }
@@ -58,10 +58,10 @@ describe UserProfile do
 
     context 'when ai_title is not present for user but multiple organization position_title from Pure are' do
       let!(:user_organization_membership1) do
-        create :user_organization_membership, user: user, started_on: Date.yesterday, position_title: 'Title 1'
+        create(:user_organization_membership, user: user, started_on: Date.yesterday, position_title: 'Title 1')
       end
       let!(:user_organization_membership2) do
-        create :user_organization_membership, user: user, started_on: Date.today, position_title: 'Title 2'
+        create(:user_organization_membership, user: user, started_on: Date.today, position_title: 'Title 2')
       end
 
       before do
@@ -118,33 +118,33 @@ describe UserProfile do
   end
 
   describe '#publications' do
-    let!(:other_user) { create :user }
-    let!(:pub1) { create :publication, title: 'First Publication',
+    let!(:other_user) { create(:user) }
+    let!(:pub1) { create(:publication, title: 'First Publication',
                                        visible: true,
                                        journal_title: 'Test Journal',
                                        published_on: Date.new(2010, 1, 1),
-                                       total_scopus_citations: 4 }
-    let!(:pub2) { create :publication, title: 'Second Publication',
+                                       total_scopus_citations: 4) }
+    let!(:pub2) { create(:publication, title: 'Second Publication',
                                        visible: true,
                                        publisher_name: 'Test Publisher',
-                                       published_on: Date.new(2015, 1, 1) }
-    let!(:pub3) { create :publication, title: 'Third Publication',
+                                       published_on: Date.new(2015, 1, 1)) }
+    let!(:pub3) { create(:publication, title: 'Third Publication',
                                        visible: true,
                                        published_on: Date.new(2018, 1, 1),
-                                       total_scopus_citations: 5 }
-    let!(:pub4) { create :publication, title: 'Undated Publication',
-                                       visible: true }
-    let!(:pub5) { create :publication,
+                                       total_scopus_citations: 5) }
+    let!(:pub4) { create(:publication, title: 'Undated Publication',
+                                       visible: true) }
+    let!(:pub5) { create(:publication,
                          title: 'Invisible Publication',
-                         visible: false }
-    let!(:pub6) { create :publication, title: 'Hidden Authorship Publication',
-                                       visible: true }
-    let!(:pub7) { create :publication, title: 'Unconfirmed Publication',
-                                       visible: true }
-    let!(:pub8) { create :publication,
+                         visible: false) }
+    let!(:pub6) { create(:publication, title: 'Hidden Authorship Publication',
+                                       visible: true) }
+    let!(:pub7) { create(:publication, title: 'Unconfirmed Publication',
+                                       visible: true) }
+    let!(:pub8) { create(:publication,
                          title: 'Non-Journal-Article Publication',
                          visible: true,
-                         publication_type: 'Book' }
+                         publication_type: 'Book') }
     let(:pos1) { nil }
     let(:pos2) { nil }
     let(:pos3) { nil }
@@ -153,16 +153,16 @@ describe UserProfile do
     let(:pos6) { nil }
 
     before do
-      create :authorship, user: user, publication: pub1, position_in_profile: pos1
-      create :authorship, user: user, publication: pub2, position_in_profile: pos2
-      create :authorship, user: user, publication: pub3, position_in_profile: pos3
-      create :authorship, user: user, publication: pub4, position_in_profile: pos4
-      create :authorship, user: user, publication: pub5, position_in_profile: pos5
-      create :authorship, user: user, publication: pub6, position_in_profile: pos6, visible_in_profile: false
-      create :authorship, user: user, publication: pub7, confirmed: false
-      create :authorship, user: user, publication: pub8
+      create(:authorship, user: user, publication: pub1, position_in_profile: pos1)
+      create(:authorship, user: user, publication: pub2, position_in_profile: pos2)
+      create(:authorship, user: user, publication: pub3, position_in_profile: pos3)
+      create(:authorship, user: user, publication: pub4, position_in_profile: pos4)
+      create(:authorship, user: user, publication: pub5, position_in_profile: pos5)
+      create(:authorship, user: user, publication: pub6, position_in_profile: pos6, visible_in_profile: false)
+      create(:authorship, user: user, publication: pub7, confirmed: false)
+      create(:authorship, user: user, publication: pub8)
 
-      create :authorship, user: other_user, publication: pub1
+      create(:authorship, user: other_user, publication: pub1)
     end
 
     context "when none of the user's authorships have a profile position" do
@@ -224,36 +224,36 @@ describe UserProfile do
   end
 
   describe '#publication_records' do
-    let!(:user2) { create :user }
-    let!(:pub1) { create :publication,
+    let!(:user2) { create(:user) }
+    let!(:pub1) { create(:publication,
                          title: 'First Publication',
                          visible: true,
-                         published_on: Date.new(2010, 1, 1) }
-    let!(:pub2) { create :publication,
+                         published_on: Date.new(2010, 1, 1)) }
+    let!(:pub2) { create(:publication,
                          title: 'Second Publication',
                          visible: true,
-                         published_on: Date.new(2015, 1, 1) }
-    let!(:pub3) { create :publication,
+                         published_on: Date.new(2015, 1, 1)) }
+    let!(:pub3) { create(:publication,
                          title: 'Third Publication',
                          visible: true,
-                         published_on: Date.new(2018, 1, 1) }
-    let!(:pub4) { create :publication,
+                         published_on: Date.new(2018, 1, 1)) }
+    let!(:pub4) { create(:publication,
                          title: 'Undated Publication',
-                         visible: true }
-    let!(:pub5) { create :publication,
+                         visible: true) }
+    let!(:pub5) { create(:publication,
                          title: 'Invisible Publication',
-                         visible: false }
-    let!(:pub6) { create :publication,
+                         visible: false) }
+    let!(:pub6) { create(:publication,
                          title: 'Unconfirmed, Claimed Publication',
                          visible: true,
-                         published_on: Date.new(2000, 1, 1) }
-    let!(:pub7) { create :publication,
+                         published_on: Date.new(2000, 1, 1)) }
+    let!(:pub7) { create(:publication,
                          title: 'Non-Journal-Article Publication',
                          visible: true,
-                         publication_type: 'Book' }
-    let!(:pub8) { create :publication,
+                         publication_type: 'Book') }
+    let!(:pub8) { create(:publication,
                          title: 'Unconfirmed, Unclaimed Publication',
-                         visible: true }
+                         visible: true) }
     let(:pos1) { nil }
     let(:pos2) { nil }
     let(:pos3) { nil }
@@ -262,20 +262,20 @@ describe UserProfile do
     let(:pos6) { nil }
 
     before do
-      create :authorship, user: user2, publication: pub1
-      create :authorship, user: user, publication: pub1, position_in_profile: pos1
-      create :authorship, user: user, publication: pub2, position_in_profile: pos2
-      create :authorship, user: user, publication: pub3, position_in_profile: pos3
-      create :authorship, user: user, publication: pub4, position_in_profile: pos4
-      create :authorship, user: user, publication: pub5, position_in_profile: pos5
-      create :authorship,
+      create(:authorship, user: user2, publication: pub1)
+      create(:authorship, user: user, publication: pub1, position_in_profile: pos1)
+      create(:authorship, user: user, publication: pub2, position_in_profile: pos2)
+      create(:authorship, user: user, publication: pub3, position_in_profile: pos3)
+      create(:authorship, user: user, publication: pub4, position_in_profile: pos4)
+      create(:authorship, user: user, publication: pub5, position_in_profile: pos5)
+      create(:authorship,
              user: user,
              publication: pub6,
              position_in_profile: pos6,
              confirmed: false,
-             claimed_by_user: true
-      create :authorship, user: user, publication: pub7
-      create :authorship, user: user, publication: pub8, confirmed: false, claimed_by_user: false
+             claimed_by_user: true)
+      create(:authorship, user: user, publication: pub7)
+      create(:authorship, user: user, publication: pub8, confirmed: false, claimed_by_user: false)
     end
 
     context "when none of the user's authorships have a profile position" do
@@ -307,32 +307,32 @@ describe UserProfile do
   end
 
   describe '#public_publication_records' do
-    let!(:user2) { create :user }
-    let!(:pub1) { create :publication,
+    let!(:user2) { create(:user) }
+    let!(:pub1) { create(:publication,
                          title: 'First Publication',
                          visible: true,
-                         published_on: Date.new(2010, 1, 1) }
-    let!(:pub2) { create :publication,
+                         published_on: Date.new(2010, 1, 1)) }
+    let!(:pub2) { create(:publication,
                          title: 'Second Publication',
                          visible: true,
-                         published_on: Date.new(2015, 1, 1) }
-    let!(:pub3) { create :publication,
+                         published_on: Date.new(2015, 1, 1)) }
+    let!(:pub3) { create(:publication,
                          title: 'Third Publication',
                          visible: true,
-                         published_on: Date.new(2018, 1, 1) }
-    let!(:pub4) { create :publication,
+                         published_on: Date.new(2018, 1, 1)) }
+    let!(:pub4) { create(:publication,
                          title: 'Undated Publication',
-                         visible: true }
-    let!(:pub5) { create :publication,
+                         visible: true) }
+    let!(:pub5) { create(:publication,
                          title: 'Invisible Publication',
-                         visible: false }
-    let!(:pub6) { create :publication,
+                         visible: false) }
+    let!(:pub6) { create(:publication,
                          title: 'Unconfirmed Publication',
-                         visible: true }
-    let!(:pub7) { create :publication,
+                         visible: true) }
+    let!(:pub7) { create(:publication,
                          title: 'Non-Journal-Article Publication',
                          visible: true,
-                         publication_type: 'Book' }
+                         publication_type: 'Book') }
     let(:pos1) { nil }
     let(:pos2) { nil }
     let(:pos3) { nil }
@@ -340,14 +340,14 @@ describe UserProfile do
     let(:pos5) { nil }
 
     before do
-      create :authorship, user: user2, publication: pub1
-      create :authorship, user: user, publication: pub1, position_in_profile: pos1
-      create :authorship, user: user, publication: pub2, position_in_profile: pos2
-      create :authorship, user: user, publication: pub3, position_in_profile: pos3
-      create :authorship, user: user, publication: pub4, position_in_profile: pos4
-      create :authorship, user: user, publication: pub5, position_in_profile: pos5
-      create :authorship, user: user, publication: pub6, confirmed: false
-      create :authorship, user: user, publication: pub7
+      create(:authorship, user: user2, publication: pub1)
+      create(:authorship, user: user, publication: pub1, position_in_profile: pos1)
+      create(:authorship, user: user, publication: pub2, position_in_profile: pos2)
+      create(:authorship, user: user, publication: pub3, position_in_profile: pos3)
+      create(:authorship, user: user, publication: pub4, position_in_profile: pos4)
+      create(:authorship, user: user, publication: pub5, position_in_profile: pos5)
+      create(:authorship, user: user, publication: pub6, confirmed: false)
+      create(:authorship, user: user, publication: pub7)
     end
 
     context "when none of the user's authorships have a profile position" do
@@ -378,26 +378,26 @@ describe UserProfile do
   end
 
   describe '#other_publications' do
-    let!(:pub1) { create :publication, title: 'First Publication',
+    let!(:pub1) { create(:publication, title: 'First Publication',
                                        publication_type: 'Letter',
                                        visible: true,
                                        journal_title: 'Test Journal',
-                                       published_on: Date.new(2010, 1, 1) }
-    let!(:pub2) { create :publication, title: 'Second Publication',
+                                       published_on: Date.new(2010, 1, 1)) }
+    let!(:pub2) { create(:publication, title: 'Second Publication',
                                        publication_type: 'Book',
                                        visible: true,
                                        publisher_name: 'Test Publisher',
-                                       published_on: Date.new(2015, 1, 1) }
-    let!(:pub3) { create :publication, title: 'Third Publication',
+                                       published_on: Date.new(2015, 1, 1)) }
+    let!(:pub3) { create(:publication, title: 'Third Publication',
                                        publication_type: 'Book',
                                        visible: true,
                                        publisher_name: 'Test Publisher',
-                                       published_on: Date.new(2016, 1, 1) }
+                                       published_on: Date.new(2016, 1, 1)) }
 
     before do
-      create :authorship, user: user, publication: pub1, position_in_profile: nil
-      create :authorship, user: user, publication: pub2, position_in_profile: 2
-      create :authorship, user: user, publication: pub3, position_in_profile: 1
+      create(:authorship, user: user, publication: pub1, position_in_profile: nil)
+      create(:authorship, user: user, publication: pub2, position_in_profile: 2)
+      create(:authorship, user: user, publication: pub3, position_in_profile: 1)
     end
 
     it "returns a hash of arrays of strings describing the given user's non-article publications in order by position" do
@@ -414,26 +414,26 @@ describe UserProfile do
   end
 
   describe '#other_publication_records' do
-    let!(:pub1) { create :publication, title: 'First Publication',
+    let!(:pub1) { create(:publication, title: 'First Publication',
                                        publication_type: 'Letter',
                                        visible: true,
                                        journal_title: 'Test Journal',
-                                       published_on: Date.new(2010, 1, 1) }
-    let!(:pub2) { create :publication, title: 'Second Publication',
+                                       published_on: Date.new(2010, 1, 1)) }
+    let!(:pub2) { create(:publication, title: 'Second Publication',
                                        publication_type: 'Book',
                                        visible: true,
                                        publisher_name: 'Test Publisher',
-                                       published_on: Date.new(2015, 1, 1) }
-    let!(:pub3) { create :publication, title: 'Third Publication',
+                                       published_on: Date.new(2015, 1, 1)) }
+    let!(:pub3) { create(:publication, title: 'Third Publication',
                                        publication_type: 'Book',
                                        visible: true,
                                        publisher_name: 'Test Publisher',
-                                       published_on: Date.new(2016, 1, 1) }
+                                       published_on: Date.new(2016, 1, 1)) }
 
     before do
-      create :authorship, user: user, publication: pub1, position_in_profile: nil
-      create :authorship, user: user, publication: pub2, position_in_profile: 2
-      create :authorship, user: user, publication: pub3, position_in_profile: 1
+      create(:authorship, user: user, publication: pub1, position_in_profile: nil)
+      create(:authorship, user: user, publication: pub2, position_in_profile: 2)
+      create(:authorship, user: user, publication: pub3, position_in_profile: 1)
     end
 
     it "returns an array of strings describing the given user's non-article publications in order by position" do
@@ -449,44 +449,44 @@ describe UserProfile do
     end
 
     context 'when the user has grants' do
-      let!(:grant1) { create :grant,
+      let!(:grant1) { create(:grant,
                              title: 'Grant 1',
                              agency_name: 'National Science Foundation',
                              start_date: Date.new(1980, 1, 1),
-                             end_date: Date.new(1990, 2, 2) }
-      let!(:grant2) { create :grant,
+                             end_date: Date.new(1990, 2, 2)) }
+      let!(:grant2) { create(:grant,
                              identifier: 'Grant 2',
                              wos_agency_name: 'Agency 2',
                              start_date: Date.new(1985, 1, 1),
-                             end_date: Date.new(1986, 2, 2) }
-      let!(:grant3) { create :grant,
+                             end_date: Date.new(1986, 2, 2)) }
+      let!(:grant3) { create(:grant,
                              wos_identifier: 'Grant 3',
                              agency_name: 'National Science Foundation',
                              start_date: Date.new(2000, 1, 1),
-                             end_date: Date.new(2002, 2, 2) }
-      let!(:grant4) { create :grant,
+                             end_date: Date.new(2002, 2, 2)) }
+      let!(:grant4) { create(:grant,
                              title: 'Grant 4',
                              agency_name: 'National Science Foundation',
                              start_date: Date.new(1990, 1, 1),
-                             end_date: nil }
-      let!(:grant5) { create :grant,
+                             end_date: nil) }
+      let!(:grant5) { create(:grant,
                              title: 'Grant 5',
                              agency_name: 'National Science Foundation',
                              start_date: nil,
-                             end_date: nil }
-      let!(:grant6) { create :grant,
+                             end_date: nil) }
+      let!(:grant6) { create(:grant,
                              title: 'Grant 6',
                              agency_name: 'National Science Foundation',
                              start_date: Date.new(2010, 1, 1),
-                             end_date: Date.new(2015, 2, 2) }
+                             end_date: Date.new(2015, 2, 2)) }
 
       before do
-        create :researcher_fund, grant: grant1, user: user
-        create :researcher_fund, grant: grant2, user: user
-        create :researcher_fund, grant: grant3, user: user
-        create :researcher_fund, grant: grant4, user: user
-        create :researcher_fund, grant: grant5, user: user
-        create :researcher_fund, grant: grant6, user: user
+        create(:researcher_fund, grant: grant1, user: user)
+        create(:researcher_fund, grant: grant2, user: user)
+        create(:researcher_fund, grant: grant3, user: user)
+        create(:researcher_fund, grant: grant4, user: user)
+        create(:researcher_fund, grant: grant5, user: user)
+        create(:researcher_fund, grant: grant6, user: user)
       end
 
       it 'returns an array of strings describing the grants in order by date' do
@@ -503,65 +503,65 @@ describe UserProfile do
   end
 
   describe '#presentations' do
-    let!(:pres1) { create :presentation,
+    let!(:pres1) { create(:presentation,
                           name: 'Presentation Two',
                           organization: 'An Organization',
                           location: 'Earth',
-                          visible: true }
-    let!(:pres2) { create :presentation,
+                          visible: true) }
+    let!(:pres2) { create(:presentation,
                           title: nil,
                           name: nil,
-                          visible: true }
-    let!(:pres3) { create :presentation,
+                          visible: true) }
+    let!(:pres3) { create(:presentation,
                           name: 'Presentation Three',
                           organization: 'Org',
                           location: 'Here',
-                          visible: false }
-    let!(:pres4) { create :presentation,
+                          visible: false) }
+    let!(:pres4) { create(:presentation,
                           title: '',
                           name: '',
-                          visible: true }
-    let!(:pres5) { create :presentation,
+                          visible: true) }
+    let!(:pres5) { create(:presentation,
                           title: 'Presentation Four',
-                          visible: true }
-    let!(:pres6) { create :presentation,
+                          visible: true) }
+    let!(:pres6) { create(:presentation,
                           title: 'Presentation Five',
-                          visible: true }
-    let!(:pres7) { create :presentation,
+                          visible: true) }
+    let!(:pres7) { create(:presentation,
                           title: 'Presentation Six',
-                          visible: true }
+                          visible: true) }
 
     before do
-      create :presentation_contribution,
+      create(:presentation_contribution,
              user: user,
              presentation: pres1,
              visible_in_profile: true,
-             position_in_profile: 2
-      create :presentation_contribution,
+             position_in_profile: 2)
+      create(:presentation_contribution,
              user: user,
              presentation: pres2,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres3,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres5,
              visible_in_profile: false,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres6,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres7,
              visible_in_profile: true,
-             position_in_profile: 1
+             position_in_profile: 1)
     end
 
     it "returns an array of strings describing the given user's visible presentations in order by user preference" do
@@ -572,70 +572,70 @@ describe UserProfile do
   end
 
   describe '#presentation_records' do
-    let!(:other_user) { create :user }
-    let!(:pres1) { create :presentation,
+    let!(:other_user) { create(:user) }
+    let!(:pres1) { create(:presentation,
                           name: 'Presentation Two',
                           organization: 'An Organization',
                           location: 'Earth',
-                          visible: true }
-    let!(:pres2) { create :presentation,
+                          visible: true) }
+    let!(:pres2) { create(:presentation,
                           title: nil,
                           name: nil,
-                          visible: true }
-    let!(:pres3) { create :presentation,
+                          visible: true) }
+    let!(:pres3) { create(:presentation,
                           name: 'Presentation Three',
                           organization: 'Org',
                           location: 'Here',
-                          visible: false }
-    let!(:pres4) { create :presentation,
+                          visible: false) }
+    let!(:pres4) { create(:presentation,
                           title: '',
                           name: '',
-                          visible: true }
-    let!(:pres5) { create :presentation,
+                          visible: true) }
+    let!(:pres5) { create(:presentation,
                           title: 'Presentation Four',
-                          visible: true }
-    let!(:pres6) { create :presentation,
+                          visible: true) }
+    let!(:pres6) { create(:presentation,
                           title: 'Presentation Five',
-                          visible: true }
-    let!(:pres7) { create :presentation,
+                          visible: true) }
+    let!(:pres7) { create(:presentation,
                           title: 'Presentation Six',
-                          visible: true }
+                          visible: true) }
 
     before do
-      create :presentation_contribution,
+      create(:presentation_contribution,
              user: other_user,
              presentation: pres1,
-             visible_in_profile: true
-      create :presentation_contribution,
+             visible_in_profile: true)
+      create(:presentation_contribution,
              user: user,
              presentation: pres1,
              visible_in_profile: true,
-             position_in_profile: 2
-      create :presentation_contribution,
+             position_in_profile: 2)
+      create(:presentation_contribution,
              user: user,
              presentation: pres2,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres3,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres5,
              visible_in_profile: false,
-             position_in_profile: 3
-      create :presentation_contribution,
+             position_in_profile: 3)
+      create(:presentation_contribution,
              user: user,
              presentation: pres6,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :presentation_contribution,
+             position_in_profile: nil)
+      create(:presentation_contribution,
              user: user,
              presentation: pres7,
              visible_in_profile: true,
-             position_in_profile: 1
+             position_in_profile: 1)
     end
 
     it "returns an array of the given user's visible presentations in order by user preference" do
@@ -644,89 +644,89 @@ describe UserProfile do
   end
 
   describe '#performances' do
-    let!(:perf1) { create :performance,
+    let!(:perf1) { create(:performance,
                           title: 'Performance One',
                           location: 'Location One',
-                          start_on: Date.new(2017, 1, 1) }
-    let!(:perf2) { create :performance,
+                          start_on: Date.new(2017, 1, 1)) }
+    let!(:perf2) { create(:performance,
                           title: 'Performance Two',
                           location: nil,
-                          start_on: Date.new(2016, 1, 1) }
-    let!(:perf3) { create :performance,
+                          start_on: Date.new(2016, 1, 1)) }
+    let!(:perf3) { create(:performance,
                           title: 'Performance Three',
                           location: 'Location Three',
-                          start_on: nil }
-    let!(:perf4) { create :performance,
+                          start_on: nil) }
+    let!(:perf4) { create(:performance,
                           title: 'Performance Four',
                           location: nil,
-                          start_on: Date.new(2018, 12, 1) }
-    let!(:perf4_dup) { create :performance,
+                          start_on: Date.new(2018, 12, 1)) }
+    let!(:perf4_dup) { create(:performance,
                               title: 'Performance Four',
                               location: nil,
-                              start_on: Date.new(2018, 12, 1) }
-    let!(:perf5) { create :performance,
+                              start_on: Date.new(2018, 12, 1)) }
+    let!(:perf5) { create(:performance,
                           title: 'Performance Five',
                           location: nil,
-                          start_on: Date.new(2019, 1, 1) }
-    let!(:perf6) { create :performance,
+                          start_on: Date.new(2019, 1, 1)) }
+    let!(:perf6) { create(:performance,
                           title: 'Performance Six',
                           location: nil,
-                          start_on: Date.new(2017, 12, 1) }
-    let!(:perf7) { create :performance,
+                          start_on: Date.new(2017, 12, 1)) }
+    let!(:perf7) { create(:performance,
                           title: 'Performance Seven',
                           location: nil,
-                          start_on: Date.new(2018, 1, 1) }
-    let!(:perf8) { create :performance,
+                          start_on: Date.new(2018, 1, 1)) }
+    let!(:perf8) { create(:performance,
                           title: 'Performance Eight',
                           location: nil,
-                          start_on: Date.new(2018, 1, 2) }
+                          start_on: Date.new(2018, 1, 2)) }
 
     before do
-      create :user_performance,
+      create(:user_performance,
              user: user,
              performance: perf1,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf2,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf3,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf4,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf4_dup,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf5,
              visible_in_profile: true,
-             position_in_profile: 2
-      create :user_performance,
+             position_in_profile: 2)
+      create(:user_performance,
              user: user,
              performance: perf6,
              visible_in_profile: true,
-             position_in_profile: 3
-      create :user_performance,
+             position_in_profile: 3)
+      create(:user_performance,
              user: user,
              performance: perf7,
              visible_in_profile: true,
-             position_in_profile: 1
-      create :user_performance,
+             position_in_profile: 1)
+      create(:user_performance,
              user: user,
              performance: perf8,
              visible_in_profile: false,
-             position_in_profile: 4
+             position_in_profile: 4)
     end
 
     it "returns an array of strings describing the given user's visible performances in order by date" do
@@ -743,77 +743,77 @@ describe UserProfile do
   end
 
   describe '#performance_records' do
-    let!(:other_user) { create :user }
-    let!(:perf1) { create :performance,
+    let!(:other_user) { create(:user) }
+    let!(:perf1) { create(:performance,
                           title: 'Performance One',
                           location: 'Location One',
-                          start_on: Date.new(2017, 1, 1) }
-    let!(:perf2) { create :performance,
+                          start_on: Date.new(2017, 1, 1)) }
+    let!(:perf2) { create(:performance,
                           title: 'Performance Two',
                           location: nil,
-                          start_on: Date.new(2016, 1, 1) }
-    let!(:perf3) { create :performance,
+                          start_on: Date.new(2016, 1, 1)) }
+    let!(:perf3) { create(:performance,
                           title: 'Performance Three',
                           location: 'Location Three',
-                          start_on: nil }
-    let!(:perf4) { create :performance,
+                          start_on: nil) }
+    let!(:perf4) { create(:performance,
                           title: 'Performance Four',
                           location: nil,
-                          start_on: Date.new(2018, 12, 1) }
-    let!(:perf5) { create :performance,
+                          start_on: Date.new(2018, 12, 1)) }
+    let!(:perf5) { create(:performance,
                           title: 'Performance Five',
                           location: nil,
-                          start_on: Date.new(2019, 1, 1) }
-    let!(:perf6) { create :performance,
+                          start_on: Date.new(2019, 1, 1)) }
+    let!(:perf6) { create(:performance,
                           title: 'Performance Six',
                           location: nil,
-                          start_on: Date.new(2017, 12, 1) }
-    let!(:perf7) { create :performance,
+                          start_on: Date.new(2017, 12, 1)) }
+    let!(:perf7) { create(:performance,
                           title: 'Performance Seven',
                           location: nil,
-                          start_on: Date.new(2018, 1, 1) }
+                          start_on: Date.new(2018, 1, 1)) }
 
     before do
-      create :user_performance,
+      create(:user_performance,
              user: other_user,
              performance: perf1,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf1,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf2,
              visible_in_profile: false,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf3,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf4,
              visible_in_profile: true,
-             position_in_profile: nil
-      create :user_performance,
+             position_in_profile: nil)
+      create(:user_performance,
              user: user,
              performance: perf5,
              visible_in_profile: false,
-             position_in_profile: 2
-      create :user_performance,
+             position_in_profile: 2)
+      create(:user_performance,
              user: user,
              performance: perf6,
              visible_in_profile: true,
-             position_in_profile: 3
-      create :user_performance,
+             position_in_profile: 3)
+      create(:user_performance,
              user: user,
              performance: perf7,
              visible_in_profile: true,
-             position_in_profile: 1
+             position_in_profile: 1)
     end
 
     it "returns an array of the given user's visible performances in order first by user preference, then by date" do
@@ -822,38 +822,38 @@ describe UserProfile do
   end
 
   describe '#master_advising_roles' do
-    let!(:m_etd1) { create :etd,
+    let!(:m_etd1) { create(:etd,
                            title: 'Master ETD\n One',
                            url: 'test.edu/etd1',
                            submission_type: 'Master Thesis',
                            year: 2010,
                            author_first_name: 'First',
-                           author_last_name: 'Author' }
-    let!(:m_etd2) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:m_etd2) { create(:etd,
                            title: 'Master ETD\n Two',
                            url: 'test.edu/etd2',
                            submission_type: 'Master Thesis',
                            year: 2005,
                            author_first_name: 'Second',
-                           author_last_name: 'Author' }
-    let!(:m_etd3) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:m_etd3) { create(:etd,
                            title: 'Master ETD\n Three',
                            url: 'test.edu/etd3',
                            submission_type: 'Master Thesis',
                            year: 2015,
                            author_first_name: 'Third',
-                           author_last_name: 'Author' }
-    let!(:p_etd1) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:p_etd1) { create(:etd,
                            title: 'PhD ETD One',
                            url: 'test2.edu',
-                           submission_type: 'Dissertation' }
+                           submission_type: 'Dissertation') }
 
     before do
-      create :committee_membership, user: user, etd: m_etd1, role: 'Committee Member'
-      create :committee_membership, user: user, etd: m_etd1, role: 'Outside Member'
-      create :committee_membership, user: user, etd: m_etd2, role: 'Committee Member'
-      create :committee_membership, user: user, etd: m_etd3, role: 'Committee Member'
-      create :committee_membership, user: user, etd: p_etd1, role: 'Committee Member'
+      create(:committee_membership, user: user, etd: m_etd1, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: m_etd1, role: 'Outside Member')
+      create(:committee_membership, user: user, etd: m_etd2, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: m_etd3, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: p_etd1, role: 'Committee Member')
     end
 
     it "returns an array of strings describing the given user's most significant advising role for each of their master thesis ETDs in order by year" do
@@ -866,38 +866,38 @@ describe UserProfile do
   end
 
   describe '#phd_advising_roles' do
-    let!(:p_etd1) { create :etd,
+    let!(:p_etd1) { create(:etd,
                            title: 'PhD ETD\n One',
                            url: 'test.edu/etd1',
                            submission_type: 'Dissertation',
                            year: 2010,
                            author_first_name: 'First',
-                           author_last_name: 'Author' }
-    let!(:p_etd2) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:p_etd2) { create(:etd,
                            title: 'PhD ETD\n Two',
                            url: 'test.edu/etd2',
                            submission_type: 'Dissertation',
                            year: 2005,
                            author_first_name: 'Second',
-                           author_last_name: 'Author' }
-    let!(:p_etd3) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:p_etd3) { create(:etd,
                            title: 'PhD ETD\n Three',
                            url: 'test.edu/etd3',
                            submission_type: 'Dissertation',
                            year: 2015,
                            author_first_name: 'Third',
-                           author_last_name: 'Author' }
-    let!(:m_etd1) { create :etd,
+                           author_last_name: 'Author') }
+    let!(:m_etd1) { create(:etd,
                            title: 'Master ETD One',
                            url: 'test2.edu',
-                           submission_type: 'Master Thesis' }
+                           submission_type: 'Master Thesis') }
 
     before do
-      create :committee_membership, user: user, etd: p_etd1, role: 'Committee Member'
-      create :committee_membership, user: user, etd: p_etd1, role: 'Outside Member'
-      create :committee_membership, user: user, etd: p_etd2, role: 'Committee Member'
-      create :committee_membership, user: user, etd: p_etd3, role: 'Committee Member'
-      create :committee_membership, user: user, etd: m_etd1, role: 'Committee Member'
+      create(:committee_membership, user: user, etd: p_etd1, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: p_etd1, role: 'Outside Member')
+      create(:committee_membership, user: user, etd: p_etd2, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: p_etd3, role: 'Committee Member')
+      create(:committee_membership, user: user, etd: m_etd1, role: 'Committee Member')
     end
 
     it "returns an array of strings describing the given user's most significant advising role for each of their PhD dissertation ETDs" do
@@ -910,16 +910,16 @@ describe UserProfile do
   end
 
   describe '#news_stories' do
-    let!(:nfi1) { create :news_feed_item,
+    let!(:nfi1) { create(:news_feed_item,
                          user: user,
                          title: 'Story One',
                          url: 'news.edu/1',
-                         published_on: Date.new(2016, 1, 2) }
-    let!(:nfi2) { create :news_feed_item,
+                         published_on: Date.new(2016, 1, 2)) }
+    let!(:nfi2) { create(:news_feed_item,
                          user: user,
                          title: 'Story Two',
                          url: 'news.edu/2',
-                         published_on: Date.new(2018, 3, 4) }
+                         published_on: Date.new(2018, 3, 4)) }
 
     it 'returns an array of strings describing news stories about the given user in order by date' do
       expect(profile.news_stories).to eq [
@@ -931,48 +931,48 @@ describe UserProfile do
 
   describe '#education_history' do
     context 'when the user has education history items' do
-      let!(:item1) { create :education_history_item,
+      let!(:item1) { create(:education_history_item,
                             user: user,
                             degree: 'MS',
                             emphasis_or_major: 'Ecology',
                             institution: 'The Pennsylvania State University',
-                            end_year: 2003 }
-      let!(:item2) { create :education_history_item,
+                            end_year: 2003) }
+      let!(:item2) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000 }
-      let!(:item3) { create :education_history_item,
+                            end_year: 2000) }
+      let!(:item3) { create(:education_history_item,
                             user: user,
                             degree: nil,
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000 }
-      let!(:item4) { create :education_history_item,
+                            end_year: 2000) }
+      let!(:item4) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: nil,
                             institution: 'University of Pittsburgh',
-                            end_year: 2000 }
-      let!(:item5) { create :education_history_item,
+                            end_year: 2000) }
+      let!(:item5) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: nil,
-                            end_year: 2000 }
-      let!(:item6) { create :education_history_item,
+                            end_year: 2000) }
+      let!(:item6) { create(:education_history_item,
                             user: user,
                             degree: 'BS',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: nil }
-      let!(:item7) { create :education_history_item,
+                            end_year: nil) }
+      let!(:item7) { create(:education_history_item,
                             user: user,
                             degree: 'Other',
                             emphasis_or_major: 'Biology',
                             institution: 'University of Pittsburgh',
-                            end_year: 2000 }
+                            end_year: 2000) }
 
       it "returns an array of strings describing the user's education history in order by year" do
         expect(profile.education_history).to eq [
@@ -990,16 +990,16 @@ describe UserProfile do
   end
 
   describe '#has_bio_info?' do
-    let!(:user) { create :user,
+    let!(:user) { create(:user,
                          ai_bio: bio,
                          ai_teaching_interests: ti,
                          ai_research_interests: ri,
-                         education_history_items: items }
-    let(:ehi) { build :education_history_item,
+                         education_history_items: items) }
+    let(:ehi) { build(:education_history_item,
                       degree: 'MS',
                       institution: 'Institution',
                       emphasis_or_major: 'Major',
-                      end_year: 2000 }
+                      end_year: 2000) }
 
     context 'when the user has a bio' do
       let(:bio) { 'A bio' }

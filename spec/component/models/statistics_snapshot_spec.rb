@@ -14,16 +14,16 @@ end
 
 describe StatisticsSnapshot, type: :model do
   before do
-    create :publication, open_access_locations: []
-    create :publication, open_access_locations: [build(:open_access_location,
+    create(:publication, open_access_locations: [])
+    create(:publication, open_access_locations: [build(:open_access_location,
                                                        source: Source::OPEN_ACCESS_BUTTON,
-                                                       url: 'url1')]
-    create :publication, open_access_locations: [build(:open_access_location,
+                                                       url: 'url1')])
+    create(:publication, open_access_locations: [build(:open_access_location,
                                                        source: Source::USER,
-                                                       url: 'url2')]
-    create :publication, publication_type: 'Book', open_access_locations: [build(:open_access_location,
+                                                       url: 'url2')])
+    create(:publication, publication_type: 'Book', open_access_locations: [build(:open_access_location,
                                                                                  source: Source::USER,
-                                                                                 url: 'url3')]
+                                                                                 url: 'url3')])
   end
 
   describe '.record' do
@@ -45,9 +45,9 @@ describe StatisticsSnapshot, type: :model do
   end
 
   describe '#percent_open_access' do
-    let(:snapshot) { build :statistics_snapshot,
+    let(:snapshot) { build(:statistics_snapshot,
                            total_article_count: 3,
-                           open_access_article_count: 2 }
+                           open_access_article_count: 2) }
 
     it 'returns the percentage of articles that were open access at the time the snapshot was taken' do
       expect(snapshot.percent_open_access).to eq 66.7

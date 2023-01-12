@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 
 describe API::V1::UserQuery do
-  let(:user) { create :user, show_all_contracts: show_all_contracts }
+  let(:user) { create(:user, show_all_contracts: show_all_contracts) }
   let(:show_all_contracts) { true }
   let(:uq) { described_class.new(user) }
 
@@ -15,8 +15,8 @@ describe API::V1::UserQuery do
     end
 
     context 'when the given user has presentations' do
-      let(:invis_pres) { create :presentation, visible: false }
-      let(:vis_pres) { create :presentation, visible: true }
+      let(:invis_pres) { create(:presentation, visible: false) }
+      let(:vis_pres) { create(:presentation, visible: true) }
 
       before { user.presentations << [invis_pres, vis_pres] }
 
@@ -34,12 +34,12 @@ describe API::V1::UserQuery do
     end
 
     context 'when the given user has grants' do
-      let!(:g1) { create :grant }
-      let!(:g2) { create :grant }
+      let!(:g1) { create(:grant) }
+      let!(:g2) { create(:grant) }
 
       before do
-        create :researcher_fund, user: user, grant: g1
-        create :researcher_fund, user: user, grant: g2
+        create(:researcher_fund, user: user, grant: g1)
+        create(:researcher_fund, user: user, grant: g2)
       end
 
       it "returns all of the user's grants" do
@@ -56,12 +56,12 @@ describe API::V1::UserQuery do
     end
 
     context 'when the given user has performances' do
-      let(:invis_perf) { create :performance, visible: false }
-      let(:vis_perf) { create :performance, visible: true }
+      let(:invis_perf) { create(:performance, visible: false) }
+      let(:vis_perf) { create(:performance, visible: true) }
 
       before do
-        create :user_performance, user: user, performance: invis_perf
-        create :user_performance, user: user, performance: vis_perf
+        create(:user_performance, user: user, performance: invis_perf)
+        create(:user_performance, user: user, performance: vis_perf)
       end
 
       it "returns the user's visible performances" do
@@ -72,7 +72,7 @@ describe API::V1::UserQuery do
 
   # TODO:  This method needs to be tested a lot more thoroughly.
   describe '#publications' do
-    let(:user) { create :user, show_all_publications: true }
+    let(:user) { create(:user, show_all_publications: true) }
 
     context 'when the user can show all publications' do
       context 'when the user has no publications' do
@@ -82,26 +82,26 @@ describe API::V1::UserQuery do
       end
 
       context 'when the user has publications' do
-        let(:invis_pub) { create :publication, visible: false }
-        let(:vis_conf_pub) { create :publication, visible: true }
-        let(:vis_unconf_pub) { create :publication, visible: true }
+        let(:invis_pub) { create(:publication, visible: false) }
+        let(:vis_conf_pub) { create(:publication, visible: true) }
+        let(:vis_unconf_pub) { create(:publication, visible: true) }
 
         before do
-          create :authorship,
+          create(:authorship,
                  user: user,
                  publication: invis_pub,
                  author_number: 1,
-                 confirmed: true
-          create :authorship,
+                 confirmed: true)
+          create(:authorship,
                  user: user,
                  publication: vis_conf_pub,
                  author_number: 1,
-                 confirmed: true
-          create :authorship,
+                 confirmed: true)
+          create(:authorship,
                  user: user,
                  publication: vis_unconf_pub,
                  author_number: 1,
-                 confirmed: false
+                 confirmed: false)
         end
 
         it "returns the user's visible, confirmed publications" do
@@ -117,7 +117,7 @@ describe API::V1::UserQuery do
     end
 
     context 'when the user cannot show any publications' do
-      let(:user) { create :user, show_all_publications: false }
+      let(:user) { create(:user, show_all_publications: false) }
 
       context 'when the user has no publications' do
         it 'returns an empty array' do
@@ -126,12 +126,12 @@ describe API::V1::UserQuery do
       end
 
       context 'when the user has publications' do
-        let(:invis_pub) { create :publication, visible: false }
-        let(:vis_pub) { create :publication, visible: true }
+        let(:invis_pub) { create(:publication, visible: false) }
+        let(:vis_pub) { create(:publication, visible: true) }
 
         before do
-          create :authorship, user: user, publication: invis_pub, author_number: 1
-          create :authorship, user: user, publication: vis_pub, author_number: 1
+          create(:authorship, user: user, publication: invis_pub, author_number: 1)
+          create(:authorship, user: user, publication: vis_pub, author_number: 1)
         end
 
         it 'returns an empty array' do

@@ -11,7 +11,7 @@ describe NewDeputyAssignmentForm, type: :model do
 
   subject(:form) { described_class.new(primary: primary, deputy_webaccess_id: deputy_webaccess_id) }
 
-  let!(:primary) { create :user, first_name: 'Primary' }
+  let!(:primary) { create(:user, first_name: 'Primary') }
   let(:deputy_webaccess_id) { 'dep0987' }
 
   describe 'validations' do
@@ -168,7 +168,7 @@ describe NewDeputyAssignmentForm, type: :model do
     end
 
     context 'when a User exists for the given webaccess id' do
-      let!(:existing_user) { create :user, webaccess_id: deputy_webaccess_id, first_name: 'Deputy', last_name: 'FromDB' }
+      let!(:existing_user) { create(:user, webaccess_id: deputy_webaccess_id, first_name: 'Deputy', last_name: 'FromDB') }
 
       context 'when everything goes as expected' do
         it 'returns true' do
@@ -193,7 +193,7 @@ describe NewDeputyAssignmentForm, type: :model do
       end
 
       context 'when an active DeputyAssignment already exists for that User' do
-        let!(:existing_deputy_assignment) { create :deputy_assignment, :active, primary: primary, deputy: existing_user }
+        let!(:existing_deputy_assignment) { create(:deputy_assignment, :active, primary: primary, deputy: existing_user) }
 
         it 'returns false' do
           expect(form.save).to be false
@@ -213,7 +213,7 @@ describe NewDeputyAssignmentForm, type: :model do
       end
 
       context 'when an inactive DeputyAssignment already exists for that User' do
-        let!(:existing_deputy_assignment) { create :deputy_assignment, :inactive, primary: primary, deputy: existing_user }
+        let!(:existing_deputy_assignment) { create(:deputy_assignment, :inactive, primary: primary, deputy: existing_user) }
 
         it 'returns true' do
           expect(form.save).to be true

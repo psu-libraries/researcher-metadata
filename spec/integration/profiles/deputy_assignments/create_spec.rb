@@ -12,7 +12,7 @@ describe 'Creating a new proxy', type: :feature do
   end
 
   context 'when logged in', :vcr do
-    let!(:user) { create :user, webaccess_id: 'abc123' }
+    let!(:user) { create(:user, webaccess_id: 'abc123') }
 
     before do
       authenticate_as(user)
@@ -40,8 +40,8 @@ describe 'Creating a new proxy', type: :feature do
 
     context 'when there is an error' do
       before do
-        existing_user = create :user, webaccess_id: 'agw13'
-        _existing_da = create :deputy_assignment, :active, :confirmed, primary: user, deputy: existing_user
+        existing_user = create(:user, webaccess_id: 'agw13')
+        _existing_da = create(:deputy_assignment, :active, :confirmed, primary: user, deputy: existing_user)
       end
 
       it 'shows the errors' do

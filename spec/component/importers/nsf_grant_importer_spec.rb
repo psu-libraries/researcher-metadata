@@ -6,9 +6,9 @@ describe NSFGrantImporter do
   let(:importer) { described_class.new(dirname: dirname) }
 
   describe '#call' do
-    let!(:u1) { create :user, first_name: 'Bethany', last_name: 'Testuser', webaccess_id: 'bat123' }
-    let!(:u2) { create :user, first_name: 'Jeff', last_name: 'Testresearcher', webaccess_id: 'jbt12' }
-    let!(:u3) { create :user, first_name: 'Richard', last_name: 'Testuser', webaccess_id: 'rat' }
+    let!(:u1) { create(:user, first_name: 'Bethany', last_name: 'Testuser', webaccess_id: 'bat123') }
+    let!(:u2) { create(:user, first_name: 'Jeff', last_name: 'Testresearcher', webaccess_id: 'jbt12') }
+    let!(:u3) { create(:user, first_name: 'Richard', last_name: 'Testuser', webaccess_id: 'rat') }
 
     context 'when given XML files of grant data from the National Science Foundation' do
       let(:dirname) { Rails.root.join('spec', 'fixtures', 'nsf_grants') }
@@ -50,14 +50,14 @@ describe NSFGrantImporter do
       end
 
       context 'when a grant matching the data in the given files already exists' do
-        let!(:existing_grant) { create :grant,
+        let!(:existing_grant) { create(:grant,
                                        agency_name: 'National Science Foundation',
                                        identifier: '1934782',
                                        title: 'Existing title',
                                        start_date: Date.new(2018, 1, 1),
                                        end_date: Date.new(2025, 1, 1),
                                        abstract: 'Existing abstract',
-                                       amount_in_dollars: 20000 }
+                                       amount_in_dollars: 20000) }
 
         it 'creates new grant records for each Penn State grant in the given data that does not match an existing grant' do
           expect { importer.call }.to change(Grant, :count).by 1
@@ -100,9 +100,9 @@ describe NSFGrantImporter do
 
         context 'when an association between the existing grant and a user already exists' do
           before do
-            create :researcher_fund,
+            create(:researcher_fund,
                    grant: existing_grant,
-                   user: u1
+                   user: u1)
           end
 
           it 'does not create a new association' do

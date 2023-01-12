@@ -259,8 +259,8 @@ Devise.setup do |config|
   # Add a new OmniAuth provider. Check the wiki for more information on setting
   # up on your models and hooks.
   config.omniauth :azure_oauth,
-                  Rails.configuration.x.azure_ad_oauth['client_id'],
-                  Rails.configuration.x.azure_ad_oauth['client_secret'],
+                  Settings.azure_ad_oauth.client_id,
+                  Settings.azure_ad_oauth.client_secret,
                   scope: 'openid profile'
 
   # ==> Warden configuration

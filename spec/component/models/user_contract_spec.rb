@@ -24,8 +24,8 @@ describe UserContract, type: :model do
   end
 
   describe 'deleting a contract with user_contracts' do
-    let(:c) { create :contract }
-    let!(:uc) { create :user_contract, contract: c }
+    let(:c) { create(:contract) }
+    let!(:uc) { create(:user_contract, contract: c) }
 
     it "also deletes the publication's authorships" do
       c.destroy

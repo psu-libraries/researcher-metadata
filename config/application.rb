@@ -24,13 +24,11 @@ module ResearcherMetadata
 
     config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
 
-    config.x.scholarsphere = YAML.load_file(Rails.root.join('config/scholarsphere-client.yml'))
-
     # Using delayed_job for async jobs
     config.active_job.queue_adapter = :delayed_job
 
     def self.scholarsphere_base_uri
-      scholarsphere_api_uri = URI(Rails.application.config.x.scholarsphere['SS4_ENDPOINT'])
+      scholarsphere_api_uri = URI(Settings.scholarsphere.endpoint)
       "#{scholarsphere_api_uri.scheme}://#{scholarsphere_api_uri.host}"
     end
   end

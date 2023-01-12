@@ -8,7 +8,7 @@ describe UnpaywallPublicationImporter, :vcr do
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
@@ -37,7 +37,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -62,7 +62,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
     context 'when an existing publication has a blank DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+        let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
@@ -91,7 +91,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -115,7 +115,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context "when an existing publication's DOI does not return usable data" do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       it 'does not raise an error' do
         expect { importer.import_all }.not_to raise_error
@@ -123,8 +123,8 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context 'when an existing publication has a DOI that corresponds to an available article listed with Unpaywall' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.1001/jamadermatol.2015.3091' }
+      let!(:pub) { create(:publication,
+                          doi: 'https://doi.org/10.1001/jamadermatol.2015.3091') }
 
       context 'when the publication has no open access locations' do
         it 'creates a new open access location for the publication' do
@@ -149,8 +149,8 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when Unpaywall has multiple open access locations' do
-        let!(:pub) { create :publication,
-                            doi: 'https://doi.org/10.1001/jamadermatol.2015.3091' }
+        let!(:pub) { create(:publication,
+                            doi: 'https://doi.org/10.1001/jamadermatol.2015.3091') }
 
         it 'creates multiple open access locations in RMD' do
           expect { importer.import_all }.to change(OpenAccessLocation, :count).by 2
@@ -159,7 +159,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
       context 'when the publication already has an open access location from Unpaywall' do
         context 'when the existing and new open access locations have the same URL' do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf',
                               source: Source::UNPAYWALL,
@@ -170,7 +170,7 @@ describe UnpaywallPublicationImporter, :vcr do
                               license: 'license type',
                               oa_date: Time.zone.yesterday,
                               source_updated_at: Time.zone.yesterday,
-                              version: '1.0'
+                              version: '1.0')
           }
 
           it 'does not create any new open access locations' do
@@ -206,7 +206,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         context 'when the OA location from Unpaywall has a different URL than the one in RMD' do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'existing_url',
                               source: Source::UNPAYWALL,
@@ -217,7 +217,7 @@ describe UnpaywallPublicationImporter, :vcr do
                               license: 'license type',
                               oa_date: Time.zone.yesterday,
                               source_updated_at: Time.zone.yesterday,
-                              version: '1.0' }
+                              version: '1.0') }
 
           it 'adds a new open access location with the data from Unpaywall' do
             expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -255,8 +255,8 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when the publication DOI has brackets' do
-        let!(:pub) { create :publication,
-                            doi: 'https://doi.org/10.1641/0006-3568(2005)055[0851:POTAPF]2.0.CO;2' }
+        let!(:pub) { create(:publication,
+                            doi: 'https://doi.org/10.1641/0006-3568(2005)055[0851:POTAPF]2.0.CO;2') }
 
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.reload.open_access_locations.count }.by 1
@@ -282,8 +282,8 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context 'when an existing publication has a DOI that does not correspond to an available article listed with Unpaywall' do
-      let!(:pub) { create :publication,
-                          doi: 'https://doi.org/10.000/doi1' }
+      let!(:pub) { create(:publication,
+                          doi: 'https://doi.org/10.000/doi1') }
 
       context 'when the publication has no open access locations' do
         it 'does not create any new open access locations' do
@@ -302,10 +302,10 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context "when the publication has an OA location that isn't in the Unpaywall results" do
-        let!(:oal) { create :open_access_location,
+        let!(:oal) { create(:open_access_location,
                             publication: pub,
                             url: 'existing_url',
-                            source: Source::UNPAYWALL }
+                            source: Source::UNPAYWALL) }
 
         it 'removes the existing open access location' do
           expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
@@ -325,7 +325,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context 'when an error is raised' do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       before do
         allow(JSON).to receive(:parse).and_raise(RuntimeError)
@@ -349,7 +349,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       it 'continues with the import' do
-        create :publication, doi: 'https://doi.org/10.000/nodata'
+        create(:publication, doi: 'https://doi.org/10.000/nodata')
         importer.import_all
         expect(ImporterErrorLog).to have_received(:log_error).twice
       end
@@ -357,7 +357,7 @@ describe UnpaywallPublicationImporter, :vcr do
   end
 
   context 'when the API request times out too many times' do
-    let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+    let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
     before do
       allow(HTTParty).to receive(:get).and_raise(Net::ReadTimeout)
@@ -381,15 +381,15 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     it 'continues with the import' do
-      create :publication, doi: 'https://doi.org/10.000/nodata'
+      create(:publication, doi: 'https://doi.org/10.000/nodata')
       importer.import_all
       expect(ImporterErrorLog).to have_received(:log_error).twice
     end
   end
 
   context 'when an error occurs updating an OpenAccessLocation' do
-    let!(:pub) { create :publication,
-                        doi: 'https://doi.org/10.1001/jamadermatol.2015.3091' }
+    let!(:pub) { create(:publication,
+                        doi: 'https://doi.org/10.1001/jamadermatol.2015.3091') }
 
     before do
       allow_any_instance_of(OpenAccessLocation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
@@ -414,9 +414,9 @@ describe UnpaywallPublicationImporter, :vcr do
   end
 
   context 'when a mystery error occurs that we cannot handle' do
-    let!(:pub) { create :publication,
+    let!(:pub) { create(:publication,
                         doi: 'https://doi.org/10.1001/jamadermatol.2015.3091',
-                        open_access_locations: [] }
+                        open_access_locations: []) }
 
     before do
       allow_any_instance_of(Publication).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
@@ -432,7 +432,7 @@ describe UnpaywallPublicationImporter, :vcr do
   describe '#import_new' do
     context 'when an existing publication does not have a DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
@@ -461,7 +461,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: nil, open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -486,7 +486,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
     context 'when an existing publication has a blank DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+        let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
           expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
@@ -515,7 +515,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
-        let!(:pub) { create :publication, doi: '', open_access_status: nil, title: 'Economic Development' }
+        let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
@@ -539,7 +539,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context "when an existing publication's DOI does not return usable data" do
-      let!(:pub) { create :publication, doi: 'https://doi.org/10.000/nodata' }
+      let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       it 'does not raise an error' do
         expect { importer.import_new }.not_to raise_error
@@ -547,10 +547,10 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context 'when an existing publication has a DOI that corresponds to an available article listed with Unpaywall' do
-      let!(:pub) { create :publication,
+      let!(:pub) { create(:publication,
                           doi: 'https://doi.org/10.1001/jamadermatol.2015.3091',
                           unpaywall_last_checked_at: last_check,
-                          open_access_status: 'green' }
+                          open_access_status: 'green') }
 
       context 'when the publication has been checked in Unpaywall before' do
         let(:last_check) { Time.zone.yesterday }
@@ -572,10 +572,10 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         context 'when the publication already has an open access location' do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: Source::UNPAYWALL }
+                              source: Source::UNPAYWALL) }
 
           it 'does not create any new open access locations' do
             expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
@@ -624,10 +624,10 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     context 'when an existing publication has a DOI that does not correspond to an available article listed with Unpaywall' do
-      let!(:pub) { create :publication,
+      let!(:pub) { create(:publication,
                           doi: 'https://doi.org/10.000/doi1',
                           unpaywall_last_checked_at: last_check,
-                          open_access_status: nil }
+                          open_access_status: nil) }
 
       context 'when the publication has been checked in Unpaywall before' do
         let(:last_check) { Time.zone.yesterday }
@@ -649,10 +649,10 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         context "when the publication has an OA location that isn't in the Unpaywall results" do
-          let!(:oal) { create :open_access_location,
+          let!(:oal) { create(:open_access_location,
                               publication: pub,
                               url: 'existing_url',
-                              source: Source::UNPAYWALL }
+                              source: Source::UNPAYWALL) }
 
           it 'removes the existing open access location' do
             expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1

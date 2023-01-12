@@ -21,7 +21,7 @@ describe DeputyAssignmentsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when authenticated' do
-      let(:user) { create :user }
+      let(:user) { create(:user) }
       let(:mock_form) { instance_spy(NewDeputyAssignmentForm) }
       let(:mock_assignment) { instance_spy(DeputyAssignment) }
 
@@ -74,7 +74,7 @@ describe DeputyAssignmentsController, type: :controller do
   end
 
   describe '#confirm' do
-    let(:deputy_assignment) { create :deputy_assignment, :active, :unconfirmed }
+    let(:deputy_assignment) { create(:deputy_assignment, :active, :unconfirmed) }
     let(:perform_request) { patch :confirm, params: { id: deputy_assignment.id } }
 
     it_behaves_like 'an unauthenticated controller'
@@ -128,7 +128,7 @@ describe DeputyAssignmentsController, type: :controller do
         end
 
         context 'when the given deputy assignment is inactive' do
-          let(:deputy_assignment) { create :deputy_assignment, :inactive, :unconfirmed }
+          let(:deputy_assignment) { create(:deputy_assignment, :inactive, :unconfirmed) }
 
           it 'does not confirm the assignment' do
             expect {
@@ -157,7 +157,7 @@ describe DeputyAssignmentsController, type: :controller do
   end
 
   describe '#destroy' do
-    let(:deputy_assignment) { create :deputy_assignment, :active, :unconfirmed }
+    let(:deputy_assignment) { create(:deputy_assignment, :active, :unconfirmed) }
     let(:perform_request) { delete :destroy, params: { id: deputy_assignment.id } }
 
     it_behaves_like 'an unauthenticated controller'
@@ -195,7 +195,7 @@ describe DeputyAssignmentsController, type: :controller do
         let(:user) { deputy_assignment.deputy }
 
         context 'when the deputy_assignment has been confirmed' do
-          let(:deputy_assignment) { create :deputy_assignment, :active, :confirmed }
+          let(:deputy_assignment) { create(:deputy_assignment, :active, :confirmed) }
 
           it 'deactivates/deletes the deputy assignment' do
             perform_request
@@ -210,7 +210,7 @@ describe DeputyAssignmentsController, type: :controller do
         end
 
         context 'when the deputy_assignment has not been confirmed' do
-          let(:deputy_assignment) { create :deputy_assignment, :active, :unconfirmed }
+          let(:deputy_assignment) { create(:deputy_assignment, :active, :unconfirmed) }
 
           it 'deactivates/deletes the deputy assignment' do
             perform_request
@@ -226,7 +226,7 @@ describe DeputyAssignmentsController, type: :controller do
       end
 
       context 'when the current user is signed in as somebody else' do
-        let(:user) { create :user }
+        let(:user) { create(:user) }
 
         it 'does not delete the record' do
           expect {

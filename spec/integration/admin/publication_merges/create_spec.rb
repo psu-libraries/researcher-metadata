@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'managing duplicate publication groups', type: :feature do
-  let!(:group) { create :duplicate_publication_group }
+  let!(:group) { create(:duplicate_publication_group) }
 
   before { authenticate_admin_user }
 
@@ -25,8 +25,8 @@ describe 'managing duplicate publication groups', type: :feature do
   end
 
   context 'a group with one publication' do
-    let!(:pub) { create :publication, duplicate_group: group }
-    let!(:import) { create :publication_import, publication: pub }
+    let!(:pub) { create(:publication, duplicate_group: group) }
+    let!(:import) { create(:publication_import, publication: pub) }
 
     before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
@@ -44,13 +44,13 @@ describe 'managing duplicate publication groups', type: :feature do
   end
 
   context 'a group with three publications' do
-    let!(:pub1) { create :publication, duplicate_group: group }
-    let!(:pub1_import1) { create :publication_import, publication: pub1 }
-    let!(:pub2) { create :publication, duplicate_group: group }
-    let!(:pub2_import1) { create :publication_import, publication: pub2 }
-    let!(:pub2_import2) { create :publication_import, publication: pub2 }
-    let!(:pub3) { create :publication, duplicate_group: group }
-    let!(:pub3_import1) { create :publication_import, publication: pub3 }
+    let!(:pub1) { create(:publication, duplicate_group: group) }
+    let!(:pub1_import1) { create(:publication_import, publication: pub1) }
+    let!(:pub2) { create(:publication, duplicate_group: group) }
+    let!(:pub2_import1) { create(:publication_import, publication: pub2) }
+    let!(:pub2_import2) { create(:publication_import, publication: pub2) }
+    let!(:pub3) { create(:publication, duplicate_group: group) }
+    let!(:pub3_import1) { create(:publication_import, publication: pub3) }
 
     before do
       visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
@@ -182,15 +182,15 @@ describe 'managing duplicate publication groups', type: :feature do
     end
 
     context "choosing one publication as the merge target and selecting another publication that's in the same non-duplicate group to merge" do
-      let(:ndpg) { create :non_duplicate_publication_group }
+      let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
-        create :non_duplicate_publication_group_membership,
+        create(:non_duplicate_publication_group_membership,
                publication: pub1,
-               non_duplicate_group: ndpg
-        create :non_duplicate_publication_group_membership,
+               non_duplicate_group: ndpg)
+        create(:non_duplicate_publication_group_membership,
                publication: pub2,
-               non_duplicate_group: ndpg
+               non_duplicate_group: ndpg)
 
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
@@ -265,15 +265,15 @@ describe 'managing duplicate publication groups', type: :feature do
     end
 
     context 'choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group' do
-      let(:ndpg) { create :non_duplicate_publication_group }
+      let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
-        create :non_duplicate_publication_group_membership,
+        create(:non_duplicate_publication_group_membership,
                publication: pub2,
-               non_duplicate_group: ndpg
-        create :non_duplicate_publication_group_membership,
+               non_duplicate_group: ndpg)
+        create(:non_duplicate_publication_group_membership,
                publication: pub3,
-               non_duplicate_group: ndpg
+               non_duplicate_group: ndpg)
 
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"

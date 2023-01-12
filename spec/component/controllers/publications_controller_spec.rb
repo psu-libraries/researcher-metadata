@@ -12,7 +12,7 @@ describe PublicationsController, type: :controller do
     it_behaves_like 'an unauthenticated controller'
 
     context 'when the user is authenticated' do
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)
@@ -26,13 +26,13 @@ describe PublicationsController, type: :controller do
   end
 
   describe '#show' do
-    let!(:pub) { create :publication }
+    let!(:pub) { create(:publication) }
     let(:perform_request) { get :show, params: { id: pub.id } }
 
     it_behaves_like 'an unauthenticated controller'
 
     context 'when the user is authenticated' do
-      let!(:user) { create :user }
+      let!(:user) { create(:user) }
 
       before do
         allow(request.env['warden']).to receive(:authenticate!).and_return(user)

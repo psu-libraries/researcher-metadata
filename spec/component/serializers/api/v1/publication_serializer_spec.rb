@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 
 describe API::V1::PublicationSerializer do
-  let(:publication) { create :publication,
+  let(:publication) { create(:publication,
                              title: 'publication 1',
                              secondary_title: 'pub 1 subtitle',
                              journal_title: 'prestegious journal',
@@ -22,12 +22,12 @@ describe API::V1::PublicationSerializer do
                              open_access_locations: [build(:open_access_location,
                                                            source: Source::OPEN_ACCESS_BUTTON,
                                                            url: 'OA URL')],
-                             journal: journal }
+                             journal: journal) }
   let(:date) { nil }
-  let(:journal) { create :journal, title: 'test journal title', publisher: publisher }
-  let(:publisher) { create :publisher, name: 'test publisher name' }
-  let(:u1) { create :user, webaccess_id: 'abc123' }
-  let(:u2) { create :user, webaccess_id: 'xyz789' }
+  let(:journal) { create(:journal, title: 'test journal title', publisher: publisher) }
+  let(:publisher) { create(:publisher, name: 'test publisher name') }
+  let(:u1) { create(:user, webaccess_id: 'abc123') }
+  let(:u2) { create(:user, webaccess_id: 'xyz789') }
 
   describe 'data attributes' do
     subject { serialized_data_attributes(publication) }
@@ -66,9 +66,9 @@ describe API::V1::PublicationSerializer do
       subject { serialized_data_attributes(publication) }
 
       before do
-        create :contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication, user: u1
-        create :contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication, user: u2
-        create :contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication, user: nil
+        create(:contributor_name, first_name: 'a', middle_name: 'b', last_name: 'c', position: 2, publication: publication, user: u1)
+        create(:contributor_name, first_name: 'd', middle_name: 'e', last_name: 'f', position: 1, publication: publication, user: u2)
+        create(:contributor_name, first_name: 'g', middle_name: 'h', last_name: 'i', position: 3, publication: publication, user: nil)
       end
 
       it { expect(subject).to include(contributors: [{ first_name: 'd', middle_name: 'e', last_name: 'f', psu_user_id: 'xyz789' },
@@ -82,8 +82,8 @@ describe API::V1::PublicationSerializer do
 
     context 'when the publications has imports from Pure' do
       before do
-        create :publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_abc123'
-        create :publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_def456'
+        create(:publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_abc123')
+        create(:publication_import, source: 'Pure', publication: publication, source_identifier: 'pure_def456')
       end
 
       it { is_expected.to include(pure_ids: ['pure_abc123', 'pure_def456']) }
@@ -95,8 +95,8 @@ describe API::V1::PublicationSerializer do
 
     context 'when the publications has imports from Activity Insight' do
       before do
-        create :publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_abc123'
-        create :publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_def456'
+        create(:publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_abc123')
+        create(:publication_import, source: 'Activity Insight', publication: publication, source_identifier: 'ai_def456')
       end
 
       it { is_expected.to include(activity_insight_ids: ['ai_abc123', 'ai_def456']) }
@@ -109,12 +109,12 @@ describe API::V1::PublicationSerializer do
     context 'when the publication has tags' do
       subject { serialized_data_attributes(publication) }
 
-      let(:tag1) { create :tag, name: 'Thing 1' }
-      let(:tag2) { create :tag, name: 'Thing 2' }
+      let(:tag1) { create(:tag, name: 'Thing 1') }
+      let(:tag2) { create(:tag, name: 'Thing 2') }
 
       before do
-        create :publication_tagging, publication: publication, tag: tag1, rank: 1
-        create :publication_tagging, publication: publication, tag: tag2, rank: 100
+        create(:publication_tagging, publication: publication, tag: tag1, rank: 1)
+        create(:publication_tagging, publication: publication, tag: tag2, rank: 100)
       end
 
       it { expect(subject).to include(tags: [{ name: 'Thing 2', rank: 100 },
@@ -126,29 +126,29 @@ describe API::V1::PublicationSerializer do
     end
 
     context 'when the publication has authorships' do
-      let(:u1) { create :user, webaccess_id: 'abc123' }
-      let(:u2) { create :user, webaccess_id: 'def456' }
-      let(:u3) { create :user }
+      let(:u1) { create(:user, webaccess_id: 'abc123') }
+      let(:u2) { create(:user, webaccess_id: 'def456') }
+      let(:u3) { create(:user) }
 
       before do
-        create :authorship,
+        create(:authorship,
                publication: publication,
                user: u1,
                visible_in_profile: true,
                position_in_profile: 4,
-               confirmed: true
+               confirmed: true)
 
-        create :authorship,
+        create(:authorship,
                publication: publication,
                user: u2,
                visible_in_profile: false,
                position_in_profile: nil,
-               confirmed: true
+               confirmed: true)
 
-        create :authorship,
+        create(:authorship,
                publication: publication,
                user: u3,
-               confirmed: false
+               confirmed: false)
       end
 
       it 'includes profile preferences' do

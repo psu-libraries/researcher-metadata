@@ -2,19 +2,19 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Users', type: :request do
+describe API::V1::UsersController do
   let(:h_index) { nil }
   let(:title) { nil }
   let(:website) { nil }
   let(:bio) { nil }
   let(:room) { nil }
   let(:building) { nil }
-  let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
-  let!(:inaccessible_user) { create :user, webaccess_id: 'inaccessible' }
-  let(:org) { create :organization }
+  let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
+  let!(:inaccessible_user) { create(:user, webaccess_id: 'inaccessible') }
+  let(:org) { create(:organization) }
 
   before do
-    create :organization_api_permission, api_token: token, organization: org
+    create(:organization_api_permission, api_token: token, organization: org)
   end
 
   describe 'GET /v1/users/:webaccess_id/presentations' do
@@ -33,10 +33,10 @@ describe 'API::V1 Users', type: :request do
     let(:user_without_visible_presentations) { create(:user, webaccess_id: 'nopres123') }
 
     before do
-      create :user_organization_membership,
+      create(:user_organization_membership,
              user: user_without_visible_presentations,
-             organization: org
-      create :user_organization_membership, user: user, organization: org
+             organization: org)
+      create(:user_organization_membership, user: user, organization: org)
       get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
     end
 
@@ -113,18 +113,18 @@ describe 'API::V1 Users', type: :request do
     let!(:user) { create(:user_with_grants,
                          webaccess_id: 'xyz321',
                          grants_count: 10) }
-    let!(:other_user) { create :user }
-    let!(:hidden_grant) { create :grant }
+    let!(:other_user) { create(:user) }
+    let!(:hidden_grant) { create(:grant) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
     let(:user_without_grants) { create(:user, webaccess_id: 'nocons123') }
 
     before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: other_user, organization: org
-      create :user_organization_membership, user: user_without_grants, organization: org
-      create :researcher_fund, user: other_user, grant: hidden_grant
+      create(:user_organization_membership, user: user, organization: org)
+      create(:user_organization_membership, user: other_user, organization: org)
+      create(:user_organization_membership, user: user_without_grants, organization: org)
+      create(:researcher_fund, user: other_user, grant: hidden_grant)
       get "/v1/users/#{webaccess_id}/grants#{params}", headers: headers
     end
 
@@ -205,8 +205,8 @@ describe 'API::V1 Users', type: :request do
     let(:user_without_news_feed_items) { create(:user, webaccess_id: 'nocons123') }
 
     before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: user_without_news_feed_items, organization: org
+      create(:user_organization_membership, user: user, organization: org)
+      create(:user_organization_membership, user: user_without_news_feed_items, organization: org)
       get "/v1/users/#{webaccess_id}/news_feed_items#{params}", headers: headers
     end
 
@@ -283,18 +283,18 @@ describe 'API::V1 Users', type: :request do
     let!(:user) { create(:user_with_performances,
                          webaccess_id: 'xyz321',
                          performances_count: 10) }
-    let!(:hidden_performance) { create :performance, visible: true }
-    let!(:invisible_performance) { create :performance, visible: false }
+    let!(:hidden_performance) { create(:performance, visible: true) }
+    let!(:invisible_performance) { create(:performance, visible: false) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
     let(:user_without_performances) { create(:user, webaccess_id: 'nopers123') }
 
     before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: user_without_performances, organization: org
-      create :user_performance, user: user, performance: invisible_performance
-      create :user_performance, user: user, performance: hidden_performance
+      create(:user_organization_membership, user: user, organization: org)
+      create(:user_organization_membership, user: user_without_performances, organization: org)
+      create(:user_performance, user: user, performance: invisible_performance)
+      create(:user_performance, user: user, performance: hidden_performance)
       get "/v1/users/#{webaccess_id}/performances#{params}", headers: headers
     end
 
@@ -362,7 +362,7 @@ describe 'API::V1 Users', type: :request do
     let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
 
     before do
-      create :user_organization_membership, user: user, organization: org
+      create(:user_organization_membership, user: user, organization: org)
       get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
     end
 
@@ -418,7 +418,7 @@ describe 'API::V1 Users', type: :request do
                          webaccess_id: 'xyz321',
                          authorships_count: 10,
                          show_all_publications: show_pubs) }
-    let!(:invisible_pub) { create :publication, visible: false }
+    let!(:invisible_pub) { create(:publication, visible: false) }
     let(:webaccess_id) { user.webaccess_id }
     let(:params) { '' }
     let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
@@ -426,9 +426,9 @@ describe 'API::V1 Users', type: :request do
     let(:user_without_publications) { create(:user, webaccess_id: 'nopubs123') }
 
     before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: user_without_publications, organization: org
-      create :authorship, user: user, publication: invisible_pub
+      create(:user_organization_membership, user: user, organization: org)
+      create(:user_organization_membership, user: user_without_publications, organization: org)
+      create(:authorship, user: user, publication: invisible_pub)
       get "/v1/users/#{webaccess_id}/publications#{params}", headers: headers
     end
 
@@ -547,17 +547,17 @@ describe 'API::V1 Users', type: :request do
 
     let!(:user_cws161) { create(:user, webaccess_id: 'cws161') }
 
-    let!(:invisible_pub1) { create :publication, visible: false }
-    let!(:invisible_pub2) { create :publication, visible: false }
+    let!(:invisible_pub1) { create(:publication, visible: false) }
+    let!(:invisible_pub2) { create(:publication, visible: false) }
 
     before do
-      create :authorship, user: user_abc123, publication: invisible_pub1
-      create :authorship, user: user_cws161, publication: invisible_pub2
+      create(:authorship, user: user_abc123, publication: invisible_pub1)
+      create(:authorship, user: user_cws161, publication: invisible_pub2)
 
-      create :user_organization_membership, organization: org, user: user_xyz123
-      create :user_organization_membership, organization: org, user: user_abc123
-      create :user_organization_membership, organization: org, user: user_def123
-      create :user_organization_membership, organization: org, user: user_cws161
+      create(:user_organization_membership, organization: org, user: user_xyz123)
+      create(:user_organization_membership, organization: org, user: user_abc123)
+      create(:user_organization_membership, organization: org, user: user_def123)
+      create(:user_organization_membership, organization: org, user: user_cws161)
 
       post '/v1/users/publications', params: params, headers: headers
     end
@@ -596,8 +596,8 @@ describe 'API::V1 Users', type: :request do
     let(:user_without_etds) { create(:user, webaccess_id: 'nocommittees123') }
 
     before do
-      create :user_organization_membership, user: user, organization: org
-      create :user_organization_membership, user: user_without_etds, organization: org
+      create(:user_organization_membership, user: user, organization: org)
+      create(:user_organization_membership, user: user_without_etds, organization: org)
       get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
     end
 
@@ -714,14 +714,14 @@ describe 'API::V1 Users', type: :request do
       end
 
       context 'when the user has publications that cannot be shown' do
-        let(:pub1) { create :publication, title: 'First Publication',
+        let(:pub1) { create(:publication, title: 'First Publication',
                                           visible: true,
                                           journal_title: 'Test Journal',
-                                          published_on: Date.new(2010, 1, 1) }
+                                          published_on: Date.new(2010, 1, 1)) }
         let(:show_pubs) { false }
 
         before do
-          create :authorship, user: user, publication: pub1
+          create(:authorship, user: user, publication: pub1)
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end
 
@@ -738,7 +738,7 @@ describe 'API::V1 Users', type: :request do
       end
 
       context 'when the user has associated metadata' do
-        let(:other_user) { create :user, show_all_contracts: false }
+        let(:other_user) { create(:user, show_all_contracts: false) }
         let(:h_index) { 49 }
         let(:title) { 'Professor' }
         let(:website) { 'http://example.com/mysite' }
@@ -746,124 +746,124 @@ describe 'API::V1 Users', type: :request do
         let(:pure_uuid) { 'pure-abc-123' }
         let(:room) { '123' }
         let(:building) { 'Test Building' }
-        let!(:pub1) { create :publication, title: 'First Publication',
+        let!(:pub1) { create(:publication, title: 'First Publication',
                                            visible: true,
                                            journal_title: 'Test Journal',
                                            published_on: Date.new(2010, 1, 1),
-                                           total_scopus_citations: 4 }
-        let!(:pub2) { create :publication, title: 'Second Publication',
+                                           total_scopus_citations: 4) }
+        let!(:pub2) { create(:publication, title: 'Second Publication',
                                            visible: true,
                                            publisher_name: 'Test Publisher',
-                                           published_on: Date.new(2015, 1, 1) }
-        let!(:pub3) { create :publication, title: 'Third Publication',
+                                           published_on: Date.new(2015, 1, 1)) }
+        let!(:pub3) { create(:publication, title: 'Third Publication',
                                            visible: true,
                                            published_on: Date.new(2018, 1, 1),
-                                           total_scopus_citations: 5 }
-        let!(:pub4) { create :publication, title: 'Undated Publication',
-                                           visible: true }
-        let!(:pub5) { create :publication,
+                                           total_scopus_citations: 5) }
+        let!(:pub4) { create(:publication, title: 'Undated Publication',
+                                           visible: true) }
+        let!(:pub5) { create(:publication,
                              title: 'Invisible Publication',
-                             visible: false }
-        let!(:pub6) { create :publication,
+                             visible: false) }
+        let!(:pub6) { create(:publication,
                              publication_type: 'Book',
                              title: 'Book Publication',
-                             visible: true }
+                             visible: true) }
 
-        let!(:pres1) { create :presentation,
+        let!(:pres1) { create(:presentation,
                               name: 'Presentation Two',
                               organization: 'An Organization',
                               location: 'Earth',
-                              visible: true}
-        let!(:pres2) { create :presentation,
+                              visible: true)}
+        let!(:pres2) { create(:presentation,
                               title: nil,
                               name: nil,
-                              visible: true }
-        let!(:pres3) { create :presentation,
+                              visible: true) }
+        let!(:pres3) { create(:presentation,
                               name: 'Presentation Three',
                               organization: 'Org',
                               location: 'Here',
-                              visible: false}
+                              visible: false)}
 
-        let!(:etd1) { create :etd, title: 'Master\n ETD',
+        let!(:etd1) { create(:etd, title: 'Master\n ETD',
                                    url: 'test1.edu',
                                    submission_type: 'Master Thesis',
                                    year: 2000,
                                    author_first_name: 'Thesis',
-                                   author_last_name: 'Author' }
-        let!(:etd2) { create :etd, title: 'PhD\n ETD',
+                                   author_last_name: 'Author') }
+        let!(:etd2) { create(:etd, title: 'PhD\n ETD',
                                    url: 'test2.edu',
                                    submission_type: 'Dissertation',
                                    year: 2010,
                                    author_first_name: 'Dissertation',
-                                   author_last_name: 'Author' }
+                                   author_last_name: 'Author') }
 
-        let!(:nfi1) { create :news_feed_item,
+        let!(:nfi1) { create(:news_feed_item,
                              user: user,
                              title: 'Story One',
                              url: 'news.edu/1',
-                             published_on: Date.new(2016, 1, 2) }
-        let!(:nfi2) { create :news_feed_item,
+                             published_on: Date.new(2016, 1, 2)) }
+        let!(:nfi2) { create(:news_feed_item,
                              user: user,
                              title: 'Story Two',
                              url: 'news.edu/2',
-                             published_on: Date.new(2018, 3, 4) }
+                             published_on: Date.new(2018, 3, 4)) }
 
-        let!(:perf1) { create :performance,
+        let!(:perf1) { create(:performance,
                               title: 'Performance One',
                               location: 'Location One',
-                              start_on: Date.new(2017, 1, 1) }
-        let!(:perf2) { create :performance,
+                              start_on: Date.new(2017, 1, 1)) }
+        let!(:perf2) { create(:performance,
                               title: 'Performance Two',
                               location: nil,
-                              start_on: nil }
-        let!(:perf3) { create :performance,
+                              start_on: nil) }
+        let!(:perf3) { create(:performance,
                               title: 'Performance Three',
                               location: 'Location Three',
-                              start_on: nil }
-        let!(:perf4) { create :performance,
+                              start_on: nil) }
+        let!(:perf4) { create(:performance,
                               title: 'Performance Four',
                               location: nil,
-                              start_on: Date.new(2018, 12, 1) }
+                              start_on: Date.new(2018, 12, 1)) }
 
-        let!(:grant1) { create :grant,
+        let!(:grant1) { create(:grant,
                                title: 'Grant One',
                                wos_agency_name: 'Test Agency',
                                start_date: Date.new(2010, 1, 1),
-                               end_date: Date.new(2010, 5, 1) }
-        let!(:grant2) { create :grant,
+                               end_date: Date.new(2010, 5, 1)) }
+        let!(:grant2) { create(:grant,
                                title: 'Grant Two',
                                wos_agency_name: 'Other Agency',
                                start_date: Date.new(2015, 2, 1),
-                               end_date: Date.new(2016, 1, 1) }
-        let!(:grant3) { create :grant,
+                               end_date: Date.new(2016, 1, 1)) }
+        let!(:grant3) { create(:grant,
                                title: 'Grant Three',
                                agency_name: 'National Science Foundation',
                                start_date: Date.new(2018, 1, 1),
-                               end_date: nil }
+                               end_date: nil) }
 
         before do
-          create :authorship, user: user, publication: pub1
-          create :authorship, user: user, publication: pub2
-          create :authorship, user: user, publication: pub3
-          create :authorship, user: user, publication: pub4
-          create :authorship, user: user, publication: pub5
-          create :authorship, user: user, publication: pub6
+          create(:authorship, user: user, publication: pub1)
+          create(:authorship, user: user, publication: pub2)
+          create(:authorship, user: user, publication: pub3)
+          create(:authorship, user: user, publication: pub4)
+          create(:authorship, user: user, publication: pub5)
+          create(:authorship, user: user, publication: pub6)
 
-          create :presentation_contribution, user: user, presentation: pres1
-          create :presentation_contribution, user: user, presentation: pres2
-          create :presentation_contribution, user: user, presentation: pres3
+          create(:presentation_contribution, user: user, presentation: pres1)
+          create(:presentation_contribution, user: user, presentation: pres2)
+          create(:presentation_contribution, user: user, presentation: pres3)
 
-          create :committee_membership, user: user, etd: etd1, role: 'Committee Member'
-          create :committee_membership, user: user, etd: etd2, role: 'Committee Member'
+          create(:committee_membership, user: user, etd: etd1, role: 'Committee Member')
+          create(:committee_membership, user: user, etd: etd2, role: 'Committee Member')
 
-          create :user_performance, user: user, performance: perf1
-          create :user_performance, user: user, performance: perf2
-          create :user_performance, user: user, performance: perf3
-          create :user_performance, user: user, performance: perf4
+          create(:user_performance, user: user, performance: perf1)
+          create(:user_performance, user: user, performance: perf2)
+          create(:user_performance, user: user, performance: perf3)
+          create(:user_performance, user: user, performance: perf4)
 
-          create :researcher_fund, user: user, grant: grant1
-          create :researcher_fund, user: user, grant: grant2
-          create :researcher_fund, user: user, grant: grant3
+          create(:researcher_fund, user: user, grant: grant1)
+          create(:researcher_fund, user: user, grant: grant2)
+          create(:researcher_fund, user: user, grant: grant3)
 
           get "/v1/users/#{webaccess_id}/profile", headers: headers
         end

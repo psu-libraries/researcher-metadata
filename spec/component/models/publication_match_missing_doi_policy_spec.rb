@@ -4,8 +4,8 @@ require 'component/component_spec_helper'
 
 describe PublicationMatchMissingDoiPolicy do
   let(:policy) { described_class.new publication1, publication2 }
-  let!(:publication1) { create :sample_publication,
-                               doi: nil}
+  let!(:publication1) { create(:sample_publication,
+                               doi: nil)}
   let!(:publication2) do
     Publication.create(publication1
       .attributes

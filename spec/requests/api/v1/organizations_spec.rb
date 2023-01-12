@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'API::V1 Organizations', type: :request do
+describe API::V1::OrganizationsController do
   describe 'GET /v1/organizations' do
     context 'when no authorization header is included in the request' do
       it 'returns 401 Unauthorized' do
@@ -19,15 +19,15 @@ describe 'API::V1 Organizations', type: :request do
     end
 
     context 'when a valid authorization header value is included in the request' do
-      let!(:org1) { create :organization, visible: true }
-      let!(:org2) { create :organization, visible: true }
-      let!(:org3) { create :organization, visible: true }
+      let!(:org1) { create(:organization, visible: true) }
+      let!(:org2) { create(:organization, visible: true) }
+      let!(:org3) { create(:organization, visible: true) }
       let!(:invisible_org) { create(:organization, visible: false) }
-      let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
+      let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
 
       before do
-        create :organization_api_permission, api_token: token, organization: org1
-        create :organization_api_permission, api_token: token, organization: org2
+        create(:organization_api_permission, api_token: token, organization: org1)
+        create(:organization_api_permission, api_token: token, organization: org2)
         get '/v1/organizations', headers: { 'X-API-Key': 'token123' }
       end
 
@@ -51,40 +51,40 @@ describe 'API::V1 Organizations', type: :request do
   end
 
   describe 'GET /v1/organizations/:id/publications' do
-    let!(:user_1) { create :user }
-    let!(:user_2) { create :user }
-    let!(:user_3) { create :user }
-    let!(:pub_1) { create :publication, published_on: Date.new(2000, 1, 1), visible: true }
-    let!(:pub_2) { create :publication, published_on: Date.new(2010, 1, 1), visible: true }
-    let!(:pub_3) { create :publication, published_on: Date.new(2015, 1, 1), visible: true }
-    let!(:invisible_pub) { create :publication, published_on: Date.new(2010, 1, 1), visible: false }
-    let!(:org) { create :organization, visible: true }
-    let!(:child_org) { create :organization, visible: true, parent: org }
-    let!(:inaccessible_org) { create :organization, visible: true }
-    let!(:invisible_org) { create :organization, visible: false }
+    let!(:user_1) { create(:user) }
+    let!(:user_2) { create(:user) }
+    let!(:user_3) { create(:user) }
+    let!(:pub_1) { create(:publication, published_on: Date.new(2000, 1, 1), visible: true) }
+    let!(:pub_2) { create(:publication, published_on: Date.new(2010, 1, 1), visible: true) }
+    let!(:pub_3) { create(:publication, published_on: Date.new(2015, 1, 1), visible: true) }
+    let!(:invisible_pub) { create(:publication, published_on: Date.new(2010, 1, 1), visible: false) }
+    let!(:org) { create(:organization, visible: true) }
+    let!(:child_org) { create(:organization, visible: true, parent: org) }
+    let!(:inaccessible_org) { create(:organization, visible: true) }
+    let!(:invisible_org) { create(:organization, visible: false) }
     let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let!(:token) { create :api_token, token: 'token123', total_requests: 0, last_used_at: nil }
+    let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
 
     before do
-      create :user_organization_membership,
+      create(:user_organization_membership,
              user: user_1,
              organization: org,
-             started_on: Date.new(1990, 1, 1)
-      create :user_organization_membership,
+             started_on: Date.new(1990, 1, 1))
+      create(:user_organization_membership,
              user: user_2,
              organization: org,
-             started_on: Date.new(1980, 1, 1)
-      create :user_organization_membership,
+             started_on: Date.new(1980, 1, 1))
+      create(:user_organization_membership,
              user: user_3,
              organization: child_org,
-             started_on: Date.new(2000, 1, 1)
+             started_on: Date.new(2000, 1, 1))
 
-      create :authorship, user: user_1, publication: pub_1
-      create :authorship, user: user_2, publication: pub_2
-      create :authorship, user: user_2, publication: invisible_pub
-      create :authorship, user: user_3, publication: pub_3
+      create(:authorship, user: user_1, publication: pub_1)
+      create(:authorship, user: user_2, publication: pub_2)
+      create(:authorship, user: user_2, publication: invisible_pub)
+      create(:authorship, user: user_3, publication: pub_3)
 
-      create :organization_api_permission, api_token: token, organization: org
+      create(:organization_api_permission, api_token: token, organization: org)
     end
 
     context 'when no authorization header is included in the request' do

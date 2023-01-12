@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 describe Users::OmniauthCallbacksController, type: :controller do
   let(:oauth_response) { double 'psu oauth response' }
-  let(:user) { build :user }
+  let(:user) { build(:user) }
 
   before do
     OmniAuth.config.test_mode = true

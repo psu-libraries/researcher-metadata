@@ -4,13 +4,13 @@ require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
 describe 'visiting the page to submit an open access waiver for a publication that is not in the database' do
-  let(:user) { create :user }
+  let(:user) { create(:user) }
 
   context 'when the user is not signed in' do
     before { visit new_external_publication_waiver_path }
 
     it 'does not allow them to visit the page' do
-      expect(page).to have_no_current_path new_external_publication_waiver_path, ignore_query: true
+      expect(page).not_to have_current_path new_external_publication_waiver_path, ignore_query: true
     end
   end
 
