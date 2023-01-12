@@ -54,4 +54,3 @@ end
 def current_admin_user
   @current_admin_user ||= create(:user, is_admin: true)
 end
-
