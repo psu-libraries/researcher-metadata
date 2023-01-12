@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2022_08_31_151648) do
+ActiveRecord::Schema.define(version: 2023_01_10_174055) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -42,6 +42,15 @@ ActiveRecord::Schema.define(version: 2022_08_31_151648) do
     t.bigint "blob_id", null: false
     t.string "variation_digest", null: false
     t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "activity_insight_oa_files", force: :cascade do |t|
+    t.string "location"
+    t.string "checksum"
+    t.bigint "publication_id", null: false
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
   end
 
   create_table "api_tokens", force: :cascade do |t|
@@ -645,6 +654,7 @@ ActiveRecord::Schema.define(version: 2022_08_31_151648) do
 
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "activity_insight_oa_files", "publications", name: "activity_insight_oa_files_publication_id_fk", on_delete: :cascade
   add_foreign_key "authorships", "publications", on_delete: :cascade
   add_foreign_key "authorships", "users", on_delete: :cascade
   add_foreign_key "committee_memberships", "etds", on_delete: :cascade

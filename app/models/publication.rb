@@ -90,6 +90,8 @@ class Publication < ApplicationRecord
            source: :publications
   has_many :open_access_locations,
            inverse_of: :publication
+  has_many :activity_insight_oa_files,
+           inverse_of: :publication
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,

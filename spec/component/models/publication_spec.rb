@@ -156,6 +156,7 @@ describe Publication, type: :model do
     it { is_expected.to have_many(:non_duplicate_groups).class_name(:NonDuplicatePublicationGroup).through(:non_duplicate_group_memberships) }
     it { is_expected.to have_many(:non_duplicates).through(:non_duplicate_groups).class_name(:Publication).source(:publications) }
     it { is_expected.to have_many(:open_access_locations).inverse_of(:publication) }
+    it { is_expected.to have_many(:activity_insight_oa_files).inverse_of(:publication) }
 
     it { is_expected.to belong_to(:duplicate_group).class_name(:DuplicatePublicationGroup).optional.inverse_of(:publications) }
     it { is_expected.to belong_to(:journal).optional.inverse_of(:publications) }
@@ -235,6 +236,16 @@ describe Publication, type: :model do
     it "also deletes the publication's open access locations" do
       p.destroy
       expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
+    end
+  end
+
+  describe 'deleting a publication with activity insight oa files' do
+    let(:p) { create(:publication) }
+    let!(:aif) { create(:activity_insight_oa_file, publication: p) }
+
+    it "also deletes the publication's activity insight oa files" do
+      p.destroy
+      expect { aif.reload }.to raise_error ActiveRecord::RecordNotFound
     end
   end
 
