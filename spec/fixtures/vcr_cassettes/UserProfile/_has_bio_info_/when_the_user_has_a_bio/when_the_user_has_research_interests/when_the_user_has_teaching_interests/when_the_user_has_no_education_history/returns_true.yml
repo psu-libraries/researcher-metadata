@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: get
-    uri: https://identity.apps.psu.edu/search-service/resources/people/userid/user41
+    path: https://identity.apps.psu.edu/search-service/resources/people/userid/
     body:
       encoding: US-ASCII
       string: ''
