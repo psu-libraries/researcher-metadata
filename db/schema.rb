@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2023_01_10_174055) do
     t.bigint "publication_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id", unique: true
   end
 
   create_table "api_tokens", force: :cascade do |t|

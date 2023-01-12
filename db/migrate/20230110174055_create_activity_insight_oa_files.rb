@@ -8,6 +8,7 @@ class CreateActivityInsightOaFiles < ActiveRecord::Migration[6.1]
       t.timestamps
     end
 
+    add_index(:activity_insight_oa_files, :publication_id, :unique => true)
     add_foreign_key :activity_insight_oa_files, 
                     :publications, 
                     name: :activity_insight_oa_files_publication_id_fk,
