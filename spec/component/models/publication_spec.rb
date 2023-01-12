@@ -240,8 +240,8 @@ describe Publication, type: :model do
   end
 
   describe 'deleting a publication with activity insight oa files' do
-    let(:p) { create :publication }
-    let!(:aif) { create :activity_insight_oa_file, publication: p }
+    let(:p) { create(:publication) }
+    let!(:aif) { create(:activity_insight_oa_file, publication: p) }
 
     it "also deletes the publication's activity insight oa files" do
       p.destroy
