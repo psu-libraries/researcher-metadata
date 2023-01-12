@@ -37,6 +37,8 @@ gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: 
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
+gem 'lograge'                           # Structured logging for production
+gem 'logstash-event'                    # JSON logging
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
