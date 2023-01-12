@@ -15,7 +15,7 @@ RSpec.describe ActivityInsightOaFile, type: :model do
   it { is_expected.to have_db_index :publication_id }
 
   it_behaves_like 'an application record'
-  
+
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
   end
