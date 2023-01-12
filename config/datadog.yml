@@ -1,9 +1,0 @@
-test:
-  enabled: false
-  env: test
-development:
-  enabled: true
-  env: dev
-production:
-  enabled: true
-  env: production

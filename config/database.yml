@@ -2,12 +2,19 @@ common: &common
   adapter: postgresql
   encoding: unicode
   pool: 5
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>
+  username: <%= ENV.fetch("POSTGRES_USER", Settings.postgres.username ) %>
+  password: <%= ENV.fetch("POSTGRES_PASSWORD", Settings.postgres.password) %>
+  port: <%= ENV.fetch("POSTGRES_PORT", Settings.postgres.port ) %>
+  host: <%= ENV.fetch("POSTGRES_HOST", Settings.postgres.host ) %>
 
 development:
   <<: *common
-  database: psu_research_metadata_development
-
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_development
 test: &test
   <<: *common
-  database: psu_research_metadata_test
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_test
+production: &production
+  <<: *common
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>
 

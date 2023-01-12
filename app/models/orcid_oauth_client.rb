@@ -21,6 +21,6 @@ class OrcidOauthClient
   private
 
     def orcid_config
-      Rails.configuration.x.orcid
+      Settings.orcid
     end
 end

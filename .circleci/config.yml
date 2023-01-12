@@ -44,14 +44,6 @@ jobs:
       - node/install-packages:
           pkg-manager: yarn
           cache-key: "yarn.lock"
-      - run:
-          name: Install secrets config files
-          command: |
-            mv config/activity_insight.yml.ci config/activity_insight.yml
-            mv config/azure_ad_oauth.yml.ci config/azure_ad_oauth.yml
-            mv config/orcid.yml.ci config/orcid.yml
-            mv config/pure.yml.ci config/pure.yml
-            mv config/scholarsphere-client.yml.ci config/scholarsphere-client.yml
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:

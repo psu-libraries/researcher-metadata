@@ -10,12 +10,6 @@ describe ScholarsphereImporter do
     let(:json_data) { fixture_file_open('scholarsphere_dois.json').read }
 
     before do
-      allow(Rails).to receive_message_chain(
-        :application, :config, :x, :scholarsphere, :[]
-      ).with('SS4_ENDPOINT').and_return 'https://scholarsphere.test/api/'
-      allow(Rails).to receive_message_chain(
-        :application, :config, :x, :scholarsphere, :[]
-      ).with('SS_CLIENT_KEY').and_return 'secret_key'
       allow(HTTParty).to receive(:get).with('https://scholarsphere.test/api/dois',
                                             headers: { 'X-API-KEY' => 'secret_key' }).and_return(response)
       allow(ResearcherMetadata::Application).to receive(:scholarsphere_base_uri).and_return 'https://scholarsphere.test'

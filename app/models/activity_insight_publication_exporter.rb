@@ -41,8 +41,8 @@ class ActivityInsightPublicationExporter
 
     def auth
       {
-        username: Rails.application.config_for(:activity_insight)['username'],
-        password: Rails.application.config_for(:activity_insight)['password']
+        username: Settings.activity_insight.username,
+        password: Settings.activity_insight.password
       }
     end
 
