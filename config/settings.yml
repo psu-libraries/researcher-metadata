@@ -19,6 +19,9 @@ datadog:
   enabled: false
   env: dev
 
+delayed_job:
+  upload_queue: scholarsphere-uploads
+
 orcid:
   client_id:
 
