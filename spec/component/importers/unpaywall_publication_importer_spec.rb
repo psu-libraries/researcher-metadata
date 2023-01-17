@@ -34,6 +34,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
+
+        it 'updates the doi verification status on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).to eq true
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -56,6 +61,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the DOI on the publication' do
           importer.import_all
           expect(pub.reload.doi).to be_nil
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).not_to eq true
         end
       end
     end
@@ -88,6 +98,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
+
+        it 'updates the doi verification status on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).to eq true
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -110,6 +125,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the DOI on the publication' do
           importer.import_all
           expect(pub.reload.doi).to eq ''
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).not_to eq true
         end
       end
     end
@@ -458,6 +478,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
+
+        it 'updates the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).to eq true
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -480,6 +505,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the DOI on the publication' do
           importer.import_all
           expect(pub.reload.doi).to be_nil
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).not_to eq true
         end
       end
     end
@@ -512,6 +542,11 @@ describe UnpaywallPublicationImporter, :vcr do
           importer.import_all
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
+
+        it 'updates the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).to eq true
+        end
       end
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
@@ -534,6 +569,11 @@ describe UnpaywallPublicationImporter, :vcr do
         it 'does not update the DOI from Unpaywall to the publication' do
           importer.import_all
           expect(pub.reload.doi).to eq ''
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_all
+          expect(pub.reload.doi_verified).not_to eq true
         end
       end
     end

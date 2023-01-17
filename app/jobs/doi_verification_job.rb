@@ -2,6 +2,6 @@
 
 class DoiVerificationJob
   def perform(publication)
-    DoiVerificationService.new(publication).verify unless publication.doi.blank?
+    DoiVerificationService.new(publication).verify if publication.doi.present?
   end
 end

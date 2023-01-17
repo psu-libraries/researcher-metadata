@@ -61,6 +61,7 @@ class UnpaywallPublicationImporter
         unpaywall_title = unpaywall_result.present? ? unpaywall_result['response']['title'] : ''
         unpaywall_locations = if title_match?(unpaywall_title, publication.title)
                                 publication.doi = DOISanitizer.new(unpaywall_json['results'].first['response']['doi']).url
+                                publication.doi_verified = true
                                 unpaywall_json['results'].first['response']['oa_locations'].presence || []
                               else
                                 []
