@@ -200,6 +200,20 @@ class ActivityInsightImporter
               c.save!
             end
           end
+
+          activity_insight_file_location = pub.postprints.first.location
+          if pub_record.no_open_access_information? && activity_insight_file_location.present?
+            aif = pub_record.activity_insight_oa_files.first
+
+            if aif.present?
+              aif.update location: activity_insight_file_location
+              aif.save!
+            else
+              file = ActivityInsightOaFile.create(location: activity_insight_file_location)
+              pub_record.activity_insight_oa_files << file
+              pub_record.save!
+            end
+          end
         end
       rescue StandardError => e
         log_error(pub, e, u)
@@ -960,6 +974,10 @@ class ActivityInsightPublicationPostprint
     # NOTE: this field is misspelled as "ACCESIBLE" (one S) on the Activity Insight side,
     # so the below misspelling is intentional.
     text_for('ACCESIBLE')
+  end
+
+  def location
+    text_for('DOC')
   end
 
   private
