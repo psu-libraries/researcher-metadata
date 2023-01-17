@@ -1,10 +1,33 @@
 version: 2.1
 orbs:
+  docker: circleci/docker@2.2.0
   ruby: circleci/ruby@1.0
   node: circleci/node@2
   browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
+  publish:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+        user: root
+    steps:
+      - setup_remote_docker:
+          docker_layer_caching: false
+          version: 20.10.18
+      - checkout
+      - docker/check:
+          registry: harbor.k8s.libraries.psu.edu
+      - docker/build:
+          image: library/researcher-metadata
+          registry: harbor.k8s.libraries.psu.edu
+          use-buildkit: true
+          tag: "cache,$CIRCLE_SHA1"
+          extra_build_args: "--target production"
+      - docker/push:
+          image: library/researcher-metadata
+          registry: harbor.k8s.libraries.psu.edu
+          tag: "$CIRCLE_SHA1"
+
   build:
     docker:
       - image: cimg/ruby:3.1.2-node
@@ -38,7 +61,7 @@ jobs:
       - browser-tools/install-chromedriver
       - run:
           name: Remove Cruft
-          command: rm * 
+          command: rm *
       - checkout
       - ruby/install-deps
       - node/install-packages:
@@ -78,6 +101,9 @@ workflows:
   version: 2
   build_and_test:     # The name of our workflow is "build_and_test"
     jobs:             # The list of jobs we run as part of this workflow.
+      - publish:
+          context:
+            - org-global
       - build         # Run build first.
       - test:         # Then run test,
           requires:   # Test requires that build passes for it to run.
