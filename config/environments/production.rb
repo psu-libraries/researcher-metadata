@@ -58,7 +58,7 @@ Rails.application.configure do
   config.log_level = :info
 
   # Prepend all log lines with the following tags.
-  config.log_tags = [:request_id]
+  config.log_tags = [:request_id] if ENV['RAILS_LOG_JSON'].blank?
 
   # Use a different cache store in production.
   # config.cache_store = :mem_cache_store
@@ -93,7 +93,7 @@ Rails.application.configure do
   config.active_support.disallowed_deprecation_warnings = []
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = Logger::Formatter.new
+  config.log_formatter = Logger::Formatter.new unless ENV['RAILS_LOG_TO_STDOUT'].present?
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
@@ -102,7 +102,7 @@ Rails.application.configure do
   if ENV['RAILS_LOG_TO_STDOUT'].present?
     logger           = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
-    config.logger    = ActiveSupport::TaggedLogging.new(logger)
+    config.logger    = logger
   end
 
   # Do not dump schema after migrations.

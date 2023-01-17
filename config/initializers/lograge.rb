@@ -2,8 +2,7 @@
 
 Rails.application.configure do
   config.lograge.enabled = Settings.lograge.enabled
-  config.lograge.formatter = Lograge::Formatters::Logstash.new if Settings.lograge.json
-
+  config.lograge.formatter = Lograge::Formatters::Json.new if Settings.lograge.json
   config.lograge.custom_payload do |controller|
     {
       request_id: controller.request.env['action_dispatch.request_id']
