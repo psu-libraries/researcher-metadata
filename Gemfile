@@ -53,6 +53,7 @@ gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
+gem 'string-similarity'                 # use for string comparison
 gem 'strscan', '~> 3.0.1'               # Must be kept at 3.0 to work with bundler 2.3.8
 gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can be turned into JSON
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
