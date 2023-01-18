@@ -67,14 +67,6 @@ Rails.application.configure do
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "researcher_metadata_production"
 
-  # Mail configuration
-  config.action_mailer.perform_deliveries = Settings.action_mailer.perform_deliveries
-  config.action_mailer.raise_delivery_errors = true
-  config.action_mailer.delivery_method = :smtp
-  config.action_mailer.smtp_settings = { address: Settings.action_mailer.smtp_server, port: Settings.action_mailer.smtp_port }
-  config.action_mailer.default_url_options = { protocol: Settings.action_mailer.default_url_options.protocol, host: Settings.action_mailer.default_url_options.host }
-  config.action_mailer.perform_caching = false
-
   # Ignore bad email addresses and do not raise email delivery errors.
   # Set this to true and configure the email server for immediate delivery to raise delivery errors.
   # config.action_mailer.raise_delivery_errors = false
