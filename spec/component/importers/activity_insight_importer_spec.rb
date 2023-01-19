@@ -4936,6 +4936,7 @@ describe ActivityInsightImporter do
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190707482930').publication
 
+          expect(ActivityInsightOaFile.count).to be 3
           expect(p1.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file.pdf')
           expect(p2.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-3.pdf')
           expect(p3.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-5.pdf')
