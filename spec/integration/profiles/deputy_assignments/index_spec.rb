@@ -52,6 +52,11 @@ describe 'Proxies page', type: :feature do
     end
 
     describe "when link is clicked in confirmed primary's name" do
+      before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(primary_confirmed.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+      end
+
       it "directs user to primary's public profile page" do
         click_link primary_confirmed.name
         expect(page).to have_current_path profile_path(primary_confirmed.webaccess_id)

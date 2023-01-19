@@ -293,6 +293,11 @@ describe User, type: :model do
       let(:user) { create(:user, webaccess_id: 'abc123') }
       let(:uid) { user.webaccess_id }
 
+      before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+      end
+
       it 'returns the matching user' do
         expect(described_class.from_omniauth(auth)).to eq user
       end

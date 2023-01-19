@@ -170,6 +170,11 @@ describe NewDeputyAssignmentForm, type: :model do
     context 'when a User exists for the given webaccess id' do
       let!(:existing_user) { create(:user, webaccess_id: deputy_webaccess_id, first_name: 'Deputy', last_name: 'FromDB') }
 
+      before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(deputy_webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+      end
+
       context 'when everything goes as expected' do
         it 'returns true' do
           expect(form.save).to be true
@@ -250,6 +255,11 @@ describe NewDeputyAssignmentForm, type: :model do
 
     context 'when you try to be your own deputy' do
       let(:deputy_webaccess_id) { primary.webaccess_id }
+
+      before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(deputy_webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+      end
 
       it 'returns false' do
         expect(form.save).to be false
