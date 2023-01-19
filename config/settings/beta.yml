@@ -4,6 +4,7 @@ action_mailer:
   raise_delivery_errors: true
   smtp_server: smtp.psu.edu
   smtp_port: 25
-  default_url_options:
-    host: stage.metadata.libraries.psu.edu
-    protocol: https
+
+default_url_options:
+  host: stage.metadata.libraries.psu.edu
+  protocol: https

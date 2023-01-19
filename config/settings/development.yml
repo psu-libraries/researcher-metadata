@@ -4,6 +4,7 @@ action_mailer:
   raise_delivery_errors: false
   smtp_server: smtp.psu.edu
   smtp_port: 25
-  default_url_options:
-    host: metadata.test
-    protocol: http
+
+default_url_options:
+  host: metadata.test
+  protocol: http
