@@ -6,9 +6,40 @@ orbs:
   browser-tools: circleci/browser-tools@1.4.0
 
 jobs:
+  release:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/researcher-metadata
+      GITHUB_USER: 'psu-stewardship-bot'
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone git@github.com:psu-libraries/researcher-metadata-config.git
+            cd researcher-metadata-config
+            /usr/local/bin/pr-release clusters/prod/manifests/scholarsphere/prod.yaml
+
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Update Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone git@github.com:psu-libraries/researcher-metadata-config.git
+            cd researcher-metadata-config
+            ./bin/generate_app
+
   publish:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
         user: root
     steps:
       - setup_remote_docker:
@@ -108,3 +139,24 @@ workflows:
       - test:         # Then run test,
           requires:   # Test requires that build passes for it to run.
             - build   # Finally, run the build job.
+      - deploy:
+          context: org-global
+          requires:
+          - publish
+          - test
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+      - release:
+          context:
+            - org-global
+          name: "Release"
+          filters:
+            tags:
+              only:
+                - /^v\d+.\d+.\d+.*/
+            branches:
+              ignore:
+                - /.*/
