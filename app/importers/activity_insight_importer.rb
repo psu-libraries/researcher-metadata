@@ -201,7 +201,8 @@ class ActivityInsightImporter
             end
           end
 
-          activity_insight_file_location = pub.postprints.first.location
+          activity_insight_file_location = pub.postprints&.first&.location
+
           if pub_record.no_open_access_information? && activity_insight_file_location.present?
             aif = pub_record.activity_insight_oa_files.first
 

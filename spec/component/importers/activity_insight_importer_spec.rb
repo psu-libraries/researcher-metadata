@@ -4923,4 +4923,69 @@ describe ActivityInsightImporter do
       end
     end
   end
+
+  describe 'importing ActivityInsightOaFiles' do
+    context 'when publications to be imported do not exist in the database' do
+      context 'when no ActivityInsightOaFile exists for publications imported with postprint/open access files' do
+        it 'creates an ActivityInsightOaFile for those publications' do
+          importer.call
+          p1 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '171620739072').publication
+          p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '92747188475').publication
+          p3 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '190707482930').publication
+
+          expect(p1.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file.pdf')
+          expect(p2.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-3.pdf')
+          expect(p3.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-5.pdf')
+        end
+
+        it 'does not import ActivityInsightOaFiles for imported publications without postprint/open access file locations' do
+          importer.call
+          p4 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '271620739072').publication
+
+          expect(p4.activity_insight_oa_files).to eq []
+        end
+      end
+    end
+
+    context 'when a publication to be imported already exists in the database' do
+      let!(:existing_import) { create(:publication_import,
+                                      source: 'Activity Insight',
+                                      source_identifier: '171620739072',
+                                      publication: existing_pub) }
+      let!(:existing_pub) { create(:publication) }
+
+      context 'when the existing publication is already open access' do
+        let(:oal) { create(:open_access_location) }
+
+        before do
+          existing_pub.open_access_locations << oal
+          existing_pub.save!
+        end
+
+        it 'does not import the ActivityInsightOaFile' do
+          importer.call
+
+          expect(existing_pub.activity_insight_oa_files).to eq []
+        end
+      end
+
+      context 'when the existing publication is not open access' do
+        context 'when an ActivityInsightOaFile exists for a publication imported with a postprint/open access file' do
+          let!(:existing_aif) { create(:activity_insight_oa_file,
+                                       publication: existing_pub,
+                                       location: 'abc123/intellcont/some_file.pdf') }
+
+          it 'updates the ActivityInsightOaFile location for that publication' do
+            expect { importer.call }.to(change { existing_aif.reload.location })
+
+            expect(existing_aif.reload.location).to eq('abc123/intellcont/file.pdf')
+          end
+        end
+      end
+    end
+  end
 end
