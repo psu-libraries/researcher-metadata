@@ -33,7 +33,6 @@ module ResearcherMetadata
     # config.time_zone = "Central Time (US & Canada)"
     # config.eager_load_paths << Rails.root.join("extras")
 
-
     # Using delayed_job for async jobs
     config.active_job.queue_adapter = :delayed_job
 
