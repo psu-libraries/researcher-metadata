@@ -8,7 +8,7 @@ describe OpenAccessButtonPublicationImporter do
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       # Tests that the " and ' characters are stripped from title when querying OAB title endpoint
-      let!(:pub) { create(:publication, doi: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'") }
+      let!(:pub) { create(:publication, doi: nil, doi_verified: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'") }
 
       before do
         allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
@@ -27,6 +27,11 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates the publication DOI' do
         importer.import_new
         expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to eq true
       end
     end
 
@@ -50,6 +55,11 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates the publication DOI' do
         importer.import_new
         expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to eq true
       end
     end
 
@@ -232,6 +242,16 @@ describe OpenAccessButtonPublicationImporter do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to eq true
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -249,6 +269,16 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates Open Access Button check timestamp on the publication' do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to eq true
       end
     end
 
