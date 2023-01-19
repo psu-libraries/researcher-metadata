@@ -1,4 +1,3 @@
-
 action_mailer:
   perform_deliveries: true
   delivery_method: smtp
@@ -7,9 +6,5 @@ action_mailer:
   smtp_port: 25
 
 default_url_options:
-  host: metadata.libraries.psu.edu
+  host: stage.metadata.libraries.psu.edu
   protocol: https
-
-lograge:
-  enabled: true
-  json: true
