@@ -295,7 +295,9 @@ describe User, type: :model do
 
       before do
         person = instance_spy(PsuIdentity::SearchService::Person)
-        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+        client = instance_double(PsuIdentity::SearchService::Client)
+        allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(client)
+        allow(client).to receive(:userid).with(user.webaccess_id).and_return(person)
       end
 
       it 'returns the matching user' do
