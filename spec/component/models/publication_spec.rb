@@ -1310,6 +1310,9 @@ describe Publication, type: :model do
 
     let(:visibility) { false }
 
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub1) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub2) }
+
     before do
       create(:authorship,
              publication: pub1,
@@ -1550,6 +1553,15 @@ describe Publication, type: :model do
       end
     end
 
+    it 'transfers all activity insight oa files from publications to the publication' do
+      expect(pub1.activity_insight_oa_files.count).to eq 1
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+      expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                    activity_insight_oa_file2]
+    end
+
     context 'when the given publications include the publication' do
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub1, pub2, pub3, pub4])
@@ -1558,6 +1570,15 @@ describe Publication, type: :model do
                                                     pub2_import1,
                                                     pub2_import2,
                                                     pub3_import1]
+      end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
       end
 
       it 'deletes the given publications except for the publication' do
@@ -1732,6 +1753,13 @@ describe Publication, type: :model do
           rescue RuntimeError; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
 
@@ -1908,6 +1936,15 @@ describe Publication, type: :model do
 
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
       end
     end
 
@@ -2087,6 +2124,15 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
+      end
     end
 
     context 'when two of the given publications are in the same non-duplicate group' do
@@ -2239,6 +2285,13 @@ describe Publication, type: :model do
           rescue Publication::NonDuplicateMerge; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
 
@@ -2395,6 +2448,13 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
+      end
     end
 
     context 'when one of the given publications is in the same non-duplicate group as the publication' do
@@ -2548,6 +2608,13 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
+      end
     end
 
     context 'when all of the publications are in the same non-duplicate group' do
@@ -2700,6 +2767,13 @@ describe Publication, type: :model do
           rescue Publication::NonDuplicateMerge; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
   end
