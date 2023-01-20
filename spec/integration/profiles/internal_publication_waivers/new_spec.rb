@@ -83,7 +83,7 @@ describe 'visiting the page to submit an open access waiver for a publication' d
           open_email('test123@psu.edu')
           expect(current_email).not_to be_nil
           expect(current_email.subject).to match(/PSU Open Access Policy Waiver for Requested Article/i)
-          expect(current_email.body).to match(/Test User/)
+          expect(current_email.body).to match(/Test A Person/)
           expect(current_email.body).to match(/Test Publication/)
           expect(current_email.body).to match(/A Prestegious Journal/)
         end
