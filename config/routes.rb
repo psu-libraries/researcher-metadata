@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/activity_insight_oa_workflow' => 'activity_insight_oa_workflow#index' 
+
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources
   get '/api_docs' => 'public#api_docs', as: :api_docs
