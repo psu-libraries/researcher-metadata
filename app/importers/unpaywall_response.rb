@@ -16,7 +16,7 @@ class UnpaywallResponse
   end
 
   def title
-    json['title']
+    json['title'] || ''
   end
   
   def genre
@@ -79,15 +79,50 @@ class UnpaywallResponse
     json['first_oa_location']
   end
 
-  def oa_locations
-    #if there are any locations present
-      #json['oa_locations'].each do |unpaywall_location_data|
-        #assign data to new open access location object
-        #put object in array
-        #return array
-      #end
-    #end
+  def oa_locations_json
     json['oa_locations']
+  end
+
+  OaLocation = Struct.new(:updated,
+    :url,
+    :url_for_pdf,
+    :url_for_landing_page,
+    :evidence,
+    :license,
+    :version,
+    :host_type,
+    :is_best,
+    :pmh_id,
+    :endpoint_id,
+    :repository_institution,
+    :oa_date)
+
+  def oa_locations
+    oals = []
+    if json['oa_locations'].presence
+      json['oa_locations'].each do |location_data|
+      oal = OaLocation.new(location_data['updated'],
+                           location_data['url'],
+                           location_data['url_for_pdf'],
+                           location_data['url_for_landing_page'],
+                           location_data['evidence'],
+                           location_data['license'],
+                           location_data['version'],
+                           location_data['host_type'],
+                           location_data['is_best'],
+                           location_data['pmh_id'],
+                           location_data['endpoint_id'],
+                           location_data['repository_institution'],
+                           location_data['oa_date'])
+      oals << oal
+        #ruby collect method
+      end
+    end
+    oals
+  end
+
+  def oal_urls
+    oa_locations.presence ? oa_locations.index_by { |l| l['url'] } : {}
   end
   
   def oa_locations_embargoed

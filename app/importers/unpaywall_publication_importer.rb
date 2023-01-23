@@ -54,29 +54,26 @@ class UnpaywallPublicationImporter
 
     def update_publication(publication, unpaywall_response)
       if publication.doi.present?
-        unpaywall_locations = unpaywall_response.oa_locations.presence || []
+        unpaywall_locations = unpaywall_response.oa_locations
+        unpaywall_locations_by_url = unpaywall_response.oal_urls
         existing_doi = true
+      elsif title_match?(unpaywall_response.title, publication.title)
+        publication.doi = DOISanitizer.new(unpaywall_response.doi).url
+        publication.doi_verified = true
+        unpaywall_locations_by_url = unpaywall_response.oal_urls
+        unpaywall_locations = unpaywall_response.oa_locations
       else
-        unpaywall_title = unpaywall_response.present? ? unpaywall_response.title : ''
-        unpaywall_locations = if title_match?(unpaywall_title, publication.title)
-                                publication.doi = DOISanitizer.new(unpaywall_response.doi).url
-                                publication.doi_verified = true
-                                unpaywall_response.oa_locations.presence || []
-                              else
-                                []
-                              end
+        unpaywall_locations_by_url = {}
+        unpaywall_locations = []
       end
 
       existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
 
       existing_locations_by_url = existing_locations.index_by(&:url)
 
- #will need to be updated to handle OAL object, or consider writing oal_url method in unpaywall response     
-      unpaywall_locations_by_url = unpaywall_locations.index_by { |l| l['url'] }
-
       ActiveRecord::Base.transaction do
         unpaywall_locations.each do |unpaywall_location_data|  
-          unpaywall_url = unpaywall_location_data['url']
+          unpaywall_url = unpaywall_location_data.url
           open_access_location = existing_locations_by_url.fetch(unpaywall_url) { build_new_oal(publication, unpaywall_url) }
 
           update_open_access_location(open_access_location, unpaywall_location_data)
@@ -96,28 +93,24 @@ class UnpaywallPublicationImporter
         locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
         locations_to_delete.each(&:destroy)
 
-        publication.open_access_status = if existing_doi
-                                           unpaywall_response.oa_status
-                                         elsif title_match?(unpaywall_title, publication.title)
-                                           unpaywall_response.present? ? unpaywall_response.oa_status : nil
-                                         end
+        publication.open_access_status = unpaywall_response.oa_status if existing_doi || title_match?(unpaywall_response.title, publication.title)
+                                           
         publication.unpaywall_last_checked_at = Time.zone.now
 
         publication.save!
       end
     end
 
-#possibly move to response class?
-    def update_open_access_location(open_access_location, unpaywall_json)
+    def update_open_access_location(open_access_location, unpaywall_location_data)
       open_access_location.assign_attributes(
-        landing_page_url: unpaywall_json['url_for_landing_page'],
-        pdf_url: unpaywall_json['url_for_pdf'],
-        host_type: unpaywall_json['host_type'],
-        is_best: unpaywall_json['is_best'],
-        license: unpaywall_json['license'],
-        oa_date: unpaywall_json['oa_date'],
-        source_updated_at: unpaywall_json['updated'],
-        version: unpaywall_json['version']
+        landing_page_url: unpaywall_location_data.url_for_landing_page,
+        pdf_url: unpaywall_location_data.url_for_pdf,
+        host_type: unpaywall_location_data.host_type,
+        is_best: unpaywall_location_data.is_best,
+        license: unpaywall_location_data.license,
+        oa_date: unpaywall_location_data.oa_date,
+        source_updated_at: unpaywall_location_data.updated,
+        version: unpaywall_location_data.version
       )
     end
 
