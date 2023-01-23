@@ -26,7 +26,7 @@ gem 'daemons'                           # for running delayed_job daemon (or oth
 gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'devise', '~> 4.8'                  # for authentication and user management
-gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
+gem 'exiftool_vendored', '~> 12.55'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories

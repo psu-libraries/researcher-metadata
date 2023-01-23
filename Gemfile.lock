@@ -248,7 +248,7 @@ GEM
     execjs (2.8.1)
     exiftool (1.2.4)
       json
-    exiftool_vendored (12.42.0)
+    exiftool_vendored (12.55.0)
       exiftool (>= 0.7.0)
     factory_bot (6.2.0)
       activesupport (>= 5.0.0)
@@ -691,7 +691,7 @@ DEPENDENCIES
   delayed_job_active_record
   devise (~> 4.8)
   ed25519
-  exiftool_vendored (~> 12.33)
+  exiftool_vendored (~> 12.55)
   factory_bot_rails
   ffaker
   fieldhand (~> 0.12)
