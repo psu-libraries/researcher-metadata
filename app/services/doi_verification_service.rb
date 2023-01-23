@@ -11,19 +11,12 @@ class DoiVerificationService
 
   def verify
     pub_title = publication.title + publication.secondary_title.to_s
-    unpaywall_title = get_unpaywall_data()
+    unpaywall_title = UnpaywallClient.new.query_unpaywall(publication).title
     publication.doi_verified = compare_title(pub_title, unpaywall_title)
     publication.save!
   end
 
   private
-
-  def get_unpaywall_data()
-    doi_url_path = Addressable::URI.encode(publication.doi_url_path)
-    find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"
-    json = JSON.parse(HttpService.get(find_url))
-    json['title']
-  end
 
   def compare_title(pub_title, unpaywall_title)
     title1 = pub_title.delete(" \t\r\n:,'\"").downcase

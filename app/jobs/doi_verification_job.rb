@@ -2,7 +2,10 @@
 
 class DoiVerificationJob
   def perform(publication)
-    DoiVerificationService.new(publication).verify if publication.doi.present?
-    #create new class to fetch doi from unpaywall
+    if publication.doi.present?
+      DoiVerificationService.new(publication).verify
+    else
+      doi = UnpaywallClient.new.query_unpaywall(publication).doi
+      publication.update!(doi: doi, doi_verified: true) if doi.present?
   end
 end

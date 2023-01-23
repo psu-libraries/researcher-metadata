@@ -363,7 +363,7 @@ describe UnpaywallPublicationImporter, :vcr do
             metadata: {
               publication_id: pub.id,
               publication_doi_url_path: pub.doi_url_path,
-              unpaywall_json: ''
+              unpaywall_response: ''
             }
           )
       end
@@ -395,7 +395,7 @@ describe UnpaywallPublicationImporter, :vcr do
           metadata: {
             publication_id: pub.id,
             publication_doi_url_path: pub.doi_url_path,
-            unpaywall_json: ''
+            unpaywall_response: ''
           }
         )
     end
@@ -427,7 +427,7 @@ describe UnpaywallPublicationImporter, :vcr do
           metadata: {
             publication_id: pub.id,
             publication_doi_url_path: pub.doi_url_path,
-            unpaywall_json: anything
+            unpaywall_response: anything
           }
         )
     end

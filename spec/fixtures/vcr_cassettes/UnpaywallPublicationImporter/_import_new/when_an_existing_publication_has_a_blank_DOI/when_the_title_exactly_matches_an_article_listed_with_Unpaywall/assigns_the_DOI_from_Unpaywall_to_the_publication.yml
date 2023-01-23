@@ -23,11 +23,11 @@ http_interactions:
       Server:
       - gunicorn
       Date:
-      - Wed, 05 Oct 2022 15:00:22 GMT
+      - Fri, 20 Jan 2023 16:39:11 GMT
       Content-Type:
       - application/json
       Content-Length:
-      - '1371'
+      - '1370'
       Access-Control-Allow-Origin:
       - "*"
       Access-Control-Allow-Methods:
@@ -40,16 +40,16 @@ http_interactions:
       - 1.1 vegur
     body:
       encoding: ASCII-8BIT
-      string: '{"elapsed_seconds":0.078,"results":[{"response":{"best_oa_location":{"endpoint_id":"arXiv.org","evidence":"oa
-        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},"data_standard":2,"doi":"10.1103/physrevlett.80.3915","doi_url":"https://doi.org/10.1103/physrevlett.80.3915","first_oa_location":{"endpoint_id":"rhmt2yo3ath4ffmgcv4x","evidence":"oa
-        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-07-01","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
-        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-07-13T20:46:26.749306","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"},"genre":"journal-article","has_repository_copy":true,"is_oa":true,"is_paratext":false,"journal_is_in_doaj":false,"journal_is_oa":false,"journal_issn_l":"0031-9007","journal_issns":"0031-9007,1079-7114","journal_name":"Physical
+      string: '{"elapsed_seconds":0.035,"results":[{"response":{"best_oa_location":{"endpoint_id":"arXiv.org","evidence":"oa
+        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},"data_standard":2,"doi":"10.1103/physrevlett.80.3915","doi_url":"https://doi.org/10.1103/physrevlett.80.3915","first_oa_location":{"endpoint_id":"e7ba69c09103a700c9d","evidence":"oa
+        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-08-05","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
+        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-03-03T01:51:21.308943","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"},"genre":"journal-article","has_repository_copy":true,"is_oa":true,"is_paratext":false,"journal_is_in_doaj":false,"journal_is_oa":false,"journal_issn_l":"0031-9007","journal_issns":"0031-9007,1079-7114","journal_name":"Physical
         Review Letters","oa_locations":[{"endpoint_id":"arXiv.org","evidence":"oa
-        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},{"endpoint_id":"rhmt2yo3ath4ffmgcv4x","evidence":"oa
-        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-07-01","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
-        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-07-13T20:46:26.749306","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"}],"oa_locations_embargoed":[],"oa_status":"green","published_date":"1998-05-04","publisher":"American
+        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},{"endpoint_id":"e7ba69c09103a700c9d","evidence":"oa
+        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-08-05","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
+        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-03-03T01:51:21.308943","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"}],"oa_locations_embargoed":[],"oa_status":"green","published_date":"1998-05-04","publisher":"American
         Physical Society (APS)","title":"Stable Characteristic Evolution of Generic
-        Three-Dimensional Single-Black-Hole Spacetimes","updated":"2022-07-16T06:34:55.953766","year":1998,"z_authors":[{"family":"G\u00f3mez","given":"R.","sequence":"first"},{"family":"Lehner","given":"L.","sequence":"additional"},{"family":"Marsa","given":"R.
+        Three-Dimensional Single-Black-Hole Spacetimes","updated":"2022-06-02T04:45:26.720108","year":1998,"z_authors":[{"family":"G\u00f3mez","given":"R.","sequence":"first"},{"family":"Lehner","given":"L.","sequence":"additional"},{"family":"Marsa","given":"R.
         L.","sequence":"additional"},{"family":"Winicour","given":"J.","sequence":"additional"},{"family":"Abrahams","given":"A.
         M.","sequence":"additional"},{"family":"Anderson","given":"A.","sequence":"additional"},{"family":"Anninos","given":"P.","sequence":"additional"},{"family":"Baumgarte","given":"T.
         W.","sequence":"additional"},{"family":"Bishop","given":"N. T.","sequence":"additional"},{"family":"Brandt","given":"S.
@@ -69,5 +69,75 @@ http_interactions:
         <b>Single</b>-<b>Black</b>-<b>Hole</b> <b>Spacetimes</b>"}]}
 
         '
-  recorded_at: Wed, 05 Oct 2022 15:00:22 GMT
+  recorded_at: Fri, 20 Jan 2023 16:39:12 GMT
+- request:
+    method: get
+    uri: https://api.unpaywall.org/v2/search/?email=openaccess@psu.edu&query=Stable%20characteristic%20evolution%20of%20generic%20three-dimensional%20single-black-hole%20spacetimes
+    body:
+      encoding: US-ASCII
+      string: ''
+    headers:
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Connection:
+      - keep-alive
+      Server:
+      - gunicorn
+      Date:
+      - Fri, 20 Jan 2023 16:39:11 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '1370'
+      Access-Control-Allow-Origin:
+      - "*"
+      Access-Control-Allow-Methods:
+      - POST, GET, OPTIONS, PUT, DELETE, PATCH
+      Access-Control-Allow-Headers:
+      - origin, content-type, accept, x-requested-with
+      Vary:
+      - Accept-Encoding
+      Via:
+      - 1.1 vegur
+    body:
+      encoding: ASCII-8BIT
+      string: '{"elapsed_seconds":0.034,"results":[{"response":{"best_oa_location":{"endpoint_id":"arXiv.org","evidence":"oa
+        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},"data_standard":2,"doi":"10.1103/physrevlett.80.3915","doi_url":"https://doi.org/10.1103/physrevlett.80.3915","first_oa_location":{"endpoint_id":"e7ba69c09103a700c9d","evidence":"oa
+        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-08-05","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
+        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-03-03T01:51:21.308943","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"},"genre":"journal-article","has_repository_copy":true,"is_oa":true,"is_paratext":false,"journal_is_in_doaj":false,"journal_is_oa":false,"journal_issn_l":"0031-9007","journal_issns":"0031-9007,1079-7114","journal_name":"Physical
+        Review Letters","oa_locations":[{"endpoint_id":"arXiv.org","evidence":"oa
+        repository (via OAI-PMH doi match)","host_type":"repository","is_best":true,"license":null,"oa_date":null,"pmh_id":"oai:arXiv.org:gr-qc/9801069","repository_institution":"arXiv.org","updated":"2017-10-20T16:41:23.656642","url":"http://arxiv.org/pdf/gr-qc/9801069","url_for_landing_page":"http://arxiv.org/abs/gr-qc/9801069","url_for_pdf":"http://arxiv.org/pdf/gr-qc/9801069","version":"submittedVersion"},{"endpoint_id":"e7ba69c09103a700c9d","evidence":"oa
+        repository (via OAI-PMH title and first author match)","host_type":"repository","is_best":false,"license":null,"oa_date":"2021-08-05","pmh_id":"cdr.lib.unc.edu:n583z396h","repository_institution":"University
+        of North Carolina at Chapel Hill - Carolina Digital Repository","updated":"2022-03-03T01:51:21.308943","url":"https://cdr.lib.unc.edu/downloads/hm50v1675","url_for_landing_page":"https://doi.org/10.17615/qyzk-xf22","url_for_pdf":"https://cdr.lib.unc.edu/downloads/hm50v1675","version":"submittedVersion"}],"oa_locations_embargoed":[],"oa_status":"green","published_date":"1998-05-04","publisher":"American
+        Physical Society (APS)","title":"Stable Characteristic Evolution of Generic
+        Three-Dimensional Single-Black-Hole Spacetimes","updated":"2022-06-02T04:45:26.720108","year":1998,"z_authors":[{"family":"G\u00f3mez","given":"R.","sequence":"first"},{"family":"Lehner","given":"L.","sequence":"additional"},{"family":"Marsa","given":"R.
+        L.","sequence":"additional"},{"family":"Winicour","given":"J.","sequence":"additional"},{"family":"Abrahams","given":"A.
+        M.","sequence":"additional"},{"family":"Anderson","given":"A.","sequence":"additional"},{"family":"Anninos","given":"P.","sequence":"additional"},{"family":"Baumgarte","given":"T.
+        W.","sequence":"additional"},{"family":"Bishop","given":"N. T.","sequence":"additional"},{"family":"Brandt","given":"S.
+        R.","sequence":"additional"},{"family":"Browne","given":"J. C.","sequence":"additional"},{"family":"Camarda","given":"K.","sequence":"additional"},{"family":"Choptuik","given":"M.
+        W.","sequence":"additional"},{"family":"Cook","given":"G. B.","sequence":"additional"},{"family":"Correll","given":"R.","sequence":"additional"},{"family":"Evans","given":"C.
+        R.","sequence":"additional"},{"family":"Finn","given":"L. S.","sequence":"additional"},{"family":"Fox","given":"G.
+        C.","sequence":"additional"},{"family":"Haupt","given":"T.","sequence":"additional"},{"family":"Huq","given":"M.
+        F.","sequence":"additional"},{"family":"Kidder","given":"L. E.","sequence":"additional"},{"family":"Klasky","given":"S.
+        A.","sequence":"additional"},{"family":"Laguna","given":"P.","sequence":"additional"},{"family":"Landry","given":"W.","sequence":"additional"},{"family":"Lenaghan","given":"J.","sequence":"additional"},{"family":"Masso","given":"J.","sequence":"additional"},{"family":"Matzner","given":"R.
+        A.","sequence":"additional"},{"family":"Mitra","given":"S.","sequence":"additional"},{"family":"Papadopoulos","given":"P.","sequence":"additional"},{"family":"Parashar","given":"M.","sequence":"additional"},{"family":"Rezzolla","given":"L.","sequence":"additional"},{"family":"Rupright","given":"M.
+        E.","sequence":"additional"},{"family":"Saied","given":"F.","sequence":"additional"},{"family":"Saylor","given":"P.
+        E.","sequence":"additional"},{"family":"Scheel","given":"M. A.","sequence":"additional"},{"family":"Seidel","given":"E.","sequence":"additional"},{"family":"Shapiro","given":"S.
+        L.","sequence":"additional"},{"family":"Shoemaker","given":"D.","sequence":"additional"},{"family":"Smarr","given":"L.","sequence":"additional"},{"family":"Szil\u00e1gyi","given":"B.","sequence":"additional"},{"family":"Teukolsky","given":"S.
+        A.","sequence":"additional"},{"family":"van Putten","given":"M. H. P. M.","sequence":"additional"},{"family":"Walker","given":"P.","sequence":"additional"},{"family":"York","given":"J.
+        W.","sequence":"additional"}]},"score":0.019493563,"snippet":"<b>Stable</b>
+        <b>Characteristic</b> <b>Evolution</b> of <b>Generic</b> <b>Three</b>-<b>Dimensional</b>
+        <b>Single</b>-<b>Black</b>-<b>Hole</b> <b>Spacetimes</b>"}]}
+
+        '
+  recorded_at: Fri, 20 Jan 2023 16:39:12 GMT
 recorded_with: VCR 6.1.0
