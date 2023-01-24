@@ -487,7 +487,7 @@
         <FULL_TEXT/>
       </INTELLCONT_FILE>
       <POST_FILE id="171620739080">
-        <DOC/>
+        <DOC>abc123/intellcont/file.pdf</DOC>
         <ACCESIBLE>In Progress</ACCESIBLE>
       </POST_FILE>
       <DTM_EXPSUB/>
@@ -738,7 +738,7 @@
       <DESC_INTERNATIONAL/>
       <RESEARCH_PROJECT/>
       <POST_FILE id="171620739081">
-        <DOC/>
+        <DOC>abc123/intellcont/file-3.pdf</DOC>
         <ACCESIBLE>Deposited to ScholarSphere</ACCESIBLE>
       </POST_FILE>
       <POST_FILE id="171620739082">
@@ -902,7 +902,7 @@
       <DESC_INTERNATIONAL/>
       <RESEARCH_PROJECT/>
       <POST_FILE id="271620739081">
-        <DOC/>
+        <DOC>abc123/intellcont/file-5.pdf</DOC>
         <ACCESIBLE>In Progress</ACCESIBLE>
       </POST_FILE>
       <DTM_EXPSUB/>

@@ -5,11 +5,20 @@ module StubbedAuthenticationHelper
   # (pass in the entire user object, not just a username).
 
   def sign_in_as(user)
+    person = instance_double(PsuIdentity::SearchService::Person)
+    allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+    allow(person).to receive(:preferred_given_name).and_return('Test')
+    allow(person).to receive(:preferred_middle_name).and_return('A')
+    allow(person).to receive(:preferred_family_name).and_return('Person')
+    allow(person).to receive(:as_json).and_return({ 'data' => {} })
+
     OmniAuth.config.test_mode = true
-    OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new({
-                                                                       provider: 'azure_oauth',
-                                                                       uid: user.webaccess_id
-                                                                     })
+    OmniAuth.config.mock_auth[:azure_oauth] = OmniAuth::AuthHash.new(
+      {
+        provider: 'azure_oauth',
+        uid: user.webaccess_id
+      }
+    )
   end
 end
 

@@ -1,7 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: "bundler"
-    directory: "/"
+  - package-ecosystem: "docker" 
+    directory: "/" 
     schedule:
       interval: "weekly"
-    vendor: true

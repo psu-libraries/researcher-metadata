@@ -21,6 +21,9 @@ describe 'Creating a new proxy', type: :feature do
 
     context 'when all goes well' do
       before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with('ajk5603').and_return(person) # rubocop:todo RSpec/AnyInstance
+
         fill_in 'new_deputy_assignment_form_deputy_webaccess_id', with: 'ajk5603'
         click_button I18n.t!('helpers.submit.new_deputy_assignment_form.create')
       end
@@ -40,6 +43,9 @@ describe 'Creating a new proxy', type: :feature do
 
     context 'when there is an error' do
       before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with('agw13').and_return(person) # rubocop:todo RSpec/AnyInstance
+
         existing_user = create(:user, webaccess_id: 'agw13')
         _existing_da = create(:deputy_assignment, :active, :confirmed, primary: user, deputy: existing_user)
       end

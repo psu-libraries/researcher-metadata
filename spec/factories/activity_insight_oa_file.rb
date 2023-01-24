@@ -4,6 +4,5 @@ FactoryBot.define do
   factory :activity_insight_oa_file do
     publication
     location { 'abc123/intellcont/test_file.pdf' }
-    checksum { SecureRandom.hex(64) }
   end
 end

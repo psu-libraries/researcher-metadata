@@ -287,7 +287,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'notifies the user by email that the deposit was successful' do
             open_email('xyz123@psu.edu')
-            expect(current_email.body).to match(/Robert Author/)
+            expect(current_email.body).to match(/Test A Person/)
             expect(current_email.body).to match(/Test Publication/)
             expect(current_email.body).to match(/https:\/\/scholarsphere\.test\/the-url/)
           end
@@ -361,7 +361,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
         it 'notifies the user by email that the deposit failed' do
           open_email('xyz123@psu.edu')
-          expect(current_email.body).to match(/Robert Author/)
+          expect(current_email.body).to match(/Test A Person/)
           expect(current_email.body).to match(/Test Publication/)
           expect(current_email.body).to match(/issue uploading/)
         end
