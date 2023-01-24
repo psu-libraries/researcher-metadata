@@ -131,6 +131,8 @@ class Publication < ApplicationRecord
 
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
+  scope :activity_insight_oa_publication, -> { non_oa_publication.joins(:activity_insight_oa_files).where('activity_insight_oa_files.location IS NOT NULL') }
+  scope :needs_doi_checked, -> { activity_insight_oa_publication.where('doi_check = false') }
 
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
