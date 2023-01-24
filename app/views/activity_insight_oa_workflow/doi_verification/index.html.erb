@@ -1,0 +1,33 @@
+<div class="container pt-4 pb-5">
+  <h1 class="pb-3">Publications Requiring DOI Verification</h1>
+  <div class='card'>
+    <table class="table">
+      <thead class='card-header'>
+        <tr>
+          <th>Title</th>
+          <th>DOI</th>
+          <th>DOI Verification Status</th>
+        </tr>
+      </thead>
+      <tbody class='card-body'>
+        <% @publications.each do |p| %>
+          <tr id="<%= dom_id(p) %>">
+            <td><%= p.title.truncate(45) %></td>
+            <td><%= p.doi %></td>
+            <td><%= if p.doi_check == false
+                      'Failed Verification'
+                    else
+                      'Unchecked'
+                    end 
+                    %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+  <div class="container pt-3">
+    <%= @publications.count > 50 ? 
+          "Showing 50 of #{@publications.count} publications" : 
+          "Showing #{@publications.count} of #{@publications.count} publications" %>
+  </div>
+</div>

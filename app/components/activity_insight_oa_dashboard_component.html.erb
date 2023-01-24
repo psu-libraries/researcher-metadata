@@ -1,11 +1,11 @@
 <div class="container">
- <% if needs_doi_check_count.nonzero? %>
-    <%= link_to '/', class: 'card-link' do %>
+ <% if doi_unverified_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
       <div class='card'>
         <div class='card-header'><strong>Check DOIs</strong>
-          <span class='float-right text-large'><strong><%= needs_doi_check_count %></strong></span>
+          <span class='float-right text-large'><strong><%= doi_unverified_count %></strong></span>
         </div>
-        <div class='card-body'>Publications whose Activity Insight Open Access files need manual DOI curation.</div>
+        <div class='card-body'>Publications that require manual DOI curation.</div>
       </div>
     <% end %>
   <% else %>
@@ -13,7 +13,7 @@
       <div class='card-header'><strong>Check DOIs</strong>
         <span class='float-right text-large'>0</strong></span>
       </div>
-      <div class='card-body'>Publications with Activity Insight Open Access files that manual DOI curation.</div>
+      <div class='card-body'>Publications that require manual DOI curation.</div>
     </div>
   <% end %>
 </div>
