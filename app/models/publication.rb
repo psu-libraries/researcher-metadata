@@ -698,6 +698,8 @@ class Publication < ApplicationRecord
         oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
         self.open_access_locations = oalmp.open_access_locations_to_keep
 
+        self.activity_insight_oa_files = all_pubs.map(&:activity_insight_oa_files).flatten
+
         yield if block_given?
 
         pubs_to_delete.each do |p|
