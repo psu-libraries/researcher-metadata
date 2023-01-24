@@ -14,12 +14,14 @@ class DOIVerificationComponent < ViewComponent::Base
       'Failed Verification'
     else
       'Unchecked'
-    end 
+    end
   end
 
   def page_count
-    publications.count > publication_display_limit ? 
-        "Showing #{publication_display_limit} of #{publications.count} publications" : 
-        "Showing #{publications.count} of #{publications.count} publications"
+    if publications.count > publication_display_limit
+      "Showing #{publication_display_limit} of #{publications.count} publications"
+    else
+      "Showing #{publications.count} of #{publications.count} publications"
+    end
   end
 end
