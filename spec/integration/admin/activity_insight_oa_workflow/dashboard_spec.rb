@@ -17,7 +17,7 @@ describe 'Admin Activity Insight Oa Workflow dashboard', type: :feature do
     end
   end
 
-  context 'when the current user is an admin' do
+  context 'when the current user is not an admin' do
     before do
       authenticate_user
       visit activity_insight_oa_workflow_path
