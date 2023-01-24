@@ -1453,15 +1453,16 @@ describe DuplicatePublicationGroup, type: :model do
         context 'when the Activity Insight publication has a verified doi status' do
           it "reassigns the Activity Insight publication's doi verified status to the Pure publication" do
             group.auto_merge
-            expect(pub2.reload.doi_verified).to eq true
+            expect(pub2.reload.doi_verified).to be true
           end
         end
 
         context 'when the Activity Insight publication has an uverified doi status' do
           let(:pub1_doi_verified) { false }
+
           it "does not reassign the Activity Insight publication's doi verified status to the Pure publication" do
             group.auto_merge
-            expect(pub2.reload.doi_verified).to eq nil
+            expect(pub2.reload.doi_verified).to be_nil
           end
         end
       end

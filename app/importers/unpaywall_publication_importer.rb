@@ -72,7 +72,7 @@ class UnpaywallPublicationImporter
       existing_locations_by_url = existing_locations.index_by(&:url)
 
       ActiveRecord::Base.transaction do
-        unpaywall_locations.each do |unpaywall_location_data|  
+        unpaywall_locations.each do |unpaywall_location_data|
           unpaywall_url = unpaywall_location_data.url
           open_access_location = existing_locations_by_url.fetch(unpaywall_url) { build_new_oal(publication, unpaywall_url) }
 
@@ -94,7 +94,7 @@ class UnpaywallPublicationImporter
         locations_to_delete.each(&:destroy)
 
         publication.open_access_status = unpaywall_response.oa_status if existing_doi || title_match?(unpaywall_response.title, publication.title)
-                                           
+
         publication.unpaywall_last_checked_at = Time.zone.now
 
         publication.save!

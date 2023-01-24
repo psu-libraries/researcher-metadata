@@ -10,7 +10,7 @@ class UnpaywallResponse
   def doi
     json['doi']
   end
-  
+
   def doi_url
     json['doi_url']
   end
@@ -18,7 +18,7 @@ class UnpaywallResponse
   def title
     json['title'] || ''
   end
-  
+
   def genre
     json['genre']
   end
@@ -30,7 +30,7 @@ class UnpaywallResponse
   def published_date
     json['published_date']
   end
-  
+
   def year
     json['year']
   end
@@ -46,7 +46,7 @@ class UnpaywallResponse
   def journal_issn_l
     json['journal_issn_l']
   end
-  
+
   def journal_is_oa
     json['journal_is_oa']
   end
@@ -74,7 +74,7 @@ class UnpaywallResponse
   def best_oa_location
     json['best_oa_location']
   end
-  
+
   def first_oa_location
     json['first_oa_location']
   end
@@ -84,38 +84,37 @@ class UnpaywallResponse
   end
 
   OaLocation = Struct.new(:updated,
-    :url,
-    :url_for_pdf,
-    :url_for_landing_page,
-    :evidence,
-    :license,
-    :version,
-    :host_type,
-    :is_best,
-    :pmh_id,
-    :endpoint_id,
-    :repository_institution,
-    :oa_date)
+                          :url,
+                          :url_for_pdf,
+                          :url_for_landing_page,
+                          :evidence,
+                          :license,
+                          :version,
+                          :host_type,
+                          :is_best,
+                          :pmh_id,
+                          :endpoint_id,
+                          :repository_institution,
+                          :oa_date)
 
   def oa_locations
     oals = []
-    if json['oa_locations'].presence
+    if json['oa_locations'].present?
       json['oa_locations'].each do |location_data|
-      oal = OaLocation.new(location_data['updated'],
-                           location_data['url'],
-                           location_data['url_for_pdf'],
-                           location_data['url_for_landing_page'],
-                           location_data['evidence'],
-                           location_data['license'],
-                           location_data['version'],
-                           location_data['host_type'],
-                           location_data['is_best'],
-                           location_data['pmh_id'],
-                           location_data['endpoint_id'],
-                           location_data['repository_institution'],
-                           location_data['oa_date'])
-      oals << oal
-        #ruby collect method
+        oal = OaLocation.new(location_data['updated'],
+                             location_data['url'],
+                             location_data['url_for_pdf'],
+                             location_data['url_for_landing_page'],
+                             location_data['evidence'],
+                             location_data['license'],
+                             location_data['version'],
+                             location_data['host_type'],
+                             location_data['is_best'],
+                             location_data['pmh_id'],
+                             location_data['endpoint_id'],
+                             location_data['repository_institution'],
+                             location_data['oa_date'])
+        oals << oal
       end
     end
     oals
@@ -124,7 +123,7 @@ class UnpaywallResponse
   def oal_urls
     oa_locations.presence ? oa_locations.index_by { |l| l['url'] } : {}
   end
-  
+
   def oa_locations_embargoed
     json['oa_locations_embargoed']
   end
@@ -132,27 +131,12 @@ class UnpaywallResponse
   def updated
     json['updated']
   end
-  
+
   def data_standard
     json['data_standard']
   end
-  
+
   def z_authors
     json['z_authors']
-  end
-
-    #possibly move to response class?
-  def update_open_access_location(open_access_location)
-    open_access_location.assign_attributes(
-      landing_page_url: json['url_for_landing_page'],
-      pdf_url: json['url_for_pdf'],
-      host_type: json['host_type'],
-      is_best: json['is_best'],
-      license: json['license'],
-      oa_date: json['oa_date'],
-      source_updated_at: json['updated'],
-      version: json['version']
-    )
-    open_access_location.save!
   end
 end

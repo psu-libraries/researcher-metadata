@@ -31,7 +31,7 @@ describe OpenAccessButtonPublicationImporter do
 
       it 'updates the publication DOI verification' do
         importer.import_new
-        expect(pub.reload.doi_verified).to eq true
+        expect(pub.reload.doi_verified).to be true
       end
     end
 
@@ -59,7 +59,7 @@ describe OpenAccessButtonPublicationImporter do
 
       it 'updates the publication DOI verification' do
         importer.import_new
-        expect(pub.reload.doi_verified).to eq true
+        expect(pub.reload.doi_verified).to be true
       end
     end
 
@@ -250,7 +250,7 @@ describe OpenAccessButtonPublicationImporter do
 
       it 'updates the publication DOI verification' do
         importer.import_new
-        expect(pub.reload.doi_verified).to eq true
+        expect(pub.reload.doi_verified).to be true
       end
     end
 
@@ -278,7 +278,7 @@ describe OpenAccessButtonPublicationImporter do
 
       it 'updates the publication DOI verification' do
         importer.import_new
-        expect(pub.reload.doi_verified).to eq true
+        expect(pub.reload.doi_verified).to be true
       end
     end
 

@@ -172,8 +172,6 @@ class PublicationMergeOnMatchingPolicy
         true
       elsif publication1.doi_verified == false || publication2.doi_verified == false
         false
-      else
-        nil
       end
     end
 

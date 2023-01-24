@@ -37,7 +37,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates the doi verification status on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).to eq true
+          expect(pub.reload.doi_verified).to be true
         end
       end
 
@@ -65,7 +65,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'does not update the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).not_to eq true
+          expect(pub.reload.doi_verified).not_to be true
         end
       end
     end
@@ -101,7 +101,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates the doi verification status on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).to eq true
+          expect(pub.reload.doi_verified).to be true
         end
       end
 
@@ -129,7 +129,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'does not update the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).not_to eq true
+          expect(pub.reload.doi_verified).not_to be true
         end
       end
     end
@@ -481,7 +481,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).to eq true
+          expect(pub.reload.doi_verified).to be true
         end
       end
 
@@ -509,7 +509,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'does not update the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).not_to eq true
+          expect(pub.reload.doi_verified).not_to be true
         end
       end
     end
@@ -545,7 +545,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'updates the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).to eq true
+          expect(pub.reload.doi_verified).to be true
         end
       end
 
@@ -573,7 +573,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
         it 'does not update the DOI verification on the publication' do
           importer.import_all
-          expect(pub.reload.doi_verified).not_to eq true
+          expect(pub.reload.doi_verified).not_to be true
         end
       end
     end

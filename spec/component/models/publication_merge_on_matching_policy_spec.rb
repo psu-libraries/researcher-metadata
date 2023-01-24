@@ -663,7 +663,7 @@ describe PublicationMergeOnMatchingPolicy do
 
         it 'picks true' do
           policy.merge!
-          expect(publication1.reload.doi_verified).to eq true
+          expect(publication1.reload.doi_verified).to be true
         end
       end
 
@@ -675,7 +675,7 @@ describe PublicationMergeOnMatchingPolicy do
 
         it 'picks false' do
           policy.merge!
-          expect(publication1.reload.doi_verified).to eq false
+          expect(publication1.reload.doi_verified).to be false
         end
       end
 

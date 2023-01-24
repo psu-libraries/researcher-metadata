@@ -96,6 +96,7 @@ Naming/PredicateName:
     - 'app/importers/activity_insight_importer.rb'
     - 'app/models/external_publication_waiver.rb'
     - 'app/models/publication.rb'
+    - 'app/importers/unpaywall_response.rb'
 
 # Offense count: 334
 # Configuration parameters: EnforcedStyle, CheckMethodNames, CheckSymbols, AllowedIdentifiers, AllowedPatterns.
@@ -140,6 +141,7 @@ RSpec/MessageChain:
   Exclude:
     - 'spec/component/controllers/orcid_works_controller_spec.rb'
     - 'spec/component/importers/scholarsphere_importer_spec.rb'
+    - 'spec/component/jobs/doi_verification_job_spec.rb'
 
 # Offense count: 87
 # Configuration parameters: EnforcedStyle.
@@ -155,6 +157,7 @@ RSpec/MessageSpies:
     - 'spec/component/models/orcid_resource_spec.rb'
     - 'spec/component/services/scholarsphere_deposit_service_spec.rb'
     - 'spec/component/models/duplicate_publication_group_spec.rb'
+    - 'spec/component/jobs/doi_verification_job_spec.rb'
 
 # Offense count: 40
 RSpec/MultipleDescribes:
@@ -199,6 +202,7 @@ RSpec/RepeatedExampleGroupDescription:
   Exclude:
     - 'spec/unit/models/activity_insight_education_history_item_spec.rb'
     - 'spec/unit/models/wos_grant_spec.rb'
+    - 'spec/component/importers/unpaywall_client_spec.rb'
 
 # Offense count: 24
 RSpec/ScatteredSetup:
