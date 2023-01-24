@@ -108,4 +108,8 @@ shared_examples_for 'a page with the admin layout' do
   it 'shows a logout link' do
     expect(page).to have_link 'Log out', href: destroy_user_session_path
   end
+
+  it 'shows a link to the Activity Insight Open Access Workflows page' do
+    expect(page).to have_link 'Activity Insight Open Access Workflow'
+  end
 end

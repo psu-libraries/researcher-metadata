@@ -125,4 +125,10 @@ RailsAdmin.config do |config|
   end
 
   config.compact_show_view = false
+
+  # Non-rails-admin links
+  config.navigation_static_label = 'Workflows'
+  config.navigation_static_links = {
+    'Activity Insight Open Access Workflow' => '/activity_insight_oa_workflow'
+  }
 end
