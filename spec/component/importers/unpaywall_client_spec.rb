@@ -7,7 +7,7 @@ describe UnpaywallClient do
                      doi: doi,
                      title: title) }
   let(:doi) { 'https://doi.org/10.1016/s0962-1849(05)80014-9' }
-  let(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
+  let!(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
   let(:client) { described_class.new }
 
   describe '#query_unpaywall' do
@@ -20,6 +20,8 @@ describe UnpaywallClient do
         allow(JSON).to receive(:parse).with(doi_json).and_return('parsed doi json')
         allow(UnpaywallResponse).to receive(:new).with('parsed doi json').and_return(doi_response)
       end
+
+      let(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
       it 'finds Unpaywall data by doi' do
         expect(client.query_unpaywall(pub)).to eq doi_response
@@ -40,6 +42,8 @@ describe UnpaywallClient do
         let(:parsed_title_json) { { 'elapsed_seconds' => 0.083, 'results' => [{ 'response' => { 'doi' => nil, 'title' => 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' } }] } }
         let(:single_response) { { 'doi' => nil, 'title' => 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' } }
         let(:title_response) { instance_double UnpaywallResponse }
+
+        let(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
         it 'returns a single response' do
           expect(client.query_unpaywall(pub)).to eq title_response
@@ -69,6 +73,7 @@ describe UnpaywallClient do
 
     let(:json) { '{"doi" : "10.1016/s0962-1849(05)80014-9", "title" : "Psychotherapy integration and the need for better theories of change: A rejoinder to Alford"}' }
     let(:response) { client.query_unpaywall(pub) }
+    let(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
 
     it 'finds Unpaywall data by doi' do
       expect(response.title).to eq 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford'
