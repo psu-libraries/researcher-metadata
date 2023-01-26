@@ -460,6 +460,45 @@ describe Publication, type: :model do
     end
   end
 
+  describe 'other scopes' do
+    let!(:pub1) { create(:publication,
+                         title: 'pub1')
+    }
+    let!(:pub2) { create(:publication,
+                         title: 'pub2',
+                         doi_verified: false)
+    }
+    let!(:pub3) { create(:publication,
+                         title: 'pub3',
+                         doi_verified: true)
+    }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         doi_verified: nil)
+    }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+
+    describe '.not_open_access' do
+      it 'returns publications that do not have open access information' do
+        expect(described_class.not_open_access.map(&:title)).to match_array [pub1, pub2, pub3, pub4].map(&:title)
+      end
+    end
+
+    describe '.activity_insight_oa_publication' do
+      it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
+        expect(described_class.activity_insight_oa_publication.map(&:title)).to match_array [pub2, pub3, pub4].map(&:title)
+      end
+    end
+
+    describe '.doi_unverified' do
+      it 'returns activity_insight_oa_publications whose doi_verified is either false or nil' do
+        expect(described_class.doi_unverified.map(&:title)).to match_array [pub2, pub4].map(&:title)
+      end
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
