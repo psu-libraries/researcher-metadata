@@ -213,6 +213,7 @@ class ActivityInsightImporter
               file = ActivityInsightOaFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
+              DoiVerificationJob.new.perform(pub_record)
             end
           end
         end

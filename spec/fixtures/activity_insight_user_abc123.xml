@@ -927,5 +927,96 @@
       <RMD_ID/>
       <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
     </INTELLCONT>
+
+    <INTELLCONT id="171620739090" dmd:originalSource="BIBTEX" dmd:created="2018-11-01T14:52:45" dmd:lastModifiedSource="MANUAL" dmd:lastModified="2020-01-20T15:38:27" dmd:startDate="2019-01-01" dmd:endDate="2019-12-31">
+      <CONTYPE>Journal Article, In House</CONTYPE>
+      <CONTYPEOTHER>Journal Article</CONTYPEOTHER>
+      <TITLE>
+        Stable Characteristic Evolution of Generic Three-Dimensional Single-Black-Hole Spacetimes
+      </TITLE>
+      <JOURNAL_NAME>Test Jouranl 2</JOURNAL_NAME>
+      <TITLE_SECONDARY>
+        
+      </TITLE_SECONDARY>
+      <STATUS>Published</STATUS>
+      <REFEREED>Yes</REFEREED>
+      <INTELLCONT_AUTH id="171620739091">
+        <FACULTY_NAME>1649499</FACULTY_NAME>
+        <FNAME>Sally</FNAME>
+        <MNAME/>
+        <LNAME>Testuser</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Primary Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <INTELLCONT_AUTH id="171620739092">
+        <FACULTY_NAME/>
+        <FNAME>B.</FNAME>
+        <MNAME/>
+        <LNAME>Tester</LNAME>
+        <INSTITUTION/>
+        <STATUS/>
+        <ROLE>Author</ROLE>
+        <PERCENT/>
+      </INTELLCONT_AUTH>
+      <AUTHORS_ETAL/>
+      <PUBLISHER/>
+      <PUBCTYST/>
+      <PUBCNTRY/>
+      <VOLUME>7</VOLUME>
+      <ISSUE/>
+      <EDITION/>
+      <PAGENUM/>
+      <PUB_PAGENUM/>
+      <WEB_ADDRESS>https://doi.org/10.1103/physrevlett.80.3915</WEB_ADDRESS>
+      <FORMAT/>
+      <EDITORS/>
+      <ISBNISSN>12345678</ISBNISSN>
+      <PMCID/>
+      <PROCEED_LOCATION/>
+      <ABSTRACT/>
+      <COMMENT/>
+      <CITATION_COUNT/>
+      <CITATION_SOURCE/>
+      <DTM_CITATION/>
+      <DTD_CITATION/>
+      <DTY_CITATION/>
+      <CITATION_START/>
+      <CITATION_END/>
+      <INTELLCONT_COUNTRY id="171620739093">
+        <COUNTRY/>
+      </INTELLCONT_COUNTRY>
+      <DESC_INTERNATIONAL/>
+      <RESEARCH_PROJECT/>
+      <INTELLCONT_FILE id="171620739094">
+        <FULL_TEXT/>
+      </INTELLCONT_FILE>
+      <POST_FILE id="171620739095">
+        <DOC>abc123/intellcont/file-6.pdf</DOC>
+        <ACCESIBLE>In Progress</ACCESIBLE>
+      </POST_FILE>
+      <DTM_EXPSUB/>
+      <DTD_EXPSUB/>
+      <DTY_EXPSUB/>
+      <EXPSUB_START/>
+      <EXPSUB_END/>
+      <DTM_SUB/>
+      <DTD_SUB/>
+      <DTY_SUB/>
+      <SUB_START/>
+      <SUB_END/>
+      <DTM_ACC/>
+      <DTY_ACC/>
+      <ACC_START/>
+      <ACC_END/>
+      <DTM_PUB/>
+      <DTD_PUB/>
+      <DTY_PUB>2019</DTY_PUB>
+      <PUB_START>2019-01-01</PUB_START>
+      <PUB_END>2019-12-31</PUB_END>
+      <RMD_ID/>
+      <USER_REFERENCE_CREATOR>Yes</USER_REFERENCE_CREATOR>
+    </INTELLCONT>
   </Record>
 </Data>
