@@ -15,6 +15,7 @@ describe DoiVerificationService do
   describe '#verify' do
     context 'when the publication title matches exactly' do
       let(:title) { 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford' }
+
       it 'updates the doi verified status in publication record' do
         service.verify
         expect(publication.reload.doi_verified).to be true
