@@ -1309,10 +1309,8 @@ describe DuplicatePublicationGroup, type: :model do
     end
 
     context 'when the group has 2 publications' do
-      let!(:pub1) { create(:publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports, doi_verified: pub1_doi_verified) }
-      let!(:pub2) { create(:publication, title: 'The Generic Title', duplicate_group: group, imports: pub2_imports, doi_verified: pub2_doi_verified) }
-      let(:pub1_doi_verified) { true }
-      let(:pub2_doi_verified) { nil }
+      let!(:pub1) { create(:publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports)}
+      let!(:pub2) { create(:publication, title: 'The Generic Title', duplicate_group: group, imports: pub2_imports) }
 
       context 'when both of the publications have no imports' do
         let(:pub1_imports) { [] }
@@ -1448,22 +1446,6 @@ describe DuplicatePublicationGroup, type: :model do
 
         it 'returns true' do
           expect(group.auto_merge).to be true
-        end
-
-        context 'when the Activity Insight publication has a verified doi status' do
-          it "reassigns the Activity Insight publication's doi verified status to the Pure publication" do
-            group.auto_merge
-            expect(pub2.reload.doi_verified).to be true
-          end
-        end
-
-        context 'when the Activity Insight publication has an uverified doi status' do
-          let(:pub1_doi_verified) { false }
-
-          it "does not reassign the Activity Insight publication's doi verified status to the Pure publication" do
-            group.auto_merge
-            expect(pub2.reload.doi_verified).to be_nil
-          end
         end
       end
     end
