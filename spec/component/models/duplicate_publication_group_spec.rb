@@ -1309,7 +1309,7 @@ describe DuplicatePublicationGroup, type: :model do
     end
 
     context 'when the group has 2 publications' do
-      let!(:pub1) { create(:publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports)}
+      let!(:pub1) { create(:publication, title: 'A Generic Title', duplicate_group: group, imports: pub1_imports) }
       let!(:pub2) { create(:publication, title: 'The Generic Title', duplicate_group: group, imports: pub2_imports) }
 
       context 'when both of the publications have no imports' do
