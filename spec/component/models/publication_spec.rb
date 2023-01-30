@@ -476,9 +476,15 @@ describe Publication, type: :model do
                          title: 'pub4',
                          doi_verified: nil)
     }
+    let!(:pub5) { create(:publication,
+                         title: 'pub4',
+                         doi_verified: nil)
+    }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+
+    let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
     describe '.not_open_access' do
       it 'returns publications that do not have open access information' do
