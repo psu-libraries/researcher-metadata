@@ -653,43 +653,5 @@ describe PublicationMergeOnMatchingPolicy do
         end
       end
     end
-
-    describe 'doi verification merging' do
-      context 'when either is verified' do
-        before do
-          publication1.update doi_verified: nil
-          publication2.update doi_verified: true
-        end
-
-        it 'picks true' do
-          policy.merge!
-          expect(publication1.reload.doi_verified).to be true
-        end
-      end
-
-      context 'when either DOI is unverified' do
-        before do
-          publication1.update doi_verified: nil
-          publication2.update doi_verified: false
-        end
-
-        it 'picks false' do
-          policy.merge!
-          expect(publication1.reload.doi_verified).to be false
-        end
-      end
-
-      context 'when neither DOI has been checked' do
-        before do
-          publication1.update doi_verified: nil
-          publication2.update doi_verified: nil
-        end
-
-        it 'picks nil' do
-          policy.merge!
-          expect(publication1.reload.doi_verified).to be_nil
-        end
-      end
-    end
   end
 end

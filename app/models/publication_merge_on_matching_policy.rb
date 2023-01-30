@@ -41,8 +41,7 @@ class PublicationMergeOnMatchingPolicy
         abstract: longer_value(:abstract),
         authors_et_al: authors_et_al,
         total_scopus_citations: either_value(:total_scopus_citations),
-        doi: doi,
-        doi_verified: doi_verified
+        doi: doi
       }
     end
 
@@ -164,14 +163,6 @@ class PublicationMergeOnMatchingPolicy
         publication1.doi
       else
         publication2.doi
-      end
-    end
-
-    def doi_verified
-      if publication1.doi_verified == true || publication2.doi_verified == true
-        true
-      elsif publication1.doi_verified == false || publication2.doi_verified == false
-        false
       end
     end
 

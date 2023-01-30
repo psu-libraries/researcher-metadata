@@ -698,6 +698,9 @@ class Publication < ApplicationRecord
 
         self.activity_insight_oa_files = all_pubs.map(&:activity_insight_oa_files).flatten
 
+        doi_verified_mp = DoiVerificationMergePolicy.new(all_pubs)
+        self.doi_verified = doi_verified_mp.doi_verification_to_keep
+
         yield if block_given?
 
         pubs_to_delete.each do |p|
