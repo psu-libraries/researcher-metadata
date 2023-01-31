@@ -7,13 +7,15 @@ describe DoiVerificationJob, type: :job do
     let(:publication) { create(:publication,
                                doi: pub_doi,
                                title: pub_title,
-                               doi_verified: nil)}
+                               doi_verified: doi_verified)}
     let(:pub_title) { 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford' }
     let(:pub_doi) { 'https://doi.org/10.1016/S0962-1849(05)80014-9' }
+    let(:doi_verified) { nil }
     let(:job) { described_class.new }
     let(:response) { instance_double(UnpaywallResponse,
                                      title: 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford',
                                      doi: '10.1016/S0962-1849(05)80014-9')}
+    let(:empty_response) { instance_double UnpaywallResponse }
     let(:service) { instance_double DoiVerificationService }
 
     context 'when the publication has a DOI' do
@@ -61,7 +63,10 @@ describe DoiVerificationJob, type: :job do
       end
 
       context "when the publication's doi is not found in Unpaywall" do
-        before { allow(UnpaywallClient.new).to receive(:query_unpaywall).with(publication).and_return('') }
+        before do
+          allow(UnpaywallClient).to receive_message_chain(:new, :query_unpaywall).with(publication).and_return(empty_response)
+          job.perform(publication)
+        end
 
         it 'does not update the publication doi' do
           expect(publication.doi).to be_nil
@@ -70,6 +75,17 @@ describe DoiVerificationJob, type: :job do
         it 'does not update the doi verification' do
           expect(publication.doi_verified).to be_nil
         end
+      end
+    end
+
+    context 'when the publication has already been verified' do
+      let(:doi_verified) { true }
+      let(:pub_title) { 'Psychotherapy integration' }
+
+      before { job.perform(publication) }
+
+      it 'does not update the publication' do
+        expect(publication.doi_verified).to be true
       end
     end
   end

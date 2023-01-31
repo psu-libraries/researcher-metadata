@@ -2,6 +2,8 @@
 
 class DoiVerificationJob
   def perform(publication)
+    return if publication.doi_verified == true
+
     if publication.doi.present?
       DoiVerificationService.new(publication).verify
     else

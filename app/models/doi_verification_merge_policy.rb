@@ -1,24 +1,38 @@
 # frozen_string_literal: true
 
 class DoiVerificationMergePolicy
-  def initialize(publications)
+  def initialize(main_pub, publications)
     @publications = publications
+    @main_pub = main_pub
   end
 
-  def doi_verification_to_keep
+  def merge!
     unverified = nil
-    publications.each do |pub|
-      return true if pub.doi_verified == true
+    verified = nil
+    unverified_doi = nil
 
-      unverified = true if pub.doi_verified == false
+    publications.each do |pub|
+      if pub.doi_verified == true
+        verified = true
+        main_pub.doi = pub.doi
+        main_pub.doi_verified = true
+      end
+
+      if pub.doi_verified == false
+        unverified = true
+        unverified_doi = pub.doi
+      end
     end
 
-    return false if unverified
+    if unverified && !verified
+      main_pub.doi = unverified_doi
+      main_pub.doi_verified = false
+    end
 
-    nil
+    main_pub.save!
   end
 
   private
 
-    attr_accessor :publications
+    attr_accessor :publications, :main_pub
 end

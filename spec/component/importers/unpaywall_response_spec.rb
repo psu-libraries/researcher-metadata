@@ -19,8 +19,18 @@ describe UnpaywallResponse do
   end
 
   describe '#title' do
-    it 'returns title' do
-      expect(response.title).to eq 'Stable Characteristic Evolution of Generic Three-Dimensional Single-Black-Hole Spacetimes'
+    context 'when a title is present' do
+      it 'returns title' do
+        expect(response.title).to eq 'Stable Characteristic Evolution of Generic Three-Dimensional Single-Black-Hole Spacetimes'
+      end
+    end
+
+    context 'when the response is empty' do
+      let(:json) { '' }
+
+      it 'returns an empty string' do
+        expect(response.title).to eq ''
+      end
     end
   end
 

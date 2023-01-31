@@ -90,7 +90,6 @@ class DuplicatePublicationGroup < ApplicationRecord
               i.update!(auto_merged: true)
             end
             pure_pub.merge!([ai_pub])
-            pure_pub.update!(doi_verified: true) if ai_pub.doi_verified == true
             pure_pub.update!(duplicate_group: nil)
             destroy
           end
