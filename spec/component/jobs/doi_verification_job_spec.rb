@@ -15,7 +15,9 @@ describe DoiVerificationJob, type: :job do
     let(:response) { instance_double(UnpaywallResponse,
                                      title: 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford',
                                      doi: '10.1016/S0962-1849(05)80014-9')}
-    let(:empty_response) { instance_double UnpaywallResponse }
+    let(:empty_response) { instance_double(UnpaywallResponse,
+                                           title: '',
+                                           doi: nil)}
     let(:service) { instance_double DoiVerificationService }
 
     context 'when the publication has a DOI' do
