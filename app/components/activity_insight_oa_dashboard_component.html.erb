@@ -3,7 +3,7 @@
     <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
       <div class='card'>
         <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
-          <span class='float-right text-large'><strong><%= doi_unverified_count %></strong></span>
+          <span class='float-right text-large'><strong><%= doi_failed_verification_count %></strong></span>
         </div>
         <div class='card-body'><%= i18n('doi_verification_description') %></div>
       </div>
