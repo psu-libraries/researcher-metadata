@@ -13,7 +13,12 @@
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
-          <td><%= p.title.truncate(45) %></td>
+          <td><%= link_to p.title.truncate(45), 
+                  rails_admin.url_for(action: 'edit', 
+                                      model_name: 'publication', 
+                                      controller: 'rails_admin/main', 
+                                      id: p.id), 
+                  target: '_blank' %></td>
           <td><%= p.doi %></td>
           <td>Failed Verification</td>
         </tr>

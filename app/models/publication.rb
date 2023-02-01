@@ -386,6 +386,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -448,6 +449,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -492,6 +494,12 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
+      field(:doi_verified, :enum) do
+        label 'DOI verified?'
+        enum do
+          [['True', true],['False', false]]
+        end
+      end
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
