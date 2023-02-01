@@ -20,7 +20,7 @@ describe 'Admin DOI Verification dashboard', type: :feature do
       expect(page).to have_text('Title')
       expect(page).to have_text('DOI')
       expect(page).to have_text('DOI Verification Status')
-      expect(page).to have_text(pub1.title)
+      expect(page).to have_link(pub1.title)
       expect(page).to have_text(pub1.doi)
       expect(page).to have_text('Failed Verification')
       expect(page).to have_css('tr').exactly(2).times
@@ -31,6 +31,13 @@ describe 'Admin DOI Verification dashboard', type: :feature do
     it 'redirects to the Oa Workflow Dashboard' do
       click_link '<< Back'
       expect(page).to have_current_path activity_insight_oa_workflow_path
+    end
+  end
+
+  describe 'clicking a link to edit a publication' do
+    it "redirects to that publication's edit page" do
+      click_link pub1.title
+      expect(page).to have_current_path rails_admin.edit_path(model_name: :publication, id: pub1.id)
     end
   end
 end
