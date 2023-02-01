@@ -134,7 +134,7 @@ class Publication < ApplicationRecord
 
   scope :not_open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
   scope :activity_insight_oa_publication, -> { not_open_access.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
-  scope :doi_unverified, -> { activity_insight_oa_publication.where('doi_verified = false OR doi_verified IS NULL') }
+  scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
 
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 

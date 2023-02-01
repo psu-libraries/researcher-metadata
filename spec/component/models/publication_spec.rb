@@ -498,9 +498,9 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.doi_unverified' do
-      it 'returns activity_insight_oa_publications whose doi_verified is either false or nil' do
-        expect(described_class.doi_unverified.map(&:title)).to match_array [pub2, pub4].map(&:title)
+    describe '.doi_failed_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is false' do
+        expect(described_class.doi_failed_verification.map(&:title)).to match_array [pub2].map(&:title)
       end
     end
   end

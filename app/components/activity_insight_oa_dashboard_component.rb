@@ -2,7 +2,7 @@
 
 class ActivityInsightOaDashboardComponent < ViewComponent::Base
   def doi_unverified_count
-    Publication.doi_unverified.count
+    Publication.doi_failed_verification.count
   end
 
   def i18n(key, **options)

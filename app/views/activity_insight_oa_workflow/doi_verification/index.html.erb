@@ -1,5 +1,24 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
   <h1 class="pb-3 pt-2">Publications Requiring DOI Verification</h1>
-  <%= render DOIVerificationComponent.new %>
+  <div class='card'>
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Title</th>
+        <th>DOI</th>
+        <th>DOI Verification Status</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td><%= p.title.truncate(45) %></td>
+          <td><%= p.doi %></td>
+          <td>Failed Verification</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
 </div>

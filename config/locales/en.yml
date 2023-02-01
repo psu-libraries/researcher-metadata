@@ -205,7 +205,7 @@ en:
       pending_as_deputy: wants you to be able to act on their behalf
       accept: Accept
     activity_insight_oa_dashboard_component:
-      doi_verification_title: Check DOIs
+      doi_verification_title: Verify DOIs
       doi_verification_description: Publications that require manual DOI curation or verification.
 
   helpers:
