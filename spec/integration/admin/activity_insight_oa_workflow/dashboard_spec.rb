@@ -3,8 +3,8 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin Activity Insight Oa Workflow dashboard', type: :feature do
-  let!(:aif) { create :activity_insight_oa_file, publication: pub }
-  let!(:pub) { create :publication, doi_verified: false }
+  let!(:aif) { create(:activity_insight_oa_file, publication: pub) }
+  let!(:pub) { create(:publication, doi_verified: false) }
 
   context 'when the current user is an admin' do
     before do

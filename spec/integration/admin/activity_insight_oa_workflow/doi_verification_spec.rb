@@ -3,12 +3,12 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin DOI Verification dashboard', type: :feature do
-  let!(:aif1) { create :activity_insight_oa_file, publication: pub1 }
-  let!(:aif2) { create :activity_insight_oa_file, publication: pub2 }
-  let!(:aif3) { create :activity_insight_oa_file, publication: pub3 }
-  let!(:pub1) { create :publication, doi_verified: false }
-  let!(:pub2) { create :publication, doi_verified: nil }
-  let!(:pub3) { create :publication, doi_verified: true }
+  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1) }
+  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2) }
+  let!(:aif3) { create(:activity_insight_oa_file, publication: pub3) }
+  let!(:pub1) { create(:publication, doi_verified: false) }
+  let!(:pub2) { create(:publication, doi_verified: nil) }
+  let!(:pub3) { create(:publication, doi_verified: true) }
 
   before do
     authenticate_admin_user
@@ -22,14 +22,14 @@ describe 'Admin DOI Verification dashboard', type: :feature do
       expect(page).to have_text('DOI Verification Status')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub1.doi)
-      expect(page).to have_text("Failed Verification")
+      expect(page).to have_text('Failed Verification')
       expect(page).to have_css('tr').exactly(2).times
     end
   end
 
   describe 'clicking "<< Back"' do
     it 'redirects to the Oa Workflow Dashboard' do
-      click_link "<< Back"
+      click_link '<< Back'
       expect(page).to have_current_path activity_insight_oa_workflow_path
     end
   end
