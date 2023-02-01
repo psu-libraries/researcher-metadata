@@ -497,7 +497,7 @@ class Publication < ApplicationRecord
       field(:doi_verified, :enum) do
         label 'DOI verified?'
         enum do
-          [['True', true],['False', false]]
+          [['True', true], ['False', false]]
         end
       end
       field(:open_access_locations)
