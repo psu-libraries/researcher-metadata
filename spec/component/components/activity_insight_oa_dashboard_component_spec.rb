@@ -26,7 +26,7 @@ RSpec.describe ActivityInsightOaDashboardComponent, type: :component do
     it 'renders the doi check card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
       expect(rendered_component).not_to have_css('.text-muted')
-      expect(rendered_component).to have_css('.text-large', text: '2')
+      expect(rendered_component).to have_css('.text-large', text: '1')
       expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/doi_verification')
     end
   end

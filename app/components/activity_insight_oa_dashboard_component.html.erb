@@ -1,5 +1,5 @@
 <div class="container">
-  <% if doi_unverified_count.nonzero? %>
+  <% if doi_failed_verification_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
       <div class='card'>
         <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
