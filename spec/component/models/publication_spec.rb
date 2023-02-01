@@ -2973,4 +2973,20 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#matchable_title' do
+    let(:pub) { create(:publication, title: 'A Sample Title: Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_title).to eq 'asampletitletest'
+    end
+  end
+
+  describe '#matchable_secondary_title' do
+    let(:pub) { create(:publication, secondary_title: 'Secondary Title: A Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
+    end
+  end
 end

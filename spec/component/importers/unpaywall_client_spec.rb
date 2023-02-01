@@ -8,7 +8,7 @@ describe UnpaywallClient do
                      title: title) }
   let(:doi) { 'https://doi.org/10.1016/s0962-1849(05)80014-9' }
   let!(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
-  let(:client) { described_class.new }
+  let(:client) { described_class }
 
   describe '#query_unpaywall' do
     let(:doi_json) { '{"doi" : "10.1016/s0962-1849(05)80014-9", "title" : "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes"}' }
@@ -77,7 +77,7 @@ describe UnpaywallClient do
 
     it 'finds Unpaywall data by doi' do
       expect(response.title).to eq 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford'
-      expect(response.doi).to eq '10.1016/s0962-1849(05)80014-9'
+      expect(response.doi).to eq 'https://doi.org/10.1016/s0962-1849(05)80014-9'
     end
   end
 end

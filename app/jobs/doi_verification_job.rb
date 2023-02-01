@@ -7,9 +7,9 @@ class DoiVerificationJob
     if publication.doi.present?
       DoiVerificationService.new(publication).verify
     else
-      response = UnpaywallClient.new.query_unpaywall(publication)
-      if publication.title&.downcase&.gsub(/[^a-z0-9]/, '') == response.title&.downcase&.gsub(/[^a-z0-9]/, '') && response.doi.present?
-        publication.update!(doi: DOISanitizer.new(response.doi).url, doi_verified: true)
+      response = UnpaywallClient.query_unpaywall(publication)
+      if publication.matchable_title == response.matchable_title && response.doi.present?
+        publication.update!(doi: response.doi, doi_verified: true)
       end
     end
   end

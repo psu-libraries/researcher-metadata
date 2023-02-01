@@ -4,6 +4,7 @@ require 'component/component_spec_helper'
 
 describe ActivityInsightImporter do
   let(:importer) { described_class.new }
+  let(:doi_job) { instance_spy DoiVerificationJob }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
@@ -23,13 +24,7 @@ describe ActivityInsightImporter do
                                                         password: 'secret' }).and_return(
                                                           Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml').read
                                                         )
-    allow(HTTParty).to receive(:get).with('https://api.unpaywall.org/v2/10.1001/amajethics.2019.239?email=openaccess@psu.edu')
-    allow(HTTParty).to receive(:get).with('https://api.unpaywall.org/v2/10.1001/archderm.139.10.1363-g?email=openaccess@psu.edu')
-    allow(HTTParty).to receive(:get).with('https://api.unpaywall.org/v2/10.1186/s40543-020-00345-w?email=openaccess@psu.edu')
-    allow(HTTParty).to receive(:get).with('https://api.unpaywall.org/v2/10.000/existing?email=openaccess@psu.edu')
-    allow(HTTParty).to receive(:get).with('https://api.unpaywall.org/v2/10.1103/physrevlett.80.3915?email=openaccess@psu.edu').and_return(
-      Rails.root.join('spec', 'fixtures', 'unpaywall1.json').read
-    )
+    allow(DoiVerificationJob).to receive(:new).and_return(doi_job)
   end
 
   describe '#call' do
@@ -4916,7 +4911,7 @@ describe ActivityInsightImporter do
           if import == 'Publication'
             expect { importer.call }.to change(ImporterErrorLog, :count).by 6
           else
-            expect { importer.call }.to change(ImporterErrorLog, :count).by 5
+            expect { importer.call }.to change(ImporterErrorLog, :count).by 2
           end
           expect(ImporterErrorLog.first.importer_type).to eq 'ActivityInsightImporter'
           expect(ImporterErrorLog.first.error_type).to eq 'RuntimeError'
@@ -4956,7 +4951,7 @@ describe ActivityInsightImporter do
           importer.call
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739090').publication
-          expect(p4.doi_verified).to be true
+          expect(doi_job).to have_received(:perform).with(p4)
         end
 
         it 'does not import ActivityInsightOaFiles for imported publications without postprint/open access file locations' do

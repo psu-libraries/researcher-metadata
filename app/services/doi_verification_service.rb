@@ -10,8 +10,8 @@ class DoiVerificationService
   end
 
   def verify
-    pub_title = publication.title + publication.secondary_title.to_s
-    unpaywall_title = UnpaywallClient.new.query_unpaywall(publication).title
+    pub_title = publication.matchable_title + publication.matchable_secondary_title
+    unpaywall_title = UnpaywallClient.query_unpaywall(publication).matchable_title
     publication.doi_verified = compare_title(pub_title, unpaywall_title)
     publication.save!
   end
@@ -19,10 +19,8 @@ class DoiVerificationService
   private
 
     def compare_title(pub_title, unpaywall_title)
-      title1 = pub_title.delete(" \t\r\n:,'\"").downcase
-      title2 = unpaywall_title.delete(" \t\r\n:,'\"").downcase
-      distance = String::Similarity.levenshtein_distance(title1, title2)
-      longer_string = [title1.length, title2.length].max
+      distance = String::Similarity.levenshtein_distance(pub_title, unpaywall_title)
+      longer_string = [pub_title.length, unpaywall_title.length].max
       similarity = (longer_string - distance) / longer_string.to_f
       return false unless similarity > 0.7
 

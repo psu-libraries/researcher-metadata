@@ -8,55 +8,15 @@ class UnpaywallResponse
   end
 
   def doi
-    json['doi']
-  end
-
-  def doi_url
-    json['doi_url']
+    DOISanitizer.new(json['doi']).url
   end
 
   def title
     json['title'] || ''
   end
 
-  def genre
-    json['genre']
-  end
-
-  def is_paratext
-    json['is_paratext']
-  end
-
-  def published_date
-    json['published_date']
-  end
-
-  def year
-    json['year']
-  end
-
-  def journal_name
-    json['journal_name']
-  end
-
-  def journal_issns
-    json['journal_issns']
-  end
-
-  def journal_issn_l
-    json['journal_issn_l']
-  end
-
-  def journal_is_oa
-    json['journal_is_oa']
-  end
-
-  def journal_is_in_doaj
-    json['journal_is_in_doaj']
-  end
-
-  def publisher
-    json['publisher']
+  def matchable_title
+    MatchableFormatter.new(title).format
   end
 
   def is_oa
@@ -65,22 +25,6 @@ class UnpaywallResponse
 
   def oa_status
     json['oa_status']
-  end
-
-  def has_repository_copy
-    json['has_repository_copy']
-  end
-
-  def best_oa_location
-    json['best_oa_location']
-  end
-
-  def first_oa_location
-    json['first_oa_location']
-  end
-
-  def oa_locations_json
-    json['oa_locations']
   end
 
   OaLocation = Struct.new(:updated,
@@ -132,11 +76,7 @@ class UnpaywallResponse
     json['updated']
   end
 
-  def data_standard
-    json['data_standard']
-  end
-
-  def z_authors
-    json['z_authors']
+  def to_s
+    json
   end
 end

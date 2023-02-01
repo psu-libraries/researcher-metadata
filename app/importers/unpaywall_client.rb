@@ -1,9 +1,7 @@
 # frozen_string_literal: true
 
 class UnpaywallClient
-  attr_reader :publication
-
-  def query_unpaywall(publication)
+  def self.query_unpaywall(publication)
     if publication.doi.present?
       doi_url_path = Addressable::URI.encode(publication.doi_url_path)
       find_url = "https://api.unpaywall.org/v2/#{doi_url_path}?email=openaccess@psu.edu"

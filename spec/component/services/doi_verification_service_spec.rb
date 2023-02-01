@@ -11,8 +11,11 @@ describe DoiVerificationService do
   let(:title) { 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford' }
   let(:secondary_title) { nil }
   let(:service) { described_class.new(publication) }
+  let(:json) { Rails.root.join('spec', 'fixtures', 'unpaywall2.json').read }
 
   describe '#verify' do
+    before { allow(HttpService).to receive(:get).with('https://api.unpaywall.org/v2/10.1016/S0962-1849(05)80014-9?email=openaccess@psu.edu').and_return(json) }
+
     context 'when the publication title matches exactly' do
       let(:title) { 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford' }
 

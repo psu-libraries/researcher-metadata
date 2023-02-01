@@ -616,6 +616,14 @@ class Publication < ApplicationRecord
     status == PUBLISHED_STATUS
   end
 
+  def matchable_title
+    MatchableFormatter.new(title).format
+  end
+
+  def matchable_secondary_title
+    secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
+  end
+
   def self.filter_by_activity_insight_id(query, activity_insight_id)
     query.joins(:imports)
       .where(publication_imports: {

@@ -34,7 +34,7 @@ class UnpaywallPublicationImporter
     end
 
     def import_from_unpaywall(publication)
-      unpaywall_response = UnpaywallClient.new.query_unpaywall(publication)
+      unpaywall_response = UnpaywallClient.query_unpaywall(publication)
       update_publication(publication, unpaywall_response)
 
       # Unpaywall asks that users limit requests to no more than 100,000 per day.
@@ -53,19 +53,16 @@ class UnpaywallPublicationImporter
     end
 
     def update_publication(publication, unpaywall_response)
-      if publication.doi.present?
-        unpaywall_locations = unpaywall_response.oa_locations
-        unpaywall_locations_by_url = unpaywall_response.oal_urls
-        existing_doi = true
-      elsif title_match?(unpaywall_response.title, publication.title)
-        publication.doi = DOISanitizer.new(unpaywall_response.doi).url
+      existing_doi = true if publication.doi.present?
+
+      if unpaywall_response.matchable_title == publication.matchable_title && !existing_doi
+        publication.doi = unpaywall_response.doi
         publication.doi_verified = true
-        unpaywall_locations_by_url = unpaywall_response.oal_urls
-        unpaywall_locations = unpaywall_response.oa_locations
-      else
-        unpaywall_locations_by_url = {}
-        unpaywall_locations = []
+        title_match = true
       end
+
+      unpaywall_locations = existing_doi || title_match ? unpaywall_response.oa_locations : []
+      unpaywall_locations_by_url = existing_doi || title_match ? unpaywall_response.oal_urls : {}
 
       existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
 
@@ -93,7 +90,7 @@ class UnpaywallPublicationImporter
         locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
         locations_to_delete.each(&:destroy)
 
-        publication.open_access_status = unpaywall_response.oa_status if existing_doi || title_match?(unpaywall_response.title, publication.title)
+        publication.open_access_status = unpaywall_response.oa_status if existing_doi || title_match
 
         publication.unpaywall_last_checked_at = Time.zone.now
 
@@ -116,9 +113,5 @@ class UnpaywallPublicationImporter
 
     def build_new_oal(publication, url)
       publication.open_access_locations.build(source: Source::UNPAYWALL, url: url)
-    end
-
-    def title_match?(title1, title2)
-      title1&.downcase&.gsub(/[^a-z0-9]/, '') == (title2&.downcase&.gsub(/[^a-z0-9]/, ''))
     end
 end
