@@ -1286,9 +1286,9 @@ describe Publication, type: :model do
     let!(:user2) { create(:user) }
     let!(:user3) { create(:user) }
 
-    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility) }
+    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility, doi_verified: nil) }
     let!(:pub2) { create(:publication) }
-    let!(:pub3) { create(:publication) }
+    let!(:pub3) { create(:publication, doi_verified: true) }
     let!(:pub4) { create(:publication) }
 
     let!(:pub1_import1) { create(:publication_import, publication: pub1) }
@@ -1579,6 +1579,11 @@ describe Publication, type: :model do
         expect(pub1.reload.activity_insight_oa_files.count).to eq 2
         expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
                                                                       activity_insight_oa_file2]
+      end
+
+      it 'transfers doi verification from publications to the publication' do
+        pub1.merge!([pub2, pub3, pub4])
+        expect(pub1.reload.doi_verified).to be true
       end
 
       it 'deletes the given publications except for the publication' do
@@ -2966,6 +2971,22 @@ describe Publication, type: :model do
       it 'returns true' do
         expect(pub.publication_type_other?).to be true
       end
+    end
+  end
+
+  describe '#matchable_title' do
+    let(:pub) { create(:publication, title: 'A Sample Title: Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_title).to eq 'asampletitletest'
+    end
+  end
+
+  describe '#matchable_secondary_title' do
+    let(:pub) { create(:publication, secondary_title: 'Secondary Title: A Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
     end
   end
 end

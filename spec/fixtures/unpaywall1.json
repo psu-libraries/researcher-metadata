@@ -1,0 +1,95 @@
+{
+    "best_oa_location": {
+      "endpoint_id": "arXiv.org",
+      "evidence": "oa repository (via OAI-PMH doi match)",
+      "host_type": "repository",
+      "is_best": true,
+      "license": null,
+      "oa_date": null,
+      "pmh_id": "oai:arXiv.org:gr-qc/9801069",
+      "repository_institution": "arXiv.org",
+      "updated": "2017-10-20T16:41:23.656642",
+      "url": "http://arxiv.org/pdf/gr-qc/9801069",
+      "url_for_landing_page": "http://arxiv.org/abs/gr-qc/9801069",
+      "url_for_pdf": "http://arxiv.org/pdf/gr-qc/9801069",
+      "version": "submittedVersion"
+    },
+    "data_standard": 2,
+    "doi": "10.1103/physrevlett.80.3915",
+    "doi_url": "https://doi.org/10.1103/physrevlett.80.3915",
+    "first_oa_location": {
+      "endpoint_id": "e7ba69c09103a700c9d",
+      "evidence": "oa repository (via OAI-PMH title and first author match)",
+      "host_type": "repository",
+      "is_best": false,
+      "license": null,
+      "oa_date": "2021-08-05",
+      "pmh_id": "cdr.lib.unc.edu:n583z396h",
+      "repository_institution": "University of North Carolina at Chapel Hill - Carolina Digital Repository",
+      "updated": "2022-03-03T01:51:21.308943",
+      "url": "https://cdr.lib.unc.edu/downloads/hm50v1675",
+      "url_for_landing_page": "https://doi.org/10.17615/qyzk-xf22",
+      "url_for_pdf": "https://cdr.lib.unc.edu/downloads/hm50v1675",
+      "version": "submittedVersion"
+    },
+    "genre": "journal-article",
+    "has_repository_copy": true,
+    "is_oa": true,
+    "is_paratext": false,
+    "journal_is_in_doaj": false,
+    "journal_is_oa": false,
+    "journal_issn_l": "0031-9007",
+    "journal_issns": "0031-9007,1079-7114",
+    "journal_name": "Physical Review Letters",
+    "oa_locations": [
+      {
+        "endpoint_id": "arXiv.org",
+        "evidence": "oa repository (via OAI-PMH doi match)",
+        "host_type": "repository",
+        "is_best": true,
+        "license": null,
+        "oa_date": null,
+        "pmh_id": "oai:arXiv.org:gr-qc/9801069",
+        "repository_institution": "arXiv.org",
+        "updated": "2017-10-20T16:41:23.656642",
+        "url": "http://arxiv.org/pdf/gr-qc/9801069",
+        "url_for_landing_page": "http://arxiv.org/abs/gr-qc/9801069",
+        "url_for_pdf": "http://arxiv.org/pdf/gr-qc/9801069",
+        "version": "submittedVersion"
+      },
+      {
+        "endpoint_id": "e7ba69c09103a700c9d",
+        "evidence": "oa repository (via OAI-PMH title and first author match)",
+        "host_type": "repository",
+        "is_best": false,
+        "license": null,
+        "oa_date": "2021-08-05",
+        "pmh_id": "cdr.lib.unc.edu:n583z396h",
+        "repository_institution": "University of North Carolina at Chapel Hill - Carolina Digital Repository",
+        "updated": "2022-03-03T01:51:21.308943",
+        "url": "https://cdr.lib.unc.edu/downloads/hm50v1675",
+        "url_for_landing_page": "https://doi.org/10.17615/qyzk-xf22",
+        "url_for_pdf": "https://cdr.lib.unc.edu/downloads/hm50v1675",
+        "version": "submittedVersion"
+      }
+    ],
+    "oa_locations_embargoed": [],
+    "oa_status": "green",
+    "published_date": "1998-05-04",
+    "publisher": "American Physical Society (APS)",
+    "title": "Stable Characteristic Evolution of Generic Three-Dimensional Single-Black-Hole Spacetimes",
+    "updated": "2022-06-02T04:45:26.720108",
+    "year": 1998,
+    "z_authors": [
+      {
+        "family": "Gómez",
+        "given": "R.",
+        "sequence": "first"
+      },
+      {
+        "family": "Lehner",
+        "given": "L.",
+        "sequence": "additional"
+      }
+    ]
+  }

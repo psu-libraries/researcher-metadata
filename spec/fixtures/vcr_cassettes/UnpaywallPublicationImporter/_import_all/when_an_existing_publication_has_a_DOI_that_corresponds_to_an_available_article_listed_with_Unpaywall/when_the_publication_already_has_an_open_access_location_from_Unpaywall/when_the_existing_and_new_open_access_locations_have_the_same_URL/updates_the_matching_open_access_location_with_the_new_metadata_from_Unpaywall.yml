@@ -23,7 +23,7 @@ http_interactions:
       Server:
       - gunicorn
       Date:
-      - Wed, 27 Oct 2021 20:13:15 GMT
+      - Mon, 23 Jan 2023 13:43:34 GMT
       Content-Type:
       - application/json
       Content-Length:
@@ -80,5 +80,5 @@ http_interactions:
         Pennsylvania"}]}, {"given": "Joslyn S.", "family": "Kirby", "sequence": "additional",
         "affiliation": [{"name": "Department of Dermatology, Penn State Milton S.
         Hershey Medical Center, Hershey, Pennsylvania"}]}]}'
-  recorded_at: Wed, 27 Oct 2021 20:13:15 GMT
-recorded_with: VCR 6.0.0
+  recorded_at: Mon, 23 Jan 2023 13:43:35 GMT
+recorded_with: VCR 6.1.0
