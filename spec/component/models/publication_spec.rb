@@ -488,7 +488,7 @@ describe Publication, type: :model do
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations.to match_array [pub1, pub2, pub3, pub4]
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4]
       end
     end
 
