@@ -21,6 +21,9 @@ Rails.application.routes.draw do
   end
 
   get '/activity_insight_oa_workflow' => 'activity_insight_oa_workflow#index'
+  namespace :activity_insight_oa_workflow do
+    get '/doi_verification' => 'doi_verification#index'
+  end
 
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources
