@@ -65,7 +65,7 @@ class Publication < ApplicationRecord
   end
 
   def self.oa_workflow_states
-    [ 'queued for doi' ]
+    ['queued for doi']
   end
 
   has_many :authorships, inverse_of: :publication
