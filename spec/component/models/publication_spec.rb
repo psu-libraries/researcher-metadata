@@ -511,6 +511,12 @@ describe Publication, type: :model do
         expect(described_class.doi_failed_verification).to match_array [pub2]
       end
     end
+
+    describe '.needs_doi_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is nil' do
+        expect(described_class.needs_doi_verification).to match_array [pub4]
+      end
+    end
   end
 
   describe '.find_by_wos_pub' do
