@@ -64,6 +64,10 @@ class Publication < ApplicationRecord
     ['gold', 'hybrid', 'bronze', 'green', 'closed']
   end
 
+  def self.oa_workflow_states
+    ['queued for doi']
+  end
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -107,6 +111,7 @@ class Publication < ApplicationRecord
   validates :status, inclusion: { in: [PUBLISHED_STATUS, IN_PRESS_STATUS] }
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
+  validates :oa_workflow_state, inclusion: { in: oa_workflow_states, allow_nil: true }
 
   validate :doi_format_is_valid
 

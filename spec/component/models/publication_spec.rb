@@ -34,6 +34,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:exported_to_activity_insight).of_type(:boolean) }
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
+  it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -58,6 +59,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_inclusion_of(:status).in_array([Publication::PUBLISHED_STATUS, Publication::IN_PRESS_STATUS]) }
     it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:activity_insight_postprint_status).in_array(described_class.postprint_statuses).allow_nil }
+    it { is_expected.to validate_inclusion_of(:oa_workflow_state).in_array(described_class.oa_workflow_states).allow_nil }
 
     describe 'validating DOI format' do
       let(:pub) { build(:publication, doi: doi) }
@@ -275,6 +277,12 @@ describe Publication, type: :model do
   describe '.open_access_statuses' do
     it 'returns the list of valid values for open access status' do
       expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed']
+    end
+  end
+
+  describe '.oa_workflow_states' do
+    it 'returns the list of valid open access workflow states' do
+      expect(described_class.oa_workflow_states).to eq ['queued for doi']
     end
   end
 
