@@ -137,6 +137,10 @@ class Publication < ApplicationRecord
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
+  scope :with_no_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
+  scope :activity_insight_oa_publication, -> { with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
+
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
@@ -387,6 +391,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -449,6 +454,7 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -493,6 +499,12 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
+      field(:doi_verified, :enum) do
+        label 'DOI verified?'
+        enum do
+          [['True', true], ['False', false]]
+        end
+      end
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -621,6 +633,14 @@ class Publication < ApplicationRecord
     status == PUBLISHED_STATUS
   end
 
+  def matchable_title
+    MatchableFormatter.new(title).format
+  end
+
+  def matchable_secondary_title
+    secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
+  end
+
   def self.filter_by_activity_insight_id(query, activity_insight_id)
     query.joins(:imports)
       .where(publication_imports: {
@@ -704,6 +724,8 @@ class Publication < ApplicationRecord
         self.activity_insight_oa_files = all_pubs.map(&:activity_insight_oa_files).flatten
 
         yield if block_given?
+
+        DoiVerificationMergePolicy.new(self, all_pubs).merge!
 
         pubs_to_delete.each do |p|
           p.non_duplicate_groups.each do |ndg|

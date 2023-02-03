@@ -468,6 +468,51 @@ describe Publication, type: :model do
     end
   end
 
+  describe 'other scopes' do
+    let!(:pub1) { create(:publication,
+                         title: 'pub1')
+    }
+    let!(:pub2) { create(:publication,
+                         title: 'pub2',
+                         doi_verified: false)
+    }
+    let!(:pub3) { create(:publication,
+                         title: 'pub3',
+                         doi_verified: true)
+    }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         doi_verified: nil)
+    }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         doi_verified: nil)
+    }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+
+    let!(:open_access_location) { create(:open_access_location, publication: pub5) }
+
+    describe '.with_no_oa_locations' do
+      it 'returns publications that do not have open access information' do
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4]
+      end
+    end
+
+    describe '.activity_insight_oa_publication' do
+      it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
+        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4]
+      end
+    end
+
+    describe '.doi_failed_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is false' do
+        expect(described_class.doi_failed_verification).to match_array [pub2]
+      end
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
@@ -1294,9 +1339,9 @@ describe Publication, type: :model do
     let!(:user2) { create(:user) }
     let!(:user3) { create(:user) }
 
-    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility) }
+    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility, doi_verified: nil) }
     let!(:pub2) { create(:publication) }
-    let!(:pub3) { create(:publication) }
+    let!(:pub3) { create(:publication, doi_verified: true) }
     let!(:pub4) { create(:publication) }
 
     let!(:pub1_import1) { create(:publication_import, publication: pub1) }
@@ -1587,6 +1632,11 @@ describe Publication, type: :model do
         expect(pub1.reload.activity_insight_oa_files.count).to eq 2
         expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
                                                                       activity_insight_oa_file2]
+      end
+
+      it 'transfers doi verification from publications to the publication' do
+        pub1.merge!([pub2, pub3, pub4])
+        expect(pub1.reload.doi_verified).to be true
       end
 
       it 'deletes the given publications except for the publication' do
@@ -2974,6 +3024,22 @@ describe Publication, type: :model do
       it 'returns true' do
         expect(pub.publication_type_other?).to be true
       end
+    end
+  end
+
+  describe '#matchable_title' do
+    let(:pub) { create(:publication, title: 'A Sample Title: Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_title).to eq 'asampletitletest'
+    end
+  end
+
+  describe '#matchable_secondary_title' do
+    let(:pub) { create(:publication, secondary_title: 'Secondary Title: A Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
     end
   end
 end

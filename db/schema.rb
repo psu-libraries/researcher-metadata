@@ -480,6 +480,7 @@ ActiveRecord::Schema.define(version: 2023_02_02_152224) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
+
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
