@@ -36,16 +36,16 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    extra_params = { journal: publication&.journal&.title }
-    exif_uploads = ScholarsphereExifUploads.new(deposit_params.merge(extra_params))
+    extra_params = { journal: publication&.journal&.title, publication: publication }
+    file_version_uploads = ScholarsphereFileVersionUploads.new(deposit_params.merge(extra_params))
 
-    if exif_uploads.valid?
-      @cache_files = exif_uploads.cache_files
-      @file_version = exif_uploads.version
-      @file_version_display = exif_uploads.version_display
+    if file_version_uploads.valid?
+      @cache_files = file_version_uploads.cache_files
+      @file_version = file_version_uploads.version
+      @file_version_display = file_version_uploads.version_display
       render :scholarsphere_file_version
     else
-      flash.now[:alert] = "Validation failed:  #{exif_uploads.errors.full_messages.join(', ')}"
+      flash.now[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
       render :edit
     end
   rescue ActionController::ParameterMissing

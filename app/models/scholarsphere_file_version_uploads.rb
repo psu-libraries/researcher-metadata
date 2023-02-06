@@ -1,37 +1,48 @@
 # frozen_string_literal: true
 
-class ScholarsphereExifUploads
+class ScholarsphereFileVersionUploads
   include ActiveModel::Model
 
-  attr_accessor :journal
+  attr_accessor :journal, :publication
 
   validate :at_least_one_file_upload
 
   def initialize(attributes = {})
     @journal = attributes[:journal]
+    @publication = attributes[:publication]
 
     super
   end
 
   def file_uploads_attributes=(attributes)
     @exif_file_versions ||= []
+    @pdf_file_versions ||= []
     @file_uploads ||= []
 
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
       if file.present?
         @exif_file_versions.push(ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal))
+        
+        if @exif_file_versions.empty?
+          @pdf_file_versions.push(ScholarspherePdfFileVersion.new(file_path: file.path,
+                                                                  filename: file.original_filename,
+                                                                  publication: publication))
+        end
+
         @file_uploads.push(file)
       end
     end
   end
 
   def version
-    @exif_file_versions.map do |exif|
-      return exif.version if exif.version == I18n.t('file_versions.accepted_version')
+    all_file_versions = @exif_file_versions + @pdf_file_versions
+
+    all_file_versions.map do |file_version|
+      return file_version.version if file_version.version == I18n.t('file_versions.accepted_version')
 
       # Either Published Version or nil
-      exif.version
+      file_version.version
     end.compact.uniq.first
   end
 

@@ -452,9 +452,9 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when is not open access' do
         let(:pub_id) { pub.id }
         let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
-        let(:exif_params) { { file_uploads_attributes: { '0' => { file: file, journal: nil } } } }
-        let(:exif_uploads) { ScholarsphereExifUploads.new(exif_params) }
-        let(:cache_files)  { exif_uploads.cache_files }
+        let(:file_version_params) { { file_uploads_attributes: { '0' => { file: file, journal: nil } } } }
+        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(file_version_params) }
+        let(:cache_files)  { file_version_uploads.cache_files }
         let(:cache_path) { cache_files.first[:cache_path] }
         let(:params) { { id: pub_id, filename: cache_path } }
 
@@ -560,13 +560,13 @@ describe OpenAccessPublicationsController, type: :controller do
             }
           }
         }
-        let(:exif_params) {
+        let(:file_version_params) {
           {
             file_uploads_attributes: { '0' => { file: file, journal: nil } }
           }
         }
-        let(:exif_uploads) { ScholarsphereExifUploads.new(exif_params) }
-        let(:cache_files)  { exif_uploads.cache_files }
+        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(file_version_params) }
+        let(:cache_files) { file_version_uploads.cache_files }
         let(:cache_path) do
           return nil if cache_files.empty?
 

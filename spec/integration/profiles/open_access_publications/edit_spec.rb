@@ -153,7 +153,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
       describe 'file upload and version check' do
         context 'when acceptedVersion is found' do
           it 'preselects Accepted Manuscript' do
-            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.accepted_version'))
+            allow_any_instance_of(ScholarsphereFileVersionUploads).to receive(:version).and_return(I18n.t('file_versions.accepted_version'))
             attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
             click_on 'Submit Files'
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
@@ -163,7 +163,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
         context 'when publishedVersion is found' do
           it 'preselects Final Published Version' do
-            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.published_version'))
+            allow_any_instance_of(ScholarsphereFileVersionUploads).to receive(:version).and_return(I18n.t('file_versions.published_version'))
             attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
             click_on 'Submit Files'
             expect(page).to have_content('This looks like the Final Published Version of the article.')
