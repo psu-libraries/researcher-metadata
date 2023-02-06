@@ -3,12 +3,13 @@
 require 'pdf-reader'
 
 class ScholarspherePdfFileVersion
-  attr_accessor :file_path, :filename, :publication, :content
+  attr_accessor :file_path, :filename, :publication_meta, :content
 
-  def initialize(file_path:, filename:, publication:)
-    @file_path = file_path
-    @filename = filename
-    @publication = publication
+  def initialize(file_meta:, publication_meta:)
+    @file_meta = file_meta
+    @file_path = file_meta_parsed['cache_path'].to_s
+    @filename = file_meta_parsed['original_filename']
+    @publication_meta = publication_meta
     @content = process_content
   end
 
@@ -19,27 +20,28 @@ class ScholarspherePdfFileVersion
       I18n.t('file_versions.published_version')
     elsif @score.negative?
       I18n.t('file_versions.accepted_version')
+    else
+      'unknown'
     end
   end
 
   private
 
+    def file_meta_parsed
+      JSON.parse @file_meta
+    end
+
     def process_content
       reader = PDF::Reader.new(file_path)
-      words = reader.pages.map { |page| page.text.split.first(500).flatten }
-      words.join(' ')
-    end
+      words = []
 
-    def publication_title
-      publication&.title
-    end
+      reader.pages.each do |page|
+        break if words.count >= 500
 
-    def publication_meta
-      {
-        year: publication&.year,
-        doi: publication&.doi
-        # TODO: publisher: publication&.publisher
-      }
+        words << page.text.split.first(500)
+        words.flatten!
+      end
+      words.flatten.join(' ')
     end
 
     def calculate_score
@@ -87,14 +89,14 @@ class ScholarspherePdfFileVersion
         if where_to_search == 'file'
           content.include?(what_to_search)
         else
-          publication_title&.include?(what_to_search) || filename&.include?(what_to_search)
+          publication_meta[:title]&.include?(what_to_search) || filename&.include?(what_to_search)
         end
       else
         re = Regexp.new(what_to_search, 'gium')
         if where_to_search == 'file'
           content.downcase.match?(re)
         else
-          publication_title&.match?(re) || filename&.match?(re)
+          publication_meta[:title]&.match?(re) || filename&.match?(re)
         end
       end
     end

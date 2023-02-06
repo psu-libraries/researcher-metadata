@@ -3,7 +3,7 @@
 class ScholarsphereFileVersionUploads
   include ActiveModel::Model
 
-  attr_accessor :journal, :publication
+  attr_accessor :journal, :publication, :exif_file_versions
 
   validate :at_least_one_file_upload
 
@@ -16,42 +16,25 @@ class ScholarsphereFileVersionUploads
 
   def file_uploads_attributes=(attributes)
     @exif_file_versions ||= []
-    @pdf_file_versions ||= []
     @file_uploads ||= []
 
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
       if file.present?
-        @exif_file_versions.push(ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal))
-        
-        if @exif_file_versions.empty?
-          @pdf_file_versions.push(ScholarspherePdfFileVersion.new(file_path: file.path,
-                                                                  filename: file.original_filename,
-                                                                  publication: publication))
-        end
-
+        exif_file_version = ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal).version
+        @exif_file_versions.push(exif_file_version)
         @file_uploads.push(file)
       end
     end
   end
 
-  def version
-    all_file_versions = @exif_file_versions + @pdf_file_versions
-
-    all_file_versions.map do |file_version|
-      return file_version.version if file_version.version == I18n.t('file_versions.accepted_version')
+  def self.version(file_versions)
+    file_versions.map do |file_version|
+      return file_version if file_version == I18n.t('file_versions.accepted_version')
 
       # Either Published Version or nil
-      file_version.version
+      file_version
     end.compact.uniq.first
-  end
-
-  def version_display
-    if version == I18n.t('file_versions.accepted_version')
-      I18n.t('file_versions.accepted_version_display')
-    elsif version == I18n.t('file_versions.published_version')
-      I18n.t('file_versions.published_version_display')
-    end
   end
 
   def cache_files

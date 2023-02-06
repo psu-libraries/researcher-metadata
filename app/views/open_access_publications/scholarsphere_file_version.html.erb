@@ -1,31 +1,7 @@
-<div class="container">
-  <div class="row">
-    <% if @file_version.nil? %>
-        <p>We have not been able to determine automatically which version of the article this is. Please
-         select the correct article version so we can fetch the sharing rules for the article.</p>
-    <% else %>
-        <p>This looks like the <strong><%= @file_version_display %></strong> of the article.
-         Please update the correct article version if this is not the correct article version
-        so we can fetch the sharing rules for the article.</p>
-    <% end %>
-
-    <%= form_for :scholarsphere_work_deposit, url: scholarsphere_deposit_form_path, method: :post do |f| %>
-    <% @cache_files.each_with_index do |file, key| %>
-      <%= f.hidden_field "cache_files[#{key}][original_filename]", value: file[:original_filename] %>
-      <%= f.hidden_field "cache_files[#{key}][cache_path]", value: file[:cache_path] %>
-    <% end %>
-      <div class='form-group'>
-        <div class="form-check">
-            <%= f.radio_button :file_version, I18n.t('file_versions.accepted_version'), class: 'form-check-input', checked: @file_version == I18n.t('file_versions.accepted_version'), required: true %>
-            <%= f.label :file_version, I18n.t('file_versions.accepted_version_display'), class: 'form-check-label' %>
-        </div>
-        <div class="form-check">
-            <%= f.radio_button :file_version, I18n.t('file_versions.published_version'), class: 'form-check-input', checked: @file_version == I18n.t('file_versions.published_version') %>
-            <%= f.label :file_version, I18n.t('file_versions.published_version_display'), class: 'form-check-label' %>
-        </div>
-      </div>
-
-      <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
-    <% end %>
-    </div>
+<div id="file_version_result" data-target="<%= file_version_result_path({ job_ids: @job_ids }) %>">
+  <p>
+    <span class="spinner-border" role="status">
+      <span class="sr-only">Loading...</span>
+    </span> Attempting to determine file version, please wait...
+  </p>
 </div>

@@ -36,14 +36,26 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
+    file_version = nil
     extra_params = { journal: publication&.journal&.title, publication: publication }
     file_version_uploads = ScholarsphereFileVersionUploads.new(deposit_params.merge(extra_params))
+    @job_ids ||= []
 
     if file_version_uploads.valid?
       @cache_files = file_version_uploads.cache_files
-      @file_version = file_version_uploads.version
-      @file_version_display = file_version_uploads.version_display
-      render :scholarsphere_file_version
+      exif_versions = file_version_uploads.exif_file_versions.compact
+      file_version = ScholarsphereFileVersionUploads.version(exif_versions) if exif_versions.present?
+
+      if file_version == I18n.t('file_versions.published_version')
+        render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version, cache_files: @cache_files }
+      else
+        @cache_files.each do |cache_file|
+          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_meta: cache_file.to_json, publication_meta: version_check_pub_meta, exif_file_version: file_version)
+          @job_ids.push(file_version_job.job_id)
+        end
+
+        render :scholarsphere_file_version
+      end
     else
       flash.now[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
       render :edit
@@ -55,6 +67,48 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
     @deposit.file_uploads.build
     render :edit
+  end
+
+  def file_version_result
+    job_ids = params[:job_ids]
+    pdf_file_versions = []
+    exif_file_versions = []
+    @cache_files = []
+    @file_version = nil
+
+    # Remove failed Delayed::Job and log an error
+    job_ids&.reject! do |job_id|
+      if Delayed::Job.exists?(job_id)
+        job = Delayed::Job.find(job_id)
+        if job.failed_at.nil?
+          false
+        else
+          job.destroy
+          Rails.logger.error "Job with ID #{job_id} failed and has been removed"
+          true
+        end
+      else
+        false
+      end
+    end
+
+    job_ids&.each do |job_id|
+      cached_data = Rails.cache.read("file_version_job_#{job_id}")
+      if !cached_data.nil?
+        pdf_file_versions << cached_data[:pdf_file_version]
+        exif_file_versions << cached_data[:exif_file_version]
+        @cache_files << JSON.parse(cached_data[:file_meta])
+      end
+    end
+
+    if pdf_file_versions.compact.count == job_ids&.count
+      file_versions = pdf_file_versions + exif_file_versions
+      @file_version = ScholarsphereFileVersionUploads.version(file_versions)
+
+      render partial: 'open_access_publications/file_version_result', locals: { file_version: @file_version, cache_files: @cache_files }
+    else
+      head :no_content
+    end
   end
 
   def file_serve
@@ -138,7 +192,17 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :publisher,
                                                          :file_version,
                                                          :journal,
+                                                         :job_ids,
                                                          cache_files: [:cache_path, :original_filename],
                                                          file_uploads_attributes: [:file, :file_cache])
+    end
+
+    def version_check_pub_meta
+      {
+        title: publication&.title,
+        year: publication&.year,
+        doi: publication&.doi,
+        publisher: publication&.preferred_publisher_name
+      }
     end
 end
