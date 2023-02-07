@@ -203,6 +203,7 @@ RSpec/RepeatedExampleGroupDescription:
     - 'spec/unit/models/activity_insight_education_history_item_spec.rb'
     - 'spec/unit/models/wos_grant_spec.rb'
     - 'spec/component/importers/unpaywall_client_spec.rb'
+    - 'spec/component/importers/oab_client_spec.rb'
 
 # Offense count: 24
 RSpec/ScatteredSetup:
