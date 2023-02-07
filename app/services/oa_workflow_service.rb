@@ -9,6 +9,7 @@ class OaWorkflowService
     rescue StandardError
       pub.doi_verified = false
       pub.save!
+      raise
     end
   end
 end
