@@ -664,6 +664,33 @@ class Publication < ApplicationRecord
     query.where(doi: doi).uniq
   end
 
+  def update_from_unpaywall(unpaywall_response)
+    existing_doi = true if doi.present?
+
+    if unpaywall_response.matchable_title == matchable_title && !existing_doi
+      self.doi = unpaywall_response.doi
+      self.doi_verified = true
+      title_match = true
+    end
+
+    unpaywall_locations = existing_doi || title_match ? unpaywall_response.oa_locations : []
+    unpaywall_locations_by_url = existing_doi || title_match ? unpaywall_response.oal_urls : {}
+    existing_locations = open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
+
+    ActiveRecord::Base.transaction do
+      locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
+      locations_to_delete.each(&:destroy)
+
+      self.open_access_status = unpaywall_response.oa_status if existing_doi || title_match
+
+      self.unpaywall_last_checked_at = Time.zone.now
+
+      save!
+
+      OpenAccessLocation.create_from_unpaywall(unpaywall_locations, self)
+    end
+  end
+
   private
 
     def merge(publications_to_merge)
