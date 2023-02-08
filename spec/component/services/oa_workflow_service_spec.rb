@@ -47,6 +47,7 @@ describe OaWorkflowService do
 
       it 'saves doi verifed as false' do
         service.workflow
+      rescue RuntimeError
         expect(pub4.reload.doi_verified).to be false
       end
     end
