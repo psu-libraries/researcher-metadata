@@ -282,7 +282,7 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['queued for doi']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending']
     end
   end
 
@@ -482,7 +482,8 @@ describe Publication, type: :model do
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
-                         doi_verified: nil)
+                         doi_verified: nil,
+                         oa_workflow_state: nil)
     }
     let!(:pub5) { create(:publication,
                          title: 'pub5',
@@ -509,6 +510,12 @@ describe Publication, type: :model do
     describe '.doi_failed_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is false' do
         expect(described_class.doi_failed_verification).to match_array [pub2]
+      end
+    end
+
+    describe '.needs_doi_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is nil' do
+        expect(described_class.needs_doi_verification).to match_array [pub4]
       end
     end
   end

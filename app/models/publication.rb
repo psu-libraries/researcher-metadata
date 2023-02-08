@@ -65,7 +65,7 @@ class Publication < ApplicationRecord
   end
 
   def self.oa_workflow_states
-    ['queued for doi']
+    ['automatic DOI verification pending']
   end
 
   has_many :authorships, inverse_of: :publication
@@ -140,6 +140,7 @@ class Publication < ApplicationRecord
   scope :with_no_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
   scope :activity_insight_oa_publication, -> { with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
+  scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
 
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
