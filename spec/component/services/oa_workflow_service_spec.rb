@@ -13,7 +13,8 @@ describe OaWorkflowService do
                          doi_verified: false)}
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)}
+                         doi_verified: true,
+                         oa_workflow_state: 'no open access data found')}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
@@ -22,12 +23,18 @@ describe OaWorkflowService do
                          title: 'pub5',
                          doi_verified: nil,
                          oa_workflow_state: 'automatic DOI verification pending')}
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_workflow_state: nil)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let(:doi_job) { instance_spy DoiVerificationJob }
+    let(:oa_metadata_job) { instance_spy FetchOAMetadataJob }
 
     context 'when publications need doi verification' do
       before { allow(DoiVerificationJob).to receive(:new).and_return(doi_job) }
@@ -42,13 +49,32 @@ describe OaWorkflowService do
       end
     end
 
-    context 'when there is an error' do
+    context 'when there is an error with DOI verification' do
       before { allow(DoiVerificationJob).to receive(:new).and_raise(RuntimeError) }
 
       it 'saves doi verifed as false' do
         service.workflow
       rescue RuntimeError
         expect(pub4.reload.doi_verified).to be false
+      end
+    end
+
+    context 'when publications need oa metadata search' do
+      before { allow(FetchOAMetadataJob).to receive(:new).and_return(oa_metadata_job) }
+
+      it 'calls the fetch oa metadata job with that publication' do
+        service.workflow
+        expect(oa_metadata_job).to have_received(:perform).with(pub6)
+      end
+    end
+
+    context 'when there is an error with fetching oa metadata' do
+      before { allow(FetchOAMetadataJob).to receive(:new).and_raise(RuntimeError) }
+
+      it 'saves doi verifed as false' do
+        service.workflow
+      rescue RuntimeError
+        expect(pub6.reload.oa_workflow_state).to eq 'error during oa metadata search'
       end
     end
   end

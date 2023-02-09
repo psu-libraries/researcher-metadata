@@ -7,8 +7,16 @@ class OaWorkflowService
       pub.save!
       DoiVerificationJob.new.perform(pub)
     rescue StandardError
-      pub.doi_verified = false
+      pub.update_column(:doi_verified, false)
+      raise
+    end
+
+    Publication.needs_oa_metadata_search.each do |pub|
+      pub.oa_workflow_state = 'oa metadata search pending'
       pub.save!
+      FetchOAMetadataJob.new.perform(pub)
+    rescue StandardError
+      pub.update_column(:oa_workflow_state, 'error during oa metadata search')
       raise
     end
   end

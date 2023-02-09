@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DoiVerificationJob
+class DoiVerificationJob < ApplicationJob
   def perform(publication)
     return if publication.doi_verified == true
 
