@@ -167,7 +167,7 @@ class DuplicatePublicationGroup < ApplicationRecord
     end
 
     list do
-      field(:id)
+      field(:id) { sort_reverse false }
       field(:first_publication_title) { label 'Title of first duplicate' }
       field(:publication_count) { label 'Number of duplicates' }
     end
