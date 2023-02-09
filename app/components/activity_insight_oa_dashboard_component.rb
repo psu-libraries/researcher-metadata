@@ -5,6 +5,10 @@ class ActivityInsightOaDashboardComponent < ViewComponent::Base
     Publication.doi_failed_verification.count
   end
 
+  def unknown_version_count
+    Publication.version_unknown
+  end
+
   def i18n(key, **options)
     I18n.t("view_component.#{self.class.name.underscore}.#{key}", **options)
   end
