@@ -68,6 +68,10 @@ class Publication < ApplicationRecord
     ['automatic DOI verification pending']
   end
 
+  def self.preferred_versions
+    ['accepted', 'published']
+  end
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -112,6 +116,7 @@ class Publication < ApplicationRecord
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
   validates :oa_workflow_state, inclusion: { in: oa_workflow_states, allow_nil: true }
+  validates :preferred_version, inclusion: { in: preferred_versions, allow_nil: true }
 
   validate :doi_format_is_valid
 

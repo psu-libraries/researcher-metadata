@@ -35,6 +35,11 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
   it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
+  it { is_expected.to have_db_column(:license).of_type(:string) }
+  it { is_expected.to have_db_column(:embargo_date).of_type(:date) }
+  it { is_expected.to have_db_column(:set_statement).of_type(:string) }
+  it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
+  it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -60,6 +65,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:activity_insight_postprint_status).in_array(described_class.postprint_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:oa_workflow_state).in_array(described_class.oa_workflow_states).allow_nil }
+    it { is_expected.to validate_inclusion_of(:preferred_version).in_array(described_class.preferred_versions).allow_nil }
 
     describe 'validating DOI format' do
       let(:pub) { build(:publication, doi: doi) }
@@ -283,6 +289,12 @@ describe Publication, type: :model do
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
       expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending']
+    end
+  end
+
+  describe '.preferred_versions' do
+    it 'returns the list of valid open access workflow states' do
+      expect(described_class.preferred_versions).to eq ['accepted', 'published']
     end
   end
 
