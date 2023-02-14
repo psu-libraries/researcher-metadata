@@ -26,11 +26,7 @@ describe FetchOAMetadataJob, type: :job do
       end
 
       it "updates publication's unpaywall last checked at" do
-        expect(pub.reload.unpaywall_last_checked_at).not_to be_nil
-      end
-
-      it 'updates oa workflow state' do
-        expect(pub.reload.oa_workflow_state).to eq 'open access publication'
+        expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
 
@@ -44,12 +40,8 @@ describe FetchOAMetadataJob, type: :job do
           expect(pub.reload.open_access_locations).not_to eq []
         end
 
-        it "updates publication's unpaywall last checked at" do
-          expect(pub.reload.open_access_button_last_checked_at).not_to be_nil
-        end
-
-        it 'updates oa workflow state' do
-          expect(pub.reload.oa_workflow_state).to eq 'open access publication'
+        it "updates publication's open access button last checked at" do
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
 
@@ -64,8 +56,8 @@ describe FetchOAMetadataJob, type: :job do
           expect(pub.reload.open_access_button_last_checked_at).to be_nil
         end
 
-        it 'updates oa workflow state' do
-          expect(pub.reload.oa_workflow_state).to eq 'no open access data found'
+        it 'updates the publication oa status last checked at' do
+          expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
     end

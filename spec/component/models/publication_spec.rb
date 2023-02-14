@@ -35,6 +35,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
   it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
+  it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -495,7 +496,8 @@ describe Publication, type: :model do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: 'oa metadata search pending')
+                         oa_workflow_state: 'oa metadata search pending',
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 60))
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }

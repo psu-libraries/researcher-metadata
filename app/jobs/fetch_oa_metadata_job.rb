@@ -12,7 +12,7 @@ class FetchOAMetadataJob < ApplicationJob
       publication.open_access_button_last_checked_at = Time.zone.now
     end
 
-    publication.oa_workflow_state = (publication.open_access_locations.present? ? 'open access publication' : 'no open access data found')
+    publication.oa_status_last_checked_at = Time.zone.now
     publication.save!
   end
 end

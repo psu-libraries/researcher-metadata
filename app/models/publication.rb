@@ -147,8 +147,13 @@ class Publication < ApplicationRecord
   scope :activity_insight_oa_publication, -> { with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
-  scope :needs_oa_metadata_search, -> { activity_insight_oa_publication.where(doi_verified: true).where(%{oa_workflow_state IS DISTINCT FROM 'no open access data found'}) }
-
+  scope :needs_oa_metadata_search,
+        -> {
+          activity_insight_oa_publication
+            .where(doi_verified: true)
+            .where(%{oa_workflow_state IS DISTINCT FROM 'no open access data found'})
+            .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
+        }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
