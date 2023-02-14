@@ -35,7 +35,7 @@ class OpenAccessLocation < ApplicationRecord
     options.index_by { |src| Source.new(src.to_s).display }
   end
 
-  def self.create_from_unpaywall(unpaywall_locations, publication)
+  def self.create_or_update_from_unpaywall(unpaywall_locations, publication)
     existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
 
     existing_locations_by_url = existing_locations.index_by(&:url)

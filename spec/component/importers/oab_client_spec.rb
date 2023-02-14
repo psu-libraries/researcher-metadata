@@ -10,7 +10,7 @@ describe OABClient do
   let!(:title) { 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes' }
   let(:client) { described_class }
 
-  describe '#query_open_access_button' do
+  describe '.query_open_access_button' do
     let(:doi_json) { '{"doi" : "10.1016/s0962-1849(05)80014-9", "title" : "Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes"}' }
     let(:doi_response) { instance_double OABResponse }
 

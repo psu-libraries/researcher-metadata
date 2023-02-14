@@ -482,7 +482,7 @@ describe Publication, type: :model do
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
-                         oa_workflow_state: 'no open access data found')
+                         oa_workflow_state: 'oa metadata search pending')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
@@ -496,7 +496,7 @@ describe Publication, type: :model do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: 'oa metadata search pending',
+                         oa_workflow_state: 'no open access data found',
                          oa_status_last_checked_at: Time.now - (1 * 60 * 60))
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
