@@ -70,7 +70,7 @@ describe OaWorkflowService do
     context 'when there is an error with fetching oa metadata' do
       before { allow(FetchOAMetadataJob).to receive(:new).and_raise(RuntimeError) }
 
-      it 'saves doi verifed as false' do
+      it 'saves error in workflow state' do
         service.workflow
       rescue RuntimeError
         expect(pub6.reload.oa_workflow_state).to eq 'error during oa metadata search'
