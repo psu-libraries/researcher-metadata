@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_10_212033) do
+ActiveRecord::Schema.define(version: 2023_02_13_132903) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -480,7 +480,7 @@ ActiveRecord::Schema.define(version: 2023_02_10_212033) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
-    t.string "license"
+    t.string "licence"
     t.date "embargo_date"
     t.string "set_statement"
     t.string "preferred_version"

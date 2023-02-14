@@ -288,7 +288,7 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'permissions check pending']
     end
   end
 
@@ -528,6 +528,12 @@ describe Publication, type: :model do
     describe '.needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
         expect(described_class.needs_doi_verification).to match_array [pub4]
+      end
+    end
+
+    describe '.needs_permissions_check' do
+      it 'returns activity_insight_oa_publications whose doi_verified is true' do
+        expect(described_class.needs_permissions_check).to match_array [pub3]
       end
     end
   end
