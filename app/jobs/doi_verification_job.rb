@@ -13,6 +13,8 @@ class DoiVerificationJob < ApplicationJob
       response = UnpaywallClient.query_unpaywall(publication)
       if publication.matchable_title == response.matchable_title && response.doi.present?
         publication.update!(doi: response.doi, doi_verified: true)
+      else
+        publication.update!(doi_verified: false)
       end
     end
   end
