@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 class DoiVerificationJob < ApplicationJob
-
   queue_as 'default'
 
   def perform(publication_id)
     publication = Publication.find(publication_id)
-
     return if publication.doi_verified == true
 
     if publication.doi.present?
