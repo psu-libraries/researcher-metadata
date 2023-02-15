@@ -68,7 +68,7 @@ describe DoiVerificationJob, type: :job do
           end
 
           it 'updates the doi verification to false' do
-            expect(publication.reload.doi_verified).to eq false
+            expect(publication.reload.doi_verified).to be false
           end
         end
       end
@@ -84,7 +84,7 @@ describe DoiVerificationJob, type: :job do
         end
 
         it 'updates the doi verification to false' do
-          expect(publication.reload.doi_verified).to eq false
+          expect(publication.reload.doi_verified).to be false
         end
       end
     end
