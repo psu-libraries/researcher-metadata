@@ -4,7 +4,6 @@ require 'component/component_spec_helper'
 
 describe ActivityInsightImporter do
   let(:importer) { described_class.new }
-  let(:doi_job) { instance_spy DoiVerificationJob }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
@@ -24,7 +23,7 @@ describe ActivityInsightImporter do
                                                         password: 'secret' }).and_return(
                                                           Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml').read
                                                         )
-    allow(DoiVerificationJob).to receive(:new).and_return(doi_job)
+    allow(DoiVerificationJob).to receive(:perform_later)
   end
 
   describe '#call' do
@@ -4951,7 +4950,7 @@ describe ActivityInsightImporter do
           importer.call
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739090').publication
-          expect(doi_job).to have_received(:perform).with(p4)
+          expect(DoiVerificationJob).to have_received(:perform_later).with(p4.id)
         end
 
         it 'does not import ActivityInsightOaFiles for imported publications without postprint/open access file locations' do
