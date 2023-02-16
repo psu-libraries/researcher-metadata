@@ -11,6 +11,7 @@ Bundler.require(*Rails.groups)
 
 module ResearcherMetadata
   class Application < Rails::Application
+    require 'healthchecks'
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 5.2
 
