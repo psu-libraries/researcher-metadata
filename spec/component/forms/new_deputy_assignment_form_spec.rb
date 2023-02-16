@@ -31,7 +31,7 @@ describe NewDeputyAssignmentForm, type: :model do
     context 'when no User exists for the given webaccess id' do
       context 'when PsuIdentity responds with a valid response' do
         before do
-          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+          allow(PSUIdentityUserService).to receive(:find_or_initialize_user)
             .and_return(build(:user, :with_psu_identity, webaccess_id: deputy_webaccess_id))
         end
 
@@ -44,7 +44,7 @@ describe NewDeputyAssignmentForm, type: :model do
             form.save
           }.to change(User, :count).by(1)
 
-          expect(PsuIdentityUserService).to have_received(:find_or_initialize_user)
+          expect(PSUIdentityUserService).to have_received(:find_or_initialize_user)
             .with(webaccess_id: deputy_webaccess_id)
         end
 
@@ -69,7 +69,7 @@ describe NewDeputyAssignmentForm, type: :model do
       end
 
       context 'when the webaccess_id is not found in PsuIdentity' do
-        before { allow(PsuIdentityUserService).to receive(:find_or_initialize_user).with(webaccess_id: deputy_webaccess_id).and_return(nil) }
+        before { allow(PSUIdentityUserService).to receive(:find_or_initialize_user).with(webaccess_id: deputy_webaccess_id).and_return(nil) }
 
         it 'returns false' do
           expect(form.save).to be false
@@ -95,10 +95,10 @@ describe NewDeputyAssignmentForm, type: :model do
         end
       end
 
-      context 'when PsuIdentityUserService raises an error' do
+      context 'when PSUIdentityUserService raises an error' do
         before do
-          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
-            .and_raise(PsuIdentityUserService::IdentityServiceError)
+          allow(PSUIdentityUserService).to receive(:find_or_initialize_user)
+            .and_raise(PSUIdentityUserService::IdentityServiceError)
         end
 
         it 'returns false' do
@@ -118,9 +118,9 @@ describe NewDeputyAssignmentForm, type: :model do
         end
       end
 
-      context 'when PsuIdentityUserService responds with something, but the data is invalid' do
+      context 'when PSUIdentityUserService responds with something, but the data is invalid' do
         before do
-          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+          allow(PSUIdentityUserService).to receive(:find_or_initialize_user)
             .and_return(build(:user, :with_psu_identity, webaccess_id: deputy_webaccess_id, first_name: ''))
         end
 
@@ -143,7 +143,7 @@ describe NewDeputyAssignmentForm, type: :model do
 
       context 'when the PsuIdentity responds correctly, but there is a problem creating the DeputyAssignment' do
         before do
-          allow(PsuIdentityUserService).to receive(:find_or_initialize_user)
+          allow(PSUIdentityUserService).to receive(:find_or_initialize_user)
             .and_return(build(:user, :with_psu_identity))
 
           allow(DeputyAssignment).to receive(:create!).and_raise(StandardError)
