@@ -23,7 +23,7 @@ describe ActivityInsightImporter do
                                                         password: 'secret' }).and_return(
                                                           Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml').read
                                                         )
-    allow(DoiVerificationJob).to receive(:perform_later)
+    allow(DOIVerificationJob).to receive(:perform_later)
   end
 
   describe '#call' do
@@ -4950,7 +4950,7 @@ describe ActivityInsightImporter do
           importer.call
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739090').publication
-          expect(DoiVerificationJob).to have_received(:perform_later).with(p4.id)
+          expect(DOIVerificationJob).to have_received(:perform_later).with(p4.id)
         end
 
         it 'does not import ActivityInsightOaFiles for imported publications without postprint/open access file locations' do

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe DoiVerificationJob, type: :job do
+describe DOIVerificationJob, type: :job do
   let(:job) { described_class }
 
   describe '.perform_later' do
@@ -27,12 +27,12 @@ describe DoiVerificationJob, type: :job do
     let(:empty_response) { instance_double(UnpaywallResponse,
                                            matchable_title: '',
                                            doi: nil)}
-    let(:service) { instance_double DoiVerificationService }
+    let(:service) { instance_double DOIVerificationService }
 
     context 'when the publication has a DOI' do
       let(:pub_title) { 'Psychotherapy integration' }
 
-      before { allow(DoiVerificationService).to receive(:new).with(publication).and_return(service) }
+      before { allow(DOIVerificationService).to receive(:new).with(publication).and_return(service) }
 
       it 'calls the DOI verification service and updates doi verified to false' do
         expect(service).to receive(:verify)

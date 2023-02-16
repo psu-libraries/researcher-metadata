@@ -2,7 +2,7 @@
 
 require 'string/similarity'
 
-class DoiVerificationService
+class DOIVerificationService
   attr_reader :publication
 
   def initialize(publication)
