@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class DoiVerificationMergePolicy
+class DOIVerificationMergePolicy
   def initialize(main_pub, publications)
     @publications = publications
     @main_pub = main_pub

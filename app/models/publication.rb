@@ -726,7 +726,7 @@ class Publication < ApplicationRecord
 
         yield if block_given?
 
-        DoiVerificationMergePolicy.new(self, all_pubs).merge!
+        DOIVerificationMergePolicy.new(self, all_pubs).merge!
 
         pubs_to_delete.each do |p|
           p.non_duplicate_groups.each do |ndg|
