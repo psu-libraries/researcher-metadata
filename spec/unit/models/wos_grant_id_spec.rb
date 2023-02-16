@@ -5,7 +5,7 @@ require 'active_support'
 require 'active_support/core_ext'
 require_relative '../../../app/models/wos_grant_id'
 
-describe WOSGrantID do
+describe WOSGrantId do
   let(:parsed_grant_id) { double 'parsed grant ID' }
   let(:grant) { double 'grant' }
   let(:grant_id) { described_class.new(grant, parsed_grant_id) }
