@@ -27,4 +27,6 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'NSF'
   inflect.acronym 'LDAP'
   inflect.acronym 'URL'
+  inflect.acronym 'ISBN'
+  inflect.acronym 'ISSN'
 end
