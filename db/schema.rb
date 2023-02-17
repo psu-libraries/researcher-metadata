@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 2023_02_14_202412) do
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
     t.string "version"
+    t.boolean "version_checked"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
   end
 

@@ -12,12 +12,12 @@ class OaWorkflowService
       raise
     end
 
-    Publication.needs_permissions_check.each do |pub|
-      pub.oa_workflow_state = 'automatic permissions check pending'
-      pub.save!
-      PermissionsCheckJob.new.perform(pub)
+    ActivityInsightOaFile.needs_permissions_check.each do |file|
+      file.version_checked = true
+      file.save!
+      PermissionsCheckJob.perform_later(file.id)
     rescue StandardError
-      pub.update_column(:oa_workflow_state, 'error during permissions check')
+      file.update_column(:version_checked, true)
       raise
     end
   end

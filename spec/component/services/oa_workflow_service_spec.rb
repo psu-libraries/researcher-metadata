@@ -21,16 +21,25 @@ describe OaWorkflowService do
     let!(:pub5) { create(:publication,
                          title: 'pub5',
                          doi_verified: nil,
-                         oa_workflow_state: 'automatic DOI verification pending')}
+                         oa_workflow_state: 'automatic DOI verification pending',
+                         licence: 'licence')}
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         doi_verified: true,
+                         permissions_last_checked_at: nil)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
-    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
-    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
-    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3, version: nil) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4, version: 'publishedVersion', version_checked: true) }
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, version: 'acceptedVersion') }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, version: 'acceptedVersion', version_checked: nil) }
     let(:doi_job) { instance_spy DoiVerificationJob }
 
     context 'when publications need doi verification' do
-      before { allow(DoiVerificationJob).to receive(:new).and_return(doi_job) }
+      before do
+        allow(DoiVerificationJob).to receive(:new).and_return(doi_job)
+        allow(PermissionsCheckJob).to receive(:perform_later)
+      end
 
       it 'calls the doi verification job with that publication' do
         service.workflow
@@ -40,15 +49,40 @@ describe OaWorkflowService do
         expect(doi_job).to have_received(:perform).with(pub4)
         expect(doi_job).not_to have_received(:perform).with(pub5)
       end
+
+      context 'when there is an error' do
+        before { allow(DoiVerificationJob).to receive(:new).and_raise(RuntimeError) }
+
+        it 'saves doi verifed as false' do
+          service.workflow
+        rescue RuntimeError
+          expect(pub4.reload.doi_verified).to be false
+        end
+      end
     end
 
-    context 'when there is an error' do
-      before { allow(DoiVerificationJob).to receive(:new).and_raise(RuntimeError) }
+    context 'when publications need permissions checks' do
+      context 'when there is not an error' do
+        before { allow(PermissionsCheckJob).to receive(:perform_later) }
 
-      it 'saves doi verifed as false' do
-        service.workflow
-      rescue RuntimeError
-        expect(pub4.reload.doi_verified).to be false
+        it 'calls the permissions check job with that publication' do
+          service.workflow
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file1.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file2.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file3.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
+          expect(PermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
+        end
+      end
+
+      context 'when there is an error' do
+        before { allow(PermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'updates file version checked' do
+          service.workflow
+        rescue RuntimeError
+          expect(activity_insight_oa_file6.reload.version_checked).to be true
+        end
       end
     end
   end

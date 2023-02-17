@@ -35,7 +35,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
   it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
-  it { is_expected.to have_db_column(:license).of_type(:string) }
+  it { is_expected.to have_db_column(:licence).of_type(:string) }
   it { is_expected.to have_db_column(:embargo_date).of_type(:date) }
   it { is_expected.to have_db_column(:set_statement).of_type(:string) }
   it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
@@ -288,13 +288,13 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'permissions check pending']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'automatic permissions check pending', 'error during permissions check']
     end
   end
 
   describe '.preferred_versions' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.preferred_versions).to eq ['accepted', 'published']
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion']
     end
   end
 
@@ -528,12 +528,6 @@ describe Publication, type: :model do
     describe '.needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
         expect(described_class.needs_doi_verification).to match_array [pub4]
-      end
-    end
-
-    describe '.needs_permissions_check' do
-      it 'returns activity_insight_oa_publications whose doi_verified is true' do
-        expect(described_class.needs_permissions_check).to match_array [pub3]
       end
     end
   end
