@@ -28,30 +28,30 @@ describe OaWorkflowService do
                          doi_verified: true,
                          permissions_last_checked_at: nil)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
+
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3, version: nil) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4, version: 'publishedVersion', version_checked: true) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, version: 'acceptedVersion') }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, version: 'acceptedVersion', version_checked: nil) }
-    let(:doi_job) { instance_spy DoiVerificationJob }
 
     context 'when publications need doi verification' do
       before do
-        allow(DoiVerificationJob).to receive(:new).and_return(doi_job)
+        allow(DoiVerificationJob).to receive(:perform_later)
         allow(PermissionsCheckJob).to receive(:perform_later)
       end
 
       it 'calls the doi verification job with that publication' do
         service.workflow
-        expect(doi_job).not_to have_received(:perform).with(pub1)
-        expect(doi_job).not_to have_received(:perform).with(pub2)
-        expect(doi_job).not_to have_received(:perform).with(pub3)
-        expect(doi_job).to have_received(:perform).with(pub4)
-        expect(doi_job).not_to have_received(:perform).with(pub5)
+        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub1.id)
+        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub2.id)
+        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub3.id)
+        expect(DoiVerificationJob).to have_received(:perform_later).with(pub4.id)
+        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub5.id)
       end
 
       context 'when there is an error' do
-        before { allow(DoiVerificationJob).to receive(:new).and_raise(RuntimeError) }
+        before { allow(DoiVerificationJob).to receive(:perform_later).and_raise(RuntimeError) }
 
         it 'saves doi verifed as false' do
           service.workflow
