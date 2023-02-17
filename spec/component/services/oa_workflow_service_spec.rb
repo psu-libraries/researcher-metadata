@@ -14,7 +14,7 @@ describe OaWorkflowService do
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
-                         oa_workflow_state: 'no open access data found')}
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 30))}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
@@ -33,7 +33,6 @@ describe OaWorkflowService do
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
-    let(:oa_metadata_job) { instance_spy FetchOAMetadataJob }
 
     context 'when publications need doi verification' do
       before { allow(DoiVerificationJob).to receive(:perform_later) }
@@ -59,21 +58,11 @@ describe OaWorkflowService do
     end
 
     context 'when publications need oa metadata search' do
-      before { allow(FetchOAMetadataJob).to receive(:new).and_return(oa_metadata_job) }
+      before { allow(FetchOAMetadataJob).to receive(:perform_later) }
 
       it 'calls the fetch oa metadata job with that publication' do
         service.workflow
-        expect(oa_metadata_job).to have_received(:perform).with(pub6)
-      end
-    end
-
-    context 'when there is an error with fetching oa metadata' do
-      before { allow(FetchOAMetadataJob).to receive(:new).and_raise(RuntimeError) }
-
-      it 'saves error in workflow state' do
-        service.workflow
-      rescue RuntimeError
-        expect(pub6.reload.oa_workflow_state).to eq 'error during oa metadata search'
+        expect(FetchOAMetadataJob).to have_received(:perform_later).with(pub6.id)
       end
     end
   end

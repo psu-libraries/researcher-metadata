@@ -283,9 +283,7 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending',
-                                                        'error during oa metadata search', 'open access publication',
-                                                        'no open access data found']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending']
     end
   end
 
@@ -496,7 +494,6 @@ describe Publication, type: :model do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: 'no open access data found',
                          oa_status_last_checked_at: Time.now - (1 * 60 * 60))
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }

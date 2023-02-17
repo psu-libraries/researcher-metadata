@@ -1,7 +1,10 @@
 # frozen_string_literal: true
 
 class FetchOAMetadataJob < ApplicationJob
-  def perform(publication)
+  queue_as 'default'
+
+  def perform(publication_id)
+    publication = Publication.find(publication_id)
     unpaywall_response = UnpaywallClient.query_unpaywall(publication)
     oab_response = OABClient.query_open_access_button(publication)
 
@@ -13,6 +16,7 @@ class FetchOAMetadataJob < ApplicationJob
     end
 
     publication.oa_status_last_checked_at = Time.zone.now
+    publication.oa_workflow_state = nil
     publication.save!
   end
 end

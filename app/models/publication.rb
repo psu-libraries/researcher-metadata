@@ -67,10 +67,7 @@ class Publication < ApplicationRecord
   def self.oa_workflow_states
     [
       'automatic DOI verification pending',
-      'oa metadata search pending',
-      'error during oa metadata search',
-      'open access publication',
-      'no open access data found'
+      'oa metadata search pending'
     ]
   end
 
