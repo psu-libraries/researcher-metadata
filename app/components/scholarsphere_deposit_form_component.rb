@@ -137,7 +137,7 @@ class ScholarsphereDepositFormComponent < ViewComponent::Base
     end
 
     def other_version_text
-      version_text((OabPermissionsService::VALID_VERSIONS - [@permissions.version]).first)
+      version_text((OABPermissionsService::VALID_VERSIONS - [@permissions.version]).first)
     end
 
     def version_text(version)

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe DoiVerificationMergePolicy do
+describe DOIVerificationMergePolicy do
   let(:policy) { described_class.new(pub1, publications) }
   let(:publications) { [pub1, pub2, pub3] }
   let(:pub1) { create(:publication, doi_verified: nil, doi: nil) }

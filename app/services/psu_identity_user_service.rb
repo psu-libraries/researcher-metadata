@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PsuIdentityUserService
+class PSUIdentityUserService
   class IdentityServiceError < StandardError; end
 
   class << self

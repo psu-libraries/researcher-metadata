@@ -11,8 +11,8 @@ Bundler.require(*Rails.groups)
 
 module ResearcherMetadata
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.2
+    # Initialize configuration defaults for Rails 6.1 (includes zeitwerk).
+    config.load_defaults 6.1
 
     # Mail settings
     config.action_mailer.perform_caching = false

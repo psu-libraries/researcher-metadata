@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe DoiVerificationService do
+describe DOIVerificationService do
   let(:publication) { create(:publication,
                              doi: 'https://doi.org/10.1016/S0962-1849(05)80014-9',
                              title: title,
