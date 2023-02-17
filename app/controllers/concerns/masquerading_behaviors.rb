@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 module MasqueradingBehaviors
-  extend ActiveSupport::Concerns
+  extend ActiveSupport::Concern
 
   SESSION_ID = :primary_user_id
 

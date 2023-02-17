@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PsuIdentityImporter do
+describe PSUIdentityImporter do
   let(:importer) { described_class.new }
   let(:mock_client) { instance_spy(PsuIdentity::SearchService::Client) }
   let(:mock_person) { instance_spy(PsuIdentity::SearchService::Person) }
@@ -39,7 +39,7 @@ describe PsuIdentityImporter do
         User.find_each do |user|
           expect(ImporterErrorLog).to have_received(:log_error).with(
             importer_class: described_class,
-            error: PsuIdentityUserService::IdentityServiceError,
+            error: PSUIdentityUserService::IdentityServiceError,
             metadata: {
               user_id: user.id
             }

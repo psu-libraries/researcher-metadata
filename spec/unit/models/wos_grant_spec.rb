@@ -217,8 +217,8 @@ describe WOSGrant do
     let(:id2) { double 'id 2' }
 
     before do
-      allow(WOSGrantID).to receive(:new).with(grant, id_element1).and_return(id1)
-      allow(WOSGrantID).to receive(:new).with(grant, id_element2).and_return(id2)
+      allow(WOSGrantId).to receive(:new).with(grant, id_element1).and_return(id1)
+      allow(WOSGrantId).to receive(:new).with(grant, id_element2).and_return(id2)
       allow(parsed_grant).to receive(:css).with('grant_ids > grant_id').and_return([id_element1, id_element2])
     end
 

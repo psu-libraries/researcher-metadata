@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PsuIdentityUserService, vcr: true do
+describe PSUIdentityUserService, vcr: true do
   # Note this spec uses VCR to mock HTTP requests to the actual PSU identity
   # server. If you change this value, you will will invalidate the VCR
   # cassettes and send new requests.
