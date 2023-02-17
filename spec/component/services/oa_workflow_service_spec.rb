@@ -43,11 +43,11 @@ describe OaWorkflowService do
 
       it 'calls the doi verification job with that publication' do
         service.workflow
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub1.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub2.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub3.id)
-        expect(DoiVerificationJob).to have_received(:perform_later).with(pub4.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub5.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub1.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub2.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
+        expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
       end
 
       context 'when there is an error' do

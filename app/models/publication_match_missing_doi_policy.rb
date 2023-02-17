@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PublicationMatchMissingDoiPolicy
+class PublicationMatchMissingDOIPolicy
   def initialize(publication1, publication2)
     @publication1 = publication1
     @publication2 = publication2

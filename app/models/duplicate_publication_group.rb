@@ -134,9 +134,9 @@ class DuplicatePublicationGroup < ApplicationRecord
         end
 
         match_policy = if pub_primary.doi.present? && pub.doi.present?
-                         PublicationMatchOnDoiPolicy.new(pub_primary, pub)
+                         PublicationMatchOnDOIPolicy.new(pub_primary, pub)
                        else
-                         PublicationMatchMissingDoiPolicy.new(pub_primary, pub)
+                         PublicationMatchMissingDOIPolicy.new(pub_primary, pub)
                        end
         if match_policy.ok_to_merge?
           begin

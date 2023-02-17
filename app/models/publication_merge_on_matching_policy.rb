@@ -7,7 +7,7 @@ class PublicationMergeOnMatchingPolicy
   end
 
   # merge! is meant to only be applied to publications that return true
-  # when analyzed with PublicationMatchOnDoiPolicy's or PublicationMatchMissingDoiPolicy's #ok_to_merge? method
+  # when analyzed with PublicationMatchOnDOIPolicy's or PublicationMatchMissingDOIPolicy's #ok_to_merge? method
   def merge!
     publication1.update attributes
     publication1.contributor_names = contributor_names_to_keep
