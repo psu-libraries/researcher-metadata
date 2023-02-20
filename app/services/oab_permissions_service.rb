@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OabPermissionsService
+class OABPermissionsService
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version, :permissions
 

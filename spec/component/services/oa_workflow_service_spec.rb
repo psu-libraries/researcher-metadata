@@ -27,23 +27,22 @@ describe OaWorkflowService do
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
-    let(:doi_job) { instance_spy DoiVerificationJob }
 
     context 'when publications need doi verification' do
-      before { allow(DoiVerificationJob).to receive(:new).and_return(doi_job) }
+      before { allow(DOIVerificationJob).to receive(:perform_later) }
 
       it 'calls the doi verification job with that publication' do
         service.workflow
-        expect(doi_job).not_to have_received(:perform).with(pub1)
-        expect(doi_job).not_to have_received(:perform).with(pub2)
-        expect(doi_job).not_to have_received(:perform).with(pub3)
-        expect(doi_job).to have_received(:perform).with(pub4)
-        expect(doi_job).not_to have_received(:perform).with(pub5)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub1.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub2.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
+        expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
       end
     end
 
     context 'when there is an error' do
-      before { allow(DoiVerificationJob).to receive(:new).and_raise(RuntimeError) }
+      before { allow(DOIVerificationJob).to receive(:perform_later).and_raise(RuntimeError) }
 
       it 'saves doi verifed as false' do
         service.workflow
