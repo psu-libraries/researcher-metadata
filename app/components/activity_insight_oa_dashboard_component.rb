@@ -6,7 +6,7 @@ class ActivityInsightOaDashboardComponent < ViewComponent::Base
   end
 
   def unknown_version_count
-    Publication.version_unknown
+    Publication.unknown_version.count
   end
 
   def i18n(key, **options)

@@ -16,4 +16,22 @@
       <div class='card-body'><%= i18n('doi_verification_description') %></div>
     </div>
   <% end %>
+  <br/>
+  <% if unknown_version_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_unknown_version_list_path, class: 'card-link' do %>
+      <div class='card'>
+        <div class='card-header'><strong><%= i18n('unknown_version_list_title') %></strong>
+          <span class='float-right text-large'><strong><%= unknown_version_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('unknown_version_list_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted'>
+      <div class='card-header'><strong><%= i18n('unknown_version_list_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('unknown_version_list_description') %></div>
+    </div>
+  <% end %>
 </div>

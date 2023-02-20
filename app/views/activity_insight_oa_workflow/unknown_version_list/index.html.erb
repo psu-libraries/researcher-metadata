@@ -1,0 +1,26 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_path %>
+  <h1 class="pb-3 pt-2">Publications With No Known File Version</h1>
+  <div class='card'>
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Title</th>
+        <th>Files</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td><%= p.title.truncate(45) %></td>
+          <td>
+            <% p.activity_insight_oa_files.each do |file| %>
+              <%= file.location %>
+            <% end %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
+</div>

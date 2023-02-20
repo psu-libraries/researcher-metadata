@@ -207,6 +207,8 @@ en:
     activity_insight_oa_dashboard_component:
       doi_verification_title: Verify DOIs
       doi_verification_description: Publications that require manual DOI curation or verification.
+      unknown_version_list_title: Unknown File Version
+      unknown_version_list_description: Publications that do not have a known file version and require admin review.
 
   helpers:
     submit:
