@@ -1,4 +1,4 @@
-class CreateOaNotificationSettings < ActiveRecord::Migration[6.1]
+class CreateOANotificationSettings < ActiveRecord::Migration[6.1]
   def change
     create_table :oa_notification_settings do |t|
       t.integer   :singleton_guard

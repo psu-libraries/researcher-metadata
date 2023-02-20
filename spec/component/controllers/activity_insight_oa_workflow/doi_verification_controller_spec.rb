@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 require 'component/controllers/shared_examples_for_an_unauthenticated_controller'
 
-describe ActivityInsightOaWorkflow::DOIVerificationController, type: :controller do
+describe ActivityInsightOAWorkflow::DOIVerificationController, type: :controller do
   let!(:user) { create(:user, is_admin: false) }
 
   describe '#index' do

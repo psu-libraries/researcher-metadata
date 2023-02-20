@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OaWorkflowService do
+describe OAWorkflowService do
   describe '#workflow' do
     let(:service) { described_class.new }
     let!(:pub1) { create(:publication,
