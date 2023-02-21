@@ -4,7 +4,7 @@ class PermissionsCheckJob < ApplicationJob
   queue_as 'default'
 
   def perform(file_id)
-    file = ActivityInsightOaFile.find(file_id)
+    file = ActivityInsightOAFile.find(file_id)
     publication = file.publication
     permissions = OABPreferredPermissionsService.new(publication.doi_url_path)
     publication.preferred_version = permissions.preferred_version
