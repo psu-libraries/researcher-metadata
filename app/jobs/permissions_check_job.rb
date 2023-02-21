@@ -5,11 +5,11 @@ class PermissionsCheckJob < ApplicationJob
 
   def perform(file_id)
     file = ActivityInsightOaFile.find(file_id)
-    publication = Publication.find(file.publication_id)
-    permissions = OabBestPermissionsService.new(publication.doi_url_path)
-    publication.preferred_version = permissions.best_version
+    publication = file.publication
+    permissions = OABPreferredPermissionsService.new(publication.doi_url_path)
+    publication.preferred_version = permissions.preferred_version
 
-    if permissions.best_version == file.version
+    if permissions.preferred_version == file.version
       publication.set_statement = permissions.set_statement
       publication.licence = permissions.licence
       publication.embargo_date = permissions.embargo_end_date

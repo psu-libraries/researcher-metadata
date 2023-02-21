@@ -69,7 +69,7 @@ class Publication < ApplicationRecord
   end
 
   def self.preferred_versions
-    ['acceptedVersion', 'publishedVersion']
+    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
   end
 
   has_many :authorships, inverse_of: :publication

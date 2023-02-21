@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OabPermissionsClient
+class OABPermissionsClient
   class InvalidVersion < StandardError; end
   attr_reader :doi, :version, :permissions
 
@@ -27,5 +27,27 @@ class OabPermissionsClient
 
     def oab_permissions_base_url
       'https://api.openaccessbutton.org/permissions/'
+    end
+
+    def accepted_version
+      if permissions.present?
+        permissions
+          .select { |perm| perm if perm['version'] == I18n.t('file_versions.accepted_version') }
+          .first
+          .presence || {}
+      else
+        {}
+      end
+    end
+
+    def published_version
+      if permissions.present?
+        permissions
+          .select { |perm| perm if perm['version'] == I18n.t('file_versions.published_version') }
+          .first
+          .presence || {}
+      else
+        {}
+      end
     end
 end

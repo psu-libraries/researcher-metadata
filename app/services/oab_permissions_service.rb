@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class OabPermissionsService < OabPermissionsClient
+class OABPermissionsService < OABPermissionsClient
   def initialize(doi, version)
     raise InvalidVersion if VALID_VERSIONS.exclude?(version)
 
@@ -39,28 +39,4 @@ class OabPermissionsService < OabPermissionsClient
 
     {}
   end
-
-  private
-
-    def accepted_version
-      if permissions.present?
-        permissions
-          .select { |perm| perm if perm['version'] == I18n.t('file_versions.accepted_version') }
-          .first
-          .presence || {}
-      else
-        {}
-      end
-    end
-
-    def published_version
-      if permissions.present?
-        permissions
-          .select { |perm| perm if perm['version'] == I18n.t('file_versions.published_version') }
-          .first
-          .presence || {}
-      else
-        {}
-      end
-    end
 end
