@@ -2,5 +2,5 @@
 
 desc 'Move publications through the open access workflow'
 task oa_workflow: :environment do
-  OaWorkflowService.new.workflow
+  OAWorkflowService.new.workflow
 end

@@ -210,7 +210,7 @@ class ActivityInsightImporter
               aif.update location: activity_insight_file_location
               aif.save!
             else
-              file = ActivityInsightOaFile.create(location: activity_insight_file_location)
+              file = ActivityInsightOAFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
               DOIVerificationJob.perform_later(pub_record.id)

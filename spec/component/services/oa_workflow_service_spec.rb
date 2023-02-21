@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OaWorkflowService do
+describe OAWorkflowService do
   describe '#workflow' do
     let(:service) { described_class.new }
     let!(:pub1) { create(:publication,
@@ -13,7 +13,8 @@ describe OaWorkflowService do
                          doi_verified: false)}
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)}
+                         doi_verified: true,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 30))}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
@@ -22,11 +23,16 @@ describe OaWorkflowService do
                          title: 'pub5',
                          doi_verified: nil,
                          oa_workflow_state: 'automatic DOI verification pending')}
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_workflow_state: nil)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
 
     context 'when publications need doi verification' do
       before { allow(DOIVerificationJob).to receive(:perform_later) }
@@ -48,6 +54,15 @@ describe OaWorkflowService do
         service.workflow
       rescue RuntimeError
         expect(pub4.reload.doi_verified).to be false
+      end
+    end
+
+    context 'when publications need oa metadata search' do
+      before { allow(FetchOAMetadataJob).to receive(:perform_later) }
+
+      it 'calls the fetch oa metadata job with that publication' do
+        service.workflow
+        expect(FetchOAMetadataJob).to have_received(:perform_later).with(pub6.id)
       end
     end
   end

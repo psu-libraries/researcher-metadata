@@ -35,6 +35,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
   it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
+  it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -282,7 +283,7 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending']
     end
   end
 
@@ -478,7 +479,8 @@ describe Publication, type: :model do
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)
+                         doi_verified: true,
+                         oa_workflow_state: 'oa metadata search pending')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
@@ -489,21 +491,27 @@ describe Publication, type: :model do
                          title: 'pub5',
                          doi_verified: nil)
     }
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 60))
+    }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6) }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4]
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6]
       end
     end
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
-        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4]
+        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4, pub6]
       end
     end
 
@@ -516,6 +524,12 @@ describe Publication, type: :model do
     describe '.needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
         expect(described_class.needs_doi_verification).to match_array [pub4]
+      end
+    end
+
+    describe '.needs_oa_metadata_search' do
+      it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
+        expect(described_class.needs_oa_metadata_search).to match_array [pub6]
       end
     end
   end

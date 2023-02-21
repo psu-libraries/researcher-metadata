@@ -1,4 +1,4 @@
-class CreateActivityInsightOaFiles < ActiveRecord::Migration[6.1]
+class CreateActivityInsightOAFiles < ActiveRecord::Migration[6.1]
   def change
     create_table :activity_insight_oa_files do |t|
       t.string :location

@@ -1,15 +1,20 @@
 # frozen_string_literal: true
 
-class OaWorkflowService
+class OAWorkflowService
   def workflow
     Publication.needs_doi_verification.each do |pub|
       pub.oa_workflow_state = 'automatic DOI verification pending'
       pub.save!
       DOIVerificationJob.perform_later(pub.id)
     rescue StandardError
-      pub.doi_verified = false
-      pub.save!
+      pub.update_column(:doi_verified, false)
       raise
+    end
+
+    Publication.needs_oa_metadata_search.each do |pub|
+      pub.oa_workflow_state = 'oa metadata search pending'
+      pub.save!
+      FetchOAMetadataJob.perform_later(pub.id)
     end
   end
 end

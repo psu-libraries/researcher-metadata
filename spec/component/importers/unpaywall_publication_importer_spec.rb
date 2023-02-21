@@ -433,7 +433,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
   end
 
-  context 'when a mystery error occurs that we cannot handle' do
+  context 'when a mystery error occurs in Publication that we cannot handle' do
     let!(:pub) { create(:publication,
                         doi: 'https://doi.org/10.1001/jamadermatol.2015.3091',
                         open_access_locations: []) }
@@ -446,6 +446,22 @@ describe UnpaywallPublicationImporter, :vcr do
       expect {
         importer.import_all
       }.not_to change(OpenAccessLocation, :count)
+    end
+  end
+
+  context 'when a mystery error occurs in OpenAccessLocation that we cannot handle' do
+    let!(:pub) { create(:publication,
+                        doi: 'https://doi.org/10.1001/jamadermatol.2015.3091',
+                        open_access_locations: [],
+                        unpaywall_last_checked_at: nil) }
+
+    before do
+      allow_any_instance_of(OpenAccessLocation).to receive(:save!).and_raise(ActiveRecord::RecordInvalid)
+    end
+
+    it 'rolls back any db changes' do
+      importer.import_all
+      expect(pub.reload.unpaywall_last_checked_at).to be_nil
     end
   end
 
