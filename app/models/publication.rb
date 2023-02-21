@@ -141,7 +141,16 @@ class Publication < ApplicationRecord
   scope :activity_insight_oa_publication, -> { with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
-  scope :unknown_version, -> { activity_insight_oa_publication.where(activity_insight_oa_files: { version: 'unknown' }).where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.version IS NULL OR activity_insight_oa_files.version IN ('accepted', 'published')))}) }
+  scope :unknown_version, -> { 
+    activity_insight_oa_publication
+    .where(
+      activity_insight_oa_files: { version: 'unknown' }
+    )
+    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.version IS NULL OR activity_insight_oa_files.version IN (?, ?)))},
+           I18n.t('file_versions.accepted_version'),
+           I18n.t('file_versions.published_version') 
+          )
+  }
 
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
