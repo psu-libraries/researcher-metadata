@@ -16,7 +16,7 @@ class OAWorkflowService
       pub.save!
       FetchOAMetadataJob.perform_later(pub.id)
     end
-    
+
     ActivityInsightOaFile.needs_permissions_check.each do |file|
       file.version_checked = true
       file.save!
