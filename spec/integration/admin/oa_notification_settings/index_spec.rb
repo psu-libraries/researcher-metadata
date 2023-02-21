@@ -3,20 +3,20 @@
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-describe 'Admin Oa Notification Settings list', type: :feature do
+describe 'Admin OA Notification Settings list', type: :feature do
   context 'when the current user is an admin' do
     before { authenticate_admin_user }
 
     describe 'the page content' do
-      let!(:setting) { OaNotificationSetting.instance }
+      let!(:setting) { OANotificationSetting.instance }
 
       before { visit rails_admin.index_path(model_name: :oa_notification_setting) }
 
-      it 'shows the Oa Notification Settings list heading' do
-        expect(page).to have_content 'List of Oa notification settings'
+      it 'shows the OA Notification Settings list heading' do
+        expect(page).to have_content 'List of OA notification settings'
       end
 
-      it 'shows information about each Oa Notification Setting' do
+      it 'shows information about each OA Notification Setting' do
         expect(page).to have_content setting.email_cap
         expect(page).to have_css 'span.label-success', exact_text: '✓', count: 1
       end

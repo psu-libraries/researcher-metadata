@@ -27,7 +27,7 @@ class UnpaywallResponse
     json['oa_status']
   end
 
-  OaLocation = Struct.new(:updated,
+  OALocation = Struct.new(:updated,
                           :url,
                           :url_for_pdf,
                           :url_for_landing_page,
@@ -45,7 +45,7 @@ class UnpaywallResponse
     oals = []
     if json['oa_locations'].present?
       json['oa_locations'].each do |location_data|
-        oal = OaLocation.new(location_data['updated'],
+        oal = OALocation.new(location_data['updated'],
                              location_data['url'],
                              location_data['url_for_pdf'],
                              location_data['url_for_landing_page'],

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OaWorkflowService do
+describe OAWorkflowService do
   describe '#workflow' do
     let(:service) { described_class.new }
     let!(:pub1) { create(:publication,
@@ -13,7 +13,8 @@ describe OaWorkflowService do
                          doi_verified: false)}
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)}
+                         doi_verified: true,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 30))}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
@@ -23,6 +24,10 @@ describe OaWorkflowService do
                          doi_verified: nil,
                          oa_workflow_state: 'automatic DOI verification pending',
                          licence: 'licence')}
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_workflow_state: nil)}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
                          doi_verified: true,
@@ -33,6 +38,7 @@ describe OaWorkflowService do
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3, version: nil) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4, version: 'publishedVersion', version_checked: true) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, version: 'acceptedVersion') }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, version: 'acceptedVersion', version_checked: nil) }
 
     context 'when publications need doi verification' do
@@ -83,6 +89,15 @@ describe OaWorkflowService do
         rescue RuntimeError
           expect(activity_insight_oa_file6.reload.version_checked).to be true
         end
+      end
+    end
+
+    context 'when publications need oa metadata search' do
+      before { allow(FetchOAMetadataJob).to receive(:perform_later) }
+
+      it 'calls the fetch oa metadata job with that publication' do
+        service.workflow
+        expect(FetchOAMetadataJob).to have_received(:perform_later).with(pub6.id)
       end
     end
   end

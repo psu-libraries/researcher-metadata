@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActivityInsightOaFile < ApplicationRecord
+class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 

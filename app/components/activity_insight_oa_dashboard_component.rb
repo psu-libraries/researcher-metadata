@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActivityInsightOaDashboardComponent < ViewComponent::Base
+class ActivityInsightOADashboardComponent < ViewComponent::Base
   def doi_failed_verification_count
     Publication.doi_failed_verification.count
   end

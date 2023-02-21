@@ -35,7 +35,7 @@ class UnpaywallPublicationImporter
 
     def import_from_unpaywall(publication)
       unpaywall_response = UnpaywallClient.query_unpaywall(publication)
-      update_publication(publication, unpaywall_response)
+      publication.update_from_unpaywall(unpaywall_response)
 
       # Unpaywall asks that users limit requests to no more than 100,000 per day.
       # Limiting to 1 request per second caps us at 86,400 requests per day.
@@ -50,68 +50,5 @@ class UnpaywallPublicationImporter
           unpaywall_response: unpaywall_response.to_s
         }
       )
-    end
-
-    def update_publication(publication, unpaywall_response)
-      existing_doi = true if publication.doi.present?
-
-      if unpaywall_response.matchable_title == publication.matchable_title && !existing_doi
-        publication.doi = unpaywall_response.doi
-        publication.doi_verified = true
-        title_match = true
-      end
-
-      unpaywall_locations = existing_doi || title_match ? unpaywall_response.oa_locations : []
-      unpaywall_locations_by_url = existing_doi || title_match ? unpaywall_response.oal_urls : {}
-
-      existing_locations = publication.open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
-
-      existing_locations_by_url = existing_locations.index_by(&:url)
-
-      ActiveRecord::Base.transaction do
-        unpaywall_locations.each do |unpaywall_location_data|
-          unpaywall_url = unpaywall_location_data.url
-          open_access_location = existing_locations_by_url.fetch(unpaywall_url) { build_new_oal(publication, unpaywall_url) }
-
-          update_open_access_location(open_access_location, unpaywall_location_data)
-          open_access_location.save!
-        rescue StandardError => e
-          ImporterErrorLog.log_error(
-            importer_class: self.class,
-            error: e,
-            metadata: {
-              publication_id: publication&.id,
-              publication_doi_url_path: publication&.doi_url_path,
-              unpaywall_response: unpaywall_location_data
-            }
-          )
-        end
-
-        locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
-        locations_to_delete.each(&:destroy)
-
-        publication.open_access_status = unpaywall_response.oa_status if existing_doi || title_match
-
-        publication.unpaywall_last_checked_at = Time.zone.now
-
-        publication.save!
-      end
-    end
-
-    def update_open_access_location(open_access_location, unpaywall_location_data)
-      open_access_location.assign_attributes(
-        landing_page_url: unpaywall_location_data.url_for_landing_page,
-        pdf_url: unpaywall_location_data.url_for_pdf,
-        host_type: unpaywall_location_data.host_type,
-        is_best: unpaywall_location_data.is_best,
-        license: unpaywall_location_data.license,
-        oa_date: unpaywall_location_data.oa_date,
-        source_updated_at: unpaywall_location_data.updated,
-        version: unpaywall_location_data.version
-      )
-    end
-
-    def build_new_oal(publication, url)
-      publication.open_access_locations.build(source: Source::UNPAYWALL, url: url)
     end
 end

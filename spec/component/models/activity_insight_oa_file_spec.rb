@@ -3,7 +3,7 @@
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
-RSpec.describe ActivityInsightOaFile, type: :model do
+RSpec.describe ActivityInsightOAFile, type: :model do
   subject { described_class.new }
 
   it { is_expected.to have_db_column(:location).of_type(:string) }
