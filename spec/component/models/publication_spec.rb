@@ -476,7 +476,7 @@ describe Publication, type: :model do
     let!(:pub2) { create(:publication,
                          title: 'pub2',
                          doi_verified: false,
-                        publication_type: 'Academic Journal Article')
+                         publication_type: 'Academic Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
@@ -501,8 +501,8 @@ describe Publication, type: :model do
                          publication_type: 'Professional Journal Article')
     }
     let!(:pub7) { create(:publication,
-                          title: 'pub7',
-                          publication_type: 'Trade Journal Article')
+                         title: 'pub7',
+                         publication_type: 'Trade Journal Article')
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
