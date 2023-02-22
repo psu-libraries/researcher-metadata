@@ -675,7 +675,7 @@ class Publication < ApplicationRecord
   end
 
   def update_from_unpaywall(unpaywall_response)
-    if unpaywall_response.matchable_title == matchable_title && doi.blank?
+    if unpaywall_response.matchable_title == matchable_title && doi.blank? && unpaywall_response.doi.present?
       self.doi = unpaywall_response.doi
       self.doi_verified = true
       title_match = true

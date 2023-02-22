@@ -69,7 +69,7 @@ class OpenAccessButtonPublicationImporter
 
       existing_oa_location = publication.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
 
-      if publication.doi.blank?
+      if publication.doi.blank? && oab_response.doi.present?
         publication.doi = oab_response.doi
         publication.doi_verified = true
       end
