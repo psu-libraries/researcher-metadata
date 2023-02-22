@@ -65,7 +65,7 @@ class Publication < ApplicationRecord
   end
 
   def self.oa_workflow_states
-    ['automatic DOI verification pending', 'oa metadata search pending', 'automatic permissions check pending']
+    ['automatic DOI verification pending', 'oa metadata search pending']
   end
 
   def self.preferred_versions

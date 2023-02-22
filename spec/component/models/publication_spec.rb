@@ -289,7 +289,7 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending', 'automatic permissions check pending']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending']
     end
   end
 
