@@ -12,7 +12,7 @@ class OABResponse
   end
 
   def doi
-    DOISanitizer.new(json['metadata']['doi']).url
+    DOISanitizer.new(json['metadata']['doi']).url if json['metadata']
   end
 
   def to_s
