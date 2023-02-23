@@ -35,6 +35,12 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
   it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
+  it { is_expected.to have_db_column(:licence).of_type(:string) }
+  it { is_expected.to have_db_column(:embargo_date).of_type(:date) }
+  it { is_expected.to have_db_column(:set_statement).of_type(:string) }
+  it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
+  it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -60,6 +66,7 @@ describe Publication, type: :model do
     it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:activity_insight_postprint_status).in_array(described_class.postprint_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:oa_workflow_state).in_array(described_class.oa_workflow_states).allow_nil }
+    it { is_expected.to validate_inclusion_of(:preferred_version).in_array(described_class.preferred_versions).allow_nil }
 
     describe 'validating DOI format' do
       let(:pub) { build(:publication, doi: doi) }
@@ -282,7 +289,13 @@ describe Publication, type: :model do
 
   describe '.oa_workflow_states' do
     it 'returns the list of valid open access workflow states' do
-      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending']
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending']
+    end
+  end
+
+  describe '.preferred_versions' do
+    it 'returns the list of valid open access workflow states' do
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion']
     end
   end
 
@@ -474,37 +487,54 @@ describe Publication, type: :model do
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         doi_verified: false)
+                         doi_verified: false,
+                         publication_type: 'Academic Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)
+                         doi_verified: true,
+                         oa_workflow_state: 'oa metadata search pending',
+                         publication_type: 'Conference Proceeding')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
-                         oa_workflow_state: nil)
+                         oa_workflow_state: nil,
+                         publication_type: 'Journal Article')
     }
     let!(:pub5) { create(:publication,
                          title: 'pub5',
                          doi_verified: nil)
     }
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 60),
+                         publication_type: 'Professional Journal Article')
+    }
     let!(:pub7) { create(:publication,
                          title: 'pub7',
+                         publication_type: 'Trade Journal Article')
+    let!(:pub8) { create(:publication,
+                         title: 'pub8',
                          doi_verified: nil)
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7, version: 'unknown') }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, version: 'unknown') }
+
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
+
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
     let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub7]
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7, pub8]
       end
     end
 
@@ -530,6 +560,12 @@ describe Publication, type: :model do
       it "returns activity_insight_oa_publications whose associated files' versions are all 'unknown'" do
         byebug
         expect(described_class.unknown_version).to match_array [pub7]
+      end
+    end
+
+    describe '.needs_oa_metadata_search' do
+      it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
+        expect(described_class.needs_oa_metadata_search).to match_array [pub6]
       end
     end
   end

@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-RSpec.describe OaNotificationSetting, type: :model do
+RSpec.describe OANotificationSetting, type: :model do
   before do
     described_class.destroy_all
   end

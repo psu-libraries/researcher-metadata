@@ -203,14 +203,14 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          if pub_record.no_open_access_information? && activity_insight_file_location.present?
+          if pub_record.no_open_access_information? && activity_insight_file_location.present? && Publication.oa_publication_types.include?(pub_record.publication_type)
             aif = pub_record.activity_insight_oa_files.first
 
             if aif.present?
               aif.update location: activity_insight_file_location
               aif.save!
             else
-              file = ActivityInsightOaFile.create(location: activity_insight_file_location)
+              file = ActivityInsightOAFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
               DOIVerificationJob.perform_later(pub_record.id)

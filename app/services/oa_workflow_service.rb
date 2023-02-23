@@ -1,14 +1,28 @@
 # frozen_string_literal: true
 
-class OaWorkflowService
+class OAWorkflowService
   def workflow
     Publication.needs_doi_verification.each do |pub|
       pub.oa_workflow_state = 'automatic DOI verification pending'
       pub.save!
       DOIVerificationJob.perform_later(pub.id)
     rescue StandardError
-      pub.doi_verified = false
+      pub.update_column(:doi_verified, false)
+      raise
+    end
+
+    Publication.needs_oa_metadata_search.each do |pub|
+      pub.oa_workflow_state = 'oa metadata search pending'
       pub.save!
+      FetchOAMetadataJob.perform_later(pub.id)
+    end
+
+    ActivityInsightOAFile.needs_permissions_check.each do |file|
+      file.version_checked = true
+      file.save!
+      PermissionsCheckJob.perform_later(file.id)
+    rescue StandardError
+      file.update_column(:version_checked, true)
       raise
     end
   end

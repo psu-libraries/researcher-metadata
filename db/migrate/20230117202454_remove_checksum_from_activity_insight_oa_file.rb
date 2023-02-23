@@ -1,4 +1,4 @@
-class RemoveChecksumFromActivityInsightOaFile < ActiveRecord::Migration[6.1]
+class RemoveChecksumFromActivityInsightOAFile < ActiveRecord::Migration[6.1]
   def up
     remove_column :activity_insight_oa_files, :checksum, :string
   end

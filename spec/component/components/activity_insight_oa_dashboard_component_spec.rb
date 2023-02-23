@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-RSpec.describe ActivityInsightOaDashboardComponent, type: :component do
+RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   let!(:aif1) { create(:activity_insight_oa_file, publication: pub1) }
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2) }
 

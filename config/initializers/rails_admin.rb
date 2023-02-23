@@ -68,7 +68,7 @@ RailsAdmin.config do |config|
             :ScholarsphereWorkDeposit,
             :ImporterErrorLog,
             :Authorship,
-            :OaNotificationSetting]
+            :OANotificationSetting]
     end
     new do
       only [:Authorship,
@@ -95,7 +95,7 @@ RailsAdmin.config do |config|
             :ExternalPublicationWaiver,
             :InternalPublicationWaiver,
             :OpenAccessLocation,
-            :OaNotificationSetting]
+            :OANotificationSetting]
     end
     delete do
       only [:APIToken,

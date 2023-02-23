@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
-class OaNotificationSetting < ApplicationRecord
+class OANotificationSetting < ApplicationRecord
   # The "singleton_guard" column is a unique column which must always be set to '0'
-  # This ensures that only one OaNotificationSettings row is created
+  # This ensures that only one OANotificationSettings row is created
   validates :singleton_guard, inclusion: { in: [0] }
 
   class << self

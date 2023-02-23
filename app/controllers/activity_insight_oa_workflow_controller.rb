@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ActivityInsightOaWorkflowController < ApplicationController
+class ActivityInsightOAWorkflowController < ApplicationController
   before_action :authenticate!
   before_action :require_admin
 

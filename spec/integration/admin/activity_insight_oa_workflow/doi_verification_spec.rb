@@ -28,7 +28,7 @@ describe 'Admin DOI Verification dashboard', type: :feature do
   end
 
   describe 'clicking "<< Back"' do
-    it 'redirects to the Oa Workflow Dashboard' do
+    it 'redirects to the OA Workflow Dashboard' do
       click_link '<< Back'
       expect(page).to have_current_path activity_insight_oa_workflow_path
     end
