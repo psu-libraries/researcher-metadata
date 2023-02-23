@@ -65,10 +65,11 @@ class Publication < ApplicationRecord
   end
 
   def self.oa_workflow_states
-    [
-      'automatic DOI verification pending',
-      'oa metadata search pending'
-    ]
+    ['automatic DOI verification pending', 'oa metadata search pending']
+  end
+
+  def self.preferred_versions
+    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
   end
 
   has_many :authorships, inverse_of: :publication
@@ -115,6 +116,7 @@ class Publication < ApplicationRecord
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
   validates :oa_workflow_state, inclusion: { in: oa_workflow_states, allow_nil: true }
+  validates :preferred_version, inclusion: { in: preferred_versions, allow_nil: true }
 
   validate :doi_format_is_valid
 
