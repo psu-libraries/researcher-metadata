@@ -475,17 +475,20 @@ describe Publication, type: :model do
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         doi_verified: false)
+                         doi_verified: false,
+                         publication_type: 'Academic Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
-                         oa_workflow_state: 'oa metadata search pending')
+                         oa_workflow_state: 'oa metadata search pending',
+                         publication_type: 'Conference Proceeding')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
-                         oa_workflow_state: nil)
+                         oa_workflow_state: nil,
+                         publication_type: 'Journal Article')
     }
     let!(:pub5) { create(:publication,
                          title: 'pub5',
@@ -494,18 +497,24 @@ describe Publication, type: :model do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_status_last_checked_at: Time.now - (1 * 60 * 60))
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 60),
+                         publication_type: 'Professional Journal Article')
+    }
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         publication_type: 'Trade Journal Article')
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6]
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7]
       end
     end
 

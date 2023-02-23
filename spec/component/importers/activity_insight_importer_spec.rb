@@ -4932,16 +4932,13 @@ describe ActivityInsightImporter do
           importer.call
           p1 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739072').publication
-          p2 = PublicationImport.find_by(source: 'Activity Insight',
-                                         source_identifier: '92747188475').publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '190707482930').publication
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739090').publication
 
-          expect(ActivityInsightOAFile.count).to be 4
+          expect(ActivityInsightOAFile.count).to be 3
           expect(p1.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file.pdf')
-          expect(p2.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-3.pdf')
           expect(p3.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-5.pdf')
           expect(p4.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-6.pdf')
         end
@@ -4960,6 +4957,13 @@ describe ActivityInsightImporter do
 
           expect(p5.activity_insight_oa_files).to eq []
           expect(p5.doi_verified).to be_nil
+        end
+
+        it 'does not import ActivityInsightOAFiles for imported publications without an open access publication type' do
+          importer.call
+          p2 = PublicationImport.find_by(source: 'Activity Insight',
+                                         source_identifier: '92747188475').publication
+          expect(p2.activity_insight_oa_files).to eq []
         end
       end
     end
