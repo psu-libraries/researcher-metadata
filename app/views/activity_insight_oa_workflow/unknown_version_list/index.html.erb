@@ -7,18 +7,23 @@
       <tr>
         <th>Title</th>
         <th>Files</th>
+        <th>Version Status</th>
       </tr>
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
-          <td><%= p.title %></td>
-          <td>
-            <% p.activity_insight_oa_files.each do |file| %>
+          <td rowspan=<%= p.activity_insight_oa_files.count %>><%= p.title %></td>
+            <% p.activity_insight_oa_files.each_with_index do |file, index| %>
+            <%= '<tr>'.html_safe unless index == 0 %>
+            <td>
               <%= file.location %>
+            </td>
+            <td>
+              <%= file.version %>
+            </td>
+            </tr>
             <% end %>
-          </td>
-        </tr>
       <% end %>
     </tbody>
   </table>
