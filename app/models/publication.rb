@@ -155,13 +155,11 @@ class Publication < ApplicationRecord
         }
   scope :unknown_version, -> { 
     activity_insight_oa_publication
+    .where.not(publications: { preferred_version: nil })
     .where(
-      activity_insight_oa_files: { version: 'unknown' }
+      %{((activity_insight_oa_files.version = 'unknown' OR publications.preferred_version <> activity_insight_oa_files.version) AND NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version))}
     )
-    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.version IS NULL OR activity_insight_oa_files.version IN (?, ?)))},
-            I18n.t('file_versions.accepted_version'),
-            I18n.t('file_versions.published_version') 
-          )
+    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
