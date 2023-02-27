@@ -14,8 +14,8 @@
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
-          <td rowspan=<%= p.activity_insight_oa_files.count %>><%= p.title %></td>
-          <td rowspan=<%= p.activity_insight_oa_files.count %>><%= p.preferred_version_display %></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.title %></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.preferred_version_display %></td>
             <% p.activity_insight_oa_files.each_with_index do |file, index| %>
               <%= '<tr>'.html_safe unless index == 0 %>
                 <td>
