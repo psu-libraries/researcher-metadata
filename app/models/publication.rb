@@ -661,6 +661,12 @@ class Publication < ApplicationRecord
     secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
   end
 
+  def preferred_version_display
+    return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
+
+    I18n.t('file_versions.published_version_display')
+  end
+
   def self.filter_by_activity_insight_id(query, activity_insight_id)
     query.joins(:imports)
       .where(publication_imports: {

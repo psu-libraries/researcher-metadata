@@ -1,11 +1,12 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
-  <h1 class="pb-3 pt-2">Publications With No Known File Version</h1>
+  <h1 class="pb-3 pt-2">Publications Requiring File Version Verification</h1>
   <div class='card'>
   <table class="table">
     <thead class='card-header'>
       <tr>
         <th>Title</th>
+        <th>Preferred Version</th>
         <th>Files</th>
         <th>Version Status</th>
       </tr>
@@ -14,15 +15,16 @@
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
           <td rowspan=<%= p.activity_insight_oa_files.count %>><%= p.title %></td>
+          <td rowspan=<%= p.activity_insight_oa_files.count %>><%= p.preferred_version_display %></td>
             <% p.activity_insight_oa_files.each_with_index do |file, index| %>
-            <%= '<tr>'.html_safe unless index == 0 %>
-            <td>
-              <%= file.location %>
-            </td>
-            <td>
-              <%= file.version %>
-            </td>
-            </tr>
+              <%= '<tr>'.html_safe unless index == 0 %>
+                <td>
+                  <%= file.location %>
+                </td>
+                <td>
+                  <%= file.version_status_display %>
+                </td>
+              </tr>
             <% end %>
       <% end %>
     </tbody>
