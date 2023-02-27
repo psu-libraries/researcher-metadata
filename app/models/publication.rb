@@ -153,13 +153,14 @@ class Publication < ApplicationRecord
             .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
         }
-  scope :file_version_check_failed, -> { 
+  scope :file_version_check_failed, -> {
     activity_insight_oa_publication
-    .where.not(publications: { preferred_version: nil })
-    .where(
-      %{((activity_insight_oa_files.version = 'unknown' OR publications.preferred_version <> activity_insight_oa_files.version) AND NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version))}
-    )
-    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
+      .where.not(publications: { preferred_version: nil })
+      .where(
+        "((activity_insight_oa_files.version = 'unknown' OR publications.preferred_version <> activity_insight_oa_files.version) " \
+        'AND NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version))'
+      )
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 

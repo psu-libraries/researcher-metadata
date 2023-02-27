@@ -13,8 +13,8 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
     it 'renders a muted card with no link' do
       render_inline(described_class.new)
-      expect(page.find('#doi-verification-card').to_json).to include('text-muted')
-      expect(page.find('#doi-verification-card').text).to include('0')
+      expect(page.find_by_id('doi-verification-card').to_json).to include('text-muted')
+      expect(page.find_by_id('doi-verification-card').text).to include('0')
       expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/doi_verification')
     end
   end
@@ -25,8 +25,8 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
     it 'renders the doi check card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
-      expect(page.find('#doi-verification-card').to_json).not_to include('text-muted')
-      expect(page.find('#doi-verification-card').text).to include('1')
+      expect(page.find_by_id('doi-verification-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('doi-verification-card').text).to include('1')
       expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/doi_verification')
     end
   end
@@ -38,8 +38,8 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
     it 'renders a muted card with no link' do
       render_inline(described_class.new)
-      expect(page.find('#file-version-check-card').to_json).to include('text-muted')
-      expect(page.find('#file-version-check-card').text).to include('0')
+      expect(page.find_by_id('file-version-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('file-version-check-card').text).to include('0')
       expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/file_version_check_list')
     end
   end
@@ -50,8 +50,8 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
     it 'renders the file version check card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
-      expect(page.find('#file-version-check-card').to_json).not_to include('text-muted')
-      expect(page.find('#file-version-check-card').text).to include('2')
+      expect(page.find_by_id('file-version-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('file-version-check-card').text).to include('2')
       expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/file_version_check_list')
     end
   end

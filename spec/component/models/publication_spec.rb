@@ -524,23 +524,23 @@ describe Publication, type: :model do
                          doi_verified: nil)
     }
     let!(:pub9) { create(:publication,
-      title: 'pub9',
-      publication_type: 'Journal Article',
-      preferred_version: 'acceptedVersion',
-      doi_verified: nil)
+                         title: 'pub9',
+                         publication_type: 'Journal Article',
+                         preferred_version: 'acceptedVersion',
+                         doi_verified: nil)
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
 
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }
-    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7) }
 
-    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
-    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
 
-    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub9, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub9, version: 'publishedVersion') }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
@@ -3113,15 +3113,15 @@ describe Publication, type: :model do
 
   describe '#preferred_version_display' do
     context 'when the preferred_version is "acceptedVersion"' do
-      let(:publication) { create :publication, preferred_version: 'acceptedVersion' }
+      let(:publication) { create(:publication, preferred_version: 'acceptedVersion') }
 
       it 'returns "Accepted Manuscript"' do
-        expect(publication.preferred_version_display).to eq 'Accepted Manuscript'  
+        expect(publication.preferred_version_display).to eq 'Accepted Manuscript'
       end
     end
 
     context 'when the preferred_version is "publishedVersion"' do
-      let(:publication) { create :publication, preferred_version: 'publishedVersion' }
+      let(:publication) { create(:publication, preferred_version: 'publishedVersion') }
 
       it 'returns "Final Published Version"' do
         expect(publication.preferred_version_display).to eq 'Final Published Version'

@@ -58,7 +58,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe '#version_status_display' do
     context 'when version is "unknown"' do
-      let(:file) { create :activity_insight_oa_file, version: 'unknown' }
+      let(:file) { create(:activity_insight_oa_file, version: 'unknown') }
 
       it 'returns "Unknown Version"' do
         expect(file.version_status_display).to eq 'Unknown Version'
@@ -66,7 +66,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     end
 
     context 'when version is "acceptedVersion"' do
-      let(:file) { create :activity_insight_oa_file, version: 'acceptedVersion' }
+      let(:file) { create(:activity_insight_oa_file, version: 'acceptedVersion') }
 
       it 'returns "Wrong Version"' do
         expect(file.version_status_display).to eq 'Wrong Version'
