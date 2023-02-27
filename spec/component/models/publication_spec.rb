@@ -556,10 +556,10 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.unknown_version' do
-      it "returns activity_insight_oa_publications whose associated files' versions are all 'unknown'" do
+    describe '.file_version_check_failed' do
+      it "returns activity_insight_oa_publications whose associated files' versions are all 'unknown' or the incorrect version" do
         byebug
-        expect(described_class.unknown_version).to match_array [pub7]
+        expect(described_class.file_version_check_failed).to match_array [pub7]
       end
     end
 

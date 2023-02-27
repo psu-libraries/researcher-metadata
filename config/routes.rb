@@ -23,7 +23,7 @@ Rails.application.routes.draw do
   get '/activity_insight_oa_workflow' => 'activity_insight_oa_workflow#index'
   namespace :activity_insight_oa_workflow do
     get '/doi_verification' => 'doi_verification#index'
-    get '/unknown_version_list' => 'unknown_version_list#index'
+    get '/file_version_check_list' => 'file_version_check_list#index'
   end
 
   root to: 'public#home'

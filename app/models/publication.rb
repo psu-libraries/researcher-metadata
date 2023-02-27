@@ -153,7 +153,7 @@ class Publication < ApplicationRecord
             .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
         }
-  scope :unknown_version, -> { 
+  scope :file_version_check_failed, -> { 
     activity_insight_oa_publication
     .where.not(publications: { preferred_version: nil })
     .where(
