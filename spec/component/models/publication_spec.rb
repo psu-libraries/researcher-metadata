@@ -3110,4 +3110,22 @@ describe Publication, type: :model do
       expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
     end
   end
+
+  describe '#preferred_version_display' do
+    context 'when the preferred_version is "acceptedVersion"' do
+      let(:publication) { create :publication, preferred_version: 'acceptedVersion' }
+
+      it 'returns "Accepted Manuscript"' do
+        expect(publication.preferred_version_display).to eq 'Accepted Manuscript'  
+      end
+    end
+
+    context 'when the preferred_version is "publishedVersion"' do
+      let(:publication) { create :publication, preferred_version: 'publishedVersion' }
+
+      it 'returns "Final Published Version"' do
+        expect(publication.preferred_version_display).to eq 'Final Published Version'
+      end
+    end
+  end
 end
