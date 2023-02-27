@@ -40,7 +40,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('file-version-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('file-version-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/file_version_curation')
+      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/file_version_review')
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('file-version-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('file-version-check-card').text).to include('2')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/file_version_curation')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/file_version_review')
     end
   end
 end
