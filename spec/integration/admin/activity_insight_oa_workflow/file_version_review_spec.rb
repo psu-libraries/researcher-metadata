@@ -4,7 +4,8 @@ require 'integration/integration_spec_helper'
 
 describe 'Admin File Version Curation dashboard', type: :feature do
   let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, version: 'unknown') }
-  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
+  let!(:aif2) { create(:activity_insight_oa_file, publication: pub1, version: 'unknown') }
+  let!(:aif3) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
   let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
 
@@ -21,6 +22,8 @@ describe 'Admin File Version Curation dashboard', type: :feature do
       expect(page).to have_text('Version Status')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub2.title)
+      expect(find_all('td[rowspan="2"]').count).to eq 2
+      expect(find_all('td[rowspan="2"]').first.text).to eq pub1.title
       expect(page).to have_text('Accepted Manuscript').twice
       expect(page).to have_text(pub1.activity_insight_oa_files.first.location)
       expect(page).to have_text(pub2.activity_insight_oa_files.first.location)
