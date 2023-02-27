@@ -207,8 +207,8 @@ en:
     activity_insight_oa_dashboard_component:
       doi_verification_title: Verify DOIs
       doi_verification_description: Publications that require manual DOI curation or verification.
-      file_version_check_list_title: Verify File Version
-      file_version_check_list_description: Publications that do not have a known or correct file version and require admin review.
+      file_version_curation_title: Review File Versions
+      file_version_curation_description: Publications that do not have a known or correct file version and require admin review.
 
   helpers:
     submit:
