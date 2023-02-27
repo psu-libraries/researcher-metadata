@@ -1,7 +1,7 @@
 <div class="container">
   <% if doi_failed_verification_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
-      <div class='card'>
+      <div class='card' id='doi-verification-card'>
         <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
           <span class='float-right text-large'><strong><%= doi_failed_verification_count %></strong></span>
         </div>
@@ -9,7 +9,7 @@
       </div>
     <% end %>
   <% else %>
-    <div class='card text-muted'>
+    <div class='card text-muted' id='doi-verification-card'>
       <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
         <span class='float-right text-large'>0</strong></span>
       </div>
@@ -19,7 +19,7 @@
   <br/>
   <% if file_version_check_failed_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_file_version_check_list_path, class: 'card-link' do %>
-      <div class='card'>
+      <div class='card' id='file-version-check-card'>
         <div class='card-header'><strong><%= i18n('file_version_check_list_title') %></strong>
           <span class='float-right text-large'><strong><%= file_version_check_failed_count %></strong></span>
         </div>
@@ -27,7 +27,7 @@
       </div>
     <% end %>
   <% else %>
-    <div class='card text-muted'>
+    <div class='card text-muted' id='file-version-check-card'>
       <div class='card-header'><strong><%= i18n('file_version_check_list_title') %></strong>
         <span class='float-right text-large'>0</strong></span>
       </div>
