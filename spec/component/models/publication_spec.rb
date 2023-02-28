@@ -537,7 +537,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7) }
 
     let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
-    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub8, version: 'publishedVersion') }
     let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
 
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub9, version: 'publishedVersion') }
@@ -569,8 +569,8 @@ describe Publication, type: :model do
     end
 
     describe '.file_version_check_failed' do
-      it "returns activity_insight_oa_publications whose associated files' versions are all 'unknown' or the incorrect version" do
-        expect(described_class.file_version_check_failed).to match_array [pub8, pub9]
+      it "returns activity_insight_oa_publications whose associated files' versions still contain an 'unknown' version and no correct version" do
+        expect(described_class.file_version_check_failed).to match_array [pub8]
       end
     end
 
