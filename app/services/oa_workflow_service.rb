@@ -25,5 +25,13 @@ class OAWorkflowService
       file.update_column(:version_checked, true)
       raise
     end
+
+    ActivityInsightOAFile.ready_for_download.each do |file|
+      file.downloaded = true
+      file.save!
+      PublicationDownloadJob.perform_later(file.id)
+    rescue StandardError
+      file.update_column(:downloaded, false)
+    end
   end
 end

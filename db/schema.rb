@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_02_14_202412) do
+ActiveRecord::Schema.define(version: 2023_02_27_170832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -51,6 +51,8 @@ ActiveRecord::Schema.define(version: 2023_02_14_202412) do
     t.datetime "updated_at", precision: 6, null: false
     t.string "version"
     t.boolean "version_checked"
+    t.string "file"
+    t.boolean "downloaded"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
   end
 
