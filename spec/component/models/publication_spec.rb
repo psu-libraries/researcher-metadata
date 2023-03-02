@@ -517,22 +517,22 @@ describe Publication, type: :model do
                          publication_type: 'Trade Journal Article')
     }
     let!(:pub8) { create(:publication,
-      title: 'pub8',
-      licence: nil,
-      doi_verified: true)
+                         title: 'pub8',
+                         licence: nil,
+                         doi_verified: true)
     }
     let!(:pub9) { create(:publication,
-      title: 'pub9',
-      licence: nil,
-      doi_verified: true,
-      permissions_last_checked_at: DateTime.now)
+                         title: 'pub9',
+                         licence: nil,
+                         doi_verified: true,
+                         permissions_last_checked_at: DateTime.now)
     }
     let!(:pub10) { create(:publication,
-      title: 'pub10',
-      licence: 'licence',
-      doi_verified: true)
+                          title: 'pub10',
+                          licence: 'licence',
+                          doi_verified: true)
     }
-    
+
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
