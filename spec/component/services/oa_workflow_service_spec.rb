@@ -14,11 +14,13 @@ describe OAWorkflowService do
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
+                         permissions_last_checked_at: DateTime.now,
                          oa_status_last_checked_at: Time.now - (1 * 60 * 30))}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
-                         oa_workflow_state: nil)}
+                         oa_workflow_state: nil,
+                         permissions_last_checked_at: DateTime.now)}
     let!(:pub5) { create(:publication,
                          title: 'pub5',
                          doi_verified: nil,
@@ -27,20 +29,18 @@ describe OAWorkflowService do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: nil,
-                         licence: 'licence')}
+                         oa_workflow_state: nil)}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
-                         doi_verified: true,
-                         permissions_last_checked_at: nil)}
+                         licence: 'licence')}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
-    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
-    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3, version: nil) }
-    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4, version: 'publishedVersion', version_checked: true) }
-    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, version: 'acceptedVersion') }
-    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6, downloaded: true) }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, version: 'acceptedVersion', version_checked: nil) }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     context 'when publications need doi verification' do
       before do
@@ -55,6 +55,7 @@ describe OAWorkflowService do
         expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
         expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
         expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub6.id)
       end
 
       context 'when there is an error' do
@@ -74,21 +75,22 @@ describe OAWorkflowService do
 
         it 'calls the permissions check job with that publication' do
           service.workflow
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file1.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file2.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file3.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
-          expect(PermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
+          expect(PermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
         end
       end
 
       context 'when there is an error' do
         before { allow(PermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
 
-        it 'updates file version checked' do
+        it 'updates permissions_last_checked_at checked' do
           service.workflow
         rescue RuntimeError
-          expect(activity_insight_oa_file6.reload.version_checked).to be true
+          expect(pub6.reload.permissions_last_checked_at).to be_present
         end
       end
     end

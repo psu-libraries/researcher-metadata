@@ -6,8 +6,6 @@ class ActivityInsightOAFile < ApplicationRecord
 
   mount_uploader :file, ActivityInsightFileUploader
 
-  scope :pub_without_permissions, -> { left_outer_joins(:publication).where(publication: { licence: nil }).where(publication: { doi_verified: true }) }
-  scope :needs_permissions_check, -> { pub_without_permissions.where(version_checked: nil).where(%{version = ? OR version = ?}, I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')) }
   scope :ready_for_download, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
