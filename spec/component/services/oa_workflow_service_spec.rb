@@ -122,7 +122,6 @@ describe OAWorkflowService do
           expect(activity_insight_oa_file4.reload.downloaded).to be false
         end
       end
-      
     end
   end
 end

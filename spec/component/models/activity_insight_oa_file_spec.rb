@@ -49,19 +49,24 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         licence: 'licence',
-                         publication_type: 'Academic Journal Article')
+                         licence: 'licence')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: nil)
     }
     let!(:pub4) { create(:publication,
-      title: 'pub4',
-      licence: 'licence',
-      publication_type: 'Trade Journal Article')
-}
-#add publication & file with open access location
+                         title: 'pub4',
+                         licence: 'licence',
+                         publication_type: 'Trade Journal Article')
+    }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         licence: 'licence',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                         ])
+    }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:file3) { create(:activity_insight_oa_file, publication: pub1, version: 'acceptedVersion') }
@@ -70,6 +75,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file6) { create(:activity_insight_oa_file, publication: pub1, version: 'acceptedVersion', version_checked: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub5) }
 
     describe '.pub_without_permissions' do
       it 'returns files where the publication does not have permissions data' do

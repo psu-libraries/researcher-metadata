@@ -12,6 +12,9 @@ activity_insight:
   username:
   password:
 
+activity_insight_s3_authorizer:
+  api_key:
+
 azure_ad_oauth:
   client_id:
   client_secret:

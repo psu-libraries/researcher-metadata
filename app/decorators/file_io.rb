@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class FileIO < SimpleDelegator
   def initialize(stream, filename)
     @filename = filename

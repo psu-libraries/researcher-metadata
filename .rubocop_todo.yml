@@ -177,6 +177,7 @@ RSpec/NamedSubject:
     - 'spec/component/serializers/api/v1/presentation_serializer_spec.rb'
     - 'spec/component/serializers/api/v1/publication_serializer_spec.rb'
     - 'spec/requests/api/v1/swagger_checker_spec.rb'
+    - 'spec/component/models/activity_insight_oa_file_spec.rb'
 
 # Offense count: 1180
 RSpec/NestedGroups:
