@@ -20,6 +20,10 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
   end
 
+  describe 'validations' do
+    it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
+  end
+
   describe '#version_status_display' do
     context 'when version is "unknown"' do
       let(:file) { create(:activity_insight_oa_file, version: 'unknown') }

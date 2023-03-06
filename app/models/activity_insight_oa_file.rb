@@ -8,6 +8,8 @@ class ActivityInsightOAFile < ApplicationRecord
                       I18n.t('file_versions.published_version'),
                       'unknown']
 
+  validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
+
   def version_status_display
     return 'Unknown Version' if version == 'unknown'
 
