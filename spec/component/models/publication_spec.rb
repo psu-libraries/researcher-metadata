@@ -534,16 +534,16 @@ describe Publication, type: :model do
                           doi_verified: true)
     }
     let!(:pub11) { create(:publication,
-      title: 'pub11',
-      publication_type: 'Journal Article',
-      preferred_version: 'acceptedVersion',
-      doi_verified: nil)
+                          title: 'pub11',
+                          publication_type: 'Journal Article',
+                          preferred_version: 'acceptedVersion',
+                          doi_verified: nil)
     }
     let!(:pub12) { create(:publication,
-      title: 'pub12',
-      publication_type: 'Journal Article',
-      preferred_version: 'acceptedVersion',
-      doi_verified: nil)
+                          title: 'pub12',
+                          publication_type: 'Journal Article',
+                          preferred_version: 'acceptedVersion',
+                          doi_verified: nil)
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
