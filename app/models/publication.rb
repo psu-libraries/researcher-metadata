@@ -146,6 +146,7 @@ class Publication < ApplicationRecord
   scope :activity_insight_oa_publication, -> { oa_publication.with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
+  scope :needs_permissions_check, -> { activity_insight_oa_publication.where(licence: nil, doi_verified: true, permissions_last_checked_at: nil) }
   scope :needs_oa_metadata_search,
         -> {
           activity_insight_oa_publication

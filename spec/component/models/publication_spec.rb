@@ -519,40 +519,56 @@ describe Publication, type: :model do
     }
     let!(:pub8) { create(:publication,
                          title: 'pub8',
-                         publication_type: 'Journal Article',
-                         preferred_version: 'acceptedVersion',
-                         doi_verified: nil)
+                         licence: nil,
+                         doi_verified: true)
     }
     let!(:pub9) { create(:publication,
                          title: 'pub9',
-                         publication_type: 'Journal Article',
-                         preferred_version: 'acceptedVersion',
-                         doi_verified: nil)
+                         licence: nil,
+                         doi_verified: true,
+                         permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub10) { create(:publication,
+                          title: 'pub10',
+                          licence: 'licence',
+                          doi_verified: true)
+    }
+    let!(:pub11) { create(:publication,
+      title: 'pub11',
+      publication_type: 'Journal Article',
+      preferred_version: 'acceptedVersion',
+      doi_verified: nil)
+    }
+    let!(:pub12) { create(:publication,
+      title: 'pub12',
+      publication_type: 'Journal Article',
+      preferred_version: 'acceptedVersion',
+      doi_verified: nil)
     }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
-
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7) }
-
-    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub8, version: 'unknown') }
-    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub8, version: 'publishedVersion') }
-    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
-
-    let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub9, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub8) }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub9) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
+    let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
+    let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7, pub8, pub9]
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7, pub8, pub9, pub10, pub11, pub12]
       end
     end
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
-        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4, pub6, pub8, pub9]
+        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4, pub6, pub8, pub9, pub10, pub11, pub12]
       end
     end
 
@@ -564,19 +580,25 @@ describe Publication, type: :model do
 
     describe '.needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
-        expect(described_class.needs_doi_verification).to match_array [pub4, pub8, pub9]
+        expect(described_class.needs_doi_verification).to match_array [pub4, pub11, pub12]
       end
     end
 
     describe '.file_version_check_failed' do
       it "returns activity_insight_oa_publications whose associated files' versions still contain an 'unknown' version and no correct version" do
-        expect(described_class.file_version_check_failed).to match_array [pub8]
+        expect(described_class.file_version_check_failed).to match_array [pub11]
       end
     end
 
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
-        expect(described_class.needs_oa_metadata_search).to match_array [pub6]
+        expect(described_class.needs_oa_metadata_search).to match_array [pub6, pub8, pub9, pub10]
+      end
+    end
+
+    describe '.needs_permissions_check' do
+      it 'returns files that have had their permissions checked' do
+        expect(described_class.needs_permissions_check).to match_array [pub8, pub3, pub6]
       end
     end
   end

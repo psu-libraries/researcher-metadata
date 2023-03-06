@@ -17,12 +17,12 @@ class OAWorkflowService
       FetchOAMetadataJob.perform_later(pub.id)
     end
 
-    ActivityInsightOAFile.needs_permissions_check.each do |file|
-      file.version_checked = true
-      file.save!
-      PermissionsCheckJob.perform_later(file.id)
+    Publication.needs_permissions_check.each do |pub|
+      pub.permissions_last_checked_at = Time.current
+      pub.save!
+      PermissionsCheckJob.perform_later(pub.id)
     rescue StandardError
-      file.update_column(:version_checked, true)
+      pub.update_column(:permissions_last_checked_at, Time.current)
       raise
     end
   end
