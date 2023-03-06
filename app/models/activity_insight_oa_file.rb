@@ -6,7 +6,7 @@ class ActivityInsightOAFile < ApplicationRecord
 
   ALLOWED_VERSIONS = [I18n.t('file_versions.accepted_version'),
                       I18n.t('file_versions.published_version'),
-                      'unknown']
+                      'unknown'].freeze
 
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 

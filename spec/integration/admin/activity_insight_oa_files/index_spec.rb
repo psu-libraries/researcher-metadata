@@ -11,12 +11,12 @@ describe 'Admin activity insight oa file list', type: :feature do
       let!(:pub1) { create(:publication, title: 'Test Publication') }
       let!(:pub2) { create(:publication, title: 'Another Publication') }
       let!(:aif1) do
-        create(:activity_insight_oa_file, 
+        create(:activity_insight_oa_file,
                publication: pub1,
                version: 'acceptedVersion')
       end
       let!(:aif2) do
-        create(:activity_insight_oa_file, 
+        create(:activity_insight_oa_file,
                publication: pub2,
                version: nil)
       end

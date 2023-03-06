@@ -6,7 +6,7 @@ require 'integration/admin/shared_examples_for_admin_page'
 describe 'Admin activity insight oa file detail page', type: :feature do
   let!(:pub) { create(:publication, title: "AIF's Publication's Title") }
   let!(:aif) do
-    create(:activity_insight_oa_file, 
+    create(:activity_insight_oa_file,
            publication: pub,
            version: 'unknown')
   end
@@ -38,7 +38,7 @@ describe 'Admin activity insight oa file detail page', type: :feature do
       end
 
       it "has a link the activity insight oa file's publication" do
-        expect(page).to have_link pub.title 
+        expect(page).to have_link pub.title
       end
     end
   end
