@@ -19,7 +19,9 @@
             <% p.activity_insight_oa_files.each_with_index do |file, index| %>
               <%= '<tr>'.html_safe unless index == 0 %>
                 <td>
-                  <%= file.location %>
+                  <%= link_to file.location.truncate(75),
+                      rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
+                      target: '_blank' %>
                 </td>
                 <td>
                   <%= file.version_status_display %>
