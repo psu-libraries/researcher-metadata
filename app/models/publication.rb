@@ -654,6 +654,10 @@ class Publication < ApplicationRecord
     secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
   end
 
+  def can_receive_new_ai_oa_files?
+    no_open_access_information? && is_oa_publication? && no_valid_file_version?
+  end
+
   def self.filter_by_activity_insight_id(query, activity_insight_id)
     query.joins(:imports)
       .where(publication_imports: {
@@ -793,5 +797,9 @@ class Publication < ApplicationRecord
           errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
         end
       end
+    end
+
+    def no_valid_file_version?
+      !(preferred_version.present? && activity_insight_oa_files.collect(&:version).include?(preferred_version))
     end
 end

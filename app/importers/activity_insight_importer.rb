@@ -203,13 +203,10 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          if pub_record.no_open_access_information? && activity_insight_file_location.present? && Publication.oa_publication_types.include?(pub_record.publication_type)
-            aif = pub_record.activity_insight_oa_files.first
+          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
-            if aif.present?
-              aif.update location: activity_insight_file_location
-              aif.save!
-            else
+            unless aif.present?
               file = ActivityInsightOAFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
