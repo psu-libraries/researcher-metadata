@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
 RSpec.describe ActivityInsightOAFile, type: :model do
-  subject { described_class.new }
+  subject(:aif) { described_class.new }
 
   it { is_expected.to have_db_column(:location).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
@@ -73,6 +73,31 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       it 'returns files that are ready to download from Activity Insight' do
         expect(described_class.ready_for_download).to match_array [file2]
       end
+    end
+  end
+
+  describe '#download_filename' do
+    before { aif.location = 'abc123/intellcont/test_publication.pdf' }
+
+    it "returns the part of the file's location after the last forward slash" do
+      expect(aif.download_filename).to eq 'test_publication.pdf'
+    end
+  end
+
+  describe '#update_download_location' do
+    let(:aif) { create(:activity_insight_oa_file, location: 'abc123/intellcont/test_publication.pdf') }
+
+    it "updates the value in the file_download_location column to the part of the file's location after the last forward slash" do
+      aif.update_download_location
+      expect(aif.reload.file_download_location.file.filename).to eq 'test_publication.pdf'
+    end
+  end
+
+  describe '#download_uri' do
+    before { aif.location = 'abc123/intellcont/test_publication.pdf' }
+
+    it "returns the full URI for the file in Activity Insight's AWS S3 bucket" do
+      expect(aif.download_uri).to eq URI('http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf')
     end
   end
 end

@@ -20,4 +20,16 @@ class ActivityInsightOAFile < ApplicationRecord
   def stored_file_path
     file_download_location.file.file
   end
+
+  def download_filename
+    location.split('/').last
+  end
+
+  def update_download_location
+    update_column(:file_download_location, download_filename)
+  end
+
+  def download_uri
+    URI("http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{location}")
+  end
 end
