@@ -158,6 +158,7 @@ RSpec/MessageSpies:
     - 'spec/component/services/scholarsphere_deposit_service_spec.rb'
     - 'spec/component/models/duplicate_publication_group_spec.rb'
     - 'spec/component/jobs/doi_verification_job_spec.rb'
+    - 'spec/component/importers/activity_insight_importer_spec.rb'
 
 # Offense count: 40
 RSpec/MultipleDescribes:

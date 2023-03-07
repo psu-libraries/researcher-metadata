@@ -5012,8 +5012,8 @@ describe ActivityInsightImporter do
           it 'creates a new ActivityInsightOAFile location for that publication' do
             importer.call
 
-            expect(existing_pub.reload.activity_insight_oa_files.collect(&:location).sort).to eq(['abc123/intellcont/file.pdf', 'abc123/intellcont/some_other_file.pdf'].sort)
-            expect(existing_pub.reload.activity_insight_oa_files.count).to eq 2
+            expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
+                                                                                              'abc123/intellcont/some_other_file.pdf'].sort)
           end
         end
 
@@ -5030,7 +5030,7 @@ describe ActivityInsightImporter do
 
             expect(existing_aif.reload.location).to eq('abc123/intellcont/some_other_file.pdf')
           end
-        end     
+        end
       end
     end
   end
