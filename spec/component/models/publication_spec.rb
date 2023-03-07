@@ -3110,4 +3110,61 @@ describe Publication, type: :model do
       expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
     end
   end
+
+  describe '#can_receive_new_ai_oa_files?' do
+    context 'when publication is not able to receive new activity insight oa files' do
+      context 'when publication has open access information' do
+        let!(:publication) { create(:publication, :oa_publication, :with_open_access_location, preferred_version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+
+      context 'when publication is not an oa_publication' do
+        let!(:publication) { create(:publication, :other_work, preferred_version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+
+      context 'when publication has associated file that matches preferred_version' do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: 'acceptedVersion') }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+    end
+
+    context 'when publication is able to receive new activity insight oa files' do
+      context 'when the publication has no activity insight oa files' do
+        let!(:publication) { create(:publication, :oa_publication) }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+
+      context "when the publication has no activity insight oa files with a version that matches the publication's preferred_version" do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: 'acceptedVersion') }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'publishedVersion') }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+
+      context 'when publication has no preferred_version and file has no version' do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: nil) }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: nil) }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+    end
+  end
 end

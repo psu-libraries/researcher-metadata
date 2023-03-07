@@ -206,7 +206,7 @@ class ActivityInsightImporter
           if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
-            unless aif.present?
+            if aif.blank?
               file = ActivityInsightOAFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!

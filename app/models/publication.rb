@@ -800,6 +800,6 @@ class Publication < ApplicationRecord
     end
 
     def no_valid_file_version?
-      !(preferred_version.present? && activity_insight_oa_files.collect(&:version).include?(preferred_version))
+      !(preferred_version.present? && activity_insight_oa_files.map(&:version).include?(preferred_version))
     end
 end
