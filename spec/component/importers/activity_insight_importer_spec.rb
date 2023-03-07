@@ -4991,15 +4991,31 @@ describe ActivityInsightImporter do
       end
 
       context 'when the existing publication is not open access' do
-        context 'when an ActivityInsightOAFile exists for a publication imported with a postprint/open access file' do
+        context 'when existing ActivityInsightOAFile has same locationas imported file' do
           let!(:existing_aif) { create(:activity_insight_oa_file,
                                        publication: existing_pub,
-                                       location: 'abc123/intellcont/some_file.pdf') }
+                                       location: 'abc123/intellcont/file.pdf') }
 
-          it 'updates the ActivityInsightOAFile location for that publication' do
-            expect { importer.call }.to(change { existing_aif.reload.location })
+          it 'does not update the ActivityInsightOAFile location for that publication' do
+            expect(existing_aif).not_to receive(:save!)
+            importer.call
 
             expect(existing_aif.reload.location).to eq('abc123/intellcont/file.pdf')
+          end
+        end
+
+        context 'when existing ActivityInsightOAFile already has a valid file version' do
+          let!(:existing_aif) { create(:activity_insight_oa_file,
+                                       publication: existing_pub,
+                                       location: 'abc123/intellcont/some_other_file.pdf',
+                                       version: 'acceptedVersion') }
+
+          it 'does not update the ActivityInsightOAFile location for that publication' do
+            existing_pub.update preferred_version: 'acceptedVersion'
+            expect(existing_aif).not_to receive(:save!)
+            importer.call
+
+            expect(existing_aif.reload.location).to eq('abc123/intellcont/some_other_file.pdf')
           end
         end
       end
