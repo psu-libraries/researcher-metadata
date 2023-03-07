@@ -4,7 +4,7 @@ class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 
-  mount_uploader :file, ActivityInsightFileUploader
+  mount_uploader :file_download_location, ActivityInsightFileUploader
 
   scope :ready_for_download, -> {
     left_outer_joins(:publication)
@@ -12,12 +12,12 @@ class ActivityInsightOAFile < ApplicationRecord
       .where.not(publication: { licence: nil })
       .left_outer_joins(publication: :open_access_locations)
       .where(open_access_locations: { publication_id: nil })
-      .where(file: nil)
+      .where(file_download_location: nil)
       .where(downloaded: nil)
       .where.not(location: nil)
   }
 
   def stored_file_path
-    file.file.file
+    file_download_location.file.file
   end
 end

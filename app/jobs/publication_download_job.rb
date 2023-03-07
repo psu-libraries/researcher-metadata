@@ -8,7 +8,7 @@ class PublicationDownloadJob < ApplicationJob
 
     remote_file = File.popen("wget -q --header 'X-API-Key: #{Settings.activity_insight_s3_authorizer.api_key}' -O - 'ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{file.location}'")
     sleep(1) until remote_file.size.positive?
-    file.file = FileIO.new(remote_file, file.location.split('/').last)
+    file.file_download_location = FileIO.new(remote_file, file.location.split('/').last)
     file.save!
   end
 end

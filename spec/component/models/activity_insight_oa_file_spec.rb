@@ -10,7 +10,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:version).of_type(:string) }
-  it { is_expected.to have_db_column(:file).of_type(:string) }
+  it { is_expected.to have_db_column(:file_download_location).of_type(:string) }
   it { is_expected.to have_db_column(:downloaded).of_type(:boolean) }
   it { is_expected.to have_db_foreign_key(:publication_id) }
   it { is_expected.to have_db_index :publication_id }
@@ -23,7 +23,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe '#file' do
     it 'mounts an ActivityInsightFileUploader' do
-      expect(subject.file).to be_a(ActivityInsightFileUploader)
+      expect(subject.file_download_location).to be_a(ActivityInsightFileUploader)
     end
   end
 
@@ -60,11 +60,12 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
                          ])
     }
+    let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:file3) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:file4) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file: 'test_file.pdf') }
+    let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file_download_location: uploader) }
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
 
