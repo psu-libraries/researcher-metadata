@@ -4959,7 +4959,7 @@ describe ActivityInsightImporter do
           expect(p5.doi_verified).to be_nil
         end
 
-        it 'does not import ActivityInsightOAFiles for imported publications without an open access publication type' do
+        it 'does not import ActivityInsightOAFiles for imported publications without an open access publication type (cannot receive new ai oa files)' do
           importer.call
           p2 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '92747188475').publication
@@ -4975,7 +4975,7 @@ describe ActivityInsightImporter do
                                       publication: existing_pub) }
       let!(:existing_pub) { create(:publication) }
 
-      context 'when the existing publication is already open access' do
+      context 'when the existing publication cannot receive new ai oa files?' do
         let(:oal) { create(:open_access_location) }
 
         before do
@@ -4990,8 +4990,8 @@ describe ActivityInsightImporter do
         end
       end
 
-      context 'when the existing publication is not open access' do
-        context 'when existing ActivityInsightOAFile has same locationas imported file' do
+      context 'when the existing publication can_receive_new_ai_oa_files?' do
+        context 'when existing ActivityInsightOAFile has same location as imported file' do
           let!(:existing_aif) { create(:activity_insight_oa_file,
                                        publication: existing_pub,
                                        location: 'abc123/intellcont/file.pdf') }
@@ -5001,6 +5001,19 @@ describe ActivityInsightImporter do
             importer.call
 
             expect(existing_aif.reload.location).to eq('abc123/intellcont/file.pdf')
+          end
+        end
+
+        context 'when existing ActivityInsightOAFile does not have the same location as the imported file' do
+          let!(:existing_aif) { create(:activity_insight_oa_file,
+                                       publication: existing_pub,
+                                       location: 'abc123/intellcont/some_other_file.pdf') }
+
+          it 'creates a new ActivityInsightOAFile location for that publication' do
+            importer.call
+
+            expect(existing_pub.reload.activity_insight_oa_files.collect(&:location).sort).to eq(['abc123/intellcont/file.pdf', 'abc123/intellcont/some_other_file.pdf'].sort)
+            expect(existing_pub.reload.activity_insight_oa_files.count).to eq 2
           end
         end
 
@@ -5017,7 +5030,7 @@ describe ActivityInsightImporter do
 
             expect(existing_aif.reload.location).to eq('abc123/intellcont/some_other_file.pdf')
           end
-        end
+        end     
       end
     end
   end
