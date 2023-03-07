@@ -2,7 +2,7 @@
 
 require 'integration/integration_spec_helper'
 
-describe 'Admin Activity Insight Oa Workflow dashboard', type: :feature do
+describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
   let!(:aif) { create(:activity_insight_oa_file, publication: pub) }
   let!(:pub) { create(:publication, doi_verified: false) }
 

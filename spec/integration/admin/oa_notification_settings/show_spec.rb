@@ -3,8 +3,8 @@
 require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
-describe 'Oa Notification Settings show page', type: :feature do
-  let!(:settings) { OaNotificationSetting.instance }
+describe 'OA Notification Settings show page', type: :feature do
+  let!(:settings) { OANotificationSetting.instance }
 
   context 'when the current user is an admin' do
     before do
@@ -12,9 +12,9 @@ describe 'Oa Notification Settings show page', type: :feature do
       visit rails_admin.show_path(model_name: :oa_notification_setting, id: settings.id)
     end
 
-    describe 'visiting the page to view an Oa Notification Setting' do
+    describe 'visiting the page to view an OA Notification Setting' do
       it 'show the correct content' do
-        expect(page).to have_content 'Details for Oa notification setting'
+        expect(page).to have_content 'Details for OA notification setting'
         expect(page).to have_content settings.email_cap
         expect(page).to have_css 'span.label-success', exact_text: '✓', count: 1
         expect(page).not_to have_content 'Singleton guard'

@@ -1,0 +1,85 @@
+{
+  "best_permission": {
+    "can_archive": true,
+    "version": "acceptedVersion",
+    "versions": [
+      "acceptedVersion",
+      "submittedVersion"
+    ],
+    "licence": "cc-by-nc-nd",
+    "locations": [
+      "Institutional Repository",
+      "Non-commercial Subject Repository"
+    ],
+    "deposit_statement": "© This manuscript version is made available under the CC-BY-NC-ND 4.0 license https://creativecommons.org/licenses/by-nc-nd/4.0/",
+    "copyright_owner": "Publisher",
+    "copyright_name": "Elsevier BV; Elsevier",
+    "copyright_year": "1997",
+    "issuer": {
+      "id": [
+        "Elsevier BV; Elsevier"
+      ],
+      "has_policy": "Yes",
+      "notes": "Embargo specified by journal",
+      "type": "Publisher",
+      "journal_oa_type": "closed"
+    },
+    "meta": {
+      "monitoring": "Automatic",
+      "contributors": [
+        "libraryrepository@pobox.upenn.edu",
+        "natalia@oa.works"
+      ],
+      "creator": [
+        "libraryrepository@pobox.upenn.edu"
+      ],
+      "reviewer": [
+        "natalia@oa.works"
+      ],
+      "added": "01/12/2021 14:59",
+      "updated": "11/02/2022 11:40"
+    },
+    "provenance": {
+      "archiving_policy_unarchived": "https://www.elsevier.com/about/policies/sharing",
+      "example": "10.1080/00325481.1992.11701289",
+      "sample": {
+        "publishing_agreement": "https://perma.cc/W7TM-DYVP"
+      },
+      "author_rights": "https://perma.cc/H55L-FCQU",
+      "embargo": "https://perma.cc/DA8N-8CXR",
+      "faq": "https://perma.cc/ZF7W-839Y",
+      "misc_source": "https://perma.cc/8D9W-U529",
+      "archiving_policy": [
+        "https://perma.cc/J5MA-H2EJ"
+      ]
+    },
+    "score": 1099,
+    "licences": [
+      {
+        "type": "cc-by-nc-nd"
+      }
+    ]
+  },
+  "all_permissions": [
+    {
+      "can_archive": true,
+      "version": "acceptedVersion",
+      "versions": [
+        "acceptedVersion",
+        "submittedVersion"
+      ],
+      "embargo_end": "2024-09-01",
+      "licence": "cc-by-nc-nd",
+      "locations": [
+        "Institutional Repository",
+        "Non-commercial Subject Repository"
+      ],
+      "deposit_statement": "© This manuscript version is made available under the CC-BY-NC-ND 4.0 license https://creativecommons.org/licenses/by-nc-nd/4.0/",
+      "licences": [
+        {
+          "type": "cc-by-nc-nd"
+        }
+      ]
+    }
+  ]
+}

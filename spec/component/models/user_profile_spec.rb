@@ -15,7 +15,7 @@ describe UserProfile do
                        ai_teaching_interests: 'test teaching interests',
                        ai_research_interests: 'test research interests') }
 
-  let(:piu_service) { class_double(PsuIdentityUserService).as_stubbed_const }
+  let(:piu_service) { class_double(PSUIdentityUserService).as_stubbed_const }
 
   before do
     allow(piu_service).to receive(:find_or_initialize_user)

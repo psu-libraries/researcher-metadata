@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class WOSGrantID
+class WOSGrantId
   def initialize(grant, parsed_grant_id)
     @grant = grant
     @parsed_grant_id = parsed_grant_id

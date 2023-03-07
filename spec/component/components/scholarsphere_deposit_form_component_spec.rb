@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 RSpec.describe ScholarsphereDepositFormComponent, type: :component do
   let(:oab_permissions) do
-    Struct.new('OabPermissionsService', :permissions,
+    Struct.new('OABPermissionsService', :permissions,
                :version,
                :this_version,
                :licence,

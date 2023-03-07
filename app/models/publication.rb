@@ -65,7 +65,11 @@ class Publication < ApplicationRecord
   end
 
   def self.oa_workflow_states
-    ['automatic DOI verification pending']
+    ['automatic DOI verification pending', 'oa metadata search pending']
+  end
+
+  def self.preferred_versions
+    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
   end
 
   has_many :authorships, inverse_of: :publication
@@ -112,6 +116,7 @@ class Publication < ApplicationRecord
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
   validates :oa_workflow_state, inclusion: { in: oa_workflow_states, allow_nil: true }
+  validates :preferred_version, inclusion: { in: preferred_versions, allow_nil: true }
 
   validate :doi_format_is_valid
 
@@ -138,10 +143,17 @@ class Publication < ApplicationRecord
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
   scope :with_no_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
-  scope :activity_insight_oa_publication, -> { with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :activity_insight_oa_publication, -> { oa_publication.with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
-
+  scope :needs_permissions_check, -> { activity_insight_oa_publication.where(licence: nil, doi_verified: true, permissions_last_checked_at: nil) }
+  scope :needs_oa_metadata_search,
+        -> {
+          activity_insight_oa_publication
+            .where(doi_verified: true)
+            .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
+            .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
+        }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
@@ -665,6 +677,31 @@ class Publication < ApplicationRecord
     query.where(doi: doi).uniq
   end
 
+  def update_from_unpaywall(unpaywall_response)
+    if unpaywall_response.matchable_title == matchable_title && doi.blank? && unpaywall_response.doi.present?
+      self.doi = unpaywall_response.doi
+      self.doi_verified = true
+      title_match = true
+    end
+
+    unpaywall_locations = doi.present? || title_match ? unpaywall_response.oa_locations : []
+    unpaywall_locations_by_url = doi.present? || title_match ? unpaywall_response.oal_urls : {}
+    existing_locations = open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
+
+    ActiveRecord::Base.transaction do
+      locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
+      locations_to_delete.each(&:destroy)
+
+      self.open_access_status = unpaywall_response.oa_status if doi.present? || title_match
+
+      self.unpaywall_last_checked_at = Time.zone.now
+
+      save!
+
+      OpenAccessLocation.create_or_update_from_unpaywall(unpaywall_locations, self)
+    end
+  end
+
   private
 
     def merge(publications_to_merge)
@@ -726,7 +763,7 @@ class Publication < ApplicationRecord
 
         yield if block_given?
 
-        DoiVerificationMergePolicy.new(self, all_pubs).merge!
+        DOIVerificationMergePolicy.new(self, all_pubs).merge!
 
         pubs_to_delete.each do |p|
           p.non_duplicate_groups.each do |ndg|

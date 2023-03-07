@@ -8,9 +8,9 @@ namespace :email_notifications do
 
   desc 'Send reminder emails about potential open access publications to applicable users up to the number passed as an argument (or the configured number as default)'
   task :send_capped_open_access_reminders, [:cap] => :environment do |_task, args|
-    return 'Notifications are turned off' if OaNotificationSetting.not_active?
+    return 'Notifications are turned off' if OANotificationSetting.not_active?
 
-    cap = (args[:cap] || OaNotificationSetting.email_cap).to_i
+    cap = (args[:cap] || OANotificationSetting.email_cap).to_i
     OpenAccessNotifier.new.send_notifications_with_cap(cap)
   end
 

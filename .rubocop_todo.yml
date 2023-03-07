@@ -203,6 +203,7 @@ RSpec/RepeatedExampleGroupDescription:
     - 'spec/unit/models/activity_insight_education_history_item_spec.rb'
     - 'spec/unit/models/wos_grant_spec.rb'
     - 'spec/component/importers/unpaywall_client_spec.rb'
+    - 'spec/component/importers/oab_client_spec.rb'
 
 # Offense count: 24
 RSpec/ScatteredSetup:
@@ -323,8 +324,10 @@ Rails/SkipsModelValidations:
     - 'app/models/deputy_assignment.rb'
     - 'app/models/scholarsphere_work_deposit.rb'
     - 'app/models/user.rb'
+    - 'app/services/oa_workflow_service.rb'
     - 'spec/component/controllers/deputy_assignments_controller_spec.rb'
     - 'spec/component/models/user_profile_spec.rb'
+    - 'app/services/oa_workflow_service.rb'
 
 # Offense count: 1
 Rails/TransactionExitStatement:

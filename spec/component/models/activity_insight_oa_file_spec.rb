@@ -3,12 +3,13 @@
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
 
-RSpec.describe ActivityInsightOaFile, type: :model do
+RSpec.describe ActivityInsightOAFile, type: :model do
   subject { described_class.new }
 
   it { is_expected.to have_db_column(:location).of_type(:string) }
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
+  it { is_expected.to have_db_column(:version).of_type(:string) }
 
   it { is_expected.to have_db_foreign_key(:publication_id) }
   it { is_expected.to have_db_index :publication_id }

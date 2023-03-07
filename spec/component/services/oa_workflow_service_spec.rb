@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe OaWorkflowService do
+describe OAWorkflowService do
   describe '#workflow' do
     let(:service) { described_class.new }
     let!(:pub1) { create(:publication,
@@ -13,41 +13,90 @@ describe OaWorkflowService do
                          doi_verified: false)}
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         doi_verified: true)}
+                         doi_verified: true,
+                         permissions_last_checked_at: DateTime.now,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 30))}
     let!(:pub4) { create(:publication,
                          title: 'pub4',
                          doi_verified: nil,
-                         oa_workflow_state: nil)}
+                         oa_workflow_state: nil,
+                         permissions_last_checked_at: DateTime.now)}
     let!(:pub5) { create(:publication,
                          title: 'pub5',
                          doi_verified: nil,
-                         oa_workflow_state: 'automatic DOI verification pending')}
+                         oa_workflow_state: 'automatic DOI verification pending',
+                         licence: 'licence')}
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_workflow_state: nil)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
+
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
 
     context 'when publications need doi verification' do
-      before { allow(DoiVerificationJob).to receive(:perform_later) }
+      before do
+        allow(DOIVerificationJob).to receive(:perform_later)
+        allow(PermissionsCheckJob).to receive(:perform_later)
+      end
 
       it 'calls the doi verification job with that publication' do
         service.workflow
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub1.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub2.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub3.id)
-        expect(DoiVerificationJob).to have_received(:perform_later).with(pub4.id)
-        expect(DoiVerificationJob).not_to have_received(:perform_later).with(pub5.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub1.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub2.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
+        expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
+        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub6.id)
+      end
+
+      context 'when there is an error' do
+        before { allow(DOIVerificationJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'saves doi verifed as false' do
+          service.workflow
+        rescue RuntimeError
+          expect(pub4.reload.doi_verified).to be false
+        end
       end
     end
 
-    context 'when there is an error' do
-      before { allow(DoiVerificationJob).to receive(:perform_later).and_raise(RuntimeError) }
+    context 'when publications need permissions checks' do
+      context 'when there is not an error' do
+        before { allow(PermissionsCheckJob).to receive(:perform_later) }
 
-      it 'saves doi verifed as false' do
+        it 'calls the permissions check job with that publication' do
+          service.workflow
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
+          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
+          expect(PermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
+        end
+      end
+
+      context 'when there is an error' do
+        before { allow(PermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'updates permissions_last_checked_at checked' do
+          service.workflow
+        rescue RuntimeError
+          expect(pub6.reload.permissions_last_checked_at).to be_present
+        end
+      end
+    end
+
+    context 'when publications need oa metadata search' do
+      before { allow(FetchOAMetadataJob).to receive(:perform_later) }
+
+      it 'calls the fetch oa metadata job with that publication' do
         service.workflow
-      rescue RuntimeError
-        expect(pub4.reload.doi_verified).to be false
+        expect(FetchOAMetadataJob).to have_received(:perform_later).with(pub6.id)
       end
     end
   end

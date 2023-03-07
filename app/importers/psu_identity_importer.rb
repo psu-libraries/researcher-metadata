@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
-class PsuIdentityImporter
+class PSUIdentityImporter
   DEFAULT_WAIT_TIME = 0.1
 
   def call
     User.find_each do |user|
-      PsuIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id)
+      PSUIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id)
       progress_bar.increment
       sleep DEFAULT_WAIT_TIME
     rescue StandardError => e

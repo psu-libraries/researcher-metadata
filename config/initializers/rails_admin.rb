@@ -3,6 +3,9 @@
 require_relative '../../app/rails_admin_actions/index_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_by_organization'
 require_relative '../../app/rails_admin_actions/export_publications_to_activity_insight'
+require_relative '../../app/rails_admin_actions/delete'
+require_relative '../../app/rails_admin_actions/edit'
+require_relative '../../app/rails_admin_actions/new'
 
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::IndexPublicationsByOrganization)
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsByOrganization)
@@ -65,7 +68,7 @@ RailsAdmin.config do |config|
             :ScholarsphereWorkDeposit,
             :ImporterErrorLog,
             :Authorship,
-            :OaNotificationSetting]
+            :OANotificationSetting]
     end
     new do
       only [:Authorship,
@@ -92,7 +95,7 @@ RailsAdmin.config do |config|
             :ExternalPublicationWaiver,
             :InternalPublicationWaiver,
             :OpenAccessLocation,
-            :OaNotificationSetting]
+            :OANotificationSetting]
     end
     delete do
       only [:APIToken,

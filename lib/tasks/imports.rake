@@ -107,7 +107,7 @@ namespace :import do
 
   desc 'Import PSU identity data'
   task psu_identity: :environment do
-    PsuIdentityImporter.new.call
+    PSUIdentityImporter.new.call
   end
 
   desc 'Import publication data from Penn State Law School OAI repositories'
