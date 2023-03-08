@@ -42,13 +42,12 @@ describe OrcidAPIClient do
     let(:employments_hash) { JSON.parse(get_employments) }
     let(:json_resource) { JSON.parse(resource.to_json) }
     let(:employment_path) do
-      employments_hash['affiliation-group'].max_by { |l| l['summaries'].last['employment-summary']['path'] }
-      ['summaries'].last['employment-summary']['path']
+      employments_hash['affiliation-group'].max_by { |l| l['summaries'].last['employment-summary']['path'] }['summaries'].last['employment-summary']['path']
     end
     let(:employment_summary) { employments_hash['affiliation-group'].last['summaries'].last['employment-summary'] }
 
     after do
-      delete_employ_uri = employments_uri[0..-2].to_s + "/#{employment_summary['put_code']}"
+      delete_employ_uri = employments_uri[0..-2].to_s + "/#{employment_summary['put-code']}"
       client.class.delete(delete_employ_uri, headers)
     end
 
