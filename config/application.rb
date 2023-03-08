@@ -13,6 +13,7 @@ module ResearcherMetadata
   class Application < Rails::Application
     # Initialize configuration defaults for Rails 6.1 (includes zeitwerk).
     config.load_defaults 6.1
+    require 'healthchecks'
 
     # Mail settings
     config.action_mailer.perform_caching = false
