@@ -14,15 +14,9 @@ describe 'Admin importer log bunerror detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :importer_error_log, id: error.id) }
 
-      it 'shows the error message' do
+      it 'shows the correct data for the error' do
         expect(page).to have_content 'Test Message'
-      end
-
-      it 'shows the metadata' do
         expect(page).to have_content '"key": "val"'
-      end
-
-      it 'shows the stack trace' do
         expect(page.html).to include "<pre>stack\ntrace</pre>"
       end
     end

@@ -31,75 +31,24 @@ describe 'Admin education history item detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :education_history_item, id: item.id) }
 
-      it 'shows the item detail heading' do
+      it 'shows the correct data for the item' do
         expect(page).to have_content "Details for Education history item 'EducationHistoryItem ##{item.id}'"
-      end
-
-      it 'shows the user to which the item belongs' do
         expect(page).to have_link 'Jane Testuser'
-      end
-
-      it "shows the item's Activity Insight identifier" do
         expect(page).to have_content '1234567890'
-      end
-
-      it "shows the item's degree" do
         expect(page).to have_content 'Test Degree'
-      end
-
-      it "shows the item's explanation of other degree" do
         expect(page).to have_content 'Test explanation'
-      end
-
-      it 'shows if the item is an honorary degree' do
         expect(page).to have_content 'Yes honorary'
-      end
-
-      it 'shows if the item is the highest degree earned' do
         expect(page).to have_content 'Not highest'
-      end
-
-      it "shows the item's institution" do
         expect(page).to have_content 'Test Institution'
-      end
-
-      it "shows the item's school" do
         expect(page).to have_content 'Test School'
-      end
-
-      it "shows the item's institution location" do
         expect(page).to have_content 'Test Location'
-      end
-
-      it "shows the item's emphasis or major" do
         expect(page).to have_content 'Test Major'
-      end
-
-      it "shows the item's supporting areas of emphasis" do
         expect(page).to have_content 'Test areas'
-      end
-
-      it "shows the item's dissertation or thesis title" do
         expect(page).to have_content 'Test Title'
-      end
-
-      it "shows the item's honor or distinction" do
         expect(page).to have_content 'Test Honor'
-      end
-
-      it "shows the item's description" do
         expect(page).to have_content 'Test description'
-      end
-
-      it "shows the item's comments" do
         expect(page).to have_content 'Test comments'
-      end
-
-      it "shows the item's start year" do
         expect(page).to have_content '2000'
-      end
-
-      it "shows the item's end year" do
         expect(page).to have_content '2005'
       end
     end

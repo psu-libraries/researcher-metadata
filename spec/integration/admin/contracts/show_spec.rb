@@ -43,48 +43,18 @@ describe 'Admin contract detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :contract, id: contract.id) }
 
-      it 'shows the contract detail heading' do
+      it 'shows the correct data for the contract' do
         expect(page).to have_content "Details for Contract 'Bob's Contract'"
-      end
-
-      it "shows the contract's title" do
         expect(page).to have_content "Bob's Contract"
-      end
-
-      it "shows the contract's contract type" do
         expect(page).to have_content 'Grant'
-      end
-
-      it "shows the contract's sponsor" do
         expect(page).to have_content 'Government Organization'
-      end
-
-      it "shows the contract's status" do
         expect(page).to have_content 'Awarded'
-      end
-
-      it "shows the contract's amount" do
         expect(page).to have_content '10000'
-      end
-
-      it "shows the contract's ospkey" do
         expect(page).to have_content '123456'
-      end
-
-      it "shows the contract's award start on date" do
         expect(page).to have_content 'September 24, 2018'
-      end
-
-      it "shows the contract's award end on date" do
         expect(page).to have_content 'September 25, 2018'
-      end
-
-      it "shows the contract's user_contracts" do
         expect(page).to have_link "UserContract ##{user_contract1.id}"
         expect(page).to have_link "UserContract ##{user_contract2.id}"
-      end
-
-      it "shows the contract's contract imports" do
         expect(page).to have_link "ContractImport ##{imp1.id}"
         expect(page).to have_link "ContractImport ##{imp2.id}"
       end

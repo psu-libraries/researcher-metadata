@@ -95,92 +95,32 @@ describe 'Admin user detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :user, id: user.id) }
 
-      it 'shows the user detail heading' do
+      it 'shows the correct data for the user' do
         expect(page).to have_content "Details for User 'Bob Testuser'"
-      end
-
-      it "shows the user's WebAccess ID" do
         expect(page).to have_content 'bat123'
-      end
-
-      it "shows the user's Penn State identity data" do
         expect(page).to have_content(/{.*affiliation.*FACULTY.*}/)
-      end
-
-      it "shows the user's Activity Insight ID" do
         expect(page).to have_content 'ai12345'
-      end
-
-      it "shows the user's Pure ID" do
         expect(page).to have_content 'pure67890'
-      end
-
-      it "shows the user's Penn State ID" do
         expect(page).to have_content 'psu345678'
-      end
-
-      it "shows the user's H-Index" do
         expect(page).to have_content '724'
-      end
-
-      it "shows the user's title" do
         expect(page).to have_content 'Test Title'
-      end
-
-      it "shows the user's Orcid ID" do
         expect(page).to have_link 'Test Orcid ID', href: 'Test Orcid ID'
-      end
-
-      it "shows the user's alt name" do
         expect(page).to have_content 'Test Alt Name'
-      end
-
-      it "shows the user's building" do
         expect(page).to have_content 'Test Building'
-      end
-
-      it "shows the user's room number" do
         expect(page).to have_content 'Test Room Number'
-      end
-
-      it "shows the user's office phone number" do
         expect(page).to have_content '(385) 503-2953'
-      end
-
-      it "shows the user's fax number" do
         expect(page).to have_content '(743) 298-1094'
-      end
-
-      it "shows the user's website address" do
         expect(page).to have_content 'http://test-example.com'
-      end
-
-      it "shows the user's Google Scholar information" do
         expect(page).to have_content 'Test Google Scholar'
-      end
-
-      it "shows the user's bio" do
         expect(page).to have_content 'Test Bio'
-      end
-
-      it "shows the user's teaching interests" do
         expect(page).to have_content 'Test Teaching Interests'
-      end
-
-      it "shows the user's research interests" do
         expect(page).to have_content 'Test Research Interests'
-      end
 
-      it "shows the user's education history" do
         expect(page).to have_link "EducationHistoryItem ##{item1.id}"
         expect(page).to have_link "EducationHistoryItem ##{item2.id}"
-      end
 
-      it 'shows the organizations that the user manages' do
         expect(page).to have_link 'Managed Org'
-      end
 
-      it "shows the user's publications" do
         expect(page).to have_link "Bob's First Publication"
         expect(page).to have_content 'First Journal'
         expect(page).to have_content 'First Publisher'
@@ -191,42 +131,28 @@ describe 'Admin user detail page', type: :feature do
         expect(page).to have_content 'Second Publisher'
         expect(page).to have_content '2018'
         expect(page).to have_link "Duplicate group ##{group.id}"
-      end
 
-      it "shows the user's presentations" do
         expect(page).to have_link "Bob's First Presentation"
         expect(page).to have_link "Bob's Second Presentation"
-      end
 
-      it "shows the user's organizations and memberships" do
         expect(page).to have_link 'Bob Testuser - Test Org One'
         expect(page).to have_link 'Bob Testuser - Test Org Two'
 
         expect(page).to have_link 'Test Org One'
         expect(page).to have_link 'Test Org Two'
-      end
 
-      it "shows the user's contracts" do
         expect(page).to have_link 'Test Contract One'
         expect(page).to have_link 'Test Contract Two'
-      end
 
-      it "shows the user's grants" do
         expect(page).to have_link 'TestGrant123'
         expect(page).to have_link 'TestGrant456'
-      end
 
-      it "shows the user's ETDs" do
         expect(page).to have_link 'Test ETD One'
         expect(page).to have_link 'Test ETD Two'
-      end
 
-      it "shows the user's news stories" do
         expect(page).to have_link 'Test Story One'
         expect(page).to have_link 'Test Story Two'
-      end
 
-      it "shows the user's performances" do
         expect(page).to have_link 'Test Performance One'
         expect(page).to have_link 'Test Performance Two'
       end

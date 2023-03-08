@@ -24,39 +24,15 @@ describe 'Admin user organization membership detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :user_organization_membership, id: membership.id) }
 
-      it 'shows the membership detail heading' do
+      it 'shows the correct data for the membership' do
         expect(page).to have_content "Details for User organization membership 'Bob Testuser - Test Org'"
-      end
-
-      it 'shows the user' do
         expect(page).to have_link 'Bob Testuser'
-      end
-
-      it 'shows the organization' do
         expect(page).to have_link 'Test Org'
-      end
-
-      it "shows the membership's import source" do
         expect(page).to have_content 'Pure'
-      end
-
-      it "shows the membership's Pure identifier" do
         expect(page).to have_content 'pure-abc123'
-      end
-
-      it "shows the membership's position title" do
         expect(page).to have_content 'test position'
-      end
-
-      it 'shows the timestamp when the membership was last updated by a user' do
         expect(page).to have_content 'November 01, 2018 11:26'
-      end
-
-      it "shows the membership's start date" do
         expect(page).to have_content 'January 01, 2000'
-      end
-
-      it "shows the membership's end date" do
         expect(page).to have_content 'February 02, 2010'
       end
     end
