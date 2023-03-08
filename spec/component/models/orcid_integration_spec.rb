@@ -41,11 +41,11 @@ describe OrcidAPIClient do
     let(:get_employments) { client.class.get(employments_uri, headers).parsed_response }
     let(:employments_hash) { JSON.parse(get_employments) }
     let(:json_resource) { JSON.parse(resource.to_json) }
-    let(:employment_path) do 
-      employments_hash["affiliation-group"].sort_by { |l| l["summaries"].last["employment-summary"]["path"] }
-                                           .last["summaries"].last["employment-summary"]["path"]
+    let(:employment_path) do
+      employments_hash['affiliation-group'].max_by { |l| l['summaries'].last['employment-summary']['path'] }
+      ['summaries'].last['employment-summary']['path']
     end
-    let(:employment_summary) { employments_hash["affiliation-group"].last["summaries"].last["employment-summary"] }
+    let(:employment_summary) { employments_hash['affiliation-group'].last['summaries'].last['employment-summary'] }
 
     after do
       delete_employ_uri = employments_uri[0..-2].to_s + "/#{employment_summary['put_code']}"
@@ -54,11 +54,11 @@ describe OrcidAPIClient do
 
     it 'successfully POSTs to ORCID and does not return an error' do
       post = client.post
-      expect(post.response.message).to eq "Created"
-      expect(post["location"]).to include employment_path
-      expect(employment_summary["department-name"]).to eq json_resource["department-name"]
-      expect(employment_summary["role-title"]).to eq json_resource["role-title"]
-      expect(employment_summary["organization"]["disambiguated-organization"]).to eq json_resource["organization"]["disambiguated-organization"]
+      expect(post.response.message).to eq 'Created'
+      expect(post['location']).to include employment_path
+      expect(employment_summary['department-name']).to eq json_resource['department-name']
+      expect(employment_summary['role-title']).to eq json_resource['role-title']
+      expect(employment_summary['organization']['disambiguated-organization']).to eq json_resource['organization']['disambiguated-organization']
     end
   end
 end
