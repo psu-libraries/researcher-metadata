@@ -156,7 +156,7 @@ class Publication < ApplicationRecord
         }
   scope :file_version_check_failed, -> {
     activity_insight_oa_publication
-      .where.not(publications: { preferred_version: nil })
+      .where.not(preferred_version: nil)
       .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
