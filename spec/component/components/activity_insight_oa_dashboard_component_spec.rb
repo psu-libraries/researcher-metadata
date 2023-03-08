@@ -55,4 +55,30 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/file_version_review')
     end
   end
+
+  context 'when no publications need their permissions verified' do
+    let!(:oal) { create(:open_access_location, publication: pub2) }
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication, doi_verified: nil) }
+    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('permissions-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('permissions-check-card').text).to include('0')
+      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/permissions_review')
+    end
+  end
+
+  context 'when publications need their permissions verified' do
+    let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
+    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+
+    it 'renders the permissions review card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('permissions-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('permissions-check-card').text).to include('1')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/permissions_review')
+    end
+  end
 end
