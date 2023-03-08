@@ -413,6 +413,10 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:doi_verified)
+      field(:preferred_version)
+      field(:set_statement)
+      field(:licence)
+      field(:embargo_date)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -476,6 +480,10 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:doi_verified)
+      field(:preferred_version)
+      field(:set_statement)
+      field(:licence)
+      field(:embargo_date)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -526,6 +534,10 @@ class Publication < ApplicationRecord
           [['True', true], ['False', false]]
         end
       end
+      field(:preferred_version)
+      field(:set_statement)
+      field(:licence)
+      field(:embargo_date)
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
