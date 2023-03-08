@@ -4996,11 +4996,11 @@ describe ActivityInsightImporter do
                                        publication: existing_pub,
                                        location: 'abc123/intellcont/file.pdf') }
 
-          it 'does not update the ActivityInsightOAFile location for that publication' do
+          it 'does not create a ActivityInsightOAFile for that publication' do
             expect(existing_aif).not_to receive(:save!)
             importer.call
 
-            expect(existing_aif.reload.location).to eq('abc123/intellcont/file.pdf')
+            expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/file.pdf'])
           end
         end
 
@@ -5009,26 +5009,25 @@ describe ActivityInsightImporter do
                                        publication: existing_pub,
                                        location: 'abc123/intellcont/some_other_file.pdf') }
 
-          it 'creates a new ActivityInsightOAFile location for that publication' do
+          it 'creates a new ActivityInsightOAFile for that publication' do
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
                                                                                               'abc123/intellcont/some_other_file.pdf'].sort)
           end
-        end
 
-        context 'when existing ActivityInsightOAFile already has a valid file version' do
-          let!(:existing_aif) { create(:activity_insight_oa_file,
-                                       publication: existing_pub,
-                                       location: 'abc123/intellcont/some_other_file.pdf',
-                                       version: 'acceptedVersion') }
-
-          it 'does not update the ActivityInsightOAFile location for that publication' do
-            existing_pub.update preferred_version: 'acceptedVersion'
-            expect(existing_aif).not_to receive(:save!)
-            importer.call
-
-            expect(existing_aif.reload.location).to eq('abc123/intellcont/some_other_file.pdf')
+          context 'when existing ActivityInsightOAFile already has a valid file version' do
+            before do
+              existing_pub.update preferred_version: 'acceptedVersion'
+              existing_aif.update version: 'acceptedVersion'
+            end
+  
+            it 'does not create an ActivityInsightOAFile location for that publication' do
+              expect(existing_aif).not_to receive(:save!)
+              importer.call
+  
+              expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/some_other_file.pdf'])
+            end
           end
         end
       end
