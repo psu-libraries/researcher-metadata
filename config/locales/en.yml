@@ -209,6 +209,8 @@ en:
       doi_verification_description: Publications that require manual DOI curation or verification.
       file_version_curation_title: Review File Versions
       file_version_curation_description: Publications that still have an unknown file version and no correct version after automated file version checking.
+      permissions_curation_title: Review Permissions
+      permissions_curation_description: Publications that require manual permissions curation.
 
   helpers:
     submit:
