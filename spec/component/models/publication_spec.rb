@@ -601,6 +601,12 @@ describe Publication, type: :model do
         expect(described_class.needs_permissions_check).to match_array [pub8, pub3, pub6]
       end
     end
+
+    describe '.permissions_check_failed' do
+      it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
+        expect(described_class.permissions_check_failed).to match_array [pub9]
+      end
+    end
   end
 
   describe '.find_by_wos_pub' do
