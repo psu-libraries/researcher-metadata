@@ -16,7 +16,6 @@ describe PublicationDownloadJob, type: :job do
     let!(:publication) { create(:publication) }
     let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'location.jpg') }
 
-    # this test depends on downloading an image file from the RMD homepage
     before do
       allow_any_instance_of(ActivityInsightOAFile).to receive(:download_uri).and_return(URI('http://townsquare.media/site/705/files/2022/05/attachment-Puppies-and-Pancakes.jpg?w=980&q=75')) # rubocop:todo RSpec/AnyInstance
     end
