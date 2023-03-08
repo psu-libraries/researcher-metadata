@@ -18,6 +18,7 @@ describe PublicationDownloadJob, type: :job do
 
     before do
       allow_any_instance_of(ActivityInsightOAFile).to receive(:download_uri).and_return(URI('http://townsquare.media/site/705/files/2022/05/attachment-Puppies-and-Pancakes.jpg?w=980&q=75')) # rubocop:todo RSpec/AnyInstance
+      allow(Settings).to receive_message_chain(:activity_insight_s3_authorizer, :api_key).and_return 'key' # rubocop:todo RSpec/MessageChain
     end
 
     it 'saves the new file path' do
