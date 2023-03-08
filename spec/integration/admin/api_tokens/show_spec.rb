@@ -25,7 +25,7 @@ describe 'Admin API token detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :api_token, id: token.id) }
 
-      it "shows the correct data for the token" do
+      it 'shows the correct data for the token' do
         expect(page).to have_content 'secret_token_1'
         expect(page).to have_content 'Test Application'
         expect(page).to have_content 'admin123@psu.edu'

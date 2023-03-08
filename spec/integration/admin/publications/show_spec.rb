@@ -132,7 +132,7 @@ describe 'Admin publication detail page', type: :feature do
                                   href: rails_admin.show_path(model_name: :open_access_location, id: oal_oab.id)
 
         expect(page).to have_link 'Test Journal Record', href: rails_admin.show_path(model_name: :journal, id: journal.id)
-        
+
         expect(page).to have_content 'July 15, 2021 13:15'
       end
     end
