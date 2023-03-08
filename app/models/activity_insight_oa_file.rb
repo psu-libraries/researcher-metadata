@@ -17,6 +17,8 @@ class ActivityInsightOAFile < ApplicationRecord
       .where.not(location: nil)
   }
 
+  S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
+
   def stored_file_path
     file_download_location.file.file
   end
@@ -30,6 +32,6 @@ class ActivityInsightOAFile < ApplicationRecord
   end
 
   def download_uri
-    URI("http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/#{location}")
+    "http://#{S3_AUTHORIZER_HOST_NAME}/api/v1/#{location}"
   end
 end

@@ -6,7 +6,7 @@ class PublicationDownloadJob < ApplicationJob
   def perform(file_id)
     file = ActivityInsightOAFile.find(file_id)
 
-    Net::HTTP.start(file.download_uri.host, file.download_uri.port) do |http|
+    Net::HTTP.start(ActivityInsightOAFile::S3_AUTHORIZER_HOST_NAME, 80) do |http|
       request = Net::HTTP::Get.new file.download_uri
       request['X-API-Key'] = Settings.activity_insight_s3_authorizer.api_key
 
