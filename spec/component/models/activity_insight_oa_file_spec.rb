@@ -97,9 +97,10 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     before { aif.location = 'abc123/intellcont/test_publication.pdf' }
 
     it "returns the full URI for the file in Activity Insight's AWS S3 bucket" do
-      expect(aif.download_uri).to eq URI('http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf')
+      expect(aif.download_uri).to eq 'http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf'
+    end
   end
-  
+
   describe '#version_status_display' do
     context 'when version is "unknown"' do
       let(:file) { create(:activity_insight_oa_file, version: 'unknown') }

@@ -33,6 +33,7 @@ class ActivityInsightOAFile < ApplicationRecord
 
   def download_uri
     "http://#{S3_AUTHORIZER_HOST_NAME}/api/v1/#{location}"
+  end
 
   def version_status_display
     return 'Unknown Version' if version == 'unknown'
