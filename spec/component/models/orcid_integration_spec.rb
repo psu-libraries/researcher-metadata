@@ -29,7 +29,7 @@ describe OrcidAPIClient do
                                      }}
   }
 
-  describe 'integrating with ORCID', glacial: true do
+  describe 'integrating with ORCID' do
     let(:headers) {
       {
         headers:
