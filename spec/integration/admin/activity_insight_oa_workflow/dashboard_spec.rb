@@ -3,8 +3,10 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
-  let!(:aif) { create(:activity_insight_oa_file, publication: pub) }
-  let!(:pub) { create(:publication, doi_verified: false) }
+  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1) }
+  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'unknown') }
+  let!(:pub1) { create(:publication, doi_verified: false) }
+  let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
 
   context 'when the current user is an admin' do
     before do
@@ -21,8 +23,15 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
 
     describe 'clicking the link to the DOI Verification page' do
       it 'redirects to the DOI Verification page' do
-        click_on class: 'card-link'
+        click_on 'Verify DOIs'
         expect(page).to have_current_path activity_insight_oa_workflow_doi_verification_path
+      end
+    end
+
+    describe 'clicking the link to the File Version Review page' do
+      it 'redirects to the File Version Review page' do
+        click_on 'Review File Versions'
+        expect(page).to have_current_path activity_insight_oa_workflow_file_version_review_path
       end
     end
   end
