@@ -5021,11 +5021,11 @@ describe ActivityInsightImporter do
               existing_pub.update preferred_version: 'acceptedVersion'
               existing_aif.update version: 'acceptedVersion'
             end
-  
+
             it 'does not create an ActivityInsightOAFile location for that publication' do
               expect(existing_aif).not_to receive(:save!)
               importer.call
-  
+
               expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/some_other_file.pdf'])
             end
           end
