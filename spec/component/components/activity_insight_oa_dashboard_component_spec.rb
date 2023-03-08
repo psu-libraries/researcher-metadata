@@ -60,7 +60,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     let!(:oal) { create(:open_access_location, publication: pub2) }
     let!(:pub1) { create(:publication) }
     let!(:pub2) { create(:publication, doi_verified: nil) }
-    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+    let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
 
     it 'renders a muted card with no link' do
       render_inline(described_class.new)
