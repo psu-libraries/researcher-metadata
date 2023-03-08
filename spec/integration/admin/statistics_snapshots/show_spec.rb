@@ -15,23 +15,11 @@ describe 'Admin statistics snapshot detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :statistics_snapshot, id: stats.id) }
 
-      it 'shows the statistics snapshot detail heading' do
+      it 'shows the correct data for the snapshot' do
         expect(page).to have_content 'Details for Statistics snapshot'
-      end
-
-      it 'shows the total article count' do
         expect(page).to have_content 3841
-      end
-
-      it 'shows the open access article count' do
         expect(page).to have_content 592
-      end
-
-      it 'shows the percentage of articles that are open access' do
         expect(page).to have_content 15.4
-      end
-
-      it 'shows the creation time of the record' do
         expect(page).to have_content 'January 21, 2021 23:39'
       end
     end

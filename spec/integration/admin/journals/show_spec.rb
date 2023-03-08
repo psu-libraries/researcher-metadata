@@ -14,11 +14,8 @@ describe 'Admin journal detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :journal, id: journal.id) }
 
-      it 'shows the journal detail heading' do
+      it 'shows the correct data for the journal' do
         expect(page).to have_content "Details for Journal 'Test Journal'"
-      end
-
-      it "shows the journal's Pure UUID" do
         expect(page).to have_content 'pure-abc-123'
       end
     end

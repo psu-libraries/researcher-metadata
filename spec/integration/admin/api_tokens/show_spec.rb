@@ -25,31 +25,13 @@ describe 'Admin API token detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :api_token, id: token.id) }
 
-      it "shows the token's value" do
+      it "shows the correct data for the token" do
         expect(page).to have_content 'secret_token_1'
-      end
-
-      it "shows the token's app name" do
         expect(page).to have_content 'Test Application'
-      end
-
-      it "shows the token's administrator email" do
         expect(page).to have_content 'admin123@psu.edu'
-      end
-
-      it 'shows if the token has write access' do
         expect(page).to have_css 'span.label-success', exact_text: '✓'
-      end
-
-      it "shows the token's total requests" do
         expect(page).to have_content 472
-      end
-
-      it 'shows the time when the token was last used' do
         expect(page).to have_content 'August 14, 2019 16:44'
-      end
-
-      it "shows the token's organizations" do
         expect(page).to have_link 'Organization One'
         expect(page).to have_link 'Organization Two'
       end

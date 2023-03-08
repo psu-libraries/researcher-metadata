@@ -26,43 +26,16 @@ describe 'Admin open access location detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :open_access_location, id: oal.id) }
 
-      it 'shows the location detail heading' do
+      it 'shows the correct data for the location' do
         expect(page).to have_content "Details for Open access location '#{oal.name}'"
-      end
-
-      it "shows the location's host type" do
         expect(page).to have_content 'publisher'
-      end
-
-      it "shows the location's license" do
         expect(page).to have_content 'cc-by-nc'
-      end
-
-      it "shows the location's open access date" do
         expect(page).to have_content 'May 03, 2020'
-      end
-
-      it "shows the location's data source" do
         expect(page).to have_content 'Unpaywall'
-      end
-
-      it "shows the location's data source update time" do
         expect(page).to have_content 'October 07, 2021 18:07'
-      end
-
-      it "shows the location's url" do
         expect(page).to have_link 'https://nature.com/articles/testpub123', href: 'https://nature.com/articles/testpub123'
-      end
-
-      it "shows the location's landing page url" do
         expect(page).to have_link 'https://nature.com/articles/testpub123/info', href: 'https://nature.com/articles/testpub123/info'
-      end
-
-      it "shows the location's pdf url" do
         expect(page).to have_link 'https://nature.com/articles/testpub123/pdf', href: 'https://nature.com/articles/testpub123/pdf'
-      end
-
-      it "shows the location's version" do
         expect(page).to have_content 'publishedVersion'
       end
     end

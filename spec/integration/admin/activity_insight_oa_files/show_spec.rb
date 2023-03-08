@@ -17,27 +17,12 @@ describe 'Admin activity insight oa file detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :activity_insight_oa_file, id: aif.id) }
 
-      it 'shows the activity insight oa file detail heading' do
+      it 'shows the correct data for the publication' do
         expect(page).to have_content "Details for Activity insight OA file 'ActivityInsightOAFile ##{aif.id}'"
-      end
-
-      it "shows the activity insight oa file's location" do
         expect(page).to have_content aif.location
-      end
-
-      it "shows the activity insight oa file's version" do
         expect(page).to have_content aif.version
-      end
-
-      it "shows the activity insight oa file's created_at timestamp" do
         expect(page).to have_content aif.created_at.strftime('%B %d, %Y')
-      end
-
-      it "shows the activity insight oa file's updated_at timestamp" do
         expect(page).to have_content aif.updated_at.strftime('%B %d, %Y')
-      end
-
-      it "has a link the activity insight oa file's publication" do
         expect(page).to have_link pub.title
       end
     end

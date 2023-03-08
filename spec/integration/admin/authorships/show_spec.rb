@@ -27,25 +27,15 @@ describe 'Admin authorship detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :authorship, id: auth.id) }
 
-      it 'shows the authorship detail heading' do
+      it 'shows the correct data for the authorship' do
         expect(page).to have_content "Details for Authorship '##{auth.id} (Bob Testuser - A Test Publication)'"
-      end
-
-      it "shows a link to the authorship's publication" do
         expect(page).to have_link 'A Test Publication', href: rails_admin.show_path(model_name: :publication, id: pub.id)
-      end
-
-      it "shows a link to the authorship's user" do
         expect(page).to have_link 'Bob Testuser', href: rails_admin.show_path(model_name: :user, id: user.id)
-      end
-
-      it "shows the authorship's author number" do
         expect(page).to have_content '5'
-      end
-
-      it "shows links to the authorship's ScholarSphere work deposits" do
-        expect(page).to have_link 'Test Deposit',
-                                  href: rails_admin.show_path(model_name: :scholarsphere_work_deposit, id: dep.id)
+        expect(page).to have_link(
+          'Test Deposit',
+          href: rails_admin.show_path(model_name: :scholarsphere_work_deposit, id: dep.id)
+        )
       end
     end
 
