@@ -23,45 +23,20 @@ describe 'Admin ScholarSphere work deposit detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :scholarsphere_work_deposit, id: deposit.id) }
 
-      it 'shows a link to the associated authorship' do
+      it 'shows the correct data for the deposit' do
         expect(page).to have_link "##{auth.id} (Test User - Test)", href: rails_admin.show_path(model_name: :authorship, id: auth.id)
-      end
-
-      it "shows the deposit's status" do
         expect(page).to have_content 'Status'
-      end
-
-      it "shows the deposit's error message" do
         expect(page).to have_content 'No errors occurred.'
-      end
-
-      it "shows the deposit's time of deposit" do
         expect(page).to have_content 'April 02, 2021 16:46'
-      end
-
-      it "shows the deposit's title" do
         expect(page).to have_content 'Test Work'
-      end
-
-      it "shows the deposit's description" do
         expect(page).to have_content 'A description'
-      end
-
-      it "shows the deposit's date of publish" do
         expect(page).to have_content 'December 20, 2020'
-      end
-
-      it "shows the date when the deposit's embargo is set to end" do
         expect(page).to have_content 'January 01, 2022'
-      end
-
-      it "shows the deposit's license" do
         expect(page).to have_content 'https://rightsstatements.org/page/InC/1.0/'
-      end
-
-      it "shows links to the deposit's file uploads" do
-        expect(page).to have_link "ScholarsphereFileUpload ##{upload.id}",
-                                  href: rails_admin.show_path(model_name: :scholarsphere_file_upload, id: upload.id)
+        expect(page).to have_link(
+          "ScholarsphereFileUpload ##{upload.id}",
+          href: rails_admin.show_path(model_name: :scholarsphere_file_upload, id: upload.id)
+        )
       end
     end
 

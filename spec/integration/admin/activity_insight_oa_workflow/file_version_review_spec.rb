@@ -39,4 +39,11 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(page).to have_current_path activity_insight_oa_workflow_path
     end
   end
+
+  describe 'clicking a link to edit a file' do
+    it "redirects to that Activity Insight OA File's edit page" do
+      click_link aif1.location
+      expect(page).to have_current_path rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif1.id)
+    end
+  end
 end

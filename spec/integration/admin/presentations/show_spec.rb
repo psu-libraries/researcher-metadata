@@ -34,67 +34,23 @@ describe 'Admin presentation detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :presentation, id: pres.id) }
 
-      it 'shows the presentation detail heading' do
+      it 'shows the correct data for the presentation' do
         expect(page).to have_content "Details for Presentation 'Test Name - Test Title'"
-      end
-
-      it "shows the presentation's title" do
         expect(page).to have_content 'Test Title'
-      end
-
-      it "shows the presentation's Activity Insight identifier" do
         expect(page).to have_content 'ai_abc123'
-      end
-
-      it "shows the presentation's organization" do
         expect(page).to have_content 'Test Org'
-      end
-
-      it "shows the presentation's location" do
         expect(page).to have_content 'Test Location'
-      end
-
-      it "shows the presentation's start date" do
         expect(page).to have_content 'October 10, 2018'
-      end
-
-      it "shows the presentation's end date" do
         expect(page).to have_content 'October 11, 2018'
-      end
-
-      it "shows the presentation's type" do
         expect(page).to have_content 'Test Type'
-      end
-
-      it "shows the presentation's classification" do
         expect(page).to have_content 'Test Classification'
-      end
-
-      it "shows the presentation's meet type" do
         expect(page).to have_content 'Test Meet'
-      end
-
-      it "shows the presentation's attendance" do
         expect(page).to have_content '345'
-      end
-
-      it "shows the presentation's refereed value" do
         expect(page).to have_content 'Yes'
-      end
-
-      it "shows the presentation's abstract" do
         expect(page).to have_content 'Test Abstract'
-      end
-
-      it "shows the presentation's comment" do
         expect(page).to have_content 'Test Comment'
-      end
-
-      it "shows the presentation's scope" do
         expect(page).to have_content 'Test Scope'
-      end
 
-      it "shows the presentation's users" do
         expect(page).to have_link 'Susan Testuser'
         expect(page).to have_link 'Bob Tester'
       end

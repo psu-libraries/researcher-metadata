@@ -14,11 +14,8 @@ describe 'Admin publisher detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :publisher, id: publisher.id) }
 
-      it 'shows the publisher detail heading' do
+      it 'shows the correct data for the publisher' do
         expect(page).to have_content "Details for Publisher 'Test Publisher'"
-      end
-
-      it "shows the publisher's Pure UUID" do
         expect(page).to have_content 'pure-abc-123'
       end
     end

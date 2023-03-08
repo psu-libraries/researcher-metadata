@@ -43,52 +43,21 @@ describe 'Admin performance detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :performance, id: performance.id) }
 
-      it 'shows the performance detail heading' do
+      it 'shows the correct data for the performance' do
         expect(page).to have_content "Details for Performance 'Bob's Performance'"
-      end
-
-      it "shows the performance's title" do
         expect(page).to have_content "Bob's Performance"
-      end
-
-      it "shows the performance's performance type" do
         expect(page).to have_content 'Film - Documentary'
-      end
-
-      it "shows the performance's sponsor" do
         expect(page).to have_content 'Penn State'
-      end
-
-      it "shows the performance's description" do
         expect(page).to have_content 'This is a performance.'
-      end
-
-      it "shows the performance's group name" do
         expect(page).to have_content 'Penn State Performing Group'
-      end
-
-      it "shows the performance's location" do
         expect(page).to have_content 'State College'
-      end
-
-      it "shows the performance's delivery type" do
         expect(page).to have_content 'Invitation'
-      end
-
-      it "shows the performance's start on date" do
         expect(page).to have_content 'September 24, 2018'
-      end
-
-      it "shows the performance's end on date" do
         expect(page).to have_content 'September 25, 2018'
-      end
 
-      it "shows the performance's user_performances" do
         expect(page).to have_link "UserPerformance ##{user_performance1.id}"
         expect(page).to have_link "UserPerformance ##{user_performance2.id}"
-      end
 
-      it "shows the performance's performance screenings" do
         expect(page).to have_link performance_screening1.name.to_s
         expect(page).to have_link performance_screening2.name.to_s
       end

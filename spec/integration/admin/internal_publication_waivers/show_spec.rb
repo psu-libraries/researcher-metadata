@@ -18,23 +18,11 @@ describe 'Admin internal publication waiver detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :internal_publication_waiver, id: waiver.id) }
 
-      it 'shows the waiver detail heading' do
+      it 'shows the correct data for the waiver' do
         expect(page).to have_content "Details for Internal publication waiver 'Publication One'"
-      end
-
-      it 'shows the title of the publication associated with the waiver' do
         expect(page).to have_link 'Publication One', href: rails_admin.show_path(model_name: :publication, id: pub.id)
-      end
-
-      it 'shows the name of the user associated with the waiver' do
         expect(page).to have_link 'Joe Testerson', href: rails_admin.show_path(model_name: :user, id: user.id)
-      end
-
-      it 'shows the reason for the waiver' do
         expect(page).to have_content 'Just because.'
-      end
-
-      it 'show the associated external waiver record' do
         expect(page).to have_link 'The External Waiver'
       end
     end
