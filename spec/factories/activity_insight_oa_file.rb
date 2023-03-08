@@ -3,6 +3,7 @@
 FactoryBot.define do
   factory :activity_insight_oa_file do
     publication
-    location { 'abc123/intellcont/test_file.pdf' }
+    sequence(:location) { |n| "abc123/intellcont/test_file#{n}.pdf" }
+    version { nil }
   end
 end

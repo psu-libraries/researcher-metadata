@@ -154,6 +154,13 @@ class Publication < ApplicationRecord
             .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
         }
+  scope :file_version_check_failed, -> {
+    activity_insight_oa_publication
+      .where.not(preferred_version: nil)
+      .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
+  }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
@@ -656,6 +663,12 @@ class Publication < ApplicationRecord
 
   def can_receive_new_ai_oa_files?
     no_open_access_information? && is_oa_publication? && no_valid_file_version?
+  end
+
+  def preferred_version_display
+    return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
+
+    I18n.t('file_versions.published_version_display')
   end
 
   def self.filter_by_activity_insight_id(query, activity_insight_id)

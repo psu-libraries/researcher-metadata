@@ -3,6 +3,7 @@
 require 'rails_helper'
 require 'rspec/its'
 
+require 'support/capybara'
 require 'support/authentication'
 require 'support/database_cleaner'
 require 'support/factory_bot'
