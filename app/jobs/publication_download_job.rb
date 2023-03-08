@@ -14,9 +14,9 @@ class PublicationDownloadJob < ApplicationJob
         unless File.directory?(file.file_download_location.store_dir)
           FileUtils.mkdir_p(file.file_download_location.store_dir)
         end
-        File.open(file.file_download_location.store_dir.join(file.download_filename), 'w:UTF-8') do |io|
+        File.open(file.file_download_location.store_dir.join(file.download_filename), 'w:ASCII-8BIT') do |io|
           response.read_body do |chunk|
-            io.write chunk.force_encoding('UTF-8')
+            io.write chunk
           end
         end
       end
