@@ -12,23 +12,18 @@ describe PublicationDownloadJob, type: :job do
     end
   end
 
-  describe '#perform_now' do
+  describe '#perform_now', no_ci: true do
     let!(:publication) { create(:publication) }
-    let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'location.jpg') }
-
-    before do
-      allow_any_instance_of(ActivityInsightOAFile).to receive(:download_uri).and_return(URI('http://townsquare.media/site/705/files/2022/05/attachment-Puppies-and-Pancakes.jpg?w=980&q=75')) # rubocop:todo RSpec/AnyInstance
-      allow(Settings).to receive_message_chain(:activity_insight_s3_authorizer, :api_key).and_return 'key' # rubocop:todo RSpec/MessageChain
-    end
+    let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'nmg110/intellcont/test_file-1.pdf') }
 
     it 'saves the new file path' do
       job.perform_now(ai_oa_file.id)
-      expect(ai_oa_file.reload.stored_file_path).to eq Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/location.jpg").to_s
+      expect(ai_oa_file.reload.stored_file_path).to eq Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf").to_s
     end
 
     it 'uploads the file' do
       job.perform_now(ai_oa_file.id)
-      expect(File.open(Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/location.jpg")).size).to eq 85577
+      expect(File.open(Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf")).size).to eq 40451
     end
   end
 end
