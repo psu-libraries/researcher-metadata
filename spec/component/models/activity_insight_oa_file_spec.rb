@@ -100,7 +100,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       expect(aif.download_uri).to eq 'http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf'
     end
   end
-  
+
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
   end
