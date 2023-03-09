@@ -30,6 +30,9 @@ describe OAWorkflowService do
                          title: 'pub6',
                          doi_verified: true,
                          oa_workflow_state: nil)}
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         licence: 'licence')}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
@@ -37,6 +40,7 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     context 'when publications need doi verification' do
       before do
@@ -97,6 +101,28 @@ describe OAWorkflowService do
       it 'calls the fetch oa metadata job with that publication' do
         service.workflow
         expect(FetchOAMetadataJob).to have_received(:perform_later).with(pub6.id)
+        expect(FetchOAMetadataJob).not_to have_received(:perform_later).with(pub3.id)
+      end
+    end
+
+    context 'when Activity Insight files are ready for download' do
+      before { allow(PublicationDownloadJob).to receive(:perform_later) }
+
+      it 'calls the publication download job with that file' do
+        service.workflow
+        expect(PublicationDownloadJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)
+        expect(PublicationDownloadJob).not_to have_received(:perform_later).with(activity_insight_oa_file5.id)
+        expect(activity_insight_oa_file4.reload.downloaded).to be true
+      end
+
+      context 'when there is an error' do
+        before { allow(PublicationDownloadJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'updates file downloaded status' do
+          service.workflow
+        rescue RuntimeError
+          expect(activity_insight_oa_file4.reload.downloaded).to be false
+        end
       end
     end
   end

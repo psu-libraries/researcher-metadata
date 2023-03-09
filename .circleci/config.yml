@@ -101,6 +101,9 @@ jobs:
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
+          name: Configure Rspec
+          command: cp .rspec.ci .rspec
+      - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:

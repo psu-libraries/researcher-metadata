@@ -25,5 +25,13 @@ class OAWorkflowService
       pub.update_column(:permissions_last_checked_at, Time.current)
       raise
     end
+
+    ActivityInsightOAFile.ready_for_download.each do |file|
+      file.downloaded = true
+      file.save!
+      PublicationDownloadJob.perform_later(file.id)
+    rescue StandardError
+      file.update_column(:downloaded, false)
+    end
   end
 end
