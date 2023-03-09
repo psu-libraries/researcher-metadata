@@ -17,7 +17,7 @@
                   rails_admin.edit_path(model_name: :publication, id: p.id),
                   target: '_blank' %></td>
           <td>Not Found</td>
-          <td><%= p.preferred_version || 'Not Found' %></td>
+          <td><%= p.preferred_version.present? ? p.preferred_version_display : 'Not Found' %></td>
         </tr>
       <% end %>
     </tbody>
