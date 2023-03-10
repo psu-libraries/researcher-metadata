@@ -886,6 +886,25 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#preferred_version' do
+    let(:pub) { create(:publication,
+                       preferred_version: I18n.t('file_versions.accepted_version')) }
+
+    context 'when the preferred version is given an acceptable version' do
+      it 'saves preferred version to that version' do
+        pub.preferred_version = I18n.t('file_versions.published_version')
+        expect(pub.preferred_version).to eq 'publishedVersion'
+      end
+    end
+
+    context 'when the preferred version is given an empty string' do
+      it 'saves preferred version as nil' do
+        pub.preferred_version = ''
+        expect(pub.preferred_version).to be_nil
+      end
+    end
+  end
+
   describe '#ai_import_identifiers' do
     let(:pub) { create(:publication) }
 
