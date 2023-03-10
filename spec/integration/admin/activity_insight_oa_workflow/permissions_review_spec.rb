@@ -17,7 +17,7 @@ describe 'Admin Permissions Review dashboard', type: :feature do
   describe 'listing publications that need their Permissions reviewed' do
     it 'show a table with header and the proper data for the publications in the table' do
       expect(page).to have_text('Title')
-      expect(page).to have_text('Licence')
+      expect(page).to have_text('License')
       expect(page).to have_text('Preferred Version')
       expect(page).to have_link(pub1.title)
       expect(page).to have_text('Not Found')
