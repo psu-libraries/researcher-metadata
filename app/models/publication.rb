@@ -541,8 +541,8 @@ class Publication < ApplicationRecord
            [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
         end
       end
-      field(:set_statement) { label 'Deposit Statement'}
-      field(:licence) { label 'License'}
+      field(:set_statement) { label 'Deposit Statement' }
+      field(:licence) { label 'License' }
       field(:embargo_date)
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
@@ -561,7 +561,7 @@ class Publication < ApplicationRecord
   end
 
   def preferred_version=(val)
-    super(val == "" ? nil : val)
+    super(val == '' ? nil : val)
   end
 
   def ai_import_identifiers
