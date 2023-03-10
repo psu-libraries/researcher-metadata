@@ -26,11 +26,13 @@ describe 'updating a publication via the admin interface', type: :feature do
     describe 'submitting the form with new data to update a publication record' do
       before do
         fill_in 'Title', with: 'Updated Title'
+        select '', from: 'Preferred Version'
         click_on 'Save'
       end
 
       it "updates the publication's data" do
         expect(pub.reload.title).to eq 'Updated Title'
+        expect(pub.reload.preferred_version).to be_nil
       end
 
       it 'sets the timestamp on the publication to indicate that it was manually updated' do
