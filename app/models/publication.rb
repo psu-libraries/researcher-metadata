@@ -534,9 +534,15 @@ class Publication < ApplicationRecord
           [['True', true], ['False', false]]
         end
       end
-      field(:preferred_version)
-      field(:set_statement)
-      field(:licence)
+      field(:preferred_version, :enum) do
+        label 'Preferred Version'
+        enum do
+          [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
+           [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
+        end
+      end
+      field(:set_statement) { label 'Deposit Statement'}
+      field(:licence) { label 'License'}
       field(:embargo_date)
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
@@ -552,6 +558,10 @@ class Publication < ApplicationRecord
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
     end
+  end
+
+  def preferred_version=(val)
+    super(val == "" ? nil : val)
   end
 
   def ai_import_identifiers
