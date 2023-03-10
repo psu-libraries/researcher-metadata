@@ -661,6 +661,10 @@ class Publication < ApplicationRecord
     secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
   end
 
+  def can_receive_new_ai_oa_files?
+    no_open_access_information? && is_oa_publication? && no_valid_file_version?
+  end
+
   def preferred_version_display
     return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
 
@@ -806,5 +810,9 @@ class Publication < ApplicationRecord
           errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
         end
       end
+    end
+
+    def no_valid_file_version?
+      !(preferred_version.present? && activity_insight_oa_files.map(&:version).include?(preferred_version))
     end
 end
