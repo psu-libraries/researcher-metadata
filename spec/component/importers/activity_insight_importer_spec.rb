@@ -4939,8 +4939,11 @@ describe ActivityInsightImporter do
 
           expect(ActivityInsightOAFile.count).to be 3
           expect(p1.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file.pdf')
+          expect(p1.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(p3.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-5.pdf')
+          expect(p3.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(p4.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-6.pdf')
+          expect(p4.oa_workflow_state).to eq('automatic DOI verification pending')
         end
 
         it 'verifies DOI for those publications' do
@@ -5010,10 +5013,12 @@ describe ActivityInsightImporter do
                                        location: 'abc123/intellcont/some_other_file.pdf') }
 
           it 'creates a new ActivityInsightOAFile for that publication' do
+            expect(DOIVerificationJob).to receive(:perform_later).exactly(3).times
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
                                                                                               'abc123/intellcont/some_other_file.pdf'].sort)
+            expect(existing_pub.oa_workflow_state).to eq('automatic DOI verification pending')
           end
 
           context 'when existing ActivityInsightOAFile already has a valid file version' do
@@ -5027,6 +5032,22 @@ describe ActivityInsightImporter do
               importer.call
 
               expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/some_other_file.pdf'])
+              expect(existing_pub.reload.oa_workflow_state).to be_nil
+            end
+          end
+
+          context "when existing ActivityInsightOAFile's publication already has a verified DOI" do
+            before do
+              existing_pub.update doi_verified: true
+            end
+
+            it 'creates a new ActivityInsightOAFile for that publication but does not kick off the DOIVerificationJob' do
+              expect(DOIVerificationJob).not_to receive(:perform_later).with(existing_pub.id)
+              importer.call
+
+              expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
+                                                                                                'abc123/intellcont/some_other_file.pdf'].sort)
+              expect(existing_pub.oa_workflow_state).to be_nil
             end
           end
         end

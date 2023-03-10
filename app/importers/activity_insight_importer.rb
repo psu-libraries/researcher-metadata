@@ -210,7 +210,11 @@ class ActivityInsightImporter
               file = ActivityInsightOAFile.create(location: activity_insight_file_location)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
-              DOIVerificationJob.perform_later(pub_record.id)
+              unless pub_record.doi_verified == true
+                pub_record.oa_workflow_state = 'automatic DOI verification pending'
+                pub_record.save!
+                DOIVerificationJob.perform_later(pub_record.id)
+              end
             end
           end
         end
