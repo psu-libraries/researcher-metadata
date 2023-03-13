@@ -601,6 +601,12 @@ describe Publication, type: :model do
         expect(described_class.needs_permissions_check).to match_array [pub8, pub3, pub6]
       end
     end
+
+    describe '.permissions_check_failed' do
+      it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
+        expect(described_class.permissions_check_failed).to match_array [pub9]
+      end
+    end
   end
 
   describe '.find_by_wos_pub' do
@@ -877,6 +883,25 @@ describe Publication, type: :model do
 
     it "returns the publication's contributors in order by position" do
       expect(pub.contributor_names).to eq [c3, c1, c2]
+    end
+  end
+
+  describe '#preferred_version' do
+    let(:pub) { create(:publication,
+                       preferred_version: I18n.t('file_versions.accepted_version')) }
+
+    context 'when the preferred version is given an acceptable version' do
+      it 'saves preferred version to that version' do
+        pub.preferred_version = I18n.t('file_versions.published_version')
+        expect(pub.preferred_version).to eq 'publishedVersion'
+      end
+    end
+
+    context 'when the preferred version is given an empty string' do
+      it 'saves preferred version as nil' do
+        pub.preferred_version = ''
+        expect(pub.preferred_version).to be_nil
+      end
     end
   end
 

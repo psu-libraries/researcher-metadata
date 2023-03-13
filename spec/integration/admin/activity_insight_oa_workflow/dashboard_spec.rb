@@ -5,8 +5,10 @@ require 'integration/integration_spec_helper'
 describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
   let!(:aif1) { create(:activity_insight_oa_file, publication: pub1) }
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'unknown') }
+  let!(:aif3) { create(:activity_insight_oa_file, publication: pub3) }
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
+  let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
 
   context 'when the current user is an admin' do
     before do
@@ -32,6 +34,13 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       it 'redirects to the File Version Review page' do
         click_on 'Review File Versions'
         expect(page).to have_current_path activity_insight_oa_workflow_file_version_review_path
+      end
+    end
+
+    describe 'clicking the link to the Permissions Review page' do
+      it 'redirects to the Permissions Review page' do
+        click_on 'Review Permissions'
+        expect(page).to have_current_path activity_insight_oa_workflow_permissions_review_path
       end
     end
   end

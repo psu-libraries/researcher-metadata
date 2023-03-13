@@ -68,6 +68,7 @@ class ActivityInsightOAFile < ApplicationRecord
     edit do
       field(:location) { read_only true }
       field(:version, :enum) do
+        required true
         enum do
           ActivityInsightOAFile::ALLOWED_VERSIONS.map { |v| [v, v] }
         end
