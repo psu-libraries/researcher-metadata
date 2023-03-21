@@ -398,7 +398,7 @@ describe ScholarsphereFileUpload, type: :model do
                         last_name: 'Researcher',
                         position: 1,
                         user: user) }
-    let!(:user) { create(:user, webaccess_id: 'abc123', orcid_identifier: 'https://orcid.org/orcid-id-456') }
+    let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'abc123', orcid_identifier: 'https://orcid.org/orcid-id-456') }
     let(:dep) {
       ScholarsphereWorkDeposit.new(
         title: 'test title',
