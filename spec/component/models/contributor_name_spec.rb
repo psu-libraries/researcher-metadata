@@ -308,7 +308,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle last' })
                 end
@@ -332,7 +332,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle' })
                 end
@@ -360,7 +360,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first last' })
                 end
@@ -384,7 +384,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first' })
                 end
@@ -416,7 +416,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle last' })
                 end
@@ -440,7 +440,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle' })
                 end
@@ -468,7 +468,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'last' })
                 end
@@ -504,7 +504,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle last' })
                 end
@@ -528,7 +528,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle' })
                 end
@@ -556,7 +556,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first last' })
                 end
@@ -580,7 +580,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first' })
                 end
@@ -612,7 +612,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle last' })
                 end
@@ -636,7 +636,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle' })
                 end
@@ -664,7 +664,7 @@ describe ContributorName, type: :model do
                 before do
                   allow(user).to receive(:is_active).and_return true
                 end
-               
+
                 it 'returns a hash with the full name and WebAccess ID of the contributor' do
                   expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'last' })
                 end
