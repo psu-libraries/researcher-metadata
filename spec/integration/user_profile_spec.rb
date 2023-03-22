@@ -47,7 +47,7 @@ describe UserProfile do
         expect(u.psu_identity.data['givenName']).to eq 'Daniel'
         expect(u.psu_identity.data['middleName']).to eq 'M'
         expect(u.psu_identity.data['familyName']).to eq 'Coughlin'
-        expect(u.psu_identity.data['affiliation']).to eq ['FACULTY']
+        expect(u.psu_identity.data['affiliation']).to eq ['FACULTY', 'MEMBER']
         expect(u.psu_identity.data['userid']).to eq 'dmc186'
         expect(u.psu_identity_updated_at).not_to be_nil
       end
