@@ -43,19 +43,21 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     context 'when publications need doi verification' do
-      before do
-        allow(DOIVerificationJob).to receive(:perform_later)
-        allow(PermissionsCheckJob).to receive(:perform_later)
-      end
+      context 'when there is not an error' do
+        before do
+          allow(PermissionsCheckJob).to receive(:perform_later)
+          allow(DOIVerificationJob).to receive(:perform_later)
+        end
 
-      it 'calls the doi verification job with that publication' do
-        service.workflow
-        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub1.id)
-        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub2.id)
-        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
-        expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
-        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
-        expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub6.id)
+        it 'calls the doi verification job with that publication' do
+          service.workflow
+          expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub1.id)
+          expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub2.id)
+          expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub3.id)
+          expect(DOIVerificationJob).to have_received(:perform_later).with(pub4.id)
+          expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub5.id)
+          expect(DOIVerificationJob).not_to have_received(:perform_later).with(pub6.id)
+        end
       end
 
       context 'when there is an error' do
