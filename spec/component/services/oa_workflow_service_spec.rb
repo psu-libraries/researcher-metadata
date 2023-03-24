@@ -44,8 +44,8 @@ describe OAWorkflowService do
 
     context 'when publications need doi verification' do
       before do
-        allow(DOIVerificationJob).to receive(:perform_later)
         allow(PermissionsCheckJob).to receive(:perform_later)
+        allow(DOIVerificationJob).to receive(:perform_later)
       end
 
       it 'calls the doi verification job with that publication' do
@@ -59,7 +59,7 @@ describe OAWorkflowService do
       end
 
       context 'when there is an error' do
-        before { allow(DOIVerificationJob).to receive(:perform_later).and_raise(RuntimeError) }
+        before { allow(DOIVerificationJob).to receive(:perform_later).with(pub4.id).and_raise(RuntimeError) }
 
         it 'saves doi verifed as false' do
           service.workflow
