@@ -42,8 +42,8 @@ Below is a list of the data sources along with the types of records that are imp
 1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
 wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
 etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) (API key
-required) for directly importing data. A cron job automatically runs this import in production once per day
-beginning at around 10:00 PM, and the import usually takes around 8 hours to finish. We import the
+required) for directly importing data. A cron job automatically runs this import in production once per weekday
+beginning at around 10:15 PM, and the import usually takes around 8 hours to finish. We import the
 following types of records from Activity Insight:
     - authorships
     - contributor_names
@@ -53,6 +53,7 @@ following types of records from Activity Insight:
     - presentations
     - presentation_contributions
     - publications
+    - activity_insight_oa_files
     - users
     - user_performances
 
@@ -94,7 +95,7 @@ from news.psu.edu:
     - news_feed_items
 
 1. **Penn State LDAP** - We import some data for existing user records from Penn State's directory of people.
-A cron job runs this import in production once per hour.
+A cron job runs this import in production once per hour.  ORCIDs are obtained from this import.
 
 1. **Web of Science** - We performed a one-time import of a static set of publication and grant data from
 Web of Science for publications that were published from 2013 to 2018. We obtained a copy of this data on
@@ -112,12 +113,14 @@ following types of records from NSF:
     - researcher_funds
 
 1. **Open Access Button** - We import information about open access copies of publications that is provided by
-Open Access Button via their web [API](https://openaccessbutton.org/api). There are two different importers
+Open Access Button via their web [API](https://openaccessbutton.org/api). There are three different importers
 configured to run with cron.  One imports Open Access Button metadata for publications with DOIs using Open Access
 Button's DOI search endpoint.  The other gathers metadata using Open Access Button's title search endpoint.  Searching by DOI is
-faster, so the import with DOIs only takes several days to complete.  This process is run every Sunday at 8:00am.  Searching by title
-can be slow, so this process runs on the 1st and 15th day of every month.  It sometimes takes more than a week to complete.
-We import the following types of records from Open Access Button:
+faster, so the import with DOIs only takes several days to complete.  This process is run every Sunday at 8:00 AM.  Searching by title
+can be slow, so this process runs on the 1st and 15th day of every month at 8:00 AM.  It sometimes takes more than a week to complete.
+The final import only imports open access button info for new publications.  In other words, any publication without an `open_access_button_last_checked_at`
+timestamp.  This is fairly quick and run at 10:00 PM every Sunday. It is meant to run after all the latest Activity insight and Pure data has been imported,
+and before the weekly open access emails go out.  We import the following types of records from Open Access Button:
     - open_access_locations
 
 1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
@@ -129,7 +132,9 @@ source may provide some metadata that is not provided by the other. In general, 
 metadata than Open Access Button. In addition to importing metadata about any open access copies of a
 publication, this import also updates the open access status on publication records in RMD. In production,
 a cron job automatically runs this import once per week beginning at 8:00 PM on Tuesdays. It can take
-multiple days to finish due to API rate limiting. We import the following types of records from Unpaywall:
+multiple days to finish due to API rate limiting. Just like the Open Access Button import, the Unpaywall import
+has a second weekly import on Sunday at 10:00 PM where Unpaywall data is only imported for new publications.
+We import the following types of records from Unpaywall:
     - open_access_locations
 
 1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
@@ -144,6 +149,7 @@ repositories:
     - authorships
     - contributor_names
     - publications
+    - open_access_locations
 
 ### Obtaining New Data
 While much of our data importing is fully automated, some of it involves parsing files that are manually 
@@ -238,9 +244,7 @@ represent the same publication after we have finished importing data. This helps
 duplicate data when they query our own API. There is logic built into the processes that import publication metadata
 that will search for possible duplicate publications that already exist and group them as each new publication
 record is imported. This allows admin users to later review the groups and pick which record in each group to keep
-while dicarding the rest. Subsequent imports of the same data will then not recreate the discarded duplicates. There's
-also a rake task, `rake group_duplicate_pubs`, which uses the same duplicate finding/grouping logic. Running this task
-will check every publication record in the database for possible duplicates and group them.
+while discarding the rest. Subsequent imports of the same data will then not recreate the discarded duplicates.
 
 Whenever suspected duplicate publication records are grouped as they're being imported, those records are also
 sometimes automatically hidden so that they do not appear as duplicates in API responses, user profiles, etc. until
@@ -304,10 +308,15 @@ to be worth the small amount of data that we'll lose from occasionally merging n
 
 If two publications have the same DOI, and are grouped as duplicates, they will likely be merged by an admin.
 To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI 
-and most of their metadata either matches exactly or matches very closely.  The process can be run with the rake task, 
-`rake auto_merge:duplicate_pubs_on_doi`.  The matching criteria is very strict, to reduce false positives.  The logic 
+and some of their metadata either matches exactly or matches very closely.  We also have a process that will make an attempt
+at merging publications that have been grouped, but one or both of the publications do _not_ have a DOI.  The merging criteria
+is more strict in this case, and checks that most of the publication's metadata is matching.  Both of these processes can be
+run at the same time with the rake task, `rake auto_merge:duplicate_pubs_on_matching`.  The logic 
 should be alterred by a programmer if users feel the matching should be less strict.  When merging, this process tries 
 to determine which data is best to keep between the two records.  This is done, in some cases, with somewhat complicated logic.
+
+Both of the above rake tasks are run every Monday at 2:00 AM and 2:30 AM respectively.  They are meant to be run
+just before the weekly open access emails go out.
 
 ### Import Logic
 In general, data imports create a new record if no matching record already exists. If a matching record does already
@@ -315,6 +324,8 @@ exist, then the import may update the attributes of that record. However, for re
 updated by admin users of this app, we keep track of whether or not a record has been modified in any way by an admin.
 If a record has been modified by an admin user, then subsequent data imports no longer update that record because we assume
 that any changes that were made manually by an admin user are corrections or additions that we don't want to overwrite.
+In a few circumstances, some metadata fields will still get updated for some of the data models even if the record
+has been updated by an admin user.  This is for data that is generally not alterred by admins, and should reflect its source value.
 Data imports never delete whole records from our database - even if formerly present records have been removed from the
 data source.
 
@@ -386,7 +397,7 @@ user's Penn State LDAP record.
 
 ### Researcher Metadata Database Integration
 #### Current Workflow
-In our production environment, a job runs houly that queries Penn State LDAP for each user in our database
+In our production environment, a job runs hourly that queries Penn State LDAP for each user in our database
 and saves their ORCID iD if it is present in their LDAP record. We then use the presence of the ORCID iD 
 that we obtained in this way to determine if the user can connect their Researcher Metadata profile to
 their ORCID record. If we've obtained an ORCID iD from LDAP, then they are able to make this new
@@ -427,19 +438,20 @@ interface shows a list of all of the user's publications and the open access sta
 that has an unknown open access status, there are several actions that a user may take in order to comply with the
 policy including:
 1. providing a URL to an open access version of their work that has already been published on the web
+1. Using RMD's builtin ScholarSphere deposit workflow to upload an open access version of their work to ScholarSphere
 1. visiting [ScholarSphere](https://scholarsphere.psu.edu/) and depositing an open access version of their work
 1. submitting a waiver if an open access version of their work cannot be published for some reason
 
 Before notifying users in this way, we attempt to obtain as much open access status information as possible so
 that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
-we have imported from various sources to query Open Access Button and attempt to obtain a URL for an existing
-open access version of the work. Currently the processes for obtaining as much data as possible beforehand and
-for sending the email notifications are triggered manually by rake tasks in the production environment. The
-task for importing data from Open Access Button is `rake import:open_access_button`, and the task for sending
-the notifications is `rake email_notifications:send_all_open_access_reminders`. As the name of the latter task
-indicates, it sends an email to *every* user who meets the criteria for receiving one. It may be more desireable
-to actually send the emails in smaller batches in some cases, which is supported by the code underlying the
-rake task. There is also a task for sending a test email containing mock data to a specific email address for the
+we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
+open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
+As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with 
+a maximum limit to how many can be sent is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
+weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
+before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
+and Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
+There is also a task for sending a test email containing mock data to a specific email address for the
 purposes of testing/demonstration:  `rake email_notifications:test_open_access_reminder[email@example.com]`.
 
 For each user, we record the time when they were last sent an open access reminder email, and for each publication
@@ -451,6 +463,24 @@ regardless of how often we run the emailing task.
 If a user takes any of the possible actions to comply with the open access policy for a publication, then the
 result will be recorded in RMD, the open access status of the publication will change, and the user will no
 longer be notified about the publication.
+
+## ScholarSphere Open Access Deposit Workflow
+
+Users can upload their open access publications within RMD's profile section from the ScholarSphere deposit workflow.  
+There are several steps to this process:
+
+1. The user uploads their files to be sent to ScholarSphere
+1. RMD analyzes those files to try to determine if the publication uploaded is a Published or Accepted version
+1. The user can confirm which version the uploaded publication is
+1. RMD then tries to grab permissions data for the publication from Open Access Button
+1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
+1. The user submits the form and the files and metadata are sent to ScholarSphere
+
+## OA Workflow
+
+WIP:  The OA Workflow is an admin feature meant to replace some manual, external processes in which admins gather open access publications
+uploaded to Activity Insight, do some curation and analysis, and upload them to ScholarSphere.  Since much of the curation and analysis 
+uses data stored in RMD, this process can be implemented in a more centralized, organized fashion within RMD.
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
