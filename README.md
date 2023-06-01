@@ -309,7 +309,7 @@ to be worth the small amount of data that we'll lose from occasionally merging n
 If two publications have the same DOI, and are grouped as duplicates, they will likely be merged by an admin.
 To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI 
 and some of their metadata either matches exactly or matches very closely.  We also have a process that will make an attempt
-at merging publications that have been group, but one or both of the publications do _not_ have a DOI.  The merging criteria
+at merging publications that have been grouped, but one or both of the publications do _not_ have a DOI.  The merging criteria
 is more strict in this case, and checks that most of the publication's metadata is matching.  Both of these processes can be
 run at the same time with the rake task, `rake auto_merge:duplicate_pubs_on_matching`.  The logic 
 should be alterred by a programmer if users feel the matching should be less strict.  When merging, this process tries 
@@ -447,7 +447,7 @@ that we're not bothering people about publications that are already open access.
 we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
 open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
 As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with 
-a maximum limit to how many can be send is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
+a maximum limit to how many can be sent is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
 weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
 before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
 and Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
@@ -472,8 +472,8 @@ There are several steps to this process:
 1. The user uploads their files to be sent to ScholarSphere
 1. RMD analyzes those files to try to determine if the publication uploaded is a Published or Accepted version
 1. The user can confirm which version the uploaded publication is
-1. RMD then tries to grab permissions data for the publications from Open Access Button
-1. The user is presented a form with autocompleted fields using permissions data and data stored in RMD to be reviewed and/or editted
+1. RMD then tries to grab permissions data for the publication from Open Access Button
+1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
 1. The user submits the form and the files and metadata are sent to ScholarSphere
 
 ## OA Workflow
