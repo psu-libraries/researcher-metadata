@@ -438,19 +438,20 @@ interface shows a list of all of the user's publications and the open access sta
 that has an unknown open access status, there are several actions that a user may take in order to comply with the
 policy including:
 1. providing a URL to an open access version of their work that has already been published on the web
+1. Using RMD's builtin ScholarSphere deposit workflow to upload an open access version of their work to ScholarSphere
 1. visiting [ScholarSphere](https://scholarsphere.psu.edu/) and depositing an open access version of their work
 1. submitting a waiver if an open access version of their work cannot be published for some reason
 
 Before notifying users in this way, we attempt to obtain as much open access status information as possible so
 that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
-we have imported from various sources to query Open Access Button and attempt to obtain a URL for an existing
-open access version of the work. Currently the processes for obtaining as much data as possible beforehand and
-for sending the email notifications are triggered manually by rake tasks in the production environment. The
-task for importing data from Open Access Button is `rake import:open_access_button`, and the task for sending
-the notifications is `rake email_notifications:send_all_open_access_reminders`. As the name of the latter task
-indicates, it sends an email to *every* user who meets the criteria for receiving one. It may be more desireable
-to actually send the emails in smaller batches in some cases, which is supported by the code underlying the
-rake task. There is also a task for sending a test email containing mock data to a specific email address for the
+we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
+open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
+As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with 
+a maximum limit to how many can be send is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
+weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
+before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
+and Unpaywall, and automerged if possible.  All of this is currently automated with cronjobs.
+There is also a task for sending a test email containing mock data to a specific email address for the
 purposes of testing/demonstration:  `rake email_notifications:test_open_access_reminder[email@example.com]`.
 
 For each user, we record the time when they were last sent an open access reminder email, and for each publication
@@ -462,6 +463,24 @@ regardless of how often we run the emailing task.
 If a user takes any of the possible actions to comply with the open access policy for a publication, then the
 result will be recorded in RMD, the open access status of the publication will change, and the user will no
 longer be notified about the publication.
+
+## ScholarSphere Open Access Deposit Workflow
+
+Users can upload their open access publications within RMD's profile section from the ScholarSphere deposit workflow.  
+There are several steps to this process:
+
+1. The user uploads their files to be sent to ScholarSphere
+1. RMD analyzes those files to try to determine if the publication uploaded is a Published or Accepted version
+1. The user can confirm which version the uploaded publication is
+1. RMD then tries to grab permissions data for the publications from Open Access Button
+1. The user is presented a form with autocompleted fields using permissions data and data stored in RMD to be reviewed and/or editted
+1. The user submits the form and the files and metadata are sent to ScholarSphere
+
+## OA Workflow
+
+WIP:  The OA Workflow is an admin feature meant to replace some manual, external processes in which admins gather open access publications
+uploaded to Activity Insight, do some curation and analysis, and upload them to ScholarSphere.  Since much of the curation and analysis 
+uses data stored in RMD, this process can be implemented in a more centralized, organized fashion within RMD.
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
