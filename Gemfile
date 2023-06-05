@@ -62,10 +62,10 @@ gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
 
 group :development, :test do
-  gem 'rswag'                           # DSL for Ruby to test and generate swagger docs
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'
+  gem 'rswag'                           # DSL for Ruby to test and generate swagger docs
 end
 
 group :development do

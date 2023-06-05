@@ -64,3 +64,11 @@ RSpec/PendingWithoutReason:
     - 'spec/component/models/organization_spec.rb'
     - 'spec/component/models/publisher_spec.rb'
     - 'spec/unit/decorators/authorship_decorator_spec.rb'
+
+RSpec/EmptyExampleGroup:
+  Exclude:
+    - 'spec/requests/api/v1/organizations_spec.rb'
+
+RSpec/VariableName:
+  Exclude:
+    - 'spec/requests/api/v1/organizations_spec.rb'

@@ -6,7 +6,7 @@ RSpec.configure do |config|
   # Specify a root folder where Swagger JSON files are generated
   # NOTE: If you're using the rswag-api to serve API descriptions, you'll need
   # to ensure that it's configured to serve Swagger from the same folder
-  config.swagger_root = Rails.root.to_s + '/public/api-docs'
+  config.swagger_root = "#{Rails.root}/public/api-docs"
 
   # Define one or more Swagger documents and provide global metadata for each one
   # When you run the 'rswag:specs:swaggerize' rake task, the complete Swagger will
@@ -20,8 +20,8 @@ RSpec.configure do |config|
       info: {
         title: 'Researcher Metadata Database API',
         description: 'An API that serves as the authority on faculty and ' \
-                      'research metadata at Penn State University ' \
-                      'in the swagger-2.0 specification.',
+                     'research metadata at Penn State University ' \
+                     'in the swagger-2.0 specification.',
         version: 'v1'
       },
       basePath: '/',
@@ -52,7 +52,7 @@ RSpec.configure do |config|
           PublicationV1: {
             type: :object,
             required: [:id, :type, :attributes],
-            properties: { 
+            properties: {
               id: {
                 type: :string,
                 example: '123',
@@ -66,7 +66,7 @@ RSpec.configure do |config|
               attributes: {
                 type: :object,
                 required: [:title, :publication_type, :contributors, :tags, :pure_ids, :activity_insight_ids],
-                properties: { 
+                properties: {
                   title: {
                     type: :string,
                     example: 'A Scholarly Research Article',

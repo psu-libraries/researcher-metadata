@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   end
 
   root to: 'public#home'
+  get '/resources' => 'public#resources', as: :resources
 
   scope module: 'api' do
     namespace :v1 do
