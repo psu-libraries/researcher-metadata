@@ -1,0 +1,83 @@
+---
+openapi: 3.0.1
+info:
+  title: Researcher Metadata Database API
+  description: An API that serves as the authority on faculty and research metadata
+    at Penn State University in the swagger-2.0 specification.
+  version: v1
+basePath: "/"
+consumes:
+- application/json
+produces:
+- application/json
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+  schemas:
+    ErrorModelV1:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+paths:
+  "/v1/organizations":
+    get:
+      summary: All Organizations
+      description: Returns all visible organizations to which the given API token
+        has access.
+      operationId: findOrganizations
+      tags:
+      - organization
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: organization
+                          description: The type of object
+                        attributes:
+                          type: object
+                          required:
+                          - name
+                          properties:
+                            name:
+                              type: string
+                              example: College of Engineering
+                              description: The name of the organization
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"

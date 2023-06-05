@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 Rails.application.routes.draw do
+  mount Rswag::Ui::Engine => '/api-docs'
+  mount Rswag::Api::Engine => '/resources'
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
@@ -28,8 +30,6 @@ Rails.application.routes.draw do
   end
 
   root to: 'public#home'
-  get '/resources' => 'public#resources', as: :resources
-  get '/api_docs' => 'public#api_docs', as: :api_docs
 
   scope module: 'api' do
     namespace :v1 do

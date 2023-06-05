@@ -1,15 +1,3 @@
-GIT
-  remote: https://github.com/psu-libraries/apivore.git
-  revision: 73c05c55dd92579c8674ae3b0e3fb5a6cb2c72b8
-  specs:
-    apivore (1.7.0)
-      actionpack (>= 5, < 7)
-      hashie (~> 3.3)
-      json-schema (~> 2.5)
-      rspec (~> 3)
-      rspec-expectations (~> 3.1)
-      rspec-mocks (~> 3.1)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -316,8 +304,8 @@ GEM
     jquery-ui-rails (6.0.1)
       railties (>= 3.2.16)
     json (2.6.3)
-    json-schema (2.8.1)
-      addressable (>= 2.4)
+    json-schema (3.0.0)
+      addressable (>= 2.8)
     jsonapi-serializer (2.2.0)
       activesupport (>= 4.2)
     jwt (2.3.0)
@@ -512,10 +500,6 @@ GEM
       actionpack (>= 5.0)
       railties (>= 5.0)
     rexml (3.2.5)
-    rspec (3.10.0)
-      rspec-core (~> 3.10.0)
-      rspec-expectations (~> 3.10.0)
-      rspec-mocks (~> 3.10.0)
     rspec-core (3.10.1)
       rspec-support (~> 3.10.0)
     rspec-expectations (3.10.1)
@@ -538,6 +522,20 @@ GEM
     rspec-support (3.10.3)
     rss (0.2.9)
       rexml
+    rswag (2.9.0)
+      rswag-api (= 2.9.0)
+      rswag-specs (= 2.9.0)
+      rswag-ui (= 2.9.0)
+    rswag-api (2.9.0)
+      railties (>= 3.1, < 7.1)
+    rswag-specs (2.9.0)
+      activesupport (>= 3.1, < 7.1)
+      json-schema (>= 2.2, < 4.0)
+      railties (>= 3.1, < 7.1)
+      rspec-core (>= 2.14)
+    rswag-ui (2.9.0)
+      actionpack (>= 3.1, < 7.1)
+      railties (>= 3.1, < 7.1)
     rubocop (1.42.0)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -623,7 +621,6 @@ GEM
     ssrf_filter (1.0.7)
     string-similarity (2.1.0)
     strscan (3.0.1)
-    swagger-blocks (3.0.0)
     temple (0.8.2)
     thor (1.2.1)
     tilt (2.0.11)
@@ -676,7 +673,6 @@ PLATFORMS
 
 DEPENDENCIES
   activerecord-import
-  apivore!
   bcrypt_pbkdf
   bootstrap (< 5.0)
   bugsnag
@@ -733,6 +729,7 @@ DEPENDENCIES
   rspec-its
   rspec-rails
   rss
+  rswag
   sass-rails
   scholarsphere-client (~> 0.3)
   selenium-webdriver
@@ -745,7 +742,6 @@ DEPENDENCIES
   spring-watcher-listen (~> 2.0.0)
   string-similarity
   strscan (~> 3.0.1)
-  swagger-blocks
   turbolinks (~> 5)
   uglifier (>= 1.3.0)
   vcr

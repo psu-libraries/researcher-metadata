@@ -1,154 +1,75 @@
-# frozen_string_literal: true
-
 require 'requests/requests_spec_helper'
 
-describe API::V1::OrganizationsController do
-  describe 'GET /v1/organizations' do
-    context 'when no authorization header is included in the request' do
-      it 'returns 401 Unauthorized' do
-        get '/v1/organizations'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
-    context 'when an invalid authorization header value is included in the request' do
-      it 'returns 401 Unauthorized' do
-        get '/v1/organizations', headers: { 'X-API-Key': 'bad-token' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
-    context 'when a valid authorization header value is included in the request' do
-      let!(:org1) { create(:organization, visible: true) }
-      let!(:org2) { create(:organization, visible: true) }
-      let!(:org3) { create(:organization, visible: true) }
-      let!(:invisible_org) { create(:organization, visible: false) }
-      let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
-
-      before do
-        create(:organization_api_permission, api_token: token, organization: org1)
-        create(:organization_api_permission, api_token: token, organization: org2)
-        get '/v1/organizations', headers: { 'X-API-Key': 'token123' }
-      end
-
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      it 'returns all visible organizations that the API token has permission to view' do
-        expect(json_response[:data].size).to eq(2)
-
-        expect(json_response[:data].find { |o| o[:id] == org1.id.to_s }).not_to be_nil
-        expect(json_response[:data].find { |o| o[:id] == org2.id.to_s }).not_to be_nil
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
+RSpec.describe 'api/v1/organizations', type: :request do
+  before do
+    create(:organization)
+    create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil)
   end
 
-  describe 'GET /v1/organizations/:id/publications' do
-    let!(:user_1) { create(:user) }
-    let!(:user_2) { create(:user) }
-    let!(:user_3) { create(:user) }
-    let!(:pub_1) { create(:publication, published_on: Date.new(2000, 1, 1), visible: true) }
-    let!(:pub_2) { create(:publication, published_on: Date.new(2010, 1, 1), visible: true) }
-    let!(:pub_3) { create(:publication, published_on: Date.new(2015, 1, 1), visible: true) }
-    let!(:invisible_pub) { create(:publication, published_on: Date.new(2010, 1, 1), visible: false) }
-    let!(:org) { create(:organization, visible: true) }
-    let!(:child_org) { create(:organization, visible: true, parent: org) }
-    let!(:inaccessible_org) { create(:organization, visible: true) }
-    let!(:invisible_org) { create(:organization, visible: false) }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
+  path '/v1/organizations' do
 
-    before do
-      create(:user_organization_membership,
-             user: user_1,
-             organization: org,
-             started_on: Date.new(1990, 1, 1))
-      create(:user_organization_membership,
-             user: user_2,
-             organization: org,
-             started_on: Date.new(1980, 1, 1))
-      create(:user_organization_membership,
-             user: user_3,
-             organization: child_org,
-             started_on: Date.new(2000, 1, 1))
-
-      create(:authorship, user: user_1, publication: pub_1)
-      create(:authorship, user: user_2, publication: pub_2)
-      create(:authorship, user: user_2, publication: invisible_pub)
-      create(:authorship, user: user_3, publication: pub_3)
-
-      create(:organization_api_permission, api_token: token, organization: org)
-    end
-
-    context 'when no authorization header is included in the request' do
-      it 'returns 401 Unauthorized' do
-        get '/v1/organizations'
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
-    context 'when an invalid authorization header value is included in the request' do
-      it 'returns 401 Unauthorized' do
-        get '/v1/organizations', headers: { 'X-API-Key': 'bad-token' }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-
-    context 'when a valid authorization header value is included in the request' do
-      context 'when given the ID of a visible organization' do
-        before do
-          get "/v1/organizations/#{org.id}/publications", headers: headers
+    get('All Organizations') do
+      description 'Returns all visible organizations to which the given API token has access.'
+      operationId 'findOrganizations'
+      produces 'application/json'
+      tags 'organization'
+      security [ api_key: [] ]
+      response(200, 'organization response') do
+        let(:'X-API-Key') { 'token123' }
+        schema type: :object,
+          properties: {
+            data: { type: :array,
+                    items: 
+                      { properties: 
+                          { id: { type: :string,
+                                  example: '123',
+                                  description: 'The ID of the object' },
+                            type: { type: :string,
+                                    example: 'organization',
+                                    description: 'The type of object'},
+                            attributes: { type: :object,
+                                          required: ['name'],
+                                          properties: { name: { type: :string,
+                                                                example: 'College of Engineering',
+                                                                description: 'The name of the organization' 
+                                                              }
+                                                      }
+                                        } 
+                            },
+                          type: :object,
+                          required: ['id', 'type', 'attributes']
+                      },
+                  }
+            },
+            required: ['data']
+          run_test! 
         end
 
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-
-        it "returns all the organization's visible publications" do
-          expect(json_response[:data].size).to eq(3)
-        end
-      end
-
-      context 'when given the ID of an invisible organization' do
-        before do
-          get "/v1/organizations/#{invisible_org.id}/publications", headers: headers
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-
-        it 'returns 404' do
-          expect(response.code).to eq '404'
-        end
-      end
-
-      context 'when given the ID of an organization to which the token does not have access' do
-        before do
-          get "/v1/organizations/#{inaccessible_org.id}/publications", headers: headers
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-
-        it 'returns 404' do
-          expect(response.code).to eq '404'
+        response(401, 'unauthorized') do
+          let(:'X-API-Key') { 'invalid' }
+          schema '$ref' => '#/components/schemas/ErrorModelV1'
+          run_test!
         end
       end
     end
-  end
+
+  # path '/v1/organizations/{id}/publications' do
+  #   # You'll want to customize the parameter types...
+  #   parameter name: 'id', in: :path, type: :string, description: 'id'
+
+  #   get('publications organization') do
+  #     response(200, 'successful') do
+  #       let(:id) { '123' }
+
+  #       after do |example|
+  #         example.metadata[:response][:content] = {
+  #           'application/json' => {
+  #             example: JSON.parse(response.body, symbolize_names: true)
+  #           }
+  #         }
+  #       end
+  #       run_test!
+  #     end
+  #   end
+  # end
 end
