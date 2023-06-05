@@ -53,23 +53,45 @@ RSpec.describe 'api/v1/organizations', type: :request do
       end
     end
 
-  # path '/v1/organizations/{id}/publications' do
-  #   # You'll want to customize the parameter types...
-  #   parameter name: 'id', in: :path, type: :string, description: 'id'
+  path '/v1/organizations/{id}/publications' do
+    parameter name: 'id', in: :path, type: :integer, description: 'The ID of an organization', required: true
 
-  #   get('publications organization') do
-  #     response(200, 'successful') do
-  #       let(:id) { '123' }
+    get("Retrieve an organization's publications") do
+      description 'Returns publications that were authored by users while they were members of the organization'
+      operationId 'findOrganizationPublications'
+      produces ['application/json']
+      tags 'organization'
+      security [ api_key: [] ]
+      response(200, 'user publication response') do
+        let(:id) { '123' }
+        let(:'X-API-Key') { 'token123' }
 
-  #       after do |example|
-  #         example.metadata[:response][:content] = {
-  #           'application/json' => {
-  #             example: JSON.parse(response.body, symbolize_names: true)
-  #           }
-  #         }
-  #       end
-  #       run_test!
-  #     end
-  #   end
-  # end
+        schema type: :object,
+          properties: {
+            data: {
+              type: :array,
+              items: {
+                '$ref' => '#/components/schemas/PublicationV1'
+              }
+            }
+          }
+        
+        run_test!
+      end
+
+      response(401, 'unauthorized') do
+        let(:'X-API-Key') { 'invalid' }
+        let(:id) { '123' }
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
+        run_test!
+      end
+
+      response(404, 'not found') do
+        let(:'X-API-Key') { 'token123' }
+        let(:id) { '5678' }
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
+        run_test!
+      end
+    end
+  end
 end
