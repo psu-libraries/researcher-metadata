@@ -249,6 +249,28 @@ components:
                     example: 8
                     description: The user's preference for what position this publication
                       should occupy in a list of their publications in their profile
+    PublicationInput:
+      type: object
+      required:
+      - scholarsphere_open_access_url
+      properties:
+        activity_insight_id:
+          type: string
+        doi:
+          type: string
+        scholarsphere_open_access_url:
+          type: string
+    PublicationPatchResult:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
 paths:
   "/v1/organizations":
     get:
@@ -349,7 +371,7 @@ paths:
       description: Returns grant data associated with a publication
       operationId: findPublicationGrants
       tags:
-      - - publication
+      - publication
       parameters:
       - name: id
         in: path
@@ -454,22 +476,136 @@ paths:
             '["application/json"]':
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
-  "/v1/publications":
-    patch:
-      summary: update_all publication
-      responses:
-        '200':
-          description: successful
   "/v1/publications/{id}":
     parameters:
     - name: id
       in: path
-      description: id
+      description: ID of publication to fetch
       required: true
+      format: int64
       schema:
-        type: string
+        type: integer
     get:
-      summary: show publication
+      summary: Find Publication by ID
+      tags:
+      - publication
+      description: Returns a single publication if the user has access
+      operationId: findPublicationById
+      security:
+      - api_key: []
       responses:
         '200':
-          description: successful
+          description: publication response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    "$ref": "#/components/schemas/PublicationV1"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/publications":
+    get:
+      summary: All Publications
+      tags:
+      - publication
+      description: Returns all publications from the system that the user has access
+        to
+      operationId: findPublications
+      parameters:
+      - name: activity_insight_id
+        in: query
+        description: Activity Insight ID to filter by
+        required: false
+        schema:
+          type: string
+      - name: doi
+        in: query
+        description: DOI to filter by
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: max number publications to return
+        required: false
+        format: int32
+        schema:
+          type: integer
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: publication response
+          content:
+            '["application/json", "text/html"]':
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            '["application/json", "text/html"]':
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+    patch:
+      summary: Update publication's ScholarSphere Open Access Link
+      tags:
+      - publication
+      description: Update publication's ScholarSphere Open Access Link by doi or activity
+        insight id
+      operationId: updateOpenAccessLink
+      parameters: []
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: ScholarSphere Open Access Link successfully updated response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PublicationPatchResult"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: No publications found response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '422':
+          description: Invalid params response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PublicationInput"
+        required: true
+        description: ScholarSphere Open Access Link update requires either a doi or
+          an activity insight id

@@ -243,6 +243,23 @@ RSpec.configure do |config|
                 }
               }
             }
+          },
+          PublicationInput: {
+            type: :object,
+            required: [:scholarsphere_open_access_url],
+            properties: {
+              activity_insight_id: { type: :string },
+              doi: { type: :string },
+              scholarsphere_open_access_url: { type: :string }
+            }
+          },
+          PublicationPatchResult: {
+            type: :object,
+            required: [:code, :message],
+            properties: {
+              code: { type: :integer, format: :int32 },
+              message: { type: :string }
+            }
           }
         }
       }
