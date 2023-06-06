@@ -120,345 +120,345 @@ module API::V1
       render json: data
     end
 
-    #     swagger_path '/v1/users/{webaccess_id}/organization_memberships' do
-    #       operation :get do
-    #         key :summary, "Retrieve the user's organization memberships"
-    #         key :description, 'Returns organization memberships for a user'
-    #         key :operationId, 'findUserOrganizationMemberships'
-    #         key :produces, [
-    #           'application/json'
-    #         ]
-    #         key :tags, [
-    #           'user'
-    #         ]
-    #         parameter do
-    #           key :name, :webaccess_id
-    #           key :in, :path
-    #           key :description, 'Webaccess ID of user to retrieve organization memberships'
-    #           key :required, true
-    #           key :type, :string
-    #         end
-    #         response 200 do
-    #           key :description, 'user organization memberships response'
-    #           schema do
-    #             key :required, [:data]
-    #             property :data do
-    #               key :type, :array
-    #               items do
-    #                 key :type, :object
-    #                 key :required, [:id, :type, :attributes]
-    #                 property :id do
-    #                   key :type, :string
-    #                   key :example, '123'
-    #                   key :description, 'The ID of the object'
-    #                 end
-    #                 property :type do
-    #                   key :type, :string
-    #                   key :example, 'organization_membership'
-    #                   key :description, 'The type of the object'
-    #                 end
-    #                 property :attributes do
-    #                   key :type, :object
-    #                   key :required, [:organization_name]
-    #                   property :organization_name do
-    #                     key :type, :string
-    #                     key :example, 'Biology'
-    #                     key :description, 'The name of the organization to which the user belongs'
-    #                   end
-    #                   property :organization_type do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Department'
-    #                     key :description, 'The type of the organization'
-    #                   end
-    #                   property :position_title do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Associate Professor of Biology'
-    #                     key :description, "The user's role or title within the organization"
-    #                   end
-    #                   property :position_started_on do
-    #                     key :type, [:string, :null]
-    #                     key :example, '2010-09-01'
-    #                     key :description, 'The date on which the user joined the organization in this role'
-    #                   end
-    #                   property :position_ended_on do
-    #                     key :type, [:string, :null]
-    #                     key :example, '2012-05-30'
-    #                     key :description, 'The date on which the user left the organization in this role'
-    #                   end
-    #                 end
-    #               end
-    #             end
-    #           end
-    #         end
-    #         response 401 do
-    #           key :description, 'unauthorized'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         response 404 do
-    #           key :description, 'not found'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         security do
-    #           key :api_key, []
-    #         end
-    #       end
-    #     end
+        # swagger_path '/v1/users/{webaccess_id}/organization_memberships' do
+        #   operation :get do
+        #     key :summary, "Retrieve the user's organization memberships"
+        #     key :description, 'Returns organization memberships for a user'
+        #     key :operationId, 'findUserOrganizationMemberships'
+        #     key :produces, [
+        #       'application/json'
+        #     ]
+        #     key :tags, [
+        #       'user'
+        #     ]
+        #     parameter do
+        #       key :name, :webaccess_id
+        #       key :in, :path
+        #       key :description, 'Webaccess ID of user to retrieve organization memberships'
+        #       key :required, true
+        #       key :type, :string
+        #     end
+        #     response 200 do
+        #       key :description, 'user organization memberships response'
+        #       schema do
+        #         key :required, [:data]
+        #         property :data do
+        #           key :type, :array
+        #           items do
+        #             key :type, :object
+        #             key :required, [:id, :type, :attributes]
+        #             property :id do
+        #               key :type, :string
+        #               key :example, '123'
+        #               key :description, 'The ID of the object'
+        #             end
+        #             property :type do
+        #               key :type, :string
+        #               key :example, 'organization_membership'
+        #               key :description, 'The type of the object'
+        #             end
+        #             property :attributes do
+        #               key :type, :object
+        #               key :required, [:organization_name]
+        #               property :organization_name do
+        #                 key :type, :string
+        #                 key :example, 'Biology'
+        #                 key :description, 'The name of the organization to which the user belongs'
+        #               end
+        #               property :organization_type do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Department'
+        #                 key :description, 'The type of the organization'
+        #               end
+        #               property :position_title do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Associate Professor of Biology'
+        #                 key :description, "The user's role or title within the organization"
+        #               end
+        #               property :position_started_on do
+        #                 key :type, [:string, :null]
+        #                 key :example, '2010-09-01'
+        #                 key :description, 'The date on which the user joined the organization in this role'
+        #               end
+        #               property :position_ended_on do
+        #                 key :type, [:string, :null]
+        #                 key :example, '2012-05-30'
+        #                 key :description, 'The date on which the user left the organization in this role'
+        #               end
+        #             end
+        #           end
+        #         end
+        #       end
+        #     end
+        #     response 401 do
+        #       key :description, 'unauthorized'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     response 404 do
+        #       key :description, 'not found'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     security do
+        #       key :api_key, []
+        #     end
+        #   end
+        # end
 
-    #     swagger_path '/v1/users/{webaccess_id}/news_feed_items' do
-    #       operation :get do
-    #         key :summary, "Retrieve a user's news feed items"
-    #         key :description, 'Returns a news feed items for a user'
-    #         key :operationId, 'findUserNewsFeedItems'
-    #         key :produces, [
-    #           'application/json',
-    #           'text/html'
-    #         ]
-    #         key :tags, [
-    #           'user'
-    #         ]
-    #         parameter do
-    #           key :name, :webaccess_id
-    #           key :in, :path
-    #           key :description, 'Webaccess ID of user to retrieve news feed items'
-    #           key :required, true
-    #           key :type, :string
-    #         end
-    #         response 200 do
-    #           key :description, 'user news_feed_items response'
-    #           schema do
-    #             key :required, [:data]
-    #             property :data do
-    #               key :type, :array
-    #               items do
-    #                 key :type, :object
-    #                 key :required, [:id, :type, :attributes]
-    #                 property :id do
-    #                   key :type, :string
-    #                   key :example, '123'
-    #                   key :description, 'The ID of the object'
-    #                 end
-    #                 property :type do
-    #                   key :type, :string
-    #                   key :example, 'news_feed_item'
-    #                   key :description, 'The type of the object'
-    #                 end
-    #                 property :attributes do
-    #                   key :type, :object
-    #                   key :required, [:title, :url, :description, :published_on]
-    #                   property :title do
-    #                     key :type, :string
-    #                     key :example, 'News Story'
-    #                     key :description, 'The title of the news feed item'
-    #                   end
-    #                   property :url do
-    #                     key :type, :string
-    #                     key :example, 'https://news.psu.edu/example'
-    #                     key :description, 'The URL where the full news story content can be found'
-    #                   end
-    #                   property :description do
-    #                     key :type, :string
-    #                     key :example, 'A news story about a Penn State researcher'
-    #                     key :description, 'A brief description of the news story content'
-    #                   end
-    #                   property :published_on do
-    #                     key :type, :string
-    #                     key :example, '2018-12-05'
-    #                     key :description, 'The date on which the news story was published'
-    #                   end
-    #                 end
-    #               end
-    #             end
-    #           end
-    #         end
-    #         response 401 do
-    #           key :description, 'unauthorized'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         response 404 do
-    #           key :description, 'not found'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         security do
-    #           key :api_key, []
-    #         end
-    #       end
-    #     end
+        # swagger_path '/v1/users/{webaccess_id}/news_feed_items' do
+        #   operation :get do
+        #     key :summary, "Retrieve a user's news feed items"
+        #     key :description, 'Returns a news feed items for a user'
+        #     key :operationId, 'findUserNewsFeedItems'
+        #     key :produces, [
+        #       'application/json',
+        #       'text/html'
+        #     ]
+        #     key :tags, [
+        #       'user'
+        #     ]
+        #     parameter do
+        #       key :name, :webaccess_id
+        #       key :in, :path
+        #       key :description, 'Webaccess ID of user to retrieve news feed items'
+        #       key :required, true
+        #       key :type, :string
+        #     end
+        #     response 200 do
+        #       key :description, 'user news_feed_items response'
+        #       schema do
+        #         key :required, [:data]
+        #         property :data do
+        #           key :type, :array
+        #           items do
+        #             key :type, :object
+        #             key :required, [:id, :type, :attributes]
+        #             property :id do
+        #               key :type, :string
+        #               key :example, '123'
+        #               key :description, 'The ID of the object'
+        #             end
+        #             property :type do
+        #               key :type, :string
+        #               key :example, 'news_feed_item'
+        #               key :description, 'The type of the object'
+        #             end
+        #             property :attributes do
+        #               key :type, :object
+        #               key :required, [:title, :url, :description, :published_on]
+        #               property :title do
+        #                 key :type, :string
+        #                 key :example, 'News Story'
+        #                 key :description, 'The title of the news feed item'
+        #               end
+        #               property :url do
+        #                 key :type, :string
+        #                 key :example, 'https://news.psu.edu/example'
+        #                 key :description, 'The URL where the full news story content can be found'
+        #               end
+        #               property :description do
+        #                 key :type, :string
+        #                 key :example, 'A news story about a Penn State researcher'
+        #                 key :description, 'A brief description of the news story content'
+        #               end
+        #               property :published_on do
+        #                 key :type, :string
+        #                 key :example, '2018-12-05'
+        #                 key :description, 'The date on which the news story was published'
+        #               end
+        #             end
+        #           end
+        #         end
+        #       end
+        #     end
+        #     response 401 do
+        #       key :description, 'unauthorized'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     response 404 do
+        #       key :description, 'not found'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     security do
+        #       key :api_key, []
+        #     end
+        #   end
+        # end
 
-    #     swagger_path '/v1/users/{webaccess_id}/presentations' do
-    #       operation :get do
-    #         key :summary, "Retrieve a user's presentations"
-    #         key :description, 'Returns presentations for a user'
-    #         key :operationId, 'findUserPresentations'
-    #         key :produces, [
-    #           'application/json',
-    #           'text/html'
-    #         ]
-    #         key :tags, [
-    #           'user'
-    #         ]
-    #         parameter do
-    #           key :name, :webaccess_id
-    #           key :in, :path
-    #           key :description, 'Webaccess ID of user to retrieve presentations'
-    #           key :required, true
-    #           key :type, :string
-    #         end
+        # swagger_path '/v1/users/{webaccess_id}/presentations' do
+        #   operation :get do
+        #     key :summary, "Retrieve a user's presentations"
+        #     key :description, 'Returns presentations for a user'
+        #     key :operationId, 'findUserPresentations'
+        #     key :produces, [
+        #       'application/json',
+        #       'text/html'
+        #     ]
+        #     key :tags, [
+        #       'user'
+        #     ]
+        #     parameter do
+        #       key :name, :webaccess_id
+        #       key :in, :path
+        #       key :description, 'Webaccess ID of user to retrieve presentations'
+        #       key :required, true
+        #       key :type, :string
+        #     end
 
-    #         response 200 do
-    #           key :description, 'user presentations response'
-    #           schema do
-    #             key :required, [:data]
-    #             property :data do
-    #               key :type, :array
-    #               items do
-    #                 key :type, :object
-    #                 key :required, [:id, :type, :attributes]
-    #                 property :id do
-    #                   key :type, :string
-    #                   key :example, '123'
-    #                   key :description, 'The ID of the object'
-    #                 end
-    #                 property :type do
-    #                   key :type, :string
-    #                   key :example, 'presentation'
-    #                   key :description, 'The type of the object'
-    #                 end
-    #                 property :attributes do
-    #                   key :type, :object
-    #                   key :required, [:activity_insight_identifier]
-    #                   property :title do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'A Public Presentation'
-    #                     key :description, 'The title of the presentation'
-    #                   end
-    #                   property :activity_insight_identifier do
-    #                     key :type, :string
-    #                     key :example, '1234567890'
-    #                     key :description, "The unique identifier for the presentation's corresponding record in the Activity Insight database"
-    #                   end
-    #                   property :name do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'A Public Presentation'
-    #                     key :description, 'The name of the presentation'
-    #                   end
-    #                   property :organization do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'The Pennsylvania State University'
-    #                     key :description, 'The name of the organization associated with the presentation'
-    #                   end
-    #                   property :location do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'University Park, PA'
-    #                     key :description, 'The name of the location where the presentation took place'
-    #                   end
-    #                   property :started_on do
-    #                     key :type, [:string, :null]
-    #                     key :example, '2018-12-04'
-    #                     key :description, 'The date on which the presentation started'
-    #                   end
-    #                   property :ended_on do
-    #                     key :type, [:string, :null]
-    #                     key :example, '2018-12-05'
-    #                     key :description, 'The date on which the presentation ended'
-    #                   end
-    #                   property :presentation_type do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Presentations'
-    #                     key :description, 'The type of the presentation'
-    #                   end
-    #                   property :classification do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Basic or Discovery Scholarship'
-    #                     key :description, 'The classification of the presentation'
-    #                   end
-    #                   property :meet_type do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Academic'
-    #                     key :description, 'The meet type of the presentation'
-    #                   end
-    #                   property :attendance do
-    #                     key :type, [:integer, :null]
-    #                     key :example, 200
-    #                     key :description, 'The number of people who attended the presentation'
-    #                   end
-    #                   property :refereed do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'Yes'
-    #                     key :description, 'Whether or not the presentation was refereed'
-    #                   end
-    #                   property :abstract do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'A presentation about Penn State academic research'
-    #                     key :description, 'A summary of the presentation content'
-    #                   end
-    #                   property :comment do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'The goal of this presentation was to broaden public awareness of a research topic.'
-    #                     key :description, 'Miscellaneous comments and notes about the presentation'
-    #                   end
-    #                   property :scope do
-    #                     key :type, [:string, :null]
-    #                     key :example, 'International'
-    #                     key :description, 'The scope of the audience for the presentation'
-    #                   end
-    #                   property :profile_preferences do
-    #                     key :type, :array
-    #                     key :description, 'An array of settings for each user who is an author of the publication indicating how they prefer to have the publication displayed in a profile'
-    #                     items do
-    #                       key :type, :object
-    #                       key :required, [:user_id, :webaccess_id, :visible_in_profile, :position_in_profile]
-    #                       property :user_id do
-    #                         key :type, :number
-    #                         key :example, 123
-    #                         key :description, 'The ID of the user to which this set of preferences belongs'
-    #                       end
-    #                       property :webaccess_id do
-    #                         key :type, :string
-    #                         key :example, 'abc123'
-    #                         key :description, 'The WebAccess ID of the user to which this set of preferences belongs'
-    #                       end
-    #                       property :visible_in_profile do
-    #                         key :type, :boolean
-    #                         key :example, true
-    #                         key :description, "The user's preference for whether or not this publication should be displayed in their profile"
-    #                       end
-    #                       property :position_in_profile do
-    #                         key :type, [:number, :null]
-    #                         key :example, 8
-    #                         key :description, "The user's preference for what position this publication should occupy in a list of their publications in their profile"
-    #                       end
-    #                     end
-    #                   end
-    #                 end
-    #               end
-    #             end
-    #           end
-    #         end
-    #         response 401 do
-    #           key :description, 'unauthorized'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         response 404 do
-    #           key :description, 'not found'
-    #           schema do
-    #             key :$ref, :ErrorModelV1
-    #           end
-    #         end
-    #         security do
-    #           key :api_key, []
-    #         end
-    #       end
-    #     end
+        #     response 200 do
+        #       key :description, 'user presentations response'
+        #       schema do
+        #         key :required, [:data]
+        #         property :data do
+        #           key :type, :array
+        #           items do
+        #             key :type, :object
+        #             key :required, [:id, :type, :attributes]
+        #             property :id do
+        #               key :type, :string
+        #               key :example, '123'
+        #               key :description, 'The ID of the object'
+        #             end
+        #             property :type do
+        #               key :type, :string
+        #               key :example, 'presentation'
+        #               key :description, 'The type of the object'
+        #             end
+        #             property :attributes do
+        #               key :type, :object
+        #               key :required, [:activity_insight_identifier]
+        #               property :title do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'A Public Presentation'
+        #                 key :description, 'The title of the presentation'
+        #               end
+        #               property :activity_insight_identifier do
+        #                 key :type, :string
+        #                 key :example, '1234567890'
+        #                 key :description, "The unique identifier for the presentation's corresponding record in the Activity Insight database"
+        #               end
+        #               property :name do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'A Public Presentation'
+        #                 key :description, 'The name of the presentation'
+        #               end
+        #               property :organization do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'The Pennsylvania State University'
+        #                 key :description, 'The name of the organization associated with the presentation'
+        #               end
+        #               property :location do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'University Park, PA'
+        #                 key :description, 'The name of the location where the presentation took place'
+        #               end
+        #               property :started_on do
+        #                 key :type, [:string, :null]
+        #                 key :example, '2018-12-04'
+        #                 key :description, 'The date on which the presentation started'
+        #               end
+        #               property :ended_on do
+        #                 key :type, [:string, :null]
+        #                 key :example, '2018-12-05'
+        #                 key :description, 'The date on which the presentation ended'
+        #               end
+        #               property :presentation_type do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Presentations'
+        #                 key :description, 'The type of the presentation'
+        #               end
+        #               property :classification do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Basic or Discovery Scholarship'
+        #                 key :description, 'The classification of the presentation'
+        #               end
+        #               property :meet_type do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Academic'
+        #                 key :description, 'The meet type of the presentation'
+        #               end
+        #               property :attendance do
+        #                 key :type, [:integer, :null]
+        #                 key :example, 200
+        #                 key :description, 'The number of people who attended the presentation'
+        #               end
+        #               property :refereed do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'Yes'
+        #                 key :description, 'Whether or not the presentation was refereed'
+        #               end
+        #               property :abstract do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'A presentation about Penn State academic research'
+        #                 key :description, 'A summary of the presentation content'
+        #               end
+        #               property :comment do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'The goal of this presentation was to broaden public awareness of a research topic.'
+        #                 key :description, 'Miscellaneous comments and notes about the presentation'
+        #               end
+        #               property :scope do
+        #                 key :type, [:string, :null]
+        #                 key :example, 'International'
+        #                 key :description, 'The scope of the audience for the presentation'
+        #               end
+        #               property :profile_preferences do
+        #                 key :type, :array
+        #                 key :description, 'An array of settings for each user who is an author of the publication indicating how they prefer to have the publication displayed in a profile'
+        #                 items do
+        #                   key :type, :object
+        #                   key :required, [:user_id, :webaccess_id, :visible_in_profile, :position_in_profile]
+        #                   property :user_id do
+        #                     key :type, :number
+        #                     key :example, 123
+        #                     key :description, 'The ID of the user to which this set of preferences belongs'
+        #                   end
+        #                   property :webaccess_id do
+        #                     key :type, :string
+        #                     key :example, 'abc123'
+        #                     key :description, 'The WebAccess ID of the user to which this set of preferences belongs'
+        #                   end
+        #                   property :visible_in_profile do
+        #                     key :type, :boolean
+        #                     key :example, true
+        #                     key :description, "The user's preference for whether or not this publication should be displayed in their profile"
+        #                   end
+        #                   property :position_in_profile do
+        #                     key :type, [:number, :null]
+        #                     key :example, 8
+        #                     key :description, "The user's preference for what position this publication should occupy in a list of their publications in their profile"
+        #                   end
+        #                 end
+        #               end
+        #             end
+        #           end
+        #         end
+        #       end
+        #     end
+        #     response 401 do
+        #       key :description, 'unauthorized'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     response 404 do
+        #       key :description, 'not found'
+        #       schema do
+        #         key :$ref, :ErrorModelV1
+        #       end
+        #     end
+        #     security do
+        #       key :api_key, []
+        #     end
+        #   end
+        # end
 
     #     swagger_path '/v1/users/{webaccess_id}/grants' do
     #       operation :get do

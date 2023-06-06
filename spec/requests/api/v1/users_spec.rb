@@ -1,980 +1,324 @@
-# frozen_string_literal: true
+require 'swagger_helper'
 
-require 'requests/requests_spec_helper'
+RSpec.describe 'api/v1/users', type: :request do
 
-describe API::V1::UsersController do
-  let(:h_index) { nil }
-  let(:title) { nil }
-  let(:website) { nil }
-  let(:bio) { nil }
-  let(:room) { nil }
-  let(:building) { nil }
-  let!(:token) { create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil) }
-  let!(:inaccessible_user) { create(:user, webaccess_id: 'inaccessible') }
-  let(:org) { create(:organization) }
+  path '/v1/users/{webaccess_id}/organization_memberships' do
+    parameter name: :webaccess_id, in: :path, type: :string, description: 'Webaccess ID of user to retrieve organization memberships', required: true
 
-  before do
-    create(:organization_api_permission, api_token: token, organization: org)
-  end
-
-  describe 'GET /v1/users/:webaccess_id/presentations' do
-    let!(:user) { create(:user_with_presentations,
-                         webaccess_id: 'xyz321',
-                         presentations_count: 10) }
-    let!(:invisible_presentation) {
-      user.presentations.create(
-        activity_insight_identifier: 'abc123',
-        visible: false
-      )
-    }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:user_without_visible_presentations) { create(:user, webaccess_id: 'nopres123') }
-
-    before do
-      create(:user_organization_membership,
-             user: user_without_visible_presentations,
-             organization: org)
-      create(:user_organization_membership, user: user, organization: org)
-      get "/v1/users/#{webaccess_id}/presentations#{params}", headers: headers
-    end
-
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
+    get 'Retrieve the user\'s organization memberships' do
+      tags 'user'
+      description 'Returns organization memberships for a user'
+      operationId 'findUserOrganizationMemberships'
+      produces 'application/json'
+  
+      response '200', description: 'user organization memberships response' do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     required: [:id, :type, :attributes],
+                     properties: {
+                       id: {
+                         type: :string,
+                         example: '123',
+                         description: 'The ID of the object'
+                       },
+                       type: {
+                         type: :string,
+                         example: 'organization_membership',
+                         description: 'The type of the object'
+                       },
+                       attributes: {
+                         type: :object,
+                         properties: {
+                           organization_name: {
+                             type: :string,
+                             example: 'Biology',
+                             description: 'The name of the organization to which the user belongs'
+                           },
+                           organization_type: {
+                             type: [:string, :null],
+                             example: 'Department',
+                             description: 'The type of the organization'
+                           },
+                           position_title: {
+                             type: [:string, :null],
+                             example: 'Associate Professor of Biology',
+                             description: "The user's role or title within the organization"
+                           },
+                           position_started_on: {
+                             type: [:string, :null],
+                             example: '2010-09-01',
+                             description: 'The date on which the user joined the organization in this role'
+                           },
+                           position_ended_on: {
+                             type: [:string, :null],
+                             example: '2012-05-30',
+                             description: 'The date on which the user left the organization in this role'
+                           }
+                         },
+                         required: [:organization_name]
+                       }
+                     }
+                   }
+                 }
+               }
+        run_test!
       end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
+  
+      response '401', description: 'unauthorized' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
       end
-
-      context 'when the user has presentations' do
-        it "returns all the user's visible presentations" do
-          expect(json_response[:data].size).to eq(10)
-        end
+  
+      response '404', description: 'not found' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
       end
-
-      context 'when the user has no presentations' do
-        let(:webaccess_id) { user_without_visible_presentations.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
-      end
+  
+      security [api_key: []]
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/grants' do
-    let!(:user) { create(:user_with_grants,
-                         webaccess_id: 'xyz321',
-                         grants_count: 10) }
-    let!(:other_user) { create(:user) }
-    let!(:hidden_grant) { create(:grant) }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:user_without_grants) { create(:user, webaccess_id: 'nocons123') }
-
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      create(:user_organization_membership, user: other_user, organization: org)
-      create(:user_organization_membership, user: user_without_grants, organization: org)
-      create(:researcher_fund, user: other_user, grant: hidden_grant)
-      get "/v1/users/#{webaccess_id}/grants#{params}", headers: headers
-    end
-
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
+  path '/v1/users/{webaccess_id}/news_feed_items' do
+    get 'Retrieve a user\'s news feed items' do
+      operationId 'findUserNewsFeedItems'
+      produces ['application/json', 'text/html']
+      tags 'user'
+      parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve news feed items', required: true, type: :string
+  
+      response '200', 'user news_feed_items response' do
+        schema type: :object, properties: {
+          data: {
+            type: :array,
+            items: {
+              type: :object,
+              properties: {
+                id: { type: :string, example: '123', description: 'The ID of the object' },
+                type: { type: :string, example: 'news_feed_item', description: 'The type of the object' },
+                attributes: {
+                  type: :object,
+                  properties: {
+                    title: { type: :string, example: 'News Story', description: 'The title of the news feed item' },
+                    url: { type: :string, example: 'https://news.psu.edu/example', description: 'The URL where the full news story content can be found' },
+                    description: { type: :string, example: 'A news story about a Penn State researcher', description: 'A brief description of the news story content' },
+                    published_on: { type: :string, example: '2018-12-05', description: 'The date on which the news story was published' }
+                  },
+                  required: [:title, :url, :description, :published_on]
+                }
+              },
+              required: [:id, :type, :attributes]
+            }
+          }
+        },
+        required: [:data]
+        run_test!
       end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
+  
+      response '401', 'unauthorized' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
       end
-
-      context 'when the user has grants' do
-        it "returns all the user's grants" do
-          expect(json_response[:data].size).to eq(10)
-        end
+  
+      response '404', 'not found' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
       end
-
-      context 'when the user has no grants' do
-        let(:webaccess_id) { user_without_grants.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
-      end
+  
+      security [{ api_key: [] }]
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/news_feed_items' do
-    let!(:user) { create(:user_with_news_feed_items, webaccess_id: 'xyz321', news_feed_items_count: 10) }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:user_without_news_feed_items) { create(:user, webaccess_id: 'nocons123') }
+  path '/v1/users/{webaccess_id}/presentations' do
+    get 'Retrieve a user\'s presentations' do
+      operationId 'findUserPresentations'
+      produces ['application/json', 'text/html']
+      tags 'user'
 
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      create(:user_organization_membership, user: user_without_news_feed_items, organization: org)
-      get "/v1/users/#{webaccess_id}/news_feed_items#{params}", headers: headers
+      parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve presentations', required: true, type: :string
+
+      response '200', 'user presentations response' do
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :array,
+                   items: {
+                     type: :object,
+                     required: [:id, :type, :attributes],
+                     properties: {
+                       id: { type: :string, example: '123', description: 'The ID of the object' },
+                       type: { type: :string, example: 'presentation', description: 'The type of the object' },
+                       attributes: {
+                         type: :object,
+                         required: [:activity_insight_identifier],
+                         properties: {
+                           title: { type: [:string, :null], example: 'A Public Presentation', description: 'The title of the presentation' },
+                           activity_insight_identifier: { type: :string, example: '1234567890', description: "The unique identifier for the presentation's corresponding record in the Activity Insight database" },
+                           name: { type: [:string, :null], example: 'A Public Presentation', description: 'The name of the presentation' },
+                           organization: { type: [:string, :null], example: 'The Pennsylvania State University', description: 'The name of the organization associated with the presentation' },
+                           location: { type: [:string, :null], example: 'University Park, PA', description: 'The name of the location where the presentation took place' },
+                           started_on: { type: [:string, :null], example: '2018-12-04', description: 'The date on which the presentation started' },
+                           ended_on: { type: [:string, :null], example: '2018-12-05', description: 'The date on which the presentation ended' },
+                           presentation_type: { type: [:string, :null], example: 'Presentations', description: 'The type of the presentation' },
+                           classification: { type: [:string, :null], example: 'Basic or Discovery Scholarship', description: 'The classification of the presentation' },
+                           meet_type: { type: [:string, :null], example: 'Academic', description: 'The meet type of the presentation' },
+                           attendance: { type: [:integer, :null], example: 200, description: 'The number of people who attended the presentation' },
+                           refereed: { type: [:string, :null], example: 'Yes', description: 'Whether or not the presentation was refereed' },
+                           abstract: { type: [:string, :null], example: 'A presentation about Penn State academic research', description: 'A summary of the presentation content' },
+                           comment: { type: [:string, :null], example: 'The goal of this presentation was to broaden public awareness of a research topic.', description: 'Miscellaneous comments and notes about the presentation' },
+                           scope: { type: [:string, :null], example: 'International', description: 'The scope of the audience for the presentation' },
+                           profile_preferences: {
+                             type: :array,
+                             description: 'An array of settings for each user who is an author of the publication indicating how they prefer to have the publication displayed in a profile',
+                             items: {
+                               type: :object,
+                               required: [:user_id, :webaccess_id, :visible_in_profile, :position_in_profile],
+                               properties: {
+                                 user_id: { type: :number, example: 123, description: 'The ID of the user to which this set of preferences belongs' },
+                                 webaccess_id: { type: :string, example: 'abc123', description: 'The WebAccess ID of the user to which this set of preferences belongs' },
+                                 visible_in_profile: { type: :boolean, example: true, description: "The user's preference for whether or not this publication should be displayed in their profile" },
+                                 position_in_profile: { type: [:number, :null], example: 8, description: "The user's preference for what position this publication should occupy in a list of their publications in their profile" }
+                               }
+                             }
+                           }
+                         }
+                       }
+                     }
+                   }
+                 }
+               }
+        run_test!
+      end
+
+      response '401', 'unauthorized' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
+      end
+
+      response '404', 'not found' do
+        schema('$ref' => '#/components/schemas/ErrorModelV1')
+        run_test!
+      end
+
+      security [api_key: []]
     end
+  end
 
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
+  path '/v1/users/{webaccess_id}/publications' do
+    # You'll want to customize the parameter types...
+    parameter name: 'webaccess_id', in: :path, type: :string, description: 'webaccess_id'
 
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
+    get('publications user') do
+      response(200, 'successful') do
+        let(:webaccess_id) { '123' }
 
-      context 'when the user has news feed items' do
-        it "returns all the user's news feed items" do
-          expect(json_response[:data].size).to eq(10)
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
         end
-      end
-
-      context 'when the user has no news feed items' do
-        let(:webaccess_id) { user_without_news_feed_items.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
+        run_test!
       end
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/performances' do
-    let!(:user) { create(:user_with_performances,
-                         webaccess_id: 'xyz321',
-                         performances_count: 10) }
-    let!(:hidden_performance) { create(:performance, visible: true) }
-    let!(:invisible_performance) { create(:performance, visible: false) }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:user_without_performances) { create(:user, webaccess_id: 'nopers123') }
+  path '/v1/users/{webaccess_id}/grants' do
+    # You'll want to customize the parameter types...
+    parameter name: 'webaccess_id', in: :path, type: :string, description: 'webaccess_id'
 
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      create(:user_organization_membership, user: user_without_performances, organization: org)
-      create(:user_performance, user: user, performance: invisible_performance)
-      create(:user_performance, user: user, performance: hidden_performance)
-      get "/v1/users/#{webaccess_id}/performances#{params}", headers: headers
-    end
+    get('grants user') do
+      response(200, 'successful') do
+        let(:webaccess_id) { '123' }
 
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      context 'when the user has performances' do
-        it "returns all the user's performances" do
-          expect(json_response[:data].size).to eq(11)
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
         end
-      end
-
-      context 'when the user has no performances' do
-        let(:webaccess_id) { user_without_performances.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
+        run_test!
       end
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/organization_memberships' do
-    let!(:user) { create(:user_with_organization_memberships, webaccess_id: 'xyz321') }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
+  path '/v1/users/{webaccess_id}/performances' do
+    # You'll want to customize the parameter types...
+    parameter name: 'webaccess_id', in: :path, type: :string, description: 'webaccess_id'
 
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      get "/v1/users/#{webaccess_id}/organization_memberships#{params}", headers: headers
-    end
+    get('performances user') do
+      response(200, 'successful') do
+        let(:webaccess_id) { '123' }
 
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      context 'when the user has organization memberships' do
-        it "returns all the user's organization memberships" do
-          expect(json_response[:data].size).to eq(4)
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
         end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
+        run_test!
       end
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/publications' do
-    let!(:user) { create(:user_with_authorships,
-                         webaccess_id: 'xyz321',
-                         authorships_count: 10,
-                         show_all_publications: show_pubs) }
-    let!(:invisible_pub) { create(:publication, visible: false) }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:show_pubs) { false }
-    let(:user_without_publications) { create(:user, webaccess_id: 'nopubs123') }
+  path '/v1/users/publications' do
 
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      create(:user_organization_membership, user: user_without_publications, organization: org)
-      create(:authorship, user: user, publication: invisible_pub)
-      get "/v1/users/#{webaccess_id}/publications#{params}", headers: headers
-    end
+    post('users_publications user') do
+      response(200, 'successful') do
 
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      context 'when the user has publications' do
-        context 'when the user can show all publications' do
-          let(:show_pubs) { true }
-
-          it "returns all the user's visible publications" do
-            expect(json_response[:data].size).to eq(10)
-          end
-
-          describe 'params:' do
-            describe 'limit' do
-              let(:params) { '?limit=5' }
-
-              it 'returns the specified number of publications' do
-                expect(json_response[:data].size).to eq(5)
-              end
-            end
-          end
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
         end
-
-        context 'when the user cannot show all publications' do
-          it 'returns no publications' do
-            expect(json_response[:data].size).to eq(0)
-          end
-
-          describe 'params:' do
-            describe 'limit' do
-              let(:params) { '?limit=5' }
-
-              it 'returns no publications' do
-                expect(json_response[:data].size).to eq(0)
-              end
-            end
-          end
-        end
-      end
-
-      context 'when the user has no publications' do
-        let(:webaccess_id) { user_without_publications.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
+        run_test!
       end
     end
   end
 
-  describe 'POST /v1/users/publications' do
-    let!(:user_xyz123) { create(:user_with_authorships,
-                                webaccess_id: 'xyz321',
-                                authorships_count: 10,
-                                show_all_publications: true) }
-    let!(:user_abc123) { create(:user_with_authorships,
-                                webaccess_id: 'abc123',
-                                authorships_count: 5,
-                                show_all_publications: true) }
-    let!(:user_def123) { create(:user_with_authorships,
-                                webaccess_id: 'def123',
-                                authorships_count: 5,
-                                show_all_publications: false) }
+  path '/v1/users/{webaccess_id}/etds' do
+    # You'll want to customize the parameter types...
+    parameter name: 'webaccess_id', in: :path, type: :string, description: 'webaccess_id'
 
-    let!(:user_cws161) { create(:user, webaccess_id: 'cws161') }
+    get('etds user') do
+      response(200, 'successful') do
+        let(:webaccess_id) { '123' }
 
-    let!(:invisible_pub1) { create(:publication, visible: false) }
-    let!(:invisible_pub2) { create(:publication, visible: false) }
-
-    before do
-      create(:authorship, user: user_abc123, publication: invisible_pub1)
-      create(:authorship, user: user_cws161, publication: invisible_pub2)
-
-      create(:user_organization_membership, organization: org, user: user_xyz123)
-      create(:user_organization_membership, organization: org, user: user_abc123)
-      create(:user_organization_membership, organization: org, user: user_def123)
-      create(:user_organization_membership, organization: org, user: user_cws161)
-
-      post '/v1/users/publications', params: params, headers: headers
-    end
-
-    context 'given a set webaccess_id params' do
-      let(:params) { { _json: %w(abc123 xyz321 def123 cws161 fake123 inaccessible) } }
-      let(:headers) { { 'X-API-Key' => 'token123' } }
-
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns visible publications for each valid webaccess_id' do
-        expect(json_response.count).to eq(4)
-        expect(json_response[:abc123][:data].count).to eq(5)
-        expect(json_response[:xyz321][:data].count).to eq(10)
-        expect(json_response[:def123][:data].count).to eq(0)
-        expect(json_response[:cws161][:data].count).to eq(0)
-        expect(json_response[:fake123]).to be_nil
-        expect(json_response[:inaccessible]).to be_nil
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
   end
 
-  describe 'GET /v1/users/:webaccess_id/etds' do
-    let!(:user) { create(:user_with_committee_memberships, webaccess_id: 'xyz321', committee_memberships_count: 10) }
-    let(:webaccess_id) { user.webaccess_id }
-    let(:params) { '' }
-    let(:headers) { { 'accept' => 'application/json', 'X-API-Key' => 'token123' } }
-    let(:user_without_etds) { create(:user, webaccess_id: 'nocommittees123') }
+  path '/v1/users/{webaccess_id}/profile' do
+    # You'll want to customize the parameter types...
+    parameter name: 'webaccess_id', in: :path, type: :string, description: 'webaccess_id'
 
-    before do
-      create(:user_organization_membership, user: user, organization: org)
-      create(:user_organization_membership, user: user_without_etds, organization: org)
-      get "/v1/users/#{webaccess_id}/etds#{params}", headers: headers
-    end
+    get('profile user') do
+      response(200, 'successful') do
+        let(:webaccess_id) { '123' }
 
-    context 'for a valid webaccess_id' do
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      context 'when the user served on etd committees' do
-        it 'returns all the etds the user was a committee member on' do
-          expect(json_response[:data].size).to eq(10)
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
         end
-      end
-
-      context 'when the user has not served on any committees' do
-        let(:webaccess_id) { user_without_etds.webaccess_id }
-
-        it 'returns an empty JSON data hash' do
-          expect(json_response[:data].size).to eq(0)
-        end
-      end
-
-      context 'when an html-formatted response is requested' do
-        let(:headers) { { 'accept' => 'text/html', 'X-API-Key' => 'token123' } }
-
-        it 'returns HTTP status 200' do
-          expect(response).to have_http_status :ok
-        end
-
-        it 'updates the usage statistics on the API token' do
-          updated_token = token.reload
-          expect(updated_token.total_requests).to eq 1
-          expect(updated_token.last_used_at).not_to be_nil
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
-      end
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-    end
-
-    context 'for a webaccess_id of a user that is inaccessible to the given API token' do
-      let(:webaccess_id) { 'inaccessible' }
-
-      it 'updates the usage statistics on the API token' do
-        updated_token = token.reload
-        expect(updated_token.total_requests).to eq 1
-        expect(updated_token.last_used_at).not_to be_nil
-      end
-
-      it 'returns 404' do
-        expect(response.code).to eq '404'
-      end
-    end
-  end
-
-  describe 'GET /v1/users/:webaccess_id/profile' do
-    let!(:user) { create(:user,
-                         first_name: 'Bob',
-                         last_name: 'Testerson',
-                         scopus_h_index: h_index,
-                         webaccess_id: 'bat123',
-                         pure_uuid: pure_uuid,
-                         show_all_contracts: true,
-                         show_all_publications: show_pubs,
-                         ai_title: title,
-                         ai_website: website,
-                         ai_bio: bio,
-                         ai_room_number: room,
-                         ai_building: building,
-                         orcid_identifier: 'orcid-id') }
-    let(:show_pubs) { true }
-    let(:headers) { { 'accept' => 'text/html' } }
-    let(:pure_uuid) { nil }
-
-    context 'for a valid webaccess_id' do
-      before do
-        person = instance_spy(PsuIdentity::SearchService::Person)
-        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
-        allow(person).to receive(:as_json).and_return({ 'data' => {} })
-        allow(person).to receive(:preferred_given_name).and_return('Bob')
-        allow(person).to receive(:preferred_middle_name).and_return('')
-        allow(person).to receive(:middle_name).and_return('')
-        allow(person).to receive(:preferred_family_name).and_return('Testerson')
-
-        get "/v1/users/#{webaccess_id}/profile", headers: headers
-      end
-
-      let(:webaccess_id) { 'bat123' }
-
-      it 'returns HTTP status 200' do
-        expect(response).to have_http_status :ok
-      end
-
-      context 'when the user has no associated metadata' do
-        it "returns an HTML representation of the given user's basic information" do
-          expect(response.body).to eq <<~HTML
-            <h2 id="md-full-name">Bob Testerson</h2>
-            <div id="md-person-info">
-              <ul id="md-contact-info">
-                <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-              </ul>
-            </div>
-          HTML
-        end
-      end
-
-      context 'when the user has publications that cannot be shown' do
-        let(:pub1) { create(:publication, title: 'First Publication',
-                                          visible: true,
-                                          journal_title: 'Test Journal',
-                                          published_on: Date.new(2010, 1, 1)) }
-        let(:show_pubs) { false }
-
-        before do
-          create(:authorship, user: user, publication: pub1)
-          get "/v1/users/#{webaccess_id}/profile", headers: headers
-        end
-
-        it "returns an HTML representation of the user's profile with no publications" do
-          expect(response.body).to eq <<~HTML
-            <h2 id="md-full-name">Bob Testerson</h2>
-            <div id="md-person-info">
-              <ul id="md-contact-info">
-                <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-              </ul>
-            </div>
-          HTML
-        end
-      end
-
-      context 'when the user has associated metadata' do
-        let(:other_user) { create(:user, show_all_contracts: false) }
-        let(:h_index) { 49 }
-        let(:title) { 'Professor' }
-        let(:website) { 'http://example.com/mysite' }
-        let(:bio) { 'Some bio content' }
-        let(:pure_uuid) { 'pure-abc-123' }
-        let(:room) { '123' }
-        let(:building) { 'Test Building' }
-        let!(:pub1) { create(:publication, title: 'First Publication',
-                                           visible: true,
-                                           journal_title: 'Test Journal',
-                                           published_on: Date.new(2010, 1, 1),
-                                           total_scopus_citations: 4) }
-        let!(:pub2) { create(:publication, title: 'Second Publication',
-                                           visible: true,
-                                           publisher_name: 'Test Publisher',
-                                           published_on: Date.new(2015, 1, 1)) }
-        let!(:pub3) { create(:publication, title: 'Third Publication',
-                                           visible: true,
-                                           published_on: Date.new(2018, 1, 1),
-                                           total_scopus_citations: 5) }
-        let!(:pub4) { create(:publication, title: 'Undated Publication',
-                                           visible: true) }
-        let!(:pub5) { create(:publication,
-                             title: 'Invisible Publication',
-                             visible: false) }
-        let!(:pub6) { create(:publication,
-                             publication_type: 'Book',
-                             title: 'Book Publication',
-                             visible: true) }
-
-        let!(:pres1) { create(:presentation,
-                              name: 'Presentation Two',
-                              organization: 'An Organization',
-                              location: 'Earth',
-                              visible: true)}
-        let!(:pres2) { create(:presentation,
-                              title: nil,
-                              name: nil,
-                              visible: true) }
-        let!(:pres3) { create(:presentation,
-                              name: 'Presentation Three',
-                              organization: 'Org',
-                              location: 'Here',
-                              visible: false)}
-
-        let!(:etd1) { create(:etd, title: 'Master\n ETD',
-                                   url: 'test1.edu',
-                                   submission_type: 'Master Thesis',
-                                   year: 2000,
-                                   author_first_name: 'Thesis',
-                                   author_last_name: 'Author') }
-        let!(:etd2) { create(:etd, title: 'PhD\n ETD',
-                                   url: 'test2.edu',
-                                   submission_type: 'Dissertation',
-                                   year: 2010,
-                                   author_first_name: 'Dissertation',
-                                   author_last_name: 'Author') }
-
-        let!(:nfi1) { create(:news_feed_item,
-                             user: user,
-                             title: 'Story One',
-                             url: 'news.edu/1',
-                             published_on: Date.new(2016, 1, 2)) }
-        let!(:nfi2) { create(:news_feed_item,
-                             user: user,
-                             title: 'Story Two',
-                             url: 'news.edu/2',
-                             published_on: Date.new(2018, 3, 4)) }
-
-        let!(:perf1) { create(:performance,
-                              title: 'Performance One',
-                              location: 'Location One',
-                              start_on: Date.new(2017, 1, 1)) }
-        let!(:perf2) { create(:performance,
-                              title: 'Performance Two',
-                              location: nil,
-                              start_on: nil) }
-        let!(:perf3) { create(:performance,
-                              title: 'Performance Three',
-                              location: 'Location Three',
-                              start_on: nil) }
-        let!(:perf4) { create(:performance,
-                              title: 'Performance Four',
-                              location: nil,
-                              start_on: Date.new(2018, 12, 1)) }
-
-        let!(:grant1) { create(:grant,
-                               title: 'Grant One',
-                               wos_agency_name: 'Test Agency',
-                               start_date: Date.new(2010, 1, 1),
-                               end_date: Date.new(2010, 5, 1)) }
-        let!(:grant2) { create(:grant,
-                               title: 'Grant Two',
-                               wos_agency_name: 'Other Agency',
-                               start_date: Date.new(2015, 2, 1),
-                               end_date: Date.new(2016, 1, 1)) }
-        let!(:grant3) { create(:grant,
-                               title: 'Grant Three',
-                               agency_name: 'National Science Foundation',
-                               start_date: Date.new(2018, 1, 1),
-                               end_date: nil) }
-
-        before do
-          create(:authorship, user: user, publication: pub1)
-          create(:authorship, user: user, publication: pub2)
-          create(:authorship, user: user, publication: pub3)
-          create(:authorship, user: user, publication: pub4)
-          create(:authorship, user: user, publication: pub5)
-          create(:authorship, user: user, publication: pub6)
-
-          create(:presentation_contribution, user: user, presentation: pres1)
-          create(:presentation_contribution, user: user, presentation: pres2)
-          create(:presentation_contribution, user: user, presentation: pres3)
-
-          create(:committee_membership, user: user, etd: etd1, role: 'Committee Member')
-          create(:committee_membership, user: user, etd: etd2, role: 'Committee Member')
-
-          create(:user_performance, user: user, performance: perf1)
-          create(:user_performance, user: user, performance: perf2)
-          create(:user_performance, user: user, performance: perf3)
-          create(:user_performance, user: user, performance: perf4)
-
-          create(:researcher_fund, user: user, grant: grant1)
-          create(:researcher_fund, user: user, grant: grant2)
-          create(:researcher_fund, user: user, grant: grant3)
-
-          get "/v1/users/#{webaccess_id}/profile", headers: headers
-        end
-
-        context 'when requesting HTML' do
-          it "returns an HTML representation of all of the given user's available metadata" do
-            expect(response.body).to eq <<~HTML
-              <h2 id="md-full-name">Bob Testerson</h2>
-                <span id="md-title">Professor</span>
-              <div id="md-person-info">
-                <ul id="md-contact-info">
-                  <li><strong>Email:</strong>  <a href="mailto:bat123@psu.edu">bat123@psu.edu</a></li>
-                    <li><strong>Office:</strong>  123 Test Building</li>
-                    <li><strong>Personal website:</strong>  http://example.com/mysite</li>
-                </ul>
-                  <ul>
-                      <li><strong>Citations:</strong>  9</li>
-                      <li><strong>H-Index:</strong>  49</li>
-                      <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
-                  </ul>
-              </div>
-                <div id="md-bio">
-                  <p>Some bio content</p>
-                </div>
-                <div id="md-publications">
-                  <h3>Publications</h3>
-                  <ul>
-                      <li><span class="publication-title">Undated Publication</span></li>
-                      <li><span class="publication-title">Third Publication</span>, 2018</li>
-                      <li><span class="publication-title">Second Publication</span>, <span class="journal-name">Test Publisher</span>, 2015</li>
-                      <li><span class="publication-title">First Publication</span>, <span class="journal-name">Test Journal</span>, 2010</li>
-                  </ul>
-                </div>
-                <div class="tabs-panel" id="other-publications">
-                    <h4>Books</h4>
-                      <p><span class="publication-title">Book Publication</span></p>
-                </div>
-                <div id="md-grants">
-                  <h3>Grants</h3>
-                  <ul>
-                      <li>Grant Three, National Science Foundation</li>
-                      <li>Grant Two, Other Agency, 2/2015 - 1/2016</li>
-                      <li>Grant One, Test Agency, 1/2010 - 5/2010</li>
-                  </ul>
-                </div>
-                <div id="md-presentations">
-                  <h3>Presentations</h3>
-                  <ul>
-                      <li>Presentation Two, An Organization, Earth</li>
-                  </ul>
-                </div>
-                <div id="md-performances">
-                  <h3>Performances</h3>
-                  <ul>
-                      <li>Performance Four, 12/1/2018</li>
-                      <li>Performance One, Location One, 1/1/2017</li>
-                      <li>Performance Two</li>
-                      <li>Performance Three, Location Three</li>
-                  </ul>
-                </div>
-                <div id="md-phd-advising">
-                  <h3>PhD Graduate Advising</h3>
-                  <ul>
-                      <li>Committee Member for Dissertation Author - <a href="test2.edu" target="_blank">PhD  ETD</a> 2010</li>
-                  </ul>
-                </div>
-                <div id="md-master-advising">
-                  <h3>Master Graduate Advising</h3>
-                  <ul>
-                      <li>Committee Member for Thesis Author - <a href="test1.edu" target="_blank">Master  ETD</a> 2000</li>
-                  </ul>
-                </div>
-                <div id="md-news-stories">
-                  <h3>Penn State News Media Mentions</h3>
-                  <ul>
-                      <li><a href="news.edu/2" target="_blank">Story Two</a> 3/4/2018</li>
-                      <li><a href="news.edu/1" target="_blank">Story One</a> 1/2/2016</li>
-                  </ul>
-                </div>
-            HTML
-          end
-        end
-
-        context 'when requesting JSON' do
-          let(:headers) { { 'accept' => 'application/json' } }
-
-          it "returns a JSON representation of the given user's profile" do
-            expect(json_response[:data][:attributes][:name]).to eq 'Bob Testerson'
-            expect(json_response[:data][:attributes][:orcid_identifier]).to eq 'orcid-id'
-          end
-        end
-      end
-    end
-
-    context 'for an invalid webaccess_id' do
-      let(:webaccess_id) { 'aaa' }
-
-      before do
-        get "/v1/users/#{webaccess_id}/profile", headers: headers
-      end
-
-      it 'returns 404 not found' do
-        expect(response).to have_http_status :not_found
+        run_test!
       end
     end
   end
