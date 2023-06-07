@@ -5,8 +5,6 @@ class Publication < ApplicationRecord
 
   class NonDuplicateMerge < ArgumentError; end
 
-  # include Swagger::Blocks
-
   PUBLISHED_STATUS = 'Published'
   IN_PRESS_STATUS = 'In Press'
 

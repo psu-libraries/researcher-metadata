@@ -2,7 +2,6 @@
 
 module API::V1
   class UsersController < APIController
-    #     include Swagger::Blocks
     include ActionController::MimeResponds
 
     def presentations
