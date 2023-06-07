@@ -345,7 +345,7 @@ paths:
         '200':
           description: user publication response
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 type: object
                 properties:
@@ -356,13 +356,13 @@ paths:
         '401':
           description: unauthorized
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/publications/{id}/grants":
@@ -385,7 +385,7 @@ paths:
         '200':
           description: publication grants response
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 type: object
                 properties:
@@ -467,13 +467,13 @@ paths:
         '401':
           description: unauthorized
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
           content:
-            '["application/json"]':
+            application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/publications/{id}":
@@ -550,7 +550,17 @@ paths:
         '200':
           description: publication response
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+            text/html:
               schema:
                 type: object
                 properties:
@@ -563,7 +573,10 @@ paths:
         '401':
           description: unauthorized
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
     patch:
@@ -720,7 +733,55 @@ paths:
         '200':
           description: user news_feed_items response
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: news_feed_item
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: News Story
+                              description: The title of the news feed item
+                            url:
+                              type: string
+                              example: https://news.psu.edu/example
+                              description: The URL where the full news story content
+                                can be found
+                            description:
+                              type: string
+                              example: A news story about a Penn State researcher
+                              description: A brief description of the news story content
+                            published_on:
+                              type: string
+                              example: '2018-12-05'
+                              description: The date on which the news story was published
+                          required:
+                          - title
+                          - url
+                          - description
+                          - published_on
+                      required:
+                      - id
+                      - type
+                      - attributes
+                required:
+                - data
+            text/html:
               schema:
                 type: object
                 properties:
@@ -771,13 +832,19 @@ paths:
         '401':
           description: unauthorized
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/users/{webaccess_id}/presentations":
@@ -799,7 +866,163 @@ paths:
         '200':
           description: user presentations response
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: presentation
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - activity_insight_identifier
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The title of the presentation
+                            activity_insight_identifier:
+                              type: string
+                              example: '1234567890'
+                              description: The unique identifier for the presentation's
+                                corresponding record in the Activity Insight database
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The name of the presentation
+                            organization:
+                              type:
+                              - string
+                              - 'null'
+                              example: The Pennsylvania State University
+                              description: The name of the organization associated
+                                with the presentation
+                            location:
+                              type:
+                              - string
+                              - 'null'
+                              example: University Park, PA
+                              description: The name of the location where the presentation
+                                took place
+                            started_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-04'
+                              description: The date on which the presentation started
+                            ended_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-05'
+                              description: The date on which the presentation ended
+                            presentation_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Presentations
+                              description: The type of the presentation
+                            classification:
+                              type:
+                              - string
+                              - 'null'
+                              example: Basic or Discovery Scholarship
+                              description: The classification of the presentation
+                            meet_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Academic
+                              description: The meet type of the presentation
+                            attendance:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 200
+                              description: The number of people who attended the presentation
+                            refereed:
+                              type:
+                              - string
+                              - 'null'
+                              example: 'Yes'
+                              description: Whether or not the presentation was refereed
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: A presentation about Penn State academic research
+                              description: A summary of the presentation content
+                            comment:
+                              type:
+                              - string
+                              - 'null'
+                              example: The goal of this presentation was to broaden
+                                public awareness of a research topic.
+                              description: Miscellaneous comments and notes about
+                                the presentation
+                            scope:
+                              type:
+                              - string
+                              - 'null'
+                              example: International
+                              description: The scope of the audience for the presentation
+                            profile_preferences:
+                              type: array
+                              description: An array of settings for each user who
+                                is an author of the publication indicating how they
+                                prefer to have the publication displayed in a profile
+                              items:
+                                type: object
+                                required:
+                                - user_id
+                                - webaccess_id
+                                - visible_in_profile
+                                - position_in_profile
+                                properties:
+                                  user_id:
+                                    type: number
+                                    example: 123
+                                    description: The ID of the user to which this
+                                      set of preferences belongs
+                                  webaccess_id:
+                                    type: string
+                                    example: abc123
+                                    description: The WebAccess ID of the user to which
+                                      this set of preferences belongs
+                                  visible_in_profile:
+                                    type: boolean
+                                    example: true
+                                    description: The user's preference for whether
+                                      or not this publication should be displayed
+                                      in their profile
+                                  position_in_profile:
+                                    type:
+                                    - number
+                                    - 'null'
+                                    example: 8
+                                    description: The user's preference for what position
+                                      this publication should occupy in a list of
+                                      their publications in their profile
+            text/html:
               schema:
                 type: object
                 properties:
@@ -958,13 +1181,19 @@ paths:
         '401':
           description: unauthorized
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
           content:
-            '["application/json", "text/html"]':
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/users/{webaccess_id}/grants":
