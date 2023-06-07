@@ -1,7 +1,6 @@
 require 'swagger_helper'
 
 RSpec.describe 'api/v1/users', type: :request do
-
   path '/v1/users/{webaccess_id}/organization_memberships' do
     parameter name: :webaccess_id, in: :path, type: :string, description: 'Webaccess ID of user to retrieve organization memberships', required: true
 
@@ -10,7 +9,7 @@ RSpec.describe 'api/v1/users', type: :request do
       description 'Returns organization memberships for a user'
       operationId 'findUserOrganizationMemberships'
       produces 'application/json'
-  
+
       response '200', description: 'user organization memberships response' do
         schema type: :object,
                properties: {
@@ -67,17 +66,17 @@ RSpec.describe 'api/v1/users', type: :request do
                }
         run_test!
       end
-  
+
       response '401', description: 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', description: 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       security [api_key: []]
     end
   end
@@ -88,45 +87,45 @@ RSpec.describe 'api/v1/users', type: :request do
       produces ['application/json', 'text/html']
       tags 'user'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve news feed items', required: true, type: :string
-  
+
       response '200', 'user news_feed_items response' do
         schema type: :object, properties: {
-          data: {
-            type: :array,
-            items: {
-              type: :object,
-              properties: {
-                id: { type: :string, example: '123', description: 'The ID of the object' },
-                type: { type: :string, example: 'news_feed_item', description: 'The type of the object' },
-                attributes: {
-                  type: :object,
-                  properties: {
-                    title: { type: :string, example: 'News Story', description: 'The title of the news feed item' },
-                    url: { type: :string, example: 'https://news.psu.edu/example', description: 'The URL where the full news story content can be found' },
-                    description: { type: :string, example: 'A news story about a Penn State researcher', description: 'A brief description of the news story content' },
-                    published_on: { type: :string, example: '2018-12-05', description: 'The date on which the news story was published' }
-                  },
-                  required: [:title, :url, :description, :published_on]
-                }
-              },
-              required: [:id, :type, :attributes]
-            }
-          }
-        },
-        required: [:data]
+                                data: {
+                                  type: :array,
+                                  items: {
+                                    type: :object,
+                                    properties: {
+                                      id: { type: :string, example: '123', description: 'The ID of the object' },
+                                      type: { type: :string, example: 'news_feed_item', description: 'The type of the object' },
+                                      attributes: {
+                                        type: :object,
+                                        properties: {
+                                          title: { type: :string, example: 'News Story', description: 'The title of the news feed item' },
+                                          url: { type: :string, example: 'https://news.psu.edu/example', description: 'The URL where the full news story content can be found' },
+                                          description: { type: :string, example: 'A news story about a Penn State researcher', description: 'A brief description of the news story content' },
+                                          published_on: { type: :string, example: '2018-12-05', description: 'The date on which the news story was published' }
+                                        },
+                                        required: [:title, :url, :description, :published_on]
+                                      }
+                                    },
+                                    required: [:id, :type, :attributes]
+                                  }
+                                }
+                              },
+               required: [:data]
         run_test!
       end
-  
+
       response '401', 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       security [{ api_key: [] }]
     end
   end
@@ -212,7 +211,7 @@ RSpec.describe 'api/v1/users', type: :request do
       produces 'application/json', 'text/html'
       operationId 'findUserGrants'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve grants', required: true, type: :string
-  
+
       response '200', 'Returns grant data for a user' do
         schema type: :object, properties: {
           data: {
@@ -240,15 +239,15 @@ RSpec.describe 'api/v1/users', type: :request do
             }
           }
         }
-  
+
         run_test!
       end
-  
+
       response '401', 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
@@ -264,7 +263,7 @@ RSpec.describe 'api/v1/users', type: :request do
       produces 'application/json', 'text/html'
       operationId 'findPerformances'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve performances', required: true, type: :string
-  
+
       response '200', 'Returns performances for a user' do
         schema type: :object, properties: {
           data: {
@@ -334,24 +333,24 @@ RSpec.describe 'api/v1/users', type: :request do
             }
           }
         }
-  
+
         run_test!
       end
-  
+
       response '401', 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
-      security [ api_key: [] ]
+
+      security [api_key: []]
     end
   end
-  
+
   path '/v1/users/{webaccess_id}/etds' do
     get 'Retrieve a user\'s student advising history' do
       tags 'user'
@@ -359,7 +358,7 @@ RSpec.describe 'api/v1/users', type: :request do
       description 'Returns ETDs for which the user served on the committee'
       operationId 'findUserETDs'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve ETDs', required: true, type: :string
-  
+
       response '200', 'user ETDs response' do
         schema type: :object, properties: {
           data: {
@@ -387,18 +386,18 @@ RSpec.describe 'api/v1/users', type: :request do
         }
         run_test!
       end
-  
+
       response '401', 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
-      security [ api_key: [] ]
+
+      security [api_key: []]
     end
   end
 
@@ -414,30 +413,30 @@ RSpec.describe 'api/v1/users', type: :request do
       parameter name: :order_first_by, in: :query, description: 'Orders publications returned', required: false, schema: { type: :string, enum: [:citation_count_desc, :publication_date_asc, :publication_date_desc, :title_asc] }
       parameter name: :order_second_by, in: :query, description: 'Orders publications returned', required: false, schema: { type: :string, enum: [:citation_count_desc, :publication_date_asc, :publication_date_desc, :title_asc] }
       parameter name: :limit, in: :query, description: 'Max number publications to return for the user', required: false, type: :integer, format: :int32
-  
+
       response '200', 'user publication response' do
-        schema type: :object, 
-          properties: {
-            data: {
-              type: :array,
-              items: { '$ref' => '#/components/schemas/PublicationV1' }
-            }
-          },
-          required: ['data']
+        schema type: :object,
+               properties: {
+                 data: {
+                   type: :array,
+                   items: { '$ref' => '#/components/schemas/PublicationV1' }
+                 }
+               },
+               required: ['data']
         run_test!
       end
-  
+
       response '401', 'unauthorized' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
+
       response '404', 'not found' do
         schema('$ref' => '#/components/schemas/ErrorModelV1')
         run_test!
       end
-  
-      security [ api_key: [] ]
+
+      security [api_key: []]
     end
   end
 
@@ -485,12 +484,17 @@ RSpec.describe 'api/v1/users', type: :request do
                   grants: { type: :array, items: { type: :string, example: 'My Grant, NSF, 5/2007 - 5/2009', description: 'A description of an awarded grant' } },
                   presentations: { type: :array, items: { type: :string, example: 'My Presentation, Penn State University, University Park', description: 'A description of a presentation' } },
                   performances: { type: :array, items: { type: :string, example: 'My Performance, Eisenhower Auditorium - Penn State University, 3/1/2016', description: 'A description of a performance' } },
-                  master_advising_roles: { type: :array, items: { type: :string, example: '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student Master Thesis Example</a> (Committee Member)', description: 'A description of a graduate student master thesis advising role with an HTML link to the thesis' } },
-                  phd_advising_roles: { type: :array, items: { type: :string, example: '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student PhD Dissertation Example</a> (Committee Member)', description: 'A description of a graduate student PhD dissertation advising role with an HTML link to the dissertation' } },
+                  master_advising_roles: { type: :array,
+                                           items: { type: :string, example: '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student Master Thesis Example</a> (Committee Member)',
+                                                    description: 'A description of a graduate student master thesis advising role with an HTML link to the thesis' } },
+                  phd_advising_roles: { type: :array,
+                                        items: { type: :string, example: '<a href="https://etda.libraries.psu.edu/catalog/12345" target="_blank">Graduate Student PhD Dissertation Example</a> (Committee Member)',
+                                                 description: 'A description of a graduate student PhD dissertation advising role with an HTML link to the dissertation' } },
                   news_stories: { type: :array, items: { type: :string, example: '<a href="https://news.psu.edu/my_story" target="_blank">My News Story</a> 9/17/2014', description: 'A description of a news story with an HTML link to the story content' } },
                   education_history: { type: :array, items: { type: :string, example: 'BS, Biology - The Pennsylvania State University - 2010', description: 'A description of a degree earned by the user' } }
                 },
-                required: [:name, :organization_name, :title, :email, :office_location, :office_phone_number, :personal_website, :total_scopus_citations, :scopus_h_index, :pure_profile_url, :orcid_identifier, :bio, :teaching_interests, :research_interests, :publications, :other_publications, :grants, :presentations, :performances, :master_advising_roles, :phd_advising_roles, :news_stories, :education_history]
+                required: [:name, :organization_name, :title, :email, :office_location, :office_phone_number, :personal_website, :total_scopus_citations, :scopus_h_index, :pure_profile_url, :orcid_identifier, :bio, :teaching_interests, :research_interests, :publications, :other_publications, :grants,
+                           :presentations, :performances, :master_advising_roles, :phd_advising_roles, :news_stories, :education_history]
               }
             },
             required: [:id, :type, :attributes]
