@@ -5,14 +5,14 @@ require 'swagger_helper'
 RSpec.describe 'api/v1/publications' do
   path '/v1/publications' do
     path '/v1/publications/{id}/grants' do
-      get("Retrieve a publication's grants") do
+      get "Retrieve a publication's grants" do
         description 'Returns grant data associated with a publication'
         operationId 'findPublicationGrants'
         tags 'publication'
-        produces ['application/json']
+        produces 'application/json'
         parameter name: :id, in: :path, description: 'ID of publication to retrieve grants', required: true, type: :string
 
-        response '200', 'publication grants response' do
+        response 200, 'publication grants response' do
           schema type: :object, properties: {
                                   data: {
                                     type: :array,
@@ -43,12 +43,12 @@ RSpec.describe 'api/v1/publications' do
           run_test!
         end
 
-        response '401', 'unauthorized' do
+        response 401, 'unauthorized' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
 
-        response '404', 'not found' do
+        response 404, 'not found' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
@@ -60,24 +60,24 @@ RSpec.describe 'api/v1/publications' do
     path '/v1/publications/{id}' do
       parameter name: :id, in: :path, description: 'ID of publication to fetch', required: true, type: :integer, format: :int64
 
-      get('Find Publication by ID') do
+      get 'Find Publication by ID' do
         tags 'publication'
         description 'Returns a single publication if the user has access'
         operationId 'findPublicationById'
 
-        response('200', 'publication response') do
+        response 200, 'publication response' do
           schema type: :object, properties: {
             data: { type: :object, '$ref' => '#/components/schemas/PublicationV1' }
           }
           run_test!
         end
 
-        response('401', 'unauthorized') do
+        response 401, 'unauthorized' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
 
-        response('404', 'not found') do
+        response 404, 'not found' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
@@ -91,13 +91,13 @@ RSpec.describe 'api/v1/publications' do
         tags 'publication'
         description 'Returns all publications from the system that the user has access to'
         operationId 'findPublications'
-        produces ['application/json', 'text/html']
+        produces 'application/json', 'text/html'
 
         parameter name: :activity_insight_id, in: :query, description: 'Activity Insight ID to filter by', required: false, type: :string
         parameter name: :doi, in: :query, description: 'DOI to filter by', required: false, type: :string
         parameter name: :limit, in: :query, description: 'max number publications to return', required: false, type: :integer, format: :int32
 
-        response '200', 'publication response' do
+        response 200, 'publication response' do
           schema type: :object,
                  properties: {
                    data: {
@@ -109,7 +109,7 @@ RSpec.describe 'api/v1/publications' do
           run_test!
         end
 
-        response '401', 'unauthorized' do
+        response 401, 'unauthorized' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
@@ -117,7 +117,7 @@ RSpec.describe 'api/v1/publications' do
         security [{ api_key: [] }]
       end
 
-      patch('Update publication\'s ScholarSphere Open Access Link') do
+      patch 'Update publication\'s ScholarSphere Open Access Link' do
         tags 'publication'
         description 'Update publication\'s ScholarSphere Open Access Link by doi or activity insight id'
         operationId 'updateOpenAccessLink'
@@ -129,27 +129,27 @@ RSpec.describe 'api/v1/publications' do
                   description: 'ScholarSphere Open Access Link update requires either a doi or an activity insight id',
                   schema: { '$ref' => '#/components/schemas/PublicationInput' }
 
-        response '200', 'ScholarSphere Open Access Link successfully updated response' do
+        response 200, 'ScholarSphere Open Access Link successfully updated response' do
           schema '$ref' => '#/components/schemas/PublicationPatchResult'
           run_test!
         end
 
-        response '401', 'Unauthorized' do
+        response 401, 'Unauthorized' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
 
-        response '404', 'No publications found response' do
+        response 404, 'No publications found response' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
 
-        response '422', 'ScholarSphere Open Access Link already exists response' do
+        response 422, 'ScholarSphere Open Access Link already exists response' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end
 
-        response '422', 'Invalid params response' do
+        response 422, 'Invalid params response' do
           schema '$ref' => '#/components/schemas/ErrorModelV1'
           run_test!
         end

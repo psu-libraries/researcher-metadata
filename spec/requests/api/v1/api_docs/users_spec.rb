@@ -12,7 +12,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserOrganizationMemberships'
       produces 'application/json'
 
-      response '200', description: 'user organization memberships response' do
+      response 200, description: 'user organization memberships response' do
         schema type: :object,
                properties: {
                  data: {
@@ -69,13 +69,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', description: 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, description: 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', description: 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, description: 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -86,11 +86,11 @@ RSpec.describe 'api/v1/users' do
   path '/v1/users/{webaccess_id}/news_feed_items' do
     get 'Retrieve a user\'s news feed items' do
       operationId 'findUserNewsFeedItems'
-      produces ['application/json', 'text/html']
+      produces 'application/json', 'text/html'
       tags 'user'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve news feed items', required: true, type: :string
 
-      response '200', 'user news_feed_items response' do
+      response 200, 'user news_feed_items response' do
         schema type: :object, properties: {
                                 data: {
                                   type: :array,
@@ -118,13 +118,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -135,12 +135,12 @@ RSpec.describe 'api/v1/users' do
   path '/v1/users/{webaccess_id}/presentations' do
     get 'Retrieve a user\'s presentations' do
       operationId 'findUserPresentations'
-      produces ['application/json', 'text/html']
+      produces 'application/json', 'text/html'
       tags 'user'
 
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve presentations', required: true, type: :string
 
-      response '200', 'user presentations response' do
+      response 200, 'user presentations response' do
         schema type: :object,
                properties: {
                  data: {
@@ -193,13 +193,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -214,7 +214,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserGrants'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve grants', required: true, type: :string
 
-      response '200', 'Returns grant data for a user' do
+      response 200, 'Returns grant data for a user' do
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -245,13 +245,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -266,7 +266,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findPerformances'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve performances', required: true, type: :string
 
-      response '200', 'Returns performances for a user' do
+      response 200, 'Returns performances for a user' do
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -339,13 +339,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -361,7 +361,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserETDs'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve ETDs', required: true, type: :string
 
-      response '200', 'user ETDs response' do
+      response 200, 'user ETDs response' do
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -389,13 +389,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -416,7 +416,7 @@ RSpec.describe 'api/v1/users' do
       parameter name: :order_second_by, in: :query, description: 'Orders publications returned', required: false, schema: { type: :string, enum: [:citation_count_desc, :publication_date_asc, :publication_date_desc, :title_asc] }
       parameter name: :limit, in: :query, description: 'Max number publications to return for the user', required: false, type: :integer, format: :int32
 
-      response '200', 'user publication response' do
+      response 200, 'user publication response' do
         schema type: :object,
                properties: {
                  data: {
@@ -428,13 +428,13 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '401', 'unauthorized' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 401, 'unauthorized' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response '404', 'not found' do
-        schema('$ref' => '#/components/schemas/ErrorModelV1')
+      response 404, 'not found' do
+        schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
@@ -450,7 +450,7 @@ RSpec.describe 'api/v1/users' do
       produces 'application/json', 'text/html'
       parameter name: :webaccess_id, in: :path, type: :string, required: true
 
-      response '200', 'user profile response' do
+      response 200, 'user profile response' do
         schema type: :object, properties: {
           data: {
             type: :object,
@@ -505,7 +505,7 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response '404', 'not found' do
+      response 404, 'not found' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end

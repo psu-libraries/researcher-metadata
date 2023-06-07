@@ -3,20 +3,13 @@
 require 'requests/requests_spec_helper'
 
 describe 'api/v1/organizations' do
-  before do
-    create(:organization)
-    create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil)
-  end
-
   path '/v1/organizations' do
-    get('All Organizations') do
+    get 'All Organizations' do
       description 'Returns all visible organizations to which the given API token has access.'
       operationId 'findOrganizations'
       produces 'application/json'
       tags 'organization'
-      security [api_key: []]
-      response(200, 'organization response') do
-        let(:'X-API-Key') { 'token123' }
+      response 200, 'organization response' do
         schema type: :object,
                properties: {
                  data: { type: :array,
@@ -37,11 +30,11 @@ describe 'api/v1/organizations' do
                              required: ['id', 'type', 'attributes'] } }
                },
                required: ['data']
+        security [api_key: []]
         run_test!
       end
 
-      response(401, 'unauthorized') do
-        let(:'X-API-Key') { 'invalid' }
+      response 401, 'unauthorized' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -51,16 +44,12 @@ describe 'api/v1/organizations' do
   path '/v1/organizations/{id}/publications' do
     parameter name: 'id', in: :path, type: :integer, description: 'The ID of an organization', required: true
 
-    get("Retrieve an organization's publications") do
+    get "Retrieve an organization's publications" do
       description 'Returns publications that were authored by users while they were members of the organization'
       operationId 'findOrganizationPublications'
-      produces ['application/json']
+      produces 'application/json'
       tags 'organization'
-      security [api_key: []]
-      response(200, 'user publication response') do
-        let(:id) { '123' }
-        let(:'X-API-Key') { 'token123' }
-
+      response 200, 'user publication response' do
         schema type: :object,
                properties: {
                  data: {
@@ -71,19 +60,16 @@ describe 'api/v1/organizations' do
                  }
                }
 
+        security [api_key: []]
         run_test!
       end
 
-      response(401, 'unauthorized') do
-        let(:'X-API-Key') { 'invalid' }
-        let(:id) { '123' }
+      response 401, 'unauthorized' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response(404, 'not found') do
-        let(:'X-API-Key') { 'token123' }
-        let(:id) { '5678' }
+      response 404, 'not found' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
