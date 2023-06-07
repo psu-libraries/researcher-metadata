@@ -2,7 +2,7 @@
 
 require 'requests/requests_spec_helper'
 
-describe 'Organizations API Docs' do
+describe 'api/v1/organizations' do
   before do
     create(:organization)
     create(:api_token, token: 'token123', total_requests: 0, last_used_at: nil)

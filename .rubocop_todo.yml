@@ -132,6 +132,8 @@ RSpec/DescribeClass:
     - 'spec/integration/user/sessions/delete_spec.rb'
     - 'spec/integration/user/sessions/new_spec.rb'
     - 'spec/requests/api/v1/api_docs/organizations_spec.rb'
+    - 'spec/requests/api/v1/api_docs/users_spec.rb'
+    - 'spec/requests/api/v1/api_docs/publications_spec.rb'
 
 # Offense count: 304
 RSpec/LetSetup:
