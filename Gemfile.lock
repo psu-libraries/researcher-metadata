@@ -522,12 +522,6 @@ GEM
     rspec-support (3.10.3)
     rss (0.2.9)
       rexml
-    rswag (2.9.0)
-      rswag-api (= 2.9.0)
-      rswag-specs (= 2.9.0)
-      rswag-ui (= 2.9.0)
-    rswag-api (2.9.0)
-      railties (>= 3.1, < 7.1)
     rswag-specs (2.9.0)
       activesupport (>= 3.1, < 7.1)
       json-schema (>= 2.2, < 4.0)
@@ -729,7 +723,8 @@ DEPENDENCIES
   rspec-its
   rspec-rails
   rss
-  rswag
+  rswag-specs
+  rswag-ui
   sass-rails
   scholarsphere-client (~> 0.3)
   selenium-webdriver

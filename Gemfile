@@ -60,12 +60,13 @@ gem 'turbolinks', '~> 5'                # makes navigating your web application 
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'view_component'                    # Reusable, testable view components
 gem 'webpacker'                         # bundle assets
+gem 'rswag-ui'                          # Display swagger docs with Rswag
 
 group :development, :test do
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'
-  gem 'rswag'                           # DSL for Ruby to test and generate swagger docs
+  gem 'rswag-specs'                     # Test and generate swagger docs with Rswag
 end
 
 group :development do
