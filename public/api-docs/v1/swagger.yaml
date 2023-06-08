@@ -640,8 +640,7 @@ paths:
       - api_key: []
       responses:
         '200':
-          description:
-            description: user organization memberships response
+          description: user organization memberships response
           content:
             application/json:
               schema:
@@ -701,15 +700,13 @@ paths:
                           required:
                           - organization_name
         '401':
-          description:
-            description: unauthorized
+          description: unauthorized
           content:
             application/json:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
         '404':
-          description:
-            description: not found
+          description: not found
           content:
             application/json:
               schema:
@@ -720,6 +717,7 @@ paths:
       operationId: findUserNewsFeedItems
       tags:
       - user
+      description: Returns a news feed items for a user
       parameters:
       - name: webaccess_id
         in: path
@@ -853,6 +851,7 @@ paths:
       operationId: findUserPresentations
       tags:
       - user
+      description: Returns presentations for a user
       parameters:
       - name: webaccess_id
         in: path
@@ -1202,6 +1201,7 @@ paths:
       tags:
       - user
       operationId: findUserGrants
+      description: Returns grant data for a user
       parameters:
       - name: webaccess_id
         in: path
@@ -1213,7 +1213,7 @@ paths:
       - api_key: []
       responses:
         '200':
-          description: Returns grant data for a user
+          description: user grants response
           content:
             application/json:
               schema:
@@ -1393,6 +1393,7 @@ paths:
       tags:
       - user
       operationId: findPerformances
+      description: Returns performances for a user
       parameters:
       - name: webaccess_id
         in: path
@@ -1404,7 +1405,7 @@ paths:
       - api_key: []
       responses:
         '200':
-          description: Returns performances for a user
+          description: user performances response
           content:
             application/json:
               schema:
@@ -2050,21 +2051,16 @@ paths:
               schema:
                 "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/users/{webaccess_id}/profile":
-    parameters:
-    - name: webaccess_id
-      in: path
-      required: true
-      description: Webaccess ID of user to retrieve HTML profile
-      schema:
-        type: string
     get:
       summary: Retrieve a user's profile
       tags:
       - user
+      description: Returns a representation of a user's profile information
       parameters:
       - name: webaccess_id
         in: path
         required: true
+        description: Webaccess ID of user to retrieve HTML profile
         schema:
           type: string
       responses:

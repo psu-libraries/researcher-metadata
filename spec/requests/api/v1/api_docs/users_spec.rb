@@ -12,7 +12,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserOrganizationMemberships'
       produces 'application/json'
 
-      response 200, description: 'user organization memberships response' do
+      response 200, 'user organization memberships response' do
         schema type: :object,
                properties: {
                  data: {
@@ -69,12 +69,12 @@ RSpec.describe 'api/v1/users' do
         run_test!
       end
 
-      response 401, description: 'unauthorized' do
+      response 401, 'unauthorized' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
-      response 404, description: 'not found' do
+      response 404, 'not found' do
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -88,6 +88,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserNewsFeedItems'
       produces 'application/json', 'text/html'
       tags 'user'
+      description 'Returns a news feed items for a user'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve news feed items', required: true, type: :string
 
       response 200, 'user news_feed_items response' do
@@ -137,6 +138,7 @@ RSpec.describe 'api/v1/users' do
       operationId 'findUserPresentations'
       produces 'application/json', 'text/html'
       tags 'user'
+      description 'Returns presentations for a user'
 
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve presentations', required: true, type: :string
 
@@ -212,9 +214,10 @@ RSpec.describe 'api/v1/users' do
       tags 'user'
       produces 'application/json', 'text/html'
       operationId 'findUserGrants'
+      description 'Returns grant data for a user'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve grants', required: true, type: :string
 
-      response 200, 'Returns grant data for a user' do
+      response 200, 'user grants response' do
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -264,9 +267,10 @@ RSpec.describe 'api/v1/users' do
       tags 'user'
       produces 'application/json', 'text/html'
       operationId 'findPerformances'
+      description 'Returns performances for a user'
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve performances', required: true, type: :string
 
-      response 200, 'Returns performances for a user' do
+      response 200, 'user performances response' do
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -443,12 +447,11 @@ RSpec.describe 'api/v1/users' do
   end
 
   path '/v1/users/{webaccess_id}/profile' do
-    parameter name: 'webaccess_id', in: :path, type: :string, required: true, description: 'Webaccess ID of user to retrieve HTML profile'
-
     get 'Retrieve a user\'s profile' do
       tags 'user'
       produces 'application/json', 'text/html'
-      parameter name: :webaccess_id, in: :path, type: :string, required: true
+      description "Returns a representation of a user's profile information"
+      parameter name: :webaccess_id, in: :path, type: :string, required: true, description: 'Webaccess ID of user to retrieve HTML profile'
 
       response 200, 'user profile response' do
         schema type: :object, properties: {
