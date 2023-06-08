@@ -50,7 +50,6 @@ gem 'progressbar'                       # the ultimate text progress bar library
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
 gem 'puma', '~> 5.6'                    # use Puma as the app server
 gem 'rss'                               # RSS reading and writing
-gem 'rswag-ui'                          # Display swagger docs with Rswag
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
@@ -66,7 +65,7 @@ group :development, :test do
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'
-  gem 'rswag-specs'                     # Test and generate swagger docs with Rswag
+  gem 'rswag-specs'                     # DSL for generating and testing swagger docs
 end
 
 group :development do

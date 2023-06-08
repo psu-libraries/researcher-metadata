@@ -527,9 +527,6 @@ GEM
       json-schema (>= 2.2, < 4.0)
       railties (>= 3.1, < 7.1)
       rspec-core (>= 2.14)
-    rswag-ui (2.9.0)
-      actionpack (>= 3.1, < 7.1)
-      railties (>= 3.1, < 7.1)
     rubocop (1.42.0)
       json (~> 2.3)
       parallel (~> 1.10)
@@ -724,7 +721,6 @@ DEPENDENCIES
   rspec-rails
   rss
   rswag-specs
-  rswag-ui
   sass-rails
   scholarsphere-client (~> 0.3)
   selenium-webdriver
