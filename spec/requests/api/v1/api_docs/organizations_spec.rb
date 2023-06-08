@@ -3,6 +3,14 @@
 require 'requests/requests_spec_helper'
 
 describe 'api/v1/organizations' do
+  let!(:org) { create :organization, id: 100 }
+  let!(:api_token) { create(:api_token, token: 'token123') }
+  let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
+  before do
+    create(:organization_api_permission, api_token: api_token, organization: org)
+    create(:user_organization_membership, organization: org, user: user)
+  end
+
   path '/v1/organizations' do
     get 'All Organizations' do
       description 'Returns all visible organizations to which the given API token has access.'
@@ -10,6 +18,7 @@ describe 'api/v1/organizations' do
       produces 'application/json'
       tags 'organization'
       response 200, 'organization response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: { type: :array,
@@ -35,6 +44,7 @@ describe 'api/v1/organizations' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -42,6 +52,7 @@ describe 'api/v1/organizations' do
   end
 
   path '/v1/organizations/{id}/publications' do
+    let(:id) { org.id }
     parameter name: 'id', in: :path, type: :integer, description: 'The ID of an organization', required: true
 
     get "Retrieve an organization's publications" do
@@ -50,6 +61,7 @@ describe 'api/v1/organizations' do
       produces 'application/json'
       tags 'organization'
       response 200, 'user publication response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: {
@@ -65,11 +77,14 @@ describe 'api/v1/organizations' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:'X-API-Key') { 'token123' }
+        let(:id) { org.id + 1 }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end

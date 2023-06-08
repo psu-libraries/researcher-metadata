@@ -40,12 +40,12 @@ RSpec.configure do |config|
             type: :object,
             required: [:code, :message],
             properties: {
+              message: {
+                type: :string
+              },
               code: {
                 type: :integer,
                 format: :int32
-              },
-              message: {
-                type: :string
               }
             }
           },
