@@ -3,9 +3,10 @@
 require 'requests/requests_spec_helper'
 
 describe 'api/v1/organizations' do
-  let!(:org) { create :organization, id: 100 }
+  let!(:org) { create(:organization, id: 100) }
   let!(:api_token) { create(:api_token, token: 'token123') }
   let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321', authorships_count: 10) }
+
   before do
     create(:organization_api_permission, api_token: api_token, organization: org)
     create(:user_organization_membership, organization: org, user: user)
