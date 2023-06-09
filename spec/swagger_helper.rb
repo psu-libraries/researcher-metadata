@@ -24,7 +24,6 @@ RSpec.configure do |config|
                      'in the swagger-2.0 specification.',
         version: 'v1'
       },
-      basePath: '/',
       consumes: ['application/json'],
       produces: ['application/json'],
       components: {
