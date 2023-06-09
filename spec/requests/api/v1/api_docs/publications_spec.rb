@@ -10,11 +10,8 @@ RSpec.describe 'api/v1/publications' do
   let!(:grant) { create(:grant) }
   let!(:research_fund) { create(:research_fund, grant: grant, publication: publication) }
   let!(:org) { create(:organization) }
-
-  before do
-    create(:organization_api_permission, api_token: api_token, organization: org)
-    create(:user_organization_membership, organization: org, user: user)
-  end
+  let!(:oap) { create(:organization_api_permission, api_token: api_token, organization: org) }
+  let!(:uom) { create(:user_organization_membership, organization: org, user: user) }
 
   path '/v1/publications' do
     path '/v1/publications/{id}/grants' do
@@ -35,15 +32,15 @@ RSpec.describe 'api/v1/publications' do
                                       type: :object,
                                       required: [:id, :type, :attributes],
                                       properties: {
-                                        id: { 
+                                        id: {
                                           type: :string,
                                           example: '123',
                                           description: 'The ID of the object'
                                         },
-                                        type: { 
+                                        type: {
                                           type: :string,
                                           example: 'grant',
-                                          description: 'The type of the object' 
+                                          description: 'The type of the object'
                                         },
                                         attributes: {
                                           type: :object,
@@ -51,40 +48,40 @@ RSpec.describe 'api/v1/publications' do
                                                      :amount_in_dollars, :start_date,
                                                      :end_date, :identifier],
                                           properties: {
-                                            title: { 
+                                            title: {
                                               type: [:string, :null],
                                               example: 'A Research Project Proposal',
-                                              description: 'The title of the grant' 
+                                              description: 'The title of the grant'
                                             },
-                                            agency: { 
+                                            agency: {
                                               type: [:string, :null],
                                               example: 'National Science Foundation',
-                                              description: 'The name of the organization that awarded the grant' 
+                                              description: 'The name of the organization that awarded the grant'
                                             },
-                                            abstract: { 
+                                            abstract: {
                                               type: [:string, :null],
                                               example: 'Information about this grant',
-                                              description: "A description of the grant's purpose" 
+                                              description: "A description of the grant's purpose"
                                             },
-                                            amount_in_dollars: { 
+                                            amount_in_dollars: {
                                               type: [:integer, :null],
                                               example: 50000,
-                                              description: 'The monetary amount of the grant in U.S. dollars' 
+                                              description: 'The monetary amount of the grant in U.S. dollars'
                                             },
-                                            start_date: { 
+                                            start_date: {
                                               type: [:string, :null],
                                               example: '2017-12-05',
-                                              description: 'The date on which the grant begins' 
+                                              description: 'The date on which the grant begins'
                                             },
-                                            end_date: { 
+                                            end_date: {
                                               type: [:string, :null],
                                               example: '2019-12-05',
-                                              description: 'The date on which the grant ends' 
+                                              description: 'The date on which the grant ends'
                                             },
-                                            identifier: { 
+                                            identifier: {
                                               type: [:string, :null],
                                               example: '1789352',
-                                              description: 'A code identifying the grant that is unique to the awarding agency' 
+                                              description: 'A code identifying the grant that is unique to the awarding agency'
                                             }
                                           }
                                         }
@@ -115,11 +112,11 @@ RSpec.describe 'api/v1/publications' do
 
     path '/v1/publications/{id}' do
       let(:id) { publication.id }
-      parameter name: :id, 
-                in: :path, 
-                description: 'ID of publication to fetch', 
-                required: true, 
-                type: :integer, 
+      parameter name: :id,
+                in: :path,
+                description: 'ID of publication to fetch',
+                required: true,
+                type: :integer,
                 format: :int64
 
       get 'Find Publication by ID' do
@@ -235,6 +232,7 @@ RSpec.describe 'api/v1/publications' do
             publication.open_access_locations << create(:open_access_location, source: 'scholarsphere', url: 'url.com')
             publication.save!
           end
+
           let(:'X-API-Key') { 'token123' }
           let(:Publication) { { doi: publication.doi, scholarsphere_open_access_url: 'url.com' } }
           schema '$ref' => '#/components/schemas/ErrorModelV1'

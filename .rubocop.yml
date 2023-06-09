@@ -74,3 +74,5 @@ RSpec/EmptyExampleGroup:
 RSpec/VariableName:
   Exclude:
     - 'spec/requests/api/v1/api_docs/organizations_spec.rb'
+    - 'spec/requests/api/v1/api_docs/publications_spec.rb'
+    - 'spec/requests/api/v1/api_docs/users_spec.rb'
