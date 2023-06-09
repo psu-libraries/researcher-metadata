@@ -498,7 +498,11 @@ RSpec.describe 'api/v1/users' do
       produces 'application/json', 'text/html'
       description 'Returns ETDs for which the user served on the committee'
       operationId 'findUserETDs'
-      parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve ETDs', required: true, type: :string
+      parameter name: :webaccess_id,
+                in: :path,
+                description: 'Webaccess ID of user to retrieve ETDs',
+                required: true,
+                type: :string
 
       response 200, 'user ETDs response' do
         schema type: :object, properties: {
@@ -508,17 +512,43 @@ RSpec.describe 'api/v1/users' do
               type: :object,
               required: [:id, :type, :attributes],
               properties: {
-                id: { type: :string, example: '123', description: 'The ID of the object' },
-                type: { type: :string, example: 'etd', description: 'The type of the object' },
+                id: {
+                  type: :string,
+                  example: '123',
+                  description: 'The ID of the object'
+                },
+                type: { type: :string,
+                        example: 'etd',
+                        description: 'The type of the object' },
                 attributes: {
                   type: :object,
                   required: [:title, :year, :author_last_name, :author_first_name],
                   properties: {
-                    title: { type: :string, example: 'A PhD Thesis', description: 'The title of the ETD' },
-                    year: { type: :integer, example: 2010, description: 'The year in which the ETD was completed' },
-                    author_last_name: { type: :string, example: 'Author', description: "The last name of the ETD's author" },
-                    author_first_name: { type: :string, example: 'Susan', description: "The first name of the ETD's author" },
-                    author_middle_name: { type: [:string, :null], example: 'Example', description: "The first name of the ETD's author" }
+                    title: {
+                      type: :string,
+                      example: 'A PhD Thesis',
+                      description: 'The title of the ETD'
+                    },
+                    year: {
+                      type: :integer,
+                      example: 2010,
+                      description: 'The year in which the ETD was completed'
+                    },
+                    author_last_name: {
+                      type: :string,
+                      example: 'Author',
+                      description: "The last name of the ETD's author"
+                    },
+                    author_first_name: {
+                      type: :string,
+                      example: 'Susan',
+                      description: "The first name of the ETD's author"
+                    },
+                    author_middle_name: {
+                      type: [:string, :null],
+                      example: 'Example',
+                      description: "The first name of the ETD's author"
+                    }
                   }
                 }
               }
