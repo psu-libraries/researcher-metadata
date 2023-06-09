@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'swagger_helper'
+require 'requests/requests_spec_helper'
 
 RSpec.describe 'api/v1/users' do
   path '/v1/users/{webaccess_id}/organization_memberships' do
