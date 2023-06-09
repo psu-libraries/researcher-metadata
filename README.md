@@ -361,7 +361,7 @@ The RMD API is intended to conform to the Swagger 2.0 specification. As such, we
 - **jsonapi-serializer**: is what we're using for serialization.
 
 ### NPM Packages
-- **swagger-ui-dist**: serves up live, interactive API documentation as part of our site. Basically provides a sandbox where users can read about the endpoints and then "try them out". It builds all of this from the API file we build from swagger-blocks.
+- **swagger-ui-dist**: serves up live, interactive API documentation as part of our site. Basically provides a sandbox where users can read about the endpoints and then "try them out". It builds all of this from the API file we build from Rswag.
 
 ### Suggested API Development Workflow
 - Document the new endpoint using the Rswag DSL. Then generate the swagger manifest with `rake rswag:specs:swaggerize`.  Pro tip: Until you get the hang of the DSL, you can use the [interactive swagger editor](https://editor.swagger.io/) for guidance and to check that you have valid Swagger 2.0. Try it out by pasting in the current API file as a starting point: ``` pbcopy < public/api_docs/v1/swagger.yaml ``` 
