@@ -3,6 +3,21 @@
 require 'requests/requests_spec_helper'
 
 RSpec.describe 'api/v1/users' do
+  let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321') }
+  let!(:authorship) { create(:authorship, user: user, publication: publication) }
+  let!(:publication) { create(:publication, visible: true, doi: 'https://doi.org/10.1000/182') }
+  let!(:api_token) { create(:api_token, token: 'token123', write_access: true) }
+  let!(:grant) { create(:grant) }
+  let!(:research_fund) { create(:research_fund, grant: grant, publication: publication) }
+  let!(:org) { create(:organization) }
+
+  before do
+    create(:organization_api_permission, api_token: api_token, organization: org)
+    create(:user_organization_membership, organization: org, user: user)
+  end
+
+  let(:webaccess_id) { user.webaccess_id }
+
   path '/v1/users/{webaccess_id}/organization_memberships' do
     parameter name: :webaccess_id, in: :path, type: :string, description: 'Webaccess ID of user to retrieve organization memberships', required: true
 
@@ -13,6 +28,7 @@ RSpec.describe 'api/v1/users' do
       produces 'application/json'
 
       response 200, 'user organization memberships response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: {
@@ -70,11 +86,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -92,6 +111,7 @@ RSpec.describe 'api/v1/users' do
       parameter name: :webaccess_id, in: :path, description: 'Webaccess ID of user to retrieve news feed items', required: true, type: :string
 
       response 200, 'user news_feed_items response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object, properties: {
                                 data: {
                                   type: :array,
@@ -132,11 +152,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -159,6 +182,7 @@ RSpec.describe 'api/v1/users' do
                 type: :string
 
       response 200, 'user presentations response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: {
@@ -254,11 +278,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -280,6 +307,7 @@ RSpec.describe 'api/v1/users' do
                 type: :string
 
       response 200, 'user grants response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -330,11 +358,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -356,6 +387,7 @@ RSpec.describe 'api/v1/users' do
                 type: :string
 
       response 200, 'user performances response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -479,11 +511,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -505,6 +540,7 @@ RSpec.describe 'api/v1/users' do
                 type: :string
 
       response 200, 'user ETDs response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object, properties: {
           data: {
             type: :array,
@@ -559,11 +595,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -573,6 +612,9 @@ RSpec.describe 'api/v1/users' do
   end
 
   path '/v1/users/{webaccess_id}/publications' do
+    let(:start_year) { '2018' }
+    let(:end_year) { '2018' }
+    let(:order_first_by) { 'citation_count_desc' }
     get 'Retrieve a user\'s publications' do
       tags 'user'
       produces 'application/json', 'text/html'
@@ -623,6 +665,7 @@ RSpec.describe 'api/v1/users' do
                 format: :int32
 
       response 200, 'user publication response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: {
@@ -635,11 +678,14 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -660,6 +706,7 @@ RSpec.describe 'api/v1/users' do
                 description: 'Webaccess ID of user to retrieve HTML profile'
 
       response 200, 'user profile response' do
+        let(:'X-API-Key') { 'token123' }
         schema type: :object,
                properties: {
                  data: {
@@ -675,45 +722,59 @@ RSpec.describe 'api/v1/users' do
                        type: :object,
                        properties: {
                          name: { type: :string,
+                                 nullable: true,
                                  example: 'Example User',
                                  description: 'The full name of the user' },
                          organization_name: { type: :string,
+                                              nullable: true,
                                               example: 'College of Engineering',
                                               description: "The name of the user's primary organization" },
                          title: { type: :string,
+                                  nullable: true,
                                   example: 'Professor',
                                   description: "The title of the user's position" },
                          email: { type: :string,
+                                  nullable: true,
                                   example: 'abc123@psu.edu',
                                   description: "The user's email address" },
                          office_location: { type: :string,
+                                            nullable: true,
                                             example: '101 Chemistry Building',
                                             description: "The room number and building where the user's office is located" },
                          office_phone_number: { type: :string,
+                                                nullable: true,
                                                 example: '(555) 555-555',
                                                 description: "The telephone number for the user's office" },
                          personal_website: { type: :string,
+                                             nullable: true,
                                              example: 'mysite.org',
                                              description: "The domain or URL for the user's personal website" },
                          total_scopus_citations: { type: :integer,
+                                                   nullable: true,
                                                    example: 76,
                                                    description: "The total number of times that all of the user's publications have been cited as recorded in Scopus (Pure)" },
                          scopus_h_index: { type: :integer,
+                                           nullable: true,
                                            example: 24,
                                            description: "The user's H-Index value in Scopus (Pure)" },
                          pure_profile_url: { type: :string,
+                                             nullable: true,
                                              example: 'https://pennstate.pure.elsevier.com/en/persons/abc123-def456',
                                              description: "The URL for the user's profile page on the Penn State Pure website" },
                          orcid_identifier: { type: :string,
+                                             nullable: true,
                                              example: 'https://orcid.org/0000-0000-0000-0000',
                                              description: "The URL for the user's ORCID ID" },
                          bio: { type: :string,
+                                nullable: true,
                                 example: 'Some biographical information about this user',
                                 description: 'A brief biography of the user' },
                          teaching_interests: { type: :string,
+                                               nullable: true,
                                                example: 'Computer Science, Information Technology',
                                                description: "A description of the user's teaching interests" },
                          research_interests: { type: :string,
+                                               nullable: true,
                                                example: 'Quantum Computing, Encryption',
                                                description: "A description of the user's research interests" },
                          publications: { type: :array,
@@ -800,7 +861,7 @@ RSpec.describe 'api/v1/users' do
                          }
                        },
                        required: [:name, :organization_name, :title,
-                                  :email, :office_location, :office_phone_number,
+                                  :office_location, :office_phone_number,
                                   :personal_website, :total_scopus_citations,
                                   :scopus_h_index, :pure_profile_url, :orcid_identifier,
                                   :bio, :teaching_interests, :research_interests,
@@ -816,6 +877,8 @@ RSpec.describe 'api/v1/users' do
       end
 
       response 404, 'not found' do
+        let(:webaccess_id) { 'nobody' }
+        let(:'X-API-Key') { 'token123' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
@@ -823,6 +886,10 @@ RSpec.describe 'api/v1/users' do
   end
 
   path '/v1/users/publications' do
+    let(:webaccess_ids) { [user.webaccess_id] }
+    let(:start_year) { '2018' }
+    let(:end_year) { '2018' }
+    let(:order_first_by) { 'citation_count_desc' }
     post 'Retrieve publications for a group of users' do
       tags 'user'
       operationId 'findUsersPublications'
@@ -875,10 +942,12 @@ RSpec.describe 'api/v1/users' do
                 }
 
       response 200, 'OK' do
+        let(:'X-API-Key') { 'token123' }
         run_test!
       end
 
       response 401, 'unauthorized' do
+        let(:'X-API-Key') { 'bogus' }
         schema '$ref' => '#/components/schemas/ErrorModelV1'
         run_test!
       end
