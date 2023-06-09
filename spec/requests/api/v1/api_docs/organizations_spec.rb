@@ -25,21 +25,32 @@ describe 'api/v1/organizations' do
                  data: { type: :array,
                          items:
                            { properties:
-                            { id: { type: :string,
-                                    example: '123',
-                                    description: 'The ID of the object' },
-                              type: { type: :string,
-                                      example: 'organization',
-                                      description: 'The type of object' },
-                              attributes: { type: :object,
-                                            required: ['name'],
-                                            properties: {
-                                              name: { type: :string,
-                                                      example: 'College of Engineering',
-                                                      description: 'The name of the organization' }
-                                            } } },
-                             type: :object,
-                             required: ['id', 'type', 'attributes'] } }
+                            { id: { 
+                              type: :string,
+                              example: '123',
+                              description: 'The ID of the object' 
+                            },
+                              type: { 
+                                type: :string,
+                                example: 'organization',
+                                description: 'The type of object' 
+                              },
+                              attributes: { 
+                                type: :object,
+                                required: ['name'],
+                                properties: {
+                                  name: { 
+                                    type: :string,
+                                    example: 'College of Engineering',
+                                    description: 'The name of the organization' 
+                                  }
+                                } 
+                              } 
+                            },
+                            type: :object,
+                            required: ['id', 'type', 'attributes'] 
+                          } 
+                        }
                },
                required: ['data']
         security [api_key: []]
