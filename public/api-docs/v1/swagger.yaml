@@ -2087,63 +2087,77 @@ paths:
                         properties:
                           name:
                             type: string
+                            nullable: true
                             example: Example User
                             description: The full name of the user
                           organization_name:
                             type: string
+                            nullable: true
                             example: College of Engineering
                             description: The name of the user's primary organization
                           title:
                             type: string
+                            nullable: true
                             example: Professor
                             description: The title of the user's position
                           email:
                             type: string
+                            nullable: true
                             example: abc123@psu.edu
                             description: The user's email address
                           office_location:
                             type: string
+                            nullable: true
                             example: 101 Chemistry Building
                             description: The room number and building where the user's
                               office is located
                           office_phone_number:
                             type: string
+                            nullable: true
                             example: "(555) 555-555"
                             description: The telephone number for the user's office
                           personal_website:
                             type: string
+                            nullable: true
                             example: mysite.org
                             description: The domain or URL for the user's personal
                               website
                           total_scopus_citations:
                             type: integer
+                            nullable: true
                             example: 76
                             description: The total number of times that all of the
                               user's publications have been cited as recorded in Scopus
                               (Pure)
                           scopus_h_index:
                             type: integer
+                            nullable: true
                             example: 24
                             description: The user's H-Index value in Scopus (Pure)
                           pure_profile_url:
                             type: string
+                            nullable: true
                             example: https://pennstate.pure.elsevier.com/en/persons/abc123-def456
                             description: The URL for the user's profile page on the
                               Penn State Pure website
                           orcid_identifier:
                             type: string
+                            nullable: true
                             example: https://orcid.org/0000-0000-0000-0000
                             description: The URL for the user's ORCID ID
                           bio:
                             type: string
+                            nullable: true
                             example: Some biographical information about this user
                             description: A brief biography of the user
                           teaching_interests:
                             type: string
+                            nullable: true
                             example: Computer Science, Information Technology
                             description: A description of the user's teaching interests
                           research_interests:
                             type: string
+                            nullable: true
                             example: Quantum Computing, Encryption
                             description: A description of the user's research interests
                           publications:
@@ -2232,7 +2246,6 @@ paths:
                         - name
                         - organization_name
                         - title
-                        - email
                         - office_location
                         - office_phone_number
                         - personal_website
@@ -2276,63 +2289,77 @@ paths:
                         properties:
                           name:
                             type: string
+                            nullable: true
                             example: Example User
                             description: The full name of the user
                           organization_name:
                             type: string
+                            nullable: true
                             example: College of Engineering
                             description: The name of the user's primary organization
                           title:
                             type: string
+                            nullable: true
                             example: Professor
                             description: The title of the user's position
                           email:
                             type: string
+                            nullable: true
                             example: abc123@psu.edu
                             description: The user's email address
                           office_location:
                             type: string
+                            nullable: true
                             example: 101 Chemistry Building
                             description: The room number and building where the user's
                               office is located
                           office_phone_number:
                             type: string
+                            nullable: true
                             example: "(555) 555-555"
                             description: The telephone number for the user's office
                           personal_website:
                             type: string
+                            nullable: true
                             example: mysite.org
                             description: The domain or URL for the user's personal
                               website
                           total_scopus_citations:
                             type: integer
+                            nullable: true
                             example: 76
                             description: The total number of times that all of the
                               user's publications have been cited as recorded in Scopus
                               (Pure)
                           scopus_h_index:
                             type: integer
+                            nullable: true
                             example: 24
                             description: The user's H-Index value in Scopus (Pure)
                           pure_profile_url:
                             type: string
+                            nullable: true
                             example: https://pennstate.pure.elsevier.com/en/persons/abc123-def456
                             description: The URL for the user's profile page on the
                               Penn State Pure website
                           orcid_identifier:
                             type: string
+                            nullable: true
                             example: https://orcid.org/0000-0000-0000-0000
                             description: The URL for the user's ORCID ID
                           bio:
                             type: string
+                            nullable: true
                             example: Some biographical information about this user
                             description: A brief biography of the user
                           teaching_interests:
                             type: string
+                            nullable: true
                             example: Computer Science, Information Technology
                             description: A description of the user's teaching interests
                           research_interests:
                             type: string
+                            nullable: true
                             example: Quantum Computing, Encryption
                             description: A description of the user's research interests
                           publications:
@@ -2421,7 +2448,6 @@ paths:
                         - name
                         - organization_name
                         - title
-                        - email
                         - office_location
                         - office_phone_number
                         - personal_website
