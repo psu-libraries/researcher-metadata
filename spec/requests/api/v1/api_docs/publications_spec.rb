@@ -181,7 +181,7 @@ RSpec.describe 'api/v1/publications' do
                   description: 'max number publications to return',
                   required: false,
                   schema: {
-                    type: :integer, 
+                    type: :integer,
                     format: :int32
                   }
 
