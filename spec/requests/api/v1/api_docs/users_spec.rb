@@ -59,22 +59,26 @@ RSpec.describe 'api/v1/users' do
                              description: 'The name of the organization to which the user belongs'
                            },
                            organization_type: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Department',
                              description: 'The type of the organization'
                            },
                            position_title: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Associate Professor of Biology',
                              description: "The user's role or title within the organization"
                            },
                            position_started_on: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: '2010-09-01',
                              description: 'The date on which the user joined the organization in this role'
                            },
                            position_ended_on: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: '2012-05-30',
                              description: 'The date on which the user left the organization in this role'
                            }
@@ -225,7 +229,8 @@ RSpec.describe 'api/v1/users' do
                          required: [:activity_insight_identifier],
                          properties: {
                            title: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'A Public Presentation',
                              description: 'The title of the presentation'
                            },
@@ -235,67 +240,80 @@ RSpec.describe 'api/v1/users' do
                              description: "The unique identifier for the presentation's corresponding record in the Activity Insight database"
                            },
                            name: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'A Public Presentation',
                              description: 'The name of the presentation'
                            },
                            organization: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'The Pennsylvania State University',
                              description: 'The name of the organization associated with the presentation'
                            },
                            location: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'University Park, PA',
                              description: 'The name of the location where the presentation took place'
                            },
                            started_on: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: '2018-12-04',
                              description: 'The date on which the presentation started'
                            },
                            ended_on: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: '2018-12-05',
                              description: 'The date on which the presentation ended'
                            },
                            presentation_type: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Presentations',
                              description: 'The type of the presentation'
                            },
                            classification: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Basic or Discovery Scholarship',
                              description: 'The classification of the presentation'
                            },
                            meet_type: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Academic',
                              description: 'The meet type of the presentation'
                            },
                            attendance: {
-                             type: [:integer, :null],
+                             type: :integer,
+                             nullable: true,
                              example: 200,
                              description: 'The number of people who attended the presentation'
                            },
                            refereed: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'Yes',
                              description: 'Whether or not the presentation was refereed'
                            },
                            abstract: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'A presentation about Penn State academic research',
                              description: 'A summary of the presentation content'
                            },
                            comment: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'The goal of this presentation was to broaden public awareness of a research topic.',
                              description: 'Miscellaneous comments and notes about the presentation'
                            },
                            scope: {
-                             type: [:string, :null],
+                             type: :string,
+                             nullable: true,
                              example: 'International',
                              description: 'The scope of the audience for the presentation'
                            },
@@ -322,7 +340,8 @@ RSpec.describe 'api/v1/users' do
                                    description: "The user's preference for whether or not this publication should be displayed in their profile"
                                  },
                                  position_in_profile: {
-                                   type: [:number, :null],
+                                   type: :number,
+                                   nullable: true,
                                    example: 8,
                                    description: "The user's preference for what position this publication should occupy in a list of their publications in their profile"
                                  }
@@ -389,37 +408,44 @@ RSpec.describe 'api/v1/users' do
                   type: :object,
                   properties: {
                     title: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'A Research Project Proposal',
                       description: 'The title of the grant'
                     },
                     agency: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'National Science Foundation',
                       description: 'The name of the organization that awarded the grant'
                     },
                     abstract: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Information about this grant',
                       description: "A description of the grant's purpose"
                     },
                     amount_in_dollars: {
-                      type: [:integer, :null],
+                      type: :integer,
+                      nullable: true,
                       example: 50000,
                       description: 'The monetary amount of the grant in U.S. dollars'
                     },
                     start_date: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: '2017-12-05',
                       description: 'The date on which the grant begins'
                     },
                     end_date: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: '2019-12-05',
                       description: 'The date on which the grant ends'
                     },
                     identifier: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: '1789352',
                       description: 'A code identifying the grant that is unique to the awarding agency'
                     }
@@ -499,47 +525,56 @@ RSpec.describe 'api/v1/users' do
                       description: "The unique identifier for the performance's corresponding record in the Activity Insight database"
                     },
                     performance_type: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Film - Documentary',
                       description: 'The type of performance'
                     },
                     sponsor: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Penn State',
                       description: 'The organization that is sponsoring this performance'
                     },
                     description: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'This is a unique performance, performed for specific reasons',
                       description: 'Any further detail describing the performance'
                     },
                     group_name: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Penn State Performers',
                       description: 'The name of the performing group'
                     },
                     location: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'State College, PA',
                       description: 'Country, State, City, theatre, etc. where the performance took place'
                     },
                     delivery_type: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Competition',
                       description: 'Audition, commission, competition, or invitation'
                     },
                     scope: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Local',
                       description: 'International, national, regional, state, local'
                     },
                     start_on: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: '12-01-2015',
                       description: 'The date that the performance started on'
                     },
                     end_on: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: '12-31-2015',
                       description: 'The date that the performance ended on'
                     },
@@ -549,27 +584,32 @@ RSpec.describe 'api/v1/users' do
                         type: :object,
                         properties: {
                           first_name: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Billy',
                             description: 'The first name of a contributor'
                           },
                           last_name: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Bob',
                             description: 'The last name of a contributor'
                           },
                           contribution: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Performer',
                             description: 'The contributor\'s role/contribution to the performance'
                           },
                           student_level: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Graduate',
                             description: 'Undergraduate or graduate'
                           },
                           role_other: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Director',
                             description: 'Role not listedin "contribution" drop-down'
                           }
@@ -582,17 +622,20 @@ RSpec.describe 'api/v1/users' do
                         type: :object,
                         properties: {
                           name: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'Film Festival',
                             description: 'Name of the venue for the screening'
                           },
                           location: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'State College, PA',
                             description: 'Country, State, City, where the screening took place'
                           },
                           screening_type: {
-                            type: [:string, :null],
+                            type: :string,
+                            nullable: true,
                             example: 'DVD Distribution',
                             description: 'Type of screening/exhibition'
                           }
@@ -622,7 +665,8 @@ RSpec.describe 'api/v1/users' do
                             description: 'The user\'s preference for whether or not this publication should be displayed in their profile'
                           },
                           position_in_profile: {
-                            type: [:number, :null],
+                            type: :number,
+                            nullable: true,
                             example: 8,
                             description: 'The user\'s preference for what position this publication should occupy in a list of their publications in their profile'
                           }
@@ -712,7 +756,8 @@ RSpec.describe 'api/v1/users' do
                       description: "The first name of the ETD's author"
                     },
                     author_middle_name: {
-                      type: [:string, :null],
+                      type: :string,
+                      nullable: true,
                       example: 'Example',
                       description: "The first name of the ETD's author"
                     }
@@ -759,14 +804,18 @@ RSpec.describe 'api/v1/users' do
                 in: :query,
                 description: 'Beginning of publication year range',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
       parameter name: :end_year,
                 in: :query,
                 description: 'End of publication year range',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
       parameter name: :order_first_by,
                 in: :query,
                 description: 'Orders publications returned',
@@ -792,8 +841,10 @@ RSpec.describe 'api/v1/users' do
                 in: :query,
                 description: 'Max number publications to return for the user',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
 
       response 200, 'user publication response' do
         let(:'X-API-Key') { 'token123' }
@@ -1059,18 +1110,24 @@ RSpec.describe 'api/v1/users' do
       tags 'user'
       operationId 'findUsersPublications'
       description 'Returns publications for a group of users'
+      consumes 'application/json'
+
       parameter name: :start_year,
                 in: :query,
                 description: 'Beginning of publication year range',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
       parameter name: :end_year,
                 in: :query,
                 description: 'End of publication year range',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
       parameter name: :order_first_by,
                 in: :query,
                 description: 'Orders publications returned',
@@ -1093,8 +1150,10 @@ RSpec.describe 'api/v1/users' do
                 in: :query,
                 description: 'Max number publications to return for each user',
                 required: false,
-                type: :integer,
-                format: :int32
+                schema: {
+                  type: :integer,
+                  format: :int32
+                }
       parameter name: :webaccess_ids,
                 in: :body,
                 description: 'Webaccess IDs of users to retrieve publications',

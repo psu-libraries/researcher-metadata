@@ -5,10 +5,6 @@ info:
   description: An API that serves as the authority on faculty and research metadata
     at Penn State University in the swagger-2.0 specification.
   version: v1
-consumes:
-- application/json
-produces:
-- application/json
 components:
   securitySchemes:
     api_key:
@@ -57,15 +53,13 @@ components:
               example: A Scholarly Research Article
               description: The title of the publication
             secondary_title:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: A Comparative Analysis
               description: The sub-title of the publication
             journal_title:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: An Academic Journal
               description: The title of the journal in which the publication was published
             publication_type:
@@ -73,79 +67,67 @@ components:
               example: Academic Journal Article
               description: The type of the publication
             publisher:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: A Publishing Company
               description: The publisher of the publication
             status:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: Published
               description: The status of the publication
             volume:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: '30'
               description: The volume of the journal in which the publication was
                 published
             issue:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: '12'
               description: The issue of the journal in which the publication was published
             edition:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: '6'
               description: The edition of the journal in which the publication was
                 published
             page_range:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: 110-123
               description: The range of page numbers on which the publication content
                 appears in the journal
             authors_et_al:
-              type:
-              - boolean
-              - 'null'
+              type: boolean
+              nullable: true
               example: true
               description: Whether or not the publication has additional, unlisted
                 authors
             abstract:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: A summary of the research
               description: A brief summary of the content of the publication
             doi:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: https://doi.org/example
               description: The Digital Object Identifier URL for the publication
             preferred_open_access_url:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: https://example.org/articles/article-123.pdf
               description: A URL for an open access copy of the publication
             published_on:
-              type:
-              - string
-              - 'null'
+              type: string
+              nullable: true
               example: '2010-12-05'
               description: The date on which the publication was published
             citation_count:
-              type:
-              - integer
-              - 'null'
+              type: integer
+              nullable: true
               example: 50
               description: The number of times that the publication has been cited
                 in other works
@@ -155,30 +137,26 @@ components:
                 type: object
                 properties:
                   first_name:
-                    type:
-                    - string
-                    - 'null'
+                    type: string
+                    nullable: true
                     example: Anne
                     description: The first name of a person who contributed to the
                       publication
                   middle_name:
-                    type:
-                    - string
-                    - 'null'
+                    type: string
+                    nullable: true
                     example: Example
                     description: The middle name of a person who contributed to the
                       publication
                   last_name:
-                    type:
-                    - string
-                    - 'null'
+                    type: string
+                    nullable: true
                     example: Contributor
                     description: The last name of a person who contributed to the
                       publication
                   psu_user_id:
-                    type:
-                    - string
-                    - 'null'
+                    type: string
+                    nullable: true
                     example: abc1234
                     description: The Penn State user ID of a person who contributed
                       to the publication if they have one
@@ -194,9 +172,8 @@ components:
                     example: A Topic
                     description: The name of a tag
                   rank:
-                    type:
-                    - number
-                    - 'null'
+                    type: number
+                    nullable: true
                     example: 1.25
                     description: The ranking of the tag
             pure_ids:
@@ -242,9 +219,8 @@ components:
                     description: The user's preference for whether or not this publication
                       should be displayed in their profile
                   position_in_profile:
-                    type:
-                    - number
-                    - 'null'
+                    type: number
+                    nullable: true
                     example: 8
                     description: The user's preference for what position this publication
                       should occupy in a list of their publications in their profile
@@ -417,47 +393,40 @@ paths:
                           - identifier
                           properties:
                             title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Research Project Proposal
                               description: The title of the grant
                             agency:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: National Science Foundation
                               description: The name of the organization that awarded
                                 the grant
                             abstract:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Information about this grant
                               description: A description of the grant's purpose
                             amount_in_dollars:
-                              type:
-                              - integer
-                              - 'null'
+                              type: integer
+                              nullable: true
                               example: 50000
                               description: The monetary amount of the grant in U.S.
                                 dollars
                             start_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2017-12-05'
                               description: The date on which the grant begins
                             end_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2019-12-05'
                               description: The date on which the grant ends
                             identifier:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '1789352'
                               description: A code identifying the grant that is unique
                                 to the awarding agency
@@ -481,9 +450,9 @@ paths:
       in: path
       description: ID of publication to fetch
       required: true
-      format: int64
       schema:
         type: integer
+        format: int64
     get:
       summary: Find Publication by ID
       tags:
@@ -495,26 +464,10 @@ paths:
       responses:
         '200':
           description: publication response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  data:
-                    type: object
-                    "$ref": "#/components/schemas/PublicationV1"
         '401':
           description: unauthorized
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/publications":
     get:
       summary: All Publications
@@ -540,9 +493,9 @@ paths:
         in: query
         description: max number publications to return
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       security:
       - api_key: []
       responses:
@@ -671,28 +624,24 @@ paths:
                               description: The name of the organization to which the
                                 user belongs
                             organization_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Department
                               description: The type of the organization
                             position_title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Associate Professor of Biology
                               description: The user's role or title within the organization
                             position_started_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2010-09-01'
                               description: The date on which the user joined the organization
                                 in this role
                             position_ended_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2012-05-30'
                               description: The date on which the user left the organization
                                 in this role
@@ -891,9 +840,8 @@ paths:
                           - activity_insight_identifier
                           properties:
                             title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Public Presentation
                               description: The title of the presentation
                             activity_insight_identifier:
@@ -902,85 +850,72 @@ paths:
                               description: The unique identifier for the presentation's
                                 corresponding record in the Activity Insight database
                             name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Public Presentation
                               description: The name of the presentation
                             organization:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: The Pennsylvania State University
                               description: The name of the organization associated
                                 with the presentation
                             location:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: University Park, PA
                               description: The name of the location where the presentation
                                 took place
                             started_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2018-12-04'
                               description: The date on which the presentation started
                             ended_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2018-12-05'
                               description: The date on which the presentation ended
                             presentation_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Presentations
                               description: The type of the presentation
                             classification:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Basic or Discovery Scholarship
                               description: The classification of the presentation
                             meet_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Academic
                               description: The meet type of the presentation
                             attendance:
-                              type:
-                              - integer
-                              - 'null'
+                              type: integer
+                              nullable: true
                               example: 200
                               description: The number of people who attended the presentation
                             refereed:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 'Yes'
                               description: Whether or not the presentation was refereed
                             abstract:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A presentation about Penn State academic research
                               description: A summary of the presentation content
                             comment:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: The goal of this presentation was to broaden
                                 public awareness of a research topic.
                               description: Miscellaneous comments and notes about
                                 the presentation
                             scope:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: International
                               description: The scope of the audience for the presentation
                             profile_preferences:
@@ -1013,9 +948,8 @@ paths:
                                       or not this publication should be displayed
                                       in their profile
                                   position_in_profile:
-                                    type:
-                                    - number
-                                    - 'null'
+                                    type: number
+                                    nullable: true
                                     example: 8
                                     description: The user's preference for what position
                                       this publication should occupy in a list of
@@ -1047,9 +981,8 @@ paths:
                           - activity_insight_identifier
                           properties:
                             title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Public Presentation
                               description: The title of the presentation
                             activity_insight_identifier:
@@ -1058,85 +991,72 @@ paths:
                               description: The unique identifier for the presentation's
                                 corresponding record in the Activity Insight database
                             name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Public Presentation
                               description: The name of the presentation
                             organization:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: The Pennsylvania State University
                               description: The name of the organization associated
                                 with the presentation
                             location:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: University Park, PA
                               description: The name of the location where the presentation
                                 took place
                             started_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2018-12-04'
                               description: The date on which the presentation started
                             ended_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2018-12-05'
                               description: The date on which the presentation ended
                             presentation_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Presentations
                               description: The type of the presentation
                             classification:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Basic or Discovery Scholarship
                               description: The classification of the presentation
                             meet_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Academic
                               description: The meet type of the presentation
                             attendance:
-                              type:
-                              - integer
-                              - 'null'
+                              type: integer
+                              nullable: true
                               example: 200
                               description: The number of people who attended the presentation
                             refereed:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 'Yes'
                               description: Whether or not the presentation was refereed
                             abstract:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A presentation about Penn State academic research
                               description: A summary of the presentation content
                             comment:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: The goal of this presentation was to broaden
                                 public awareness of a research topic.
                               description: Miscellaneous comments and notes about
                                 the presentation
                             scope:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: International
                               description: The scope of the audience for the presentation
                             profile_preferences:
@@ -1169,9 +1089,8 @@ paths:
                                       or not this publication should be displayed
                                       in their profile
                                   position_in_profile:
-                                    type:
-                                    - number
-                                    - 'null'
+                                    type: number
+                                    nullable: true
                                     example: 8
                                     description: The user's preference for what position
                                       this publication should occupy in a list of
@@ -1235,47 +1154,40 @@ paths:
                           type: object
                           properties:
                             title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Research Project Proposal
                               description: The title of the grant
                             agency:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: National Science Foundation
                               description: The name of the organization that awarded
                                 the grant
                             abstract:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Information about this grant
                               description: A description of the grant's purpose
                             amount_in_dollars:
-                              type:
-                              - integer
-                              - 'null'
+                              type: integer
+                              nullable: true
                               example: 50000
                               description: The monetary amount of the grant in U.S.
                                 dollars
                             start_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2017-12-05'
                               description: The date on which the grant begins
                             end_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2019-12-05'
                               description: The date on which the grant ends
                             identifier:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '1789352'
                               description: A code identifying the grant that is unique
                                 to the awarding agency
@@ -1312,47 +1224,40 @@ paths:
                           type: object
                           properties:
                             title:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: A Research Project Proposal
                               description: The title of the grant
                             agency:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: National Science Foundation
                               description: The name of the organization that awarded
                                 the grant
                             abstract:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Information about this grant
                               description: A description of the grant's purpose
                             amount_in_dollars:
-                              type:
-                              - integer
-                              - 'null'
+                              type: integer
+                              nullable: true
                               example: 50000
                               description: The monetary amount of the grant in U.S.
                                 dollars
                             start_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2017-12-05'
                               description: The date on which the grant begins
                             end_date:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '2019-12-05'
                               description: The date on which the grant ends
                             identifier:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: '1789352'
                               description: A code identifying the grant that is unique
                                 to the awarding agency
@@ -1443,61 +1348,52 @@ paths:
                               description: The unique identifier for the performance's
                                 corresponding record in the Activity Insight database
                             performance_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Film - Documentary
                               description: The type of performance
                             sponsor:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Penn State
                               description: The organization that is sponsoring this
                                 performance
                             description:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: This is a unique performance, performed for
                                 specific reasons
                               description: Any further detail describing the performance
                             group_name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Penn State Performers
                               description: The name of the performing group
                             location:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: State College, PA
                               description: Country, State, City, theatre, etc. where
                                 the performance took place
                             delivery_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Competition
                               description: Audition, commission, competition, or invitation
                             scope:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Local
                               description: International, national, regional, state,
                                 local
                             start_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 12-01-2015
                               description: The date that the performance started on
                             end_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 12-31-2015
                               description: The date that the performance ended on
                             user_performances:
@@ -1506,34 +1402,29 @@ paths:
                                 type: object
                                 properties:
                                   first_name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Billy
                                     description: The first name of a contributor
                                   last_name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Bob
                                     description: The last name of a contributor
                                   contribution:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Performer
                                     description: The contributor's role/contribution
                                       to the performance
                                   student_level:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Graduate
                                     description: Undergraduate or graduate
                                   role_other:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Director
                                     description: Role not listedin "contribution"
                                       drop-down
@@ -1543,22 +1434,19 @@ paths:
                                 type: object
                                 properties:
                                   name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Film Festival
                                     description: Name of the venue for the screening
                                   location:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: State College, PA
                                     description: Country, State, City, where the screening
                                       took place
                                   screening_type:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: DVD Distribution
                                     description: Type of screening/exhibition
                             profile_preferences:
@@ -1591,9 +1479,8 @@ paths:
                                       or not this publication should be displayed
                                       in their profile
                                   position_in_profile:
-                                    type:
-                                    - number
-                                    - 'null'
+                                    type: number
+                                    nullable: true
                                     example: 8
                                     description: The user's preference for what position
                                       this publication should occupy in a list of
@@ -1635,61 +1522,52 @@ paths:
                               description: The unique identifier for the performance's
                                 corresponding record in the Activity Insight database
                             performance_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Film - Documentary
                               description: The type of performance
                             sponsor:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Penn State
                               description: The organization that is sponsoring this
                                 performance
                             description:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: This is a unique performance, performed for
                                 specific reasons
                               description: Any further detail describing the performance
                             group_name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Penn State Performers
                               description: The name of the performing group
                             location:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: State College, PA
                               description: Country, State, City, theatre, etc. where
                                 the performance took place
                             delivery_type:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Competition
                               description: Audition, commission, competition, or invitation
                             scope:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Local
                               description: International, national, regional, state,
                                 local
                             start_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 12-01-2015
                               description: The date that the performance started on
                             end_on:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: 12-31-2015
                               description: The date that the performance ended on
                             user_performances:
@@ -1698,34 +1576,29 @@ paths:
                                 type: object
                                 properties:
                                   first_name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Billy
                                     description: The first name of a contributor
                                   last_name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Bob
                                     description: The last name of a contributor
                                   contribution:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Performer
                                     description: The contributor's role/contribution
                                       to the performance
                                   student_level:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Graduate
                                     description: Undergraduate or graduate
                                   role_other:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Director
                                     description: Role not listedin "contribution"
                                       drop-down
@@ -1735,22 +1608,19 @@ paths:
                                 type: object
                                 properties:
                                   name:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: Film Festival
                                     description: Name of the venue for the screening
                                   location:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: State College, PA
                                     description: Country, State, City, where the screening
                                       took place
                                   screening_type:
-                                    type:
-                                    - string
-                                    - 'null'
+                                    type: string
+                                    nullable: true
                                     example: DVD Distribution
                                     description: Type of screening/exhibition
                             profile_preferences:
@@ -1783,9 +1653,8 @@ paths:
                                       or not this publication should be displayed
                                       in their profile
                                   position_in_profile:
-                                    type:
-                                    - number
-                                    - 'null'
+                                    type: number
+                                    nullable: true
                                     example: 8
                                     description: The user's preference for what position
                                       this publication should occupy in a list of
@@ -1874,9 +1743,8 @@ paths:
                               example: Susan
                               description: The first name of the ETD's author
                             author_middle_name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Example
                               description: The first name of the ETD's author
             text/html:
@@ -1925,9 +1793,8 @@ paths:
                               example: Susan
                               description: The first name of the ETD's author
                             author_middle_name:
-                              type:
-                              - string
-                              - 'null'
+                              type: string
+                              nullable: true
                               example: Example
                               description: The first name of the ETD's author
         '401':
@@ -1966,16 +1833,16 @@ paths:
         in: query
         description: Beginning of publication year range
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       - name: end_year
         in: query
         description: End of publication year range
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       - name: order_first_by
         in: query
         description: Orders publications returned
@@ -2002,9 +1869,9 @@ paths:
         in: query
         description: Max number publications to return for the user
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       security:
       - api_key: []
       responses:
@@ -2491,16 +2358,16 @@ paths:
         in: query
         description: Beginning of publication year range
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       - name: end_year
         in: query
         description: End of publication year range
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       - name: order_first_by
         in: query
         description: Orders publications returned
@@ -2527,9 +2394,9 @@ paths:
         in: query
         description: Max number publications to return for each user
         required: false
-        format: int32
         schema:
           type: integer
+          format: int32
       security:
       - api_key: []
       responses:
@@ -2537,10 +2404,6 @@ paths:
           description: OK
         '401':
           description: unauthorized
-          content:
-            application/json:
-              schema:
-                "$ref": "#/components/schemas/ErrorModelV1"
       requestBody:
         content:
           application/json:
