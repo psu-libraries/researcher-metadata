@@ -131,6 +131,9 @@ RSpec/DescribeClass:
     - 'spec/integration/profiles/open_access_publications/edit_spec.rb'
     - 'spec/integration/user/sessions/delete_spec.rb'
     - 'spec/integration/user/sessions/new_spec.rb'
+    - 'spec/requests/api/v1/api_docs/organizations_spec.rb'
+    - 'spec/requests/api/v1/api_docs/users_spec.rb'
+    - 'spec/requests/api/v1/api_docs/publications_spec.rb'
 
 # Offense count: 304
 RSpec/LetSetup:
@@ -177,7 +180,6 @@ RSpec/NamedSubject:
     - 'spec/component/serializers/api/v1/performance_serializer_spec.rb'
     - 'spec/component/serializers/api/v1/presentation_serializer_spec.rb'
     - 'spec/component/serializers/api/v1/publication_serializer_spec.rb'
-    - 'spec/requests/api/v1/swagger_checker_spec.rb'
     - 'spec/component/models/activity_insight_oa_file_spec.rb'
 
 # Offense count: 1180

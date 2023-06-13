@@ -1,0 +1,2552 @@
+---
+openapi: 3.0.1
+info:
+  title: Researcher Metadata Database API
+  description: An API that serves as the authority on faculty and research metadata
+    at Penn State University in the swagger-2.0 specification.
+  version: v1
+consumes:
+- application/json
+produces:
+- application/json
+components:
+  securitySchemes:
+    api_key:
+      type: apiKey
+      name: X-API-Key
+      in: header
+  schemas:
+    ErrorModelV1:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        message:
+          type: string
+        code:
+          type: integer
+          format: int32
+    PublicationV1:
+      type: object
+      required:
+      - id
+      - type
+      - attributes
+      properties:
+        id:
+          type: string
+          example: '123'
+          description: The ID of the object
+        type:
+          type: string
+          example: publication
+          description: The type of the object
+        attributes:
+          type: object
+          required:
+          - title
+          - publication_type
+          - contributors
+          - tags
+          - pure_ids
+          - activity_insight_ids
+          properties:
+            title:
+              type: string
+              example: A Scholarly Research Article
+              description: The title of the publication
+            secondary_title:
+              type:
+              - string
+              - 'null'
+              example: A Comparative Analysis
+              description: The sub-title of the publication
+            journal_title:
+              type:
+              - string
+              - 'null'
+              example: An Academic Journal
+              description: The title of the journal in which the publication was published
+            publication_type:
+              type: string
+              example: Academic Journal Article
+              description: The type of the publication
+            publisher:
+              type:
+              - string
+              - 'null'
+              example: A Publishing Company
+              description: The publisher of the publication
+            status:
+              type:
+              - string
+              - 'null'
+              example: Published
+              description: The status of the publication
+            volume:
+              type:
+              - string
+              - 'null'
+              example: '30'
+              description: The volume of the journal in which the publication was
+                published
+            issue:
+              type:
+              - string
+              - 'null'
+              example: '12'
+              description: The issue of the journal in which the publication was published
+            edition:
+              type:
+              - string
+              - 'null'
+              example: '6'
+              description: The edition of the journal in which the publication was
+                published
+            page_range:
+              type:
+              - string
+              - 'null'
+              example: 110-123
+              description: The range of page numbers on which the publication content
+                appears in the journal
+            authors_et_al:
+              type:
+              - boolean
+              - 'null'
+              example: true
+              description: Whether or not the publication has additional, unlisted
+                authors
+            abstract:
+              type:
+              - string
+              - 'null'
+              example: A summary of the research
+              description: A brief summary of the content of the publication
+            doi:
+              type:
+              - string
+              - 'null'
+              example: https://doi.org/example
+              description: The Digital Object Identifier URL for the publication
+            preferred_open_access_url:
+              type:
+              - string
+              - 'null'
+              example: https://example.org/articles/article-123.pdf
+              description: A URL for an open access copy of the publication
+            published_on:
+              type:
+              - string
+              - 'null'
+              example: '2010-12-05'
+              description: The date on which the publication was published
+            citation_count:
+              type:
+              - integer
+              - 'null'
+              example: 50
+              description: The number of times that the publication has been cited
+                in other works
+            contributors:
+              type: array
+              items:
+                type: object
+                properties:
+                  first_name:
+                    type:
+                    - string
+                    - 'null'
+                    example: Anne
+                    description: The first name of a person who contributed to the
+                      publication
+                  middle_name:
+                    type:
+                    - string
+                    - 'null'
+                    example: Example
+                    description: The middle name of a person who contributed to the
+                      publication
+                  last_name:
+                    type:
+                    - string
+                    - 'null'
+                    example: Contributor
+                    description: The last name of a person who contributed to the
+                      publication
+                  psu_user_id:
+                    type:
+                    - string
+                    - 'null'
+                    example: abc1234
+                    description: The Penn State user ID of a person who contributed
+                      to the publication if they have one
+            tags:
+              type: array
+              items:
+                type: object
+                required:
+                - name
+                properties:
+                  name:
+                    type: string
+                    example: A Topic
+                    description: The name of a tag
+                  rank:
+                    type:
+                    - number
+                    - 'null'
+                    example: 1.25
+                    description: The ranking of the tag
+            pure_ids:
+              type: array
+              description: Unique identifiers for corresponding records in the Pure
+                database that represent the publication
+              items:
+                type: string
+                example: abc-def-123-456
+            activity_insight_ids:
+              type: array
+              description: Unique identifiers for corresponding records in the Activity
+                Insight database that represent the publication
+              items:
+                type: string
+                example: '1234567890'
+            profile_preferences:
+              type: array
+              description: An array of settings for each user who is an author of
+                the publication indicating how they prefer to have the publication
+                displayed in a profile
+              items:
+                type: object
+                required:
+                - user_id
+                - webaccess_id
+                - visible_in_profile
+                - position_in_profile
+                properties:
+                  user_id:
+                    type: number
+                    example: 123
+                    description: The ID of the user to which this set of preferences
+                      belongs
+                  webaccess_id:
+                    type: string
+                    example: abc123
+                    description: The WebAccess ID of the user to which this set of
+                      preferences belongs
+                  visible_in_profile:
+                    type: boolean
+                    example: true
+                    description: The user's preference for whether or not this publication
+                      should be displayed in their profile
+                  position_in_profile:
+                    type:
+                    - number
+                    - 'null'
+                    example: 8
+                    description: The user's preference for what position this publication
+                      should occupy in a list of their publications in their profile
+    PublicationInput:
+      type: object
+      required:
+      - scholarsphere_open_access_url
+      properties:
+        activity_insight_id:
+          type: string
+        doi:
+          type: string
+        scholarsphere_open_access_url:
+          type: string
+    PublicationPatchResult:
+      type: object
+      required:
+      - code
+      - message
+      properties:
+        code:
+          type: integer
+          format: int32
+        message:
+          type: string
+paths:
+  "/v1/organizations":
+    get:
+      summary: All Organizations
+      description: Returns all visible organizations to which the given API token
+        has access.
+      operationId: findOrganizations
+      tags:
+      - organization
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: organization response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: organization
+                          description: The type of object
+                        attributes:
+                          type: object
+                          required:
+                          - name
+                          properties:
+                            name:
+                              type: string
+                              example: College of Engineering
+                              description: The name of the organization
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/organizations/{id}/publications":
+    parameters:
+    - name: id
+      in: path
+      description: The ID of an organization
+      required: true
+      schema:
+        type: integer
+    get:
+      summary: Retrieve an organization's publications
+      description: Returns publications that were authored by users while they were
+        members of the organization
+      operationId: findOrganizationPublications
+      tags:
+      - organization
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user publication response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/publications/{id}/grants":
+    get:
+      summary: Retrieve a publication's grants
+      description: Returns grant data associated with a publication
+      operationId: findPublicationGrants
+      tags:
+      - publication
+      parameters:
+      - name: id
+        in: path
+        description: ID of publication to retrieve grants
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: publication grants response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: grant
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - title
+                          - agency
+                          - abstract
+                          - amount_in_dollars
+                          - start_date
+                          - end_date
+                          - identifier
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Research Project Proposal
+                              description: The title of the grant
+                            agency:
+                              type:
+                              - string
+                              - 'null'
+                              example: National Science Foundation
+                              description: The name of the organization that awarded
+                                the grant
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: Information about this grant
+                              description: A description of the grant's purpose
+                            amount_in_dollars:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 50000
+                              description: The monetary amount of the grant in U.S.
+                                dollars
+                            start_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2017-12-05'
+                              description: The date on which the grant begins
+                            end_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2019-12-05'
+                              description: The date on which the grant ends
+                            identifier:
+                              type:
+                              - string
+                              - 'null'
+                              example: '1789352'
+                              description: A code identifying the grant that is unique
+                                to the awarding agency
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/publications/{id}":
+    parameters:
+    - name: id
+      in: path
+      description: ID of publication to fetch
+      required: true
+      format: int64
+      schema:
+        type: integer
+    get:
+      summary: Find Publication by ID
+      tags:
+      - publication
+      description: Returns a single publication if the user has access
+      operationId: findPublicationById
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: publication response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    "$ref": "#/components/schemas/PublicationV1"
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/publications":
+    get:
+      summary: All Publications
+      tags:
+      - publication
+      description: Returns all publications from the system that the user has access
+        to
+      operationId: findPublications
+      parameters:
+      - name: activity_insight_id
+        in: query
+        description: Activity Insight ID to filter by
+        required: false
+        schema:
+          type: string
+      - name: doi
+        in: query
+        description: DOI to filter by
+        required: false
+        schema:
+          type: string
+      - name: limit
+        in: query
+        description: max number publications to return
+        required: false
+        format: int32
+        schema:
+          type: integer
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: publication response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+    patch:
+      summary: Update publication's ScholarSphere Open Access Link
+      tags:
+      - publication
+      description: Update publication's ScholarSphere Open Access Link by doi or activity
+        insight id
+      operationId: updateOpenAccessLink
+      parameters: []
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: ScholarSphere Open Access Link successfully updated response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PublicationPatchResult"
+        '401':
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: No publications found response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '422':
+          description: Invalid params response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              "$ref": "#/components/schemas/PublicationInput"
+        required: true
+        description: ScholarSphere Open Access Link update requires either a doi or
+          an activity insight id
+  "/v1/users/{webaccess_id}/organization_memberships":
+    parameters:
+    - name: webaccess_id
+      in: path
+      description: Webaccess ID of user to retrieve organization memberships
+      required: true
+      schema:
+        type: string
+    get:
+      summary: Retrieve the user's organization memberships
+      tags:
+      - user
+      description: Returns organization memberships for a user
+      operationId: findUserOrganizationMemberships
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user organization memberships response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: organization_membership
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            organization_name:
+                              type: string
+                              example: Biology
+                              description: The name of the organization to which the
+                                user belongs
+                            organization_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Department
+                              description: The type of the organization
+                            position_title:
+                              type:
+                              - string
+                              - 'null'
+                              example: Associate Professor of Biology
+                              description: The user's role or title within the organization
+                            position_started_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2010-09-01'
+                              description: The date on which the user joined the organization
+                                in this role
+                            position_ended_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2012-05-30'
+                              description: The date on which the user left the organization
+                                in this role
+                          required:
+                          - organization_name
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/news_feed_items":
+    get:
+      summary: Retrieve a user's news feed items
+      operationId: findUserNewsFeedItems
+      tags:
+      - user
+      description: Returns a news feed items for a user
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve news feed items
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user news_feed_items response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: news_feed_item
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: News Story
+                              description: The title of the news feed item
+                            url:
+                              type: string
+                              example: https://news.psu.edu/example
+                              description: The URL where the full news story content
+                                can be found
+                            description:
+                              type: string
+                              example: A news story about a Penn State researcher
+                              description: A brief description of the news story content
+                            published_on:
+                              type: string
+                              example: '2018-12-05'
+                              description: The date on which the news story was published
+                          required:
+                          - title
+                          - url
+                          - description
+                          - published_on
+                      required:
+                      - id
+                      - type
+                      - attributes
+                required:
+                - data
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: news_feed_item
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type: string
+                              example: News Story
+                              description: The title of the news feed item
+                            url:
+                              type: string
+                              example: https://news.psu.edu/example
+                              description: The URL where the full news story content
+                                can be found
+                            description:
+                              type: string
+                              example: A news story about a Penn State researcher
+                              description: A brief description of the news story content
+                            published_on:
+                              type: string
+                              example: '2018-12-05'
+                              description: The date on which the news story was published
+                          required:
+                          - title
+                          - url
+                          - description
+                          - published_on
+                      required:
+                      - id
+                      - type
+                      - attributes
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/presentations":
+    get:
+      summary: Retrieve a user's presentations
+      operationId: findUserPresentations
+      tags:
+      - user
+      description: Returns presentations for a user
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve presentations
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user presentations response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: presentation
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - activity_insight_identifier
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The title of the presentation
+                            activity_insight_identifier:
+                              type: string
+                              example: '1234567890'
+                              description: The unique identifier for the presentation's
+                                corresponding record in the Activity Insight database
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The name of the presentation
+                            organization:
+                              type:
+                              - string
+                              - 'null'
+                              example: The Pennsylvania State University
+                              description: The name of the organization associated
+                                with the presentation
+                            location:
+                              type:
+                              - string
+                              - 'null'
+                              example: University Park, PA
+                              description: The name of the location where the presentation
+                                took place
+                            started_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-04'
+                              description: The date on which the presentation started
+                            ended_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-05'
+                              description: The date on which the presentation ended
+                            presentation_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Presentations
+                              description: The type of the presentation
+                            classification:
+                              type:
+                              - string
+                              - 'null'
+                              example: Basic or Discovery Scholarship
+                              description: The classification of the presentation
+                            meet_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Academic
+                              description: The meet type of the presentation
+                            attendance:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 200
+                              description: The number of people who attended the presentation
+                            refereed:
+                              type:
+                              - string
+                              - 'null'
+                              example: 'Yes'
+                              description: Whether or not the presentation was refereed
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: A presentation about Penn State academic research
+                              description: A summary of the presentation content
+                            comment:
+                              type:
+                              - string
+                              - 'null'
+                              example: The goal of this presentation was to broaden
+                                public awareness of a research topic.
+                              description: Miscellaneous comments and notes about
+                                the presentation
+                            scope:
+                              type:
+                              - string
+                              - 'null'
+                              example: International
+                              description: The scope of the audience for the presentation
+                            profile_preferences:
+                              type: array
+                              description: An array of settings for each user who
+                                is an author of the publication indicating how they
+                                prefer to have the publication displayed in a profile
+                              items:
+                                type: object
+                                required:
+                                - user_id
+                                - webaccess_id
+                                - visible_in_profile
+                                - position_in_profile
+                                properties:
+                                  user_id:
+                                    type: number
+                                    example: 123
+                                    description: The ID of the user to which this
+                                      set of preferences belongs
+                                  webaccess_id:
+                                    type: string
+                                    example: abc123
+                                    description: The WebAccess ID of the user to which
+                                      this set of preferences belongs
+                                  visible_in_profile:
+                                    type: boolean
+                                    example: true
+                                    description: The user's preference for whether
+                                      or not this publication should be displayed
+                                      in their profile
+                                  position_in_profile:
+                                    type:
+                                    - number
+                                    - 'null'
+                                    example: 8
+                                    description: The user's preference for what position
+                                      this publication should occupy in a list of
+                                      their publications in their profile
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: presentation
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - activity_insight_identifier
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The title of the presentation
+                            activity_insight_identifier:
+                              type: string
+                              example: '1234567890'
+                              description: The unique identifier for the presentation's
+                                corresponding record in the Activity Insight database
+                            name:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Public Presentation
+                              description: The name of the presentation
+                            organization:
+                              type:
+                              - string
+                              - 'null'
+                              example: The Pennsylvania State University
+                              description: The name of the organization associated
+                                with the presentation
+                            location:
+                              type:
+                              - string
+                              - 'null'
+                              example: University Park, PA
+                              description: The name of the location where the presentation
+                                took place
+                            started_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-04'
+                              description: The date on which the presentation started
+                            ended_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2018-12-05'
+                              description: The date on which the presentation ended
+                            presentation_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Presentations
+                              description: The type of the presentation
+                            classification:
+                              type:
+                              - string
+                              - 'null'
+                              example: Basic or Discovery Scholarship
+                              description: The classification of the presentation
+                            meet_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Academic
+                              description: The meet type of the presentation
+                            attendance:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 200
+                              description: The number of people who attended the presentation
+                            refereed:
+                              type:
+                              - string
+                              - 'null'
+                              example: 'Yes'
+                              description: Whether or not the presentation was refereed
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: A presentation about Penn State academic research
+                              description: A summary of the presentation content
+                            comment:
+                              type:
+                              - string
+                              - 'null'
+                              example: The goal of this presentation was to broaden
+                                public awareness of a research topic.
+                              description: Miscellaneous comments and notes about
+                                the presentation
+                            scope:
+                              type:
+                              - string
+                              - 'null'
+                              example: International
+                              description: The scope of the audience for the presentation
+                            profile_preferences:
+                              type: array
+                              description: An array of settings for each user who
+                                is an author of the publication indicating how they
+                                prefer to have the publication displayed in a profile
+                              items:
+                                type: object
+                                required:
+                                - user_id
+                                - webaccess_id
+                                - visible_in_profile
+                                - position_in_profile
+                                properties:
+                                  user_id:
+                                    type: number
+                                    example: 123
+                                    description: The ID of the user to which this
+                                      set of preferences belongs
+                                  webaccess_id:
+                                    type: string
+                                    example: abc123
+                                    description: The WebAccess ID of the user to which
+                                      this set of preferences belongs
+                                  visible_in_profile:
+                                    type: boolean
+                                    example: true
+                                    description: The user's preference for whether
+                                      or not this publication should be displayed
+                                      in their profile
+                                  position_in_profile:
+                                    type:
+                                    - number
+                                    - 'null'
+                                    example: 8
+                                    description: The user's preference for what position
+                                      this publication should occupy in a list of
+                                      their publications in their profile
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/grants":
+    get:
+      summary: Retrieve a user's grants
+      tags:
+      - user
+      operationId: findUserGrants
+      description: Returns grant data for a user
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve grants
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user grants response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: grant
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Research Project Proposal
+                              description: The title of the grant
+                            agency:
+                              type:
+                              - string
+                              - 'null'
+                              example: National Science Foundation
+                              description: The name of the organization that awarded
+                                the grant
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: Information about this grant
+                              description: A description of the grant's purpose
+                            amount_in_dollars:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 50000
+                              description: The monetary amount of the grant in U.S.
+                                dollars
+                            start_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2017-12-05'
+                              description: The date on which the grant begins
+                            end_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2019-12-05'
+                              description: The date on which the grant ends
+                            identifier:
+                              type:
+                              - string
+                              - 'null'
+                              example: '1789352'
+                              description: A code identifying the grant that is unique
+                                to the awarding agency
+                          required:
+                          - title
+                          - agency
+                          - abstract
+                          - amount_in_dollars
+                          - start_date
+                          - end_date
+                          - identifier
+                      required:
+                      - id
+                      - type
+                      - attributes
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: grant
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          properties:
+                            title:
+                              type:
+                              - string
+                              - 'null'
+                              example: A Research Project Proposal
+                              description: The title of the grant
+                            agency:
+                              type:
+                              - string
+                              - 'null'
+                              example: National Science Foundation
+                              description: The name of the organization that awarded
+                                the grant
+                            abstract:
+                              type:
+                              - string
+                              - 'null'
+                              example: Information about this grant
+                              description: A description of the grant's purpose
+                            amount_in_dollars:
+                              type:
+                              - integer
+                              - 'null'
+                              example: 50000
+                              description: The monetary amount of the grant in U.S.
+                                dollars
+                            start_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2017-12-05'
+                              description: The date on which the grant begins
+                            end_date:
+                              type:
+                              - string
+                              - 'null'
+                              example: '2019-12-05'
+                              description: The date on which the grant ends
+                            identifier:
+                              type:
+                              - string
+                              - 'null'
+                              example: '1789352'
+                              description: A code identifying the grant that is unique
+                                to the awarding agency
+                          required:
+                          - title
+                          - agency
+                          - abstract
+                          - amount_in_dollars
+                          - start_date
+                          - end_date
+                          - identifier
+                      required:
+                      - id
+                      - type
+                      - attributes
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/performances":
+    get:
+      summary: Retrieve a user's performances
+      tags:
+      - user
+      operationId: findPerformances
+      description: Returns performances for a user
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve performances
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user performances response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: performance
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - title
+                          - activity_insight_id
+                          properties:
+                            title:
+                              type: string
+                              example: Example Performance
+                              description: The title of the performance
+                            activity_insight_id:
+                              type: integer
+                              example: '1234567890'
+                              description: The unique identifier for the performance's
+                                corresponding record in the Activity Insight database
+                            performance_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Film - Documentary
+                              description: The type of performance
+                            sponsor:
+                              type:
+                              - string
+                              - 'null'
+                              example: Penn State
+                              description: The organization that is sponsoring this
+                                performance
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: This is a unique performance, performed for
+                                specific reasons
+                              description: Any further detail describing the performance
+                            group_name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Penn State Performers
+                              description: The name of the performing group
+                            location:
+                              type:
+                              - string
+                              - 'null'
+                              example: State College, PA
+                              description: Country, State, City, theatre, etc. where
+                                the performance took place
+                            delivery_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Competition
+                              description: Audition, commission, competition, or invitation
+                            scope:
+                              type:
+                              - string
+                              - 'null'
+                              example: Local
+                              description: International, national, regional, state,
+                                local
+                            start_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: 12-01-2015
+                              description: The date that the performance started on
+                            end_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: 12-31-2015
+                              description: The date that the performance ended on
+                            user_performances:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  first_name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Billy
+                                    description: The first name of a contributor
+                                  last_name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Bob
+                                    description: The last name of a contributor
+                                  contribution:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Performer
+                                    description: The contributor's role/contribution
+                                      to the performance
+                                  student_level:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Graduate
+                                    description: Undergraduate or graduate
+                                  role_other:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Director
+                                    description: Role not listedin "contribution"
+                                      drop-down
+                            performance_screenings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Film Festival
+                                    description: Name of the venue for the screening
+                                  location:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: State College, PA
+                                    description: Country, State, City, where the screening
+                                      took place
+                                  screening_type:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: DVD Distribution
+                                    description: Type of screening/exhibition
+                            profile_preferences:
+                              type: array
+                              description: An array of settings for each user who
+                                is an author of the publication indicating how they
+                                prefer to have the publication displayed in a profile
+                              items:
+                                type: object
+                                required:
+                                - user_id
+                                - webaccess_id
+                                - visible_in_profile
+                                - position_in_profile
+                                properties:
+                                  user_id:
+                                    type: number
+                                    example: 123
+                                    description: The ID of the user to which this
+                                      set of preferences belongs
+                                  webaccess_id:
+                                    type: string
+                                    example: abc123
+                                    description: The WebAccess ID of the user to which
+                                      this set of preferences belongs
+                                  visible_in_profile:
+                                    type: boolean
+                                    example: true
+                                    description: The user's preference for whether
+                                      or not this publication should be displayed
+                                      in their profile
+                                  position_in_profile:
+                                    type:
+                                    - number
+                                    - 'null'
+                                    example: 8
+                                    description: The user's preference for what position
+                                      this publication should occupy in a list of
+                                      their publications in their profile
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: performance
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - title
+                          - activity_insight_id
+                          properties:
+                            title:
+                              type: string
+                              example: Example Performance
+                              description: The title of the performance
+                            activity_insight_id:
+                              type: integer
+                              example: '1234567890'
+                              description: The unique identifier for the performance's
+                                corresponding record in the Activity Insight database
+                            performance_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Film - Documentary
+                              description: The type of performance
+                            sponsor:
+                              type:
+                              - string
+                              - 'null'
+                              example: Penn State
+                              description: The organization that is sponsoring this
+                                performance
+                            description:
+                              type:
+                              - string
+                              - 'null'
+                              example: This is a unique performance, performed for
+                                specific reasons
+                              description: Any further detail describing the performance
+                            group_name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Penn State Performers
+                              description: The name of the performing group
+                            location:
+                              type:
+                              - string
+                              - 'null'
+                              example: State College, PA
+                              description: Country, State, City, theatre, etc. where
+                                the performance took place
+                            delivery_type:
+                              type:
+                              - string
+                              - 'null'
+                              example: Competition
+                              description: Audition, commission, competition, or invitation
+                            scope:
+                              type:
+                              - string
+                              - 'null'
+                              example: Local
+                              description: International, national, regional, state,
+                                local
+                            start_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: 12-01-2015
+                              description: The date that the performance started on
+                            end_on:
+                              type:
+                              - string
+                              - 'null'
+                              example: 12-31-2015
+                              description: The date that the performance ended on
+                            user_performances:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  first_name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Billy
+                                    description: The first name of a contributor
+                                  last_name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Bob
+                                    description: The last name of a contributor
+                                  contribution:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Performer
+                                    description: The contributor's role/contribution
+                                      to the performance
+                                  student_level:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Graduate
+                                    description: Undergraduate or graduate
+                                  role_other:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Director
+                                    description: Role not listedin "contribution"
+                                      drop-down
+                            performance_screenings:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: Film Festival
+                                    description: Name of the venue for the screening
+                                  location:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: State College, PA
+                                    description: Country, State, City, where the screening
+                                      took place
+                                  screening_type:
+                                    type:
+                                    - string
+                                    - 'null'
+                                    example: DVD Distribution
+                                    description: Type of screening/exhibition
+                            profile_preferences:
+                              type: array
+                              description: An array of settings for each user who
+                                is an author of the publication indicating how they
+                                prefer to have the publication displayed in a profile
+                              items:
+                                type: object
+                                required:
+                                - user_id
+                                - webaccess_id
+                                - visible_in_profile
+                                - position_in_profile
+                                properties:
+                                  user_id:
+                                    type: number
+                                    example: 123
+                                    description: The ID of the user to which this
+                                      set of preferences belongs
+                                  webaccess_id:
+                                    type: string
+                                    example: abc123
+                                    description: The WebAccess ID of the user to which
+                                      this set of preferences belongs
+                                  visible_in_profile:
+                                    type: boolean
+                                    example: true
+                                    description: The user's preference for whether
+                                      or not this publication should be displayed
+                                      in their profile
+                                  position_in_profile:
+                                    type:
+                                    - number
+                                    - 'null'
+                                    example: 8
+                                    description: The user's preference for what position
+                                      this publication should occupy in a list of
+                                      their publications in their profile
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/etds":
+    get:
+      summary: Retrieve a user's student advising history
+      tags:
+      - user
+      description: Returns ETDs for which the user served on the committee
+      operationId: findUserETDs
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve ETDs
+        required: true
+        schema:
+          type: string
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user ETDs response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: etd
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - title
+                          - year
+                          - author_last_name
+                          - author_first_name
+                          properties:
+                            title:
+                              type: string
+                              example: A PhD Thesis
+                              description: The title of the ETD
+                            year:
+                              type: integer
+                              example: 2010
+                              description: The year in which the ETD was completed
+                            author_last_name:
+                              type: string
+                              example: Author
+                              description: The last name of the ETD's author
+                            author_first_name:
+                              type: string
+                              example: Susan
+                              description: The first name of the ETD's author
+                            author_middle_name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Example
+                              description: The first name of the ETD's author
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                      - id
+                      - type
+                      - attributes
+                      properties:
+                        id:
+                          type: string
+                          example: '123'
+                          description: The ID of the object
+                        type:
+                          type: string
+                          example: etd
+                          description: The type of the object
+                        attributes:
+                          type: object
+                          required:
+                          - title
+                          - year
+                          - author_last_name
+                          - author_first_name
+                          properties:
+                            title:
+                              type: string
+                              example: A PhD Thesis
+                              description: The title of the ETD
+                            year:
+                              type: integer
+                              example: 2010
+                              description: The year in which the ETD was completed
+                            author_last_name:
+                              type: string
+                              example: Author
+                              description: The last name of the ETD's author
+                            author_first_name:
+                              type: string
+                              example: Susan
+                              description: The first name of the ETD's author
+                            author_middle_name:
+                              type:
+                              - string
+                              - 'null'
+                              example: Example
+                              description: The first name of the ETD's author
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/publications":
+    get:
+      summary: Retrieve a user's publications
+      tags:
+      - user
+      operationId: findUserPublications
+      description: Returns a publications for a user
+      parameters:
+      - name: webaccess_id
+        in: path
+        description: Webaccess ID of user to retrieve publications
+        required: true
+        schema:
+          type: string
+      - name: start_year
+        in: query
+        description: Beginning of publication year range
+        required: false
+        format: int32
+        schema:
+          type: integer
+      - name: end_year
+        in: query
+        description: End of publication year range
+        required: false
+        format: int32
+        schema:
+          type: integer
+      - name: order_first_by
+        in: query
+        description: Orders publications returned
+        required: false
+        schema:
+          type: string
+          enum:
+          - citation_count_desc
+          - publication_date_asc
+          - publication_date_desc
+          - title_asc
+      - name: order_second_by
+        in: query
+        description: Orders publications returned
+        required: false
+        schema:
+          type: string
+          enum:
+          - citation_count_desc
+          - publication_date_asc
+          - publication_date_desc
+          - title_asc
+      - name: limit
+        in: query
+        description: Max number publications to return for the user
+        required: false
+        format: int32
+        schema:
+          type: integer
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: user publication response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      "$ref": "#/components/schemas/PublicationV1"
+                required:
+                - data
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/{webaccess_id}/profile":
+    get:
+      summary: Retrieve a user's profile
+      tags:
+      - user
+      description: Returns a representation of a user's profile information
+      parameters:
+      - name: webaccess_id
+        in: path
+        required: true
+        description: Webaccess ID of user to retrieve HTML profile
+        schema:
+          type: string
+      responses:
+        '200':
+          description: user profile response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '123'
+                        description: The ID of the user
+                      type:
+                        type: string
+                        example: user_profile
+                        description: The type of the object
+                      attributes:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            nullable: true
+                            example: Example User
+                            description: The full name of the user
+                          organization_name:
+                            type: string
+                            nullable: true
+                            example: College of Engineering
+                            description: The name of the user's primary organization
+                          title:
+                            type: string
+                            nullable: true
+                            example: Professor
+                            description: The title of the user's position
+                          email:
+                            type: string
+                            nullable: true
+                            example: abc123@psu.edu
+                            description: The user's email address
+                          office_location:
+                            type: string
+                            nullable: true
+                            example: 101 Chemistry Building
+                            description: The room number and building where the user's
+                              office is located
+                          office_phone_number:
+                            type: string
+                            nullable: true
+                            example: "(555) 555-555"
+                            description: The telephone number for the user's office
+                          personal_website:
+                            type: string
+                            nullable: true
+                            example: mysite.org
+                            description: The domain or URL for the user's personal
+                              website
+                          total_scopus_citations:
+                            type: integer
+                            nullable: true
+                            example: 76
+                            description: The total number of times that all of the
+                              user's publications have been cited as recorded in Scopus
+                              (Pure)
+                          scopus_h_index:
+                            type: integer
+                            nullable: true
+                            example: 24
+                            description: The user's H-Index value in Scopus (Pure)
+                          pure_profile_url:
+                            type: string
+                            nullable: true
+                            example: https://pennstate.pure.elsevier.com/en/persons/abc123-def456
+                            description: The URL for the user's profile page on the
+                              Penn State Pure website
+                          orcid_identifier:
+                            type: string
+                            nullable: true
+                            example: https://orcid.org/0000-0000-0000-0000
+                            description: The URL for the user's ORCID ID
+                          bio:
+                            type: string
+                            nullable: true
+                            example: Some biographical information about this user
+                            description: A brief biography of the user
+                          teaching_interests:
+                            type: string
+                            nullable: true
+                            example: Computer Science, Information Technology
+                            description: A description of the user's teaching interests
+                          research_interests:
+                            type: string
+                            nullable: true
+                            example: Quantum Computing, Encryption
+                            description: A description of the user's research interests
+                          publications:
+                            type: array
+                            items:
+                              type: string
+                              example: <span class="publication-title">My Publication</span>,
+                                <span class="journal-name">Journal of Medicine</span>,
+                                2010
+                              description: A string of HTML describing a journal article
+                          other_publications:
+                            type: object
+                            properties:
+                              Books:
+                                type: array
+                                items:
+                                  type: string
+                                  example: <span class="publication-title">My Book</span>,
+                                    <span class="journal-name">Journal of Science</span>,
+                                    2012
+                              Letters:
+                                type: array
+                                items:
+                                  type: string
+                                  example: <span class="publication-title">My Letter</span>,
+                                    <span class="journal-name">Journal of Physics</span>,
+                                    2011
+                            description: A JSON object containing arrays of strings
+                              of HTML describing non-journal publications
+                          grants:
+                            type: array
+                            items:
+                              type: string
+                              example: My Grant, NSF, 5/2007 - 5/2009
+                              description: A description of an awarded grant
+                          presentations:
+                            type: array
+                            items:
+                              type: string
+                              example: My Presentation, Penn State University, University
+                                Park
+                              description: A description of a presentation
+                          performances:
+                            type: array
+                            items:
+                              type: string
+                              example: My Performance, Eisenhower Auditorium - Penn
+                                State University, 3/1/2016
+                              description: A description of a performance
+                          master_advising_roles:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://etda.libraries.psu.edu/catalog/12345"
+                                target="_blank">Graduate Student Master Thesis Example</a>
+                                (Committee Member)
+                              description: A description of a graduate student master
+                                thesis advising role with an HTML link to the thesis
+                          phd_advising_roles:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://etda.libraries.psu.edu/catalog/12345"
+                                target="_blank">Graduate Student PhD Dissertation
+                                Example</a> (Committee Member)
+                              description: A description of a graduate student PhD
+                                dissertation advising role with an HTML link to the
+                                dissertation
+                          news_stories:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://news.psu.edu/my_story" target="_blank">My
+                                News Story</a> 9/17/2014
+                              description: A description of a news story with an HTML
+                                link to the story content
+                          education_history:
+                            type: array
+                            items:
+                              type: string
+                              example: BS, Biology - The Pennsylvania State University
+                                - 2010
+                              description: A description of a degree earned by the
+                                user
+                        required:
+                        - name
+                        - organization_name
+                        - title
+                        - office_location
+                        - office_phone_number
+                        - personal_website
+                        - total_scopus_citations
+                        - scopus_h_index
+                        - pure_profile_url
+                        - orcid_identifier
+                        - bio
+                        - teaching_interests
+                        - research_interests
+                        - publications
+                        - other_publications
+                        - grants
+                        - presentations
+                        - performances
+                        - master_advising_roles
+                        - phd_advising_roles
+                        - news_stories
+                        - education_history
+                    required:
+                    - id
+                    - type
+                    - attributes
+            text/html:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                        example: '123'
+                        description: The ID of the user
+                      type:
+                        type: string
+                        example: user_profile
+                        description: The type of the object
+                      attributes:
+                        type: object
+                        properties:
+                          name:
+                            type: string
+                            nullable: true
+                            example: Example User
+                            description: The full name of the user
+                          organization_name:
+                            type: string
+                            nullable: true
+                            example: College of Engineering
+                            description: The name of the user's primary organization
+                          title:
+                            type: string
+                            nullable: true
+                            example: Professor
+                            description: The title of the user's position
+                          email:
+                            type: string
+                            nullable: true
+                            example: abc123@psu.edu
+                            description: The user's email address
+                          office_location:
+                            type: string
+                            nullable: true
+                            example: 101 Chemistry Building
+                            description: The room number and building where the user's
+                              office is located
+                          office_phone_number:
+                            type: string
+                            nullable: true
+                            example: "(555) 555-555"
+                            description: The telephone number for the user's office
+                          personal_website:
+                            type: string
+                            nullable: true
+                            example: mysite.org
+                            description: The domain or URL for the user's personal
+                              website
+                          total_scopus_citations:
+                            type: integer
+                            nullable: true
+                            example: 76
+                            description: The total number of times that all of the
+                              user's publications have been cited as recorded in Scopus
+                              (Pure)
+                          scopus_h_index:
+                            type: integer
+                            nullable: true
+                            example: 24
+                            description: The user's H-Index value in Scopus (Pure)
+                          pure_profile_url:
+                            type: string
+                            nullable: true
+                            example: https://pennstate.pure.elsevier.com/en/persons/abc123-def456
+                            description: The URL for the user's profile page on the
+                              Penn State Pure website
+                          orcid_identifier:
+                            type: string
+                            nullable: true
+                            example: https://orcid.org/0000-0000-0000-0000
+                            description: The URL for the user's ORCID ID
+                          bio:
+                            type: string
+                            nullable: true
+                            example: Some biographical information about this user
+                            description: A brief biography of the user
+                          teaching_interests:
+                            type: string
+                            nullable: true
+                            example: Computer Science, Information Technology
+                            description: A description of the user's teaching interests
+                          research_interests:
+                            type: string
+                            nullable: true
+                            example: Quantum Computing, Encryption
+                            description: A description of the user's research interests
+                          publications:
+                            type: array
+                            items:
+                              type: string
+                              example: <span class="publication-title">My Publication</span>,
+                                <span class="journal-name">Journal of Medicine</span>,
+                                2010
+                              description: A string of HTML describing a journal article
+                          other_publications:
+                            type: object
+                            properties:
+                              Books:
+                                type: array
+                                items:
+                                  type: string
+                                  example: <span class="publication-title">My Book</span>,
+                                    <span class="journal-name">Journal of Science</span>,
+                                    2012
+                              Letters:
+                                type: array
+                                items:
+                                  type: string
+                                  example: <span class="publication-title">My Letter</span>,
+                                    <span class="journal-name">Journal of Physics</span>,
+                                    2011
+                            description: A JSON object containing arrays of strings
+                              of HTML describing non-journal publications
+                          grants:
+                            type: array
+                            items:
+                              type: string
+                              example: My Grant, NSF, 5/2007 - 5/2009
+                              description: A description of an awarded grant
+                          presentations:
+                            type: array
+                            items:
+                              type: string
+                              example: My Presentation, Penn State University, University
+                                Park
+                              description: A description of a presentation
+                          performances:
+                            type: array
+                            items:
+                              type: string
+                              example: My Performance, Eisenhower Auditorium - Penn
+                                State University, 3/1/2016
+                              description: A description of a performance
+                          master_advising_roles:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://etda.libraries.psu.edu/catalog/12345"
+                                target="_blank">Graduate Student Master Thesis Example</a>
+                                (Committee Member)
+                              description: A description of a graduate student master
+                                thesis advising role with an HTML link to the thesis
+                          phd_advising_roles:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://etda.libraries.psu.edu/catalog/12345"
+                                target="_blank">Graduate Student PhD Dissertation
+                                Example</a> (Committee Member)
+                              description: A description of a graduate student PhD
+                                dissertation advising role with an HTML link to the
+                                dissertation
+                          news_stories:
+                            type: array
+                            items:
+                              type: string
+                              example: <a href="https://news.psu.edu/my_story" target="_blank">My
+                                News Story</a> 9/17/2014
+                              description: A description of a news story with an HTML
+                                link to the story content
+                          education_history:
+                            type: array
+                            items:
+                              type: string
+                              example: BS, Biology - The Pennsylvania State University
+                                - 2010
+                              description: A description of a degree earned by the
+                                user
+                        required:
+                        - name
+                        - organization_name
+                        - title
+                        - office_location
+                        - office_phone_number
+                        - personal_website
+                        - total_scopus_citations
+                        - scopus_h_index
+                        - pure_profile_url
+                        - orcid_identifier
+                        - bio
+                        - teaching_interests
+                        - research_interests
+                        - publications
+                        - other_publications
+                        - grants
+                        - presentations
+                        - performances
+                        - master_advising_roles
+                        - phd_advising_roles
+                        - news_stories
+                        - education_history
+                    required:
+                    - id
+                    - type
+                    - attributes
+        '404':
+          description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+  "/v1/users/publications":
+    post:
+      summary: Retrieve publications for a group of users
+      tags:
+      - user
+      operationId: findUsersPublications
+      description: Returns publications for a group of users
+      parameters:
+      - name: start_year
+        in: query
+        description: Beginning of publication year range
+        required: false
+        format: int32
+        schema:
+          type: integer
+      - name: end_year
+        in: query
+        description: End of publication year range
+        required: false
+        format: int32
+        schema:
+          type: integer
+      - name: order_first_by
+        in: query
+        description: Orders publications returned
+        required: false
+        schema:
+          type: string
+          enum:
+          - citation_count_desc
+          - publication_date_asc
+          - publication_date_desc
+          - title_asc
+      - name: order_second_by
+        in: query
+        description: Orders publications returned
+        required: false
+        schema:
+          type: string
+          enum:
+          - citation_count_desc
+          - publication_date_asc
+          - publication_date_desc
+          - title_asc
+      - name: limit
+        in: query
+        description: Max number publications to return for each user
+        required: false
+        format: int32
+        schema:
+          type: integer
+      security:
+      - api_key: []
+      responses:
+        '200':
+          description: OK
+        '401':
+          description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: string
+        required: true
+        description: Webaccess IDs of users to retrieve publications

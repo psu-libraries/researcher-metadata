@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   class OmniauthError < RuntimeError; end
 
-  include Swagger::Blocks
   include Admin::Users
 
   before_validation :downcase_webaccess_id,

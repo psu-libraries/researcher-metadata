@@ -5,7 +5,7 @@ module API::V1
     before_action :authenticate_request!, except: [:profile]
 
     rescue_from ActiveRecord::RecordNotFound do |exception|
-      render json: exception, status: :not_found
+      render json: { message: exception, code: 404 }, status: :not_found
     end
 
     private
