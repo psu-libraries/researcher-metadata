@@ -7,10 +7,10 @@
     <%= csp_meta_tag %>
 
     <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
-    <%= javascript_pack_tag 'application' %>
-    <%= stylesheet_pack_tag 'application' %>
+    <%= stylesheet_link_tag    'bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
     <title>Penn State University Libraries | Researcher Metadata Database</title>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "bundle", "data-turbo-track": "reload", defer: true %>
   </head>
   <body>
     <nav class="navbar navbar-expand-md navbar-dark mb-4">

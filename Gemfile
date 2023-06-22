@@ -36,6 +36,7 @@ gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
+gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'lograge'                           # Structured logging for production
 gem 'multi_json'                        # JSON parser wrapper
@@ -59,7 +60,6 @@ gem 'strscan', '~> 3.0.1'               # Must be kept at 3.0 to work with bundl
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'view_component'                    # Reusable, testable view components
-gem 'webpacker'                         # bundle assets
 
 group :development, :test do
   gem 'byebug', platform: :mri
