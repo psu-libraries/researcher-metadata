@@ -1,7 +1,7 @@
 const path = require("path")
 const webpack = require("webpack")
 const NodePolyfillPlugin = require("node-polyfill-webpack-plugin")
-
+const mode = process.env.NODE_ENV === 'development' ? 'development' : 'production';
 // Extracts CSS into .css file
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 // Removes exported JavaScript files from CSS-only entries
@@ -9,8 +9,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 
 module.exports = {
-  mode: "production",
-  devtool: "source-map",
+  mode,
   entry: {
     bundle: "./app/javascript/bundle.js"
   },
@@ -39,5 +38,8 @@ module.exports = {
     new RemoveEmptyScriptsPlugin(),
     new MiniCssExtractPlugin(),
     new NodePolyfillPlugin()
-  ]
+  ],
+  optimization: {
+    moduleIds: 'deterministic',
+  }
 }
