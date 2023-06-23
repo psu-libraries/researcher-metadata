@@ -484,6 +484,16 @@ uses data stored in RMD, this process can be implemented in a more centralized, 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
 
+## Development Notes
+
+### Frontend
+
+Jsbundling-rails is used to bundle assets in the `app/javascript` directory.  After bundling, the bundled manifests are added to `app/assets/builds` for sprockets to load.
+Javascripts requiring node modules should be added to the `app/javascript` directory to be bundled.  Other assets should be placed in `app/assets` to be loaded by sprockets.
+To make the rails server "watch" the `app/javascript` directory for changes and automatically trigger a re-bundle when changes are detected, run `bin/dev` instead of `rails s`.
+At the time of writing this documentation, rspec-rails does not have a builtin hook to prepare assets with jsbundling for tests.  We are invoking the rake task `test:prepare`
+in the `integration_helper.rb` to do this ourselves.
+
 ---
 
 This project was developed by the The Pennsylvania State University Libraries Digital Scholarship and Repository Development team in collaboration with [West Arete](https://westarete.com).

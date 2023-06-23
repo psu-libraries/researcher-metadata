@@ -117,7 +117,7 @@ jobs:
           command: bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rails test:prepare && bundle exec rspec
+          command: bundle exec rspec 
       - run:
           name: Upload Coverage
           when: on_success

@@ -57,7 +57,7 @@ gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
 gem 'string-similarity'                 # use for string comparison
 gem 'strscan', '~> 3.0.1'               # Must be kept at 3.0 to work with bundler 2.3.8
-gem 'terser' # Compressor for JavaScript assets
+gem 'terser'                            # Compressor for JavaScript assets
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
 gem 'view_component'                    # Reusable, testable view components
 
