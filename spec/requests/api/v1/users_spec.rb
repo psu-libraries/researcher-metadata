@@ -890,7 +890,7 @@ describe API::V1::UsersController do
                   <ul>
                       <li><strong>Citations:</strong>  9</li>
                       <li><strong>H-Index:</strong>  49</li>
-                      <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+                      <li><a href="https://pure.psu.edu/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
                   </ul>
               </div>
                 <div id="md-bio">

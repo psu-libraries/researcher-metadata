@@ -1,529 +1,649 @@
 {
-  "count" : 4,
-  "pageInformation" : {
-    "offset" : 0,
-    "size" : 2
+  "count": 4,
+  "pageInformation": {
+    "offset": 0,
+    "size": 2
   },
-  "items" : [ {
-    "pureId" : 9477895,
-    "externalId" : "0031523976",
-    "externalIdSource" : "Scopus",
-    "uuid" : "e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
-    "title" : {
-      "formatted" : true,
-      "value" : "The First Publication"
-    },
-    "subTitle" : {
-      "formatted" : true,
-      "value" : "From Pure"
-    },
-    "peerReview" : true,
-    "numberOfPages" : 5,
-    "managingOrganisationalUnit" : {
-      "uuid" : "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
-      "externalId" : "DEPT-COL-LA-PSYCH",
-      "externalIdSource" : "synchronisedOrganisation",
-      "externallyManaged" : true,
-      "name" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Psychology"
-        } ]
+  "items": [
+    {
+      "pureId": 9477895,
+      "externalId": "0031523976",
+      "externalIdSource": "Scopus",
+      "uuid": "e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+      "title": {
+        "formatted": true,
+        "value": "The First Publication"
       },
-      "type" : {
-        "pureId" : 855,
-        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Department"
-          } ]
-        }
-      }
-    },
-    "confidential" : false,
-    "info" : {
-      "createdBy" : "root",
-      "createdDate" : "2017-01-10T21:23:16.508+0000",
-      "modifiedBy" : "sync_user",
-      "modifiedDate" : "2018-03-14T20:47:06.357+0000",
-      "portalUrl" : "https://pennstate.pure.elsevier.com/en/publications/e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
-      "prettyURLIdentifiers" : [ "psychotherapy-integration-and-the-need-for-better-theories-of-cha" ],
-      "additionalExternalIds" : [ {
-        "value" : "0031523976",
-        "idSource" : "QABO"
-      } ]
-    },
-    "totalScopusCitations" : 2,
-    "pages" : "91-95",
-    "volume" : "6",
-    "journalAssociation" : {
-      "pureId" : 9477896,
-      "title" : {
-        "value" : "Applied and Preventive Psychology"
+      "subTitle": {
+        "formatted": true,
+        "value": "From Pure"
       },
-      "issn" : {
-        "value" : "0962-1849"
-      },
-      "journal" : {
-        "uuid" : "e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad",
-        "externalId" : "12023",
-        "externalIdSource" : "Scopus",
-        "externallyManaged" : true,
-        "name" : {
-          "formatted" : false,
-          "text" : [ {
-            "value" : "Applied and Preventive Psychology"
-          } ]
+      "peerReview": true,
+      "numberOfPages": 5,
+      "managingOrganisationalUnit": {
+        "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+        "externalId": "DEPT-COL-LA-PSYCH",
+        "externalIdSource": "synchronisedOrganisation",
+        "externallyManaged": true,
+        "name": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Psychology"
+            }
+          ]
         },
-        "type" : {
-          "pureId" : 910,
-          "uri" : "/dk/atira/pure/journal/journaltypes/journal/journal",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "Journal"
-            } ]
+        "type": {
+          "pureId": 855,
+          "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+          "term": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Department"
+              }
+            ]
           }
         }
-      }
-    },
-    "journalNumber" : "2",
-    "type" : {
-      "pureId" : 4664,
-      "uri" : "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontojournal/article",
-      "term" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Article"
-        } ]
-      }
-    },
-    "category" : {
-      "pureId" : 6885,
-      "uri" : "/dk/atira/pure/researchoutput/category/research",
-      "term" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Research"
-        } ]
-      }
-    },
-    "language" : {
-      "pureId" : 9423172,
-      "uri" : "/dk/atira/pure/core/languages/en_US",
-      "term" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "English (US)"
-        } ]
-      }
-    },
-    "totalNumberOfAuthors" : 2,
-    "openAccessPermission" : {
-      "pureId" : 3436171,
-      "uri" : "/dk/atira/pure/researchoutput/openaccesspermission/indeterminate",
-      "term" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Indeterminate"
-        } ]
-      }
-    },
-    "visibility" : {
-      "key" : "FREE",
-      "value" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Public - No restriction"
-        } ]
-      }
-    },
-    "workflow" : {
-      "workflowStep" : "approved",
-      "value" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Validated"
-        } ]
-      }
-    },
-    "publicationStatuses" : [ {
-      "pureId" : 9477895,
-      "externalId" : "0031523976",
-      "externalIdSource" : "Scopus",
-      "current" : true,
-      "publicationDate" : {
-        "year" : 1997,
-        "month" : 1,
-        "day" : 1
       },
-      "publicationStatus" : {
-        "pureId" : 798,
-        "uri" : "/dk/atira/pure/researchoutput/status/published",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Published"
-          } ]
-        }
-      }
-    } ],
-    "personAssociations" : [ {
-      "pureId" : 52285401,
-      "person" : {
-        "uuid" : "5ec8ce05-0912-4d68-8633-c5618a3cf15d",
-        "externalId" : "LGC3",
-        "externalIdSource" : "synchronisedPerson",
-        "externallyManaged" : true,
-        "name" : {
-          "formatted" : false,
-          "text" : [ {
-            "value" : "Firstpub Robert Firstauthor"
-          } ]
-        }
+      "confidential": false,
+      "info": {
+        "createdBy": "root",
+        "createdDate": "2017-01-10T21:23:16.508+0000",
+        "modifiedBy": "sync_user",
+        "modifiedDate": "2018-03-14T20:47:06.357+0000",
+        "portalUrl": "https://pure.psu.edu/en/publications/e1b21d75-4579-4efc-9fcc-dcd9827ee51a",
+        "prettyURLIdentifiers": [
+          "psychotherapy-integration-and-the-need-for-better-theories-of-cha"
+        ],
+        "additionalExternalIds": [
+          {
+            "value": "0031523976",
+            "idSource": "QABO"
+          }
+        ]
       },
-      "name" : {
-        "firstName" : "Firstpub R.",
-        "lastName" : "Firstauthor"
-      },
-      "personRole" : {
-        "pureId" : 4891,
-        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Author"
-          } ]
-        }
-      },
-      "organisationalUnits" : [ {
-        "uuid" : "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
-        "externalId" : "DEPT-COL-LA-PSYCH",
-        "externalIdSource" : "synchronisedOrganisation",
-        "externallyManaged" : true,
-        "name" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Psychology"
-          } ]
+      "totalScopusCitations": 2,
+      "pages": "91-95",
+      "volume": "6",
+      "journalAssociation": {
+        "pureId": 9477896,
+        "title": {
+          "value": "Applied and Preventive Psychology"
         },
-        "type" : {
-          "pureId" : 855,
-          "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "Department"
-            } ]
-          }
-        }
-      } ]
-    }, {
-      "pureId" : 52285403,
-      "externalPerson" : {
-        "uuid" : "a33bd846-afe5-4852-851e-7b7201af5fe5",
-        "name" : {
-          "formatted" : false,
-          "text" : [ {
-            "value" : "Firstpub Secondauthor"
-          } ]
+        "issn": {
+          "value": "0962-1849"
         },
-        "type" : {
-          "pureId" : 4855,
-          "uri" : "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "External person"
-            } ]
+        "journal": {
+          "uuid": "e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad",
+          "externalId": "12023",
+          "externalIdSource": "Scopus",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "value": "Applied and Preventive Psychology"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 910,
+            "uri": "/dk/atira/pure/journal/journaltypes/journal/journal",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Journal"
+                }
+              ]
+            }
           }
         }
       },
-      "name" : {
-        "firstName" : "Firstpub",
-        "lastName" : "Secondauthor"
-      },
-      "personRole" : {
-        "pureId" : 4891,
-        "uri" : "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Author"
-          } ]
+      "journalNumber": "2",
+      "type": {
+        "pureId": 4664,
+        "uri": "/dk/atira/pure/researchoutput/researchoutputtypes/contributiontojournal/article",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Article"
+            }
+          ]
         }
       },
-      "externalOrganisations" : [ {
-        "uuid" : "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
-        "externalId" : "508225",
-        "externalIdSource" : "scival",
-        "externallyManaged" : true,
-        "name" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Stony Brook University"
-          } ]
+      "category": {
+        "pureId": 6885,
+        "uri": "/dk/atira/pure/researchoutput/category/research",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Research"
+            }
+          ]
+        }
+      },
+      "language": {
+        "pureId": 9423172,
+        "uri": "/dk/atira/pure/core/languages/en_US",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "English (US)"
+            }
+          ]
+        }
+      },
+      "totalNumberOfAuthors": 2,
+      "openAccessPermission": {
+        "pureId": 3436171,
+        "uri": "/dk/atira/pure/researchoutput/openaccesspermission/indeterminate",
+        "term": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Indeterminate"
+            }
+          ]
+        }
+      },
+      "visibility": {
+        "key": "FREE",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Public - No restriction"
+            }
+          ]
+        }
+      },
+      "workflow": {
+        "workflowStep": "approved",
+        "value": {
+          "formatted": false,
+          "text": [
+            {
+              "locale": "en_US",
+              "value": "Validated"
+            }
+          ]
+        }
+      },
+      "publicationStatuses": [
+        {
+          "pureId": 9477895,
+          "externalId": "0031523976",
+          "externalIdSource": "Scopus",
+          "current": true,
+          "publicationDate": {
+            "year": 1997,
+            "month": 1,
+            "day": 1
+          },
+          "publicationStatus": {
+            "pureId": 798,
+            "uri": "/dk/atira/pure/researchoutput/status/published",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Published"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "personAssociations": [
+        {
+          "pureId": 52285401,
+          "person": {
+            "uuid": "5ec8ce05-0912-4d68-8633-c5618a3cf15d",
+            "externalId": "LGC3",
+            "externalIdSource": "synchronisedPerson",
+            "externallyManaged": true,
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "value": "Firstpub Robert Firstauthor"
+                }
+              ]
+            }
+          },
+          "name": {
+            "firstName": "Firstpub R.",
+            "lastName": "Firstauthor"
+          },
+          "personRole": {
+            "pureId": 4891,
+            "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Author"
+                }
+              ]
+            }
+          },
+          "organisationalUnits": [
+            {
+              "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+              "externalId": "DEPT-COL-LA-PSYCH",
+              "externalIdSource": "synchronisedOrganisation",
+              "externallyManaged": true,
+              "name": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Psychology"
+                  }
+                ]
+              },
+              "type": {
+                "pureId": 855,
+                "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Department"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
         },
-        "type" : {
-          "pureId" : 3438682,
-          "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "Academic"
-            } ]
+        {
+          "pureId": 52285403,
+          "externalPerson": {
+            "uuid": "a33bd846-afe5-4852-851e-7b7201af5fe5",
+            "name": {
+              "formatted": false,
+              "text": [
+                {
+                  "value": "Firstpub Secondauthor"
+                }
+              ]
+            },
+            "type": {
+              "pureId": 4855,
+              "uri": "/dk/atira/pure/externalperson/externalpersontypes/externalperson/externalperson",
+              "term": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "External person"
+                  }
+                ]
+              }
+            }
+          },
+          "name": {
+            "firstName": "Firstpub",
+            "lastName": "Secondauthor"
+          },
+          "personRole": {
+            "pureId": 4891,
+            "uri": "/dk/atira/pure/researchoutput/roles/contributiontojournal/author",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Author"
+                }
+              ]
+            }
+          },
+          "externalOrganisations": [
+            {
+              "uuid": "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
+              "externalId": "508225",
+              "externalIdSource": "scival",
+              "externallyManaged": true,
+              "name": {
+                "formatted": false,
+                "text": [
+                  {
+                    "locale": "en_US",
+                    "value": "Stony Brook University"
+                  }
+                ]
+              },
+              "type": {
+                "pureId": 3438682,
+                "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Academic"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "organisationalUnits": [
+        {
+          "uuid": "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
+          "externalId": "DEPT-COL-LA-PSYCH",
+          "externalIdSource": "synchronisedOrganisation",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Psychology"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 855,
+            "uri": "/dk/atira/pure/organisation/organisationtypes/organisation/department",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Department"
+                }
+              ]
+            }
           }
         }
-      } ]
-    } ],
-    "organisationalUnits" : [ {
-      "uuid" : "f3ebd910-8783-42f0-ad1f-ba760de1d08c",
-      "externalId" : "DEPT-COL-LA-PSYCH",
-      "externalIdSource" : "synchronisedOrganisation",
-      "externallyManaged" : true,
-      "name" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Psychology"
-        } ]
-      },
-      "type" : {
-        "pureId" : 855,
-        "uri" : "/dk/atira/pure/organisation/organisationtypes/organisation/department",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Department"
-          } ]
-        }
-      }
-    } ],
-    "externalOrganisations" : [ {
-      "uuid" : "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
-      "externalId" : "508225",
-      "externalIdSource" : "scival",
-      "externallyManaged" : true,
-      "name" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Stony Brook University"
-        } ]
-      },
-      "type" : {
-        "pureId" : 3438682,
-        "uri" : "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Academic"
-          } ]
-        }
-      }
-    } ],
-    "electronicVersions" : [ {
-      "pureId" : 34576018,
-      "doi" : "https://doi.org/10.1016/S0962-1849(05)80014-9",
-      "accessType" : {
-        "pureId" : 20055478,
-        "uri" : "/dk/atira/pure/core/openaccesspermission/unknown",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Unknown"
-          } ]
-        }
-      },
-      "versionType" : {
-        "pureId" : 3436203,
-        "uri" : "/dk/atira/pure/researchoutput/electronicversion/versiontype/publishersversion",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Final published version"
-          } ]
-        }
-      }
-    } ],
-    "additionalLinks" : [ {
-      "pureId" : 9477901,
-      "url" : "http://www.scopus.com/inward/record.url?scp=0031523976&partnerID=8YFLogxK",
-      "description" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Link to publication in Scopus"
-        } ]
-      },
-      "linkType" : {
-        "pureId" : 3436191,
-        "uri" : "/dk/atira/pure/links/researchoutput/scopuspublication",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Scopus publication"
-          } ]
-        }
-      }
-    }, {
-      "pureId" : 9477902,
-      "url" : "http://www.scopus.com/inward/citedby.url?scp=0031523976&partnerID=8YFLogxK",
-      "description" : {
-        "formatted" : false,
-        "text" : [ {
-          "locale" : "en_US",
-          "value" : "Link to citation list in Scopus"
-        } ]
-      },
-      "linkType" : {
-        "pureId" : 3436193,
-        "uri" : "/dk/atira/pure/links/researchoutput/scopuscitations",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "Scopus citations"
-          } ]
-        }
-      }
-    } ],
-    "keywordGroups" : [ {
-      "pureId" : 34576019,
-      "logicalName" : "ASJCSubjectAreas",
-      "type" : {
-        "uri" : "/dk/atira/pure/subjectarea/asjc",
-        "term" : {
-          "formatted" : false,
-          "text" : [ {
-            "locale" : "en_US",
-            "value" : "All Science Journal Classification (ASJC) codes"
-          } ]
-        }
-      },
-      "keywordContainers" : [ {
-        "pureId" : 34576020,
-        "structuredKeyword" : {
-          "pureId" : 6529,
-          "uri" : "/dk/atira/pure/subjectarea/asjc/3200/3202",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "Applied Psychology"
-            } ]
+      ],
+      "externalOrganisations": [
+        {
+          "uuid": "6abde63e-002f-4b2a-96ad-ff3039c49ea1",
+          "externalId": "508225",
+          "externalIdSource": "scival",
+          "externallyManaged": true,
+          "name": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Stony Brook University"
+              }
+            ]
+          },
+          "type": {
+            "pureId": 3438682,
+            "uri": "/dk/atira/pure/ueoexternalorganisation/ueoexternalorganisationtypes/ueoexternalorganisation/academic",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Academic"
+                }
+              ]
+            }
           }
         }
-      }, {
-        "pureId" : 34576021,
-        "structuredKeyword" : {
-          "pureId" : 6349,
-          "uri" : "/dk/atira/pure/subjectarea/asjc/2700/2739",
-          "term" : {
-            "formatted" : false,
-            "text" : [ {
-              "locale" : "en_US",
-              "value" : "Public Health, Environmental and Occupational Health"
-            } ]
+      ],
+      "electronicVersions": [
+        {
+          "pureId": 34576018,
+          "doi": "https://doi.org/10.1016/S0962-1849(05)80014-9",
+          "accessType": {
+            "pureId": 20055478,
+            "uri": "/dk/atira/pure/core/openaccesspermission/unknown",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Unknown"
+                }
+              ]
+            }
+          },
+          "versionType": {
+            "pureId": 3436203,
+            "uri": "/dk/atira/pure/researchoutput/electronicversion/versiontype/publishersversion",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Final published version"
+                }
+              ]
+            }
           }
         }
-      } ]
-    } ],
-    "scopusMetrics" : [ {
-      "value" : 0,
-      "year" : 2020
-    }, {
-      "value" : 0,
-      "year" : 2019
-    }, {
-      "value" : 0,
-      "year" : 2018
-    }, {
-      "value" : 0,
-      "year" : 2017
-    }, {
-      "value" : 0,
-      "year" : 2016
-    }, {
-      "value" : 0,
-      "year" : 2015
-    }, {
-      "value" : 0,
-      "year" : 2014
-    }, {
-      "value" : 0,
-      "year" : 2013
-    }, {
-      "value" : 0,
-      "year" : 2012
-    }, {
-      "value" : 0,
-      "year" : 2011
-    }, {
-      "value" : 0,
-      "year" : 2010
-    }, {
-      "value" : 0,
-      "year" : 2009
-    }, {
-      "value" : 0,
-      "year" : 2008
-    }, {
-      "value" : 0,
-      "year" : 2007
-    }, {
-      "value" : 0,
-      "year" : 2006
-    }, {
-      "value" : 0,
-      "year" : 2005
-    }, {
-      "value" : 0,
-      "year" : 2004
-    }, {
-      "value" : 0,
-      "year" : 2003
-    }, {
-      "value" : 0,
-      "year" : 2002
-    }, {
-      "value" : 1,
-      "year" : 2001
-    }, {
-      "value" : 1,
-      "year" : 2000
-    }, {
-      "value" : 0,
-      "year" : 1999
-    }, {
-      "value" : 0,
-      "year" : 1998
-    }, {
-      "value" : 0,
-      "year" : 1997
-    } ]
-  }]
+      ],
+      "additionalLinks": [
+        {
+          "pureId": 9477901,
+          "url": "http://www.scopus.com/inward/record.url?scp=0031523976&partnerID=8YFLogxK",
+          "description": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Link to publication in Scopus"
+              }
+            ]
+          },
+          "linkType": {
+            "pureId": 3436191,
+            "uri": "/dk/atira/pure/links/researchoutput/scopuspublication",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Scopus publication"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "pureId": 9477902,
+          "url": "http://www.scopus.com/inward/citedby.url?scp=0031523976&partnerID=8YFLogxK",
+          "description": {
+            "formatted": false,
+            "text": [
+              {
+                "locale": "en_US",
+                "value": "Link to citation list in Scopus"
+              }
+            ]
+          },
+          "linkType": {
+            "pureId": 3436193,
+            "uri": "/dk/atira/pure/links/researchoutput/scopuscitations",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "Scopus citations"
+                }
+              ]
+            }
+          }
+        }
+      ],
+      "keywordGroups": [
+        {
+          "pureId": 34576019,
+          "logicalName": "ASJCSubjectAreas",
+          "type": {
+            "uri": "/dk/atira/pure/subjectarea/asjc",
+            "term": {
+              "formatted": false,
+              "text": [
+                {
+                  "locale": "en_US",
+                  "value": "All Science Journal Classification (ASJC) codes"
+                }
+              ]
+            }
+          },
+          "keywordContainers": [
+            {
+              "pureId": 34576020,
+              "structuredKeyword": {
+                "pureId": 6529,
+                "uri": "/dk/atira/pure/subjectarea/asjc/3200/3202",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Applied Psychology"
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "pureId": 34576021,
+              "structuredKeyword": {
+                "pureId": 6349,
+                "uri": "/dk/atira/pure/subjectarea/asjc/2700/2739",
+                "term": {
+                  "formatted": false,
+                  "text": [
+                    {
+                      "locale": "en_US",
+                      "value": "Public Health, Environmental and Occupational Health"
+                    }
+                  ]
+                }
+              }
+            }
+          ]
+        }
+      ],
+      "scopusMetrics": [
+        {
+          "value": 0,
+          "year": 2020
+        },
+        {
+          "value": 0,
+          "year": 2019
+        },
+        {
+          "value": 0,
+          "year": 2018
+        },
+        {
+          "value": 0,
+          "year": 2017
+        },
+        {
+          "value": 0,
+          "year": 2016
+        },
+        {
+          "value": 0,
+          "year": 2015
+        },
+        {
+          "value": 0,
+          "year": 2014
+        },
+        {
+          "value": 0,
+          "year": 2013
+        },
+        {
+          "value": 0,
+          "year": 2012
+        },
+        {
+          "value": 0,
+          "year": 2011
+        },
+        {
+          "value": 0,
+          "year": 2010
+        },
+        {
+          "value": 0,
+          "year": 2009
+        },
+        {
+          "value": 0,
+          "year": 2008
+        },
+        {
+          "value": 0,
+          "year": 2007
+        },
+        {
+          "value": 0,
+          "year": 2006
+        },
+        {
+          "value": 0,
+          "year": 2005
+        },
+        {
+          "value": 0,
+          "year": 2004
+        },
+        {
+          "value": 0,
+          "year": 2003
+        },
+        {
+          "value": 0,
+          "year": 2002
+        },
+        {
+          "value": 1,
+          "year": 2001
+        },
+        {
+          "value": 1,
+          "year": 2000
+        },
+        {
+          "value": 0,
+          "year": 1999
+        },
+        {
+          "value": 0,
+          "year": 1998
+        },
+        {
+          "value": 0,
+          "year": 1997
+        }
+      ]
+    }
+  ]
 }
