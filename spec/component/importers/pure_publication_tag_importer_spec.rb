@@ -12,11 +12,11 @@ describe PurePublicationTagImporter do
   let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
 
   before do
-    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/524/research-outputs',
+    allow(HTTParty).to receive(:post).with('https://pure.psu.edu/ws/api/524/research-outputs',
                                            body: %{{"navigationLink": false, "size": 1, "offset": 0, "renderings": ["fingerprint"]}},
                                            headers: { 'api-key' => 'fake_api_key', 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/524/research-outputs',
+    allow(HTTParty).to receive(:post).with('https://pure.psu.edu/ws/api/524/research-outputs',
                                            body: %{{"navigationLink": false, "size": 500, "offset": 0, "renderings": ["fingerprint"]}},
                                            headers: { 'api-key' => 'fake_api_key', 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).and_return http_response_2
   end
@@ -163,11 +163,11 @@ describe PurePublicationTagImporter do
       let(:email) { spy 'notification email' }
 
       before do
-        allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/524/research-outputs',
+        allow(HTTParty).to receive(:post).with('https://pure.psu.edu/ws/api/524/research-outputs',
                                                body: %{{"navigationLink": false, "size": 1, "offset": 0, "renderings": ["fingerprint"]}},
                                                headers: { 'api-key' => 'fake_api_key', 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:post).with('https://pennstate.pure.elsevier.com/ws/api/524/research-outputs',
+        allow(HTTParty).to receive(:post).with('https://pure.psu.edu/ws/api/524/research-outputs',
                                                body: %{{"navigationLink": false, "size": 500, "offset": 0, "renderings": ["fingerprint"]}},
                                                headers: { 'api-key' => 'fake_api_key', 'Content-Type' => 'application/json', 'Accept' => 'application/json' }).and_return http_error_response
 

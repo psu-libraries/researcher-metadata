@@ -1336,7 +1336,7 @@ describe User, type: :model do
       let(:pure_uuid) { 'pure-abc-123' }
 
       it "returns the URL to the user's page on the Penn State Pure website" do
-        expect(user.pure_profile_url).to eq 'https://pennstate.pure.elsevier.com/en/persons/pure-abc-123'
+        expect(user.pure_profile_url).to eq 'https://pure.psu.edu/en/persons/pure-abc-123'
       end
     end
   end

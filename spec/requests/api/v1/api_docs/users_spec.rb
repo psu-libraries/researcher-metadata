@@ -964,7 +964,7 @@ RSpec.describe 'api/v1/users' do
                          pure_profile_url: {
                            type: :string,
                            nullable: true,
-                           example: 'https://pennstate.pure.elsevier.com/en/persons/abc123-def456',
+                           example: 'https://pure.psu.edu/en/persons/abc123-def456',
                            description: "The URL for the user's profile page on the Penn State Pure website"
                          },
                          orcid_identifier: {

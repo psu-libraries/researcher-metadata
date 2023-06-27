@@ -199,7 +199,7 @@ class User < ApplicationRecord
   end
 
   def pure_profile_url
-    "https://pennstate.pure.elsevier.com/en/persons/#{pure_uuid}" if pure_uuid.present?
+    "https://pure.psu.edu/en/persons/#{pure_uuid}" if pure_uuid.present?
   end
 
   def office_phone_number

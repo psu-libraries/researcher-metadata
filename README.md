@@ -62,7 +62,7 @@ researchers, their published research, and the organizations within Penn State t
 This data mostly has to do with scientific research that is published in peer-reviewed journals, so
 we don't get much data about faculty in the arts and humanities from this source as opposed to Activity
 Insight which provides data about faculty across the whole university. This application also has a
-well-documented [REST API](https://pennstate.pure.elsevier.com/ws/api/511/api-docs/index.html) (API key
+well-documented [REST API](https://pure.psu.edu/ws/api/524/api-docs/index.html) (API key
 required) to which we have access. We use this API for directly importing data. A cron job automatically
 runs this import in production once per week beginning at around 8:00 AM on Saturday, and the import
 may take multiple hours to finish. We import the following types of records from Pure:

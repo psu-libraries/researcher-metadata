@@ -12,10 +12,10 @@ describe PureUserImporter do
   let(:error_filename) { Rails.root.join('spec', 'fixtures', 'pure_not_found_error.json') }
 
   before do
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/524/persons?navigationLink=false&size=1&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=1&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_1
 
-    allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/524/persons?navigationLink=false&size=100&offset=0',
+    allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=100&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
   end
 
@@ -226,10 +226,10 @@ describe PureUserImporter do
 
     context 'when the API endpoint is not found' do
       before do
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/524/persons?navigationLink=false&size=1&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=1&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
-        allow(HTTParty).to receive(:get).with('https://pennstate.pure.elsevier.com/ws/api/524/persons?navigationLink=false&size=100&offset=0',
+        allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/persons?navigationLink=false&size=100&offset=0',
                                               headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_error_response
 
         allow(ImporterErrorLog).to receive(:log_error)
