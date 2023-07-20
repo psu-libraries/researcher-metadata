@@ -17,7 +17,7 @@ namespace :database_data do
 
     Net::SSH.start(hostname, 'deploy', port: 1855) do |ssh|
       # Pull down db config to be parsed
-      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'), aliases: true)
+      db_config = Rails.configuration.database_configuration
 
       # Parse values from db config
       db_password = db_config['production']['password']
@@ -57,7 +57,7 @@ namespace :database_data do
     filename = File.basename(Dir["#{Rails.root}/tmp/psql-rmd-prod-data-*.sql.gz"].first, '.gz')
 
     # Get local db config
-    db_config = YAML.safe_load(File.open("#{Rails.root}/config/database.yml"), aliases: true)
+    db_config = Rails.configuration.database_configuration
 
     # Unzip production data file
     `gunzip #{Rails.root}/tmp/#{filename}.gz`
@@ -79,7 +79,7 @@ namespace :database_data do
 
     Net::SSH.start(hostname, 'deploy', port: 1855) do |ssh|
       # Pull down db config to be parsed
-      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'), aliases: true)
+      db_config = Rails.configuration.database_configuration
 
       # Parse values from db config
       db_password = db_config['staging']['password']
@@ -115,7 +115,7 @@ namespace :database_data do
 
     Net::SSH.start(hostname, 'deploy', port: 1855) do |ssh|
       # Pull down db config to be parsed
-      db_config = YAML.safe_load(ssh.exec!('cat rmd/current/config/database.yml'), aliases: true)
+      db_config = Rails.configuration.database_configuration
 
       # Parse values from db config
       db_password = db_config['beta']['password']
