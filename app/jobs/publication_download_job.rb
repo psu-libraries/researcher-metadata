@@ -11,17 +11,19 @@ class PublicationDownloadJob < ApplicationJob
       request['X-API-Key'] = Settings.activity_insight_s3_authorizer.api_key
 
       http.request request do |response|
-        unless File.directory?(file.file_download_location.store_dir)
-          FileUtils.mkdir_p(file.file_download_location.store_dir)
-        end
-        File.open(file.file_download_location.store_dir.join(file.download_filename), 'w:ASCII-8BIT') do |io|
-          response.read_body do |chunk|
-            io.write chunk
+        if response.code == "200"
+          unless File.directory?(file.file_download_location.store_dir)
+            FileUtils.mkdir_p(file.file_download_location.store_dir)
           end
+          File.open(file.file_download_location.store_dir.join(file.download_filename), 'w:ASCII-8BIT') do |io|
+            response.read_body do |chunk|
+              io.write chunk
+            end
+          end
+
+          file.update_download_location
         end
       end
-
-      file.update_download_location
     end
   end
 end

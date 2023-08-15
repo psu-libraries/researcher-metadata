@@ -20,7 +20,7 @@ class ActivityInsightOAFile < ApplicationRecord
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
 
   def stored_file_path
-    file_download_location.file.file
+    file_download_location.file&.file
   end
 
   def download_filename

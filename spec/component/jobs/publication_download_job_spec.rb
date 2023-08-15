@@ -21,15 +21,32 @@ describe PublicationDownloadJob, type: :job do
   describe '#perform_now', no_ci: true do
     let!(:publication) { create(:publication) }
     let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'nmg110/intellcont/test_file-1.pdf') }
+    let(:file_path) { Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf") }
 
-    it 'saves the new file path' do
-      job.perform_now(ai_oa_file.id)
-      expect(ai_oa_file.reload.stored_file_path).to eq Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf").to_s
+    after do
+      File.delete(file_path) if File.exists?(file_path)
     end
 
-    it 'uploads the file' do
-      job.perform_now(ai_oa_file.id)
-      expect(File.open(Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf")).size).to eq 40451
+    context 'when response code is "200"' do
+      it 'saves the new file path' do
+        job.perform_now(ai_oa_file.id)
+        expect(ai_oa_file.reload.stored_file_path).to eq file_path.to_s
+      end
+
+      it 'uploads the file' do
+        job.perform_now(ai_oa_file.id)
+        expect(File.open(file_path).size).to eq 40451
+      end
+    end
+
+    context 'when response code is not "200"' do
+      let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'fakeperson/intellcont/test_file-1.pdf') }
+
+      it 'does not store the file' do
+        job.perform_now(ai_oa_file.id)
+        expect(ai_oa_file.reload.stored_file_path).to eq nil
+        expect(File.exists?(file_path)).to be false
+      end
     end
   end
 end
