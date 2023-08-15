@@ -2,10 +2,6 @@
 
 require 'webdrivers/chromedriver'
 
-# TODO remove this when webdrivers updates
-# https://github.com/titusfortner/webdrivers/issues/247
-Webdrivers::Chromedriver.required_version = '114.0.5735.90'
-
 # We'll use the Rack::Test driver by default, and a headless chrome driver for tests tagged with javascript.
 module DownloadHelpers
   DIRECTORY = Pathname.pwd.join('tmp/downloads').to_s
