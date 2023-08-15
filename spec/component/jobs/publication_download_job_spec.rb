@@ -24,7 +24,7 @@ describe PublicationDownloadJob, type: :job do
     let(:file_path) { Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf") }
 
     after do
-      File.delete(file_path) if File.exists?(file_path)
+      FileUtils.rm_f(file_path)
     end
 
     context 'when response code is "200"' do
@@ -44,7 +44,7 @@ describe PublicationDownloadJob, type: :job do
 
       it 'does not store the file' do
         job.perform_now(ai_oa_file.id)
-        expect(ai_oa_file.reload.stored_file_path).to eq nil
+        expect(ai_oa_file.reload.stored_file_path).to be_nil
         expect(File.exists?(file_path)).to be false
       end
     end

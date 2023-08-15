@@ -11,7 +11,7 @@ class PublicationDownloadJob < ApplicationJob
       request['X-API-Key'] = Settings.activity_insight_s3_authorizer.api_key
 
       http.request request do |response|
-        if response.code == "200"
+        if response.code == '200'
           unless File.directory?(file.file_download_location.store_dir)
             FileUtils.mkdir_p(file.file_download_location.store_dir)
           end

@@ -42,7 +42,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     context "when stored file doesn't exist" do
       it 'returns nil' do
-        expect(subject.stored_file_path).to eq nil
+        expect(subject.stored_file_path).to be_nil
       end
     end
   end
