@@ -32,7 +32,7 @@ class ActivityInsightOAFile < ApplicationRecord
   end
 
   def download_uri
-    "http://#{S3_AUTHORIZER_HOST_NAME}/api/v1/#{location}"
+    "https://#{S3_AUTHORIZER_HOST_NAME}/api/v1/#{location}"
   end
 
   ALLOWED_VERSIONS = [I18n.t('file_versions.accepted_version'),
