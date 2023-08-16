@@ -24,6 +24,7 @@ class PublicationDownloadJob < ApplicationJob
           file.update_download_location
         else
           Rails.logger.error "#{response.code}: #{response.message}"
+          file.update_column(:downloaded, false)
         end
       end
     end

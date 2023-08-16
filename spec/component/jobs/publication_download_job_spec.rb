@@ -44,9 +44,11 @@ describe PublicationDownloadJob, type: :job do
 
       it 'does not store the file' do
         expect(Rails.logger).to receive(:error).with('500: Internal Server Error')
+        ai_oa_file.update_column(:downloaded, false)
         job.perform_now(ai_oa_file.id)
         expect(ai_oa_file.reload.stored_file_path).to be_nil
         expect(File.exists?(file_path)).to be false
+        expect(ai_oa_file.reload.downloaded).to be false
       end
     end
   end
