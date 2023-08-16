@@ -32,10 +32,18 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let(:file) { double 'file', file: path }
     let(:path) { 'the/file/path' }
 
-    before { allow(ActivityInsightFileUploader).to receive(:new).and_return uploader }
+    context 'when stored file exists' do
+      before { allow(ActivityInsightFileUploader).to receive(:new).and_return uploader }
 
-    it 'returns the full path to the saved file' do
-      expect(subject.stored_file_path).to eq 'the/file/path'
+      it 'returns the full path to the saved file' do
+        expect(subject.stored_file_path).to eq 'the/file/path'
+      end
+    end
+
+    context "when stored file doesn't exist" do
+      it 'returns nil' do
+        expect(subject.stored_file_path).to be_nil
+      end
     end
   end
 
@@ -97,7 +105,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     before { aif.location = 'abc123/intellcont/test_publication.pdf' }
 
     it "returns the full URI for the file in Activity Insight's AWS S3 bucket" do
-      expect(aif.download_uri).to eq 'http://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf'
+      expect(aif.download_uri).to eq 'https://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf'
     end
   end
 
