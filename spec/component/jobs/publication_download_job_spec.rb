@@ -43,6 +43,7 @@ describe PublicationDownloadJob, type: :job do
       let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'fakeperson/intellcont/test_file-1.pdf') }
 
       it 'does not store the file' do
+        expect(Rails.logger).to receive(:error).with('500: Internal Server Error')
         job.perform_now(ai_oa_file.id)
         expect(ai_oa_file.reload.stored_file_path).to be_nil
         expect(File.exists?(file_path)).to be false

@@ -22,6 +22,8 @@ class PublicationDownloadJob < ApplicationJob
           end
 
           file.update_download_location
+        else
+          Rails.logger.error "#{response.code}: #{response.message}"
         end
       end
     end
