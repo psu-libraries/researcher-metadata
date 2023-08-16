@@ -118,7 +118,7 @@ describe OpenAccessURLForm do
   end
 
   # One brittle test for a real-world edge case
-  xcontext 'using real HTTP client for URL validation' do
+  context 'using real HTTP client for URL validation', skip: 'Temporarily skipping until new validation strategy is implemented' do
     describe '#valid?' do
       context 'when given a valid HTTP open access URL that does not allow access by certain user agents' do
         let(:url) { 'https://www.sciencedirect.com/science/article/am/pii/S0361923017302502' }
