@@ -28,5 +28,8 @@ class PublicationDownloadJob < ApplicationJob
         end
       end
     end
+  rescue StandardError => e
+    Rails.logger.error e.message
+    file.update(downloaded: false)
   end
 end
