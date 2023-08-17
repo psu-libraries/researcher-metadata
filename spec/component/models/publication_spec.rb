@@ -41,6 +41,8 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
   it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:checked_for_set_statement).of_type(:boolean) }
+  it { is_expected.to have_db_column(:checked_for_embargo_date).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -603,6 +605,7 @@ describe Publication, type: :model do
     end
 
     describe '.permissions_check_failed' do
+      # TODO:  add more test cases for this query
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
         expect(described_class.permissions_check_failed).to match_array [pub9]
       end

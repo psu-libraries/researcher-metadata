@@ -160,7 +160,7 @@ class Publication < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
-  scope :permissions_check_failed, -> { activity_insight_oa_publication.where.not(permissions_last_checked_at: nil).where(licence: nil) }
+  scope :permissions_check_failed, -> { activity_insight_oa_publication.where.not(permissions_last_checked_at: nil).where(%{licence IS NULL OR preferred_version IS NULL OR (embargo_date IS NULL AND checked_for_embargo_date IS DISTINCT FROM TRUE) OR (set_statement IS NULL AND checked_for_set_statement IS DISTINCT FROM TRUE)}) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
@@ -292,10 +292,14 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:doi_verified)
-      field(:preferred_version)
-      field(:set_statement)
-      field(:licence)
-      field(:embargo_date)
+      group :open_access_permissions do
+        field(:preferred_version)
+        field(:set_statement)
+        field(:checked_for_set_statement)
+        field(:licence)
+        field(:embargo_date)
+        field(:checked_for_embargo_date)
+      end
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -346,16 +350,20 @@ class Publication < ApplicationRecord
           [['True', true], ['False', false]]
         end
       end
-      field(:preferred_version, :enum) do
-        label 'Preferred Version'
-        enum do
-          [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
-           [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
+      group :open_access_permissions do
+        field(:preferred_version, :enum) do
+          label 'Preferred Version'
+          enum do
+            [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
+            [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
+          end
         end
+        field(:set_statement) { label 'Deposit Statement' }
+        field(:checked_for_set_statement) { label 'Checked for deposit statement'}
+        field(:licence) { label 'License' }
+        field(:embargo_date)
+        field(:checked_for_embargo_date)
       end
-      field(:set_statement) { label 'Deposit Statement' }
-      field(:licence) { label 'License' }
-      field(:embargo_date)
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
