@@ -651,6 +651,11 @@ describe Publication, type: :model do
                           preferred_version: 'acceptedVersion',
                           doi_verified: nil)
     }
+    let!(:pub13) { create(:publication,
+                          title: 'pub13',
+                          publication_type: 'Journal Article',
+                          preferred_version: 'acceptedVersion')
+    }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
@@ -672,6 +677,22 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file13) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub13,
+        version: 'unknown'
+      )
+    }
+    let!(:activity_insight_oa_file13a) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub13,
+        version: 'acceptedVersion',
+        downloaded: true,
+        file_download_location: fixture_file_open('test_file.pdf')
+      )
+    }
 
     let!(:open_access_location) { create(:open_access_location, publication: pub5) }
 
@@ -697,7 +718,8 @@ describe Publication, type: :model do
           pub9j,
           pub10,
           pub11,
-          pub12
+          pub12,
+          pub13
         ]
       end
     end
@@ -722,7 +744,8 @@ describe Publication, type: :model do
           pub9j,
           pub10,
           pub11,
-          pub12
+          pub12,
+          pub13
         ]
       end
     end
@@ -735,7 +758,7 @@ describe Publication, type: :model do
 
     describe '.needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
-        expect(described_class.needs_doi_verification).to match_array [pub4, pub11, pub12]
+        expect(described_class.needs_doi_verification).to match_array [pub4, pub11, pub12, pub13]
       end
     end
 
@@ -774,6 +797,13 @@ describe Publication, type: :model do
     describe '.permissions_check_failed' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
         expect(described_class.permissions_check_failed).to match_array [pub9a, pub9b, pub9g, pub9h, pub9i, pub9j]
+      end
+    end
+
+    describe '.ready_for_metadata_review' do
+      # TODO: Add more test cases for this query
+      it 'returns activity_insight_oa_publications with a preferred version and a downloaded file that matches the preferred version' do
+        expect(described_class.ready_for_metadata_review).to match_array [pub13]
       end
     end
   end

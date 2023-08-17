@@ -21,7 +21,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
   end
 
-  describe '#file' do
+  describe '#file_download_location' do
     it 'mounts an ActivityInsightFileUploader' do
       expect(subject.file_download_location).to be_a(ActivityInsightFileUploader)
     end
@@ -120,6 +120,13 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       it 'returns "Wrong Version"' do
         expect(file.version_status_display).to eq 'Wrong Version'
       end
+    end
+  end
+
+  describe '#download_location_value' do
+    let!(:file) { create :activity_insight_oa_file, file_download_location: fixture_file_open('test_file.pdf') }
+    it "returns the value stored in the file_download_location column" do
+      expect(file.download_location_value).to eq 'test_file.pdf'
     end
   end
 end

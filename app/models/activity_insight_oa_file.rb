@@ -46,6 +46,10 @@ class ActivityInsightOAFile < ApplicationRecord
     'Wrong Version'
   end
 
+  def download_location_value
+    read_attribute(:file_download_location)
+  end
+
   rails_admin do
     show do
       field(:location)
@@ -58,6 +62,8 @@ class ActivityInsightOAFile < ApplicationRecord
           bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
         end
       end
+      field(:downloaded)
+      field(:download_location_value) { label 'File download'}
     end
 
     list do
@@ -67,6 +73,8 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:created_at)
       field(:updated_at)
       field(:publication)
+      field(:downloaded)
+      field(:download_location_value) { label 'File download'}
     end
 
     edit do
