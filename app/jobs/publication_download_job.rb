@@ -26,6 +26,9 @@ class PublicationDownloadJob < ApplicationJob
           Rails.logger.error "#{response.code}: #{response.message}"
           file.update(downloaded: false)
         end
+      rescue StandardError => e
+        Rails.logger.error e.message
+        file.update(downloaded: false)
       end
     end
   end
