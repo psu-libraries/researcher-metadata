@@ -1,5 +1,6 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20230710 as base
-ARG UID=2000
+# Isilon has issues with high UID numbers for some reason. Hardcoding to 201 to fix this
+ARG UID=201
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /app
