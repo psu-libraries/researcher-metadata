@@ -4,7 +4,7 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating a publication via the admin interface', type: :feature do
-  let!(:pub) { 
+  let!(:pub) {
     create(
       :publication,
       title: 'Test Publication',
@@ -42,8 +42,8 @@ describe 'updating a publication via the admin interface', type: :feature do
         reloaded_pub = pub.reload
         expect(reloaded_pub.title).to eq 'Updated Title'
         expect(reloaded_pub.preferred_version).to be_nil
-        expect(reloaded_pub.checked_for_set_statement).to eq true
-        expect(reloaded_pub.checked_for_embargo_date).to eq true
+        expect(reloaded_pub.checked_for_set_statement).to be true
+        expect(reloaded_pub.checked_for_embargo_date).to be true
       end
 
       it 'sets the timestamp on the publication to indicate that it was manually updated' do

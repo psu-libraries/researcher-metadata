@@ -58,54 +58,54 @@ describe 'Admin Permissions Review dashboard', type: :feature do
 
       within "tr#publication_#{pub1.id}" do
         expect(page).to have_link('Pub1')
-        within "td#license" do
+        within 'td#license' do
           expect(page).to have_text('Not Found')
         end
-        
-        within "td#preferred-version" do
+
+        within 'td#preferred-version' do
           expect(page).to have_text('Accepted Manuscript')
         end
 
-        within "td#set-statement" do
+        within 'td#set-statement' do
           expect(page).to have_text('Not Found')
         end
 
-        within "td#checked-set-statement" do
+        within 'td#checked-set-statement' do
           expect(page).not_to have_text('✓')
         end
 
-        within "td#embargo-date" do
+        within 'td#embargo-date' do
           expect(page).to have_text('Not Found')
         end
 
-        within "td#checked-embargo-date" do
+        within 'td#checked-embargo-date' do
           expect(page).not_to have_text('✓')
         end
       end
 
       within "tr#publication_#{pub4.id}" do
         expect(page).to have_link('Pub4')
-        within "td#license" do
+        within 'td#license' do
           expect(page).to have_text('The license')
         end
-        
-        within "td#preferred-version" do
+
+        within 'td#preferred-version' do
           expect(page).to have_text('Not Found')
         end
 
-        within "td#set-statement" do
+        within 'td#set-statement' do
           expect(page).to have_text('The set statement.')
         end
 
-        within "td#checked-set-statement" do
+        within 'td#checked-set-statement' do
           expect(page).to have_text('✓')
         end
 
-        within "td#embargo-date" do
+        within 'td#embargo-date' do
           expect(page).to have_text('2023-08-17')
         end
 
-        within "td#checked-embargo-date" do
+        within 'td#checked-embargo-date' do
           expect(page).to have_text('✓')
         end
       end
