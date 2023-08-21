@@ -9,7 +9,6 @@ class ActivityInsightOAFile < ApplicationRecord
   scope :ready_for_download, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
-      .where.not(publication: { licence: nil })
       .left_outer_joins(publication: :open_access_locations)
       .where(open_access_locations: { publication_id: nil })
       .where(file_download_location: nil)
