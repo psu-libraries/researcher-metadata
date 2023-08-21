@@ -287,11 +287,13 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
-      field(:doi) do
-        label 'DOI'
-        pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+      group :doi do
+        field(:doi) do
+          label 'DOI'
+          pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
+        end
+        field(:doi_verified)
       end
-      field(:doi_verified)
       group :open_access_permissions do
         field(:preferred_version)
         field(:set_statement)
@@ -343,11 +345,13 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
-      field(:doi) { label 'DOI' }
-      field(:doi_verified, :enum) do
-        label 'DOI verified?'
-        enum do
-          [['True', true], ['False', false]]
+      group :doi do
+        field(:doi) { label 'DOI' }
+        field(:doi_verified, :enum) do
+          label 'DOI verified?'
+          enum do
+            [['True', true], ['False', false]]
+          end
         end
       end
       group :open_access_permissions do
