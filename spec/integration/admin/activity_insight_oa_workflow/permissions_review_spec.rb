@@ -8,9 +8,13 @@ describe 'Admin Permissions Review dashboard', type: :feature do
   let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
   let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
   let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
+  let(:uploader) { double 'uploader', file: file }
+  let(:file) { double 'file', file: path }
+  let(:path) { 'the/file/path' }
 
   before do
     authenticate_admin_user
+    allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
     visit activity_insight_oa_workflow_permissions_review_path
   end
 
@@ -19,9 +23,11 @@ describe 'Admin Permissions Review dashboard', type: :feature do
       expect(page).to have_text('Title')
       expect(page).to have_text('License')
       expect(page).to have_text('Preferred Version')
+      expect(page).to have_text('Files')
       expect(page).to have_link(pub1.title)
       expect(page).to have_text('Not Found')
       expect(page).to have_css('tr').exactly(2).times
+      expect(page).to have_link("Download #{aif1.download_filename}")
     end
   end
 

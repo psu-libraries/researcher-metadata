@@ -9,9 +9,13 @@ describe 'Admin DOI Verification dashboard', type: :feature do
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, doi_verified: nil) }
   let!(:pub3) { create(:publication, doi_verified: true) }
+  let(:uploader) { double 'uploader', file: file }
+  let(:file) { double 'file', file: path }
+  let(:path) { 'the/file/path' }
 
   before do
     authenticate_admin_user
+    allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
     visit activity_insight_oa_workflow_doi_verification_path
   end
 
@@ -24,6 +28,7 @@ describe 'Admin DOI Verification dashboard', type: :feature do
       expect(page).to have_text(pub1.doi)
       expect(page).to have_text('Failed Verification')
       expect(page).to have_css('tr').exactly(2).times
+      expect(page).to have_link("Download #{aif1.download_filename}")
     end
   end
 
