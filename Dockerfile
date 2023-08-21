@@ -1,5 +1,7 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20230818 as base
-ARG UID=2000
+# Isilon has issues with uid 2000 for some reason
+# change the app to run as 201
+ARG UID=201
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 WORKDIR /app
