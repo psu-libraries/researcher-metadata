@@ -16,8 +16,8 @@ RSpec.configure do |config|
 end
 
 # Bundle assets if not bundled
-unless File.exist?(Rails.root.join('app', 'assets', 'builds', 'bundle.js')) && 
-       File.exist?(Rails.root.join('app', 'assets', 'builds', 'bundle.css'))
+unless Rails.root.join('app', 'assets', 'builds', 'bundle.js').exist? &&
+    Rails.root.join('app', 'assets', 'builds', 'bundle.css').exist?
   require 'rake'
   Rails.application.load_tasks
   Rake::Task['test:prepare'].invoke
