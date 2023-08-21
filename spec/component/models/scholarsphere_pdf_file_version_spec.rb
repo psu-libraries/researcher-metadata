@@ -3,10 +3,12 @@
 require 'component/component_spec_helper'
 
 describe ScholarspherePdfFileVersion do
-  subject(:pdf_file_version) { described_class.new(file_meta: file_meta, publication_meta: publication_meta) }
+  subject(:pdf_file_version) { described_class.new(file_path: file_path, publication: publication) }
 
-  let(:file_meta) { { original_filename: 'test_file', cache_path: "#{Rails.root}/spec/fixtures/#{test_file}" }.to_json }
-  let(:publication_meta) { { title: 'test_pub_title', year: '2000', doi: 'test_doi', publisher: 'Test Publisher' } }
+  let(:file_path) { "#{Rails.root}/spec/fixtures/#{test_file}" }
+  let!(:publication) { create(:publication, title: 'test_pub_title', 
+                                            published_on: '2000', 
+                                            doi: 'https://doi.org/10.1234/1234') }
   let(:test_file) { 'pdf_check_unknown_version.pdf' }
 
   describe '#version' do

@@ -3,13 +3,12 @@
 require 'pdf-reader'
 
 class ScholarspherePdfFileVersion
-  attr_accessor :file_path, :filename, :publication_meta, :content
+  attr_accessor :file_path, :filename, :publication, :content
 
-  def initialize(file_meta:, publication_meta:)
-    @file_meta = file_meta
-    @file_path = file_meta_parsed['cache_path'].to_s
-    @filename = file_meta_parsed['original_filename']
-    @publication_meta = publication_meta
+  def initialize(file_path:, publication:)
+    @file_path = file_path
+    @filename = File.basename(file_path)
+    @publication = publication
     @content = process_content
   end
 
@@ -26,10 +25,6 @@ class ScholarspherePdfFileVersion
   end
 
   private
-
-    def file_meta_parsed
-      JSON.parse @file_meta
-    end
 
     def process_content
       reader = PDF::Reader.new(file_path)
@@ -76,8 +71,8 @@ class ScholarspherePdfFileVersion
     def process_wts(what_to_search)
       if what_to_search.include?('<<') && what_to_search.include?('>>')
         what_to_match = what_to_search.split('<<')[1].split('>>').first
-        if publication_meta[what_to_match.downcase]
-          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", publication_meta[what_to_match.downcase])
+        if publication.send(what_to_match.downcase)
+          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", publication.send(what_to_match.downcase))
         end
       end
 
@@ -89,14 +84,14 @@ class ScholarspherePdfFileVersion
         if where_to_search == 'file'
           content.include?(what_to_search)
         else
-          publication_meta[:title]&.include?(what_to_search) || filename&.include?(what_to_search)
+          publication.send(:title)&.include?(what_to_search) || filename&.include?(what_to_search)
         end
       else
         re = Regexp.new(what_to_search, 'gium')
         if where_to_search == 'file'
           content.downcase.match?(re)
         else
-          publication_meta[:title]&.match?(re) || filename&.match?(re)
+          publication.send(:title)&.match?(re) || filename&.match?(re)
         end
       end
     end
