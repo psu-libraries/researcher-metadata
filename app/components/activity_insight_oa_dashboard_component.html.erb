@@ -1,0 +1,55 @@
+<div class="container">
+  <% if doi_failed_verification_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
+      <div class='card' id='doi-verification-card'>
+        <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
+          <span class='float-right text-large'><strong><%= doi_failed_verification_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('doi_verification_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='doi-verification-card'>
+      <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('doi_verification_description') %></div>
+    </div>
+  <% end %>
+  <br>
+  <% if file_version_check_failed_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_file_version_review_path, class: 'card-link' do %>
+      <div class='card' id='file-version-check-card'>
+        <div class='card-header'><strong><%= i18n('file_version_curation_title') %></strong>
+          <span class='float-right text-large'><strong><%= file_version_check_failed_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('file_version_curation_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='file-version-check-card'>
+      <div class='card-header'><strong><%= i18n('file_version_curation_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('file_version_curation_description') %></div>
+    </div>
+  <% end %>
+  <br>
+  <% if permissions_check_failed_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_permissions_review_path, class: 'card-link' do %>
+      <div class='card' id='permissions-check-card'>
+        <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
+          <span class='float-right text-large'><strong><%= permissions_check_failed_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('permissions_curation_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='permissions-check-card'>
+      <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('permissions_curation_description') %></div>
+    </div>
+  <% end %>
+</div>

@@ -15,6 +15,12 @@ describe UserProfile do
                        ai_teaching_interests: 'test teaching interests',
                        ai_research_interests: 'test research interests') }
 
+  let(:piu_service) { class_double(PSUIdentityUserService).as_stubbed_const }
+
+  before do
+    allow(piu_service).to receive(:find_or_initialize_user)
+  end
+
   it { is_expected.to delegate_method(:active?).to(:user) }
   it { is_expected.to delegate_method(:available_deputy?).to(:user) }
   it { is_expected.to delegate_method(:id).to(:user) }
@@ -28,14 +34,12 @@ describe UserProfile do
   it { is_expected.to delegate_method(:total_scopus_citations).to(:user) }
 
   describe '::new' do
-    before { allow(PsuIdentityUserService).to receive(:find_or_initialize_user) }
-
     context 'when the user has data from the identity management service' do
       let(:user) { build(:user, :with_psu_identity) }
 
       it 'does NOT update their identity' do
         described_class.new(user)
-        expect(PsuIdentityUserService).not_to have_received(:find_or_initialize_user)
+        expect(piu_service).not_to have_received(:find_or_initialize_user)
       end
     end
 
@@ -44,7 +48,7 @@ describe UserProfile do
 
       it 'updates their identity' do
         described_class.new(user)
-        expect(PsuIdentityUserService).to have_received(:find_or_initialize_user)
+        expect(piu_service).to have_received(:find_or_initialize_user)
       end
     end
   end
@@ -58,10 +62,10 @@ describe UserProfile do
 
     context 'when ai_title is not present for user but multiple organization position_title from Pure are' do
       let!(:user_organization_membership1) do
-        create(:user_organization_membership, user: user, started_on: Date.yesterday, position_title: 'Title 1')
+        create(:user_organization_membership, user: user, started_on: 1.week.ago, position_title: 'Title 1')
       end
       let!(:user_organization_membership2) do
-        create(:user_organization_membership, user: user, started_on: Date.today, position_title: 'Title 2')
+        create(:user_organization_membership, user: user, started_on: 1.day.ago, position_title: 'Title 2')
       end
 
       before do

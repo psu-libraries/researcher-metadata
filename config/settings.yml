@@ -4,9 +4,16 @@
 # To have environment specific overrides edit `config/settings/#{environment}.local.yml`
 # Test environment does not read `config/settings.local.yml` settings for test should be put in `config/settings/test.yml`
 
+lograge:
+  enabled: false
+  json: false
+
 activity_insight:
   username:
   password:
+
+activity_insight_s3_authorizer:
+  api_key:
 
 azure_ad_oauth:
   client_id:
@@ -18,6 +25,9 @@ azure_ad_oauth:
 datadog:
   enabled: false
   env: dev
+
+delayed_job:
+  upload_queue: scholarsphere-uploads
 
 orcid:
   client_id:

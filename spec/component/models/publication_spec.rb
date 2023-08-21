@@ -34,6 +34,13 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:exported_to_activity_insight).of_type(:boolean) }
   it { is_expected.to have_db_column(:open_access_status).of_type(:string) }
   it { is_expected.to have_db_column(:activity_insight_postprint_status).of_type(:string) }
+  it { is_expected.to have_db_column(:oa_workflow_state).of_type(:string) }
+  it { is_expected.to have_db_column(:licence).of_type(:string) }
+  it { is_expected.to have_db_column(:embargo_date).of_type(:date) }
+  it { is_expected.to have_db_column(:set_statement).of_type(:string) }
+  it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
+  it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -58,6 +65,8 @@ describe Publication, type: :model do
     it { is_expected.to validate_inclusion_of(:status).in_array([Publication::PUBLISHED_STATUS, Publication::IN_PRESS_STATUS]) }
     it { is_expected.to validate_inclusion_of(:open_access_status).in_array(described_class.open_access_statuses).allow_nil }
     it { is_expected.to validate_inclusion_of(:activity_insight_postprint_status).in_array(described_class.postprint_statuses).allow_nil }
+    it { is_expected.to validate_inclusion_of(:oa_workflow_state).in_array(described_class.oa_workflow_states).allow_nil }
+    it { is_expected.to validate_inclusion_of(:preferred_version).in_array(described_class.preferred_versions).allow_nil }
 
     describe 'validating DOI format' do
       let(:pub) { build(:publication, doi: doi) }
@@ -278,6 +287,18 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.oa_workflow_states' do
+    it 'returns the list of valid open access workflow states' do
+      expect(described_class.oa_workflow_states).to eq ['automatic DOI verification pending', 'oa metadata search pending']
+    end
+  end
+
+  describe '.preferred_versions' do
+    it 'returns the list of valid open access workflow states' do
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion']
+    end
+  end
+
   describe '.postprint_statuses' do
     it 'returns the list of valid values for postprint status' do
       expect(described_class.postprint_statuses).to eq ['Already Openly Available',
@@ -456,6 +477,134 @@ describe Publication, type: :model do
     describe '.unpaywall_open_access' do
       it 'returns publications that have an Unpaywall open access location' do
         expect(described_class.unpaywall_open_access.map(&:title)).to match_array [pub3, pub5].map(&:title)
+      end
+    end
+  end
+
+  describe 'other scopes' do
+    let!(:pub1) { create(:publication,
+                         title: 'pub1')
+    }
+    let!(:pub2) { create(:publication,
+                         title: 'pub2',
+                         doi_verified: false,
+                         publication_type: 'Academic Journal Article')
+    }
+    let!(:pub3) { create(:publication,
+                         title: 'pub3',
+                         doi_verified: true,
+                         oa_workflow_state: 'oa metadata search pending',
+                         publication_type: 'Conference Proceeding')
+    }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         doi_verified: nil,
+                         oa_workflow_state: nil,
+                         preferred_version: 'acceptedVersion',
+                         publication_type: 'Journal Article')
+    }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         doi_verified: nil)
+    }
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         doi_verified: true,
+                         oa_status_last_checked_at: Time.now - (1 * 60 * 60),
+                         publication_type: 'Professional Journal Article')
+    }
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         publication_type: 'Trade Journal Article')
+    }
+    let!(:pub8) { create(:publication,
+                         title: 'pub8',
+                         licence: nil,
+                         doi_verified: true)
+    }
+    let!(:pub9) { create(:publication,
+                         title: 'pub9',
+                         licence: nil,
+                         doi_verified: true,
+                         permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub10) { create(:publication,
+                          title: 'pub10',
+                          licence: 'licence',
+                          doi_verified: true)
+    }
+    let!(:pub11) { create(:publication,
+                          title: 'pub11',
+                          publication_type: 'Journal Article',
+                          preferred_version: 'acceptedVersion',
+                          doi_verified: nil)
+    }
+    let!(:pub12) { create(:publication,
+                          title: 'pub12',
+                          publication_type: 'Journal Article',
+                          preferred_version: 'acceptedVersion',
+                          doi_verified: nil)
+    }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub8) }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub9) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
+    let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
+    let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
+
+    let!(:open_access_location) { create(:open_access_location, publication: pub5) }
+
+    describe '.with_no_oa_locations' do
+      it 'returns publications that do not have open access information' do
+        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7, pub8, pub9, pub10, pub11, pub12]
+      end
+    end
+
+    describe '.activity_insight_oa_publication' do
+      it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
+        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4, pub6, pub8, pub9, pub10, pub11, pub12]
+      end
+    end
+
+    describe '.doi_failed_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is false' do
+        expect(described_class.doi_failed_verification).to match_array [pub2]
+      end
+    end
+
+    describe '.needs_doi_verification' do
+      it 'returns activity_insight_oa_publications whose doi_verified is nil' do
+        expect(described_class.needs_doi_verification).to match_array [pub4, pub11, pub12]
+      end
+    end
+
+    describe '.file_version_check_failed' do
+      it "returns activity_insight_oa_publications whose associated files' versions still contain an 'unknown' version and no correct version" do
+        expect(described_class.file_version_check_failed).to match_array [pub11]
+      end
+    end
+
+    describe '.needs_oa_metadata_search' do
+      it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
+        expect(described_class.needs_oa_metadata_search).to match_array [pub6, pub8, pub9, pub10]
+      end
+    end
+
+    describe '.needs_permissions_check' do
+      it 'returns files that have had their permissions checked' do
+        expect(described_class.needs_permissions_check).to match_array [pub8, pub3, pub6]
+      end
+    end
+
+    describe '.permissions_check_failed' do
+      it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
+        expect(described_class.permissions_check_failed).to match_array [pub9]
       end
     end
   end
@@ -734,6 +883,25 @@ describe Publication, type: :model do
 
     it "returns the publication's contributors in order by position" do
       expect(pub.contributor_names).to eq [c3, c1, c2]
+    end
+  end
+
+  describe '#preferred_version' do
+    let(:pub) { create(:publication,
+                       preferred_version: I18n.t('file_versions.accepted_version')) }
+
+    context 'when the preferred version is given an acceptable version' do
+      it 'saves preferred version to that version' do
+        pub.preferred_version = I18n.t('file_versions.published_version')
+        expect(pub.preferred_version).to eq 'publishedVersion'
+      end
+    end
+
+    context 'when the preferred version is given an empty string' do
+      it 'saves preferred version as nil' do
+        pub.preferred_version = ''
+        expect(pub.preferred_version).to be_nil
+      end
     end
   end
 
@@ -1286,9 +1454,9 @@ describe Publication, type: :model do
     let!(:user2) { create(:user) }
     let!(:user3) { create(:user) }
 
-    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility) }
+    let!(:pub1) { create(:publication, updated_by_user_at: nil, visible: visibility, doi_verified: nil) }
     let!(:pub2) { create(:publication) }
-    let!(:pub3) { create(:publication) }
+    let!(:pub3) { create(:publication, doi_verified: true) }
     let!(:pub4) { create(:publication) }
 
     let!(:pub1_import1) { create(:publication_import, publication: pub1) }
@@ -1309,6 +1477,9 @@ describe Publication, type: :model do
     let(:deposit3) { build(:scholarsphere_work_deposit) }
 
     let(:visibility) { false }
+
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub1) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub2) }
 
     before do
       create(:authorship,
@@ -1550,6 +1721,15 @@ describe Publication, type: :model do
       end
     end
 
+    it 'transfers all activity insight oa files from publications to the publication' do
+      expect(pub1.activity_insight_oa_files.count).to eq 1
+      pub1.merge!([pub2, pub3, pub4])
+
+      expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+      expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                    activity_insight_oa_file2]
+    end
+
     context 'when the given publications include the publication' do
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub1, pub2, pub3, pub4])
@@ -1558,6 +1738,20 @@ describe Publication, type: :model do
                                                     pub2_import1,
                                                     pub2_import2,
                                                     pub3_import1]
+      end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
+      end
+
+      it 'transfers doi verification from publications to the publication' do
+        pub1.merge!([pub2, pub3, pub4])
+        expect(pub1.reload.doi_verified).to be true
       end
 
       it 'deletes the given publications except for the publication' do
@@ -1732,6 +1926,13 @@ describe Publication, type: :model do
           rescue RuntimeError; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue RuntimeError; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
 
@@ -1908,6 +2109,15 @@ describe Publication, type: :model do
 
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
       end
     end
 
@@ -2087,6 +2297,15 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'transfers all activity insight oa files from publications to the publication' do
+        expect(pub1.activity_insight_oa_files.count).to eq 1
+        pub1.merge!([pub2, pub3, pub4])
+
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 2
+        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
+                                                                      activity_insight_oa_file2]
+      end
     end
 
     context 'when two of the given publications are in the same non-duplicate group' do
@@ -2239,6 +2458,13 @@ describe Publication, type: :model do
           rescue Publication::NonDuplicateMerge; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
 
@@ -2395,6 +2621,13 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
+      end
     end
 
     context 'when one of the given publications is in the same non-duplicate group as the publication' do
@@ -2548,6 +2781,13 @@ describe Publication, type: :model do
           expect(pub1.reload.visible).to be true
         end
       end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
+      end
     end
 
     context 'when all of the publications are in the same non-duplicate group' do
@@ -2700,6 +2940,13 @@ describe Publication, type: :model do
           rescue Publication::NonDuplicateMerge; end
           expect(pub1.reload.visible).to be true
         end
+      end
+
+      it 'does not transfer activity insight oa files' do
+        begin
+          pub1.merge!([pub2, pub3, pub4])
+        rescue Publication::NonDuplicateMerge; end
+        expect(pub1.reload.activity_insight_oa_files.count).to eq 1
       end
     end
   end
@@ -2891,6 +3138,97 @@ describe Publication, type: :model do
 
       it 'returns true' do
         expect(pub.publication_type_other?).to be true
+      end
+    end
+  end
+
+  describe '#matchable_title' do
+    let(:pub) { create(:publication, title: 'A Sample Title: Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_title).to eq 'asampletitletest'
+    end
+  end
+
+  describe '#matchable_secondary_title' do
+    let(:pub) { create(:publication, secondary_title: 'Secondary Title: A Test') }
+
+    it 'returns a formatted title' do
+      expect(pub.matchable_secondary_title).to eq 'secondarytitleatest'
+    end
+  end
+
+  describe '#can_receive_new_ai_oa_files?' do
+    context 'when publication is not able to receive new activity insight oa files' do
+      context 'when publication has open access information' do
+        let!(:publication) { create(:publication, :oa_publication, :with_open_access_location, preferred_version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+
+      context 'when publication is not an oa_publication' do
+        let!(:publication) { create(:publication, :other_work, preferred_version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+
+      context 'when publication has associated file that matches preferred_version' do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: 'acceptedVersion') }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion') }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be false
+        end
+      end
+    end
+
+    context 'when publication is able to receive new activity insight oa files' do
+      context 'when the publication has no activity insight oa files' do
+        let!(:publication) { create(:publication, :oa_publication) }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+
+      context "when the publication has no activity insight oa files with a version that matches the publication's preferred_version" do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: 'acceptedVersion') }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'publishedVersion') }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+
+      context 'when publication has no preferred_version and file has no version' do
+        let!(:publication) { create(:publication, :oa_publication, preferred_version: nil) }
+        let!(:activity_insight_oa_file) { create(:activity_insight_oa_file, publication: publication, version: nil) }
+
+        it 'returns true' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+    end
+  end
+
+  describe '#preferred_version_display' do
+    context 'when the preferred_version is "acceptedVersion"' do
+      let(:publication) { create(:publication, preferred_version: 'acceptedVersion') }
+
+      it 'returns "Accepted Manuscript"' do
+        expect(publication.preferred_version_display).to eq 'Accepted Manuscript'
+      end
+    end
+
+    context 'when the preferred_version is "publishedVersion"' do
+      let(:publication) { create(:publication, preferred_version: 'publishedVersion') }
+
+      it 'returns "Final Published Version"' do
+        expect(publication.preferred_version_display).to eq 'Final Published Version'
       end
     end
   end

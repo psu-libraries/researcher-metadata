@@ -691,6 +691,14 @@ describe API::V1::UsersController do
 
     context 'for a valid webaccess_id' do
       before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+        allow(person).to receive(:as_json).and_return({ 'data' => {} })
+        allow(person).to receive(:preferred_given_name).and_return('Bob')
+        allow(person).to receive(:preferred_middle_name).and_return('')
+        allow(person).to receive(:middle_name).and_return('')
+        allow(person).to receive(:preferred_family_name).and_return('Testerson')
+
         get "/v1/users/#{webaccess_id}/profile", headers: headers
       end
 
@@ -882,7 +890,7 @@ describe API::V1::UsersController do
                   <ul>
                       <li><strong>Citations:</strong>  9</li>
                       <li><strong>H-Index:</strong>  49</li>
-                      <li><a href="https://pennstate.pure.elsevier.com/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
+                      <li><a href="https://pure.psu.edu/en/persons/pure-abc-123" target="_blank">Pure Profile</a></li>
                   </ul>
               </div>
                 <div id="md-bio">

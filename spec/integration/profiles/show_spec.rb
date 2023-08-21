@@ -174,7 +174,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows a link to the requested user's Pure profile" do
-      expect(page).to have_link 'Pure Profile', href: 'https://pennstate.pure.elsevier.com/en/persons/xyz789'
+      expect(page).to have_link 'Pure Profile', href: 'https://pure.psu.edu/en/persons/xyz789'
     end
 
     it "shows the requested user's research interests in the sidebar" do

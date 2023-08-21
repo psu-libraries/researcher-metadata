@@ -40,6 +40,7 @@ describe ContributorName, type: :model do
   it { is_expected.to belong_to(:publication).inverse_of(:contributor_names) }
   it { is_expected.to belong_to(:user).inverse_of(:contributor_names).optional }
   it { is_expected.to delegate_method(:webaccess_id).to(:user).allow_nil }
+  it { is_expected.to delegate_method(:is_active).to(:user).allow_nil }
 
   describe 'Validating that a contributor has at least one name' do
     let(:cn) { described_class.new(publication: create(:publication),
@@ -303,16 +304,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ orcid: 'orcidid123', display_name: 'first middle last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first middle' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ orcid: 'orcidid123', display_name: 'first middle' })
+                end
               end
             end
           end
@@ -323,16 +356,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ orcid: 'orcidid123', display_name: 'first last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'first' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ orcid: 'orcidid123', display_name: 'first' })
+                end
               end
             end
           end
@@ -347,16 +412,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ orcid: 'orcidid123', display_name: 'middle last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'middle' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ orcid: 'orcidid123', display_name: 'middle' })
+                end
               end
             end
           end
@@ -367,8 +464,24 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name, WebAccess ID, and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', orcid: 'orcidid123', display_name: 'last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name and ORCID ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ orcid: 'orcidid123', display_name: 'last' })
+                end
               end
             end
           end
@@ -387,16 +500,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ display_name: 'first middle last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first middle' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ display_name: 'first middle' })
+                end
               end
             end
           end
@@ -407,16 +552,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ display_name: 'first last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ psu_id: 'abc123', display_name: 'first' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq({ display_name: 'first' })
+                end
               end
             end
           end
@@ -431,16 +608,48 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ display_name: 'middle last' })
+                end
               end
             end
 
             context 'when the contributor has no last name' do
               let(:ln) { '' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'middle' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ display_name: 'middle' })
+                end
               end
             end
           end
@@ -451,8 +660,24 @@ describe ContributorName, type: :model do
             context 'when the contributor has a last name' do
               let(:ln) { 'last' }
 
-              it 'returns a hash with the full name and WebAccess ID of the contributor' do
-                expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'last' })
+              context 'when the contributor is active' do
+                before do
+                  allow(user).to receive(:is_active).and_return true
+                end
+
+                it 'returns a hash with the full name and WebAccess ID of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ psu_id: 'abc123', display_name: 'last' })
+                end
+              end
+
+              context 'when the contributor is not active' do
+                before do
+                  allow(user).to receive(:is_active).and_return false
+                end
+
+                it 'returns a hash with the full name of the contributor' do
+                  expect(cn.to_scholarsphere_creator).to eq ({ display_name: 'last' })
+                end
               end
             end
           end

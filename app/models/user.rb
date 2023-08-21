@@ -3,7 +3,6 @@
 class User < ApplicationRecord
   class OmniauthError < RuntimeError; end
 
-  include Swagger::Blocks
   include Admin::Users
 
   before_validation :downcase_webaccess_id,
@@ -60,12 +59,12 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :user_organization_memberships, allow_destroy: true
 
   # TODO handle the following cases:
-  #      * PsuIdentityUserService returns nil (user cannot be found in identity service)
-  #      * PsuIdentityUserService raises IdentityServiceError (network error, etc)
-  #      * PsuIdentityUserService returns a successful response, but that response is
+  #      * PSUIdentityUserService returns nil (user cannot be found in identity service)
+  #      * PSUIdentityUserService raises IdentityServiceError (network error, etc)
+  #      * PSUIdentityUserService returns a successful response, but that response is
   #        invalid per User's validations (e.g. first or last name is blank)
   def self.from_omniauth(auth)
-    PsuIdentityUserService.find_or_initialize_user(webaccess_id: auth.uid)
+    PSUIdentityUserService.find_or_initialize_user(webaccess_id: auth.uid)
   end
 
   def self.find_all_by_wos_pub(pub)
@@ -200,7 +199,7 @@ class User < ApplicationRecord
   end
 
   def pure_profile_url
-    "https://pennstate.pure.elsevier.com/en/persons/#{pure_uuid}" if pure_uuid.present?
+    "https://pure.psu.edu/en/persons/#{pure_uuid}" if pure_uuid.present?
   end
 
   def office_phone_number

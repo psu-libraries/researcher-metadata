@@ -32,52 +32,19 @@ describe 'Admin grant detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :grant, id: grant.id) }
 
-      it 'shows the grant detail heading' do
+      it 'shows the correct data for the grant' do
         expect(page).to have_content "Details for Grant 'Test Grant'"
-      end
-
-      it "shows the grant's agency name in Web of Science" do
         expect(page).to have_content 'Test Agency'
-      end
-
-      it "shows the grant's identifier in Web of Science" do
         expect(page).to have_content 'GRANT-ID-123'
-      end
-
-      it "shows the grant's canonical identifier" do
         expect(page).to have_content '123'
-      end
-
-      it "shows the grant's canonical agency name" do
         expect(page).to have_content 'National Science Foundation'
-      end
-
-      it "shows the grant's title" do
         expect(page).to have_content 'Test Grant'
-      end
-
-      it "shows the grant's abstract" do
         expect(page).to have_content 'A description of the grant.'
-      end
-
-      it "shows the grant's start date" do
         expect(page).to have_content 'January 01, 2000'
-      end
-
-      it "shows the grant's end date" do
         expect(page).to have_content 'February 20, 2005'
-      end
-
-      it "shows the grant's dollar amount" do
         expect(page).to have_content '50123'
-      end
-
-      it "shows the grant's publications" do
         expect(page).to have_link 'Publication1'
         expect(page).to have_link 'Publication2'
-      end
-
-      it "shows the grant's users" do
         expect(page).to have_link 'Test User1'
         expect(page).to have_link 'Test User2'
       end

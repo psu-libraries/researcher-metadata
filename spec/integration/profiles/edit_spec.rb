@@ -7,6 +7,7 @@ describe 'editing profile preferences' do
   let!(:user) { create(:user,
                        webaccess_id: 'abc123',
                        first_name: 'Bob',
+                       middle_name: '',
                        last_name: 'Testuser',
                        ai_bio: "Bob's bio info",
                        show_all_publications: true,
@@ -50,7 +51,12 @@ describe 'editing profile preferences' do
   describe 'the manage profile link', type: :feature do
     describe 'visiting the profile page for a given user' do
       context 'when not logged in' do
-        before { visit profile_path(webaccess_id: 'abc123') }
+        before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+
+          visit profile_path(webaccess_id: user.webaccess_id)
+        end
 
         it 'does not display a link to manage the profile' do
           expect(page).not_to have_link 'Manage my profile'
@@ -60,7 +66,7 @@ describe 'editing profile preferences' do
       context 'when logged in as that user' do
         before do
           authenticate_as(user)
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'displays a link to manage the profile' do
@@ -70,8 +76,11 @@ describe 'editing profile preferences' do
 
       context 'when logged in as a different user' do
         before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with('abc123').and_return(person) # rubocop:todo RSpec/AnyInstance
+
           authenticate_as(other_user)
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'does not display a link to manage the profile' do
@@ -81,8 +90,12 @@ describe 'editing profile preferences' do
 
       context 'when logged in as an admin' do
         before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+          allow(person).to receive(:as_json).and_return({ 'data' => {} })
+
           authenticate_admin_user
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'allows the admin to become and unbecome the user in the profile' do
@@ -101,9 +114,13 @@ describe 'editing profile preferences' do
         let(:deputy) { create(:user) }
 
         before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+          allow(person).to receive(:as_json).and_return({ 'data' => {} })
+
           create(:deputy_assignment, primary: user, deputy: deputy)
           authenticate_as(deputy)
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         it 'allows the deputy to become and unbecome the user in the profile' do
@@ -123,7 +140,12 @@ describe 'editing profile preferences' do
   describe 'the ORCID link', type: :feature do
     describe 'visiting the profile page for a given user' do
       context 'when not logged in' do
-        before { visit profile_path(webaccess_id: 'abc123') }
+        before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+
+          visit profile_path(webaccess_id: user.webaccess_id)
+        end
 
         context 'when the user has no ORCID ID' do
           it 'does not display an ORCID ID link' do
@@ -151,7 +173,7 @@ describe 'editing profile preferences' do
       context 'when logged in as that user' do
         before do
           authenticate_as(user)
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         context 'when the user has no ORCID ID' do
@@ -179,8 +201,12 @@ describe 'editing profile preferences' do
 
       context 'when logged in as a different user' do
         before do
+          person = instance_spy(PsuIdentity::SearchService::Person)
+          allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+          allow(person).to receive(:as_json).and_return({ 'data' => {} })
+
           authenticate_as(other_user)
-          visit profile_path(webaccess_id: 'abc123')
+          visit profile_path(webaccess_id: user.webaccess_id)
         end
 
         context 'when the user has no ORCID ID' do
@@ -504,7 +530,7 @@ describe 'editing profile preferences' do
       end
 
       it 'shows bio information for the user' do
-        expect(page).to have_content 'Bob Testuser'
+        expect(page).to have_content 'Test A Person'
       end
 
       context "when the user doesn't belong to an organization" do

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class ScholarsphereUploadJob < ApplicationJob
-  queue_as "scholarsphere-uploads-#{`hostname`}".strip
+  queue_as Settings.delayed_job.upload_queue
 
   def perform(deposit_id, user_id)
     Scholarsphere::Client.reset

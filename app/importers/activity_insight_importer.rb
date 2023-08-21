@@ -200,6 +200,23 @@ class ActivityInsightImporter
               c.save!
             end
           end
+
+          activity_insight_file_location = pub.postprints&.first&.location
+
+          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
+
+            if aif.blank?
+              file = ActivityInsightOAFile.create(location: activity_insight_file_location)
+              pub_record.activity_insight_oa_files << file
+              pub_record.save!
+              unless pub_record.doi_verified == true
+                pub_record.oa_workflow_state = 'automatic DOI verification pending'
+                pub_record.save!
+                DOIVerificationJob.perform_later(pub_record.id)
+              end
+            end
+          end
         end
       rescue StandardError => e
         log_error(pub, e, u)
@@ -960,6 +977,10 @@ class ActivityInsightPublicationPostprint
     # NOTE: this field is misspelled as "ACCESIBLE" (one S) on the Activity Insight side,
     # so the below misspelling is intentional.
     text_for('ACCESIBLE')
+  end
+
+  def location
+    text_for('DOC')
   end
 
   private

@@ -183,7 +183,7 @@ describe 'claiming authorship of a publication' do
 
           it 'sends a notification of the claim to the RMD admins' do
             open_email('rmd-admin@psu.edu')
-            expect(current_email.body).to match(/Test Claimer/)
+            expect(current_email.body).to match(/Test A Person/)
           end
 
           it 'returns the user to page for managing their profile publications' do

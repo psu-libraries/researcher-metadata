@@ -204,6 +204,13 @@ en:
       pending_as_primary: Awaiting Confirmation
       pending_as_deputy: wants you to be able to act on their behalf
       accept: Accept
+    activity_insight_oa_dashboard_component:
+      doi_verification_title: Verify DOIs
+      doi_verification_description: Publications that require manual DOI curation or verification.
+      file_version_curation_title: Review File Versions
+      file_version_curation_description: Publications that still have an unknown file version and no correct version after automated file version checking.
+      permissions_curation_title: Review Permissions
+      permissions_curation_description: Publications that require manual permissions curation.
 
   helpers:
     submit:

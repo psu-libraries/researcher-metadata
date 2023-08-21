@@ -37,7 +37,7 @@ class NewDeputyAssignmentForm
   private
 
     def find_or_initialize_deputy(webaccess_id:)
-      user = PsuIdentityUserService.find_or_initialize_user(webaccess_id: webaccess_id)
+      user = PSUIdentityUserService.find_or_initialize_user(webaccess_id: webaccess_id)
 
       if user.blank?
         errors.add(:deputy_webaccess_id, :not_found)
@@ -50,7 +50,7 @@ class NewDeputyAssignmentForm
     rescue ActiveRecord::RecordInvalid
       errors.add(:base, :error_creating_user)
       nil
-    rescue PsuIdentityUserService::IdentityServiceError
+    rescue PSUIdentityUserService::IdentityServiceError
       errors.add(:base, :identity_service_error)
       nil
     end

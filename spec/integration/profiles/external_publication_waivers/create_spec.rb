@@ -49,7 +49,7 @@ describe 'submitting an open access waiver for a publication that is not in the 
         open_email('test123@psu.edu')
         expect(current_email).not_to be_nil
         expect(current_email.subject).to match(/PSU Open Access Policy Waiver for Requested Article/i)
-        expect(current_email.body).to match(/Test User/)
+        expect(current_email.body).to match(/Test A Person/)
         expect(current_email.body).to match(/My Test Publication/)
         expect(current_email.body).to match(/Test Journal/)
       end
@@ -81,6 +81,10 @@ describe 'submitting an open access waiver for a publication that is not in the 
     let(:deputy) { create(:user) }
 
     before do
+      person = instance_spy(PsuIdentity::SearchService::Person)
+      allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
+      allow(person).to receive(:as_json).and_return({ 'data' => {} })
+
       create(:deputy_assignment, primary: user, deputy: deputy)
       impersonate_user(primary: user, deputy: deputy)
       visit new_external_publication_waiver_path

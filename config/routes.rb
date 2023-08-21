@@ -20,6 +20,13 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/activity_insight_oa_workflow' => 'activity_insight_oa_workflow#index'
+  namespace :activity_insight_oa_workflow do
+    get '/doi_verification' => 'doi_verification#index'
+    get '/file_version_review' => 'file_version_curation#index'
+    get '/permissions_review' => 'permissions_curation#index'
+  end
+
   root to: 'public#home'
   get '/resources' => 'public#resources', as: :resources
   get '/api_docs' => 'public#api_docs', as: :api_docs

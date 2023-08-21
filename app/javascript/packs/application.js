@@ -1,3 +1,0 @@
-import 'controllers';
-import 'frontend';
-

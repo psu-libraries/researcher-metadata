@@ -7,7 +7,7 @@ class PublicationMergeOnMatchingPolicy
   end
 
   # merge! is meant to only be applied to publications that return true
-  # when analyzed with PublicationMatchOnDoiPolicy's or PublicationMatchMissingDoiPolicy's #ok_to_merge? method
+  # when analyzed with PublicationMatchOnDOIPolicy's or PublicationMatchMissingDOIPolicy's #ok_to_merge? method
   def merge!
     publication1.update attributes
     publication1.contributor_names = contributor_names_to_keep
@@ -68,7 +68,7 @@ class PublicationMergeOnMatchingPolicy
       secondary_title2 = publication2.secondary_title
       if publication1.pure_import_identifiers.present?
         if secondary_title1.present? &&
-            title1&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title1&.downcase&.gsub(/[^a-z0-9]/, ''))
+            publication1.matchable_title&.exclude?(publication1.matchable_secondary_title)
           return "#{title1}: #{secondary_title1}"
         else
           return title1
@@ -77,7 +77,7 @@ class PublicationMergeOnMatchingPolicy
 
       if publication2.pure_import_identifiers.present?
         if secondary_title2.present? &&
-            title2&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title2&.downcase&.gsub(/[^a-z0-9]/, ''))
+            publication2.matchable_title&.exclude?(publication2.matchable_secondary_title)
           return "#{title2}: #{secondary_title2}"
         else
           return title2
@@ -90,17 +90,18 @@ class PublicationMergeOnMatchingPolicy
     def secondary_title
       secondary_title1 = publication1.secondary_title
       secondary_title2 = publication2.secondary_title
+      formatted_title = MatchableFormatter.new(title).format
       if publication1.pure_import_identifiers.present? || publication2.pure_import_identifiers.present?
         return nil
       end
 
       if secondary_title1.present? &&
-          title&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title1&.downcase&.gsub(/[^a-z0-9]/, ''))
+          formatted_title&.exclude?(publication1.matchable_secondary_title)
         return secondary_title1
       end
 
       if secondary_title2.present? &&
-          title&.downcase&.gsub(/[^a-z0-9]/, '')&.exclude?(secondary_title2&.downcase&.gsub(/[^a-z0-9]/, ''))
+          formatted_title&.exclude?(publication2.matchable_secondary_title)
         return secondary_title2
       end
 

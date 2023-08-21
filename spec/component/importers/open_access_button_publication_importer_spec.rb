@@ -8,25 +8,50 @@ describe OpenAccessButtonPublicationImporter do
   describe '#import_all' do
     context 'when an existing publication does not have a DOI' do
       # Tests that the " and ' characters are stripped from title when querying OAB title endpoint
-      let!(:pub) { create(:publication, doi: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'") }
+      let!(:pub) { create(:publication, doi: nil, doi_verified: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'") }
 
-      before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
+      context 'when there is a title match from OAB' do
+        before do
+          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
+        end
+
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 1
+        end
+
+        it 'updates Open Access Button check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the publication DOI' do
+          importer.import_all
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+        end
+
+        it 'updates the publication DOI verification' do
+          importer.import_all
+          expect(pub.reload.doi_verified).to be true
+        end
       end
 
-      it 'creates a new open access location for the publication' do
-        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
-      end
+      context 'when there is not a title match from OAB' do
+        before do
+          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
+        end
 
-      it 'updates Open Access Button check timestamp on the publication' do
-        importer.import_new
-        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-      end
+        it 'does not update doi' do
+          importer.import_all
+          expect(pub.reload.doi).to be_nil
+          expect(pub.reload.doi_verified).to be_nil
+        end
 
-      it 'updates the publication DOI' do
-        importer.import_new
-        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+        it 'updates Open Access Button check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
       end
     end
 
@@ -50,6 +75,11 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates the publication DOI' do
         importer.import_new
         expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to be true
       end
     end
 
@@ -219,18 +249,48 @@ describe OpenAccessButtonPublicationImporter do
     context 'when an existing publication does not have a DOI' do
       let!(:pub) { create(:publication, doi: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
-      before do
-        allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
-          .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
+      context 'when there is a matching title from OAB' do
+        before do
+          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oab3.json').read)
+        end
+
+        it 'creates a new open access location for the publication' do
+          expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
+        end
+
+        it 'updates Open Access Button check timestamp on the publication' do
+          importer.import_new
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
+
+        it 'updates the publication DOI' do
+          importer.import_new
+          expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+        end
+
+        it 'updates the publication DOI verification' do
+          importer.import_new
+          expect(pub.reload.doi_verified).to be true
+        end
       end
 
-      it 'creates a new open access location for the publication' do
-        expect { importer.import_new }.to change { pub.open_access_locations.count }.by 1
-      end
+      context 'when there is not a title match from OAB' do
+        before do
+          allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
+            .and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
+        end
 
-      it 'updates Open Access Button check timestamp on the publication' do
-        importer.import_new
-        expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        it 'does not update doi' do
+          importer.import_new
+          expect(pub.reload.doi).to be_nil
+          expect(pub.reload.doi_verified).to be_nil
+        end
+
+        it 'updates Open Access Button check timestamp on the publication' do
+          importer.import_new
+          expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        end
       end
     end
 
@@ -249,6 +309,16 @@ describe OpenAccessButtonPublicationImporter do
       it 'updates Open Access Button check timestamp on the publication' do
         importer.import_new
         expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+
+      it 'updates the publication DOI' do
+        importer.import_new
+        expect(pub.reload.doi).to eq 'https://doi.org/10.1103/PhysRevLett.80.3915'
+      end
+
+      it 'updates the publication DOI verification' do
+        importer.import_new
+        expect(pub.reload.doi_verified).to be true
       end
     end
 

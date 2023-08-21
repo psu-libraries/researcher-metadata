@@ -5,8 +5,6 @@ class Publication < ApplicationRecord
 
   class NonDuplicateMerge < ArgumentError; end
 
-  include Swagger::Blocks
-
   PUBLISHED_STATUS = 'Published'
   IN_PRESS_STATUS = 'In Press'
 
@@ -64,6 +62,14 @@ class Publication < ApplicationRecord
     ['gold', 'hybrid', 'bronze', 'green', 'closed']
   end
 
+  def self.oa_workflow_states
+    ['automatic DOI verification pending', 'oa metadata search pending']
+  end
+
+  def self.preferred_versions
+    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
+  end
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -107,6 +113,8 @@ class Publication < ApplicationRecord
   validates :status, inclusion: { in: [PUBLISHED_STATUS, IN_PRESS_STATUS] }
   validates :open_access_status, inclusion: { in: open_access_statuses, allow_nil: true }
   validates :activity_insight_postprint_status, inclusion: { in: postprint_statuses, allow_nil: true }
+  validates :oa_workflow_state, inclusion: { in: oa_workflow_states, allow_nil: true }
+  validates :preferred_version, inclusion: { in: preferred_versions, allow_nil: true }
 
   validate :doi_format_is_valid
 
@@ -132,7 +140,27 @@ class Publication < ApplicationRecord
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
+  scope :with_no_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
+  scope :activity_insight_oa_publication, -> { oa_publication.with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
+  scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
+  scope :needs_permissions_check, -> { activity_insight_oa_publication.where(licence: nil, doi_verified: true, permissions_last_checked_at: nil) }
+  scope :needs_oa_metadata_search,
+        -> {
+          activity_insight_oa_publication
+            .where(doi_verified: true)
+            .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
+            .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
+        }
+  scope :file_version_check_failed, -> {
+    activity_insight_oa_publication
+      .where.not(preferred_version: nil)
+      .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
+  }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
+  scope :permissions_check_failed, -> { activity_insight_oa_publication.where.not(permissions_last_checked_at: nil).where(licence: nil) }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
@@ -170,192 +198,6 @@ class Publication < ApplicationRecord
     d.try(:gsub, 'https://doi.org/', '')
   end
 
-  swagger_schema :PublicationV1 do
-    key :type, :object
-    key :required, [:id, :type, :attributes]
-    property :id do
-      key :type, :string
-      key :example, '123'
-      key :description, 'The ID of the object'
-    end
-    property :type do
-      key :type, :string
-      key :example, 'publication'
-      key :description, 'The type of the object'
-    end
-    property :attributes do
-      key :type, :object
-      key :required, [:title, :publication_type, :contributors, :tags, :pure_ids, :activity_insight_ids]
-      property :title do
-        key :type, :string
-        key :example, 'A Scholarly Research Article'
-        key :description, 'The title of the publication'
-      end
-      property :secondary_title do
-        key :type, [:string, :null]
-        key :example, 'A Comparative Analysis'
-        key :description, 'The sub-title of the publication'
-      end
-      property :journal_title do
-        key :type, [:string, :null]
-        key :example, 'An Academic Journal'
-        key :description, 'The title of the journal in which the publication was published'
-      end
-      property :publication_type do
-        key :type, :string
-        key :example, 'Academic Journal Article'
-        key :description, 'The type of the publication'
-      end
-      property :publisher do
-        key :type, [:string, :null]
-        key :example, 'A Publishing Company'
-        key :description, 'The publisher of the publication'
-      end
-      property :status do
-        key :type, [:string, :null]
-        key :example, 'Published'
-        key :description, 'The status of the publication'
-      end
-      property :volume do
-        key :type, [:string, :null]
-        key :example, '30'
-        key :description, 'The volume of the journal in which the publication was published'
-      end
-      property :issue do
-        key :type, [:string, :null]
-        key :example, '12'
-        key :description, 'The issue of the journal in which the publication was published'
-      end
-      property :edition do
-        key :type, [:string, :null]
-        key :example, '6'
-        key :description, 'the edition of the journal in which the publication was published'
-      end
-      property :page_range do
-        key :type, [:string, :null]
-        key :example, '110-123'
-        key :description, 'The range of page numbers on which the publication content appears in the journal'
-      end
-      property :authors_et_al do
-        key :type, [:boolean, :null]
-        key :example, true
-        key :description, 'Whether or not the publication has additional, unlisted authors'
-      end
-      property :abstract do
-        key :type, [:string, :null]
-        key :example, 'A summary of the research'
-        key :description, 'A brief summary of the content of the publication'
-      end
-      property :doi do
-        key :type, [:string, :null]
-        key :example, 'https://doi.org/example'
-        key :description, 'The Digital Object Identifier URL for the publication'
-      end
-      property :preferred_open_access_url do
-        key :type, [:string, :null]
-        key :example, 'https://example.org/articles/article-123.pdf'
-        key :description, 'A URL for an open access copy of the publication'
-      end
-      property :published_on do
-        key :type, [:string, :null]
-        key :example, '2010-12-05'
-        key :description, 'The date on which the publication was published'
-      end
-      property :citation_count do
-        key :type, [:integer, :null]
-        key :example, 50
-        key :description, 'The number of times that the publication has been cited in other works'
-      end
-      property :contributors do
-        key :type, :array
-        items do
-          key :type, :object
-          property :first_name do
-            key :type, [:string, :null]
-            key :example, 'Anne'
-            key :description, 'The first name of a person who contributed to the publication'
-          end
-          property :middle_name do
-            key :type, [:string, :null]
-            key :example, 'Example'
-            key :description, 'The middle name of a person who contributed to the publication'
-          end
-          property :last_name do
-            key :type, [:string, :null]
-            key :example, 'Contributor'
-            key :description, 'The last name of a person who contributed to the publication'
-          end
-          property :psu_user_id do
-            key :type, [:string, :null]
-            key :example, 'abc1234'
-            key :description, 'The Penn State user ID of a person who contributed to the publication if they have one'
-          end
-        end
-      end
-      property :tags do
-        key :type, :array
-        items do
-          key :type, :object
-          key :required, [:name]
-          property :name do
-            key :type, :string
-            key :example, 'A Topic'
-            key :description, 'The name of a tag'
-          end
-          property :rank do
-            key :type, [:number, :null]
-            key :example, 1.25
-            key :description, 'The ranking of the tag'
-          end
-        end
-      end
-      property :pure_ids do
-        key :type, :array
-        key :description, 'Unique identifiers for corresponding records in the Pure database that represent the publication'
-        items do
-          key :type, :string
-          key :example, 'abc-def-123-456'
-        end
-      end
-      property :activity_insight_ids do
-        key :type, :array
-        key :description, 'Unique identifiers for corresponding records in the Activity Insight database that represent the publication'
-        items do
-          key :type, :string
-          key :example, '1234567890'
-        end
-      end
-      property :profile_preferences do
-        key :type, :array
-        key :description, 'An array of settings for each user who is an author of the publication indicating how they prefer to have the publication displayed in a profile'
-        items do
-          key :type, :object
-          key :required, [:user_id, :webaccess_id, :visible_in_profile, :position_in_profile]
-          property :user_id do
-            key :type, :number
-            key :example, 123
-            key :description, 'The ID of the user to which this set of preferences belongs'
-          end
-          property :webaccess_id do
-            key :type, :string
-            key :example, 'abc123'
-            key :description, 'The WebAccess ID of the user to which this set of preferences belongs'
-          end
-          property :visible_in_profile do
-            key :type, :boolean
-            key :example, true
-            key :description, "The user's preference for whether or not this publication should be displayed in their profile"
-          end
-          property :position_in_profile do
-            key :type, [:number, :null]
-            key :example, 8
-            key :description, "The user's preference for what position this publication should occupy in a list of their publications in their profile"
-          end
-        end
-      end
-    end
-  end
-
   rails_admin do
     list do
       scopes [
@@ -382,6 +224,11 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
+      field(:preferred_version)
+      field(:set_statement)
+      field(:licence)
+      field(:embargo_date)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -444,6 +291,11 @@ class Publication < ApplicationRecord
         label 'DOI'
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
+      field(:doi_verified)
+      field(:preferred_version)
+      field(:set_statement)
+      field(:licence)
+      field(:embargo_date)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -488,6 +340,22 @@ class Publication < ApplicationRecord
       field(:edition)
       field(:page_range)
       field(:doi) { label 'DOI' }
+      field(:doi_verified, :enum) do
+        label 'DOI verified?'
+        enum do
+          [['True', true], ['False', false]]
+        end
+      end
+      field(:preferred_version, :enum) do
+        label 'Preferred Version'
+        enum do
+          [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
+           [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
+        end
+      end
+      field(:set_statement) { label 'Deposit Statement' }
+      field(:licence) { label 'License' }
+      field(:embargo_date)
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -502,6 +370,10 @@ class Publication < ApplicationRecord
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
     end
+  end
+
+  def preferred_version=(val)
+    super(val == '' ? nil : val)
   end
 
   def ai_import_identifiers
@@ -616,6 +488,24 @@ class Publication < ApplicationRecord
     status == PUBLISHED_STATUS
   end
 
+  def matchable_title
+    MatchableFormatter.new(title).format
+  end
+
+  def matchable_secondary_title
+    secondary_title.present? ? MatchableFormatter.new(secondary_title).format : ''
+  end
+
+  def can_receive_new_ai_oa_files?
+    no_open_access_information? && is_oa_publication? && no_valid_file_version?
+  end
+
+  def preferred_version_display
+    return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
+
+    I18n.t('file_versions.published_version_display')
+  end
+
   def self.filter_by_activity_insight_id(query, activity_insight_id)
     query.joins(:imports)
       .where(publication_imports: {
@@ -637,6 +527,31 @@ class Publication < ApplicationRecord
     end
 
     query.where(doi: doi).uniq
+  end
+
+  def update_from_unpaywall(unpaywall_response)
+    if unpaywall_response.matchable_title == matchable_title && doi.blank? && unpaywall_response.doi.present?
+      self.doi = unpaywall_response.doi
+      self.doi_verified = true
+      title_match = true
+    end
+
+    unpaywall_locations = doi.present? || title_match ? unpaywall_response.oa_locations : []
+    unpaywall_locations_by_url = doi.present? || title_match ? unpaywall_response.oal_urls : {}
+    existing_locations = open_access_locations.filter { |l| l.source == Source::UNPAYWALL }
+
+    ActiveRecord::Base.transaction do
+      locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
+      locations_to_delete.each(&:destroy)
+
+      self.open_access_status = unpaywall_response.oa_status if doi.present? || title_match
+
+      self.unpaywall_last_checked_at = Time.zone.now
+
+      save!
+
+      OpenAccessLocation.create_or_update_from_unpaywall(unpaywall_locations, self)
+    end
   end
 
   private
@@ -696,7 +611,11 @@ class Publication < ApplicationRecord
         oalmp = OpenAccessLocationMergePolicy.new(all_pubs)
         self.open_access_locations = oalmp.open_access_locations_to_keep
 
+        self.activity_insight_oa_files = all_pubs.map(&:activity_insight_oa_files).flatten
+
         yield if block_given?
+
+        DOIVerificationMergePolicy.new(self, all_pubs).merge!
 
         pubs_to_delete.each do |p|
           p.non_duplicate_groups.each do |ndg|
@@ -726,5 +645,9 @@ class Publication < ApplicationRecord
           errors.add(:doi, I18n.t('models.publication.validation_errors.doi_format'))
         end
       end
+    end
+
+    def no_valid_file_version?
+      !(preferred_version.present? && activity_insight_oa_files.map(&:version).include?(preferred_version))
     end
 end

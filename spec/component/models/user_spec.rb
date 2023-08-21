@@ -293,6 +293,13 @@ describe User, type: :model do
       let(:user) { create(:user, webaccess_id: 'abc123') }
       let(:uid) { user.webaccess_id }
 
+      before do
+        person = instance_spy(PsuIdentity::SearchService::Person)
+        client = instance_double(PsuIdentity::SearchService::Client)
+        allow(PsuIdentity::SearchService::Client).to receive(:new).and_return(client)
+        allow(client).to receive(:userid).with(user.webaccess_id).and_return(person)
+      end
+
       it 'returns the matching user' do
         expect(described_class.from_omniauth(auth)).to eq user
       end
@@ -1329,7 +1336,7 @@ describe User, type: :model do
       let(:pure_uuid) { 'pure-abc-123' }
 
       it "returns the URL to the user's page on the Penn State Pure website" do
-        expect(user.pure_profile_url).to eq 'https://pennstate.pure.elsevier.com/en/persons/pure-abc-123'
+        expect(user.pure_profile_url).to eq 'https://pure.psu.edu/en/persons/pure-abc-123'
       end
     end
   end
@@ -1716,7 +1723,7 @@ describe User, type: :model do
     context 'when identity data is present' do
       let(:user) { create(:user, webaccess_id: 'ajk5603') }
 
-      before { PsuIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id) }
+      before { PSUIdentityUserService.find_or_initialize_user(webaccess_id: user.webaccess_id) }
 
       it { is_expected.to be_a(PsuIdentity::SearchService::Person) }
       its(:surname) { is_expected.to eq('Kiessling') }

@@ -39,14 +39,6 @@ Rails.application.configure do
   # Store uploaded files on the local file system (see config/storage.yml for options).
   config.active_storage.service = :local
 
-  # Mail configuration
-  config.action_mailer.raise_delivery_errors = false
-  config.action_mailer.default_url_options = { protocol: 'http', host: 'researcher-metadata.test' }
-  config.action_mailer.perform_caching = false
-  config.action_mailer.perform_deliveries = true
-  config.action_mailer.delivery_method = :file
-  config.action_mailer.file_settings = { location: Rails.root.join('tmp/mail') }
-
   # Print deprecation notices to the Rails logger.
   config.active_support.deprecation = :log
 

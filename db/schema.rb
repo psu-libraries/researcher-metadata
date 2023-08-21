@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_01_10_174055) do
+ActiveRecord::Schema.define(version: 2023_03_06_155446) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -46,10 +46,12 @@ ActiveRecord::Schema.define(version: 2023_01_10_174055) do
 
   create_table "activity_insight_oa_files", force: :cascade do |t|
     t.string "location"
-    t.string "checksum"
     t.bigint "publication_id", null: false
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
+    t.string "version"
+    t.string "file_download_location"
+    t.boolean "downloaded"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
   end
 
@@ -479,6 +481,14 @@ ActiveRecord::Schema.define(version: 2023_01_10_174055) do
     t.string "open_access_status"
     t.datetime "unpaywall_last_checked_at"
     t.string "activity_insight_postprint_status"
+    t.boolean "doi_verified"
+    t.string "oa_workflow_state"
+    t.string "licence"
+    t.date "embargo_date"
+    t.string "set_statement"
+    t.string "preferred_version"
+    t.datetime "permissions_last_checked_at"
+    t.datetime "oa_status_last_checked_at"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"

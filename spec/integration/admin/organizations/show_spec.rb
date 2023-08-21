@@ -29,32 +29,16 @@ describe 'Admin organization detail page', type: :feature do
     describe 'the page content' do
       before { visit rails_admin.show_path(model_name: :organization, id: org.id) }
 
-      it 'shows the organization detail heading' do
+      it 'shows the correct data for the organization' do
         expect(page).to have_content "Details for Organization 'Test Org'"
-      end
-
-      it "shows the organization's pure UUID" do
         expect(page).to have_content 'pure-uuid-001'
-      end
-
-      it "shows the organization's type" do
         expect(page).to have_content 'College'
-      end
-
-      it "shows the organization's Pure external identifier" do
         expect(page).to have_content 'EXT-ID'
-      end
-
-      it "shows a link to the organization's parent organization" do
         expect(page).to have_link 'Test Parent Org'
-      end
 
-      it "shows links to the organization's child organizations" do
         expect(page).to have_link 'Test Child Org 1'
         expect(page).to have_link 'Test Child Org 2'
-      end
 
-      it "show the organization's users and memberships" do
         expect(page).to have_link 'Susan Testuser - Test Org'
         expect(page).to have_link 'Bob Tester - Test Org'
 

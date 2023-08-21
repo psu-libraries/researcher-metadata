@@ -65,23 +65,20 @@ class OpenAccessButtonPublicationImporter
     end
 
     def query_open_access_button_for(publication)
-      oab_json = nil
-      find_url = if publication.doi.present?
-                   "https://api.openaccessbutton.org/find?id=#{CGI.escape(publication.doi_url_path)}"
-                 else
-                   "https://api.openaccessbutton.org/find?title=#{CGI.escape(cleaned_title(publication))}"
-                 end
-      oab_json = JSON.parse(HttpService.get(find_url))
+      oab_response = OABClient.query_open_access_button(publication)
 
       existing_oa_location = publication.open_access_locations.find_by(source: Source::OPEN_ACCESS_BUTTON)
 
-      publication.doi = DOISanitizer.new(oab_json['metadata']['doi']).url if publication.doi.blank?
+      if publication.doi.blank? && oab_response.doi.present?
+        publication.doi = oab_response.doi
+        publication.doi_verified = true
+      end
 
-      if oab_json['url']
+      if oab_response.url
         if existing_oa_location
-          existing_oa_location.update!(url: oab_json['url'])
+          existing_oa_location.update!(url: oab_response.url)
         else
-          publication.open_access_locations.create!(source: Source::OPEN_ACCESS_BUTTON, url: oab_json['url'])
+          publication.open_access_locations.create!(source: Source::OPEN_ACCESS_BUTTON, url: oab_response.url)
         end
       else
         existing_oa_location.try(:destroy)
@@ -100,14 +97,8 @@ class OpenAccessButtonPublicationImporter
         metadata: {
           publication_id: publication&.id,
           publication_doi_url_path: publication&.doi_url_path,
-          oab_json: oab_json.to_s
+          oab_json: oab_response.to_s
         }
       )
-    end
-
-    # Open Access Button will block requests that they detect as "bot behavior"
-    # We strip some characters here to not get flagged as a bot and blocked
-    def cleaned_title(publication)
-      publication.title.tr("'\"", '')
     end
 end

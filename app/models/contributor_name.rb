@@ -7,7 +7,7 @@ class ContributorName < ApplicationRecord
   validates :publication, :position, presence: true
   validate :at_least_one_name_present
 
-  delegate :webaccess_id, to: :user, prefix: false, allow_nil: true
+  delegate :webaccess_id, :is_active, to: :user, prefix: false, allow_nil: true
 
   def name
     full_name = first_name.to_s
@@ -20,7 +20,7 @@ class ContributorName < ApplicationRecord
 
   def to_scholarsphere_creator
     ss_attrs = {}
-    ss_attrs[:psu_id] = webaccess_id if webaccess_id
+    ss_attrs[:psu_id] = webaccess_id if webaccess_id && is_active
     ss_attrs[:orcid] = orcid_identifier if orcid_identifier
     ss_attrs[:display_name] = name if name.present?
     ss_attrs.presence

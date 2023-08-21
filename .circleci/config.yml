@@ -3,12 +3,43 @@ orbs:
   docker: circleci/docker@2.2.0
   ruby: circleci/ruby@1.0
   node: circleci/node@2
-  browser-tools: circleci/browser-tools@1.4.0
+  browser-tools: circleci/browser-tools@1.4.3
 
 jobs:
+  release:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    environment:
+      REGISTRY_HOST: harbor.k8s.libraries.psu.edu
+      REGISTRY_REPO: library/researcher-metadata
+      GITHUB_USER: 'psu-stewardship-bot'
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Release"
+          command: |
+            /usr/local/bin/tag-image
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone git@github.com:psu-libraries/researcher-metadata-config.git
+            cd researcher-metadata-config
+            /usr/local/bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
+
+  deploy:
+    docker:
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+    steps:
+      - add_ssh_keys
+      - run:
+          name: "Update Config Repo"
+          command: |
+            ssh-keyscan github.com > ~/.ssh/known_hosts
+            git clone git@github.com:psu-libraries/researcher-metadata-config.git
+            cd researcher-metadata-config
+            ./bin/generate_app
+
   publish:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMG_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
         user: root
     steps:
       - setup_remote_docker:
@@ -59,9 +90,6 @@ jobs:
     steps:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
-      - run:
-          name: Remove Cruft
-          command: rm *
       - checkout
       - ruby/install-deps
       - node/install-packages:
@@ -69,6 +97,9 @@ jobs:
           cache-key: "yarn.lock"
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
+      - run:
+          name: Configure Rspec
+          command: cp .rspec.ci .rspec
       - run:
           name: Wait for DB
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
@@ -83,7 +114,7 @@ jobs:
           command: bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rspec
+          command: bundle exec rspec 
       - run:
           name: Upload Coverage
           when: on_success
@@ -108,3 +139,24 @@ workflows:
       - test:         # Then run test,
           requires:   # Test requires that build passes for it to run.
             - build   # Finally, run the build job.
+      - deploy:
+          context: org-global
+          requires:
+          - publish
+          - test
+          filters:
+            branches:
+              only:
+                - main
+                - /preview\/.*/
+      - release:
+          context:
+            - org-global
+          name: "Release"
+          filters:
+            tags:
+              only:
+                - /^v\d+.\d+.\d+.*/
+            branches:
+              ignore:
+                - /.*/

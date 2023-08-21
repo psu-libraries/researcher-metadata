@@ -36,7 +36,9 @@ gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
+gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
+gem 'lograge'                           # Structured logging for production
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
@@ -53,18 +55,17 @@ gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
 gem 'simple_form'                       # HTML Form builder
 gem 'smarter_csv'                       # simple, efficient CSV processing for Ruby
+gem 'string-similarity'                 # use for string comparison
 gem 'strscan', '~> 3.0.1'               # Must be kept at 3.0 to work with bundler 2.3.8
-gem 'swagger-blocks'                    # DSL for pure Ruby code blocks that can be turned into JSON
+gem 'terser'                            # Compressor for JavaScript assets
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
-gem 'uglifier', '>= 1.3.0'              # use Uglifier as compressor for JavaScript assets
 gem 'view_component'                    # Reusable, testable view components
-gem 'webpacker'                         # bundle assets
 
 group :development, :test do
-  gem 'apivore', git: 'https://github.com/psu-libraries/apivore.git'
   gem 'byebug', platform: :mri
   gem 'niftany'
   gem 'pry-byebug'
+  gem 'rswag-specs'                     # DSL for generating and testing swagger docs
 end
 
 group :development do
