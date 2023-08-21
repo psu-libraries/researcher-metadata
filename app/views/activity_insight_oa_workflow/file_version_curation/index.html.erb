@@ -8,7 +8,7 @@
         <th>Title</th>
         <th>Preferred Version</th>
         <th>Edit File Metadata</th>
-        <th>View File</th>
+        <th>Download File</th>
         <th>Version Status</th>
       </tr>
     </thead>
@@ -24,9 +24,9 @@
                       rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
                       target: '_blank' %>
                 </td>
-                <td><% p.activity_insight_oa_files.each do |f| %>
+                <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
                 <% if f.stored_file_path.present? %>
-                  <%= link_to "Download #{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
+                  <%= link_to "#{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
                 <% else %>
                   Not Found
                 <% end %>
