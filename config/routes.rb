@@ -24,6 +24,7 @@ Rails.application.routes.draw do
   namespace :activity_insight_oa_workflow do
     get '/doi_verification' => 'doi_verification#index'
     get '/file_version_review' => 'file_version_curation#index'
+    get '/wrong_file_version_review' => 'wrong_file_version_curation#index'
     get '/permissions_review' => 'permissions_curation#index'
   end
 
