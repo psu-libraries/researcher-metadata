@@ -590,6 +590,12 @@ describe Publication, type: :model do
       end
     end
 
+    describe '.wrong_file_version' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
+        expect(described_class.wrong_file_version).to match_array [pub12]
+      end
+    end
+
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
         expect(described_class.needs_oa_metadata_search).to match_array [pub6, pub8, pub9, pub10]
