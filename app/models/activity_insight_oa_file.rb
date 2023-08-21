@@ -54,6 +54,11 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:created_at)
       field(:updated_at)
       field(:publication)
+      field 'File' do
+        formatted_value do
+          bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+        end
+      end
     end
 
     list do
@@ -67,6 +72,12 @@ class ActivityInsightOAFile < ApplicationRecord
 
     edit do
       field(:location) { read_only true }
+      field 'File' do
+        read_only true
+        formatted_value do
+          bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+        end
+      end
       field(:version, :enum) do
         required true
         enum do

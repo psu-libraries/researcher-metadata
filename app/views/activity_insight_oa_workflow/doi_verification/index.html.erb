@@ -8,6 +8,7 @@
         <th>Title</th>
         <th>DOI</th>
         <th>DOI Verification Status</th>
+        <th>Files</th>
       </tr>
     </thead>
     <tbody class='card-body'>
@@ -18,6 +19,14 @@
                   target: '_blank' %></td>
           <td><%= p.doi %></td>
           <td>Failed Verification</td>
+          <td><% p.activity_insight_oa_files.each do |f| %>
+                <% if f.stored_file_path.present? %>
+                  <%= link_to "Download #{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
+                <% else %>
+                  Not Found
+                <% end %>
+              <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
