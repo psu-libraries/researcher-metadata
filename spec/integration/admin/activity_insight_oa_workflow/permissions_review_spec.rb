@@ -42,7 +42,6 @@ describe 'Admin Permissions Review dashboard', type: :feature do
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }
 
-
   before do
     authenticate_admin_user
     allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
@@ -71,7 +70,7 @@ describe 'Admin Permissions Review dashboard', type: :feature do
         within 'td#preferred-version' do
           expect(page).to have_text('Accepted Manuscript')
         end
-        
+
         within 'td.file-name' do
           expect(page).to have_link(aif1.download_filename)
         end
