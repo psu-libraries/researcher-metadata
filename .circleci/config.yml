@@ -13,6 +13,7 @@ jobs:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/researcher-metadata
       GITHUB_USER: 'psu-stewardship-bot'
+      CONFIG_REPO: 'git@github.com:psu-libraries/researcher-metadata-config.git'
     steps:
       - add_ssh_keys
       - run:
@@ -20,7 +21,7 @@ jobs:
           command: |
             /usr/local/bin/tag-image
             ssh-keyscan github.com > ~/.ssh/known_hosts
-            git clone git@github.com:psu-libraries/researcher-metadata-config.git
+            git clone $CONFIG_REPO
             cd researcher-metadata-config
             /usr/local/bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
 

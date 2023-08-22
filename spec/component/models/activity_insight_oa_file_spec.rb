@@ -49,21 +49,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'scopes' do
     let!(:pub1) { create(:publication,
-                         title: 'pub1',
-                         licence: nil)
+                         title: 'pub1')
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         licence: 'licence')
+                         publication_type: 'Trade Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         licence: 'licence',
-                         publication_type: 'Trade Journal Article')
-    }
-    let!(:pub4) { create(:publication,
-                         title: 'pub4',
-                         licence: 'licence',
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
                          ])
@@ -71,15 +64,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
-    let!(:file3) { create(:activity_insight_oa_file, publication: pub3) }
-    let!(:file4) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:file4) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file_download_location: uploader) }
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file2]
+        expect(described_class.ready_for_download).to match_array [file1]
       end
     end
   end

@@ -41,6 +41,8 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
   it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:checked_for_set_statement).of_type(:boolean) }
+  it { is_expected.to have_db_column(:checked_for_embargo_date).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -522,11 +524,115 @@ describe Publication, type: :model do
                          licence: nil,
                          doi_verified: true)
     }
-    let!(:pub9) { create(:publication,
-                         title: 'pub9',
-                         licence: nil,
-                         doi_verified: true,
-                         permissions_last_checked_at: DateTime.now)
+    let!(:pub9a) { create(:publication,
+                          title: 'pub9',
+                          licence: nil,
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: true,
+                          checked_for_set_statement: true,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9b) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: nil,
+                          set_statement: 'statement',
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: true,
+                          checked_for_set_statement: true,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9c) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: nil,
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: true,
+                          checked_for_set_statement: true,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9d) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: nil,
+                          checked_for_embargo_date: true,
+                          checked_for_set_statement: true,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9e) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: false,
+                          checked_for_set_statement: true,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9f) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: true,
+                          checked_for_set_statement: false,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9g) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: nil,
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: false,
+                          checked_for_set_statement: false,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9h) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: nil,
+                          checked_for_embargo_date: false,
+                          checked_for_set_statement: false,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9i) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: 'statement',
+                          embargo_date: nil,
+                          checked_for_embargo_date: nil,
+                          checked_for_set_statement: nil,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
+    }
+    let!(:pub9j) { create(:publication,
+                          title: 'pub9',
+                          licence: 'license',
+                          preferred_version: 'acceptedVersion',
+                          set_statement: nil,
+                          embargo_date: Date.current,
+                          checked_for_embargo_date: nil,
+                          checked_for_set_statement: nil,
+                          doi_verified: true,
+                          permissions_last_checked_at: DateTime.now)
     }
     let!(:pub10) { create(:publication,
                           title: 'pub10',
@@ -551,7 +657,16 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub7) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub8) }
-    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub9) }
+    let!(:activity_insight_oa_file7a) { create(:activity_insight_oa_file, publication: pub9a) }
+    let!(:activity_insight_oa_file7b) { create(:activity_insight_oa_file, publication: pub9b) }
+    let!(:activity_insight_oa_file7c) { create(:activity_insight_oa_file, publication: pub9c) }
+    let!(:activity_insight_oa_file7d) { create(:activity_insight_oa_file, publication: pub9d) }
+    let!(:activity_insight_oa_file7e) { create(:activity_insight_oa_file, publication: pub9e) }
+    let!(:activity_insight_oa_file7f) { create(:activity_insight_oa_file, publication: pub9f) }
+    let!(:activity_insight_oa_file7g) { create(:activity_insight_oa_file, publication: pub9g) }
+    let!(:activity_insight_oa_file7h) { create(:activity_insight_oa_file, publication: pub9h) }
+    let!(:activity_insight_oa_file7i) { create(:activity_insight_oa_file, publication: pub9i) }
+    let!(:activity_insight_oa_file7j) { create(:activity_insight_oa_file, publication: pub9j) }
     let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
     let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
@@ -562,13 +677,53 @@ describe Publication, type: :model do
 
     describe '.with_no_oa_locations' do
       it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [pub1, pub2, pub3, pub4, pub6, pub7, pub8, pub9, pub10, pub11, pub12]
+        expect(described_class.with_no_oa_locations).to match_array [
+          pub1,
+          pub2,
+          pub3,
+          pub4,
+          pub6,
+          pub7,
+          pub8,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub10,
+          pub11,
+          pub12
+        ]
       end
     end
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
-        expect(described_class.activity_insight_oa_publication).to match_array [pub2, pub3, pub4, pub6, pub8, pub9, pub10, pub11, pub12]
+        expect(described_class.activity_insight_oa_publication).to match_array [
+          pub2,
+          pub3,
+          pub4,
+          pub6,
+          pub8,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub10,
+          pub11,
+          pub12
+        ]
       end
     end
 
@@ -598,7 +753,21 @@ describe Publication, type: :model do
 
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
-        expect(described_class.needs_oa_metadata_search).to match_array [pub6, pub8, pub9, pub10]
+        expect(described_class.needs_oa_metadata_search).to match_array [
+          pub6,
+          pub8,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub10
+        ]
       end
     end
 
@@ -610,7 +779,7 @@ describe Publication, type: :model do
 
     describe '.permissions_check_failed' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
-        expect(described_class.permissions_check_failed).to match_array [pub9]
+        expect(described_class.permissions_check_failed).to match_array [pub9a, pub9b, pub9g, pub9h, pub9i, pub9j]
       end
     end
   end
