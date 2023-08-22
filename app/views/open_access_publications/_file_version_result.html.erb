@@ -1,6 +1,6 @@
 <% if file_version.nil? || file_version == 'unknown' %>
-    <p>We have not been able to determine automatically which version of the article this is. Please
-        select the correct article version so we can fetch the sharing rules for the article.</p>
+    <p>We were not able to determine the version of your uploaded publication article. Please
+        select the correct article version so we can fetch its sharing rules.</p>
 <% else %>
     <p>This looks like the <strong>
     <%=
@@ -13,8 +13,8 @@
         end
     %>
         </strong> of the article.
-        Please update the correct article version if this is not the correct article version
-    so we can fetch the sharing rules for the article.</p>
+        Please update the selected article version if this is not correct
+    so we can fetch the publication's sharing rules.</p>
 <% end %>
 
 <div class="container">

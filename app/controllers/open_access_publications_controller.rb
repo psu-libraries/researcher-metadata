@@ -70,8 +70,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     job_ids = params[:job_ids]
     pdf_file_versions = []
     exif_file_versions = []
-    @cache_files = []
-    @file_version = nil
+    cache_files = []
+    file_version = nil
 
     # Remove failed Delayed::Job and log an error
     job_ids&.reject! do |job_id|
