@@ -337,6 +337,7 @@ class Publication < ApplicationRecord
           )
         end
       end
+      field(:activity_insight_oa_files)
       field(:abstract)
       field(:authors_et_al) { label 'Et al authors?' }
       field(:published_on)

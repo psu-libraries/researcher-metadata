@@ -88,6 +88,9 @@ describe 'Admin publication detail page', type: :feature do
   let!(:journal) { create(:journal,
                           title: 'Test Journal Record') }
 
+  let!(:ai_file) { create(:activity_insight_oa_file,
+                          publication: pub) }
+
   context 'when the current user is an admin' do
     before { authenticate_admin_user }
 
@@ -130,6 +133,9 @@ describe 'Admin publication detail page', type: :feature do
                                   href: rails_admin.show_path(model_name: :open_access_location, id: oal_ss.id)
         expect(page).to have_link 'https://openaccess.org/publications/oal3',
                                   href: rails_admin.show_path(model_name: :open_access_location, id: oal_oab.id)
+
+        expect(page).to have_link "ActivityInsightOAFile ##{ai_file.id}",
+                                  href: rails_admin.show_path(model_name: :activity_insight_oa_file, id: ai_file.id)
 
         expect(page).to have_link 'Test Journal Record', href: rails_admin.show_path(model_name: :journal, id: journal.id)
 
