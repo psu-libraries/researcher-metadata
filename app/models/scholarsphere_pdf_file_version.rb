@@ -35,6 +35,10 @@ class ScholarspherePdfFileVersion
 
         words << page.text.split.first(500)
         words.flatten!
+      # Formatting issues make this prone to errors
+      # Best to rescue and move to the next page
+      rescue StandardError
+        next
       end
       words.flatten.join(' ')
     end

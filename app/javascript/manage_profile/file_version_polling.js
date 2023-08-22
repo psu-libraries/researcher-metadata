@@ -1,24 +1,27 @@
 const file_version_polling = () => {
     const fileVersionResult = document.getElementById("file_version_result");
-    if(fileVersionResult) {
+    if (fileVersionResult) {
         const targetUrl = fileVersionResult.getAttribute("data-target");
 
-        var polling = setInterval(function() {
-            if(targetUrl) {
+        var polling = setInterval(function () {
+            if (targetUrl) {
                 fetch(targetUrl)
                     .then(response => response.text())
                     .then(result => {
-                        if(result) {
+                        if (result) {
                             document.getElementById("file_version_result").innerHTML = result;
-                            
+
                             clearInterval(polling);
                         }
                     });
-                }
+            }
         }, 2000);
 
         // Stop the poll after 60 seconds
-        setTimeout(function() { 
+        setTimeout(function () {
+            document.getElementById("file_version_result").setAttribute('hidden', 'hidden');
+            document.getElementById("hidden-version-form").removeAttribute('hidden');
+
             clearInterval(polling);
         }, 60000);
     }

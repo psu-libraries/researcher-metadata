@@ -1,7 +1,16 @@
-<div id="file_version_result" data-target="<%= file_version_result_path({ job_ids: @job_ids }) %>">
-  <p>
-    <span class="spinner-border" role="status">
-      <span class="sr-only">Loading...</span>
-    </span> Attempting to determine file version, please wait...
-  </p>
-</div>
+<% if file_version == I18n.t('file_versions.accepted_version') || file_version == I18n.t('file_versions.published_version') %>
+  <%= render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version, 
+                                                                                cache_files: cache_files } %>
+<% else %>
+  <div id="hidden-version-form" hidden="hidden">
+    <%= render partial: 'open_access_publications/file_version_result', locals: { file_version: 'unknown', 
+                                                                                cache_files: cache_files } %>
+  </div>
+  <div id="file_version_result" data-target="<%= file_version_result_path({ job_ids: @job_ids }) %>">
+    <p>
+      <span class="spinner-border" role="status">
+        <span class="sr-only">Loading...</span>
+      </span> Attempting to determine file version, please wait...
+    </p>
+  </div>
+<% end %>

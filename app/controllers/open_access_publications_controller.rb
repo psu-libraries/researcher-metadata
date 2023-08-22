@@ -44,9 +44,9 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
       # If version is found with exif version check don't bother with the other check
       if file_version_uploads.version.present?
-        render partial: 'open_access_publications/file_version_result', 
+        render :scholarsphere_file_version,
                locals: { file_version: file_version_uploads.version, 
-                         cache_files: @cache_files }
+                         cache_files: @cache_files.collect { |f| f[:cache_path] } }
       else
         @cache_files.each do |cache_file|
           file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_path: cache_file[:cache_path].to_s, 
@@ -54,7 +54,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
           @job_ids.push(file_version_job.job_id)
         end
 
-        render :scholarsphere_file_version
+        render :scholarsphere_file_version, locals: { file_version: nil, 
+          cache_files: @cache_files.collect { |f| f[:cache_path] } }
       end
     else
       flash[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
@@ -92,19 +93,19 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       cached_data = Rails.cache.read("file_version_job_#{job_id}")
       if !cached_data.nil?
         pdf_file_versions << [cached_data[:pdf_file_version], cached_data[:pdf_file_score]]
-        @cache_files << cached_data[:file_path]
+        cache_files << cached_data[:file_path]
       end
     end
 
     if pdf_file_versions.compact.count == job_ids&.count
       # Determine best version by absolute score
-      @file_version = pdf_file_versions
+      file_version = pdf_file_versions
                         .select{ |i| i.first if i.second.abs == pdf_file_versions.collect { |n| n.second.abs }.max }
                         .first
                         .first
 
-      render partial: 'open_access_publications/file_version_result', locals: { file_version: @file_version, 
-                                                                                cache_files: @cache_files }
+      render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version, 
+                                                                                cache_files: cache_files }
     else
       head :no_content
     end
