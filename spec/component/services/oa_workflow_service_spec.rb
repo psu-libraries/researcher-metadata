@@ -112,6 +112,7 @@ describe OAWorkflowService do
         service.workflow
         expect(PublicationDownloadJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)
         expect(PublicationDownloadJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
+        expect(PublicationDownloadJob).not_to have_received(:perform_later).with(activity_insight_oa_file6.id)
         expect(activity_insight_oa_file4.reload.downloaded).to be true
       end
 
