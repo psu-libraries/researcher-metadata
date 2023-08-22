@@ -3,7 +3,7 @@
 require 'pdf-reader'
 
 class ScholarspherePdfFileVersion
-  attr_accessor :file_path, :filename, :publication, :content
+  attr_accessor :file_path, :filename, :publication, :content, :score
 
   def initialize(file_path:, publication:)
     @file_path = file_path
@@ -71,8 +71,8 @@ class ScholarspherePdfFileVersion
     def process_wts(what_to_search)
       if what_to_search.include?('<<') && what_to_search.include?('>>')
         what_to_match = what_to_search.split('<<')[1].split('>>').first
-        if publication.send(what_to_match.downcase)
-          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", publication.send(what_to_match.downcase))
+        if pub_meta[what_to_match.downcase.to_sym]
+          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", pub_meta[what_to_match.downcase.to_sym].to_s)
         end
       end
 
@@ -84,14 +84,14 @@ class ScholarspherePdfFileVersion
         if where_to_search == 'file'
           content.include?(what_to_search)
         else
-          publication.send(:title)&.include?(what_to_search) || filename&.include?(what_to_search)
+          pub_meta[:title]&.include?(what_to_search) || filename&.include?(what_to_search)
         end
       else
         re = Regexp.new(what_to_search, 'gium')
         if where_to_search == 'file'
           content.downcase.match?(re)
         else
-          publication.send(:title)&.match?(re) || filename&.match?(re)
+          pub_meta[:title]&.match?(re) || filename&.match?(re)
         end
       end
     end
@@ -104,5 +104,14 @@ class ScholarspherePdfFileVersion
           @score -= 1
         end
       end
+    end
+
+    def pub_meta
+      {
+        title: publication&.title,
+        year: publication&.year,
+        doi: publication&.doi,
+        publisher: publication&.preferred_publisher_name
+      }
     end
 end

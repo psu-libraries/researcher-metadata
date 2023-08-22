@@ -1,17 +1,22 @@
 # frozen_string_literal: true
 
 class ScholarsphereFileVersionUploads
+  # This class is designed to handle the initial upload of multiple files 
+  # to RMD for version checking in the ScholarSphere upload workflow.
+  # It validates that files have been uploaded and caches the files 
+  # for us so they can be accessed later in the ScholarSphere 
+  # upload process. It also determines the version of the file
+  # via the exif file meta data check.
   include ActiveModel::Model
 
-  attr_accessor :journal, :publication, :exif_file_versions
+  attr_accessor :publication, :exif_file_versions
 
   validate :at_least_one_file_upload
 
-  def initialize(attributes = {})
-    @journal = attributes[:journal]
-    @publication = attributes[:publication]
-
-    super
+  def initialize(attributes = {}, publication)
+    @publication = publication
+    
+    super(attributes)
   end
 
   def file_uploads_attributes=(attributes)
@@ -21,19 +26,22 @@ class ScholarsphereFileVersionUploads
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
       if file.present?
-        exif_file_version = ScholarsphereExifFileVersion.new(file_path: file.path, journal: journal).version
+        exif_file_version = ScholarsphereExifFileVersion.new(file_path: file.path,
+                                                             journal: publication&.journal&.title).version
         @exif_file_versions.push(exif_file_version)
         @file_uploads.push(file)
       end
     end
   end
 
-  def self.version(file_versions)
-    file_versions.map do |file_version|
+  def version
+    exif_file_versions.map do |file_version|
+      # Select 'Accepted Version' if present since this check is most strict
       return file_version if file_version == I18n.t('file_versions.accepted_version')
 
       # Either Published Version or nil
       file_version
+      # Otherwise grab the first version in array (will be 'Published' if present, else nil)
     end.compact.uniq.first
   end
 

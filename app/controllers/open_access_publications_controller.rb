@@ -36,37 +36,33 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    file_version = nil
-    extra_params = { journal: publication&.journal&.title, publication: publication }
-    file_version_uploads = ScholarsphereFileVersionUploads.new(deposit_params.merge(extra_params))
+    file_version_uploads = ScholarsphereFileVersionUploads.new(deposit_params, publication)
     @job_ids ||= []
 
     if file_version_uploads.valid?
       @cache_files = file_version_uploads.cache_files
-      exif_versions = file_version_uploads.exif_file_versions.compact
-      file_version = ScholarsphereFileVersionUploads.version(exif_versions) if exif_versions.present?
 
-      if file_version == I18n.t('file_versions.published_version')
-        render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version, cache_files: @cache_files }
+      # If version is found with exif version check don't bother with the other check
+      if file_version_uploads.version.present?
+        render partial: 'open_access_publications/file_version_result', 
+               locals: { file_version: file_version_uploads.version, 
+                         cache_files: @cache_files }
       else
         @cache_files.each do |cache_file|
-          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_meta: cache_file.to_json, publication_meta: version_check_pub_meta, exif_file_version: file_version)
+          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_path: cache_file[:cache_path].to_s, 
+                                                                          publication_id: publication.id)
           @job_ids.push(file_version_job.job_id)
         end
 
         render :scholarsphere_file_version
       end
     else
-      flash.now[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
-      render :edit
+      flash[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
+      redirect_to edit_open_access_publication_path(publication)
     end
   rescue ActionController::ParameterMissing
-    flash.now[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
-    @form = OpenAccessURLForm.new
-    @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
-    @deposit.file_uploads.build
-    render :edit
+    flash[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+    redirect_to edit_open_access_publication_path(publication)
   end
 
   def file_version_result
@@ -92,20 +88,23 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       end
     end
 
-    job_ids&.each do |job_id|
+    job_ids&.each_with_index do |job_id, index|
       cached_data = Rails.cache.read("file_version_job_#{job_id}")
       if !cached_data.nil?
-        pdf_file_versions << cached_data[:pdf_file_version]
-        exif_file_versions << cached_data[:exif_file_version]
-        @cache_files << JSON.parse(cached_data[:file_meta])
+        pdf_file_versions << [cached_data[:pdf_file_version], cached_data[:pdf_file_score]]
+        @cache_files << cached_data[:file_path]
       end
     end
 
     if pdf_file_versions.compact.count == job_ids&.count
-      file_versions = pdf_file_versions + exif_file_versions
-      @file_version = ScholarsphereFileVersionUploads.version(file_versions)
+      # Determine best version by absolute score
+      @file_version = pdf_file_versions
+                        .select{ |i| i.first if i.second.abs == pdf_file_versions.collect { |n| n.second.abs }.max }
+                        .first
+                        .first
 
-      render partial: 'open_access_publications/file_version_result', locals: { file_version: @file_version, cache_files: @cache_files }
+      render partial: 'open_access_publications/file_version_result', locals: { file_version: @file_version, 
+                                                                                cache_files: @cache_files }
     else
       head :no_content
     end
@@ -197,12 +196,4 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          file_uploads_attributes: [:file, :file_cache])
     end
 
-    def version_check_pub_meta
-      {
-        title: publication&.title,
-        year: publication&.year,
-        doi: publication&.doi,
-        publisher: publication&.preferred_publisher_name
-      }
-    end
 end
