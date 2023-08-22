@@ -2,6 +2,34 @@
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
   <h1 class="pb-3 pt-2">Publications with Wrong File Version</h1>
   <div class='card'>
-  
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Title</th>
+        <th>Preferred Version</th>
+        <th>File Version</th>
+        <th>Download File</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.title %></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.preferred_version_display %></td>
+            <% p.activity_insight_oa_files.each_with_index do |file, index| %>
+              <%= '<tr>'.html_safe unless index == 0 %>
+                <td>
+                  <%= file.version_status_display %>
+                </td>
+                <td>
+                  <%= link_to file.location.truncate(75),
+                      rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
+                      target: '_blank' %>
+                </td>
+              </tr>
+            <% end %>
+      <% end %>
+    </tbody>
+  </table>
   </div>
 </div>

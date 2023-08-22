@@ -37,7 +37,7 @@
   <br>
   <% if wrong_file_version_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_wrong_file_version_review_path, class: 'card-link' do %>
-      <div class='card' id='wrong-file-version-card'>
+      <div class='card' id='wrong-file-version-check-card'>
         <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
           <span class='float-right text-large'><strong><%= wrong_file_version_count %></strong></span>
         </div>
