@@ -8,6 +8,7 @@
         <th>Title</th>
         <th>License</th>
         <th>Preferred Version</th>
+        <th>Download Files</th>
         <th>Deposit Statement</th>
         <th>Checked Deposit Statement</th>
         <th>Embargo Date</th>
@@ -22,6 +23,14 @@
                   target: '_blank' %></td>
           <td id="license"><%= p.licence.present? ? p.licence.truncate(45) : 'Not Found' %></td>
           <td id="preferred-version"><%= p.preferred_version.present? ? p.preferred_version_display : 'Not Found' %></td>
+          <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
+            <% if f.stored_file_path.present? %>
+              <%= link_to "#{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
+            <% else %>
+              Not Found
+            <% end %>
+          <% end %>
+          </td>
           <td id="set-statement"><%= p.set_statement.present? ? p.set_statement.truncate(45) : 'Not Found' %></td>
           <td id="checked-set-statement"><%= p.checked_for_set_statement.present? ? '✓' : '' %></td>
           <td id="embargo-date"><%= p.embargo_date.present? ? p.embargo_date : 'Not Found' %></td>

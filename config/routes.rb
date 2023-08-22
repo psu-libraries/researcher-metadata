@@ -25,6 +25,7 @@ Rails.application.routes.draw do
     get '/doi_verification' => 'doi_verification#index'
     get '/file_version_review' => 'file_version_curation#index'
     get '/permissions_review' => 'permissions_curation#index'
+    get '/files/:activity_insight_oa_file_id/download' => 'files#download', as: :file_download
   end
 
   root to: 'public#home'

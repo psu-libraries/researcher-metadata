@@ -38,9 +38,13 @@ describe 'Admin Permissions Review dashboard', type: :feature do
       checked_for_embargo_date: true
     )
   }
+  let(:uploader) { double 'uploader', file: file }
+  let(:file) { double 'file', file: path }
+  let(:path) { 'the/file/path' }
 
   before do
     authenticate_admin_user
+    allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
     visit activity_insight_oa_workflow_permissions_review_path
   end
 
@@ -50,6 +54,7 @@ describe 'Admin Permissions Review dashboard', type: :feature do
         expect(page).to have_text('Title')
         expect(page).to have_text('License')
         expect(page).to have_text('Preferred Version')
+        expect(page).to have_text('Download Files')
         expect(page).to have_text('Deposit Statement')
         expect(page).to have_text('Checked Deposit Statement')
         expect(page).to have_text('Embargo Date')
@@ -64,6 +69,10 @@ describe 'Admin Permissions Review dashboard', type: :feature do
 
         within 'td#preferred-version' do
           expect(page).to have_text('Accepted Manuscript')
+        end
+
+        within 'td.file-name' do
+          expect(page).to have_link(aif1.download_filename)
         end
 
         within 'td#set-statement' do
