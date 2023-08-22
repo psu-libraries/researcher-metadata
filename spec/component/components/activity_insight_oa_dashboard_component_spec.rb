@@ -108,7 +108,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   context 'when publications are ready for final metadata review' do
     let(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
     let(:pub2) { create(:publication) }
-    let!(:aif) { 
+    let!(:aif) {
       create(
         :activity_insight_oa_file,
         publication: pub1,

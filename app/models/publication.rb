@@ -167,10 +167,22 @@ class Publication < ApplicationRecord
         %{licence IS NULL OR preferred_version IS NULL OR (embargo_date IS NULL AND checked_for_embargo_date IS DISTINCT FROM TRUE) OR (set_statement IS NULL AND checked_for_set_statement IS DISTINCT FROM TRUE)}
       )
   }
-  scope :ready_for_metadata_review, -> { 
+  scope :ready_for_metadata_review, -> {
     activity_insight_oa_publication
-      .where.not(preferred_version: nil)
-      .where(%{EXISTS (SELECT id FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version AND activity_insight_oa_files.downloaded IS TRUE AND activity_insight_oa_files.file_download_location IS NOT NULL)})
+      .where(
+        <<-SQL.squish
+          EXISTS (
+            SELECT id FROM activity_insight_oa_files
+            WHERE activity_insight_oa_files.publication_id = publications.id
+              AND publications.preferred_version = activity_insight_oa_files.version
+              AND licence IS NOT NULL
+              AND (set_statement IS NOT NULL OR checked_for_set_statement IS TRUE)
+              AND (embargo_date IS NOT NULL OR checked_for_embargo_date IS TRUE)
+              AND activity_insight_oa_files.downloaded IS TRUE
+              AND activity_insight_oa_files.file_download_location IS NOT NULL
+          )
+        SQL
+      )
   }
 
   accepts_nested_attributes_for :authorships, allow_destroy: true

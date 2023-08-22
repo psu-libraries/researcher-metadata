@@ -124,8 +124,9 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   end
 
   describe '#download_location_value' do
-    let!(:file) { create :activity_insight_oa_file, file_download_location: fixture_file_open('test_file.pdf') }
-    it "returns the value stored in the file_download_location column" do
+    let!(:file) { create(:activity_insight_oa_file, file_download_location: fixture_file_open('test_file.pdf')) }
+
+    it 'returns the value stored in the file_download_location column' do
       expect(file.download_location_value).to eq 'test_file.pdf'
     end
   end

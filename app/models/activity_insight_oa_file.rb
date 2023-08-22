@@ -63,7 +63,7 @@ class ActivityInsightOAFile < ApplicationRecord
         end
       end
       field(:downloaded)
-      field(:download_location_value) { label 'File download'}
+      field(:download_location_value) { label 'File download' }
     end
 
     list do
@@ -74,7 +74,7 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:updated_at)
       field(:publication)
       field(:downloaded)
-      field(:download_location_value) { label 'File download'}
+      field(:download_location_value) { label 'File download' }
     end
 
     edit do
