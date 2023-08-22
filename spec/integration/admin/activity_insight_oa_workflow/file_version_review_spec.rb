@@ -24,7 +24,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(page).to have_text('Title')
       expect(page).to have_text('Preferred Version')
       expect(page).to have_text('Edit File Metadata')
-      expect(page).to have_text('View File')
+      expect(page).to have_text('Download File')
       expect(page).to have_text('Version Status')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub2.title)
@@ -34,7 +34,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(page).to have_text('Edit metadata in admin dashboard')
       expect(page).to have_text('Unknown Version')
       expect(page).to have_text('Wrong Version')
-      expect(page).to have_link("Download #{aif1.download_filename}")
+      expect(page).to have_link(aif1.download_filename)
     end
   end
 

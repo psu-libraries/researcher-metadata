@@ -23,11 +23,11 @@ describe 'Admin Permissions Review dashboard', type: :feature do
       expect(page).to have_text('Title')
       expect(page).to have_text('License')
       expect(page).to have_text('Preferred Version')
-      expect(page).to have_text('Files')
+      expect(page).to have_text('Download Files')
       expect(page).to have_link(pub1.title)
       expect(page).to have_text('Not Found')
       expect(page).to have_css('tr').exactly(2).times
-      expect(page).to have_link("Download #{aif1.download_filename}")
+      expect(page).to have_link(aif1.download_filename)
     end
   end
 
