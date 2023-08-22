@@ -18,7 +18,15 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
   let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
-  let!(:pub4) { create(:publication, preferred_version: 'acceptedVersion') }
+  let!(:pub4) {
+    create(
+      :publication,
+      preferred_version: 'acceptedVersion',
+      licence: 'license',
+      set_statement: 'statement',
+      embargo_date: Date.current
+    )
+  }
 
   context 'when the current user is an admin' do
     before do

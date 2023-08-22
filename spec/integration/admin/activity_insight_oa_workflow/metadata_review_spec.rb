@@ -31,7 +31,16 @@ describe 'Admin Metadata Review dashboard', type: :feature do
     )
   }
   let!(:pub1) { create(:publication, title: 'Pub1', preferred_version: 'acceptedVersion') }
-  let!(:pub2) { create(:publication, title: 'Pub2', preferred_version: 'acceptedVersion') }
+  let!(:pub2) {
+    create(
+      :publication,
+      title: 'Pub2',
+      preferred_version: 'acceptedVersion',
+      licence: 'license',
+      set_statement: 'statement',
+      embargo_date: Date.current
+    )
+  }
   let!(:pub3) { create(:publication, title: 'Pub3', preferred_version: nil) }
 
   before do

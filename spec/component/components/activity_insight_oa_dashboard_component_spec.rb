@@ -106,7 +106,15 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   end
 
   context 'when publications are ready for final metadata review' do
-    let(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
+    let(:pub1) {
+      create(
+        :publication,
+        preferred_version: 'acceptedVersion',
+        licence: 'license',
+        set_statement: 'statement',
+        embargo_date: Date.current
+      )
+    }
     let(:pub2) { create(:publication) }
     let!(:aif) {
       create(
