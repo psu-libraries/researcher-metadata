@@ -72,7 +72,16 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
   context 'when publications need their permissions verified' do
     let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
-    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+    let!(:pub2) {
+      create(
+        :publication,
+        permissions_last_checked_at: Time.now,
+        licence: 'licence',
+        preferred_version: 'acceptedVersion',
+        checked_for_set_statement: true,
+        checked_for_embargo_date: true
+      )
+    }
 
     it 'renders the permissions review card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
