@@ -36,7 +36,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    file_version_uploads = ScholarsphereFileVersionUploads.new(deposit_params, publication)
+    file_version_uploads = ScholarsphereFileVersionUploads.new(publication, deposit_params)
     @job_ids ||= []
 
     if file_version_uploads.valid?
@@ -45,17 +45,17 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       # If version is found with exif version check don't bother with the other check
       if file_version_uploads.version.present?
         render :scholarsphere_file_version,
-               locals: { file_version: file_version_uploads.version, 
-                         cache_files: @cache_files.collect { |f| f[:cache_path] } }
+               locals: { file_version: file_version_uploads.version,
+                         cache_files: @cache_files.pluck(:cache_path) }
       else
         @cache_files.each do |cache_file|
-          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_path: cache_file[:cache_path].to_s, 
+          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_path: cache_file[:cache_path].to_s,
                                                                           publication_id: publication.id)
           @job_ids.push(file_version_job.job_id)
         end
 
-        render :scholarsphere_file_version, locals: { file_version: nil, 
-          cache_files: @cache_files.collect { |f| f[:cache_path] } }
+        render :scholarsphere_file_version, locals: { file_version: nil,
+                                                      cache_files: @cache_files.pluck(:cache_path) }
       end
     else
       flash[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
@@ -69,9 +69,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def file_version_result
     job_ids = params[:job_ids]
     pdf_file_versions = []
-    exif_file_versions = []
     cache_files = []
-    file_version = nil
 
     # Remove failed Delayed::Job and log an error
     job_ids&.reject! do |job_id|
@@ -89,7 +87,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       end
     end
 
-    job_ids&.each_with_index do |job_id, index|
+    job_ids&.each_with_index do |job_id, _index|
       cached_data = Rails.cache.read("file_version_job_#{job_id}")
       if !cached_data.nil?
         pdf_file_versions << [cached_data[:pdf_file_version], cached_data[:pdf_file_score]]
@@ -100,11 +98,11 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     if pdf_file_versions.compact.count == job_ids&.count
       # Determine best version by absolute score
       file_version = pdf_file_versions
-                        .select{ |i| i.first if i.second.abs == pdf_file_versions.collect { |n| n.second.abs }.max }
-                        .first
-                        .first
+        .select { |i| i.first if i.second.abs == pdf_file_versions.map { |n| n.second.abs }.max }
+        .first
+        .first
 
-      render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version, 
+      render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version,
                                                                                 cache_files: cache_files }
     else
       head :no_content
@@ -196,5 +194,4 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          cache_files: [:cache_path, :original_filename],
                                                          file_uploads_attributes: [:file, :file_cache])
     end
-
 end

@@ -1,10 +1,10 @@
 # frozen_string_literal: true
 
 class ScholarsphereFileVersionUploads
-  # This class is designed to handle the initial upload of multiple files 
+  # This class is designed to handle the initial upload of files
   # to RMD for version checking in the ScholarSphere upload workflow.
-  # It validates that files have been uploaded and caches the files 
-  # for us so they can be accessed later in the ScholarSphere 
+  # It validates that files have been uploaded and caches the files
+  # for us so they can be accessed later in the ScholarSphere
   # upload process. It also determines the version of the file
   # via the exif file meta data check.
   include ActiveModel::Model
@@ -13,9 +13,9 @@ class ScholarsphereFileVersionUploads
 
   validate :at_least_one_file_upload
 
-  def initialize(attributes = {}, publication)
+  def initialize(publication, attributes = {})
     @publication = publication
-    
+
     super(attributes)
   end
 

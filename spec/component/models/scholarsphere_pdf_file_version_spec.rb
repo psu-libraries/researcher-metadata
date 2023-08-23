@@ -6,8 +6,8 @@ describe ScholarspherePdfFileVersion do
   subject(:pdf_file_version) { described_class.new(file_path: file_path, publication: publication) }
 
   let(:file_path) { "#{Rails.root}/spec/fixtures/#{test_file}" }
-  let!(:publication) { create(:publication, title: 'test_pub_title', 
-                                            published_on: '2000', 
+  let!(:publication) { create(:publication, title: 'test_pub_title',
+                                            published_on: '2000',
                                             doi: 'https://doi.org/10.1234/1234') }
   let(:test_file) { 'pdf_check_unknown_version.pdf' }
 
