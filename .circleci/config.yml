@@ -8,7 +8,7 @@ orbs:
 jobs:
   release:
     docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:$CI_UTILS_IMAGE_TAG
+      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
     environment:
       REGISTRY_HOST: harbor.k8s.libraries.psu.edu
       REGISTRY_REPO: library/researcher-metadata
@@ -23,7 +23,7 @@ jobs:
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd researcher-metadata-config
-            /usr/local/bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
+            ./bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
 
   deploy:
     docker:
