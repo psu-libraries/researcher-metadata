@@ -5,6 +5,10 @@
   <table class="table">
     <thead class='card-header'>
       <tr>
+        <th>Author</th>
+        <th>Author Batch Email</th>
+        <th>Publication Email</th>
+        <th>Email Last Sent On</th>
         <th>Title</th>
         <th>Preferred Version</th>
         <th>File Version</th>
@@ -13,21 +17,35 @@
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
-        <tr id="<%= dom_id(p) %>">
-          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.title %></td>
-          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= p.preferred_version_display %></td>
+          <tr id="<%= dom_id(p) %>">
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= p.confirmed_users.first.webaccess_id %>
+          </td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><button>Send Batch Email</button></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><button>Send Email</button></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= Time.now.strftime("%m/%d/%Y") %></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= link_to p.title.truncate(45),
+                  rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
+                  target: '_blank' %>
+          </td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= p.preferred_version_display %>
+          </td>
             <% p.activity_insight_oa_files.each_with_index do |file, index| %>
               <%= '<tr>'.html_safe unless index == 0 %>
                 <td>
                   <%= file.version_status_display %>
                 </td>
-                <td>
-                  <%= link_to file.location.truncate(75),
-                      rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
-                      target: '_blank' %>
+                <td class="file-name">
+                    <% if file.stored_file_path.present? %>
+                     <%= link_to "#{file.download_filename}", activity_insight_oa_workflow_file_download_path(file.id) %>
+                    <% else %>
+                      Not Found
+                    <% end %>
                 </td>
-              </tr>
             <% end %>
+          </tr>
       <% end %>
     </tbody>
   </table>
