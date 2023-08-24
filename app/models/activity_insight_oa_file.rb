@@ -3,6 +3,7 @@
 class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
+  belongs_to :user
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 

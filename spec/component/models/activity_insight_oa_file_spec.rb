@@ -12,13 +12,20 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it { is_expected.to have_db_column(:version).of_type(:string) }
   it { is_expected.to have_db_column(:file_download_location).of_type(:string) }
   it { is_expected.to have_db_column(:downloaded).of_type(:boolean) }
+  it { is_expected.to have_db_column(:publication_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+
   it { is_expected.to have_db_foreign_key(:publication_id) }
+  it { is_expected.to have_db_foreign_key(:user_id) }
+
   it { is_expected.to have_db_index :publication_id }
+  it { is_expected.to have_db_index :user_id }
 
   it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
+    it { is_expected.to belong_to(:user) }
   end
 
   describe '#file_download_location' do
