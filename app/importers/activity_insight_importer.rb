@@ -207,7 +207,7 @@ class ActivityInsightImporter
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
             if aif.blank?
-              file = ActivityInsightOAFile.create(location: activity_insight_file_location)
+              file = ActivityInsightOAFile.create(location: activity_insight_file_location, user: u)
               pub_record.activity_insight_oa_files << file
               pub_record.save!
               unless pub_record.doi_verified == true
