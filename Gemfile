@@ -45,6 +45,7 @@ gem 'net-ldap'                          # lightweight Directory Access Protocol 
 gem 'net-pop', require: false           # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-smtp', require: false          # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
+gem 'okcomputer'                        # Healthchecks
 gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
