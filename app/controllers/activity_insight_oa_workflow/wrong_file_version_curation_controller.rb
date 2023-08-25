@@ -4,5 +4,9 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
   def index
     @publications = Publication.wrong_file_version.order('email_last_sent_at DESC NULLS FIRST')
   end
+
+  def email_author(publications)
+    FacultyNotificationsMailer.wrong_file_version(publications).deliver_now
+  end
 end
   

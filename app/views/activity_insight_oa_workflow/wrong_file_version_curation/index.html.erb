@@ -16,6 +16,9 @@
       </tr>
     </thead>
     <tbody class='card-body'>
+
+    <!--- Will need to change p.confirmed_users to whatever connects a publication to the activity insight uploader -->
+
     <% authors_grouped = @publications.group_by { |p| p.confirmed_users.first.webaccess_id } %>
     <% authors_grouped.each do |author, publications| %>
       <% publications.each do |p, index| %>
@@ -27,10 +30,12 @@
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <% if publications.index(p) == 0 %>
-                <button>Send Batch Email</button>
+                <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: publications}%>
             <% end %>
           </td>
-          <td rowspan="<%= p.activity_insight_oa_files.count %>"><button>Send Email</button></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p}%>
+          </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <%= p.email_last_sent_at.present? ? p.email_last_sent_at.strftime("%m/%d/%Y") : '' %>
           </td>

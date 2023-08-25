@@ -19,4 +19,13 @@ class FacultyNotificationsMailer < ApplicationMailer
          from: 'scholarsphere@psu.edu',
          reply_to: 'scholarsphere@psu.edu'
   end
+
+  def wrong_file_version(publications)
+    @publications = publications
+    #will need to change the mail to to whatever connects a publication to the activity insight uploader's email
+    mail to: @publications.first.confirmed_users.first.psu_identity.data['universityEmail'],
+         subject: 'Open Access Post-Print Publication Files in Activity Insight',
+         from: 'openaccess@psu.edu',
+         reply_to: 'openaccess@psu.edu'
+  end
 end

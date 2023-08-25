@@ -1,0 +1,70 @@
+<p>
+  Hello,
+</p>
+
+<p>
+  We are writing to follow up on the publication file(s) uploaded to your account in Activity Insight in the 
+  section titled “Open Access Post-Print Publication files."
+</p>
+
+<p>
+  When researchers <a href="https://openaccess.psu.edu/deposit/activity-insight/">upload files to this section</a>, 
+  a team in the Libraries works to make them available to the public via 
+  <a href="http://scholarsphere.psu.edu/">ScholarSphere</a> according to the default terms of the journal's 
+  publishing agreement. This process is designed for the 
+  <a href="https://psu.libanswers.com/faq/273465">“post-print” or “accepted manuscript” version</a> of the article, 
+  because most journals allow that version to be shared widely. Some journals prefer that you share the final 
+  published version.
+</p>
+
+<p>
+  One or more of the files you (or an Activity Insight Proxy) uploaded appear to be a version of the article 
+  that the journal's default policy does not allow to be deposited in ScholarSphere. If you have the version of 
+  an article that can be deposited, you can send it by reply email or upload it in Activity Insight. Here is a 
+  summary of what we have and what we need:
+</p>
+
+<table class="table">
+  <thead class='card-header'>
+    <tr>
+      <th>Title</th>
+      <th>Version we have</th>
+      <th>Version that can be deposited</th>
+    </tr>
+  </thead>
+  <tbody class='card-body'>
+    <% @publications.each do |p| %>
+      <tr>
+        <td>
+          <%= p.title %>
+        </td>
+        <td>
+          <%= p.activity_insight_oa_files.first.version_status_display %>
+        </td>
+        <td>
+          <%= p.preferred_version_display %>
+        </td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<p>
+  You can view a list of all your publications and their open access statuses on your 
+  <a href="https://metadata.libraries.psu.edu/profile/publications/edit">Manage Profile Publications</a> 
+  page. If you have uploaded other files in Activity Insight, we will process those files and update you in due course.
+</p>
+
+<p>
+  If you have any questions, please do not hesitate to contact us at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>
+</p>
+
+<p>
+  All the best,
+  <br>
+  Office of Scholarly Communications and Copyright
+  <br>
+  Penn State University Libraries
+  <br>  
+  <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>
+</p>
