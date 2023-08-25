@@ -16,14 +16,24 @@
       </tr>
     </thead>
     <tbody class='card-body'>
-      <% @publications.each do |p| %>
+    <% authors_grouped = @publications.group_by { |p| p.confirmed_users.first.webaccess_id } %>
+    <% authors_grouped.each do |author, publications| %>
+      <% publications.each do |p, index| %>
           <tr id="<%= dom_id(p) %>">
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
-            <%= p.confirmed_users.first.webaccess_id %>
+            <% if publications.index(p) == 0 %>
+              <%= p.confirmed_users.first.webaccess_id %>
+            <% end %>
           </td>
-          <td rowspan="<%= p.activity_insight_oa_files.count %>"><button>Send Batch Email</button></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <% if publications.index(p) == 0 %>
+                <button>Send Batch Email</button>
+            <% end %>
+          </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>"><button>Send Email</button></td>
-          <td rowspan="<%= p.activity_insight_oa_files.count %>"><%= Time.now.strftime("%m/%d/%Y") %></td>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= p.email_last_sent_at.present? ? p.email_last_sent_at.strftime("%m/%d/%Y") : '' %>
+          </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <%= link_to p.title.truncate(45),
                   rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
@@ -47,6 +57,7 @@
             <% end %>
           </tr>
       <% end %>
+    <% end %>
     </tbody>
   </table>
   </div>
