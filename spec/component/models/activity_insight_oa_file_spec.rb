@@ -12,16 +12,23 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it { is_expected.to have_db_column(:version).of_type(:string) }
   it { is_expected.to have_db_column(:file_download_location).of_type(:string) }
   it { is_expected.to have_db_column(:downloaded).of_type(:boolean) }
+  it { is_expected.to have_db_column(:publication_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+
   it { is_expected.to have_db_foreign_key(:publication_id) }
+  it { is_expected.to have_db_foreign_key(:user_id) }
+
   it { is_expected.to have_db_index :publication_id }
+  it { is_expected.to have_db_index :user_id }
 
   it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
+    it { is_expected.to belong_to(:user).optional }
   end
 
-  describe '#file' do
+  describe '#file_download_location' do
     it 'mounts an ActivityInsightFileUploader' do
       expect(subject.file_download_location).to be_a(ActivityInsightFileUploader)
     end
@@ -120,6 +127,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       it 'returns "Wrong Version"' do
         expect(file.version_status_display).to eq 'Wrong Version'
       end
+    end
+  end
+
+  describe '#download_location_value' do
+    let!(:file) { create(:activity_insight_oa_file, file_download_location: fixture_file_open('test_file.pdf')) }
+
+    it 'returns the value stored in the file_download_location column' do
+      expect(file.download_location_value).to eq 'test_file.pdf'
     end
   end
 end
