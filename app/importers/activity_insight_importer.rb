@@ -202,10 +202,17 @@ class ActivityInsightImporter
           end
 
           activity_insight_file_location = pub.postprints&.first&.location
+          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
+          # This is only needed to backfill the new user association on existing ActivityInsightOAFile
+          # records. After this has been run once in production, this #update! call can be removed
+          # and the .find_by can be moved back into the conditional below.
+          if aif && aif.user.blank?
+            aif.update!(user: u)
+          end
+
+          # rubocop:disable Style/SoleNestedConditional
           if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
-            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
-
             if aif.blank?
               file = ActivityInsightOAFile.create(location: activity_insight_file_location, user: u)
               pub_record.activity_insight_oa_files << file
@@ -217,6 +224,7 @@ class ActivityInsightImporter
               end
             end
           end
+          # rubocop:enable Style/SoleNestedConditional
         end
       rescue StandardError => e
         log_error(pub, e, u)
