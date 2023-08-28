@@ -64,13 +64,12 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:created_at)
       field(:updated_at)
       field(:publication)
-      field 'File' do
+      field 'File download' do
         formatted_value do
-          bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+          bindings[:view].link_to(bindings[:object].download_location_value.to_s, Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
         end
       end
       field(:downloaded)
-      field(:download_location_value) { label 'File download' }
     end
 
     list do

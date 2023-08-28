@@ -29,7 +29,7 @@ describe 'Admin activity insight oa file detail page', type: :feature do
         expect(page).to have_content aif.created_at.strftime('%B %d, %Y')
         expect(page).to have_content aif.updated_at.strftime('%B %d, %Y')
         expect(page).to have_link pub.title
-        expect(page).to have_content 'test_file.pdf'
+        expect(page).to have_link 'test_file.pdf'
         expect(page).to have_content '✓'
       end
     end
