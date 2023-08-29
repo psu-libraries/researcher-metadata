@@ -6,7 +6,7 @@ class ScholarsphereFileVersionUploads
   # It validates that files have been uploaded and caches the files
   # for us so they can be accessed later in the ScholarSphere
   # upload process. It also determines the version of the file
-  # via the exif file meta data check.
+  # via the exif file metadata check.
   include ActiveModel::Model
 
   attr_accessor :publication, :exif_file_versions

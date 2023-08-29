@@ -354,12 +354,12 @@ describe OpenAccessPublicationsController, type: :controller do
         }
 
         context 'when given valid params' do
-          context 'when given file does not return published version from exif check' do
-            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], exif_file_versions: [nil] }
+          context 'when given file does not return a version version from exif check' do
+            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: nil }
             let(:pdf_file_version_job) { double 'ScholarspherePdfFileVersionJob', job_id: 1 }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
-            let(:file_meta) { cache_file.to_json }
-            let(:publication_meta) { { title: 'Test', year: nil, doi: nil, publisher: nil } }
+            let(:file_path) { cache_file.to_json }
+            let(:publication) { create :pubilcation, title: 'Test', year: nil, doi: nil, publisher: nil }
 
             before do
               allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
@@ -369,12 +369,12 @@ describe OpenAccessPublicationsController, type: :controller do
             it 'render the scholarsphere file version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_meta: file_meta, publication_meta: publication_meta, exif_file_version: nil)
+              expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_path: file_path, publication_id: publication_id, version: nil)
             end
           end
 
-          context 'when given file returns published version from exif check' do
-            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], exif_file_versions: [I18n.t('file_versions.published_version')] }
+          context 'when given file returns a version version from exif check' do
+            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: I18n.t('file_versions.published_version') }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
 
             before do
