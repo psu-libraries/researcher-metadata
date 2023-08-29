@@ -18,15 +18,15 @@ namespace :database_data do
     client = Aws::S3::Client.new
 
     download_prog = ProgressBar.create(total: nil, title: 'download', format: '%t |%B| %a')
-    objects = client.list_objects({bucket: bucket, prefix: prefix}).contents.reverse
+    objects = client.list_objects({ bucket: bucket, prefix: prefix }).contents.reverse
     options = objects.map(&:key)
-    key = prompt.select("Choose your File", options)
+    key = prompt.select('Choose your File', options)
     filename = "#{Rails.root}/tmp/#{File.basename(key)}"
     Thread.new { until download_prog.finished? do download_prog.increment; sleep(0.2); end }
     client.get_object(response_target: filename, bucket: bucket, key: key)
     download_prog.finish
     puts "database downloaded to #{filename}"
-    return filename
+    filename
   end
 
   task download_from_s3: :environment do
@@ -34,14 +34,12 @@ namespace :database_data do
     download_from_s3
   end
 
-  task :load_from_backup, [:dump_file] => :environment do |t, args|
+  task :load_from_backup, [:dump_file] => :environment do | _t, args|
     desc 'Loads a database backup into the development environment'
     filename = args[:dump_file]
     db_config = Rails.configuration.database_configuration
 
-    unless filename
-      filename = download_from_s3
-    end
+    filename ||= download_from_s3
 
     # pg_restore expects these environment variables
     ENV['PGHOST'] = db_config['development']['host']
@@ -55,9 +53,9 @@ namespace :database_data do
       SELECT pg_terminate_backend(pg_stat_activity.pid)
       FROM pg_stat_activity
       WHERE pg_stat_activity.datname = '#{db_config['development']['database']}';
-    SQL
+      SQL
     rescue ActiveRecord::StatementInvalid
-      puts "All connections killed."
+      puts 'All connections killed.'
     end
 
     ActiveRecord::Tasks::DatabaseTasks.purge_current
