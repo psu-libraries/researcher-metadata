@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 require 'progressbar'
+require 'aws-sdk-s3'
+require 'tty-prompt'
 
 namespace :database_data do
   # These tasks are for getting production data into local, qa, and stage environments
@@ -8,6 +10,66 @@ namespace :database_data do
   # Then run :load_to_local, :load_to_qa, or :load_to_stage to load the data into
   # your local, qa, or stage environments respectively
   # These tasks should be run from the root directory of the application on your local machine
+
+  def download_from_s3
+    bucket = ENV.fetch('AWS_BUCKET', 'edu.psu.libraries.devteam.rmd-backup')
+    prefix = ENV.fetch('DB_PREFIX', 'db')
+    prompt = TTY::Prompt.new
+    client = Aws::S3::Client.new
+
+    download_prog = ProgressBar.create(total: nil, title: 'download', format: '%t |%B| %a')
+    objects = client.list_objects({bucket: bucket, prefix: prefix}).contents.reverse
+    options = objects.map(&:key)
+    key = prompt.select("Choose your File", options)
+    filename = "#{Rails.root}/tmp/#{File.basename(key)}"
+    Thread.new { until download_prog.finished? do download_prog.increment; sleep(0.2); end }
+    client.get_object(response_target: filename, bucket: bucket, key: key)
+    download_prog.finish
+    puts "database downloaded to #{filename}"
+    return filename
+  end
+
+  task download_from_s3: :environment do
+    desc 'Downloads a database dump from s3'
+    download_from_s3
+  end
+
+  task :load_from_backup, [:dump_file] => :environment do |t, args|
+    desc 'Loads a database backup into the development environment'
+    filename = args[:dump_file]
+    db_config = Rails.configuration.database_configuration
+
+    unless filename
+      filename = download_from_s3
+    end
+
+    # pg_restore expects these environment variables
+    ENV['PGHOST'] = db_config['development']['host']
+    ENV['PGUSER'] = db_config['development']['username']
+    ENV['PGPASSWORD'] = db_config['development']['password']
+    ENV['PG_DATABASE'] = db_config['development']['database']
+
+    # Remove any active connections to the database before purging
+    begin
+      ActiveRecord::Base.connection.execute <<-SQL.squish
+      SELECT pg_terminate_backend(pg_stat_activity.pid)
+      FROM pg_stat_activity
+      WHERE pg_stat_activity.datname = '#{db_config['development']['database']}';
+    SQL
+    rescue ActiveRecord::StatementInvalid
+      puts "All connections killed."
+    end
+
+    ActiveRecord::Tasks::DatabaseTasks.purge_current
+
+    psql_prog = ProgressBar.create(total: nil, title: 'restore', format: '%t |%B| %a')
+    Thread.new { until psql_prog.finished? do psql_prog.increment; sleep(0.2); end }
+    `pg_restore --no-owner --no-acl --dbname #{db_config['development']['database']} #{filename}`
+    psql_prog.finish
+
+    # Catch up on any migrations
+    ActiveRecord::Tasks::DatabaseTasks.migrate
+  end
 
   task get_prod_data_file: :environment do
     desc 'Pull production data down as a sql.gz file and store it in the tmp directory'
