@@ -62,28 +62,6 @@ class PublicationMergeOnMatchingPolicy
     end
 
     def title
-      title1 = publication1.title
-      title2 = publication2.title
-      secondary_title1 = publication1.secondary_title
-      secondary_title2 = publication2.secondary_title
-      if publication1.pure_import_identifiers.present?
-        if secondary_title1.present? &&
-            publication1.matchable_title&.exclude?(publication1.matchable_secondary_title)
-          return "#{title1}: #{secondary_title1}"
-        else
-          return title1
-        end
-      end
-
-      if publication2.pure_import_identifiers.present?
-        if secondary_title2.present? &&
-            publication2.matchable_title&.exclude?(publication2.matchable_secondary_title)
-          return "#{title2}: #{secondary_title2}"
-        else
-          return title2
-        end
-      end
-
       longer_value(:title)
     end
 
@@ -91,9 +69,6 @@ class PublicationMergeOnMatchingPolicy
       secondary_title1 = publication1.secondary_title
       secondary_title2 = publication2.secondary_title
       formatted_title = MatchableFormatter.new(title).format
-      if publication1.pure_import_identifiers.present? || publication2.pure_import_identifiers.present?
-        return nil
-      end
 
       if secondary_title1.present? &&
           formatted_title&.exclude?(publication1.matchable_secondary_title)

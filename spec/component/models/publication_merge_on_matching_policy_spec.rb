@@ -9,62 +9,39 @@ describe PublicationMergeOnMatchingPolicy do
 
   describe '#merge!' do
     describe 'title merging' do
-      context 'when neither publication was imported from Pure' do
-        before do
-          publication1.update title: 'Short'
-          publication1.update secondary_title: 'Title'
-        end
-
-        it 'picks the longer title' do
-          policy.merge!
-          expect(publication1.reload.title).to eq publication2.title
-        end
+      before do
+        publication1.update title: 'Short'
+        publication1.update secondary_title: 'Title'
       end
 
-      context 'when one publication was imported from Pure' do
-        before do
-          create(:publication_import, :from_pure, publication: publication2)
-          publication2.save
-        end
-
-        context 'when secondary title is present in the imported from Pure publication' do
-          context 'when secondary title is not within the main title' do
-            it 'appends secondary title to main title of the imported from Pure publication and picks this as the title' do
-              policy.merge!
-              expect(publication1.reload.title).to eq "#{publication2.title}: #{publication2.secondary_title}"
-            end
-          end
-
-          context 'when secondary title is within the main title' do
-            before do
-              publication2.update title: "#{publication2.title}: #{publication2.secondary_title}"
-            end
-
-            it 'picks the title from the imported from Pure record' do
-              policy.merge!
-              expect(publication1.reload.title).to eq publication2.title
-            end
-          end
-        end
-
-        context 'when secondary title is not present in the imported from Pure record' do
-          before do
-            publication2.update secondary_title: ''
-          end
-
-          it 'picks the title from the imported from Pure record' do
-            policy.merge!
-            expect(publication1.reload.title).to eq publication2.title
-          end
-        end
+      it 'picks the longer title' do
+        policy.merge!
+        expect(publication1.reload.title).to eq publication2.title
       end
     end
 
     describe 'secondary_title merging' do
-      context 'when one or both publications were imported from Pure' do
+      before do
+        create(:publication_import, :from_pure, publication: publication2)
+        publication2.save
+      end
+
+      context 'when only one publication has a secondary title and it is not within the main title' do
         before do
-          create(:publication_import, :from_pure, publication: publication2)
-          publication2.save
+          publication1.update secondary_title: ''
+        end
+
+        it 'picks this secondary title' do
+          policy.merge!
+          expect(publication1.reload.secondary_title).to eq publication2.secondary_title
+        end
+      end
+
+      context 'when only one publication has a secondary title and it is within the main title' do
+        before do
+          publication1.update secondary_title: ''
+          publication1.update title: 'Short title'
+          publication2.update title: "Title#{publication2.secondary_title}"
         end
 
         it 'sets secondary_title to nil' do
@@ -73,37 +50,21 @@ describe PublicationMergeOnMatchingPolicy do
         end
       end
 
-      context 'when neither publication was imported from Pure' do
-        context 'when only one publication has a secondary title and it is not within the main title' do
-          before do
-            publication1.update secondary_title: ''
-          end
-
-          it 'picks this secondary title' do
-            policy.merge!
-            expect(publication1.reload.secondary_title).to eq publication2.secondary_title
-          end
+      context 'when both publications have a secondary title that is not within the main title' do
+        it 'picks the secondary title from the first publication' do
+          secondary_title = publication1.secondary_title
+          policy.merge!
+          expect(publication1.reload.secondary_title).to eq secondary_title
         end
+      end
 
-        context 'when only one publication has a secondary title and it is within the main title' do
-          before do
-            publication1.update secondary_title: ''
-            publication1.update title: 'Short title'
-            publication2.update title: "Title#{publication2.secondary_title}"
-          end
-
-          it 'sets secondary_title to nil' do
-            policy.merge!
-            expect(publication1.reload.secondary_title).to be_nil
-          end
-        end
-
-        context 'when both publications have a secondary title that is not within the main title' do
-          it 'picks the secondary title from the first publication' do
-            secondary_title = publication1.secondary_title
-            policy.merge!
-            expect(publication1.reload.secondary_title).to eq secondary_title
-          end
+      context 'when both publications have a secondary title that are within the main title' do
+        it 'picks nil' do
+          publication1.update title: "Title#{publication1.secondary_title}"
+          publication2.update secondary_title: publication1.secondary_title
+          publication2.update title: "Title#{publication2.secondary_title}"
+          policy.merge!
+          expect(publication1.reload.secondary_title).to eq nil
         end
       end
     end
