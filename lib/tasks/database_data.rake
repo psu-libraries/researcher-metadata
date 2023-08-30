@@ -34,7 +34,7 @@ namespace :database_data do
     download_from_s3
   end
 
-  task :load_from_backup, [:dump_file] => :environment do | _t, args|
+  task :load_from_backup, [:dump_file] => :environment do |_t, args|
     desc 'Loads a database backup into the development environment'
     filename = args[:dump_file]
     db_config = Rails.configuration.database_configuration
