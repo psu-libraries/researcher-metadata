@@ -89,6 +89,7 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
+      - run: sudo apt-get update
       - browser-tools/install-chrome:
           chrome-version: 116.0.5845.96
       - browser-tools/install-chromedriver
