@@ -342,63 +342,63 @@ describe OpenAccessPublicationsController, type: :controller do
       end
 
       context 'when is not open access' do
-        let(:pub_id) { pub.id }
         let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
         let(:params) {
           {
-            id: pub_id,
+            id: pub.id,
             scholarsphere_work_deposit: {
-              file_uploads_attributes: { '0' => { file: file, journal: nil } }
+              file_uploads_attributes: { '0' => { file: file } }
             }
           }
         }
 
         context 'when given valid params' do
-          context 'when given file does not return a version version from exif check' do
+          context 'when given file does not return a version from exif check' do
             let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: nil }
             let(:pdf_file_version_job) { double 'ScholarspherePdfFileVersionJob', job_id: 1 }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
-            let(:file_path) { cache_file.to_json }
-            let(:publication) { create :pubilcation, title: 'Test', year: nil, doi: nil, publisher: nil }
+            let(:file_path) { cache_file[:cache_path] }
 
             before do
               allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
               allow(ScholarspherePdfFileVersionJob).to receive(:perform_later).and_return(pdf_file_version_job)
             end
 
-            it 'render the scholarsphere file version form' do
+            it 'begins file version check and renders the scholarsphere_file_version form with loading spinner' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_path: file_path, publication_id: publication_id, version: nil)
+              expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
             end
           end
 
-          context 'when given file returns a version version from exif check' do
+          context 'when given file returns a version from exif check' do
             let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: I18n.t('file_versions.published_version') }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
 
             before do
               allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
+              allow(ScholarspherePdfFileVersionJob).to receive(:perform_later)
             end
 
-            it 'render the scholarsphere file version spinner' do
+            it 'does not begin file version check and renders the scholarsphere_file_version' do
               post :scholarsphere_file_version, params: params
-              expect(response).to render_template 'open_access_publications/_file_version_result'
+              expect(response).to render_template :scholarsphere_file_version
+              expect(ScholarspherePdfFileVersionJob).not_to have_received(:perform_later)
             end
           end
         end
 
         context 'when given no scholarsphere_work_deposit param' do
-          let(:params) { { id: pub_id } }
+          let(:params) { { id: pub.id } }
 
           it 'sets an error message' do
             post :scholarsphere_file_version, params: params
             expect(flash.now[:alert]).not_to be_empty
           end
 
-          it 'rerenders the edit form' do
+          it 'redirects to the edit form' do
             post :scholarsphere_file_version, params: params
-            expect(response).to render_template :edit
+            expect(response).to redirect_to(edit_open_access_publication_url)
           end
         end
 
@@ -410,9 +410,9 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(flash.now[:alert]).not_to be_empty
           end
 
-          it 'rerenders the edit form' do
+          it 'redirects to the edit form' do
             post :scholarsphere_file_version, params: params
-            expect(response).to render_template :edit
+            expect(response).to redirect_to(edit_open_access_publication_url)
           end
         end
       end
@@ -425,9 +425,9 @@ describe OpenAccessPublicationsController, type: :controller do
     let(:job_id2) { 'job_id_2' }
     let(:job_id3) { 'job_id_3' }
     let(:job) { instance_double(Delayed::Backend::ActiveRecord::Job) }
-    let(:file_meta1) { { original_filename: 'file1.pdf' }.to_json }
-    let(:file_meta2) { { original_filename: 'file2.pdf' }.to_json }
-    let(:file_meta3) { { original_filename: 'file3.pdf' }.to_json }
+    let(:file_path1) { '/path/to/file1.pdf' }
+    let(:file_path2) { '/path/to/file2.pdf' }
+    let(:file_path3) { '/path/to/file3.pdf' }
 
     it_behaves_like 'an unauthenticated controller'
 
@@ -439,9 +439,9 @@ describe OpenAccessPublicationsController, type: :controller do
 
       context 'when pdf file version polling resolves with a version' do
         before do
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id1}").and_return({ pdf_file_version: 'acceptedVersion', exif_file_version: 'acceptedVersion', file_meta: file_meta1 })
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id2}").and_return({ pdf_file_version: 'publishedVersion', exif_file_version: 'acceptedVersion', file_meta: file_meta2 })
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id3}").and_return({ pdf_file_version: 'unknown', exif_file_version: nil, file_meta: file_meta3 })
+          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id1}").and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: 3, file_path: file_path1 })
+          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id2}").and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: -1, file_path: file_path2 })
+          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id3}").and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
           allow(Delayed::Job).to receive(:exists?).with(job_id1).and_return(true)
           allow(Delayed::Job).to receive(:exists?).with(job_id2).and_return(true)
           allow(Delayed::Job).to receive(:exists?).with(job_id3).and_return(true)
@@ -452,20 +452,16 @@ describe OpenAccessPublicationsController, type: :controller do
           allow(job).to receive(:failed_at).and_return(nil)
           allow(job).to receive(:failed_at).and_return(nil)
           allow(job).to receive(:destroy)
+        end
+
+        it 'renders the file version result partial with file_version and cache_files locals' do
+          allow(controller).to receive(:render).and_call_original
+          expect(controller).to receive(:render).with(partial: 'open_access_publications/file_version_result', 
+            locals: { file_version: 'acceptedVersion', 
+                      cache_files: ["/path/to/file1.pdf", "/path/to/file2.pdf", "/path/to/file3.pdf"]
+                      })
 
           perform_request
-        end
-
-        it 'renders the file version result partial' do
-          expect(response).to render_template(partial: 'open_access_publications/_file_version_result')
-        end
-
-        it 'assigns the file version' do
-          expect(assigns(:file_version)).to eq('acceptedVersion')
-        end
-
-        it 'assigns the cache files' do
-          expect(assigns(:cache_files)).to eq([JSON.parse(file_meta1), JSON.parse(file_meta2), JSON.parse(file_meta3)])
         end
       end
 
@@ -474,12 +470,10 @@ describe OpenAccessPublicationsController, type: :controller do
           get :file_version_result, params: { id: pub.id, job_ids: [] }
         end
 
-        it 'does not assign the file version' do
-          expect(assigns(:file_version)).to be_nil
-        end
+        it 'renders no_content' do
+          perform_request
 
-        it 'does not assign the cache files' do
-          expect(assigns(:cache_files)).to be_empty
+          expect(response.message).to eq "No Content"
         end
       end
     end
