@@ -62,15 +62,13 @@ class PublicationMergeOnMatchingPolicy
     end
 
     def title
-      title1 = publication1.title
-      title2 = publication2.title
       # Give preference to Pure titles
       if publication1.pure_import_identifiers.present?
-        return title1
+        return publication1.title
       end
 
       if publication2.pure_import_identifiers.present?
-        return title2
+        return publication2.title
       end
 
       longer_value(:title)
