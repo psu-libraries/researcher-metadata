@@ -64,7 +64,7 @@ describe PublicationMergeOnMatchingPolicy do
           publication2.update secondary_title: publication1.secondary_title
           publication2.update title: "Title#{publication2.secondary_title}"
           policy.merge!
-          expect(publication1.reload.secondary_title).to eq nil
+          expect(publication1.reload.secondary_title).to be_nil
         end
       end
     end
