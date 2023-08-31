@@ -5,14 +5,15 @@
     <thead class='card-header'>
       <tr>
         <th>Title</th>
+        <th>Uploaded by</th>
       </tr>
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
           <td><%= link_to p.title.truncate(45),
-                  rails_admin.edit_path(model_name: :publication, id: p.id),
-                  target: '_blank' %></td>
+                  activity_insight_oa_workflow_review_publication_metadata_path(p) %></td>
+          <td><%= p.ai_file_for_deposit.user.webaccess_id %>
         </tr>
       <% end %>
     </tbody>

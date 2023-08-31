@@ -706,6 +706,12 @@ class Publication < ApplicationRecord
                               end
   end
 
+  def ai_file_for_deposit
+    if preferred_version.present?
+      activity_insight_oa_files.where(version: preferred_version).first
+    end
+  end
+
   private
 
     def merge(publications_to_merge)

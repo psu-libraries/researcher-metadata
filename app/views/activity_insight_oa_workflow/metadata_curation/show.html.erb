@@ -1,0 +1,14 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_metadata_review_path %>
+  <div class='card'>
+    <div class='card-header'>
+      <strong><%= @publication.title %></strong>
+    </div>
+    <div class='card-body'>
+      <%= link_to(
+        'Edit',
+        rails_admin.edit_path(model_name: :publication, id: @publication.id),
+        target: 'blank') %>
+    </div>
+  </div>
+</div>
