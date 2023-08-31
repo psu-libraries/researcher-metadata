@@ -14,6 +14,12 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it { is_expected.to have_db_column(:downloaded).of_type(:boolean) }
   it { is_expected.to have_db_column(:publication_id).of_type(:integer) }
   it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:license).of_type(:string) }
+  it { is_expected.to have_db_column(:embargo_date).of_type(:date) }
+  it { is_expected.to have_db_column(:set_statement).of_type(:text) }
+  it { is_expected.to have_db_column(:checked_for_set_statement).of_type(:boolean) }
+  it { is_expected.to have_db_column(:checked_for_embargo_date).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:publication_id) }
   it { is_expected.to have_db_foreign_key(:user_id) }
