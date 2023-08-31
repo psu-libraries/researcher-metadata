@@ -9,14 +9,40 @@ describe PublicationMergeOnMatchingPolicy do
 
   describe '#merge!' do
     describe 'title merging' do
-      before do
-        publication1.update title: 'Short'
-        publication1.update secondary_title: 'Title'
+      context 'when neither publication was imported from Pure' do
+        before do
+          publication1.update title: 'Short'
+          publication1.update secondary_title: 'Title'
+        end
+
+        it 'picks the longer title' do
+          policy.merge!
+          expect(publication1.reload.title).to eq publication2.title
+        end
       end
 
-      it 'picks the longer title' do
-        policy.merge!
-        expect(publication1.reload.title).to eq publication2.title
+      context 'when publication1 was imported from Pure' do
+        before do
+          create(:publication_import, :from_pure, publication: publication1)
+          publication1.save
+        end
+
+        it 'picks the title from the imported from publication1' do
+          policy.merge!
+          expect(publication1.reload.title).to eq publication1.title
+        end
+      end
+
+      context 'when publication2 was imported from Pure' do
+        before do
+          create(:publication_import, :from_pure, publication: publication2)
+          publication2.save
+        end
+
+        it 'picks the title from the imported from publication2' do
+          policy.merge!
+          expect(publication2.reload.title).to eq publication2.title
+        end
       end
     end
 
