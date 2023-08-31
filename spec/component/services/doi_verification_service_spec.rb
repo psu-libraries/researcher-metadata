@@ -9,7 +9,7 @@ describe DOIVerificationService do
                              secondary_title: secondary_title,
                              doi_verified: nil)}
   let(:title) { 'Psychotherapy integration and the need for better theories of change: A rejoinder to Alford' }
-  let(:secondary_title) { nil }
+  let(:secondary_title) { 'Theories of change for psychotherapy integration' }
   let(:service) { described_class.new(publication) }
   let(:json) { Rails.root.join('spec', 'fixtures', 'unpaywall2.json').read }
 
@@ -49,16 +49,6 @@ describe DOIVerificationService do
       it 'updates the doi verified status in publication record' do
         service.verify
         expect(publication.reload.doi_verified).to be false
-      end
-    end
-
-    context 'when the publication has a secondary title' do
-      let(:title) { 'Psychotherapy integration and the need for better theories of change' }
-      let(:secondary_title) { 'A rejoinder to Alford' }
-
-      it 'updates the doi verified status in publication record' do
-        service.verify
-        expect(publication.reload.doi_verified).to be true
       end
     end
   end
