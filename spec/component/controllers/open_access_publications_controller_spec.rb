@@ -540,11 +540,11 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when is not open access' do
         let(:pub_id) { pub.id }
         let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
-        let(:file_version_params) { { file_uploads_attributes: { '0' => { file: file, journal: nil } } } }
-        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(file_version_params) }
+        let(:file_version_params) { { file_uploads_attributes: { '0' => { file: file } } } }
+        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(pub, file_version_params) }
         let(:cache_files)  { file_version_uploads.cache_files }
         let(:cache_path) { cache_files.first[:cache_path] }
-        let(:params) { { id: pub_id, filename: cache_path } }
+        let(:params) { { id: pub_id, filename: cache_path.to_s } }
 
         it 'renders the requested file' do
           post :file_serve, params: params
@@ -650,10 +650,10 @@ describe OpenAccessPublicationsController, type: :controller do
         }
         let(:file_version_params) {
           {
-            file_uploads_attributes: { '0' => { file: file, journal: nil } }
+            file_uploads_attributes: { '0' => { file: file } }
           }
         }
-        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(file_version_params) }
+        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(pub, file_version_params) }
         let(:cache_files) { file_version_uploads.cache_files }
         let(:cache_path) do
           return nil if cache_files.empty?
