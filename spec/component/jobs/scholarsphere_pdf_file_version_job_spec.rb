@@ -16,7 +16,7 @@ describe ScholarspherePdfFileVersionJob, type: :job do
     ActiveJob::Base.queue_adapter = :test
     let(:job) { described_class.new }
     let(:file_path) { 'path/to/test/file' }
-    let(:publication) { create :publication, { title: 'test_pub_title', published_on: '2000' } }
+    let(:publication) { create(:publication, { title: 'test_pub_title', published_on: '2000' }) }
     let(:pdf_file_version) { double('ScholarspherePdfFileVersion', version: 'acceptedVersion', score: 2) }
     let(:exif_file_version) { 'acceptedVersion' }
 

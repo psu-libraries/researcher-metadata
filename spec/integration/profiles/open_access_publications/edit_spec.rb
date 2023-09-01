@@ -154,8 +154,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         include ActiveJob::TestHelper
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
-        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads, 
-                                                     version: exif_version, 
+        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads,
+                                                     version: exif_version,
                                                      cache_files: [cache_file], valid?: true) }
 
         before do
@@ -172,7 +172,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when exif check returns a acceptedVersion' do
           let(:exif_version) { I18n.t('file_versions.accepted_version') }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf', 
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
 
           it 'preselects Accepted Manuscript' do
@@ -184,7 +184,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when exif check returns nil and pdf check returns acceptedVersion' do
           let(:exif_version) { nil }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_accepted_version.pdf', 
+          let(:cache_file) { { original_filename: 'pdf_check_accepted_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version.pdf" } }
 
           it 'preselects Accepted Manuscript' do
@@ -196,7 +196,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when exif check returns publishedVersion' do
           let(:exif_version) { I18n.t('file_versions.published_version') }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_unkown_version.pdf', 
+          let(:cache_file) { { original_filename: 'pdf_check_unkown_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unkown_version.pdf" } }
 
           it 'preselects Final Published Version' do
@@ -208,7 +208,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when exif check returns nil and pdf check returns publishedVersion' do
           let(:exif_version) { nil }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf', 
+          let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" } }
 
           it 'preselects Final Published Version' do
@@ -220,7 +220,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when nothing is found' do
           let(:exif_version) { nil }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf', 
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
 
           it 'does not preselect anything' do
@@ -372,11 +372,11 @@ describe 'visiting the page to edit the open acess status of a publication', typ
       describe 'submitting a valid form with an error in the deposit process' do
         include ActiveJob::TestHelper
         let(:ingest) { double 'scholarsphere client ingest' }
-        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads, 
-                                                     version: I18n.t('file_versions.published_version'), 
-                                                     cache_files: [cache_file], 
+        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads,
+                                                     version: I18n.t('file_versions.published_version'),
+                                                     cache_files: [cache_file],
                                                      valid?: true) }
-        let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf', 
+        let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf',
                              cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }.with_indifferent_access }
 
         before do

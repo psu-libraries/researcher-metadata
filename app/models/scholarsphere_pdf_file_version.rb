@@ -35,7 +35,7 @@ class ScholarspherePdfFileVersion
 
         words << page.text.split.first(500)
         words.flatten!
-      # Formatting issues can cause errors 
+      # Formatting issues can cause errors
       # Best to rescue and move to the next page
       rescue StandardError
         next
