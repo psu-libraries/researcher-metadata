@@ -364,7 +364,7 @@ describe OpenAccessPublicationsController, type: :controller do
               allow(ScholarspherePdfFileVersionJob).to receive(:perform_later).and_return(pdf_file_version_job)
             end
 
-            it 'begins file version check and renders the scholarsphere_file_version form with loading spinner' do
+            it 'begins file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
               expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
@@ -380,7 +380,7 @@ describe OpenAccessPublicationsController, type: :controller do
               allow(ScholarspherePdfFileVersionJob).to receive(:perform_later)
             end
 
-            it 'does not begin file version check and renders the scholarsphere_file_version' do
+            it 'does not begin file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
               expect(ScholarspherePdfFileVersionJob).not_to have_received(:perform_later)
