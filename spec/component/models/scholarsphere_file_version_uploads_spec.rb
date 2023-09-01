@@ -3,24 +3,27 @@
 require 'component/component_spec_helper'
 
 describe ScholarsphereFileVersionUploads do
-  subject(:file_version_uploads) { described_class.new(attributes) }
+  subject(:file_version_uploads) { described_class.new(publication, file_attributes) }
 
-  let(:attributes) { { file_uploads_attributes: { '0' => { file: file, journal: nil, publication: publication } } } }
+  let(:file_attributes) { { file_uploads_attributes: { '0' => { file: file } } } }
   let(:file) { double 'file', path: 'the/file/path', original_filename: 'test_file' }
   let(:publication) { create(:sample_publication) }
+  let(:journal) { publication.journal.title }
 
   describe '#version' do
     let(:exif_file_version) { double 'ScholarsphereExifFileVersion', version: nil }
 
     before {
-      allow(ScholarsphereExifFileVersion).to receive(:new).and_return exif_file_version
+      allow(ScholarsphereExifFileVersion)
+        .to receive(:new)
+        .with(file_path: file.path, journal: journal)
+        .and_return exif_file_version
     }
 
     context 'when one file upload' do
       context 'uploaded file has no exif data' do
         it 'returns nil' do
-          expect(file_version_uploads.exif_file_versions.count).to eq 1
-          expect(file_version_uploads.exif_file_versions.first).to be_nil
+          expect(file_version_uploads.version).to be_nil
         end
       end
 
@@ -28,8 +31,7 @@ describe ScholarsphereFileVersionUploads do
         let(:exif_file_version) { double 'ScholarsphereExifFileVersion', version: I18n.t('file_versions.accepted_version') }
 
         it 'returns Accepted Manuscript' do
-          expect(file_version_uploads.exif_file_versions.count).to eq 1
-          expect(file_version_uploads.exif_file_versions.first).to eq I18n.t('file_versions.accepted_version')
+          expect(file_version_uploads.version).to eq I18n.t('file_versions.accepted_version')
         end
       end
 
@@ -37,19 +39,18 @@ describe ScholarsphereFileVersionUploads do
         let(:exif_file_version) { double 'ScholarsphereExifFileVersion', version: I18n.t('file_versions.published_version') }
 
         it 'returns Final Published Version' do
-          expect(file_version_uploads.exif_file_versions.count).to eq 1
-          expect(file_version_uploads.exif_file_versions.first).to eq I18n.t('file_versions.published_version')
+          expect(file_version_uploads.version).to eq I18n.t('file_versions.published_version')
         end
       end
     end
 
     context 'when multiple file uploads' do
-      let(:attributes) do
+      let(:file_attributes) do
         {
           file_uploads_attributes: {
-            '0' => { file: file1, journal: nil },
-            '1' => { file: file2, journal: nil },
-            '2' => { file: file3, journal: nil }
+            '0' => { file: file1 },
+            '1' => { file: file2 },
+            '2' => { file: file3 }
           }
         }
       end
@@ -59,9 +60,9 @@ describe ScholarsphereFileVersionUploads do
       let(:exif_file1_version) { double 'ScholarsphereExifFileVersion', version: version1 }
       let(:exif_file2_version) { double 'ScholarsphereExifFileVersion', version: version2 }
       let(:exif_file3_version) { double 'ScholarsphereExifFileVersion', version: version3 }
-      let(:options1) { { file_path: file1.path, journal: nil } }
-      let(:options2) { { file_path: file2.path, journal: nil } }
-      let(:options3) { { file_path: file3.path, journal: nil } }
+      let(:options1) { { file_path: file1.path, journal: journal } }
+      let(:options2) { { file_path: file2.path, journal: journal } }
+      let(:options3) { { file_path: file3.path, journal: journal } }
       let(:version1) { nil }
 
       before {
@@ -75,7 +76,7 @@ describe ScholarsphereFileVersionUploads do
         let(:version3) { nil }
 
         it 'returns nil' do
-          expect(described_class.version(file_version_uploads.exif_file_versions)).to be_nil
+          expect(file_version_uploads.version).to be_nil
         end
       end
 
@@ -84,7 +85,7 @@ describe ScholarsphereFileVersionUploads do
         let(:version3) { I18n.t('file_versions.accepted_version') }
 
         it 'returns Accepted Manuscript' do
-          expect(described_class.version(file_version_uploads.exif_file_versions)).to eq I18n.t('file_versions.accepted_version')
+          expect(file_version_uploads.version).to eq I18n.t('file_versions.accepted_version')
         end
       end
 
@@ -93,18 +94,18 @@ describe ScholarsphereFileVersionUploads do
         let(:version3) { nil }
 
         it 'returns Final Published Version' do
-          expect(described_class.version(file_version_uploads.exif_file_versions)).to eq I18n.t('file_versions.published_version')
+          expect(file_version_uploads.version).to eq I18n.t('file_versions.published_version')
         end
       end
     end
   end
 
   describe '#cache_files' do
-    let(:attributes) do
+    let(:file_attributes) do
       {
         file_uploads_attributes: {
-          '0' => { file: file1, journal: nil },
-          '1' => { file: file2, journal: nil }
+          '0' => { file: file1 },
+          '1' => { file: file2 }
         }
       }
     end
