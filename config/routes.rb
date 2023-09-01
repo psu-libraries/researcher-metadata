@@ -3,6 +3,8 @@
 Rails.application.routes.draw do
   mount RailsAdmin::Engine => '/admin', as: 'rails_admin'
 
+  mount OkComputer::Engine, at: '/health'
+
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   devise_scope :user do
     match 'sign_out', to: 'devise/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
@@ -25,6 +27,8 @@ Rails.application.routes.draw do
     get '/doi_verification' => 'doi_verification#index'
     get '/file_version_review' => 'file_version_curation#index'
     get '/permissions_review' => 'permissions_curation#index'
+    get '/files/:activity_insight_oa_file_id/download' => 'files#download', as: :file_download
+    get '/metadata_review' => 'metadata_curation#index'
   end
 
   root to: 'public#home'

@@ -72,13 +72,67 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
 
   context 'when publications need their permissions verified' do
     let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
-    let!(:pub2) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+    let!(:pub2) {
+      create(
+        :publication,
+        permissions_last_checked_at: Time.now,
+        licence: 'licence',
+        preferred_version: 'acceptedVersion',
+        checked_for_set_statement: true,
+        checked_for_embargo_date: true
+      )
+    }
 
     it 'renders the permissions review card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
       expect(page.find_by_id('permissions-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('permissions-check-card').text).to include('1')
       expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/permissions_review')
+    end
+  end
+
+  context 'when no publications are ready for final metadata review' do
+    let(:pub1) { create(:publication) }
+    let(:pub2) { create(:publication) }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('metadata-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('metadata-check-card').text).to include('0')
+      expect(rendered_component).not_to have_link(
+        href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_metadata_review_path
+      )
+    end
+  end
+
+  context 'when publications are ready for final metadata review' do
+    let(:pub1) {
+      create(
+        :publication,
+        preferred_version: 'acceptedVersion',
+        licence: 'license',
+        set_statement: 'statement',
+        embargo_date: Date.current
+      )
+    }
+    let(:pub2) { create(:publication) }
+    let!(:aif) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion',
+        downloaded: true,
+        file_download_location: fixture_file_open('test_file.pdf')
+      )
+    }
+
+    it 'renders the metadata review card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('metadata-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('metadata-check-card').text).to include('1')
+      expect(rendered_component).to have_link(
+        href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_metadata_review_path
+      )
     end
   end
 end

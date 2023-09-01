@@ -12,16 +12,23 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it { is_expected.to have_db_column(:version).of_type(:string) }
   it { is_expected.to have_db_column(:file_download_location).of_type(:string) }
   it { is_expected.to have_db_column(:downloaded).of_type(:boolean) }
+  it { is_expected.to have_db_column(:publication_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:user_id).of_type(:integer) }
+
   it { is_expected.to have_db_foreign_key(:publication_id) }
+  it { is_expected.to have_db_foreign_key(:user_id) }
+
   it { is_expected.to have_db_index :publication_id }
+  it { is_expected.to have_db_index :user_id }
 
   it_behaves_like 'an application record'
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
+    it { is_expected.to belong_to(:user).optional }
   end
 
-  describe '#file' do
+  describe '#file_download_location' do
     it 'mounts an ActivityInsightFileUploader' do
       expect(subject.file_download_location).to be_a(ActivityInsightFileUploader)
     end
@@ -49,21 +56,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'scopes' do
     let!(:pub1) { create(:publication,
-                         title: 'pub1',
-                         licence: nil)
+                         title: 'pub1')
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         licence: 'licence')
+                         publication_type: 'Trade Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
-                         licence: 'licence',
-                         publication_type: 'Trade Journal Article')
-    }
-    let!(:pub4) { create(:publication,
-                         title: 'pub4',
-                         licence: 'licence',
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
                          ])
@@ -71,15 +71,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
-    let!(:file3) { create(:activity_insight_oa_file, publication: pub3) }
-    let!(:file4) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:file4) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file_download_location: uploader) }
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file2]
+        expect(described_class.ready_for_download).to match_array [file1]
       end
     end
   end
@@ -128,6 +127,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       it 'returns "Wrong Version"' do
         expect(file.version_status_display).to eq 'Wrong Version'
       end
+    end
+  end
+
+  describe '#download_location_value' do
+    let!(:file) { create(:activity_insight_oa_file, file_download_location: fixture_file_open('test_file.pdf')) }
+
+    it 'returns the value stored in the file_download_location column' do
+      expect(file.download_location_value).to eq 'test_file.pdf'
     end
   end
 end

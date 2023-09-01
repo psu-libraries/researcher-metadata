@@ -1,26 +1,33 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
   <h1 class="pb-3 pt-2">Publications Requiring DOI Verification</h1>
-  <div class='card'>
   <table class="table">
     <thead class='card-header'>
       <tr>
         <th>Title</th>
         <th>DOI</th>
         <th>DOI Verification Status</th>
+        <th>Download Files</th>
       </tr>
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
           <td><%= link_to p.title.truncate(45),
-                  rails_admin.edit_path(model_name: :publication, id: p.id),
+                  rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
                   target: '_blank' %></td>
           <td><%= p.doi %></td>
           <td>Failed Verification</td>
+          <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
+                <% if f.stored_file_path.present? %>
+                  <%= link_to "#{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
+                <% else %>
+                  Not Found
+                <% end %>
+              <% end %>
+          </td>
         </tr>
       <% end %>
     </tbody>
   </table>
-  </div>
 </div>

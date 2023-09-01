@@ -8,17 +8,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
   end
 
   def self.rights
-    %w{
-      https://creativecommons.org/licenses/by/4.0/
-      https://creativecommons.org/licenses/by-sa/4.0/
-      https://creativecommons.org/licenses/by-nc/4.0/
-      https://creativecommons.org/licenses/by-nd/4.0/
-      https://creativecommons.org/licenses/by-nc-nd/4.0/
-      https://creativecommons.org/licenses/by-nc-sa/4.0/
-      http://creativecommons.org/publicdomain/mark/1.0/
-      http://creativecommons.org/publicdomain/zero/1.0/
-      https://rightsstatements.org/page/InC/1.0/
-    }
+    rights_options.pluck(1)
   end
 
   def self.rights_options

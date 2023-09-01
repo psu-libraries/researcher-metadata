@@ -27,6 +27,7 @@ datadog:
   env: dev
 
 delayed_job:
+  failure_threshold_minutes: 10
   upload_queue: scholarsphere-uploads
 
 orcid:

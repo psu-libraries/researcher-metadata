@@ -5,10 +5,14 @@ require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin activity insight oa file detail page', type: :feature do
   let!(:pub) { create(:publication, title: "AIF's Publication's Title") }
+  let!(:u) { create(:user) }
   let!(:aif) do
     create(:activity_insight_oa_file,
+           user: u,
            publication: pub,
-           version: 'unknown')
+           version: 'unknown',
+           downloaded: true,
+           file_download_location: fixture_file_open('test_file.pdf'))
   end
 
   context 'when the current user is an admin' do
@@ -21,9 +25,12 @@ describe 'Admin activity insight oa file detail page', type: :feature do
         expect(page).to have_content "Details for Activity insight OA file 'ActivityInsightOAFile ##{aif.id}'"
         expect(page).to have_content aif.location
         expect(page).to have_content aif.version
+        expect(page).to have_link 'Test User'
         expect(page).to have_content aif.created_at.strftime('%B %d, %Y')
         expect(page).to have_content aif.updated_at.strftime('%B %d, %Y')
         expect(page).to have_link pub.title
+        expect(page).to have_link 'test_file.pdf'
+        expect(page).to have_content '✓'
       end
     end
   end

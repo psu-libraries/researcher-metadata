@@ -4,12 +4,17 @@ class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 
+  # TODO:  We ultimately don't want this association to be optional, but
+  # the data will be missing for records that already exist in production,
+  # and we don't want to break anything. Once we have populated all of the
+  # existing production records, then we should make this required.
+  belongs_to :user, optional: true
+
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
   scope :ready_for_download, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
-      .where.not(publication: { licence: nil })
       .left_outer_joins(publication: :open_access_locations)
       .where(open_access_locations: { publication_id: nil })
       .where(file_download_location: nil)
@@ -47,13 +52,24 @@ class ActivityInsightOAFile < ApplicationRecord
     'Wrong Version'
   end
 
+  def download_location_value
+    read_attribute(:file_download_location)
+  end
+
   rails_admin do
     show do
       field(:location)
       field(:version)
+      field(:user)
       field(:created_at)
       field(:updated_at)
       field(:publication)
+      field 'File download' do
+        formatted_value do
+          bindings[:view].link_to(bindings[:object].download_location_value.to_s, Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+        end
+      end
+      field(:downloaded)
     end
 
     list do
@@ -63,10 +79,19 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:created_at)
       field(:updated_at)
       field(:publication)
+      field(:user)
+      field(:downloaded)
+      field(:download_location_value) { label 'File download' }
     end
 
     edit do
       field(:location) { read_only true }
+      field 'File' do
+        read_only true
+        formatted_value do
+          bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+        end
+      end
       field(:version, :enum) do
         required true
         enum do
