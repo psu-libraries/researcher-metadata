@@ -95,7 +95,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       end
     end
 
-    if pdf_file_versions.compact.count == job_ids&.count
+    if pdf_file_versions.present? && pdf_file_versions.compact.count == job_ids&.count
       # Determine best version by absolute score
       file_version = pdf_file_versions
         .select { |i| i.first if i.second.abs == pdf_file_versions.map { |n| n.second.abs }.max }

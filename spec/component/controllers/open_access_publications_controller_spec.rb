@@ -439,8 +439,8 @@ describe OpenAccessPublicationsController, type: :controller do
 
       context 'when pdf file version polling resolves with a version' do
         before do
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id1}").and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: 3, file_path: file_path1 })
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id2}").and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: -1, file_path: file_path2 })
+          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id1}").and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
+          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id2}").and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
           allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id3}").and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
           allow(Delayed::Job).to receive(:exists?).with(job_id1).and_return(true)
           allow(Delayed::Job).to receive(:exists?).with(job_id2).and_return(true)
@@ -454,13 +454,63 @@ describe OpenAccessPublicationsController, type: :controller do
           allow(job).to receive(:destroy)
         end
 
-        it 'renders the file version result partial with file_version and cache_files locals' do
-          allow(controller).to receive(:render).and_call_original
+        context "when the absolute score of the acceptedVersion is greater than the publishedVersion" do
+          let(:score1) { -3 }
+          let(:score2) { 1 }
 
-          perform_request
-          expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
-                                                            locals: { file_version: 'acceptedVersion',
-                                                                      cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+          it 'renders the file version result partial with acceptedVersion as file_version and cache_files locals' do
+            allow(controller).to receive(:render).and_call_original
+
+            perform_request
+            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
+                                                              locals: { file_version: 'acceptedVersion',
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+            expect(job).not_to have_received(:destroy)
+          end
+        end
+
+        context "when the absolute score of the publishedVersion is greater than the acceptedVersion" do
+          let(:score1) { -1 }
+          let(:score2) { 3 }
+
+          it 'renders the file version result partial with publishedVersion as file_version and cache_files locals' do
+            allow(controller).to receive(:render).and_call_original
+
+            perform_request
+            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
+                                                              locals: { file_version: 'publishedVersion',
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+            expect(job).not_to have_received(:destroy)
+          end
+        end
+        
+        context "when the absolute score of the publishedVersion is equal to the acceptedVersion" do
+          let(:score1) { -3 }
+          let(:score2) { 3 }
+
+          it 'renders the file version result partial with whatever is first in the list of file_versions and cache_files locals' do
+            allow(controller).to receive(:render).and_call_original
+
+            perform_request
+            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
+                                                              locals: { file_version: 'acceptedVersion',
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+            expect(job).not_to have_received(:destroy)
+          end
+        end
+
+        context 'when a job fails' do
+          let(:score1) { -1 }
+          let(:score2) { -1 }
+
+          before do
+            allow(job).to receive(:failed_at).and_return(DateTime.now)
+            get :file_version_result, params: { id: pub.id, job_ids: [job_id1] }
+          end
+
+          it 'destroys the Delayed::Job record' do
+            expect(job).to have_received(:destroy).exactly(1).time
+          end
         end
       end
 
