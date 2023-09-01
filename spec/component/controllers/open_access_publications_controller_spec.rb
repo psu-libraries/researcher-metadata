@@ -454,7 +454,7 @@ describe OpenAccessPublicationsController, type: :controller do
           allow(job).to receive(:destroy)
         end
 
-        context "when the absolute score of the acceptedVersion is greater than the publishedVersion" do
+        context 'when the absolute score of the acceptedVersion is greater than the publishedVersion' do
           let(:score1) { -3 }
           let(:score2) { 1 }
 
@@ -469,7 +469,7 @@ describe OpenAccessPublicationsController, type: :controller do
           end
         end
 
-        context "when the absolute score of the publishedVersion is greater than the acceptedVersion" do
+        context 'when the absolute score of the publishedVersion is greater than the acceptedVersion' do
           let(:score1) { -1 }
           let(:score2) { 3 }
 
@@ -483,8 +483,8 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(job).not_to have_received(:destroy)
           end
         end
-        
-        context "when the absolute score of the publishedVersion is equal to the acceptedVersion" do
+
+        context 'when the absolute score of the publishedVersion is equal to the acceptedVersion' do
           let(:score1) { -3 }
           let(:score2) { 3 }
 
