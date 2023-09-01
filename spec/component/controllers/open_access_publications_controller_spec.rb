@@ -500,16 +500,26 @@ describe OpenAccessPublicationsController, type: :controller do
         end
 
         context 'when a job fails' do
-          let(:score1) { -1 }
-          let(:score2) { -1 }
+          let(:score1) { -3 }
+          let(:score2) { 1 }
+          let(:failed_job) { instance_double(Delayed::Backend::ActiveRecord::Job) }
+          let(:struct) { Struct.new(:job_data) }
+          let(:payload_object) { struct.new({ 'arguments' => [{ 'file_path' => file_path1 }] }) }
 
           before do
-            allow(job).to receive(:failed_at).and_return(DateTime.now)
-            get :file_version_result, params: { id: pub.id, job_ids: [job_id1] }
+            allow(failed_job).to receive(:failed_at).and_return(DateTime.now)
+            allow(failed_job).to receive(:payload_object).and_return(payload_object)
+            allow(failed_job).to receive(:destroy)
+            allow(Delayed::Job).to receive(:find).with(job_id1).and_return(failed_job)
+            allow(controller).to receive(:render).and_call_original
+            get :file_version_result, params: { id: pub.id, job_ids: [job_id1, job_id2] }
           end
 
-          it 'destroys the Delayed::Job record' do
-            expect(job).to have_received(:destroy).exactly(1).time
+          it 'destroys that Delayed::Job record; proceeds with analysis of the other job' do
+            expect(failed_job).to have_received(:destroy).exactly(1).time
+            expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
+                                                              locals: { file_version: 'publishedVersion',
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'] })
           end
         end
       end
