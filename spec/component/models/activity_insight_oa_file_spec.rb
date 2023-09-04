@@ -35,7 +35,13 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   end
 
   describe 'validations' do
-    it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
+    it { expect(subject).to validate_inclusion_of(:version).in_array(
+      %w{
+        acceptedVersion
+        publishedVersion
+        unknown
+      }
+    ).allow_nil }
 
     it { expect(subject).to validate_inclusion_of(:license).in_array(%w{
                                                                        https://creativecommons.org/licenses/by/4.0/
@@ -145,10 +151,53 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:file9) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:file10) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:file11) {
+      create(
+        :activity_insight_oa_file,
+        version: 'acceptedVersion',
+        location: nil
+      )
+    }
+    let!(:file12) {
+      create(
+        :activity_insight_oa_file,
+        version: 'publishedVersion',
+        location: nil
+      )
+    }
+    let!(:file13) {
+      create(
+        :activity_insight_oa_file,
+        version: 'unknown',
+        location: nil
+      )
+    }
+    let!(:file14) {
+      create(
+        :activity_insight_oa_file,
+        version: 'acceptedVersion',
+        location: nil,
+        permissions_last_checked_at: Time.now
+      )
+    }
+    let!(:file15) {
+      create(
+        :activity_insight_oa_file,
+        version: 'publishedVersion',
+        location: nil,
+        permissions_last_checked_at: Time.now
+      )
+    }
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
         expect(described_class.ready_for_download).to match_array [file1, file8]
+      end
+    end
+
+    describe '.needs_permissions_check' do
+      it 'returns files that have a known version but have not had their permissions checked yet' do
+        expect(described_class.needs_permissions_check).to match_array [file11, file12]
       end
     end
   end

@@ -33,6 +33,11 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
   }
 
+  scope :needs_permissions_check, -> {
+    where(%{version = 'acceptedVersion' OR version = 'publishedVersion'})
+      .where(permissions_last_checked_at: nil)
+  }
+
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
 
   validates :license, inclusion: { in: licenses, allow_blank: true }
