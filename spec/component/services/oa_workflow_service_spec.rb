@@ -44,7 +44,7 @@ describe OAWorkflowService do
 
     context 'when publications need doi verification' do
       before do
-        allow(PermissionsCheckJob).to receive(:perform_later)
+        allow(PublicationPermissionsCheckJob).to receive(:perform_later)
         allow(DOIVerificationJob).to receive(:perform_later)
       end
 
@@ -71,21 +71,21 @@ describe OAWorkflowService do
 
     context 'when publications need permissions checks' do
       context 'when there is not an error' do
-        before { allow(PermissionsCheckJob).to receive(:perform_later) }
+        before { allow(PublicationPermissionsCheckJob).to receive(:perform_later) }
 
         it 'calls the permissions check job with that publication' do
           service.workflow
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
-          expect(PermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
+          expect(PublicationPermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
         end
       end
 
       context 'when there is an error' do
-        before { allow(PermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+        before { allow(PublicationPermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
 
         it 'updates permissions_last_checked_at checked' do
           service.workflow

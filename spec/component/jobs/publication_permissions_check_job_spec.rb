@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe PermissionsCheckJob, type: :job do
+describe PublicationPermissionsCheckJob, type: :job do
   let(:job) { described_class }
 
   describe '.perform_later' do

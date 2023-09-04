@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class PermissionsCheckJob < ApplicationJob
+class PublicationPermissionsCheckJob < ApplicationJob
   queue_as 'default'
 
   def perform(publication_id)
