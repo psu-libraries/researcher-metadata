@@ -26,11 +26,22 @@ describe 'updating a activity insight oa file via the admin interface', type: :f
     describe 'submitting the form with new data to update a publication record' do
       before do
         select 'unknown', from: 'Version'
+        select 'Public Domain Mark 1.0', from: 'License'
+        fill_in 'Set statement', with: 'test statement'
+        check 'Checked for set statement'
+        fill_in 'Embargo date', with: 'September 04, 2023'
+        check 'Checked for embargo date'
         click_on 'Save'
       end
 
       it "updates the activity insight oa file's data" do
-        expect(aif.reload.version).to eq 'unknown'
+        f = aif.reload
+        expect(f.version).to eq 'unknown'
+        expect(f.license).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
+        expect(f.set_statement).to eq 'test statement'
+        expect(f.checked_for_set_statement).to eq true
+        expect(f.embargo_date).to eq Date.new(2023, 9, 4)
+        expect(f.checked_for_embargo_date).to eq true
       end
     end
   end

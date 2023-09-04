@@ -188,7 +188,7 @@ class Publication < ApplicationRecord
       .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
       .where(
-        %{licence IS NULL OR preferred_version IS NULL OR (embargo_date IS NULL AND checked_for_embargo_date IS DISTINCT FROM TRUE) OR (set_statement IS NULL AND checked_for_set_statement IS DISTINCT FROM TRUE)}
+        %{licence IS NULL OR preferred_version IS NULL OR (publications.embargo_date IS NULL AND publications.checked_for_embargo_date IS DISTINCT FROM TRUE) OR (publications.set_statement IS NULL AND publications.checked_for_set_statement IS DISTINCT FROM TRUE)}
       )
   }
   scope :ready_for_metadata_review, -> {
@@ -199,9 +199,9 @@ class Publication < ApplicationRecord
             SELECT id FROM activity_insight_oa_files
             WHERE activity_insight_oa_files.publication_id = publications.id
               AND publications.preferred_version = activity_insight_oa_files.version
-              AND licence IS NOT NULL
-              AND (set_statement IS NOT NULL OR checked_for_set_statement IS TRUE)
-              AND (embargo_date IS NOT NULL OR checked_for_embargo_date IS TRUE)
+              AND publications.licence IS NOT NULL
+              AND (publications.set_statement IS NOT NULL OR publications.checked_for_set_statement IS TRUE)
+              AND (publications.embargo_date IS NOT NULL OR publications.checked_for_embargo_date IS TRUE)
               AND activity_insight_oa_files.downloaded IS TRUE
               AND activity_insight_oa_files.file_download_location IS NOT NULL
               AND (open_access_status != 'gold' AND open_access_status != 'hybrid' AND open_access_status IS NOT NULL)

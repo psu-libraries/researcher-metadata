@@ -1,6 +1,20 @@
 # frozen_string_literal: true
 
 class ActivityInsightOAFile < ApplicationRecord
+  ALLOWED_VERSIONS = [
+    I18n.t('file_versions.accepted_version'),
+    I18n.t('file_versions.published_version'),
+    'unknown'
+  ].freeze
+
+  def self.licenses
+    ScholarsphereWorkDeposit.rights
+  end
+
+  def self.license_options
+    ScholarsphereWorkDeposit.rights_options
+  end
+
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 
@@ -21,6 +35,9 @@ class ActivityInsightOAFile < ApplicationRecord
 
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
 
+  validates :license, inclusion: { in: licenses, allow_blank: true }
+  validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
+
   def stored_file_path
     file_download_location.file&.file
   end
@@ -36,12 +53,6 @@ class ActivityInsightOAFile < ApplicationRecord
   def download_uri
     "https://#{S3_AUTHORIZER_HOST_NAME}/api/v1/#{URI::DEFAULT_PARSER.escape(location)}"
   end
-
-  ALLOWED_VERSIONS = [I18n.t('file_versions.accepted_version'),
-                      I18n.t('file_versions.published_version'),
-                      'unknown'].freeze
-
-  validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 
   def version_status_display
     return I18n.t('file_versions.published_version_display') if version == I18n.t('file_versions.published_version')
@@ -69,18 +80,25 @@ class ActivityInsightOAFile < ApplicationRecord
         end
       end
       field(:downloaded)
+      field(:permissions_last_checked_at)
+      field(:license)
+      field(:set_statement)
+      field(:checked_for_set_statement)
+      field(:embargo_date)
+      field(:checked_for_embargo_date)
     end
 
     list do
       field(:id)
-      field(:location)
+      field(:publication)
+      field(:downloaded)
       field(:version)
       field(:created_at)
       field(:updated_at)
-      field(:publication)
+      field(:permissions_last_checked_at)
       field(:user)
-      field(:downloaded)
       field(:download_location_value) { label 'File download' }
+      field(:location)
     end
 
     edit do
@@ -96,6 +114,17 @@ class ActivityInsightOAFile < ApplicationRecord
         enum do
           ActivityInsightOAFile::ALLOWED_VERSIONS.map { |v| [v, v] }
         end
+      end
+      group :open_access_permissions do
+        field(:license, :enum) do
+          enum do
+            ActivityInsightOAFile.license_options
+          end
+        end
+        field(:set_statement)
+        field(:checked_for_set_statement)
+        field(:embargo_date)
+        field(:checked_for_embargo_date)
       end
     end
   end

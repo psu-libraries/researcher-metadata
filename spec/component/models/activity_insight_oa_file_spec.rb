@@ -34,6 +34,55 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     it { is_expected.to belong_to(:user).required }
   end
 
+  describe 'validations' do
+    it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
+
+    it { is_expected.to validate_inclusion_of(:license).in_array(%w{
+      https://creativecommons.org/licenses/by/4.0/
+      https://creativecommons.org/licenses/by-sa/4.0/
+      https://creativecommons.org/licenses/by-nc/4.0/
+      https://creativecommons.org/licenses/by-nd/4.0/
+      https://creativecommons.org/licenses/by-nc-nd/4.0/
+      https://creativecommons.org/licenses/by-nc-sa/4.0/
+      http://creativecommons.org/publicdomain/mark/1.0/
+      http://creativecommons.org/publicdomain/zero/1.0/
+      https://rightsstatements.org/page/InC/1.0/
+    }).allow_blank
+    }
+  end
+
+  describe '.licenses' do
+    it 'returns an array of the possible licenses for a file' do
+      expect(ActivityInsightOAFile.licenses).to eq %w{
+        https://creativecommons.org/licenses/by/4.0/
+        https://creativecommons.org/licenses/by-sa/4.0/
+        https://creativecommons.org/licenses/by-nc/4.0/
+        https://creativecommons.org/licenses/by-nd/4.0/
+        https://creativecommons.org/licenses/by-nc-nd/4.0/
+        https://creativecommons.org/licenses/by-nc-sa/4.0/
+        http://creativecommons.org/publicdomain/mark/1.0/
+        http://creativecommons.org/publicdomain/zero/1.0/
+        https://rightsstatements.org/page/InC/1.0/
+      }
+    end
+  end
+
+  describe '.license_options' do
+    it 'returns an array of the possible licenses for a file along with descriptions of each' do
+      expect(ActivityInsightOAFile.license_options).to eq [
+        ['Attribution 4.0 International (CC BY 4.0)', 'https://creativecommons.org/licenses/by/4.0/'],
+        ['Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)', 'https://creativecommons.org/licenses/by-sa/4.0/'],
+        ['Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)', 'https://creativecommons.org/licenses/by-nc/4.0/'],
+        ['Attribution-NoDerivatives 4.0 International (CC BY-ND 4.0)', 'https://creativecommons.org/licenses/by-nd/4.0/'],
+        ['Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)', 'https://creativecommons.org/licenses/by-nc-nd/4.0/'],
+        ['Attribution-NonCommercial-ShareAlike 4.0 International (CC BY-NC-SA 4.0)', 'https://creativecommons.org/licenses/by-nc-sa/4.0/'],
+        ['Public Domain Mark 1.0', 'http://creativecommons.org/publicdomain/mark/1.0/'],
+        ['CC0 1.0 Universal', 'http://creativecommons.org/publicdomain/zero/1.0/'],
+        ['All rights reserved', 'https://rightsstatements.org/page/InC/1.0/']
+      ]
+    end
+  end
+
   describe '#file_download_location' do
     it 'mounts an ActivityInsightFileUploader' do
       expect(subject.file_download_location).to be_a(ActivityInsightFileUploader)
@@ -127,10 +176,6 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     it "returns the full URI for the file in Activity Insight's AWS S3 bucket" do
       expect(aif.download_uri).to eq 'https://ai-s3-authorizer.k8s.libraries.psu.edu/api/v1/abc123/intellcont/test_publication.pdf'
     end
-  end
-
-  describe 'validations' do
-    it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
   end
 
   describe '#version_status_display' do

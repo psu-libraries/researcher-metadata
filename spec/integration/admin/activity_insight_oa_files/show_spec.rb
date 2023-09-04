@@ -12,7 +12,11 @@ describe 'Admin activity insight oa file detail page', type: :feature do
            publication: pub,
            version: 'unknown',
            downloaded: true,
-           file_download_location: fixture_file_open('test_file.pdf'))
+           file_download_location: fixture_file_open('test_file.pdf'),
+           license: 'https://rightsstatements.org/page/InC/1.0/',
+           set_statement: 'publisher set statement',
+           embargo_date: Date.new(2025, 8, 31)
+           )
   end
 
   context 'when the current user is an admin' do
@@ -31,6 +35,9 @@ describe 'Admin activity insight oa file detail page', type: :feature do
         expect(page).to have_link pub.title
         expect(page).to have_link 'test_file.pdf'
         expect(page).to have_content '✓'
+        expect(page).to have_content 'https://rightsstatements.org/page/InC/1.0/'
+        expect(page).to have_content 'publisher set statement'
+        expect(page).to have_content 'August 31, 2025'
       end
     end
   end
