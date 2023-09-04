@@ -24,8 +24,6 @@ describe PublicationPermissionsCheckJob, type: :job do
     it 'updates the publication permissions' do
       job.perform_now(publication.id)
       expect(publication.reload.preferred_version).to eq 'acceptedVersion'
-      expect(publication.reload.set_statement).to eq '© This manuscript version is made available under the CC-BY-NC-ND 4.0 license https://creativecommons.org/licenses/by-nc-nd/4.0/'
-      expect(publication.reload.licence).to eq 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
     end
   end
 end

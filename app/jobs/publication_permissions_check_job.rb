@@ -8,9 +8,6 @@ class PublicationPermissionsCheckJob < ApplicationJob
     permissions = OABPreferredPermissionsService.new(publication.doi_url_path)
 
     publication.preferred_version = permissions.preferred_version
-    publication.set_statement = permissions.set_statement
-    publication.licence = permissions.licence
-    publication.embargo_date = permissions.embargo_end_date
 
     publication.save!
   end
