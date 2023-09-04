@@ -740,7 +740,7 @@ describe Publication, type: :model do
     }
     let!(:pub10) { create(:publication,
                           title: 'pub10',
-                          licence: 'licence',
+                          preferred_version: 'acceptedVersion',
                           doi_verified: true)
     }
     let!(:pub11) { create(:publication,
@@ -1147,7 +1147,7 @@ describe Publication, type: :model do
     end
 
     describe '.needs_permissions_check' do
-      it 'returns files that have had their permissions checked' do
+      it 'returns activity_insight_oa_publications that have not been checked for a preferred version' do
         expect(described_class.needs_permissions_check).to match_array [pub8]
       end
     end

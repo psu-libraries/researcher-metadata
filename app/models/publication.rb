@@ -155,10 +155,10 @@ class Publication < ApplicationRecord
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
   scope :needs_permissions_check, -> {
-                                    activity_insight_oa_publication
-                                      .filter_oa_status_from_workflow
-                                      .where(licence: nil, doi_verified: true, permissions_last_checked_at: nil)
-                                  }
+    activity_insight_oa_publication
+      .filter_oa_status_from_workflow
+      .where(preferred_version: nil, doi_verified: true, permissions_last_checked_at: nil)
+  }
   scope :needs_oa_metadata_search,
         -> {
           activity_insight_oa_publication

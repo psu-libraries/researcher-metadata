@@ -39,9 +39,9 @@ describe 'updating a activity insight oa file via the admin interface', type: :f
         expect(f.version).to eq 'unknown'
         expect(f.license).to eq 'http://creativecommons.org/publicdomain/mark/1.0/'
         expect(f.set_statement).to eq 'test statement'
-        expect(f.checked_for_set_statement).to eq true
+        expect(f.checked_for_set_statement).to be true
         expect(f.embargo_date).to eq Date.new(2023, 9, 4)
-        expect(f.checked_for_embargo_date).to eq true
+        expect(f.checked_for_embargo_date).to be true
       end
     end
   end

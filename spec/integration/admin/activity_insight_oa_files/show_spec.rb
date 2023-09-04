@@ -15,8 +15,7 @@ describe 'Admin activity insight oa file detail page', type: :feature do
            file_download_location: fixture_file_open('test_file.pdf'),
            license: 'https://rightsstatements.org/page/InC/1.0/',
            set_statement: 'publisher set statement',
-           embargo_date: Date.new(2025, 8, 31)
-           )
+           embargo_date: Date.new(2025, 8, 31))
   end
 
   context 'when the current user is an admin' do

@@ -37,23 +37,23 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   describe 'validations' do
     it { is_expected.to validate_inclusion_of(:version).in_array(described_class::ALLOWED_VERSIONS).allow_nil }
 
-    it { is_expected.to validate_inclusion_of(:license).in_array(%w{
-      https://creativecommons.org/licenses/by/4.0/
-      https://creativecommons.org/licenses/by-sa/4.0/
-      https://creativecommons.org/licenses/by-nc/4.0/
-      https://creativecommons.org/licenses/by-nd/4.0/
-      https://creativecommons.org/licenses/by-nc-nd/4.0/
-      https://creativecommons.org/licenses/by-nc-sa/4.0/
-      http://creativecommons.org/publicdomain/mark/1.0/
-      http://creativecommons.org/publicdomain/zero/1.0/
-      https://rightsstatements.org/page/InC/1.0/
-    }).allow_blank
+    it { expect(subject).to validate_inclusion_of(:license).in_array(%w{
+                                                                       https://creativecommons.org/licenses/by/4.0/
+                                                                       https://creativecommons.org/licenses/by-sa/4.0/
+                                                                       https://creativecommons.org/licenses/by-nc/4.0/
+                                                                       https://creativecommons.org/licenses/by-nd/4.0/
+                                                                       https://creativecommons.org/licenses/by-nc-nd/4.0/
+                                                                       https://creativecommons.org/licenses/by-nc-sa/4.0/
+                                                                       http://creativecommons.org/publicdomain/mark/1.0/
+                                                                       http://creativecommons.org/publicdomain/zero/1.0/
+                                                                       https://rightsstatements.org/page/InC/1.0/
+                                                                     }).allow_blank
     }
   end
 
   describe '.licenses' do
     it 'returns an array of the possible licenses for a file' do
-      expect(ActivityInsightOAFile.licenses).to eq %w{
+      expect(described_class.licenses).to eq %w{
         https://creativecommons.org/licenses/by/4.0/
         https://creativecommons.org/licenses/by-sa/4.0/
         https://creativecommons.org/licenses/by-nc/4.0/
@@ -69,7 +69,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe '.license_options' do
     it 'returns an array of the possible licenses for a file along with descriptions of each' do
-      expect(ActivityInsightOAFile.license_options).to eq [
+      expect(described_class.license_options).to eq [
         ['Attribution 4.0 International (CC BY 4.0)', 'https://creativecommons.org/licenses/by/4.0/'],
         ['Attribution-ShareAlike 4.0 International (CC BY-SA 4.0)', 'https://creativecommons.org/licenses/by-sa/4.0/'],
         ['Attribution-NonCommercial 4.0 International (CC BY-NC 4.0)', 'https://creativecommons.org/licenses/by-nc/4.0/'],
