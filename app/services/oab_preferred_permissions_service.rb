@@ -42,12 +42,4 @@ class OABPreferredPermissionsService < OABPermissionsClient
   def licence
     LicenceMapper.map(preferred_permission['licence'].presence)
   end
-
-  private
-
-    def best_permission
-      JSON.parse(permissions_response)['best_permission']
-    rescue JSON::ParserError
-      nil
-    end
 end
