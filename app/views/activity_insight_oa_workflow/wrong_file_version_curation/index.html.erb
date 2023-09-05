@@ -1,7 +1,6 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
   <h1 class="pb-3 pt-2">Publications with Wrong File Version</h1>
-  <div class='card'>
   <table class="table">
     <thead class='card-header'>
       <tr>
@@ -17,15 +16,13 @@
     </thead>
     <tbody class='card-body'>
 
-    <!--- Will need to change p.confirmed_users to whatever connects a publication to the activity insight uploader -->
-
-    <% authors_grouped = @publications.group_by { |p| p.confirmed_users.first.webaccess_id } %>
+    <% authors_grouped = @publications.group_by { |p| p.activity_insight_oa_files.first.user_id } %>
     <% authors_grouped.each do |author, publications| %>
       <% publications.each do |p, index| %>
           <tr id="<%= dom_id(p) %>">
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <% if publications.index(p) == 0 %>
-              <%= p.confirmed_users.first.webaccess_id %>
+              <%= User.find(p.activity_insight_oa_files.first.user_id).webaccess_id %>
             <% end %>
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
@@ -37,7 +34,7 @@
             <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p}%>
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
-            <%= p.email_last_sent_at.present? ? p.email_last_sent_at.strftime("%m/%d/%Y") : '' %>
+            <%= p.wrong_oa_version_notification_sent_at.present? ? p.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y") : '' %>
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <%= link_to p.title.truncate(45),
@@ -65,5 +62,4 @@
     <% end %>
     </tbody>
   </table>
-  </div>
 </div>

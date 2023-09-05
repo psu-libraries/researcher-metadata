@@ -16,15 +16,11 @@ class FacultyNotificationsMailerPreview < ActionMailer::Preview
 
   # Accessible from http://localhost:3000/rails/mailers/faculty_notifications_mailer/wrong_file_version
   def wrong_file_version
-    
-    #will need to change the user to whatever connects a publication to the activity insight uploader's email
 
-    data = OpenStruct.new({"data"=>{"userid"=>"abc123","universityEmail"=>"abc123@psu.edu"}})
-    user = [OpenStruct.new({psu_identity: data})]
-    ai_oa_file = OpenStruct.new(version_status_display: 'Final Published Version')
-    pub1 = OpenStruct.new({ title: 'Example Publication One', preferred_version_display: 'Accepted Manuscript', confirmed_users: user, activity_insight_oa_files: [ai_oa_file] })
-    pub2 = OpenStruct.new({ title: 'Example Publication Two', preferred_version_display: 'Accepted Manuscript', confirmed_users: user, activity_insight_oa_files: [ai_oa_file] })
-    pub3 = OpenStruct.new({ title: 'Example Publication Three', preferred_version_display: 'Accepted Manuscript', confirmed_users: user, activity_insight_oa_files: [ai_oa_file] })
+    ai_oa_file = OpenStruct.new(user_id: 1, version_status_display: 'Final Published Version')
+    pub1 = OpenStruct.new({ title: 'Example Publication One', preferred_version_display: 'Accepted Manuscript', activity_insight_oa_files: [ai_oa_file] })
+    pub2 = OpenStruct.new({ title: 'Example Publication Two', preferred_version_display: 'Accepted Manuscript', activity_insight_oa_files: [ai_oa_file] })
+    pub3 = OpenStruct.new({ title: 'Example Publication Three', preferred_version_display: 'Accepted Manuscript', activity_insight_oa_files: [ai_oa_file] })
     pubs = [pub1, pub2, pub3]
 
     FacultyNotificationsMailer.wrong_file_version(pubs)
