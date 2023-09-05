@@ -13,4 +13,3 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
     end
   end
 end
-  

@@ -27,11 +27,11 @@
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <% if publications.index(p) == 0 %>
-                <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: publications}%>
+                <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: publications} %>
             <% end %>
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
-            <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p}%>
+            <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p} %>
           </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <%= p.wrong_oa_version_notification_sent_at.present? ? p.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y") : '' %>
