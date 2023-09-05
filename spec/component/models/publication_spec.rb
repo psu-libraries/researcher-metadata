@@ -1042,7 +1042,7 @@ describe Publication, type: :model do
 
     describe '.wrong_file_version' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
-        expect(described_class.wrong_file_version).to match_array [pub12]
+        expect(described_class.wrong_file_version).to match_array [pub12, pub13b]
       end
     end
 
