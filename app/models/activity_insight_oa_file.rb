@@ -43,6 +43,8 @@ class ActivityInsightOAFile < ApplicationRecord
   validates :license, inclusion: { in: licenses, allow_blank: true }
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 
+  delegate :doi_url_path, to: :publication, prefix: false
+
   def stored_file_path
     file_download_location.file&.file
   end

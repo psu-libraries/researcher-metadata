@@ -33,5 +33,10 @@ class OAWorkflowService
     rescue StandardError
       file.update_column(:downloaded, false)
     end
+
+    ActivityInsightOAFile.needs_permissions_check.each do |file|
+      file.update!(permissions_last_checked_at: Time.current)
+      FilePermissionsCheckJob.perform_later(file.id)
+    end
   end
 end

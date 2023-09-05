@@ -29,6 +29,8 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   it_behaves_like 'an application record'
 
+  it { is_expected.to delegate_method(:doi_url_path).to(:publication) }
+
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
     it { is_expected.to belong_to(:user).required }
