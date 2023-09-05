@@ -4930,6 +4930,8 @@ describe ActivityInsightImporter do
       context 'when no ActivityInsightOAFile exists for publications imported with postprint/open access files' do
         it 'creates an ActivityInsightOAFile for those publications' do
           importer.call
+          u = User.find_by(webaccess_id: 'abc123')
+
           p1 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739072').publication
           p3 = PublicationImport.find_by(source: 'Activity Insight',
@@ -4937,12 +4939,19 @@ describe ActivityInsightImporter do
           p4 = PublicationImport.find_by(source: 'Activity Insight',
                                          source_identifier: '171620739090').publication
 
+          f1 = p1.activity_insight_oa_files.first
+          f3 = p3.activity_insight_oa_files.first
+          f4 = p4.activity_insight_oa_files.first
+
           expect(ActivityInsightOAFile.count).to be 3
-          expect(p1.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file.pdf')
+          expect(f1.location).to eq('abc123/intellcont/file.pdf')
+          expect(f1.user).to eq u
           expect(p1.oa_workflow_state).to eq('automatic DOI verification pending')
-          expect(p3.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-5.pdf')
+          expect(f3.location).to eq('abc123/intellcont/file-5.pdf')
+          expect(f3.user).to eq u
           expect(p3.oa_workflow_state).to eq('automatic DOI verification pending')
-          expect(p4.activity_insight_oa_files.first.location).to eq('abc123/intellcont/file-6.pdf')
+          expect(f4.location).to eq('abc123/intellcont/file-6.pdf')
+          expect(f4.user).to eq u
           expect(p4.oa_workflow_state).to eq('automatic DOI verification pending')
         end
 

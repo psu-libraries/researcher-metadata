@@ -70,4 +70,22 @@
       <div class='card-body'><%= i18n('permissions_curation_description') %></div>
     </div>
   <% end %>
+  <br>
+  <% if ready_for_metadata_review_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_metadata_review_path, class: 'card-link' do %>
+      <div class='card' id='metadata-check-card'>
+        <div class='card-header'><strong><%= i18n('metadata_curation_title') %></strong>
+          <span class='float-right text-large'><strong><%= ready_for_metadata_review_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('metadata_curation_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='metadata-check-card'>
+      <div class='card-header'><strong><%= i18n('metadata_curation_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('metadata_curation_description') %></div>
+    </div>
+  <% end %>
 </div>

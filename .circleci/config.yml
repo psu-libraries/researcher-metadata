@@ -3,7 +3,7 @@ orbs:
   docker: circleci/docker@2.2.0
   ruby: circleci/ruby@1.0
   node: circleci/node@2
-  browser-tools: circleci/browser-tools@1.4.3
+  browser-tools: circleci/browser-tools@1.4.4
 
 jobs:
   release:
@@ -23,7 +23,7 @@ jobs:
             ssh-keyscan github.com > ~/.ssh/known_hosts
             git clone $CONFIG_REPO
             cd researcher-metadata-config
-            /usr/local/bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
+            ./bin/pr-release clusters/prod/manifests/researcher-metadata/prod.yaml
 
   deploy:
     docker:
@@ -89,7 +89,9 @@ jobs:
       RAILS_ENV: test
     # A series of steps to run, some are similar to those in "build".
     steps:
-      - browser-tools/install-chrome
+      - run: sudo apt-get update
+      - browser-tools/install-chrome:
+          chrome-version: 116.0.5845.96
       - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps

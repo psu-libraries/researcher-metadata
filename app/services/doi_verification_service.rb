@@ -10,7 +10,7 @@ class DOIVerificationService
   end
 
   def verify
-    pub_title = publication.matchable_title + publication.matchable_secondary_title
+    pub_title = publication.matchable_title
     unpaywall_title = UnpaywallClient.query_unpaywall(publication).matchable_title
     publication.doi_verified = compare_title(pub_title, unpaywall_title)
     publication.save!
