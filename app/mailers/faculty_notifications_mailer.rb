@@ -22,7 +22,7 @@ class FacultyNotificationsMailer < ApplicationMailer
 
   def wrong_file_version(publications)
     @publications = publications
-    mail to: User.find(@publications.first.activity_insight_oa_files.first.user_id).webaccess_id,
+    mail to: "#{User.find(@publications.first.activity_insight_oa_files.first.user_id).webaccess_id}@psu.edu",
          subject: 'Open Access Post-Print Publication Files in Activity Insight',
          from: 'openaccess@psu.edu',
          reply_to: 'openaccess@psu.edu'
