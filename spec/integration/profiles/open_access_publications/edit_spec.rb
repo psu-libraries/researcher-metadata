@@ -229,6 +229,27 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
           end
         end
+
+        # Tagged as glacial.  This test takes over a minute to complete.
+        context 'when timeout is reached', glacial: true do
+          let(:exif_version) { nil }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
+
+          it 'displays spinner for 60 seconds; then, displays selection and does not preselect anything' do
+            allow_any_instance_of(OpenAccessPublicationsController).to receive(:file_version_result).and_return(nil)
+            expect(page).to have_content('Attempting to determine file version, please wait...', wait: 10)
+            expect(page).to have_content('Attempting to determine file version, please wait...', wait: 20)
+            expect(page).to have_content('Attempting to determine file version, please wait...', wait: 30)
+            expect(page).to have_content('Attempting to determine file version, please wait...', wait: 40)
+            expect(page).to have_content('Attempting to determine file version, please wait...', wait: 50)
+            expect(page).not_to have_content('Attempting to determine file version, please wait...', wait: 60)
+            expect(page).to have_content('We were not able to determine the version of your uploaded publication article.', wait: 60)
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+          end
+        end
       end
 
       describe 'completing the workflow', js: true do
