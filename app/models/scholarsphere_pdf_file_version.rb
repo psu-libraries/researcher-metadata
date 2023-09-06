@@ -10,11 +10,11 @@ class ScholarspherePdfFileVersion
     @filename = File.basename(file_path)
     @publication = publication
     @content = process_content
+    @score = 0
+    calculate_score
   end
 
   def version
-    calculate_score
-
     if @score.positive?
       I18n.t('file_versions.published_version')
     elsif @score.negative?
@@ -44,8 +44,6 @@ class ScholarspherePdfFileVersion
     end
 
     def calculate_score
-      @score = 0
-
       lines&.each do |line|
         process_line(line)
       end
