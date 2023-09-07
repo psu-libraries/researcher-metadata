@@ -13,7 +13,7 @@ describe FilePermissionsCheckJob, type: :job do
   end
 
   describe '#perform_now' do
-    let!(:pub) { 
+    let!(:pub) {
       create(
         :publication,
         doi: 'https://doi.org/10.1016/S0962-1849(05)80014-9'
@@ -40,14 +40,17 @@ describe FilePermissionsCheckJob, type: :job do
 
         f = file.reload
         expect(f.license).to eq 'https://rightsstatements.org/page/InC/1.0/'
-        expect(f.set_statement).to eq "This version of the article has been accepted for publication, after peer review (when applicable) and is subject to Springer Nature’s AM terms of use, but is not the Version of Record and does not reflect post-acceptance improvements, or any corrections. The Version of Record is available online at: http://dx.doi.org/10.1038/s41598-023-28289-6"
+        expect(f.set_statement).to eq(
+          'This version of the article has been accepted for publication, after peer review (when applicable) ' +
+          'and is subject to Springer Nature’s AM terms of use, but is not the Version of Record and does not reflect post-acceptance improvements, or any corrections. The Version of Record is available online at: http://dx.doi.org/10.1038/s41598-023-28289-6'
+        )
         expect(f.embargo_date).to eq Date.new(2024, 1, 24)
       end
     end
 
     context "when the file's version is publishedVersion" do
       let(:version) { 'publishedVersion' }
-      
+
       it "updates the file's permissions fields with the correct metadata for the published version" do
         job.perform_now(file.id)
 

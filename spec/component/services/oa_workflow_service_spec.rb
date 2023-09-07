@@ -153,6 +153,7 @@ describe OAWorkflowService do
         expect(activity_insight_oa_file4.reload.permissions_last_checked_at).not_to be_nil
         expect(activity_insight_oa_file5.reload.permissions_last_checked_at).not_to be_nil
       end
+
       it 'enqueues a file permissions check job for each of the files' do
         service.workflow
         expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)

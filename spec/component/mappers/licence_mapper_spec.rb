@@ -89,7 +89,7 @@ describe LicenceMapper do
 
   context 'when somthing else' do
     it 'returns nil' do
-      expect(described_class.map('something else')).to eq nil
+      expect(described_class.map('something else')).to be_nil
     end
   end
 end
