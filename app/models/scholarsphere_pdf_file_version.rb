@@ -60,7 +60,7 @@ class ScholarspherePdfFileVersion
     end
 
     def process_line(line)
-      what_to_search = process_wts(line['what to search'])
+      what_to_search = process_wts(line['what to search']).strip
       where_to_search = line['where to search']
       how_to_search = line['how to search']
       indication = line['what it Indicates']&.downcase
@@ -72,9 +72,10 @@ class ScholarspherePdfFileVersion
 
     def process_wts(what_to_search)
       if what_to_search.include?('<<') && what_to_search.include?('>>')
+        # Insert publication metadata here if '<<' and '>>' present
         what_to_match = what_to_search.split('<<')[1].split('>>').first
         if pub_meta[what_to_match.downcase.to_sym]
-          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", pub_meta[what_to_match.downcase.to_sym].to_s)
+          what_to_search = what_to_search.gsub("<<#{what_to_match}>>", pub_meta[what_to_match.downcase.to_sym].to_s).squish
         end
       end
 
@@ -110,10 +111,10 @@ class ScholarspherePdfFileVersion
 
     def pub_meta
       {
-        title: publication&.title,
-        year: publication&.year,
-        doi: publication&.doi,
-        publisher: publication&.preferred_publisher_name
+        title: publication.title,
+        year: publication.year,
+        doi: publication.doi,
+        publisher: publication.preferred_publisher_name
       }
     end
 end
