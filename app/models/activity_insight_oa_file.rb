@@ -44,6 +44,7 @@ class ActivityInsightOAFile < ApplicationRecord
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 
   delegate :doi_url_path, to: :publication, prefix: false
+  delegate :doi, to: :publication, prefix: false
 
   def stored_file_path
     file_download_location.file&.file
@@ -73,26 +74,40 @@ class ActivityInsightOAFile < ApplicationRecord
     read_attribute(:file_download_location)
   end
 
+  def journal
+    publication.preferred_journal_title
+  end
+
   rails_admin do
     show do
-      field(:location)
-      field(:version)
-      field(:user)
-      field(:created_at)
-      field(:updated_at)
-      field(:publication)
-      field 'File download' do
-        formatted_value do
-          bindings[:view].link_to(bindings[:object].download_location_value.to_s, Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
-        end
+      group :publication_info do
+        field(:publication)
+        field(:doi)
+        field(:journal)
       end
-      field(:downloaded)
-      field(:permissions_last_checked_at)
-      field(:license)
-      field(:set_statement)
-      field(:checked_for_set_statement)
-      field(:embargo_date)
-      field(:checked_for_embargo_date)
+
+      group :file_info do
+        field(:location)
+        field(:version)
+        field(:user)
+        field(:created_at)
+        field(:updated_at)
+        field 'File download' do
+          formatted_value do
+            bindings[:view].link_to(bindings[:object].download_location_value.to_s, Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+          end
+        end
+        field(:downloaded)
+      end
+
+      group :open_access_permissions do
+        field(:permissions_last_checked_at)
+        field(:license)
+        field(:set_statement)
+        field(:checked_for_set_statement)
+        field(:embargo_date)
+        field(:checked_for_embargo_date)
+      end
     end
 
     list do
@@ -109,19 +124,28 @@ class ActivityInsightOAFile < ApplicationRecord
     end
 
     edit do
-      field(:location) { read_only true }
-      field 'File' do
-        read_only true
-        formatted_value do
-          bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+      group :publication_info do
+        field(:publication) { read_only true }
+        field(:doi) { read_only true }
+        field(:journal) { read_only true }
+      end
+
+      group :file_info do
+        field(:location) { read_only true }
+        field 'File' do
+          read_only true
+          formatted_value do
+            bindings[:view].link_to("Download #{bindings[:object].download_filename}", Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
+          end
+        end
+        field(:version, :enum) do
+          required true
+          enum do
+            ActivityInsightOAFile::ALLOWED_VERSIONS.map { |v| [v, v] }
+          end
         end
       end
-      field(:version, :enum) do
-        required true
-        enum do
-          ActivityInsightOAFile::ALLOWED_VERSIONS.map { |v| [v, v] }
-        end
-      end
+
       group :open_access_permissions do
         field(:license, :enum) do
           enum do

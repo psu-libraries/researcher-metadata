@@ -30,6 +30,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   it_behaves_like 'an application record'
 
   it { is_expected.to delegate_method(:doi_url_path).to(:publication) }
+  it { is_expected.to delegate_method(:doi).to(:publication) }
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
@@ -260,6 +261,18 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     it 'returns the value stored in the file_download_location column' do
       expect(file.download_location_value).to eq 'test_file.pdf'
+    end
+  end
+
+  describe '#journal' do
+    let(:file) { create(:activity_insight_oa_file, publication: pub) }
+    let(:pub) { create(:publication) }
+    let(:policy) { instance_double PreferredJournalInfoPolicy, journal_title: 'A Journal' }
+
+    before { allow(PreferredJournalInfoPolicy).to receive(:new).with(pub).and_return policy }
+
+    it "delegates to the associatied publication's preferred journal title" do
+      expect(file.journal).to eq 'A Journal'
     end
   end
 end

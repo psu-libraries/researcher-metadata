@@ -4,7 +4,15 @@ require 'integration/integration_spec_helper'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'updating a activity insight oa file via the admin interface', type: :feature do
-  let!(:aif) { create(:activity_insight_oa_file) }
+  let!(:aif) { create(:activity_insight_oa_file, publication: pub) }
+  let(:pub) {
+    create(
+      :publication,
+      title: 'Test Publication',
+      doi: 'https://doi.org/10.123/test',
+      journal_title: 'Test Journal'
+    )
+  }
 
   context 'when the current user is an admin' do
     before do
@@ -20,6 +28,12 @@ describe 'updating a activity insight oa file via the admin interface', type: :f
 
       it 'shows a form for version' do
         expect(page).to have_field 'Version'
+      end
+
+      it 'shows useful metadata about the associated publication' do
+        expect(page).to have_link 'Test Publication'
+        expect(page).to have_content 'https://doi.org/10.123/test'
+        expect(page).to have_content 'Test Journal'
       end
     end
 
