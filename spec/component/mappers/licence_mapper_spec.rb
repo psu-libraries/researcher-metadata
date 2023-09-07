@@ -57,6 +57,30 @@ describe LicenceMapper do
     end
   end
 
+  context 'when other-closed' do
+    it 'returns https://rightsstatements.org/page/InC/1.0/' do
+      expect(described_class.map('other-closed')).to eq 'https://rightsstatements.org/page/InC/1.0/'
+    end
+  end
+
+  context 'when Other-closed' do
+    it 'returns https://rightsstatements.org/page/InC/1.0/' do
+      expect(described_class.map('Other-closed')).to eq 'https://rightsstatements.org/page/InC/1.0/'
+    end
+  end
+
+  context 'when none' do
+    it 'returns https://rightsstatements.org/page/InC/1.0/' do
+      expect(described_class.map('none')).to eq 'https://rightsstatements.org/page/InC/1.0/'
+    end
+  end
+
+  context 'when None' do
+    it 'returns https://rightsstatements.org/page/InC/1.0/' do
+      expect(described_class.map('None')).to eq 'https://rightsstatements.org/page/InC/1.0/'
+    end
+  end
+
   context 'when unclear' do
     it 'returns https://rightsstatements.org/page/InC/1.0/' do
       expect(described_class.map('unclear')).to eq 'https://rightsstatements.org/page/InC/1.0/'
@@ -64,8 +88,8 @@ describe LicenceMapper do
   end
 
   context 'when somthing else' do
-    it 'returns https://rightsstatements.org/page/InC/1.0/' do
-      expect(described_class.map('something else')).to eq 'https://rightsstatements.org/page/InC/1.0/'
+    it 'returns nil' do
+      expect(described_class.map('something else')).to eq nil
     end
   end
 end

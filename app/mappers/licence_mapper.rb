@@ -15,8 +15,10 @@ class LicenceMapper
       ScholarsphereWorkDeposit.rights[5]
     when 'cc0'
       ScholarsphereWorkDeposit.rights[7]
-    else
+    when 'other (non-commercial)', 'unclear', /other-closed/i, /none/i
       ScholarsphereWorkDeposit.rights[8]
+    else
+      nil
     end
   end
 end
