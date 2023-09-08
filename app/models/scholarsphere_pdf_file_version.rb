@@ -87,14 +87,14 @@ class ScholarspherePdfFileVersion
         if where_to_search == 'file'
           content.include?(what_to_search)
         else
-          pub_meta[:title]&.include?(what_to_search) || filename&.include?(what_to_search)
+          filename&.include?(what_to_search)
         end
       else
         re = Regexp.new(what_to_search, 'gium')
         if where_to_search == 'file'
           content.downcase.match?(re)
         else
-          pub_meta[:title]&.match?(re) || filename&.match?(re)
+          filename&.match?(re)
         end
       end
     end
@@ -111,7 +111,6 @@ class ScholarspherePdfFileVersion
 
     def pub_meta
       {
-        title: publication.title,
         year: publication.year,
         doi: publication.doi,
         publisher: publication.preferred_publisher_name

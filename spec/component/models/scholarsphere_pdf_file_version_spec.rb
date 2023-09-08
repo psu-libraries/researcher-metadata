@@ -7,7 +7,7 @@ describe ScholarspherePdfFileVersion do
 
   let(:file_path) { "#{Rails.root}/spec/fixtures/#{test_file}" }
   let!(:publication) { create(:sample_publication,
-                              title: 'test_pub_title Revision',
+                              title: 'test_pub_title',
                               published_on: '2000',
                               doi: 'https://doi.org/10.1234/1234',
                               publisher_name: "Jerry's Publishing Company") }
@@ -15,10 +15,6 @@ describe ScholarspherePdfFileVersion do
 
   describe '#version' do
     context 'when unknown version' do
-      before do
-        publication.update title: 'test_pub_title'
-      end
-
       it 'returns unknown' do
         expect(pdf_file_version.version).to eq 'unknown'
         expect(pdf_file_version.score).to eq 0
@@ -26,6 +22,7 @@ describe ScholarspherePdfFileVersion do
     end
 
     context 'when accepted version' do
+      # The test_file filename contains an acceptedVersion signal
       let(:test_file) { 'pdf_check_accepted_version_postprint.pdf' }
 
       it 'returns accepted version' do
@@ -35,6 +32,7 @@ describe ScholarspherePdfFileVersion do
     end
 
     context 'when published version' do
+      # The test_file filename contains an publishedVersion signal
       let(:test_file) { 'pdf_check_published_versionS123456abc.pdf' }
 
       it 'returns published version' do
@@ -56,10 +54,9 @@ describe ScholarspherePdfFileVersion do
     context "when there's an error during word parsing" do
       before do
         allow_any_instance_of(PDF::Reader::Page).to receive(:text).and_raise(RuntimeError)
-        publication.update title: 'test_pub_title'
       end
 
-      it 'catches errors, and continues parsing; returns unknown' do
+      it 'catches errors and continues parsing; returns unknown' do
         expect(pdf_file_version.version).to eq 'unknown'
         expect(pdf_file_version.score).to eq 0
       end
