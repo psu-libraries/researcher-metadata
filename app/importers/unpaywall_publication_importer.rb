@@ -1,10 +1,20 @@
 # frozen_string_literal: true
 
 class UnpaywallPublicationImporter
+  def import_since(days_ago: 7)
+    count = Publication.where(unpaywall_last_checked_at: Date.new..days_ago.days.ago).count
+    Rails.logger.info("Starting to import #{count} records from unpaywall")
+    Publication.where(unpaywall_last_checked_at: Date.new..days_ago.days.ago).find_in_batches(batch_size: 500) do |publications|
+      publications.each do |p|
+        import_from_unpaywall(p)
+      end
+      Rails.logger.info('Processed 500 Records')
+    end
+  end
+
   def import_all
     pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
                                  total: all_pubs.count)
-
     all_pubs.find_each do |p|
       import_from_unpaywall(p)
       pbar.increment

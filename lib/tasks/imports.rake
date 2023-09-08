@@ -46,7 +46,7 @@ namespace :import do
 
   desc 'Import Unpaywall publication metadata'
   task unpaywall: :environment do
-    UnpaywallPublicationImporter.new.import_all
+    UnpaywallPublicationImporter.new.import_since(days_ago: 7)
   end
 
   desc 'Import Unpaywall publication metadata for publications that have not been checked before'
