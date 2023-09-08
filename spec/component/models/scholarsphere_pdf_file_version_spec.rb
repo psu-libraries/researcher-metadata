@@ -52,5 +52,17 @@ describe ScholarspherePdfFileVersion do
                          'Error: config/file_version_checking_rules.csv does not exist or cannot be read.'
       end
     end
+
+    context "when there's an error during word parsing" do
+      before do
+        allow_any_instance_of(PDF::Reader::Page).to receive(:text).and_raise(RuntimeError)
+        publication.update title: 'test_pub_title'
+      end
+
+      it 'catches errors, and continues parsing; returns unknown' do
+        expect(pdf_file_version.version).to eq 'unknown'
+        expect(pdf_file_version.score).to eq 0
+      end
+    end
   end
 end

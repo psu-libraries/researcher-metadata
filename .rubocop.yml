@@ -37,6 +37,7 @@ RSpec/AnyInstance:
     - 'spec/component/components/scholarsphere_deposit_form_component_spec.rb'
     - 'spec/integration/profiles/open_access_publications/edit_spec.rb'
     - 'spec/component/models/duplicate_publication_group_spec.rb'
+    - 'spec/component/models/scholarsphere_pdf_file_version_spec.rb'
 
 RSpec/LeakyConstantDeclaration:
   Exclude:
