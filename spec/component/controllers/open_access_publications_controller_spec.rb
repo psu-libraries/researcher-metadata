@@ -439,14 +439,14 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when pdf file version polling resolves with a version' do
         before do
           allow(Rails.cache).to receive(:read)
-                            .with("file_version_job_#{job_id1[:job_id]}")
-                            .and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
+            .with("file_version_job_#{job_id1[:job_id]}")
+            .and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
           allow(Rails.cache).to receive(:read)
-                            .with("file_version_job_#{job_id2[:job_id]}")
-                            .and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
+            .with("file_version_job_#{job_id2[:job_id]}")
+            .and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
           allow(Rails.cache).to receive(:read)
-                            .with("file_version_job_#{job_id3[:job_id]}")
-                            .and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
+            .with("file_version_job_#{job_id3[:job_id]}")
+            .and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
         end
 
         context 'when the absolute score of the acceptedVersion is greater than the publishedVersion' do
@@ -494,13 +494,13 @@ describe OpenAccessPublicationsController, type: :controller do
         context 'when a job fails' do
           let(:score1) { -3 }
           let(:score2) { 1 }
-          let!(:job) { Delayed::Job.create id: 1, 
+          let!(:job) { Delayed::Job.create id: 1,
                                            handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-                                           "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
-                                           "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
-                                           "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
-                                           "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
-                                           "08T18:19:35Z'\n", 
+                                             "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+                                             "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
+                                             "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
+                                             "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
+                                             "08T18:19:35Z'\n",
                                            failed_at: DateTime.now }
 
           before do
@@ -530,13 +530,14 @@ describe OpenAccessPublicationsController, type: :controller do
       end
 
       context 'when the job has yet to complete' do
-        let!(:job) { Delayed::Job.create id: 1, 
-          handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-          "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
-          "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
-          "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
-          "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
-          "08T18:19:35Z'\n" }
+        let!(:job) { Delayed::Job.create id: 1,
+                                         handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
+                                           "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+                                           "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
+                                           "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
+                                           "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
+                                           "08T18:19:35Z'\n" }
+
         before do
           get :file_version_result, params: { id: pub.id, jobs: [] }
         end
