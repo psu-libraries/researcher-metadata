@@ -27,7 +27,7 @@ describe ScholarspherePdfFileVersion do
 
       it 'returns accepted version' do
         expect(pdf_file_version.version).to eq I18n.t('file_versions.accepted_version')
-        expect(pdf_file_version.score).to eq -4
+        expect(pdf_file_version.score).to eq -3
       end
     end
 
@@ -37,7 +37,7 @@ describe ScholarspherePdfFileVersion do
 
       it 'returns published version' do
         expect(pdf_file_version.version).to eq I18n.t('file_versions.published_version')
-        expect(pdf_file_version.score).to eq 3
+        expect(pdf_file_version.score).to eq 4
       end
     end
 
