@@ -355,7 +355,7 @@ describe OpenAccessPublicationsController, type: :controller do
         context 'when given valid params' do
           context 'when given file does not return a version from exif check' do
             let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: nil }
-            let(:pdf_file_version_job) { double 'FileVersionCheckerJob', job_id: 1 }
+            let(:pdf_file_version_job) { double 'FileVersionCheckerJob', provider_job_id: 10, job_id: 1 }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
             let(:file_path) { cache_file[:cache_path] }
 
@@ -420,11 +420,10 @@ describe OpenAccessPublicationsController, type: :controller do
   end
 
   describe '#file_version_result' do
-    let(:perform_request) { get :file_version_result, params: { id: pub.id, job_ids: [job_id1, job_id2, job_id3] } }
-    let(:job_id1) { 'job_id_1' }
-    let(:job_id2) { 'job_id_2' }
-    let(:job_id3) { 'job_id_3' }
-    let(:job) { instance_double(Delayed::Backend::ActiveRecord::Job) }
+    let(:perform_request) { get :file_version_result, params: { id: pub.id, jobs: [job_id1, job_id2, job_id3] } }
+    let(:job_id1) { { provider_id: 1, job_id: 'job_id_1' } }
+    let(:job_id2) { { provider_id: 2, job_id: 'job_id_2' } }
+    let(:job_id3) { { provider_id: 3, job_id: 'job_id_3' } }
     let(:file_path1) { '/path/to/file1.pdf' }
     let(:file_path2) { '/path/to/file2.pdf' }
     let(:file_path3) { '/path/to/file3.pdf' }
@@ -439,19 +438,15 @@ describe OpenAccessPublicationsController, type: :controller do
 
       context 'when pdf file version polling resolves with a version' do
         before do
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id1}").and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id2}").and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
-          allow(Rails.cache).to receive(:read).with("file_version_job_#{job_id3}").and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
-          allow(Delayed::Job).to receive(:exists?).with(job_id1).and_return(true)
-          allow(Delayed::Job).to receive(:exists?).with(job_id2).and_return(true)
-          allow(Delayed::Job).to receive(:exists?).with(job_id3).and_return(true)
-          allow(Delayed::Job).to receive(:find).with(job_id1).and_return(job)
-          allow(Delayed::Job).to receive(:find).with(job_id2).and_return(job)
-          allow(Delayed::Job).to receive(:find).with(job_id3).and_return(job)
-          allow(job).to receive(:failed_at).and_return(nil)
-          allow(job).to receive(:failed_at).and_return(nil)
-          allow(job).to receive(:failed_at).and_return(nil)
-          allow(job).to receive(:destroy)
+          allow(Rails.cache).to receive(:read)
+                            .with("file_version_job_#{job_id1[:job_id]}")
+                            .and_return({ pdf_file_version: 'acceptedVersion', pdf_file_score: score1, file_path: file_path1 })
+          allow(Rails.cache).to receive(:read)
+                            .with("file_version_job_#{job_id2[:job_id]}")
+                            .and_return({ pdf_file_version: 'publishedVersion', pdf_file_score: score2, file_path: file_path2 })
+          allow(Rails.cache).to receive(:read)
+                            .with("file_version_job_#{job_id3[:job_id]}")
+                            .and_return({ pdf_file_version: 'unknown', pdf_file_score: 0, file_path: file_path3 })
         end
 
         context 'when the absolute score of the acceptedVersion is greater than the publishedVersion' do
@@ -465,7 +460,6 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'acceptedVersion',
                                                                         cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-            expect(job).not_to have_received(:destroy)
           end
         end
 
@@ -480,7 +474,6 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'publishedVersion',
                                                                         cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-            expect(job).not_to have_received(:destroy)
           end
         end
 
@@ -495,38 +488,57 @@ describe OpenAccessPublicationsController, type: :controller do
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'acceptedVersion',
                                                                         cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
-            expect(job).not_to have_received(:destroy)
           end
         end
 
         context 'when a job fails' do
           let(:score1) { -3 }
           let(:score2) { 1 }
-          let(:failed_job) { instance_double(Delayed::Backend::ActiveRecord::Job) }
-          let(:struct) { Struct.new(:job_data) }
-          let(:payload_object) { struct.new({ 'arguments' => [{ 'file_path' => file_path1 }] }) }
+          let!(:job) { Delayed::Job.create id: 1, 
+                                           handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
+                                           "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+                                           "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
+                                           "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
+                                           "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
+                                           "08T18:19:35Z'\n", 
+                                           failed_at: DateTime.now }
 
           before do
-            allow(failed_job).to receive(:failed_at).and_return(DateTime.now)
-            allow(failed_job).to receive(:payload_object).and_return(payload_object)
-            allow(failed_job).to receive(:destroy)
-            allow(Delayed::Job).to receive(:find).with(job_id1).and_return(failed_job)
             allow(controller).to receive(:render).and_call_original
-            get :file_version_result, params: { id: pub.id, job_ids: [job_id1, job_id2] }
+            get :file_version_result, params: { id: pub.id, jobs: [job_id1, job_id2] }
           end
 
           it 'destroys that Delayed::Job record; proceeds with analysis of the other job' do
-            expect(failed_job).to have_received(:destroy).exactly(1).time
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'publishedVersion',
                                                                         cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'] })
+            expect(Delayed::Job.count).to eq 0
           end
         end
       end
 
       context 'when there are no job ids' do
         before do
-          get :file_version_result, params: { id: pub.id, job_ids: [] }
+          get :file_version_result, params: { id: pub.id, jobs: [] }
+        end
+
+        it 'renders no_content' do
+          perform_request
+
+          expect(response.message).to eq 'No Content'
+        end
+      end
+
+      context 'when the job has yet to complete' do
+        let!(:job) { Delayed::Job.create id: 1, 
+          handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
+          "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+          "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
+          "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
+          "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
+          "08T18:19:35Z'\n" }
+        before do
+          get :file_version_result, params: { id: pub.id, jobs: [] }
         end
 
         it 'renders no_content' do
