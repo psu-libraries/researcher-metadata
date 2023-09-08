@@ -3,6 +3,9 @@
 require 'component/component_spec_helper'
 
 describe ScholarspherePdfFileVersion do
+  # These tests use PDF file fixtures containing patterns/signals that indicate either 
+  # accepted or published versions.  The fixtures are crafted to test all the 
+  # permutations of logic in the ScholarspherePdfFileVersion class.
   subject(:pdf_file_version) { described_class.new(file_path: file_path, publication: publication) }
 
   let(:file_path) { "#{Rails.root}/spec/fixtures/#{test_file}" }
