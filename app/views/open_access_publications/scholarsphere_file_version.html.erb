@@ -6,7 +6,7 @@
     <%= render partial: 'open_access_publications/file_version_result', locals: { file_version: 'unknown',
                                                                                 cache_files: cache_files } %>
   </div>
-  <div id="file_version_result" data-target="<%= file_version_result_path({ job_ids: @job_ids }) %>">
+  <div id="file_version_result" data-target="<%= file_version_result_path({ jobs: @jobs }) %>">
     <p>
       <span class="spinner-border" role="status">
         <span class="sr-only">Loading...</span>

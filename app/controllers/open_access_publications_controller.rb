@@ -37,7 +37,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
-    @job_ids ||= []
+    @jobs ||= []
 
     if file_handler.valid?
       @cache_files = file_handler.cache_files
@@ -51,7 +51,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
         @cache_files.each do |cache_file|
           file_version_job = FileVersionCheckerJob.perform_later(file_path: cache_file[:cache_path].to_s,
                                                                  publication_id: publication.id)
-          @job_ids.push(file_version_job.job_id)
+          @jobs.push({ provider_id: file_version_job.provider_job_id, job_id: file_version_job.job_id })
         end
 
         render :scholarsphere_file_version, locals: { file_version: nil,
@@ -67,21 +67,21 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def file_version_result
-    job_ids = params[:job_ids]
+    jobs = params[:jobs]
     pdf_file_versions = []
     cache_files = []
 
     # Remove failed Delayed::Job and log an error
-    job_ids&.reject! do |job_id|
-      if Delayed::Job.exists?(job_id)
-        job = Delayed::Job.find(job_id)
+    jobs&.reject! do |job|
+      if Delayed::Job.exists?(job[:provider_id])
+        job = Delayed::Job.find(job[:provider_id])
         if job.failed_at.nil?
           false
         else
           # Still need the file, so store file now
           cache_files << job.payload_object.job_data['arguments'].first['file_path']
           job.destroy
-          Rails.logger.error "Job with ID #{job_id} failed and has been removed"
+          Rails.logger.error "Job with ID #{job[:provider_id]} failed and has been removed"
           true
         end
       else
@@ -89,15 +89,15 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
       end
     end
 
-    job_ids&.each_with_index do |job_id, _index|
-      cached_data = Rails.cache.read("file_version_job_#{job_id}")
+    jobs&.each_with_index do |job, _index|
+      cached_data = Rails.cache.read("file_version_job_#{job[:job_id]}")
       if !cached_data.nil?
         pdf_file_versions << [cached_data[:pdf_file_version], cached_data[:pdf_file_score]]
         cache_files << cached_data[:file_path]
       end
     end
 
-    if pdf_file_versions.present? && pdf_file_versions.compact.count == job_ids&.count
+    if pdf_file_versions.present? && pdf_file_versions.compact.count == jobs&.count
       # Determine best version by absolute score
       file_version = pdf_file_versions
         .select { |i| i.first if i.second.abs == pdf_file_versions.map { |n| n.second.abs }.max }
