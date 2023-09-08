@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class ScholarsphereFileVersionUploads
+class ScholarsphereFileHandler
   # This class is designed to handle the initial upload of files
   # to RMD for version checking in the ScholarSphere upload workflow.
   # It validates that files have been uploaded and caches the files
@@ -26,8 +26,8 @@ class ScholarsphereFileVersionUploads
     attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
       if file.present?
-        exif_file_version = ScholarsphereExifFileVersion.new(file_path: file.path,
-                                                             journal: publication&.journal&.title).version
+        exif_file_version = ExifFileVersionChecker.new(file_path: file.path,
+                                                       journal: publication&.journal&.title).version
         @exif_file_versions.push(exif_file_version)
         @file_uploads.push(file)
       end

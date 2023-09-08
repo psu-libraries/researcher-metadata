@@ -354,36 +354,36 @@ describe OpenAccessPublicationsController, type: :controller do
 
         context 'when given valid params' do
           context 'when given file does not return a version from exif check' do
-            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: nil }
-            let(:pdf_file_version_job) { double 'ScholarspherePdfFileVersionJob', job_id: 1 }
+            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: nil }
+            let(:pdf_file_version_job) { double 'FileVersionCheckerJob', job_id: 1 }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
             let(:file_path) { cache_file[:cache_path] }
 
             before do
-              allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
-              allow(ScholarspherePdfFileVersionJob).to receive(:perform_later).and_return(pdf_file_version_job)
+              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
+              allow(FileVersionCheckerJob).to receive(:perform_later).and_return(pdf_file_version_job)
             end
 
             it 'begins file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarspherePdfFileVersionJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
+              expect(FileVersionCheckerJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
             end
           end
 
           context 'when given file returns a version from exif check' do
-            let(:file_version_uploads) { double 'ScholarsphereFileVersionUploads', valid?: true, cache_files: [cache_file], version: I18n.t('file_versions.published_version') }
+            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: I18n.t('file_versions.published_version') }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
 
             before do
-              allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
-              allow(ScholarspherePdfFileVersionJob).to receive(:perform_later)
+              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
+              allow(FileVersionCheckerJob).to receive(:perform_later)
             end
 
             it 'does not begin file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(ScholarspherePdfFileVersionJob).not_to have_received(:perform_later)
+              expect(FileVersionCheckerJob).not_to have_received(:perform_later)
             end
           end
         end
@@ -600,8 +600,8 @@ describe OpenAccessPublicationsController, type: :controller do
         let(:pub_id) { pub.id }
         let(:file) { fixture_file_upload('test_file.pdf', 'application/pdf') }
         let(:file_version_params) { { file_uploads_attributes: { '0' => { file: file } } } }
-        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(pub, file_version_params) }
-        let(:cache_files)  { file_version_uploads.cache_files }
+        let(:file_handler) { ScholarsphereFileHandler.new(pub, file_version_params) }
+        let(:cache_files)  { file_handler.cache_files }
         let(:cache_path) { cache_files.first[:cache_path] }
         let(:params) { { id: pub_id, filename: cache_path.to_s } }
 
@@ -712,8 +712,8 @@ describe OpenAccessPublicationsController, type: :controller do
             file_uploads_attributes: { '0' => { file: file } }
           }
         }
-        let(:file_version_uploads) { ScholarsphereFileVersionUploads.new(pub, file_version_params) }
-        let(:cache_files) { file_version_uploads.cache_files }
+        let(:file_handler) { ScholarsphereFileHandler.new(pub, file_version_params) }
+        let(:cache_files) { file_handler.cache_files }
         let(:cache_path) do
           return nil if cache_files.empty?
 

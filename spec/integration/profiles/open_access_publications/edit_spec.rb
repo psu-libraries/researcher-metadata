@@ -154,12 +154,12 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         include ActiveJob::TestHelper
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
-        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads,
-                                                     version: exif_version,
-                                                     cache_files: [cache_file], valid?: true) }
+        let(:file_handler) { instance_double(ScholarsphereFileHandler,
+                                             version: exif_version,
+                                             cache_files: [cache_file], valid?: true) }
 
         before do
-          allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
+          allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
           allow(Rails).to receive(:cache).and_return(file_store)
           Rails.cache.clear
 
@@ -393,17 +393,17 @@ describe 'visiting the page to edit the open acess status of a publication', typ
       describe 'submitting a valid form with an error in the deposit process' do
         include ActiveJob::TestHelper
         let(:ingest) { double 'scholarsphere client ingest' }
-        let(:file_version_uploads) { instance_double(ScholarsphereFileVersionUploads,
-                                                     version: I18n.t('file_versions.published_version'),
-                                                     cache_files: [cache_file],
-                                                     valid?: true) }
+        let(:file_handler) { instance_double(ScholarsphereFileHandler,
+                                             version: I18n.t('file_versions.published_version'),
+                                             cache_files: [cache_file],
+                                             valid?: true) }
         let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
                              cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }.with_indifferent_access }
 
         before do
           allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
           allow(ingest).to receive(:publish).and_raise RuntimeError.new('Oh no! Failure!')
-          allow(ScholarsphereFileVersionUploads).to receive(:new).and_return(file_version_uploads)
+          allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
 
           perform_enqueued_jobs do
             suppress(RuntimeError) do

@@ -2,9 +2,7 @@
 
 require 'pdf-reader'
 
-class ScholarspherePdfFileVersion
-  attr_accessor :file_path, :filename, :publication, :content, :score
-
+class FileVersionChecker
   def initialize(file_path:, publication:)
     @file_path = file_path
     @filename = File.basename(file_path)
@@ -24,7 +22,13 @@ class ScholarspherePdfFileVersion
     end
   end
 
+  def score
+    @score
+  end
+
   private
+
+    attr_accessor :file_path, :filename, :publication, :content
 
     def process_content
       reader = PDF::Reader.new(file_path)

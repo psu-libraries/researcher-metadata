@@ -36,21 +36,21 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    file_version_uploads = ScholarsphereFileVersionUploads.new(publication, deposit_params)
+    file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @job_ids ||= []
 
-    if file_version_uploads.valid?
-      @cache_files = file_version_uploads.cache_files
+    if file_handler.valid?
+      @cache_files = file_handler.cache_files
 
       # If version is found with exif version check don't bother with the other check
-      if file_version_uploads.version.present?
+      if file_handler.version.present?
         render :scholarsphere_file_version,
-               locals: { file_version: file_version_uploads.version,
+               locals: { file_version: file_handler.version,
                          cache_files: @cache_files.pluck(:cache_path) }
       else
         @cache_files.each do |cache_file|
-          file_version_job = ScholarspherePdfFileVersionJob.perform_later(file_path: cache_file[:cache_path].to_s,
-                                                                          publication_id: publication.id)
+          file_version_job = FileVersionCheckerJob.perform_later(file_path: cache_file[:cache_path].to_s,
+                                                                 publication_id: publication.id)
           @job_ids.push(file_version_job.job_id)
         end
 
@@ -58,7 +58,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                       cache_files: @cache_files.pluck(:cache_path) }
       end
     else
-      flash[:alert] = "Validation failed:  #{file_version_uploads.errors.full_messages.join(', ')}"
+      flash[:alert] = "Validation failed:  #{file_handler.errors.full_messages.join(', ')}"
       redirect_to edit_open_access_publication_path(publication)
     end
   rescue ActionController::ParameterMissing

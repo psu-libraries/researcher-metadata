@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe ScholarsphereExifFileVersion do
+describe ExifFileVersionChecker do
   subject(:exif_file_version) { described_class.new(file_path: file.path, journal: journal) }
 
   let(:file) { double 'file', path: 'the/file/path' }
@@ -81,7 +81,7 @@ describe ScholarsphereExifFileVersion do
         end
 
         context 'when right_en_gb field has RIGHTS_EN_GB_TEXT' do
-          let(:exif_data) { { rights_en_gb: ScholarsphereExifFileVersion::RIGHTS_EN_GB_TEXT } }
+          let(:exif_data) { { rights_en_gb: ExifFileVersionChecker::RIGHTS_EN_GB_TEXT } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
@@ -138,7 +138,7 @@ describe ScholarsphereExifFileVersion do
         end
 
         context 'when creator field is one of the PUBLISHED_VERSION_CREATORS' do
-          let(:exif_data) { { creator: ScholarsphereExifFileVersion::PUBLISHED_VERSION_CREATORS.sample } }
+          let(:exif_data) { { creator: ExifFileVersionChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
@@ -146,7 +146,7 @@ describe ScholarsphereExifFileVersion do
         end
 
         context 'when creator_tool field is one of the PUBLISHED_VERSION_CREATORS value' do
-          let(:exif_data) { { creator_tool: ScholarsphereExifFileVersion::PUBLISHED_VERSION_CREATORS.sample } }
+          let(:exif_data) { { creator_tool: ExifFileVersionChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
