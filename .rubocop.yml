@@ -77,3 +77,7 @@ RSpec/VariableName:
     - 'spec/requests/api/v1/api_docs/organizations_spec.rb'
     - 'spec/requests/api/v1/api_docs/publications_spec.rb'
     - 'spec/requests/api/v1/api_docs/users_spec.rb'
+
+Style/StringConcatenation:
+  Exclude:
+    - 'spec/component/controllers/open_access_publications_controller_spec.rb'
