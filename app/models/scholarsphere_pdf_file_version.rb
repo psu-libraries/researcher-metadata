@@ -60,7 +60,7 @@ class ScholarspherePdfFileVersion
     end
 
     def process_line(line)
-      what_to_search = process_wts(line['what to search']).strip
+      what_to_search = process_wts(line['what to search'])
       where_to_search = line['where to search']
       how_to_search = line['how to search']
       indication = line['what it Indicates']&.downcase
@@ -79,7 +79,7 @@ class ScholarspherePdfFileVersion
         end
       end
 
-      what_to_search
+      what_to_search.strip
     end
 
     def match_content(what_to_search, where_to_search, how_to_search)

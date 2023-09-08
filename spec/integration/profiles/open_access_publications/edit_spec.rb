@@ -183,9 +183,9 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
         context 'when exif check returns nil and pdf check returns acceptedVersion' do
           let(:exif_version) { nil }
-          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_accepted_version.pdf',
-                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version.pdf" } }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_accepted_version_postprint.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" } }
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.', wait: 10)
@@ -195,7 +195,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
         context 'when exif check returns publishedVersion' do
           let(:exif_version) { I18n.t('file_versions.published_version') }
-          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }
           let(:cache_file) { { original_filename: 'pdf_check_unkown_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unkown_version.pdf" } }
 
@@ -207,9 +207,9 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
         context 'when exif check returns nil and pdf check returns publishedVersion' do
           let(:exif_version) { nil }
-          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf',
-                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" } }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" } }
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.', wait: 10)
@@ -397,8 +397,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
                                                      version: I18n.t('file_versions.published_version'),
                                                      cache_files: [cache_file],
                                                      valid?: true) }
-        let(:cache_file) { { original_filename: 'pdf_check_published_version.pdf',
-                             cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf" }.with_indifferent_access }
+        let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                             cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }.with_indifferent_access }
 
         before do
           allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
@@ -407,7 +407,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           perform_enqueued_jobs do
             suppress(RuntimeError) do
-              attach_file('File', "#{Rails.root}/spec/fixtures/pdf_check_published_version.pdf")
+              attach_file('File', "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf")
               click_on 'Submit Files'
               find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
               choose 'scholarsphere_work_deposit_file_version_acceptedversion'
