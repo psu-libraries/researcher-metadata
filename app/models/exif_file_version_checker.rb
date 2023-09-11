@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pdf-reader'
 require 'exiftool_vendored'
 
 class ExifFileVersionChecker
