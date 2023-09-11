@@ -508,11 +508,10 @@ describe OpenAccessPublicationsController, type: :controller do
             get :file_version_result, params: { id: pub.id, jobs: [job_id1, job_id2] }
           end
 
-          it 'destroys that Delayed::Job record; proceeds with analysis of the other job' do
+          it 'proceeds with analysis of the other job' do
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'publishedVersion',
                                                                         cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'] })
-            expect(Delayed::Job.count).to eq 0
           end
         end
       end
