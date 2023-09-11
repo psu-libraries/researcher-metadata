@@ -28,18 +28,4 @@ class OABPreferredPermissionsService < OABPermissionsClient
   def preferred_version
     preferred_permission['version']
   end
-
-  def set_statement
-    preferred_permission['deposit_statement'].presence
-  end
-
-  def embargo_end_date
-    if preferred_permission['embargo_end'].present?
-      Date.parse(preferred_permission['embargo_end'], '%Y-%m-%d')
-    end
-  end
-
-  def licence
-    LicenceMapper.map(preferred_permission['licence'].presence)
-  end
 end
