@@ -65,13 +65,14 @@ describe FileVersionChecker do
       end
     end
 
-    context "when the file is not a .pdf" do
+    context 'when the file is not a .pdf' do
       let(:test_file) { 'pdf_check_unknown_version.docx' }
 
       it "doesn't parse; returns unknown" do
-        expect(PDF::Reader).not_to receive(:new)
+        allow(PDF::Reader).to receive(:new)
         expect(pdf_file_version.version).to eq 'unknown'
         expect(pdf_file_version.score).to eq 0
+        expect(PDF::Reader).not_to have_received(:new)
       end
     end
   end
