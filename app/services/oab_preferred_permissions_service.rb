@@ -4,7 +4,6 @@ class OABPreferredPermissionsService < OABPermissionsClient
   def initialize(doi)
     super()
     @doi = doi
-    @permissions = all_permissions
   end
 
   def preferred_permission
