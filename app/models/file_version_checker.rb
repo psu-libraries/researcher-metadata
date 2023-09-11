@@ -31,6 +31,8 @@ class FileVersionChecker
     attr_accessor :file_path, :filename, :publication, :content
 
     def process_content
+      return "" if File.extname(file_path) != '.pdf'
+
       reader = PDF::Reader.new(file_path)
       words = []
 
