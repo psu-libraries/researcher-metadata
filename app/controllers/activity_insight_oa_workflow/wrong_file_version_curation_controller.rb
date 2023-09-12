@@ -7,7 +7,7 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
 
   def email_author
     publications = Publication.wrong_file_version.find(params[:publications])
-    
+
     FacultyNotificationsMailer.wrong_file_version(publications).deliver_now
     ActiveRecord::Base.transaction do
       publications.each do |pub|

@@ -7,7 +7,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion', user: user) }
   let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1') }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2') }
-  let!(:user) { create(:user, webaccess_id: 'abc123')}
+  let!(:user) { create(:user, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }
@@ -54,8 +54,8 @@ describe 'Admin File Version Review dashboard', type: :feature do
     it 'sends an email and displays a confirmation message' do
       click_button('Send Batch Email', match: :first)
       expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
-      expect(page).to have_content("Email sent to abc123")
-      open_email("abc123@psu.edu")
+      expect(page).to have_content('Email sent to abc123')
+      open_email('abc123@psu.edu')
       expect(current_email).not_to be_nil
       expect(current_email.body).to match(/Version we have/)
       expect(current_email.body).to match(/Version that can be deposited/)
