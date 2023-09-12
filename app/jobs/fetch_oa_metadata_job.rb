@@ -15,6 +15,7 @@ class FetchOAMetadataJob < ApplicationJob
       publication.open_access_button_last_checked_at = Time.zone.now
     end
 
+    unpaywall_response.oa_status.present? ? publication.update_oa_status_from_unpaywall(unpaywall_response) : publication.open_access_status = 'unknown'
     publication.oa_status_last_checked_at = Time.zone.now
     publication.oa_workflow_state = nil
     publication.save!

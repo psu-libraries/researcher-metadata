@@ -17,7 +17,8 @@ describe FetchOAMetadataJob, type: :job do
                         doi: 'https://doi.org/10.1103/physrevlett.80.3915',
                         open_access_locations: [],
                         unpaywall_last_checked_at: nil,
-                        open_access_button_last_checked_at: nil) }
+                        open_access_button_last_checked_at: nil,
+                        open_access_status: nil) }
     let(:unpaywall_json) { Rails.root.join('spec', 'fixtures', 'unpaywall1.json').read }
     let(:oab_json) { Rails.root.join('spec', 'fixtures', 'oab3.json').read }
 
@@ -31,6 +32,7 @@ describe FetchOAMetadataJob, type: :job do
 
       it 'updates publication with unpaywall open access information' do
         expect(pub.reload.open_access_locations).not_to eq []
+        expect(pub.reload.open_access_status).to eq 'green'
       end
 
       it "updates publication's unpaywall last checked at" do
@@ -51,6 +53,12 @@ describe FetchOAMetadataJob, type: :job do
         it "updates publication's open access button last checked at" do
           expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
+
+        it 'updates the publication oa status last checked at, oa status, and workflow state' do
+          expect(pub.reload.open_access_status).to eq 'closed'
+          expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+          expect(pub.reload.oa_workflow_state).to be_nil
+        end
       end
 
       context 'when there is no open access information' do
@@ -64,7 +72,8 @@ describe FetchOAMetadataJob, type: :job do
           expect(pub.reload.open_access_button_last_checked_at).to be_nil
         end
 
-        it 'updates the publication oa status last checked at and workflow state' do
+        it 'updates the publication oa status last checked at, oa status, and workflow state' do
+          expect(pub.reload.open_access_status).to eq 'closed'
           expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           expect(pub.reload.oa_workflow_state).to be_nil
         end
