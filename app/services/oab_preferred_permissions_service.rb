@@ -6,25 +6,19 @@ class OABPreferredPermissionsService < OABPermissionsClient
     @doi = doi
   end
 
-  def preferred_permission
-    accepted = false
-    published = false
-
-    all_permissions.each do |perm|
-      accepted = true if perm['version'] == I18n.t('file_versions.accepted_version') && perm['can_archive'] == true && perm['locations'].map(&:downcase).include?('institutional repository')
-      published = true if perm['version'] == I18n.t('file_versions.published_version') && perm['can_archive'] == true && perm['locations'].map(&:downcase).include?('institutional repository')
-    end
-
-    if accepted && !published
-      accepted_version
-    elsif published
-      published_version
-    else
-      {}
-    end
-  end
-
   def preferred_version
-    preferred_permission['version']
+    if permissions.can_deposit_accepted_version? && permissions.can_deposit_published_version?
+      'Published or Accepted'
+    elsif permissions.can_deposit_published_version?
+      I18n.t('file_versions.published_version')
+    elsif permissions.can_deposit_accepted_version?
+      I18n.t('file_versions.accepted_version')
+    end
   end
+
+  private
+
+    def permissions
+      OABPermissionsSet.new(all_permissions.map { |p| OABPermission.new(p) })
+    end
 end

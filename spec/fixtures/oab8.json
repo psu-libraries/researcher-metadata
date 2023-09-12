@@ -1,0 +1,180 @@
+{
+  "best_permission": {
+    "can_archive": true,
+    "version": "publishedVersion",
+    "versions": [
+      "publishedVersion"
+    ],
+    "licence": "other-closed",
+    "locations": [
+      "Institutional Repository",
+      "Funder Designated Repository"
+    ],
+    "embargo_months": 12,
+    "embargo_end": "2016-10-13",
+    "deposit_statement": "AMS copyright",
+    "copyright_owner": "Publisher",
+    "copyright_name": "American Meteorological Society",
+    "copyright_year": "2015",
+    "issuer": {
+      "id": [
+        "American Meteorological Society"
+      ],
+      "has_policy": "Yes",
+      "type": "Publisher",
+      "journal_oa_type": "hybrid"
+    },
+    "meta": {
+      "monitoring": "Automatic",
+      "contributors": [
+        "natalia@openaccessbutton.org",
+        "natalia@oa.works"
+      ],
+      "creator": [
+        "natalia@openaccessbutton.org"
+      ],
+      "reviewer": [
+        "natalia@oa.works"
+      ],
+      "added": "12/10/2019 00:00:00"
+    },
+    "provenance": {
+      "archiving_policy_unarchived": "https://www.ametsoc.org/ams/index.cfm/publications/ethical-guidelines-and-ams-policies/ams-copyright-policy/",
+      "example": "10.1175/WAF-D-20-0101.1",
+      "sample": {
+        "publishing_agreement": "https://perma.cc/U79C-TYMQ",
+        "publishing_agreement_splash": "https://perma.cc/93MJ-YG84"
+      },
+      "author_rights": "https://perma.cc/V263-G6YM",
+      "archiving_policy": [
+        "https://web.archive.org/web/20200211122657/https://www.ametsoc.org/ams/index.cfm/publications/ethical-guidelines-and-ams-policies/ams-copyright-policy/"
+      ]
+    },
+    "09/05/2023 09:19": "01/07/2020 00:00:00",
+    "score": 1199,
+    "licences": [
+      {
+        "type": "other-closed"
+      }
+    ]
+  },
+  "all_permissions": [
+    {
+      "can_archive": true,
+      "version": "publishedVersion",
+      "versions": [
+        "publishedVersion"
+      ],
+      "licence": "other-closed",
+      "locations": [
+        "Institutional Repository",
+        "Funder Designated Repository"
+      ],
+      "embargo_months": 12,
+      "embargo_end": "2016-10-13",
+      "deposit_statement": "AMS copyright",
+      "copyright_owner": "Publisher",
+      "copyright_name": "American Meteorological Society",
+      "copyright_year": "2015",
+      "issuer": {
+        "id": [
+          "American Meteorological Society"
+        ],
+        "has_policy": "Yes",
+        "type": "Publisher",
+        "journal_oa_type": "hybrid"
+      },
+      "meta": {
+        "monitoring": "Automatic",
+        "contributors": [
+          "natalia@openaccessbutton.org",
+          "natalia@oa.works"
+        ],
+        "creator": [
+          "natalia@openaccessbutton.org"
+        ],
+        "reviewer": [
+          "natalia@oa.works"
+        ],
+        "added": "12/10/2019 00:00:00"
+      },
+      "provenance": {
+        "archiving_policy_unarchived": "https://www.ametsoc.org/ams/index.cfm/publications/ethical-guidelines-and-ams-policies/ams-copyright-policy/",
+        "example": "10.1175/WAF-D-20-0101.1",
+        "sample": {
+          "publishing_agreement": "https://perma.cc/U79C-TYMQ",
+          "publishing_agreement_splash": "https://perma.cc/93MJ-YG84"
+        },
+        "author_rights": "https://perma.cc/V263-G6YM",
+        "archiving_policy": [
+          "https://web.archive.org/web/20200211122657/https://www.ametsoc.org/ams/index.cfm/publications/ethical-guidelines-and-ams-policies/ams-copyright-policy/"
+        ]
+      },
+      "09/05/2023 09:19": "01/07/2020 00:00:00",
+      "score": 1199,
+      "licences": [
+        {
+          "type": "other-closed"
+        }
+      ]
+    },
+    {
+      "can_archive": true,
+      "version": "acceptedVersion",
+      "versions": [
+        "acceptedVersion"
+      ],
+      "licence": "cc-by",
+      "locations": [
+        "Institutional Repository",
+        "Funder Designated Repository"
+      ],
+      "deposit_statement": "This is the accepted version of the following article: [Wintertime North Pacific Teleconnection Patterns: Seasonal and Interannual Variability. Journal of Climate 28, 20 p8247-8263 (2015)], which has been published in final form at https://doi.org/10.1175/JCLI-D-14-00749.1.",
+      "copyright_owner": "Publisher",
+      "copyright_name": "American Meteorological Society",
+      "copyright_year": "2015",
+      "issuer": {
+        "id": [
+          "American Meteorological Society"
+        ],
+        "has_policy": "Yes",
+        "type": "Publisher",
+        "journal_oa_type": "hybrid"
+      },
+      "meta": {
+        "monitoring": "Automatic",
+        "contributors": [
+          "joe@oa.works",
+          "sarah@oa.works"
+        ],
+        "creator": [
+          "joe@oa.works"
+        ],
+        "reviewer": [
+          "sarah@oa.works"
+        ],
+        "added": "16/05/2022 18:41"
+      },
+      "provenance": {
+        "archiving_policy_unarchived": "https://www.ametsoc.org/ams/index.cfm/publications/ethical-guidelines-and-ams-policies/ams-copyright-policy/",
+        "example": "10.1175/WAF-D-20-0101.1",
+        "archiving_policy": [
+          "https://perma.cc/7GRP-86R3"
+        ]
+      },
+      "requirements": {
+        "funder": [
+          "Plan S",
+          "UKRI"
+        ]
+      },
+      "09/05/2023 09:19": "16/05/2022 20:45",
+      "score": 989,
+      "licences": [
+        {
+          "type": "cc-by"
+        }
+      ]
+    }
+  ]
+}
