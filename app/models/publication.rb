@@ -59,7 +59,7 @@ class Publication < ApplicationRecord
   end
 
   def self.open_access_statuses
-    ['gold', 'hybrid', 'bronze', 'green', 'closed']
+    ['gold', 'hybrid', 'bronze', 'green', 'closed', 'unknown']
   end
 
   def self.oa_workflow_states
@@ -140,20 +140,27 @@ class Publication < ApplicationRecord
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
-  scope :with_no_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations).where(open_access_locations: { publication_id: nil }) }
-  scope :activity_insight_oa_publication, -> { oa_publication.with_no_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :with_no_scholarsphere_oa_locations, -> { distinct(:id).left_outer_joins(:open_access_locations)
+    .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')}) }
+  scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
-  scope :needs_permissions_check, -> { activity_insight_oa_publication.where(licence: nil, doi_verified: true, permissions_last_checked_at: nil) }
+  scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
+  scope :needs_permissions_check, -> {
+    activity_insight_oa_publication
+      .filter_oa_status_from_workflow
+      .where(licence: nil, doi_verified: true, permissions_last_checked_at: nil)}
   scope :needs_oa_metadata_search,
         -> {
           activity_insight_oa_publication
+            .filter_oa_status_from_workflow
             .where(doi_verified: true)
             .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
         }
   scope :file_version_check_failed, -> {
     activity_insight_oa_publication
+      .filter_oa_status_from_workflow
       .where.not(preferred_version: nil)
       .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
@@ -162,6 +169,7 @@ class Publication < ApplicationRecord
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :permissions_check_failed, -> {
     activity_insight_oa_publication
+      .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
       .where(
         %{licence IS NULL OR preferred_version IS NULL OR (embargo_date IS NULL AND checked_for_embargo_date IS DISTINCT FROM TRUE) OR (set_statement IS NULL AND checked_for_set_statement IS DISTINCT FROM TRUE)}
@@ -180,6 +188,7 @@ class Publication < ApplicationRecord
               AND (embargo_date IS NOT NULL OR checked_for_embargo_date IS TRUE)
               AND activity_insight_oa_files.downloaded IS TRUE
               AND activity_insight_oa_files.file_download_location IS NOT NULL
+              AND (open_access_status != 'gold' AND open_access_status != 'hybrid' AND open_access_status IS NOT NULL)
           )
         SQL
       )
@@ -468,6 +477,10 @@ class Publication < ApplicationRecord
     !has_open_access_information?
   end
 
+  def no_scholarsphere_open_access_information?
+    !(scholarsphere_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived?)
+  end
+
   def has_open_access_information?
     preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived?
   end
@@ -533,7 +546,7 @@ class Publication < ApplicationRecord
   end
 
   def can_receive_new_ai_oa_files?
-    no_open_access_information? && is_oa_publication? && no_valid_file_version?
+    no_scholarsphere_open_access_information? && is_oa_publication? && no_valid_file_version?
   end
 
   def preferred_version_display
@@ -588,6 +601,10 @@ class Publication < ApplicationRecord
 
       OpenAccessLocation.create_or_update_from_unpaywall(unpaywall_locations, self)
     end
+  end
+
+  def update_oa_status_from_unpaywall(unpaywall_response)
+    self.open_access_status = doi.present? || unpaywall_response.matchable_title == matchable_title ? unpaywall_response.oa_status : 'unknown'
   end
 
   private

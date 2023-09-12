@@ -285,7 +285,7 @@ describe Publication, type: :model do
 
   describe '.open_access_statuses' do
     it 'returns the list of valid values for open access status' do
-      expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed']
+      expect(described_class.open_access_statuses).to eq ['gold', 'hybrid', 'bronze', 'green', 'closed', 'unknown']
     end
   end
 
@@ -419,6 +419,57 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.with_no_scholarsphere_oa_locations' do
+    let!(:pub1) { create(:publication,
+      title: 'pub1',
+      open_access_locations: []) }
+    let!(:pub2) { create(:publication,
+      title: 'pub2',
+      open_access_locations: [
+        build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+      ])
+    }
+    let!(:pub3) { create(:publication,
+      title: 'pub3',
+      open_access_locations: [
+        build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+        build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+      ])
+    }
+    let!(:pub4) { create(:publication,
+      title: 'pub4',
+      open_access_locations: [
+        build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+      ])
+    }
+    let!(:pub5) { create(:publication,
+      title: 'pub5',
+      open_access_locations: [
+        build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
+        build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+        build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+        build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+      ])}
+    let!(:pub6) { create(:publication,
+        title: 'pub6',
+        open_access_locations: [
+          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+        ])
+    }
+    let!(:pub7) { create(:publication,
+      title: 'pub7')
+    }
+    let!(:oa_location) { create(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: pub7)}
+    
+    before { oa_location.update_column(:publication_id, nil)}
+
+    it 'only returns publications without scholarsphere open access locations' do
+      expect(described_class.with_no_scholarsphere_oa_locations).to match_array [pub1, pub2, pub3, pub7]
+    end
+  end
+
   describe 'open access scopes' do
     let!(:pub1) { create(:publication,
                          title: 'pub1',
@@ -496,7 +547,8 @@ describe Publication, type: :model do
                          title: 'pub3',
                          doi_verified: true,
                          oa_workflow_state: 'oa metadata search pending',
-                         publication_type: 'Conference Proceeding')
+                         publication_type: 'Conference Proceeding',
+                         open_access_status: nil)
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
@@ -513,7 +565,8 @@ describe Publication, type: :model do
                          title: 'pub6',
                          doi_verified: true,
                          oa_status_last_checked_at: Time.now - (1 * 60 * 60),
-                         publication_type: 'Professional Journal Article')
+                         publication_type: 'Professional Journal Article',
+                         open_access_status: 'gold')
     }
     let!(:pub7) { create(:publication,
                          title: 'pub7',
@@ -523,6 +576,12 @@ describe Publication, type: :model do
                          title: 'pub8',
                          licence: nil,
                          doi_verified: true)
+    }
+    let!(:pub8b) { create(:publication,
+                          title: 'pub8b',
+                          licence: nil,
+                          doi_verified: true,
+                          open_access_status: 'hybrid')
     }
     let!(:pub9a) { create(:publication,
                           title: 'pub9a',
@@ -659,7 +718,8 @@ describe Publication, type: :model do
                            set_statement: 'statement',
                            embargo_date: Date.current,
                            checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           checked_for_set_statement: nil,
+                           open_access_status: 'gold')
     }
     let!(:pub13b) { create(:publication,
                            title: 'pub13b',
@@ -719,7 +779,8 @@ describe Publication, type: :model do
                            set_statement: 'statement',
                            embargo_date: nil,
                            checked_for_embargo_date: true,
-                           checked_for_set_statement: nil)
+                           checked_for_set_statement: nil,
+                           open_access_status: 'hybrid')
     }
     let!(:pub13h) { create(:publication,
                            title: 'pub13h',
@@ -729,7 +790,8 @@ describe Publication, type: :model do
                            set_statement: nil,
                            embargo_date: Date.current,
                            checked_for_embargo_date: nil,
-                           checked_for_set_statement: true)
+                           checked_for_set_statement: true,
+                           open_access_status: 'green')
     }
     let!(:pub13i) { create(:publication,
                            title: 'pub13i',
@@ -780,6 +842,17 @@ describe Publication, type: :model do
                            embargo_date: Date.current,
                            checked_for_embargo_date: nil,
                            checked_for_set_statement: nil)
+    }
+    let!(:pub13n) { create(:publication,
+      title: 'pub13n',
+      publication_type: 'Journal Article',
+      licence: 'license',
+      preferred_version: 'acceptedVersion',
+      set_statement: nil,
+      embargo_date: Date.current,
+      checked_for_embargo_date: nil,
+      checked_for_set_statement: true,
+      open_access_status: nil)
     }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
@@ -930,46 +1003,10 @@ describe Publication, type: :model do
     }
 
     let!(:open_access_location5) { create(:open_access_location, publication: pub5) }
-    let!(:open_access_location13m) { create(:open_access_location, publication: pub13m) }
+    let!(:open_access_location12) { create(:open_access_location, publication: pub12, source: Source::UNPAYWALL) }
+    let!(:open_access_location13m_1) { create(:open_access_location, publication: pub13m, source: Source::SCHOLARSPHERE) }
+    let!(:open_access_location13m_2) { create(:open_access_location, publication: pub13m, source: Source::UNPAYWALL) }
 
-    describe '.with_no_oa_locations' do
-      it 'returns publications that do not have open access information' do
-        expect(described_class.with_no_oa_locations).to match_array [
-          pub1,
-          pub2,
-          pub3,
-          pub4,
-          pub6,
-          pub7,
-          pub8,
-          pub9a,
-          pub9b,
-          pub9c,
-          pub9d,
-          pub9e,
-          pub9f,
-          pub9g,
-          pub9h,
-          pub9i,
-          pub9j,
-          pub10,
-          pub11,
-          pub12,
-          pub13a,
-          pub13b,
-          pub13c,
-          pub13d,
-          pub13e,
-          pub13f,
-          pub13g,
-          pub13h,
-          pub13i,
-          pub13j,
-          pub13k,
-          pub13l
-        ]
-      end
-    end
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
@@ -1043,7 +1080,6 @@ describe Publication, type: :model do
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
         expect(described_class.needs_oa_metadata_search).to match_array [
-          pub6,
           pub8,
           pub9a,
           pub9b,
@@ -1062,7 +1098,7 @@ describe Publication, type: :model do
 
     describe '.needs_permissions_check' do
       it 'returns files that have had their permissions checked' do
-        expect(described_class.needs_permissions_check).to match_array [pub8, pub3, pub6]
+        expect(described_class.needs_permissions_check).to match_array [pub8]
       end
     end
 
@@ -1074,7 +1110,7 @@ describe Publication, type: :model do
 
     describe '.ready_for_metadata_review' do
       it 'returns activity_insight_oa_publications with a preferred version and a downloaded file that matches the preferred version' do
-        expect(described_class.ready_for_metadata_review).to match_array [pub13a, pub13g, pub13h]
+        expect(described_class.ready_for_metadata_review).to match_array [pub13h]
       end
     end
   end
@@ -1793,6 +1829,126 @@ describe Publication, type: :model do
 
           it 'returns false' do
             expect(pub.no_open_access_information?).to be false
+          end
+        end
+      end
+    end
+  end
+
+  describe '#no_scholarsphere_open_access_information?' do
+    let!(:pub) { create(:publication) }
+    let!(:auth1) { create(:authorship, publication: pub) }
+    let!(:auth2) { create(:authorship, publication: pub) }
+    let(:policy) { double 'open access policy', url: url }
+    let(:url) { nil }
+
+    before { allow(PreferredOpenAccessPolicy).to receive(:new).with(pub.open_access_locations).and_return policy }
+
+    context "when none of the publication's authorships have a waiver" do
+      context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns true' do
+            expect(pub.no_scholarsphere_open_access_information?).to be true
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+      end
+
+      context 'when the publication has an authorship with a pending ScholarSphere deposit' do
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
+
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+      end
+
+      context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
+
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns true' do
+            expect(pub.no_scholarsphere_open_access_information?).to be true
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+      end
+    end
+
+    context "when one of the publication's authorships has a waiver" do
+      before { create(:internal_publication_waiver, authorship: auth2) }
+
+      context 'when the publication does not have an authorship with a pending ScholarSphere deposit' do
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+      end
+
+      context 'when the publication has an authorship with a pending ScholarSphere deposit' do
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Pending') }
+
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+      end
+
+      context 'when the publication has an authorship with a non-pending ScholarSphere deposit' do
+        before { create(:scholarsphere_work_deposit, authorship: auth1, status: 'Success') }
+
+        context 'when there is not a scholarsphere open access URL for the publication' do
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
+          end
+        end
+
+        context 'when there is a scholarsphere open access URL for the publication' do
+          let(:url) { 'a_url' }
+
+          it 'returns false' do
+            expect(pub.no_scholarsphere_open_access_information?).to be false
           end
         end
       end
@@ -3630,8 +3786,13 @@ describe Publication, type: :model do
 
   describe '#can_receive_new_ai_oa_files?' do
     context 'when publication is not able to receive new activity insight oa files' do
-      context 'when publication has open access information' do
-        let!(:publication) { create(:publication, :oa_publication, :with_open_access_location, preferred_version: 'acceptedVersion') }
+      context 'when publication has scholarsphere open access information' do
+        let!(:publication) { create(:publication,
+          :oa_publication,
+          preferred_version: 'acceptedVersion',
+          open_access_locations: [
+          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+        ]) }
 
         it 'returns false' do
           expect(publication.can_receive_new_ai_oa_files?).to be false
@@ -3657,6 +3818,19 @@ describe Publication, type: :model do
     end
 
     context 'when publication is able to receive new activity insight oa files' do
+      context 'when publication has non-scholarsphere open access information' do
+        let!(:publication) { create(:publication,
+          :oa_publication,
+          preferred_version: 'acceptedVersion',
+          open_access_locations: [
+          build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+        ]) }
+
+        it 'returns false' do
+          expect(publication.can_receive_new_ai_oa_files?).to be true
+        end
+      end
+      
       context 'when the publication has no activity insight oa files' do
         let!(:publication) { create(:publication, :oa_publication) }
 
