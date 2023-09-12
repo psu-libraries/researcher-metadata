@@ -3,10 +3,11 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin File Version Review dashboard', type: :feature do
-  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, version: 'publishedVersion') }
-  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion') }
-  let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
-  let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
+  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, version: 'publishedVersion', user: user) }
+  let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion', user: user) }
+  let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1') }
+  let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2') }
+  let!(:user) { create(:user, webaccess_id: 'abc123')}
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }
@@ -46,6 +47,22 @@ describe 'Admin File Version Review dashboard', type: :feature do
     it "redirects to that Activity Insight OA File's edit page" do
       click_link(pub1.title, match: :first)
       expect(page).to have_current_path rails_admin.edit_path(model_name: :publication, id: pub1.id)
+    end
+  end
+
+  describe 'clicking the button to send an email notification' do
+    it 'sends an email and displays a confirmation message' do
+      click_button('Send Batch Email', match: :first)
+      expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
+      expect(page).to have_content("Email sent to abc123")
+      open_email("abc123@psu.edu")
+      expect(current_email).not_to be_nil
+      expect(current_email.body).to match(/Version we have/)
+      expect(current_email.body).to match(/Version that can be deposited/)
+      expect(current_email.body).to match(/Title 1/)
+      expect(current_email.body).to match(/Title 2/)
+      expect(pub1.reload.wrong_oa_version_notification_sent_at).not_to be_nil
+      expect(pub2.reload.wrong_oa_version_notification_sent_at).not_to be_nil
     end
   end
 end

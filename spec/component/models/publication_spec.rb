@@ -1351,6 +1351,10 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#activity_insight_file_uploader' do
+    xit
+  end
+
   describe '#contributors' do
     let(:pub) { create(:publication) }
     let!(:c1) { create(:contributor_name, position: 2, publication: pub) }

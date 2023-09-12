@@ -223,6 +223,10 @@ class Publication < ApplicationRecord
     users.where(authorships: { confirmed: true })
   end
 
+  def activity_insight_file_uploader
+    activity_insight_oa_files.first.user
+  end
+
   def doi_url_path
     d = doi
     d.try(:gsub, 'https://doi.org/', '')
