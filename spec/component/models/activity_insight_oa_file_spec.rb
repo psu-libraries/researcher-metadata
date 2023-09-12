@@ -69,16 +69,16 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          ])
     }
     let!(:pub4) { create(:publication,
-      title: 'pub4',
-      open_access_status: nil)
+                         title: 'pub4',
+                         open_access_status: nil)
     }
     let!(:pub5) { create(:publication,
-      title: 'pub5',
-      open_access_status: 'gold')
+                         title: 'pub5',
+                         open_access_status: 'gold')
     }
     let!(:pub6) { create(:publication,
-      title: 'pub6',
-      open_access_status: 'hybrid')
+                         title: 'pub6',
+                         open_access_status: 'hybrid')
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }

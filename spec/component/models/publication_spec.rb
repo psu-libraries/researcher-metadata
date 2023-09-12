@@ -421,49 +421,49 @@ describe Publication, type: :model do
 
   describe '.with_no_scholarsphere_oa_locations' do
     let!(:pub1) { create(:publication,
-      title: 'pub1',
-      open_access_locations: []) }
+                         title: 'pub1',
+                         open_access_locations: []) }
     let!(:pub2) { create(:publication,
-      title: 'pub2',
-      open_access_locations: [
-        build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
-      ])
+                         title: 'pub2',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                         ])
     }
     let!(:pub3) { create(:publication,
-      title: 'pub3',
-      open_access_locations: [
-        build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
-        build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-      ])
+                         title: 'pub3',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                         ])
     }
     let!(:pub4) { create(:publication,
-      title: 'pub4',
-      open_access_locations: [
-        build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
-      ])
+                         title: 'pub4',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ])
     }
     let!(:pub5) { create(:publication,
-      title: 'pub5',
-      open_access_locations: [
-        build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
-        build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
-        build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
-        build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-      ])}
+                         title: 'pub5',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::USER, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                         ])}
     let!(:pub6) { create(:publication,
-        title: 'pub6',
-        open_access_locations: [
-          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
-          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
-          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
-        ])
+                         title: 'pub6',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil),
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ])
     }
     let!(:pub7) { create(:publication,
-      title: 'pub7')
+                         title: 'pub7')
     }
-    let!(:oa_location) { create(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: pub7)}
-    
-    before { oa_location.update_column(:publication_id, nil)}
+    let!(:oa_location) { create(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: pub7) }
+
+    before { oa_location.update_column(:publication_id, nil) }
 
     it 'only returns publications without scholarsphere open access locations' do
       expect(described_class.with_no_scholarsphere_oa_locations).to match_array [pub1, pub2, pub3, pub7]
@@ -844,15 +844,15 @@ describe Publication, type: :model do
                            checked_for_set_statement: nil)
     }
     let!(:pub13n) { create(:publication,
-      title: 'pub13n',
-      publication_type: 'Journal Article',
-      licence: 'license',
-      preferred_version: 'acceptedVersion',
-      set_statement: nil,
-      embargo_date: Date.current,
-      checked_for_embargo_date: nil,
-      checked_for_set_statement: true,
-      open_access_status: nil)
+                           title: 'pub13n',
+                           publication_type: 'Journal Article',
+                           licence: 'license',
+                           preferred_version: 'acceptedVersion',
+                           set_statement: nil,
+                           embargo_date: Date.current,
+                           checked_for_embargo_date: nil,
+                           checked_for_set_statement: true,
+                           open_access_status: nil)
     }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
@@ -1006,7 +1006,6 @@ describe Publication, type: :model do
     let!(:open_access_location12) { create(:open_access_location, publication: pub12, source: Source::UNPAYWALL) }
     let!(:open_access_location13m_1) { create(:open_access_location, publication: pub13m, source: Source::SCHOLARSPHERE) }
     let!(:open_access_location13m_2) { create(:open_access_location, publication: pub13m, source: Source::UNPAYWALL) }
-
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
@@ -3788,11 +3787,11 @@ describe Publication, type: :model do
     context 'when publication is not able to receive new activity insight oa files' do
       context 'when publication has scholarsphere open access information' do
         let!(:publication) { create(:publication,
-          :oa_publication,
-          preferred_version: 'acceptedVersion',
-          open_access_locations: [
-          build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
-        ]) }
+                                    :oa_publication,
+                                    preferred_version: 'acceptedVersion',
+                                    open_access_locations: [
+                                      build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                                    ]) }
 
         it 'returns false' do
           expect(publication.can_receive_new_ai_oa_files?).to be false
@@ -3820,17 +3819,17 @@ describe Publication, type: :model do
     context 'when publication is able to receive new activity insight oa files' do
       context 'when publication has non-scholarsphere open access information' do
         let!(:publication) { create(:publication,
-          :oa_publication,
-          preferred_version: 'acceptedVersion',
-          open_access_locations: [
-          build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-        ]) }
+                                    :oa_publication,
+                                    preferred_version: 'acceptedVersion',
+                                    open_access_locations: [
+                                      build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                                    ]) }
 
         it 'returns false' do
           expect(publication.can_receive_new_ai_oa_files?).to be true
         end
       end
-      
+
       context 'when the publication has no activity insight oa files' do
         let!(:publication) { create(:publication, :oa_publication) }
 

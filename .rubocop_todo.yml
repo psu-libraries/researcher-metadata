@@ -334,6 +334,7 @@ Rails/SkipsModelValidations:
     - 'spec/component/models/user_profile_spec.rb'
     - 'app/services/oa_workflow_service.rb'
     - 'app/models/activity_insight_oa_file.rb'
+    - 'spec/component/models/publication_spec.rb'
 
 
 # Offense count: 1
