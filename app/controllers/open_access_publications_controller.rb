@@ -80,7 +80,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
         else
           # Still need the file, so store file now
           cache_files << job.payload_object.job_data['arguments'].first['file_path']
-          Rails.logger.error "Job with ID #{job[:provider_id]} failed and has been removed"
+          Rails.logger.error "Job with ID #{job[:provider_id]} failed"
           true
         end
       else
