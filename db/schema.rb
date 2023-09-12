@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_24_203549) do
+ActiveRecord::Schema.define(version: 2023_09_12_202604) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -493,6 +493,7 @@ ActiveRecord::Schema.define(version: 2023_08_24_203549) do
     t.datetime "permissions_last_checked_at"
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
+    t.datetime "wrong_oa_version_notification_sent_at"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
@@ -656,6 +657,7 @@ ActiveRecord::Schema.define(version: 2023_08_24_203549) do
     t.string "uid"
     t.jsonb "psu_identity"
     t.datetime "psu_identity_updated_at"
+    t.boolean "suppress_oa_reminders", default: false
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"
     t.index ["last_name"], name: "index_users_on_last_name"
