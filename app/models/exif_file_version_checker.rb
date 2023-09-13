@@ -22,8 +22,6 @@ class ExifFileVersionChecker
                  # versions.  This makes it too confusing for our checkers to determine, so default to 'unknown'.
                  elsif latex?
                    'unknown'
-                 else
-                   nil
                  end
   end
 
