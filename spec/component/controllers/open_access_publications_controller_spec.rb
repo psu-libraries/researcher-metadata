@@ -386,6 +386,22 @@ describe OpenAccessPublicationsController, type: :controller do
               expect(FileVersionCheckerJob).not_to have_received(:perform_later)
             end
           end
+
+          context 'when given file returns unknown from exif version checker' do
+            let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: 'unknown' }
+            let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
+
+            before do
+              allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
+              allow(FileVersionCheckerJob).to receive(:perform_later)
+            end
+
+            it 'does not begin file version check and renders the scholarsphere_file_version form' do
+              post :scholarsphere_file_version, params: params
+              expect(response).to render_template :scholarsphere_file_version
+              expect(FileVersionCheckerJob).not_to have_received(:perform_later)
+            end
+          end
         end
 
         context 'when given no scholarsphere_work_deposit param' do

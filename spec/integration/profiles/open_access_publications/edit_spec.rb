@@ -169,11 +169,24 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           end
         end
 
-        context 'when exif check returns a acceptedVersion' do
-          let(:exif_version) { I18n.t('file_versions.accepted_version') }
+        context 'when exif check returns unknown' do
+          let(:exif_version) { 'unknown' }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
           let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
                                cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
+
+          it 'does not preselect anything' do
+            expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+          end
+        end
+
+        context 'when exif check returns a acceptedVersion' do
+          let(:exif_version) { I18n.t('file_versions.accepted_version') }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_accepted_version_postprint.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" } }
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
@@ -196,8 +209,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         context 'when exif check returns publishedVersion' do
           let(:exif_version) { I18n.t('file_versions.published_version') }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }
-          let(:cache_file) { { original_filename: 'pdf_check_unkown_version.pdf',
-                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unkown_version.pdf" } }
+          let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" } }
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.')

@@ -145,11 +145,27 @@ describe ExifFileVersionChecker do
           end
         end
 
+        context 'when creator field is LaTeX' do
+          let(:exif_data) { { creator: 'LaTeX' } }
+
+          it 'returns unknown' do
+            expect(exif_file_version.version).to eq 'unknown'
+          end
+        end
+
         context 'when creator_tool field is one of the PUBLISHED_VERSION_CREATORS value' do
           let(:exif_data) { { creator_tool: ExifFileVersionChecker::PUBLISHED_VERSION_CREATORS.sample } }
 
           it 'returns Final Published Version' do
             expect(exif_file_version.version).to eq I18n.t('file_versions.published_version')
+          end
+        end
+
+        context 'when creator_tool field is LaTeX' do
+          let(:exif_data) { { creator_tool: 'LaTeX' } }
+
+          it 'returns unknown' do
+            expect(exif_file_version.version).to eq 'unknown'
           end
         end
 

@@ -18,6 +18,12 @@ class ExifFileVersionChecker
                    I18n.t('file_versions.accepted_version')
                  elsif published?
                    I18n.t('file_versions.published_version')
+                 # LaTeX formats papers like a published version, but it's often used for both accepted and published
+                 # versions.  This makes it too confusing for our checkers to determine, so default to 'unknown'.
+                 elsif latex?
+                   'unknown'
+                 else
+                   nil
                  end
   end
 
@@ -25,6 +31,11 @@ class ExifFileVersionChecker
 
     def exif
       @exif ||= Exiftool.new(@file_path).to_hash
+    end
+
+    def latex?
+      (!exif[:creator].nil? && exif[:creator].to_s.downcase.include?('latex')) ||
+        (!exif[:creator_tool].nil? && exif[:creator_tool].to_s.downcase.include?('latex'))
     end
 
     def accepted?

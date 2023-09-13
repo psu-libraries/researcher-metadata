@@ -35,14 +35,14 @@ class ScholarsphereFileHandler
   end
 
   def version
-    exif_file_versions.map do |file_version|
-      # Select 'Accepted Version' if present since this check is most strict
-      return file_version if file_version == I18n.t('file_versions.accepted_version')
+    # Select 'Accepted Version' if present since this check is most strict
+    return I18n.t('file_versions.accepted_version') if exif_file_versions.include? I18n.t('file_versions.accepted_version')
 
-      # Either Published Version or nil
-      file_version
-      # Otherwise grab the first version in array (will be 'Published' if present, else nil)
-    end.compact.uniq.first
+    # Otherwise take 'Published Version'
+    return I18n.t('file_versions.published_version') if exif_file_versions.include? I18n.t('file_versions.published_version')
+
+    # Either 'unknown' or nil
+    exif_file_versions.compact.uniq.first
   end
 
   def cache_files
