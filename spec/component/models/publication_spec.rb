@@ -3875,4 +3875,41 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#update_oa_status_from_unpaywall' do
+    let(:publication) { create(:publication,
+                               doi: doi,
+                               title: title,
+                               open_access_status: nil) }
+    let(:doi) { 'https://doi.org/10.0000/valid-doi' }
+    let(:title) { 'Title' }
+    let(:unpaywall_response) { double 'Unpaywall Response', oa_status: 'green', matchable_title: 'title' }
+
+    context 'when the publication has a doi' do
+      it 'updates the publication open access status with the unpaywall oa status' do
+        publication.update_oa_status_from_unpaywall(unpaywall_response)
+        expect(publication.open_access_status).to eq 'green'
+      end
+    end
+
+    context 'when the publication does not have a doi' do
+      let(:doi) { nil }
+
+      context 'when the publication has a matching title' do
+        it 'updates the publication open access status with the unpaywall oa status' do
+          publication.update_oa_status_from_unpaywall(unpaywall_response)
+          expect(publication.open_access_status).to eq 'green'
+        end
+      end
+
+      context 'when the publication title does not match the unpaywall response' do
+        let(:title) { 'Not a Match' }
+
+        it 'updates the publication open access status to unknown' do
+          publication.update_oa_status_from_unpaywall(unpaywall_response)
+          expect(publication.open_access_status).to eq 'unknown'
+        end
+      end
+    end
+  end
 end
