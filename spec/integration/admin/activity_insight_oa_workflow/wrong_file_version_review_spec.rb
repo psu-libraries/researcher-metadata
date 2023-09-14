@@ -15,6 +15,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
   before do
     authenticate_admin_user
     allow(ActivityInsightFileUploader).to receive(:new).and_return uploader
+    allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(user.webaccess_id)
     visit activity_insight_oa_workflow_wrong_file_version_review_path
   end
 
