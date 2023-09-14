@@ -8,7 +8,7 @@ class OABPreferredPermissionsService < OABPermissionsClient
 
   def preferred_version
     if permissions.can_deposit_accepted_version? && permissions.can_deposit_published_version?
-      'Published or Accepted'
+      Publication::PUBLISHED_OR_ACCEPTED_VERSION
     elsif permissions.can_deposit_published_version?
       I18n.t('file_versions.published_version')
     elsif permissions.can_deposit_accepted_version?

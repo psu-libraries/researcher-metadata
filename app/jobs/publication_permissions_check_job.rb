@@ -7,8 +7,6 @@ class PublicationPermissionsCheckJob < ApplicationJob
     publication = Publication.find(publication_id)
     permissions = OABPreferredPermissionsService.new(publication.doi_url_path)
 
-    publication.preferred_version = permissions.preferred_version
-
-    publication.save!
+    publication.update!(preferred_version: permissions.preferred_version)
   end
 end

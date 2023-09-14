@@ -228,3 +228,4 @@ en:
     accepted_version_display: 'Accepted Manuscript'
     published_version: 'publishedVersion'
     published_version_display: 'Final Published Version'
+    published_or_accepted_version_display: 'Final Published Version or Accepted Manuscript'

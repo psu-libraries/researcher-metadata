@@ -8,6 +8,8 @@ class Publication < ApplicationRecord
   PUBLISHED_STATUS = 'Published'
   IN_PRESS_STATUS = 'In Press'
 
+  PUBLISHED_OR_ACCEPTED_VERSION = 'Published or Accepted'
+
   def self.publication_types
     [
       'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
@@ -67,7 +69,15 @@ class Publication < ApplicationRecord
   end
 
   def self.preferred_versions
-    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
+    preferred_version_options.pluck(1)
+  end
+
+  def self.preferred_version_options
+    [
+      [I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
+      [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')],
+      [I18n.t('file_versions.published_or_accepted_version_display'), PUBLISHED_OR_ACCEPTED_VERSION]
+    ].freeze
   end
 
   has_many :authorships, inverse_of: :publication
@@ -410,10 +420,7 @@ class Publication < ApplicationRecord
       group :open_access_permissions do
         field(:preferred_version, :enum) do
           label 'Preferred Version'
-          enum do
-            [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
-             [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
-          end
+          enum { Publication.preferred_version_options }
         end
         field(:set_statement) { label 'Deposit Statement' }
         field(:checked_for_set_statement) { label 'Checked for deposit statement' }
@@ -570,9 +577,11 @@ class Publication < ApplicationRecord
   end
 
   def preferred_version_display
-    return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
+    option = self.class.preferred_version_options.find do |o|
+      o[1] == preferred_version
+    end
 
-    I18n.t('file_versions.published_version_display')
+    option[0]
   end
 
   def self.filter_by_activity_insight_id(query, activity_insight_id)

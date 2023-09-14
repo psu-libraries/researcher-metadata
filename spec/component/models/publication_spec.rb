@@ -296,8 +296,18 @@ describe Publication, type: :model do
   end
 
   describe '.preferred_versions' do
-    it 'returns the list of valid open access workflow states' do
-      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion']
+    it 'returns the list of valid values for preferred version' do
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion', 'Published or Accepted']
+    end
+  end
+
+  describe '.preferred_version_options' do
+    it 'returns the list of valid values for preferred version along with their labels' do
+      expect(described_class.preferred_version_options).to eq [
+        ['Accepted Manuscript', 'acceptedVersion'],
+        ['Final Published Version', 'publishedVersion'],
+        ['Final Published Version or Accepted Manuscript', 'Published or Accepted']
+      ]
     end
   end
 
@@ -3920,8 +3930,10 @@ describe Publication, type: :model do
   end
 
   describe '#preferred_version_display' do
+    let(:publication) { build(:publication, preferred_version: version) }
+
     context 'when the preferred_version is "acceptedVersion"' do
-      let(:publication) { create(:publication, preferred_version: 'acceptedVersion') }
+      let(:version) { 'acceptedVersion' }
 
       it 'returns "Accepted Manuscript"' do
         expect(publication.preferred_version_display).to eq 'Accepted Manuscript'
@@ -3929,10 +3941,18 @@ describe Publication, type: :model do
     end
 
     context 'when the preferred_version is "publishedVersion"' do
-      let(:publication) { create(:publication, preferred_version: 'publishedVersion') }
+      let(:version) { 'publishedVersion' }
 
       it 'returns "Final Published Version"' do
         expect(publication.preferred_version_display).to eq 'Final Published Version'
+      end
+    end
+
+    context 'when the preferred_version is "Published or Accepted"' do
+      let(:version) { 'Published or Accepted' }
+
+      it 'returns "Final Published Version or Accepted Manuscript"' do
+        expect(publication.preferred_version_display).to eq 'Final Published Version or Accepted Manuscript'
       end
     end
   end
