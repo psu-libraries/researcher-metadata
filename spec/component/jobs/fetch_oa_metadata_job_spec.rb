@@ -55,7 +55,7 @@ describe FetchOAMetadataJob, type: :job do
         end
 
         it 'updates the publication oa status last checked at, oa status, and workflow state' do
-          expect(pub.reload.open_access_status).to eq 'closed'
+          expect(pub.reload.open_access_status).to eq 'unknown'
           expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           expect(pub.reload.oa_workflow_state).to be_nil
         end
@@ -73,7 +73,7 @@ describe FetchOAMetadataJob, type: :job do
         end
 
         it 'updates the publication oa status last checked at, oa status, and workflow state' do
-          expect(pub.reload.open_access_status).to eq 'closed'
+          expect(pub.reload.open_access_status).to eq 'unknown'
           expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           expect(pub.reload.oa_workflow_state).to be_nil
         end
