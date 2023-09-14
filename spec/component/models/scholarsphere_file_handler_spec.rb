@@ -27,6 +27,14 @@ describe ScholarsphereFileHandler do
         end
       end
 
+      context 'uploaded file is unknown' do
+        let(:exif_file_version) { double 'ExifFileVersionChecker', version: 'unknown' }
+
+        it 'returns unknown' do
+          expect(file_handler.version).to eq 'unknown'
+        end
+      end
+
       context 'uploaded file is Accepted Manuscript' do
         let(:exif_file_version) { double 'ExifFileVersionChecker', version: I18n.t('file_versions.accepted_version') }
 
@@ -80,7 +88,17 @@ describe ScholarsphereFileHandler do
         end
       end
 
+      context 'uploaded files include an unknown version but no other versions' do
+        let(:version2) { nil }
+        let(:version3) { 'unknown' }
+
+        it 'returns unknown' do
+          expect(file_handler.version).to eq 'unknown'
+        end
+      end
+
       context 'uploaded files include Accepted Manuscript version' do
+        let(:version1) { 'unknown' }
         let(:version2) { I18n.t('file_versions.published_version') }
         let(:version3) { I18n.t('file_versions.accepted_version') }
 
@@ -90,6 +108,7 @@ describe ScholarsphereFileHandler do
       end
 
       context 'uploaded files include Final Published Version but not Accepted Manuscript version' do
+        let(:version1) { 'unknown' }
         let(:version2) { I18n.t('file_versions.published_version') }
         let(:version3) { nil }
 
