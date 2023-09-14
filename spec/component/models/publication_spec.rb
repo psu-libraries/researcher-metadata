@@ -1351,13 +1351,13 @@ describe Publication, type: :model do
     end
   end
 
-  describe '#activity_insight_file_uploader' do
+  describe '#activity_insight_upload_user' do
     let(:u1) { create(:user) }
     let!(:pub) { create(:publication) }
     let!(:aif1) { create(:activity_insight_oa_file, publication: pub, user: u1) }
 
     it 'returns the user who uploaded the activity insight file' do
-      expect(pub.activity_insight_file_uploader).to eq u1
+      expect(pub.activity_insight_upload_user).to eq u1
     end
   end
 

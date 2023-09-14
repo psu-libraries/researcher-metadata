@@ -14,7 +14,7 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
         pub.update_column(:wrong_oa_version_notification_sent_at, Time.current)
       end
     end
-    flash[:alert] = "Email sent to #{publications.first.activity_insight_file_uploader.webaccess_id}}"
+    flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}}"
     redirect_to activity_insight_oa_workflow_wrong_file_version_review_path
   end
 end

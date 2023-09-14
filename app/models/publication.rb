@@ -223,7 +223,7 @@ class Publication < ApplicationRecord
     users.where(authorships: { confirmed: true })
   end
 
-  def activity_insight_file_uploader
+  def activity_insight_upload_user
     activity_insight_oa_files.first.user
   end
 

@@ -16,7 +16,7 @@
     </thead>
     <tbody class='card-body'>
 
-    <% authors_grouped = @publications.group_by { |p| p.activity_insight_file_uploader } %>
+    <% authors_grouped = @publications.group_by { |p| p.activity_insight_upload_user } %>
     <% authors_grouped.each do |author, publications| %>
       <tr id="<%= dom_id(author) %>">
         <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
