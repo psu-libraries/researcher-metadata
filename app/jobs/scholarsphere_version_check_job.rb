@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class FileVersionCheckerJob < ApplicationJob
+class ScholarsphereVersionCheckJob < ApplicationJob
   queue_as 'scholarsphere-pdf-file-version'
 
   def perform(file_path:, publication_id:)

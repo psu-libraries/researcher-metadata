@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 
-describe FileVersionCheckerJob, type: :job do
+describe ScholarsphereVersionCheckJob, type: :job do
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
     let(:args) { { file_path: [], publication: [] } }
