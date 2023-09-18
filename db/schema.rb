@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_08_24_203549) do
+ActiveRecord::Schema.define(version: 2023_09_18_173023) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2023_08_24_203549) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
+    t.boolean "version_checked"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end

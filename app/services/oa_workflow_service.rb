@@ -33,5 +33,13 @@ class OAWorkflowService
     rescue StandardError
       file.update_column(:downloaded, false)
     end
+
+    ActivityInsightOAFile.needs_version_check.each do |file|
+      file.version_checked = true
+      file.save!
+      AiOAWfVersionCheckJob.perform_later(file.id)
+    rescue StandardError
+      file.update_column(:version_checked, false)
+    end
   end
 end
