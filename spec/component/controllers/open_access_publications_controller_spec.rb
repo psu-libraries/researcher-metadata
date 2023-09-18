@@ -355,19 +355,19 @@ describe OpenAccessPublicationsController, type: :controller do
         context 'when given valid params' do
           context 'when given file does not return a version from exif check' do
             let(:file_handler) { double 'ScholarsphereFileHandler', valid?: true, cache_files: [cache_file], version: nil }
-            let(:pdf_file_version_job) { double 'FileVersionCheckerJob', provider_job_id: 10, job_id: 1 }
+            let(:pdf_file_version_job) { double 'ScholarsphereVersionCheckJob', provider_job_id: 10, job_id: 1 }
             let(:cache_file) { { original_filename: 'test_file.pdf', cache_path: "#{Rails.root}/spec/fixtures/test_file.pdf" } }
             let(:file_path) { cache_file[:cache_path] }
 
             before do
               allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(FileVersionCheckerJob).to receive(:perform_later).and_return(pdf_file_version_job)
+              allow(ScholarsphereVersionCheckJob).to receive(:perform_later).and_return(pdf_file_version_job)
             end
 
             it 'begins file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(FileVersionCheckerJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
+              expect(ScholarsphereVersionCheckJob).to have_received(:perform_later).with(file_path: file_path, publication_id: pub.id)
             end
           end
 
@@ -377,13 +377,13 @@ describe OpenAccessPublicationsController, type: :controller do
 
             before do
               allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(FileVersionCheckerJob).to receive(:perform_later)
+              allow(ScholarsphereVersionCheckJob).to receive(:perform_later)
             end
 
             it 'does not begin file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(FileVersionCheckerJob).not_to have_received(:perform_later)
+              expect(ScholarsphereVersionCheckJob).not_to have_received(:perform_later)
             end
           end
 
@@ -393,13 +393,13 @@ describe OpenAccessPublicationsController, type: :controller do
 
             before do
               allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
-              allow(FileVersionCheckerJob).to receive(:perform_later)
+              allow(ScholarsphereVersionCheckJob).to receive(:perform_later)
             end
 
             it 'does not begin file version check and renders the scholarsphere_file_version form' do
               post :scholarsphere_file_version, params: params
               expect(response).to render_template :scholarsphere_file_version
-              expect(FileVersionCheckerJob).not_to have_received(:perform_later)
+              expect(ScholarsphereVersionCheckJob).not_to have_received(:perform_later)
             end
           end
         end
@@ -512,7 +512,7 @@ describe OpenAccessPublicationsController, type: :controller do
           let(:score2) { 1 }
           let!(:job) { Delayed::Job.create id: 1,
                                            handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-                                             "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+                                             "job_class: ScholarsphereVersionCheckJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
                                              "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
                                              "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
                                              "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +
@@ -547,7 +547,7 @@ describe OpenAccessPublicationsController, type: :controller do
       context 'when the job has yet to complete' do
         let!(:job) { Delayed::Job.create id: 1,
                                          handler: "--- !ruby/object:ActiveJob::QueueAdapters::DelayedJobAdapter::JobWrapper\njob_data:\n  " +
-                                           "job_class: FileVersionCheckerJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
+                                           "job_class: ScholarsphereVersionCheckJob\n  job_id: #{job_id1[:job_id]}\n  provider_job_id:\n  queue_nam" +
                                            "e: scholarsphere-pdf-file-version\n  priority:\n  arguments:\n  - file_path: /path/to/file1.pdf\n" +
                                            "    publication_id: 123456\n    _aj_ruby2_keywords:\n    - file_path\n    - publication_id\n  ex" +
                                            "ecutions: 0\n  exception_executions: {}\n  locale: en\n  timezone: UTC\n  enqueued_at: '2023-09-" +

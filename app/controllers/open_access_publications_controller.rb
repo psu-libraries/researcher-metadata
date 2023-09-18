@@ -49,8 +49,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                          cache_files: @cache_files.pluck(:cache_path) }
       else
         @cache_files.each do |cache_file|
-          file_version_job = FileVersionCheckerJob.perform_later(file_path: cache_file[:cache_path].to_s,
-                                                                 publication_id: publication.id)
+          file_version_job = ScholarSphereVersionCheckJob.perform_later(file_path: cache_file[:cache_path].to_s,
+                                                                        publication_id: publication.id)
           @jobs.push({ provider_id: file_version_job.provider_job_id, job_id: file_version_job.job_id })
         end
 
