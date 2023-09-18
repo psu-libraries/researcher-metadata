@@ -72,13 +72,28 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:file4) { create(:activity_insight_oa_file, publication: pub3) }
-    let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file_download_location: uploader) }
-    let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
-    let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
+    let!(:file5) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader) }
+    let!(:file6) { create(:activity_insight_oa_file, publication: pub1, downloaded: true) }
+    let!(:file7) { create(:activity_insight_oa_file, publication: pub1, location: nil) }
+    let!(:file8) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true) }
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version_checked: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version: 'unknown') }
+
+    describe '.oa_type_w_no_locations' do
+      it 'returns files that have an associated publication of the oa type and have no oa locations' do
+        expect(described_class.oa_type_w_no_locations).to match_array [file1, file5, file6, file8, file9, file10]
+      end
+    end
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
         expect(described_class.ready_for_download).to match_array [file1]
+      end
+    end
+
+    describe '.needs_version_check' do
+      it 'returns files that are ready to have their versions automatically determined' do
+        expect(described_class.needs_version_check).to match_array [file8]
       end
     end
   end
