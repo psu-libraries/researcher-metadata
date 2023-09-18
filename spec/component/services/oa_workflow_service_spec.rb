@@ -40,10 +40,19 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
-    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, file_download_location: fixture_file_open('test_file.pdf')) }
-    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, version_checked: true, file_download_location: fixture_file_open('test_file.pdf')) }
-    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, version: 'unknown', file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7,
+                                                                         downloaded: true) }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub7,
+                                                                         downloaded: true,
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub7,
+                                                                         downloaded: true,
+                                                                         version_checked: true,
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub7,
+                                                                         downloaded: true,
+                                                                         version: 'unknown',
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
 
     context 'when publications need doi verification' do
       before do
