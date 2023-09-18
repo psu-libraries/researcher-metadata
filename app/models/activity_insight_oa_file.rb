@@ -12,14 +12,25 @@ class ActivityInsightOAFile < ApplicationRecord
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
-  scope :ready_for_download, -> {
+  scope :oa_type_w_no_locations, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
       .where(open_access_locations: { publication_id: nil })
+      .where.not(location: nil)
+  }
+
+  scope :ready_for_download, -> {
+    oa_type_w_no_locations
       .where(file_download_location: nil)
       .where(downloaded: nil)
-      .where.not(location: nil)
+  }
+
+  scope :needs_version_check, -> { 
+    oa_type_w_no_locations
+      .where.not(file_download_location: nil)
+      .where(downloaded: true)
+      .where(version: nil)
   }
 
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
