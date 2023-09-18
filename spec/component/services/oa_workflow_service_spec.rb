@@ -41,6 +41,9 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, version_checked: true, file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub7, downloaded: true, version: 'unknown', file_download_location: fixture_file_open('test_file.pdf')) }
 
     context 'when publications need doi verification' do
       before do
@@ -123,6 +126,28 @@ describe OAWorkflowService do
           service.workflow
         rescue RuntimeError
           expect(activity_insight_oa_file4.reload.downloaded).to be false
+        end
+      end
+    end
+
+    context 'when Activity Insight files are need their versions automatically checked' do
+      before { allow(AiOAWfVersionCheckJob).to receive(:perform_later) }
+
+      it 'calls the version check job with that file' do
+        service.workflow
+        expect(AiOAWfVersionCheckJob).to have_received(:perform_later).with(activity_insight_oa_file7.id)
+        expect(AiOAWfVersionCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file8.id)
+        expect(AiOAWfVersionCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file9.id)
+        expect(activity_insight_oa_file7.reload.version_checked).to be true
+      end
+
+      context 'when there is an error' do
+        before { allow(AiOAWfVersionCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'updates file version_checked status' do
+          service.workflow
+        rescue RuntimeError
+          expect(activity_insight_oa_file7.reload.version_checked).to be false
         end
       end
     end
