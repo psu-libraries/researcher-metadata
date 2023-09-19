@@ -297,7 +297,7 @@ describe Publication, type: :model do
 
   describe '.preferred_versions' do
     it 'returns the list of valid values for preferred version' do
-      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion', 'Published or Accepted']
+      expect(described_class.preferred_versions).to eq ['acceptedVersion', 'publishedVersion', 'Published or Accepted', 'None']
     end
   end
 
@@ -306,7 +306,8 @@ describe Publication, type: :model do
       expect(described_class.preferred_version_options).to eq [
         ['Accepted Manuscript', 'acceptedVersion'],
         ['Final Published Version', 'publishedVersion'],
-        ['Final Published Version or Accepted Manuscript', 'Published or Accepted']
+        ['Final Published Version or Accepted Manuscript', 'Published or Accepted'],
+        ['None', 'None']
       ]
     end
   end

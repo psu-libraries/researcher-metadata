@@ -9,6 +9,7 @@ class Publication < ApplicationRecord
   IN_PRESS_STATUS = 'In Press'
 
   PUBLISHED_OR_ACCEPTED_VERSION = 'Published or Accepted'
+  NO_VERSION = 'None'
 
   def self.publication_types
     [
@@ -76,7 +77,8 @@ class Publication < ApplicationRecord
     [
       [I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
       [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')],
-      [I18n.t('file_versions.published_or_accepted_version_display'), PUBLISHED_OR_ACCEPTED_VERSION]
+      [I18n.t('file_versions.published_or_accepted_version_display'), PUBLISHED_OR_ACCEPTED_VERSION],
+      [I18n.t('file_versions.no_version_display'), NO_VERSION]
     ].freeze
   end
 
