@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class OABPermissionsSet
+  class PermissionsUnknown < RuntimeError; end
+
   def initialize(permissions)
     @permissions = permissions
   end
@@ -18,6 +20,8 @@ class OABPermissionsSet
     attr_accessor :permissions
 
     def can_deposit?(version)
+      raise PermissionsUnknown if permissions.none?
+
       permissions.find do |p|
         p.version == version && p.can_archive_in_institutional_repository? && !p.has_requirements?
       end.present?

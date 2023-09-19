@@ -13,7 +13,10 @@ class OABPreferredPermissionsService < OABPermissionsClient
       I18n.t('file_versions.published_version')
     elsif permissions.can_deposit_accepted_version?
       I18n.t('file_versions.accepted_version')
+    else
+      Publication::NO_VERSION
     end
+  rescue OABPermissionsSet::PermissionsUnknown
   end
 
   private

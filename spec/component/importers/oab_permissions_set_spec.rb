@@ -8,8 +8,8 @@ describe OABPermissionsSet do
 
   describe '#can_deposit_accepted_version?' do
     context 'when the set has no permissions' do
-      it 'returns false' do
-        expect(ps.can_deposit_accepted_version?).to be false
+      it 'raises an error' do
+        expect { ps.can_deposit_accepted_version? }.to raise_error OABPermissionsSet::PermissionsUnknown
       end
     end
 
@@ -109,8 +109,8 @@ describe OABPermissionsSet do
 
   describe '#can_deposit_published_version?' do
     context 'when the set has no permissions' do
-      it 'returns false' do
-        expect(ps.can_deposit_published_version?).to be false
+      it 'raises an error' do
+        expect { ps.can_deposit_published_version? }.to raise_error OABPermissionsSet::PermissionsUnknown
       end
     end
 
