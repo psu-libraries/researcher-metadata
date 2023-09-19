@@ -1040,6 +1040,12 @@ describe Publication, type: :model do
       end
     end
 
+    describe '.wrong_file_version' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
+        expect(described_class.wrong_file_version).to match_array [pub12, pub13b]
+      end
+    end
+
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
         expect(described_class.needs_oa_metadata_search).to match_array [
@@ -1342,6 +1348,16 @@ describe Publication, type: :model do
 
     it "returns only the publication's users that have confirmed authorships" do
       expect(pub.confirmed_users).to eq [u2]
+    end
+  end
+
+  describe '#activity_insight_upload_user' do
+    let(:u1) { create(:user) }
+    let!(:pub) { create(:publication) }
+    let!(:aif1) { create(:activity_insight_oa_file, publication: pub, user: u1) }
+
+    it 'returns the user who uploaded the activity insight file' do
+      expect(pub.activity_insight_upload_user).to eq u1
     end
   end
 
