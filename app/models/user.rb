@@ -117,6 +117,7 @@ class User < ApplicationRecord
   def self.needs_open_access_notification
     joins(:authorships, :user_organization_memberships, :publications)
       .joins('LEFT OUTER JOIN open_access_locations ON open_access_locations.publication_id = publications.id')
+      .where('suppress_oa_reminders != true')
       .where(publications: { status: Publication::PUBLISHED_STATUS })
       .where("publications.publication_type IN (#{User.oa_publication_type_params})", *Publication.oa_publication_types)
       .where('publications.id NOT IN (SELECT publication_id from authorships WHERE authorships.id IN (SELECT authorship_id FROM internal_publication_waivers))')

@@ -47,9 +47,11 @@ class ActivityInsightOAFile < ApplicationRecord
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 
   def version_status_display
-    return 'Unknown Version' if version == 'unknown'
+    return I18n.t('file_versions.published_version_display') if version == I18n.t('file_versions.published_version')
 
-    'Wrong Version'
+    return I18n.t('file_versions.accepted_version_display') if version == I18n.t('file_versions.accepted_version')
+
+    'Unknown Version'
   end
 
   def download_location_value
