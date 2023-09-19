@@ -4,16 +4,17 @@ require 'component/component_spec_helper'
 
 describe AiOAWfVersionCheckJob, type: :job do
   let(:job) { described_class }
-  let!(:ai_oa_file) { create(:activity_insight_oa_file) }
 
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
     it 'enqueues a job' do
-      expect { job.perform_later(ai_oa_file.id) }.to have_enqueued_job.with(1).on_queue('default')
+      expect { job.perform_later(1) }.to have_enqueued_job.with(1).on_queue('default')
     end
   end
 
   describe '#perform_now' do
+    let!(:ai_oa_file) { create(:activity_insight_oa_file) }
+
     context 'when exif version checker returns a version' do
       before do
         allow(ExifFileVersionChecker).to receive(:new).and_return double(version: 'acceptedVersion')
