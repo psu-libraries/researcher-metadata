@@ -195,13 +195,11 @@ class Publication < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
-  scope :permissions_check_failed, -> {
+  scope :needs_manual_preferred_version_check, -> {
     activity_insight_oa_publication
       .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
-      .where(
-        %{licence IS NULL OR preferred_version IS NULL OR (publications.embargo_date IS NULL AND publications.checked_for_embargo_date IS DISTINCT FROM TRUE) OR (publications.set_statement IS NULL AND publications.checked_for_set_statement IS DISTINCT FROM TRUE)}
-      )
+      .where(preferred_version: nil)
   }
   scope :ready_for_metadata_review, -> {
     activity_insight_oa_publication

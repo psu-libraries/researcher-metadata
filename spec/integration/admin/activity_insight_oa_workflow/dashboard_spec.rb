@@ -64,10 +64,10 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       end
     end
 
-    describe 'clicking the link to the Permissions Review page' do
-      it 'redirects to the Permissions Review page' do
-        click_on 'Review Permissions'
-        expect(page).to have_current_path activity_insight_oa_workflow_permissions_review_path
+    describe 'clicking the link to the Preferred Version Review page' do
+      it 'redirects to the Preferred Version Review page' do
+        click_on 'Review Preferred Version'
+        expect(page).to have_current_path activity_insight_oa_workflow_preferred_version_review_path
       end
     end
 

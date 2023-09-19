@@ -125,38 +125,35 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
-  context 'when no publications need their permissions verified' do
+  context 'when no publications need their preferred version verified' do
     let!(:oal) { create(:open_access_location, publication: pub2, source: Source::SCHOLARSPHERE) }
     let!(:pub1) { create(:publication) }
     let!(:pub2) { create(:publication, doi_verified: nil) }
-    let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }
+    let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: 'acceptedVersion') }
 
     it 'renders a muted card with no link' do
       render_inline(described_class.new)
-      expect(page.find_by_id('permissions-check-card').to_json).to include('text-muted')
-      expect(page.find_by_id('permissions-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/permissions_review')
+      expect(page.find_by_id('preferred-version-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('preferred-version-check-card').text).to include('0')
+      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
     end
   end
 
-  context 'when publications need their permissions verified' do
+  context 'when publications need their preferred version verified' do
     let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
     let!(:pub2) {
       create(
         :publication,
         permissions_last_checked_at: Time.now,
-        licence: 'licence',
-        preferred_version: 'acceptedVersion',
-        checked_for_set_statement: true,
-        checked_for_embargo_date: true
+        preferred_version: 'acceptedVersion'
       )
     }
 
-    it 'renders the permissions review card with a link and the number of publications in the corner' do
+    it 'renders the preferred version review card with a link and the number of publications in the corner' do
       render_inline(described_class.new)
-      expect(page.find_by_id('permissions-check-card').to_json).not_to include('text-muted')
-      expect(page.find_by_id('permissions-check-card').text).to include('1')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/permissions_review')
+      expect(page.find_by_id('preferred-version-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('preferred-version-check-card').text).to include('1')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
     end
   end
 

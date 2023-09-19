@@ -1163,9 +1163,9 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.permissions_check_failed' do
+    describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
-        expect(described_class.permissions_check_failed).to match_array [pub9a, pub9b, pub9g, pub9h, pub9i, pub9j]
+        expect(described_class.needs_manual_preferred_version_check).to match_array [pub9b]
       end
     end
 

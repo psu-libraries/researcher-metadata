@@ -64,7 +64,7 @@ describe OABPreferredPermissionsService do
     context 'when the publication is not found in Open Access Button' do
       let(:doi) { 'some_unknown_doi' }
 
-      it "returns nil" do
+      it 'returns nil' do
         expect(service.preferred_version).to be_nil
       end
     end

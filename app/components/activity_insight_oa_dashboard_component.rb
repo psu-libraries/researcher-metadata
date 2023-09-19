@@ -13,8 +13,8 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.wrong_file_version.count
   end
 
-  def permissions_check_failed_count
-    Publication.permissions_check_failed.count
+  def needs_manual_preferred_version_check_count
+    Publication.needs_manual_preferred_version_check.count
   end
 
   def ready_for_metadata_review_count
