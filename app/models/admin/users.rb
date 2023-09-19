@@ -59,6 +59,7 @@ module Admin::Users
         end
         field(:show_all_publications, :toggle)
         field(:show_all_contracts, :toggle)
+        field(:suppress_oa_reminders, :toggle) { label 'Suppress Open Access Reminder Emails' }
         field(:scopus_h_index) do
           label 'H-Index'
           visible do
@@ -109,6 +110,7 @@ module Admin::Users
         field(:is_admin) { label 'Admin user?' }
         field(:show_all_publications)
         field(:show_all_contracts)
+        field(:suppress_oa_reminders) { label 'Suppress Open Access Reminder Emails' }
         field(:managed_organizations)
         field(:created_at)
         field(:updated_at)
@@ -199,6 +201,7 @@ module Admin::Users
         end
         field(:show_all_publications)
         field(:show_all_contracts)
+        field(:suppress_oa_reminders) { label 'Suppress Open Access Reminder Emails' }
         field(:managed_organizations) do
           read_only do
             !bindings[:view]._current_user.is_admin
