@@ -40,6 +40,7 @@ class OAWorkflowService
       AiOAWfVersionCheckJob.perform_later(file.id)
     rescue StandardError
       file.update_column(:version_checked, false)
+      raise
     end
   end
 end

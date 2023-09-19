@@ -28,8 +28,8 @@ class ActivityInsightOAFile < ApplicationRecord
 
   scope :needs_version_check, -> {
     oa_type_w_no_locations
-      .where('version_checked = false OR version_checked IS NULL')
       .where.not(file_download_location: nil)
+      .where(version_checked: nil)
       .where(downloaded: true)
       .where(version: nil)
   }
