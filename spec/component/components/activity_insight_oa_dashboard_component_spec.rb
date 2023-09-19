@@ -56,6 +56,75 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when no publications have only wrong file versions' do
+    let!(:oal) { create(:open_access_location, publication: pub1) }
+    let!(:aif1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion'
+      )
+    }
+    let!(:aif2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub2,
+        version: 'publishedVersion'
+      )
+    }
+    let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub2) { create(:publication, preferred_version: 'publishedVersion') }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('wrong-file-version-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('wrong-file-version-check-card').text).to include('0')
+      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
+    end
+  end
+
+  context 'when publications have only wrong file versions' do
+    let!(:aif1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion'
+      )
+    }
+    let!(:aif2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub2,
+        version: 'publishedVersion'
+      )
+    }
+    let!(:aif3) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub3,
+        version: 'unknown'
+      )
+    }
+    let!(:aif4) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub4,
+        version: nil
+      )
+    }
+    let!(:pub1) { create(:publication, preferred_version: 'publishedVersion') }
+    let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub4) { create(:publication, preferred_version: 'acceptedVersion') }
+
+    it 'renders the file version check card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('wrong-file-version-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('wrong-file-version-check-card').text).to include('2')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
+    end
+  end
+
   context 'when no publications need their permissions verified' do
     let!(:oal) { create(:open_access_location, publication: pub2) }
     let!(:pub1) { create(:publication) }

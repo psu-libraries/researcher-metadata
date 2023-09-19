@@ -26,6 +26,8 @@ Rails.application.routes.draw do
   namespace :activity_insight_oa_workflow do
     get '/doi_verification' => 'doi_verification#index'
     get '/file_version_review' => 'file_version_curation#index'
+    get '/wrong_file_version_review' => 'wrong_file_version_curation#index'
+    post '/wrong_file_version_email' => 'wrong_file_version_curation#email_author'
     get '/permissions_review' => 'permissions_curation#index'
     get '/files/:activity_insight_oa_file_id/download' => 'files#download', as: :file_download
     get '/metadata_review' => 'metadata_curation#index'
