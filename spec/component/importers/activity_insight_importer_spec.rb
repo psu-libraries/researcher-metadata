@@ -4946,12 +4946,18 @@ describe ActivityInsightImporter do
           expect(ActivityInsightOAFile.count).to be 3
           expect(f1.location).to eq('abc123/intellcont/file.pdf')
           expect(f1.user).to eq u
+          expect(f1.intellcont_id).to eq '171620739072'
+          expect(f1.post_file_id).to eq '171620739080'
           expect(p1.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(f3.location).to eq('abc123/intellcont/file-5.pdf')
           expect(f3.user).to eq u
+          expect(f3.intellcont_id).to eq '190707482930'
+          expect(f3.post_file_id).to eq '271620739081'
           expect(p3.oa_workflow_state).to eq('automatic DOI verification pending')
           expect(f4.location).to eq('abc123/intellcont/file-6.pdf')
           expect(f4.user).to eq u
+          expect(f4.intellcont_id).to eq '171620739090'
+          expect(f4.post_file_id).to eq '171620739095'
           expect(p4.oa_workflow_state).to eq('automatic DOI verification pending')
         end
 
