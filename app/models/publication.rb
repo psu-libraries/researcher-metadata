@@ -156,7 +156,7 @@ class Publication < ApplicationRecord
   scope :needs_oa_metadata_search,
         -> {
           activity_insight_oa_publication
-            .filter_oa_status_from_workflow
+            .where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid'})
             .where(doi_verified: true)
             .where(%{oa_workflow_state IS DISTINCT FROM 'oa metadata search pending'})
             .where(%{oa_status_last_checked_at IS NULL OR oa_status_last_checked_at < ?}, 1.hour.ago)
