@@ -2,6 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 
 describe 'the publications table', type: :model do
   subject { Publication.new }
@@ -910,6 +911,20 @@ describe Publication, type: :model do
                            checked_for_set_statement: true,
                            open_access_status: nil)
     }
+    let!(:pub14a) { create(:publication,
+                           title: 'pub14a',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'Published or Accepted')
+    }
+    let!(:pub14b) { create(:publication,
+                           title: 'pub14b',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'Published or Accepted')
+    }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
@@ -1057,6 +1072,39 @@ describe Publication, type: :model do
         file_download_location: fixture_file_open('test_file.pdf')
       )
     }
+    let!(:activity_insight_oa_file14a) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14a,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion',
+        license: nil,
+        set_statement: 'statement',
+        embargo_date: Date.today
+      )
+    }
+    let!(:activity_insight_oa_file14b1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14b,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion',
+        license: nil,
+        set_statement: 'statement',
+        embargo_date: Date.today
+      )
+    }
+    let!(:activity_insight_oa_file14b2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14b,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        set_statement: 'statement',
+        embargo_date: Date.today
+      )
+    }
 
     let!(:open_access_location5) { create(:open_access_location, publication: pub5) }
     let!(:open_access_location12) { create(:open_access_location, publication: pub12, source: Source::UNPAYWALL) }
@@ -1094,7 +1142,9 @@ describe Publication, type: :model do
           pub13h,
           pub13i,
           pub13j,
-          pub13k
+          pub13k,
+          pub14a,
+          pub14b
         ]
       end
     end
@@ -1166,6 +1216,12 @@ describe Publication, type: :model do
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
         expect(described_class.needs_manual_preferred_version_check).to match_array [pub9b]
+      end
+    end
+
+    describe '.needs_manual_permissions_review' do
+      it 'returns activity_insight_oa_publications that have a preferred version, matching file(s) with incomplete permissions metadata, and no matching file(s) with complete permissions metadata' do
+        expect(described_class.needs_manual_permissions_review).to match_array [pub14a]
       end
     end
 
