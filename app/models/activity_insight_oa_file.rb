@@ -4,11 +4,7 @@ class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 
-  # TODO:  We ultimately don't want this association to be optional, but
-  # the data will be missing for records that already exist in production,
-  # and we don't want to break anything. Once we have populated all of the
-  # existing production records, then we should make this required.
-  belongs_to :user, optional: true
+  belongs_to :user, required: true
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
