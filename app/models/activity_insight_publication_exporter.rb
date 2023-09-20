@@ -2,6 +2,7 @@
 
 class ActivityInsightPublicationExporter < ActivityInsightExporter
   def initialize(publications, target)
+    super()
     @publications = publications
     # target should be 'beta' or 'production'
     @target = target

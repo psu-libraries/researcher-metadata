@@ -30,7 +30,7 @@ describe AiOAStatusExportJob, type: :job do
 
     context 'when target is production' do
       before { allow(ActivityInsightOAStatusExporter).to receive(:new).with([aif1, aif2], 'production').and_return(exporter) }
-      
+
       it 'calls the ActivityInsightOAStatusExporter' do
         expect(exporter).to receive(:export)
         job.perform_now('production')

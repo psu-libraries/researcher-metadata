@@ -71,17 +71,17 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          open_access_status: 'gold')
     }
     let!(:pub4) { create(:publication,
-      title: 'pub1',
-      open_access_status: 'gold')
+                         title: 'pub1',
+                         open_access_status: 'gold')
     }
     let!(:pub5) { create(:publication,
-      title: 'pub1',
-      open_access_status: 'hybrid')
+                         title: 'pub1',
+                         open_access_status: 'hybrid')
     }
     let!(:pub6) { create(:publication,
-      title: 'pub1',
-      open_access_status: 'gold',
-      exported_oa_status_to_activity_insight: true)
+                         title: 'pub1',
+                         open_access_status: 'gold',
+                         exported_oa_status_to_activity_insight: true)
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
@@ -101,7 +101,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     end
 
     describe '.send_oa_status_to_activity_insight' do
-      it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status ' do
+      it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
         expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9]
       end
     end

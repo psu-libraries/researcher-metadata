@@ -1,8 +1,8 @@
 # frozen_string_literal: true
 
 class ActivityInsightExporter
-    private
-  
+  private
+
     attr_accessor :target
 
     def auth

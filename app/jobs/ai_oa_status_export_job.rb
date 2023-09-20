@@ -6,4 +6,3 @@ class AiOAStatusExportJob < ApplicationJob
     ActivityInsightOAStatusExporter.new(files, target).export
   end
 end
-  
