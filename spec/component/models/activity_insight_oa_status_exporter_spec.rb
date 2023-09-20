@@ -7,8 +7,8 @@ describe ActivityInsightOAStatusExporter do
 
   let!(:user) { create(:user, webaccess_id: 'abc123') }
   let(:aif1) { create(:activity_insight_oa_file, publication: pub1, intellcont_id: '123456789100', post_file_id: '123456789101', user: user) }
-  let(:aif2) { create(:activity_insight_oa_file, publication: pub2, intellcont_id: '123456789100', post_file_id: '123456789101', user: user) }
-  let(:pub1) { create(:publication, open_access_status: 'gold') }
+  let(:aif2) { create(:activity_insight_oa_file, publication: pub2, intellcont_id: '123456789102', post_file_id: '123456789103', user: user) }
+  let(:pub1) { create(:publication, open_access_status: 'gold', id: 123456) }
   let(:pub2) { create(:publication, open_access_status: 'hybrid') }
 
   describe '#to_xml' do
