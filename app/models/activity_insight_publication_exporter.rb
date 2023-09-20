@@ -1,16 +1,15 @@
 # frozen_string_literal: true
 
-class ActivityInsightPublicationExporter
+class ActivityInsightPublicationExporter < ActivityInsightExporter
   def initialize(publications, target)
     @publications = publications
-    # target should be 'beta or 'production'
+    # target should be 'beta' or 'production'
     @target = target
   end
 
   def export
     logger = Logger.new('log/ai_publication_export.log')
-    logger.info "Export to #{target} Activity Insight started at #{DateTime.now}"
-    was_error = false
+    logger.info "Full publication export to #{target} Activity Insight started at #{DateTime.now}"
     not_exported_ids = []
     publications.each do |publication|
       if publication.ai_import_identifiers.present? || publication.exported_to_activity_insight
@@ -23,37 +22,20 @@ class ActivityInsightPublicationExporter
       if response.code != 200
         logger.error Nokogiri::XML(response.to_s).text
         logger.error "Publication ID: #{publication.id}"
-        was_error ||= true
         not_exported_ids << publication.id
       elsif target == 'production'
         publication.exported_to_activity_insight = true
         publication.save!
       end
     end
-    Bugsnag.notify(I18n.t('models.activity_insight_publication_exporter.bugsnag_message')) if was_error
-    logger.info "Export to #{target} Activity Insight ended at #{DateTime.now}"
+
+    logger.info "Full publication export to #{target} Activity Insight ended at #{DateTime.now}"
     logger.info "Publications not exported to AI: #{not_exported_ids}"
   end
 
   private
 
     attr_accessor :publications, :target
-
-    def auth
-      {
-        username: Settings.activity_insight.username,
-        password: Settings.activity_insight.password
-      }
-    end
-
-    def webservice_url
-      case target
-      when 'beta'
-        'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-      when 'production'
-        'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-      end
-    end
 
     def to_xml(publication)
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
