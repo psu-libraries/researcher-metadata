@@ -203,7 +203,6 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          # rubocop:disable Style/SoleNestedConditional
           if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
@@ -217,7 +216,6 @@ class ActivityInsightImporter
               end
             end
           end
-          # rubocop:enable Style/SoleNestedConditional
         end
       rescue StandardError => e
         log_error(pub, e, u)
