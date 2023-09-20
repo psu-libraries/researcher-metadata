@@ -148,8 +148,16 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     context 'when version is "acceptedVersion"' do
       let(:file) { create(:activity_insight_oa_file, version: 'acceptedVersion') }
 
-      it 'returns "Wrong Version"' do
-        expect(file.version_status_display).to eq 'Wrong Version'
+      it 'returns "Accepted Manuscript"' do
+        expect(file.version_status_display).to eq 'Accepted Manuscript'
+      end
+    end
+
+    context 'when version is "publishedVersion"' do
+      let(:file) { create(:activity_insight_oa_file, version: 'publishedVersion') }
+
+      it 'returns "Final Published Version"' do
+        expect(file.version_status_display).to eq 'Final Published Version'
       end
     end
   end

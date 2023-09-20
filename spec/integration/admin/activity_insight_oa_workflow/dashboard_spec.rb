@@ -15,6 +15,7 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       file_download_location: fixture_file_open('test_file.pdf')
     )
   }
+  let!(:aif5) { create(:activity_insight_oa_file, publication: pub5, version: 'publishedVersion') }
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
   let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
@@ -27,6 +28,7 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       embargo_date: Date.current
     )
   }
+  let!(:pub5) { create(:publication, preferred_version: 'acceptedVersion') }
 
   context 'when the current user is an admin' do
     before do
@@ -48,10 +50,17 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       end
     end
 
-    describe 'clicking the link to the File Version Review page' do
-      it 'redirects to the File Version Review page' do
-        click_on 'Review File Versions'
+    describe 'clicking the link to the Unknown File Version Review page' do
+      it 'redirects to the Unknown File Version Review page' do
+        click_on 'Review Unknown File Versions'
         expect(page).to have_current_path activity_insight_oa_workflow_file_version_review_path
+      end
+    end
+
+    describe 'clicking the link to the Wrong File Version Review page' do
+      it 'redirects to the Wrong File Version Review page' do
+        click_on 'Review Wrong File Versions'
+        expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
       end
     end
 
