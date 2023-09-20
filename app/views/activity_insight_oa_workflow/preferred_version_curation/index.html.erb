@@ -23,7 +23,9 @@
                           rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
                           target: '_blank' %>
                   <% else %>
-                    Not Yet Downloaded
+                    <%= link_to 'Not Yet Downloaded',
+                          rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                          target: '_blank' %>
                   <% end %>
                 </li>
               <% end %>
