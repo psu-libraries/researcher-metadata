@@ -202,9 +202,9 @@ class ActivityInsightImporter
           end
 
           activity_insight_file_location = pub.postprints&.first&.location
+          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
           if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
-            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
               file = ActivityInsightOAFile.create(location: activity_insight_file_location, user: u)
               pub_record.activity_insight_oa_files << file
