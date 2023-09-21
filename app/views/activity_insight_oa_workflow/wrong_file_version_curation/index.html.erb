@@ -47,7 +47,9 @@
             </td>
             <td class="file-name">
                 <% if file.stored_file_path.present? %>
-                  <%= link_to "#{file.download_filename}", activity_insight_oa_workflow_file_download_path(file.id) %>
+                  <%= link_to "#{file.download_filename}",
+                              activity_insight_oa_workflow_file_download_path(file.id),
+                              target: '_blank' %>
                 <% else %>
                   Not Found
                 <% end %>
