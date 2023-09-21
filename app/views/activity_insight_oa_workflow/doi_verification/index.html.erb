@@ -20,7 +20,9 @@
           <td>Failed Verification</td>
           <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
                 <% if f.stored_file_path.present? %>
-                  <%= link_to "#{f.download_filename}", activity_insight_oa_workflow_file_download_path(f.id) %>
+                  <%= link_to "#{f.download_filename}",
+                              activity_insight_oa_workflow_file_download_path(f.id),
+                              target: '_blank' %>
                 <% else %>
                   Not Found
                 <% end %>
