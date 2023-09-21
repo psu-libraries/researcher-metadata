@@ -25,7 +25,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'associations' do
     it { is_expected.to belong_to(:publication).inverse_of(:activity_insight_oa_files) }
-    it { is_expected.to belong_to(:user).optional }
+    it { is_expected.to belong_to(:user).required }
   end
 
   describe '#file_download_location' do
