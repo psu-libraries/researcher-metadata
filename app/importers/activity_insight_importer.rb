@@ -204,13 +204,6 @@ class ActivityInsightImporter
           activity_insight_file_location = pub.postprints&.first&.location
           aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
-          # This is only needed to backfill the new user association on existing ActivityInsightOAFile
-          # records. After this has been run once in production, this #update! call can be removed
-          # and the .find_by can be moved back into the conditional below.
-          if aif && aif.user.blank?
-            aif.update!(user: u)
-          end
-
           # This is only needed to backfill the post_file_id and intellcont_id on existing ActivityInsightOAFile
           # records. After this has been run once in production, this #update! call can be removed
           aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
