@@ -39,14 +39,28 @@ describe AiOAWfVersionCheckJob, type: :job do
     end
 
     context 'when an error occurs' do
-      before do
-        allow(ExifFileVersionChecker).to receive(:new).and_return double(version: nil)
-        allow(FileVersionChecker).to receive(:new).and_raise RuntimeError
+      context 'when a non-PDF::Reader error is raised' do
+        before do
+          allow(ExifFileVersionChecker).to receive(:new).and_return double(version: nil)
+          allow(FileVersionChecker).to receive(:new).and_raise RuntimeError
+        end
+
+        it "raises the error and does not update the file version" do
+          expect { job.perform_now(ai_oa_file.id) }.to raise_error RuntimeError
+          expect(ai_oa_file.reload.version).to eq nil
+        end
       end
 
-      it "rescues the error and sets the file's version to unknown" do
-        job.perform_now(ai_oa_file.id)
-        expect(ai_oa_file.reload.version).to eq 'unknown'
+      context 'when a PDF::Reader error is raised' do
+        before do
+          allow(ExifFileVersionChecker).to receive(:new).and_return double(version: nil)
+          allow(FileVersionChecker).to receive(:new).and_raise PDF::Reader::MalformedPDFError
+        end
+
+        it "rescues the error and sets the file version to 'unknown" do
+          job.perform_now(ai_oa_file.id)
+          expect(ai_oa_file.reload.version).to eq 'unknown'
+        end
       end
     end
   end

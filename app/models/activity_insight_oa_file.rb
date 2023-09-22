@@ -83,6 +83,7 @@ class ActivityInsightOAFile < ApplicationRecord
         end
       end
       field(:downloaded)
+      field(:version_checked)
     end
 
     list do
@@ -95,6 +96,7 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:user)
       field(:downloaded)
       field(:download_location_value) { label 'File download' }
+      field(:version_checked)
     end
 
     edit do

@@ -15,8 +15,10 @@ class AiOAWfVersionCheckJob < ApplicationJob
     pdf_file_version = FileVersionChecker.new(file_path: file.file_download_location.path,
                                               publication: file.publication).version
 
-    file.update! version: pdf_file_version
-  rescue StandardError
-    file.update! version: 'unknown'
+    file.update_column :version, pdf_file_version
+  rescue StandardError => e
+    raise e unless e.class.name.start_with?('PDF::Reader::')
+
+    file.update_column :version, 'unknown'
   end
 end
