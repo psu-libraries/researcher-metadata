@@ -596,18 +596,23 @@ class Publication < ApplicationRecord
       locations_to_delete = existing_locations.reject { |l| unpaywall_locations_by_url.key? l.url }
       locations_to_delete.each(&:destroy)
 
-      self.open_access_status = unpaywall_response.oa_status if doi.present? || title_match
+      update_oa_status_from_unpaywall(unpaywall_response)
 
       self.unpaywall_last_checked_at = Time.zone.now
 
       save!
 
-      OpenAccessLocation.create_or_update_from_unpaywall(unpaywall_locations, self)
+      OpenAccessLocation.create_or_update_from_unpaywall(unpaywall_locations, self) if unpaywall_locations.present?
     end
   end
 
   def update_oa_status_from_unpaywall(unpaywall_response)
-    self.open_access_status = doi.present? || unpaywall_response.matchable_title == matchable_title ? unpaywall_response.oa_status : 'unknown'
+    unpaywall_match = doi.present? || unpaywall_response.matchable_title == matchable_title
+    self.open_access_status = if unpaywall_match && unpaywall_response.oa_status.present?
+                                unpaywall_response.oa_status
+                              else
+                                'unknown'
+                              end
   end
 
   private
