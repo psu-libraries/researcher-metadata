@@ -12,22 +12,23 @@ class ActivityInsightOAFile < ApplicationRecord
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
-  scope :oa_type_w_no_locations, -> {
+  scope :subject_to_ai_oa_workflow, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
-      .where(open_access_locations: { publication_id: nil })
+      .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where.not(location: nil)
+      .where.not(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid' OR publication.open_access_status IS NULL})
   }
 
   scope :ready_for_download, -> {
-    oa_type_w_no_locations
+    subject_to_ai_oa_workflow
       .where(file_download_location: nil)
       .where(downloaded: nil)
   }
 
   scope :needs_version_check, -> {
-    oa_type_w_no_locations
+    subject_to_ai_oa_workflow
       .where.not(file_download_location: nil)
       .where(version_checked: nil)
       .where(downloaded: true)

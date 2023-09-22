@@ -56,16 +56,26 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'scopes' do
     let!(:pub1) { create(:publication,
+                         open_access_status: 'closed',
                          title: 'pub1')
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
+                         open_access_status: 'closed',
                          publication_type: 'Trade Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
+                         open_access_status: 'hybrid',
                          open_access_locations: [
-                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                         ])
+    }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         open_access_status: 'closed',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
                          ])
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
@@ -78,10 +88,11 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file8) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true) }
     let!(:file9) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version_checked: true) }
     let!(:file10) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version: 'unknown') }
+    let!(:file11) { create(:activity_insight_oa_file, publication: pub4) }
 
-    describe '.oa_type_w_no_locations' do
-      it 'returns files that have an associated publication of the oa type and have no oa locations' do
-        expect(described_class.oa_type_w_no_locations).to match_array [file1, file5, file6, file8, file9, file10]
+    describe '.subject_to_ai_oa_workflow' do
+      it 'returns files that have an associated publication that is subject to the activity insight oa workflow' do
+        expect(described_class.subject_to_ai_oa_workflow).to match_array [file1, file5, file6, file8, file9, file10]
       end
     end
 
