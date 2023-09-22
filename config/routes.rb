@@ -10,6 +10,10 @@ Rails.application.routes.draw do
     match 'sign_out', to: 'devise/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
   end
 
+  authenticated :user, ->(user) { user.admin? } do
+    mount DelayedJobWeb, at: '/delayed_job'
+  end
+
   namespace :admin do
     post 'duplicate_publication_group/:duplicate_publication_group_id/merge' => 'publication_merges#create', as: :duplicate_publication_group_merge
     delete 'duplicate_publication_group/:id' => 'duplicate_publication_groups#delete', as: :duplicate_publication_group
