@@ -45,9 +45,9 @@ describe AiOAWfVersionCheckJob, type: :job do
           allow(FileVersionChecker).to receive(:new).and_raise RuntimeError
         end
 
-        it "raises the error and does not update the file version" do
+        it 'raises the error and does not update the file version' do
           expect { job.perform_now(ai_oa_file.id) }.to raise_error RuntimeError
-          expect(ai_oa_file.reload.version).to eq nil
+          expect(ai_oa_file.reload.version).to be_nil
         end
       end
 
