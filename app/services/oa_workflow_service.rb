@@ -35,8 +35,7 @@ class OAWorkflowService
     end
 
     ActivityInsightOAFile.needs_version_check.each do |file|
-      file.version_checked = true
-      file.save!
+      file.update_column(:version_checked, true)
       AiOAWfVersionCheckJob.perform_later(file.id)
     rescue StandardError
       file.update_column(:version_checked, false)
