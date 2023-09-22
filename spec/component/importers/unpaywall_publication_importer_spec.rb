@@ -6,20 +6,24 @@ describe UnpaywallPublicationImporter, :vcr do
   let(:importer) { described_class.new }
 
   describe '#import_before' do
-    context 'when we already saw the publication' do 
+    context 'when we already saw the publication' do
       let!(:pub) { create(:publication, unpaywall_last_checked_at: 2.hours.ago, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
-      it 'does not change the publication' do 
+
+      it 'does not change the publication' do
         importer.import_before(date: 3.hours.ago)
         expect(pub.reload.unpaywall_last_checked_at).not_to be_within(1.minute).of(Time.zone.now)
       end
     end
-    context 'when last checked at was before sent date' do 
+
+    context 'when last checked at was before sent date' do
       let!(:pub) { create(:publication, unpaywall_last_checked_at: 3.hours.ago, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
-      it 'does change the publication' do 
+
+      it 'does change the publication' do
         importer.import_before(date: 2.hours.ago)
         expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
       end
     end
+
     context 'when an existing publication does not have a DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
         let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
