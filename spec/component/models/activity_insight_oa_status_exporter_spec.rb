@@ -13,7 +13,7 @@ describe ActivityInsightOAStatusExporter do
 
   describe '#to_xml' do
     it 'generates xml' do
-      exporter_object = exporter.new([], 'beta')
+      exporter_object = exporter.new([])
       expect(exporter_object.send(:to_xml, aif1)).to eq fixture('activity_insight_oa_status_export.xml').read
     end
   end
@@ -22,22 +22,10 @@ describe ActivityInsightOAStatusExporter do
     let(:beta_url) do
       'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
     end
-    let(:production_url) do
-      'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-    end
 
-    context 'when target is "beta"' do
-      it 'returns beta url' do
-        exporter_object = exporter.new([], 'beta')
-        expect(exporter_object.send(:webservice_url)).to eq beta_url
-      end
-    end
-
-    context 'when target is "production"' do
-      it 'returns production url' do
-        exporter_object = exporter.new([], 'production')
-        expect(exporter_object.send(:webservice_url)).to eq production_url
-      end
+    it 'returns beta url' do
+      exporter_object = exporter.new([])
+      expect(exporter_object.send(:webservice_url)).to eq beta_url
     end
   end
 
@@ -56,7 +44,7 @@ describe ActivityInsightOAStatusExporter do
       end
 
       it 'logs DM webservice responses' do
-        exporter_object = exporter.new([aif1], 'beta')
+        exporter_object = exporter.new([aif1])
         allow(HTTParty).to receive(:post).and_return response
         expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
         expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF|File ID: #{aif1.id}/).twice
@@ -71,24 +59,12 @@ describe ActivityInsightOAStatusExporter do
                to_s: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Success/>\n"
       end
 
-      context 'when exporting to beta' do
-        it 'does not log any errors and does not update #exported_oa_status_to_activity_insight' do
-          exporter_object = exporter.new([aif1], 'beta')
-          allow(HTTParty).to receive(:post).and_return response
-          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
-          expect_any_instance_of(Logger).not_to receive(:error)
-          expect { exporter_object.export }.not_to change(pub1, :exported_oa_status_to_activity_insight)
-        end
-      end
-
-      context 'when exporting to production' do
-        it 'does not log any errors and updates #exported_oa_status_to_activity_insight' do
-          exporter_object = exporter.new([aif1], 'production')
-          allow(HTTParty).to receive(:post).and_return response
-          expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
-          expect_any_instance_of(Logger).not_to receive(:error)
-          expect { exporter_object.export }.to change(pub1, :exported_oa_status_to_activity_insight).to true
-        end
+      it 'does not log any errors and updates #exported_oa_status_to_activity_insight' do
+        exporter_object = exporter.new([aif1])
+        allow(HTTParty).to receive(:post).and_return response
+        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
+        expect_any_instance_of(Logger).not_to receive(:error)
+        expect { exporter_object.export }.to change(pub1, :exported_oa_status_to_activity_insight).to true
       end
     end
   end

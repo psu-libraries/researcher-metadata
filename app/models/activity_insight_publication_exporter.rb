@@ -91,4 +91,13 @@ class ActivityInsightPublicationExporter < ActivityInsightExporter
       end
       builder.to_xml
     end
+
+    def webservice_url
+      case target
+      when 'beta'
+        'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      when 'production'
+        'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
+      end
+    end
 end

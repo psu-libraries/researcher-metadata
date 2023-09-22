@@ -3,8 +3,6 @@
 class ActivityInsightExporter
   private
 
-    attr_accessor :target
-
     def auth
       {
         username: Settings.activity_insight.username,
@@ -13,11 +11,6 @@ class ActivityInsightExporter
     end
 
     def webservice_url
-      case target
-      when 'beta'
-        'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-      when 'production'
-        'https://webservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
-      end
+      # Url is defined in the child class
     end
 end

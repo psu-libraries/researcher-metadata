@@ -19,22 +19,11 @@ describe AiOAStatusExportJob, type: :job do
     let(:pub2) { create(:publication, open_access_status: 'hybrid', exported_oa_status_to_activity_insight: nil) }
     let(:exporter) { instance_double ActivityInsightOAStatusExporter }
 
-    context 'when target is beta' do
-      before { allow(ActivityInsightOAStatusExporter).to receive(:new).with([aif1, aif2], 'beta').and_return(exporter) }
+    before { allow(ActivityInsightOAStatusExporter).to receive(:new).with([aif1, aif2]).and_return(exporter) }
 
-      it 'calls the ActivityInsightOAStatusExporter' do
-        expect(exporter).to receive(:export)
-        job.perform_now('beta')
-      end
-    end
-
-    context 'when target is production' do
-      before { allow(ActivityInsightOAStatusExporter).to receive(:new).with([aif1, aif2], 'production').and_return(exporter) }
-
-      it 'calls the ActivityInsightOAStatusExporter' do
-        expect(exporter).to receive(:export)
-        job.perform_now('production')
-      end
+    it 'calls the ActivityInsightOAStatusExporter' do
+      expect(exporter).to receive(:export)
+      job.perform_now
     end
   end
 end
