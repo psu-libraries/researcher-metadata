@@ -21,8 +21,9 @@ class ActivityInsightOAFile < ApplicationRecord
                                                left_outer_joins(:publication)
                                                  .where(publication: { publication_type: Publication.oa_publication_types })
                                                  .left_outer_joins(publication: :open_access_locations)
-                                                 .where(open_access_locations: { publication_id: nil })
-                                                 .where(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid'})
+                                                 .where(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid'
+                                                  OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
+                                                  AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                                  .where(publication: { exported_oa_status_to_activity_insight: nil })
                                              }
 

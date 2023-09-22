@@ -68,7 +68,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
                          ],
-                         open_access_status: 'gold')
+                         open_access_status: 'green')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub1',
@@ -83,6 +83,13 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          open_access_status: 'gold',
                          exported_oa_status_to_activity_insight: true)
     }
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ],
+                         open_access_status: 'green')
+    }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
@@ -93,6 +100,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4, downloaded: true) }
     let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
     let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true) }
+    let!(:file11) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
@@ -102,7 +110,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.send_oa_status_to_activity_insight' do
       it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
-        expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9]
+        expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9, file11]
       end
     end
   end
