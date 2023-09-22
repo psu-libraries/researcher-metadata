@@ -4,7 +4,7 @@ class UnpaywallPublicationImporter
   def import_before(date: Time.now)
     count = Publication.where(unpaywall_last_checked_at: nil..date).count
     Rails.logger.info("Starting to import #{count} records from unpaywall")
-    Publication.where(unpaywall_last_checked_at: nil..date).find_in_batches(batch_size: 500) do |publications|
+    Publication.where(unpaywall_last_checked_at: nil..date).or(Publication.where(unpaywall_last_checked_at: nil)).find_in_batches(batch_size: 500) do |publications|
       publications.each do |p|
         import_from_unpaywall(p)
       end
