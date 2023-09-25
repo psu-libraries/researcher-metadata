@@ -192,10 +192,10 @@ class Publication < ApplicationRecord
       .where.not(preferred_version: nil)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(
-        <<-SQL
+        <<-SQL.squish
           NOT EXISTS (
-            SELECT id FROM activity_insight_oa_files 
-            WHERE activity_insight_oa_files.publication_id = publications.id 
+            SELECT id FROM activity_insight_oa_files
+            WHERE activity_insight_oa_files.publication_id = publications.id
               AND (
                 publications.preferred_version = activity_insight_oa_files.version
                 OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
@@ -249,19 +249,21 @@ class Publication < ApplicationRecord
       )
   }
   scope :ready_for_metadata_review, -> {
-    # TODO:  This query is no longer correct, and it will need to be changed both to check for
-    # permissions metadata on the files rather than on the publications and to correctly match the
-    # file version when the publication's preferred version is 'Published or Accepted'.
     activity_insight_oa_publication
+      .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
       .where(
         <<-SQL.squish
           EXISTS (
             SELECT id FROM activity_insight_oa_files
             WHERE activity_insight_oa_files.publication_id = publications.id
-              AND publications.preferred_version = activity_insight_oa_files.version
-              AND publications.licence IS NOT NULL
-              AND (publications.set_statement IS NOT NULL OR publications.checked_for_set_statement IS TRUE)
-              AND (publications.embargo_date IS NOT NULL OR publications.checked_for_embargo_date IS TRUE)
+              AND (
+                preferred_version = activity_insight_oa_files.version
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+              )
+              AND activity_insight_oa_files.license IS NOT NULL
+              AND (activity_insight_oa_files.set_statement IS NOT NULL OR activity_insight_oa_files.checked_for_set_statement IS TRUE)
+              AND (activity_insight_oa_files.embargo_date IS NOT NULL OR activity_insight_oa_files.checked_for_embargo_date IS TRUE)
               AND activity_insight_oa_files.downloaded IS TRUE
               AND activity_insight_oa_files.file_download_location IS NOT NULL
               AND (open_access_status != 'gold' AND open_access_status != 'hybrid' AND open_access_status IS NOT NULL)

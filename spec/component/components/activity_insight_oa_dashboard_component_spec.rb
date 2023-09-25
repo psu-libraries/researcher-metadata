@@ -175,10 +175,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     let(:pub1) {
       create(
         :publication,
-        preferred_version: 'acceptedVersion',
-        licence: 'license',
-        set_statement: 'statement',
-        embargo_date: Date.current
+        preferred_version: 'acceptedVersion'
       )
     }
     let(:pub2) { create(:publication) }
@@ -187,6 +184,9 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
         :activity_insight_oa_file,
         publication: pub1,
         version: 'acceptedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        checked_for_set_statement: true,
+        checked_for_embargo_date: true,
         downloaded: true,
         file_download_location: fixture_file_open('test_file.pdf')
       )

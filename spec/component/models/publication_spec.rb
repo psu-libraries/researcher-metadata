@@ -631,122 +631,70 @@ describe Publication, type: :model do
     }
     let!(:pub8) { create(:publication,
                          title: 'pub8',
-                         licence: nil,
                          doi_verified: true)
     }
     let!(:pub8b) { create(:publication,
                           title: 'pub8b',
-                          licence: nil,
                           doi_verified: true,
                           open_access_status: 'hybrid')
     }
     let!(:pub9a) { create(:publication,
                           title: 'pub9a',
-                          licence: nil,
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: true,
-                          checked_for_set_statement: true,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9b) { create(:publication,
                           title: 'pub9b',
-                          licence: 'license',
                           preferred_version: nil,
-                          set_statement: 'statement',
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: true,
-                          checked_for_set_statement: true,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9c) { create(:publication,
                           title: 'pub9c',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: nil,
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: true,
-                          checked_for_set_statement: true,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9d) { create(:publication,
                           title: 'pub9d',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: nil,
-                          checked_for_embargo_date: true,
-                          checked_for_set_statement: true,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9e) { create(:publication,
                           title: 'pub9e',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: false,
-                          checked_for_set_statement: true,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9f) { create(:publication,
                           title: 'pub9f',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: true,
-                          checked_for_set_statement: false,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9g) { create(:publication,
                           title: 'pub9g',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: nil,
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: false,
-                          checked_for_set_statement: false,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9h) { create(:publication,
                           title: 'pub9h',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: nil,
-                          checked_for_embargo_date: false,
-                          checked_for_set_statement: false,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9i) { create(:publication,
                           title: 'pub9i',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: 'statement',
-                          embargo_date: nil,
-                          checked_for_embargo_date: nil,
-                          checked_for_set_statement: nil,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
     let!(:pub9j) { create(:publication,
                           title: 'pub9j',
-                          licence: 'license',
                           preferred_version: 'acceptedVersion',
-                          set_statement: nil,
-                          embargo_date: Date.current,
-                          checked_for_embargo_date: nil,
-                          checked_for_set_statement: nil,
                           doi_verified: true,
                           permissions_last_checked_at: DateTime.now)
     }
@@ -770,145 +718,75 @@ describe Publication, type: :model do
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
-                           licence: 'license',
                            preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil,
                            open_access_status: 'gold')
     }
     let!(:pub13b) { create(:publication,
                            title: 'pub13b',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'Published or Accepted')
     }
     let!(:pub13c) { create(:publication,
                            title: 'pub13c',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: nil,
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'publishedVersion')
     }
     let!(:pub13d) { create(:publication,
                            title: 'pub13d',
                            publication_type: 'Journal Article',
-                           licence: nil,
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'Published or Accepted')
     }
     let!(:pub13e) { create(:publication,
                            title: 'pub13e',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: nil,
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13f) { create(:publication,
                            title: 'pub13f',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: nil,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13g) { create(:publication,
                            title: 'pub13g',
                            publication_type: 'Journal Article',
-                           licence: 'license',
                            preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: nil,
-                           checked_for_embargo_date: true,
-                           checked_for_set_statement: nil,
                            open_access_status: 'hybrid')
     }
     let!(:pub13h) { create(:publication,
                            title: 'pub13h',
                            publication_type: 'Journal Article',
-                           licence: 'license',
                            preferred_version: 'acceptedVersion',
-                           set_statement: nil,
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: true,
                            open_access_status: 'green')
     }
     let!(:pub13i) { create(:publication,
                            title: 'pub13i',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13j) { create(:publication,
                            title: 'pub13j',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13k) { create(:publication,
                            title: 'pub13k',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: nil,
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: nil)
     }
     let!(:pub13l) { create(:publication,
                            title: 'pub13l',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13m) { create(:publication,
                            title: 'pub13m',
                            publication_type: 'Journal Article',
-                           licence: 'license',
-                           preferred_version: 'acceptedVersion',
-                           set_statement: 'statement',
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: nil)
+                           preferred_version: 'acceptedVersion')
     }
     let!(:pub13n) { create(:publication,
                            title: 'pub13n',
                            publication_type: 'Journal Article',
-                           licence: 'license',
                            preferred_version: 'acceptedVersion',
-                           set_statement: nil,
-                           embargo_date: Date.current,
-                           checked_for_embargo_date: nil,
-                           checked_for_set_statement: true,
                            open_access_status: nil)
     }
     let!(:pub14a) { create(:publication,
@@ -959,6 +837,9 @@ describe Publication, type: :model do
         :activity_insight_oa_file,
         publication: pub13a,
         version: 'acceptedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        set_statement: 'statement',
+        embargo_date: Date.today,
         downloaded: true,
         file_download_location: fixture_file_open('test_file.pdf')
       )
@@ -968,6 +849,9 @@ describe Publication, type: :model do
         :activity_insight_oa_file,
         publication: pub13b,
         version: 'publishedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        set_statement: 'statement',
+        embargo_date: Date.today,
         downloaded: true,
         file_download_location: fixture_file_open('test_file.pdf')
       )
@@ -976,7 +860,10 @@ describe Publication, type: :model do
       create(
         :activity_insight_oa_file,
         publication: pub13c,
-        version: 'acceptedVersion',
+        version: 'publishedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        set_statement: 'statement',
+        embargo_date: Date.today,
         downloaded: true,
         file_download_location: fixture_file_open('test_file.pdf')
       )
@@ -985,89 +872,9 @@ describe Publication, type: :model do
       create(
         :activity_insight_oa_file,
         publication: pub13d,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13e) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13e,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13f) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13f,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13g) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13g,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13h) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13h,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13i) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13i,
-        version: 'acceptedVersion',
-        downloaded: nil,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13j) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13j,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: nil
-      )
-    }
-    let!(:activity_insight_oa_file13k) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13k,
-        version: nil,
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13l) {
-      create(
-        :activity_insight_oa_file,
-        location: nil,
-        publication: pub13l,
-        version: 'acceptedVersion',
-        downloaded: true,
-        file_download_location: fixture_file_open('test_file.pdf')
-      )
-    }
-    let!(:activity_insight_oa_file13m) {
-      create(
-        :activity_insight_oa_file,
-        publication: pub13m,
-        version: 'acceptedVersion',
+        version: 'publishedVersion',
+        license: 'https://creativecommons.org/licenses/by/4.0/',
+        embargo_date: Date.today,
         downloaded: true,
         file_download_location: fixture_file_open('test_file.pdf')
       )
@@ -1136,13 +943,6 @@ describe Publication, type: :model do
           pub13b,
           pub13c,
           pub13d,
-          pub13e,
-          pub13f,
-          pub13g,
-          pub13h,
-          pub13i,
-          pub13j,
-          pub13k,
           pub14a,
           pub14b
         ]
@@ -1164,14 +964,7 @@ describe Publication, type: :model do
           pub13a,
           pub13b,
           pub13c,
-          pub13d,
-          pub13e,
-          pub13f,
-          pub13g,
-          pub13h,
-          pub13i,
-          pub13j,
-          pub13k
+          pub13d
         ]
       end
     end
@@ -1184,7 +977,7 @@ describe Publication, type: :model do
 
     describe '.wrong_file_version' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
-        expect(described_class.wrong_file_version).to match_array [pub12, pub13b]
+        expect(described_class.wrong_file_version).to match_array [pub12]
       end
     end
 
@@ -1220,14 +1013,18 @@ describe Publication, type: :model do
     end
 
     describe '.needs_manual_permissions_review' do
+      # TODO:  Ideally, we should create more records to exercise more of the logic in the
+      # SQL query for this scope.
       it 'returns activity_insight_oa_publications that have a preferred version, matching file(s) with incomplete permissions metadata, and no matching file(s) with complete permissions metadata' do
         expect(described_class.needs_manual_permissions_review).to match_array [pub14a]
       end
     end
 
     describe '.ready_for_metadata_review' do
+      # TODO:  Ideally, we should create more records to exercise more of the logic in the
+      # SQL query for this scope.
       it 'returns activity_insight_oa_publications with a preferred version and a downloaded file that matches the preferred version' do
-        expect(described_class.ready_for_metadata_review).to match_array [pub13h]
+        expect(described_class.ready_for_metadata_review).to match_array [pub13b, pub13c]
       end
     end
   end

@@ -11,6 +11,9 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       :activity_insight_oa_file,
       publication: pub4,
       version: 'acceptedVersion',
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      checked_for_set_statement: true,
+      embargo_date: Date.today,
       downloaded: true,
       file_download_location: fixture_file_open('test_file.pdf')
     )
@@ -19,14 +22,7 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
   let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
-  let!(:pub4) {
-    create(
-      :publication,
-      preferred_version: 'acceptedVersion',
-      licence: 'license',
-      set_statement: 'statement',
-      embargo_date: Date.current
-    )
+  let!(:pub4) { create(:publication, preferred_version: 'acceptedVersion')
   }
   let!(:pub5) { create(:publication, preferred_version: 'acceptedVersion') }
 
