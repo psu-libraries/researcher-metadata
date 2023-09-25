@@ -32,8 +32,9 @@ describe FetchOAMetadataJob, type: :job do
       before { job.perform_now(pub.id) }
 
       it 'updates publication with unpaywall open access information' do
-        expect(pub.reload.open_access_locations.where(source: Source::UNPAYWALL)).not_to eq []
-        expect(pub.reload.open_access_status).to eq 'green'
+        reloaded_pub = pub.reload
+        expect(reloaded_pub.open_access_locations.where(source: Source::UNPAYWALL)).not_to eq []
+        expect(reloaded_pub.open_access_status).to eq 'green'
       end
 
       it "updates publication's unpaywall last checked at" do
@@ -51,10 +52,11 @@ describe FetchOAMetadataJob, type: :job do
       end
 
       it 'updates the publication oa status & unpaywall last checked at, oa status, and workflow state' do
-        expect(pub.reload.open_access_status).to eq 'unknown'
-        expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-        expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-        expect(pub.reload.oa_workflow_state).to be_nil
+        reloaded_pub = pub.reload
+        expect(reloaded_pub.open_access_status).to eq 'unknown'
+        expect(reloaded_pub.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        expect(reloaded_pub.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        expect(reloaded_pub.oa_workflow_state).to be_nil
       end
     end
 
@@ -75,9 +77,10 @@ describe FetchOAMetadataJob, type: :job do
         expect(pub.reload.open_access_locations.where(source: Source::SCHOLARSPHERE)).to eq []
       end
 
-      it 'updates the publication oa status & unpaywall last checked at, oa status, and workflow state' do
-        expect(pub.reload.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-        expect(pub.reload.oa_workflow_state).to be_nil
+      it 'updates the OA status check timestamp and clears the OA workflow state' do
+        reloaded_pub = pub.reload
+        expect(reloaded_pub.oa_status_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+        expect(reloaded_pub.oa_workflow_state).to be_nil
       end
     end
   end

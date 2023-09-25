@@ -3841,7 +3841,7 @@ describe Publication, type: :model do
                                       build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
                                     ]) }
 
-        it 'returns false' do
+        it 'returns true' do
           expect(publication.can_receive_new_ai_oa_files?).to be true
         end
       end
