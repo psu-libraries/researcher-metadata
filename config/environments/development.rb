@@ -33,7 +33,7 @@ Rails.application.configure do
   else
     config.action_controller.perform_caching = false
 
-    config.cache_store = :null_store
+    config.cache_store = :file_store, ENV.fetch('RAILS_CACHE_PATH', Rails.root.join('tmp', 'cache'))
   end
 
   # Store uploaded files on the local file system (see config/storage.yml for options).

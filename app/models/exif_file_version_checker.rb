@@ -1,9 +1,8 @@
 # frozen_string_literal: true
 
-require 'pdf-reader'
 require 'exiftool_vendored'
 
-class ScholarsphereExifFileVersion
+class ExifFileVersionChecker
   def initialize(file_path:, journal:)
     @file_path = file_path
     @journal = journal
@@ -19,6 +18,10 @@ class ScholarsphereExifFileVersion
                    I18n.t('file_versions.accepted_version')
                  elsif published?
                    I18n.t('file_versions.published_version')
+                 # LaTeX formats papers like a published version, but it's often used for both accepted and published
+                 # versions.  This makes it too confusing for our checkers to determine, so default to 'unknown'.
+                 elsif latex?
+                   'unknown'
                  end
   end
 
@@ -26,6 +29,11 @@ class ScholarsphereExifFileVersion
 
     def exif
       @exif ||= Exiftool.new(@file_path).to_hash
+    end
+
+    def latex?
+      (!exif[:creator].nil? && exif[:creator].to_s.downcase.include?('latex')) ||
+        (!exif[:creator_tool].nil? && exif[:creator_tool].to_s.downcase.include?('latex'))
     end
 
     def accepted?

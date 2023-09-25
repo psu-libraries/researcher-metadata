@@ -46,7 +46,8 @@ namespace :import do
 
   desc 'Import Unpaywall publication metadata'
   task unpaywall: :environment do
-    UnpaywallPublicationImporter.new.import_all
+    time_started_at = ENV.fetch('ARGO_SUBMITTED_AT', Time.now)
+    UnpaywallPublicationImporter.new.import_before(date: time_started_at)
   end
 
   desc 'Import Unpaywall publication metadata for publications that have not been checked before'

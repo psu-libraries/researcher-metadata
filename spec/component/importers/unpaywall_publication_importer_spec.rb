@@ -5,39 +5,57 @@ require 'component/component_spec_helper'
 describe UnpaywallPublicationImporter, :vcr do
   let(:importer) { described_class.new }
 
-  describe '#import_all' do
+  describe '#import_before' do
+    context 'when we already saw the publication' do
+      let!(:pub) { create(:publication, unpaywall_last_checked_at: 2.hours.ago, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
+
+      it 'does not change the publication' do
+        importer.import_before(date: 3.hours.ago)
+        expect(pub.reload.unpaywall_last_checked_at).not_to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
+    context 'when last checked at was before sent date' do
+      let!(:pub) { create(:publication, unpaywall_last_checked_at: 3.hours.ago, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
+
+      it 'does change the publication' do
+        importer.import_before(date: 2.hours.ago)
+        expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      end
+    end
+
     context 'when an existing publication does not have a DOI' do
       context 'when the title exactly matches an article listed with Unpaywall' do
         let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         context 'when the Unpaywall response has a DOI' do
           it 'creates a new open access location for the publication' do
-            expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+            expect { importer.import_before }.to change { pub.open_access_locations.count }.by 2
           end
 
           it 'assigns the metadata from Unpaywall to the new open access location' do
-            importer.import_all
+            importer.import_before
             oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
             expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
           it 'updates the open access status on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.open_access_status).to eq 'green'
           end
 
           it 'assigns the DOI from Unpaywall to the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
           end
 
           it 'updates the doi verification status on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi_verified).to be true
           end
         end
@@ -45,17 +63,17 @@ describe UnpaywallPublicationImporter, :vcr do
         context 'when the Unpaywall response does not have a doi' do
           # removed DOI from cassettes
           it 'does not update the DOI on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi).to be_nil
           end
 
           it 'does not update the DOI verification status on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi_verified).to be_nil
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
         end
@@ -65,26 +83,26 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
         end
 
         it "updates the publication's Unpaywall check timestamp" do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
 
         it 'does not update the DOI on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to be_nil
         end
 
         it 'does not update the DOI verification on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).not_to be true
         end
       end
@@ -95,32 +113,32 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
-          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+          expect { importer.import_before }.to change { pub.open_access_locations.count }.by 2
         end
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
-          importer.import_all
+          importer.import_before
           oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'green'
         end
 
         it 'assigns the DOI from Unpaywall to the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
 
         it 'updates the doi verification status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).to be true
         end
       end
@@ -129,26 +147,26 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
         end
 
         it "updates the publication's Unpaywall check timestamp" do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
 
         it 'does not update the DOI on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to eq ''
         end
 
         it 'does not update the DOI verification on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).not_to be true
         end
       end
@@ -158,7 +176,7 @@ describe UnpaywallPublicationImporter, :vcr do
       let!(:pub) { create(:publication, doi: 'https://doi.org/10.000/nodata') }
 
       it 'does not raise an error' do
-        expect { importer.import_all }.not_to raise_error
+        expect { importer.import_before }.not_to raise_error
       end
     end
 
@@ -168,22 +186,22 @@ describe UnpaywallPublicationImporter, :vcr do
 
       context 'when the publication has no open access locations' do
         it 'creates a new open access location for the publication' do
-          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 1
+          expect { importer.import_before }.to change { pub.open_access_locations.count }.by 1
         end
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
-          importer.import_all
+          importer.import_before
           oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'https://jamanetwork.com/journals/jamadermatology/articlepdf/2471551/doi150042.pdf'
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'bronze'
         end
       end
@@ -193,7 +211,7 @@ describe UnpaywallPublicationImporter, :vcr do
                             doi: 'https://doi.org/10.1001/jamadermatol.2015.3091') }
 
         it 'creates multiple open access locations in RMD' do
-          expect { importer.import_all }.to change(OpenAccessLocation, :count).by 2
+          expect { importer.import_before }.to change(OpenAccessLocation, :count).by 2
         end
       end
 
@@ -214,11 +232,11 @@ describe UnpaywallPublicationImporter, :vcr do
           }
 
           it 'does not create any new open access locations' do
-            expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+            expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
           end
 
           it 'updates the matching open access location with the new metadata from Unpaywall' do
-            importer.import_all
+            importer.import_before
 
             oal.reload
 
@@ -234,12 +252,12 @@ describe UnpaywallPublicationImporter, :vcr do
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
           it 'updates the open access status on the publication' do
-            importer.import_all
+            importer.import_before
             pub.reload
             expect(pub.open_access_status).to eq 'bronze'
           end
@@ -260,7 +278,7 @@ describe UnpaywallPublicationImporter, :vcr do
                               version: '1.0') }
 
           it 'adds a new open access location with the data from Unpaywall' do
-            expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+            expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
 
             oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
 
@@ -276,18 +294,18 @@ describe UnpaywallPublicationImporter, :vcr do
           end
 
           it 'removes the existing open access location from RMD' do
-            importer.import_all
+            importer.import_before
 
             expect { oal.reload }.to raise_error(ActiveRecord::RecordNotFound)
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
           it 'updates the open access status on the publication' do
-            importer.import_all
+            importer.import_before
             pub.reload
             expect(pub.open_access_status).to eq 'bronze'
           end
@@ -299,22 +317,22 @@ describe UnpaywallPublicationImporter, :vcr do
                             doi: 'https://doi.org/10.1641/0006-3568(2005)055[0851:POTAPF]2.0.CO;2') }
 
         it 'creates a new open access location for the publication' do
-          expect { importer.import_all }.to change { pub.reload.open_access_locations.count }.by 1
+          expect { importer.import_before }.to change { pub.reload.open_access_locations.count }.by 1
         end
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
-          importer.import_all
+          importer.import_before
           oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'https://academic.oup.com/bioscience/article-pdf/55/10/851/26896247/55-10-851.pdf'
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           pub.reload
           expect(pub.open_access_status).to eq 'bronze'
         end
@@ -327,16 +345,16 @@ describe UnpaywallPublicationImporter, :vcr do
 
       context 'when the publication has no open access locations' do
         it 'does not create any new open access locations' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
       end
@@ -348,17 +366,17 @@ describe UnpaywallPublicationImporter, :vcr do
                             source: Source::UNPAYWALL) }
 
         it 'removes the existing open access location' do
-          expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
+          expect { importer.import_before }.to change(OpenAccessLocation, :count).by -1
           expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
       end
@@ -373,7 +391,7 @@ describe UnpaywallPublicationImporter, :vcr do
       end
 
       it 'logs the error' do
-        importer.import_all
+        importer.import_before
 
         expect(ImporterErrorLog)
           .to have_received(:log_error)
@@ -390,7 +408,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
       it 'continues with the import' do
         create(:publication, doi: 'https://doi.org/10.000/nodata')
-        importer.import_all
+        importer.import_before
         expect(ImporterErrorLog).to have_received(:log_error).twice
       end
     end
@@ -405,7 +423,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     it 'logs the error' do
-      importer.import_all
+      importer.import_before
 
       expect(ImporterErrorLog)
         .to have_received(:log_error)
@@ -422,7 +440,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
     it 'continues with the import' do
       create(:publication, doi: 'https://doi.org/10.000/nodata')
-      importer.import_all
+      importer.import_before
       expect(ImporterErrorLog).to have_received(:log_error).twice
     end
   end
@@ -437,7 +455,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     it 'logs the error' do
-      importer.import_all
+      importer.import_before
 
       expect(ImporterErrorLog)
         .to have_received(:log_error)
@@ -464,7 +482,7 @@ describe UnpaywallPublicationImporter, :vcr do
 
     it 'rolls back any db changes' do
       expect {
-        importer.import_all
+        importer.import_before
       }.not_to change(OpenAccessLocation, :count)
     end
   end
@@ -480,7 +498,7 @@ describe UnpaywallPublicationImporter, :vcr do
     end
 
     it 'rolls back any db changes' do
-      importer.import_all
+      importer.import_before
       expect(pub.reload.unpaywall_last_checked_at).to be_nil
     end
   end
@@ -492,32 +510,32 @@ describe UnpaywallPublicationImporter, :vcr do
 
         context 'when the Unpaywall response has a DOI' do
           it 'creates a new open access location for the publication' do
-            expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+            expect { importer.import_before }.to change { pub.open_access_locations.count }.by 2
           end
 
           it 'assigns the metadata from Unpaywall to the new open access location' do
-            importer.import_all
+            importer.import_before
             oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
             expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
           it 'updates the open access status on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.open_access_status).to eq 'green'
           end
 
           it 'assigns the DOI from Unpaywall to the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
           end
 
           it 'updates the DOI verification on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi_verified).to be true
           end
         end
@@ -525,17 +543,17 @@ describe UnpaywallPublicationImporter, :vcr do
         context 'when the Unpaywall response does not have a doi' do
           # removed DOI from cassettes
           it 'does not update the DOI on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi).to be_nil
           end
 
           it 'does not update the DOI verification status on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.doi_verified).to be_nil
           end
 
           it 'updates Unpaywall check timestamp on the publication' do
-            importer.import_all
+            importer.import_before
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
         end
@@ -545,26 +563,26 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: nil, open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
         end
 
         it "updates the publication's Unpaywall check timestamp" do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
 
         it 'does not update the DOI on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to be_nil
         end
 
         it 'does not update the DOI verification on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).not_to be true
         end
       end
@@ -575,32 +593,32 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'creates a new open access location for the publication' do
-          expect { importer.import_all }.to change { pub.open_access_locations.count }.by 2
+          expect { importer.import_before }.to change { pub.open_access_locations.count }.by 2
         end
 
         it 'assigns the metadata from Unpaywall to the new open access location' do
-          importer.import_all
+          importer.import_before
           oal = pub.open_access_locations.find_by(source: Source::UNPAYWALL)
           expect(oal.url).to eq 'http://arxiv.org/pdf/gr-qc/9801069'
         end
 
         it 'updates Unpaywall check timestamp on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'updates the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'green'
         end
 
         it 'assigns the DOI from Unpaywall to the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
         end
 
         it 'updates the DOI verification on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).to be true
         end
       end
@@ -609,26 +627,26 @@ describe UnpaywallPublicationImporter, :vcr do
         let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Economic Development') }
 
         it 'does not create any open access locations for the publication' do
-          expect { importer.import_all }.not_to change(OpenAccessLocation, :count)
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
         end
 
         it "updates the publication's Unpaywall check timestamp" do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
         it 'does not update the open access status on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to be_nil
         end
 
         it 'does not update the DOI from Unpaywall to the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi).to eq ''
         end
 
         it 'does not update the DOI verification on the publication' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.doi_verified).not_to be true
         end
       end
@@ -751,7 +769,7 @@ describe UnpaywallPublicationImporter, :vcr do
                               source: Source::UNPAYWALL) }
 
           it 'removes the existing open access location' do
-            expect { importer.import_all }.to change(OpenAccessLocation, :count).by -1
+            expect { importer.import_before }.to change(OpenAccessLocation, :count).by -1
             expect { oal.reload }.to raise_error ActiveRecord::RecordNotFound
           end
 
