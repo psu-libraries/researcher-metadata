@@ -47,9 +47,9 @@ class FileVersionChecker
         rescue StandardError
           next
         end
-      rescue StandardError => e
-        raise e unless e.class.name.start_with?('PDF::Reader::')
-
+      rescue PDF::Reader::MalformedPDFError,
+             PDF::Reader::InvalidObjectError,
+             PDF::Reader::EncryptedPDFError
         return ''
       end
 
