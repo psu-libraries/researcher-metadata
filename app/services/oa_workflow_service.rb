@@ -33,5 +33,7 @@ class OAWorkflowService
     rescue StandardError
       file.update_column(:downloaded, false)
     end
+
+    AiOAStatusExportJob.perform_later
   end
 end

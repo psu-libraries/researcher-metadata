@@ -42,6 +42,13 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
+    before { allow(AiOAStatusExportJob).to receive(:perform_later) }
+
+    it 'calls the AiOAStatusExportJob' do
+      service.workflow
+      expect(AiOAStatusExportJob).to have_received(:perform_later)
+    end
+
     context 'when publications need doi verification' do
       before do
         allow(PermissionsCheckJob).to receive(:perform_later)
