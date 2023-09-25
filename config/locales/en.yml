@@ -213,6 +213,8 @@ en:
       wrong_file_version_curation_description: Publications that do not have an unknown file version or correct version after automated file version checking.
       preferred_version_curation_title: Review Preferred Version
       preferred_version_curation_description: Publications that require manual check for preferred version.
+      permissions_curation_title: Review File Permissions
+      permissions_curation_description: Publications with a file that can be deposited that does not have all required permissions metadata.
       metadata_curation_title: Review Publication Metadata
       metadata_curation_description: Publications that have a file which can be deposited and that are ready for a final metadata check prior to submission to ScholarSphere.
       all_workflow_publications_title: All Publications

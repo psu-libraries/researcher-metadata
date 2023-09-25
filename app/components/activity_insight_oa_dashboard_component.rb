@@ -17,6 +17,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.needs_manual_preferred_version_check.count
   end
 
+  def needs_manual_permissions_review_count
+    Publication.needs_manual_permissions_review.count
+  end
+
   def ready_for_metadata_review_count
     Publication.ready_for_metadata_review.count
   end

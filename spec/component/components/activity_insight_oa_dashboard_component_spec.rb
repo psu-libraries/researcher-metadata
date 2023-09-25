@@ -157,6 +157,50 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when no publications have files that need manual permissions metadata review' do
+    let(:pub1) { create(:publication) }
+    let(:pub2) { create(:publication) }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('permissions-review-card').to_json).to include('text-muted')
+      expect(page.find_by_id('permissions-review-card').text).to include('0')
+      expect(rendered_component).not_to have_link(
+        href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_permissions_review_path
+      )
+    end
+  end
+
+  context 'when publications have files that need manual permissions metadata review' do
+    let(:pub1) {
+      create(
+        :publication,
+        preferred_version: 'acceptedVersion'
+      )
+    }
+    let(:pub2) { create(:publication) }
+    let!(:aif) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion',
+        license: nil,
+        checked_for_set_statement: true,
+        checked_for_embargo_date: true
+      )
+    }
+
+    it 'renders the permissions metadata review card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('permissions-review-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('permissions-review-card').text).to include('1')
+      expect(rendered_component).to have_link(
+        href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_permissions_review_path
+      )
+    end
+  end
+
   context 'when no publications are ready for final metadata review' do
     let(:pub1) { create(:publication) }
     let(:pub2) { create(:publication) }
