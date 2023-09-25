@@ -182,6 +182,11 @@ GEM
     delayed_job_active_record (4.1.7)
       activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
+    delayed_job_web (1.4.4)
+      activerecord (> 3.0.0)
+      delayed_job (> 2.0.3)
+      rack-protection (>= 1.5.5)
+      sinatra (>= 1.4.4)
     devise (4.8.0)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -355,6 +360,8 @@ GEM
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
+    mustermann (3.0.0)
+      ruby2_keywords (~> 0.0.1)
     nested_form (0.3.2)
     net-imap (0.2.3)
       digest
@@ -412,6 +419,8 @@ GEM
     parallel (1.22.1)
     parser (3.2.0.0)
       ast (~> 2.4.1)
+    pastel (0.8.0)
+      tty-color (~> 0.5)
     pdf-reader (2.10.0)
       Ascii85 (~> 1.0)
       afm (~> 0.2.1)
@@ -590,6 +599,11 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
+    sinatra (3.0.5)
+      mustermann (~> 3.0)
+      rack (~> 2.2, >= 2.2.4)
+      rack-protection (= 3.0.5)
+      tilt (~> 2.0)
     smart_properties (1.17.0)
     smarter_csv (1.2.8)
     spring (2.1.1)
@@ -619,6 +633,16 @@ GEM
     tilt (2.0.11)
     timeout (0.3.0)
     ttfunk (1.7.0)
+    tty-color (0.6.0)
+    tty-cursor (0.7.1)
+    tty-prompt (0.23.1)
+      pastel (~> 0.8)
+      tty-reader (~> 0.8)
+    tty-reader (0.9.0)
+      tty-cursor (~> 0.7)
+      tty-screen (~> 0.8)
+      wisper (~> 2.0)
+    tty-screen (0.8.1)
     turbolinks (5.2.1)
       turbolinks-source (~> 5.2)
     turbolinks-source (5.2.0)
@@ -650,6 +674,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    wisper (2.0.1)
     xpath (3.2.0)
       nokogiri (~> 1.8)
     zeitwerk (2.6.7)
@@ -676,6 +701,7 @@ DEPENDENCIES
   database_cleaner
   ddtrace (~> 1.4)
   delayed_job_active_record
+  delayed_job_web
   devise (~> 4.8)
   ed25519
   exiftool_vendored (~> 12.33)
@@ -731,6 +757,7 @@ DEPENDENCIES
   string-similarity
   strscan (~> 3.0.1)
   terser
+  tty-prompt
   turbolinks (~> 5)
   vcr
   view_component

@@ -169,6 +169,13 @@ class Publication < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
+  scope :wrong_file_version, -> {
+    activity_insight_oa_publication
+      .where.not(preferred_version: nil)
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
+  }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :permissions_check_failed, -> {
     activity_insight_oa_publication
@@ -226,6 +233,10 @@ class Publication < ApplicationRecord
 
   def confirmed_users
     users.where(authorships: { confirmed: true })
+  end
+
+  def activity_insight_upload_user
+    activity_insight_oa_files.first.user
   end
 
   def doi_url_path

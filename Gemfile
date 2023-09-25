@@ -25,6 +25,7 @@ gem 'config', '~> 4.1'
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
+gem 'delayed_job_web'                   # /delayed_job UI for delayed job
 gem 'devise', '~> 4.8'                  # for authentication and user management
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
@@ -78,6 +79,7 @@ group :development do
   gem 'spring'
   gem 'spring-commands-rspec'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'tty-prompt'
   gem 'web-console', '>= 3.3.0'
 end
 

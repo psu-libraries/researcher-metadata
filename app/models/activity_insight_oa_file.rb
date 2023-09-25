@@ -4,11 +4,7 @@ class ActivityInsightOAFile < ApplicationRecord
   belongs_to :publication,
              inverse_of: :activity_insight_oa_files
 
-  # TODO:  We ultimately don't want this association to be optional, but
-  # the data will be missing for records that already exist in production,
-  # and we don't want to break anything. Once we have populated all of the
-  # existing production records, then we should make this required.
-  belongs_to :user, optional: true
+  belongs_to :user
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
@@ -48,9 +44,11 @@ class ActivityInsightOAFile < ApplicationRecord
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
 
   def version_status_display
-    return 'Unknown Version' if version == 'unknown'
+    return I18n.t('file_versions.published_version_display') if version == I18n.t('file_versions.published_version')
 
-    'Wrong Version'
+    return I18n.t('file_versions.accepted_version_display') if version == I18n.t('file_versions.accepted_version')
+
+    'Unknown Version'
   end
 
   def download_location_value

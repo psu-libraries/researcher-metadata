@@ -1,0 +1,63 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_path %>
+  <h1 class="pb-3 pt-2">Publications with Wrong File Version</h1>
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Author</th>
+        <th>Author Batch Email</th>
+        <th>Publication Email</th>
+        <th>Email Last Sent On</th>
+        <th>Title</th>
+        <th>Preferred Version</th>
+        <th>File Version</th>
+        <th>Download File</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+
+    <% authors_grouped = @publications.group_by { |p| p.activity_insight_upload_user } %>
+    <% authors_grouped.each do |author, publications| %>
+      <tr id="<%= dom_id(author) %>">
+        <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
+          <%= author.webaccess_id %>
+        </td>
+        <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
+          <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: publications} %>
+        </td>
+      <% publications.each do |p| %>
+        <td rowspan="<%= p.activity_insight_oa_files.count %>">
+          <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p} %>
+        </td>
+        <td rowspan="<%= p.activity_insight_oa_files.count %>">
+          <%= p.wrong_oa_version_notification_sent_at.present? ? p.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y") : '' %>
+        </td>
+        <td rowspan="<%= p.activity_insight_oa_files.count %>">
+          <%= link_to p.title.truncate(45),
+              rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
+              target: '_blank' %>
+        </td>
+        <td rowspan="<%= p.activity_insight_oa_files.count %>">
+          <%= p.preferred_version_display %>
+        </td>
+        <% p.activity_insight_oa_files.each_with_index do |file, index| %>
+          <%= '<tr>'.html_safe unless index == 0 %>
+            <td>
+              <%= file.version_status_display %>
+            </td>
+            <td class="file-name">
+                <% if file.stored_file_path.present? %>
+                  <%= link_to "#{file.download_filename}",
+                              activity_insight_oa_workflow_file_download_path(file.id),
+                              target: '_blank' %>
+                <% else %>
+                  Not Found
+                <% end %>
+            </td>
+        <% end %>
+      </tr>
+      <% end %>
+    <% end %>
+    </tbody>
+  </table>
+</div>
