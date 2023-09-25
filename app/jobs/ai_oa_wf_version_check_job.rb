@@ -16,9 +16,5 @@ class AiOAWfVersionCheckJob < ApplicationJob
                                               publication: file.publication).version
 
     file.update_column :version, pdf_file_version
-  rescue StandardError => e
-    raise e unless e.class.name.start_with?('PDF::Reader::')
-
-    file.update_column :version, 'unknown'
   end
 end
