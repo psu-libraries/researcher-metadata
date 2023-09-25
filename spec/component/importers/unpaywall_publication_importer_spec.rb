@@ -92,7 +92,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
@@ -156,7 +156,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
@@ -354,7 +354,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
       end
@@ -376,7 +376,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
       end
@@ -572,7 +572,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
@@ -636,7 +636,7 @@ describe UnpaywallPublicationImporter, :vcr do
         end
 
         it 'updates the open access status on the publication to unknown' do
-          importer.import_all
+          importer.import_before
           expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
@@ -799,7 +799,7 @@ describe UnpaywallPublicationImporter, :vcr do
           end
 
           it 'updates the open access status on the publication to unknown' do
-            importer.import_all
+            importer.import_new
             expect(pub.reload.open_access_status).to eq 'unknown'
           end
         end
