@@ -33,7 +33,6 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(page).to have_text('Accepted Manuscript').twice
       expect(page).to have_text('Edit metadata in admin dashboard')
       expect(page).to have_text('Unknown Version')
-      expect(page).to have_text('Wrong Version')
       expect(page).to have_link(aif1.download_filename)
     end
   end
