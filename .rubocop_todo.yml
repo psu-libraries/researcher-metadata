@@ -153,6 +153,7 @@ RSpec/MessageSpies:
   Exclude:
     - 'spec/component/importers/csv_importer_spec.rb'
     - 'spec/component/jobs/scholarsphere_upload_job_spec.rb'
+    - 'spec/component/jobs/scholarsphere_version_check_job_spec.rb'
     - 'spec/component/models/activity_insight_publication_exporter_spec.rb'
     - 'spec/component/models/open_access_notifier_spec.rb'
     - 'spec/component/models/orcid_api_client_spec.rb'

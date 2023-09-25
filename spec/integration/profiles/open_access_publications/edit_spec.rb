@@ -150,32 +150,120 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         end
       end
 
-      describe 'file upload and version check' do
-        context 'when acceptedVersion is found' do
-          it 'preselects Accepted Manuscript' do
-            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.accepted_version'))
-            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+      describe 'file upload and version check', js: true do
+        include ActiveJob::TestHelper
+        let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
+        let(:cache) { Rails.cache }
+        let(:file_handler) { instance_double(ScholarsphereFileHandler,
+                                             version: exif_version,
+                                             cache_files: [cache_file], valid?: true) }
+
+        before do
+          allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
+          allow(Rails).to receive(:cache).and_return(file_store)
+          Rails.cache.clear
+
+          perform_enqueued_jobs do
+            attach_file('File', test_file)
             click_on 'Submit Files'
+          end
+        end
+
+        context 'when exif check returns unknown' do
+          let(:exif_version) { 'unknown' }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
+
+          it 'does not preselect anything' do
+            expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+          end
+        end
+
+        context 'when exif check returns a acceptedVersion' do
+          let(:exif_version) { I18n.t('file_versions.accepted_version') }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_accepted_version_postprint.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" } }
+
+          it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
             expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
           end
         end
 
-        context 'when publishedVersion is found' do
+        context 'when exif check returns nil and pdf check returns acceptedVersion' do
+          let(:exif_version) { nil }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_accepted_version_postprint.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_accepted_version_postprint.pdf" } }
+
+          it 'preselects Accepted Manuscript' do
+            expect(page).to have_content('This looks like the Accepted Manuscript of the article.', wait: 10)
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+          end
+        end
+
+        context 'when exif check returns publishedVersion' do
+          let(:exif_version) { I18n.t('file_versions.published_version') }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" } }
+
           it 'preselects Final Published Version' do
-            allow_any_instance_of(ScholarsphereExifUploads).to receive(:version).and_return(I18n.t('file_versions.published_version'))
-            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
-            click_on 'Submit Files'
             expect(page).to have_content('This looks like the Final Published Version of the article.')
             expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
           end
         end
 
+        context 'when exif check returns nil and pdf check returns publishedVersion' do
+          let(:exif_version) { nil }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" } }
+
+          it 'preselects Final Published Version' do
+            expect(page).to have_content('This looks like the Final Published Version of the article.', wait: 10)
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+          end
+        end
+
         context 'when nothing is found' do
+          let(:exif_version) { nil }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
+
           it 'does not preselect anything' do
-            attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
-            click_on 'Submit Files'
-            expect(page).to have_content('We have not been able to determine automatically which version of the article this is.')
+            expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
+            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
+            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+          end
+        end
+
+        # Tagged as glacial.  This test takes over a minute to complete.
+        context 'when timeout is reached', glacial: true do
+          let(:exif_version) { nil }
+          let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
+          let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
+                               cache_path: "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" } }
+
+          it 'displays spinner for 60 seconds; then, displays selection and does not preselect anything' do
+            allow_any_instance_of(OpenAccessPublicationsController).to receive(:file_version_result).and_return(nil)
+            sleep 10
+            expect(page).to have_content('Attempting to determine file version, please wait...')
+            sleep 10
+            expect(page).to have_content('Attempting to determine file version, please wait...')
+            sleep 10
+            expect(page).to have_content('Attempting to determine file version, please wait...')
+            sleep 10
+            expect(page).to have_content('Attempting to determine file version, please wait...')
+            sleep 10
+            expect(page).to have_content('Attempting to determine file version, please wait...')
+            expect(page).not_to have_content('Attempting to determine file version, please wait...', wait: 15)
+            expect(page).to have_content('We were not able to determine the version of your uploaded publication article.', wait: 15)
             expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
             expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
           end
@@ -183,16 +271,26 @@ describe 'visiting the page to edit the open acess status of a publication', typ
       end
 
       describe 'completing the workflow', js: true do
+        include ActiveJob::TestHelper
+        let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
+        let(:cache) { Rails.cache }
+
         before do
-          click_on 'Add Another File'
-          sleep 0.5
-          file_elements = find_all('input[type="file"]')
-          file_elements.each do |file|
-            file.attach_file("#{Rails.root}/spec/fixtures/test_file.pdf")
+          allow(Rails).to receive(:cache).and_return(file_store)
+          Rails.cache.clear
+
+          perform_enqueued_jobs do
+            click_on 'Add Another File'
+            sleep 0.5
+            file_elements = find_all('input[type="file"]')
+            file_elements.each do |file|
+              file.attach_file("#{Rails.root}/spec/fixtures/test_file.pdf")
+            end
+            click_on 'Submit Files'
+            find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
+            choose 'scholarsphere_work_deposit_file_version_acceptedversion'
+            click_on 'Submit'
           end
-          click_on 'Submit Files'
-          choose 'scholarsphere_work_deposit_file_version_acceptedversion'
-          click_on 'Submit'
         end
 
         describe 'viewing the form to deposit a publication in ScholarSphere' do
@@ -313,15 +411,23 @@ describe 'visiting the page to edit the open acess status of a publication', typ
       describe 'submitting a valid form with an error in the deposit process' do
         include ActiveJob::TestHelper
         let(:ingest) { double 'scholarsphere client ingest' }
+        let(:file_handler) { instance_double(ScholarsphereFileHandler,
+                                             version: I18n.t('file_versions.published_version'),
+                                             cache_files: [cache_file],
+                                             valid?: true) }
+        let(:cache_file) { { original_filename: 'pdf_check_published_versionS123456abc.pdf',
+                             cache_path: "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf" }.with_indifferent_access }
 
         before do
           allow(Scholarsphere::Client::Ingest).to receive(:new).and_return ingest
           allow(ingest).to receive(:publish).and_raise RuntimeError.new('Oh no! Failure!')
+          allow(ScholarsphereFileHandler).to receive(:new).and_return(file_handler)
+
           perform_enqueued_jobs do
             suppress(RuntimeError) do
-              attach_file('File', "#{Rails.root}/spec/fixtures/test_file.pdf")
+              attach_file('File', "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf")
               click_on 'Submit Files'
-              sleep 1
+              find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
               choose 'scholarsphere_work_deposit_file_version_acceptedversion'
               click_on 'Submit'
 
