@@ -19,6 +19,19 @@ class Organization < ApplicationRecord
     User.joins(:user_organization_memberships).where(user_organization_memberships: { organization_id: descendant_ids }).distinct(:id)
   end
 
+  def all_current_users
+    User.joins(:user_organization_memberships)
+        .where(user_organization_memberships: { organization_id: descendant_ids })
+        .where('user_organization_memberships.ended_on IS NULL OR user_organization_memberships.ended_on > ?', DateTime.now)
+        .distinct(:id)
+  end
+
+  def descendant_ids
+    ActiveRecord::Base.connection.execute(
+      %{WITH RECURSIVE org_tree AS (SELECT id, name, parent_id FROM organizations WHERE id = #{id} UNION SELECT child.id, child.name, child.parent_id FROM organizations AS child JOIN org_tree AS parent ON parent.id = child.parent_id) SELECT * FROM org_tree;}
+    ).to_a.pluck('id')
+  end
+
   def user_count
     all_users.count
   end
@@ -76,12 +89,6 @@ class Organization < ApplicationRecord
   end
 
   private
-
-    def descendant_ids
-      ActiveRecord::Base.connection.execute(
-        %{WITH RECURSIVE org_tree AS (SELECT id, name, parent_id FROM organizations WHERE id = #{id} UNION SELECT child.id, child.name, child.parent_id FROM organizations AS child JOIN org_tree AS parent ON parent.id = child.parent_id) SELECT * FROM org_tree;}
-      ).to_a.pluck('id')
-    end
 
     def all_user_ids
       all_users.pluck(:id)

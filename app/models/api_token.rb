@@ -8,6 +8,17 @@ class APIToken < ApplicationRecord
   has_many :users, through: :organizations
   has_many :publications, through: :users
 
+  def all_current_publications
+    Publication.joins(users: :organizations).where(organizations: { id: descendant_org_ids }).published_during_membership.distinct(:id)
+  end
+
+  def all_current_users
+    User.joins(:user_organization_memberships)
+        .where(user_organization_memberships: { organization_id: descendant_org_ids })
+        .where('user_organization_memberships.ended_on IS NULL OR user_organization_memberships.ended_on > ?', DateTime.now)
+        .distinct(:id)
+  end
+
   def increment_request_count
     update_column(:total_requests, total_requests + 1)
     update_column(:last_used_at, Time.current)
@@ -57,6 +68,10 @@ class APIToken < ApplicationRecord
   end
 
   private
+
+    def descendant_org_ids
+      organizations.collect(&:descendant_ids).flatten
+    end
 
     def set_token
       self.token ||= SecureRandom.hex(48)
