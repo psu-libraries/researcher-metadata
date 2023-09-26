@@ -5,38 +5,30 @@
     <thead class='card-header'>
       <tr>
         <th>Title</th>
-        <th>Created At</th>
-        <th>DOI Verified?</th>
-        <th>Open Access Status</th>
-        <th>Download Files</th>
+        <th>File Created At</th>
+        <th>Edit file in admin dashboard</th>
       </tr>
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
-          <td><%= link_to p.title.truncate(45),
-                  rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
-                  target: '_blank' %></td>
-          <td><%= p.created_at.strftime("%m/%d/%Y") %></td>
-          <td><% if p.doi_verified.nil? %>
-                <%= 'not checked yet'%>
-              <% elsif p.doi_verified %>
-                <%= 'verified' %>
-              <% else %>
-                <%= 'verification failed' %>
-              <% end %>
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= link_to p.title.truncate(45),
+                    rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
+                    target: '_blank' %>
           </td>
-          <td><%= p.open_access_status %>
-          <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
-                <% if f.stored_file_path.present? %>
-                  <%= link_to "#{f.download_filename}",
-                              activity_insight_oa_workflow_file_download_path(f.id),
-                              target: '_blank' %>
-                <% else %>
-                  Not Found
-                <% end %>
-              <% end %>
-          </td>
+          <% p.activity_insight_oa_files.each_with_index do |file, index| %>
+          <%= '<tr>'.html_safe unless index == 0 %>
+            <td>
+              <%= file.created_at.strftime("%m/%d/%Y") %>
+            </td>
+            <td class="file-name">
+                <% link_name = file.download_filename.present? ? file.download_filename : "file #{index+1}"%>
+                <%= link_to link_name,
+                  rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
+                  target: '_blank' %>
+            </td>
+        <% end %>
         </tr>
       <% end %>
     </tbody>
