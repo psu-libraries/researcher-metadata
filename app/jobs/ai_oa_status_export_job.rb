@@ -3,8 +3,7 @@
 class AiOAStatusExportJob < ApplicationJob
   queue_as 'default'
 
-  def perform
-    files = ActivityInsightOAFile.send_oa_status_to_activity_insight
-    ActivityInsightOAStatusExporter.new(files).export
+  def perform(file_id)
+    ActivityInsightOAStatusExporter.new(file_id).export
   end
 end

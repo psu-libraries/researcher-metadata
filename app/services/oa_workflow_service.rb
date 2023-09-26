@@ -34,6 +34,11 @@ class OAWorkflowService
       file.update_column(:downloaded, false)
     end
 
-    AiOAStatusExportJob.perform_later
+    ActivityInsightOAFile.send_oa_status_to_activity_insight.each do |file|
+      publication = file.publication
+      publication.exported_oa_status_to_activity_insight = true
+      publication.save!
+      AiOAStatusExportJob.perform_later(file.id)
+    end
   end
 end

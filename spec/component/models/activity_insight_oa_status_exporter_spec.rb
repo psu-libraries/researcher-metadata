@@ -13,7 +13,7 @@ describe ActivityInsightOAStatusExporter do
 
   describe '#to_xml' do
     it 'generates xml' do
-      exporter_object = exporter.new([])
+      exporter_object = exporter.new(aif1.id)
       expect(exporter_object.send(:to_xml, aif1)).to eq fixture('activity_insight_oa_status_export.xml').read
     end
   end
@@ -24,7 +24,7 @@ describe ActivityInsightOAStatusExporter do
     end
 
     it 'returns beta url' do
-      exporter_object = exporter.new([])
+      exporter_object = exporter.new(aif1.id)
       expect(exporter_object.send(:webservice_url)).to eq beta_url
     end
   end
@@ -34,21 +34,19 @@ describe ActivityInsightOAStatusExporter do
       let(:response) do
         double 'httparty_response',
                code: 400,
-               to_s: '<?xml version="1.0" encoding="UTF-8"?>
-
-<Error>The following errors were detected:
-	<Message>Unexpected EOF in prolog
- at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog
- at [row,col {unknown-source}]: [1,0]</Message>
-</Error>'
+               body: response_body
       end
+      let (:response_body) { '<?xml version="1.0" encoding="UTF-8"?>
+        <Error>The following errors were detected:
+          <Message>Unexpected EOF in prolog
+         at [row,col {unknown-source}]: [1,0] Nested exception: Unexpected EOF in prolog
+         at [row,col {unknown-source}]: [1,0]</Message>
+        </Error>' }
 
-      it 'logs DM webservice responses' do
-        exporter_object = exporter.new([aif1])
+      it 'raises an error' do
         allow(HTTParty).to receive(:post).and_return response
-        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
-        expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF|File ID: #{aif1.id}/).twice
-        exporter_object.export
+        exporter_object = exporter.new(aif1.id)
+        expect { exporter_object.export }.to raise_error ActivityInsightOAStatusExporter::ExportFailed, response.body
       end
     end
 
@@ -59,12 +57,10 @@ describe ActivityInsightOAStatusExporter do
                to_s: "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<Success/>\n"
       end
 
-      it 'does not log any errors and updates #exported_oa_status_to_activity_insight' do
-        exporter_object = exporter.new([aif1])
+      it 'does not raise an error' do
         allow(HTTParty).to receive(:post).and_return response
-        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Files not/).exactly(3).times
-        expect_any_instance_of(Logger).not_to receive(:error)
-        expect { exporter_object.export }.to change(pub1, :exported_oa_status_to_activity_insight).to true
+        exporter_object = exporter.new(aif1.id)
+        expect { exporter_object.export }.not_to raise_error
       end
     end
   end

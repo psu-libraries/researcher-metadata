@@ -25,11 +25,14 @@ describe OAWorkflowService do
                          title: 'pub5',
                          doi_verified: nil,
                          oa_workflow_state: 'automatic DOI verification pending',
+                         open_access_status: 'hybrid',
+                         exported_oa_status_to_activity_insight: true,
                          licence: 'licence')}
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: nil)}
+                         oa_workflow_state: nil,
+                         open_access_status: 'gold')}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
                          licence: 'licence')}
@@ -41,13 +44,6 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
-
-    before { allow(AiOAStatusExportJob).to receive(:perform_later) }
-
-    it 'calls the AiOAStatusExportJob' do
-      service.workflow
-      expect(AiOAStatusExportJob).to have_received(:perform_later)
-    end
 
     context 'when publications need doi verification' do
       before do
@@ -131,6 +127,17 @@ describe OAWorkflowService do
         rescue RuntimeError
           expect(activity_insight_oa_file4.reload.downloaded).to be false
         end
+      end
+    end
+
+    context 'when Activity Insight files are ready for oa status export' do
+      before { allow(AiOAStatusExportJob).to receive(:perform_later) }
+
+      it 'calls the AiOAStatusExportJob' do
+        service.workflow
+        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
+        expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
+        expect(pub6.reload.exported_oa_status_to_activity_insight).to be true
       end
     end
   end
