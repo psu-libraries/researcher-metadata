@@ -7,7 +7,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'unknown') }
 
   context 'when no publications need their doi verified' do
-    let!(:oal) { create(:open_access_location, publication: pub2) }
+    let!(:oal) { create(:open_access_location, publication: pub2, source: Source::UNPAYWALL) }
     let!(:pub1) { create(:publication, doi_verified: true) }
     let!(:pub2) { create(:publication, doi_verified: nil) }
 
@@ -32,7 +32,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   end
 
   context 'when no publications need their file versions verified' do
-    let!(:oal) { create(:open_access_location, publication: pub1) }
+    let!(:oal) { create(:open_access_location, publication: pub1, source: Source::SCHOLARSPHERE) }
     let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion') }
     let!(:pub2) { create(:publication, preferred_version: nil) }
 
@@ -126,7 +126,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
   end
 
   context 'when no publications need their permissions verified' do
-    let!(:oal) { create(:open_access_location, publication: pub2) }
+    let!(:oal) { create(:open_access_location, publication: pub2, source: Source::SCHOLARSPHERE) }
     let!(:pub1) { create(:publication) }
     let!(:pub2) { create(:publication, doi_verified: nil) }
     let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now, licence: 'licence') }

@@ -14,7 +14,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .left_outer_joins(publication: :open_access_locations)
       .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where.not(location: nil)
-      .where.not(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid' OR publication.open_access_status IS NULL})
+      .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
   }
 
   scope :ready_for_download, -> {

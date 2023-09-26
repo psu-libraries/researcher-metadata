@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
-
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 RSpec.describe ActivityInsightOAFile, type: :model do
   subject(:aif) { described_class.new }
 
@@ -56,7 +56,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'scopes' do
     let!(:pub1) { create(:publication,
-                         open_access_status: 'closed',
+                         open_access_status: nil,
                          title: 'pub1')
     }
     let!(:pub2) { create(:publication,
@@ -78,6 +78,10 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                            build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
                          ])
     }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         open_access_status: 'gold')
+    }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
@@ -86,9 +90,10 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file6) { create(:activity_insight_oa_file, publication: pub1, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub1, location: nil) }
     let!(:file8) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true) }
-    let!(:file9) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version_checked: true) }
-    let!(:file10) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, downloaded: true, version: 'unknown') }
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, version_checked: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader, version: 'unknown') }
     let!(:file11) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:file12) { create(:activity_insight_oa_file, publication: pub5) }
 
     describe '.subject_to_ai_oa_workflow' do
       it 'returns files that have an associated publication that is subject to the activity insight oa workflow' do
