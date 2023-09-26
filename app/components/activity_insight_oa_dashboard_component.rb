@@ -21,6 +21,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.ready_for_metadata_review.count
   end
 
+  def all_workflow_publications_count
+    Publication.activity_insight_oa_publication.count
+  end
+
   def i18n(key, **options)
     I18n.t("view_component.#{self.class.name.underscore}.#{key}", **options)
   end

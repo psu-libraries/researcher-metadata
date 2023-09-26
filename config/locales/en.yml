@@ -215,6 +215,8 @@ en:
       permissions_curation_description: Publications that require manual permissions curation.
       metadata_curation_title: Review Publication Metadata
       metadata_curation_description: Publications that have a file which can be deposited and that are ready for a final metadata check prior to submission to ScholarSphere.
+      all_workflow_publications_title: All Publications
+      all_workflow_publications_description: Troubleshooting list of all publications subject to workflow
 
   helpers:
     submit:
