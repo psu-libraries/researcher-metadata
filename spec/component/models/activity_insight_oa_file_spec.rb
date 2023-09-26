@@ -93,7 +93,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file1]
+        expect(described_class.ready_for_download).to match_array [file1, file8]
       end
     end
   end

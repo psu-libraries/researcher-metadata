@@ -16,7 +16,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(file_download_location: nil)
       .where(downloaded: nil)
       .where.not(location: nil)
-      .where.not(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid' OR publication.open_access_status IS NULL})
+      .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
   }
 
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
