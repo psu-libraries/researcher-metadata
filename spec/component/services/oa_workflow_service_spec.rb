@@ -139,7 +139,7 @@ describe OAWorkflowService do
       end
     end
 
-    context 'when Activity Insight files are need their versions automatically checked' do
+    context 'when Activity Insight OA files need their versions automatically checked' do
       before { allow(AiOAWfVersionCheckJob).to receive(:perform_later) }
 
       it 'calls the version check job with that file' do
