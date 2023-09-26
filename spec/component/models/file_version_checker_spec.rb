@@ -82,7 +82,7 @@ describe FileVersionChecker do
           allow(PDF::Reader).to receive(:new).and_raise(RuntimeError)
         end
 
-        it 'catches the error and returns unknown' do
+        it 'raises the error' do
           expect { pdf_file_version.version }.to raise_error RuntimeError
         end
       end
