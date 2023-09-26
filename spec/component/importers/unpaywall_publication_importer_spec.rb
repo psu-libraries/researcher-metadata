@@ -91,9 +91,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
         it 'does not update the DOI on the publication' do
@@ -155,9 +155,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
         it 'does not update the DOI on the publication' do
@@ -353,9 +353,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
       end
 
@@ -375,9 +375,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
       end
     end
@@ -571,9 +571,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
         it 'does not update the DOI on the publication' do
@@ -635,9 +635,9 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
 
-        it 'does not update the open access status on the publication' do
+        it 'updates the open access status on the publication to unknown' do
           importer.import_before
-          expect(pub.reload.open_access_status).to be_nil
+          expect(pub.reload.open_access_status).to eq 'unknown'
         end
 
         it 'does not update the DOI from Unpaywall to the publication' do
@@ -798,9 +798,9 @@ describe UnpaywallPublicationImporter, :vcr do
             expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
           end
 
-          it 'does not update the open access status on the publication' do
+          it 'updates the open access status on the publication to unknown' do
             importer.import_new
-            expect(pub.reload.open_access_status).to be_nil
+            expect(pub.reload.open_access_status).to eq 'unknown'
           end
         end
       end
