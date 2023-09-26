@@ -22,7 +22,7 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
   end
 
   def all_workflow_publications_count
-    Publication.activity_insight_oa_publication.count
+    Publication.troubleshooting_list.count
   end
 
   def i18n(key, **options)

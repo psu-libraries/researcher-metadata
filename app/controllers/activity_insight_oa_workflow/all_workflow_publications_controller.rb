@@ -2,6 +2,6 @@
 
 class ActivityInsightOAWorkflow::AllWorkflowPublicationsController < ActivityInsightOAWorkflowController
   def index
-    @publications = Publication.activity_insight_oa_publication.order('created_at ASC NULLS FIRST')
+    @publications = Publication.troubleshooting_list
   end
 end
