@@ -60,8 +60,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     }
     let!(:pub2) { create(:publication,
                          title: 'pub2',
-                         publication_type: 'Trade Journal Article',
-                         open_access_status: 'gold')
+                         publication_type: 'Trade Journal Article')
     }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
