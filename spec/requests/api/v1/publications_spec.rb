@@ -23,7 +23,7 @@ describe API::V1::PublicationsController do
     end
 
     context 'when a valid authorization header value is included in the request' do
-      let!(:publications) { create_list(:publication, 10, visible: true) }
+      let!(:publications) { create_list(:publication, 10, visible: true, published_on: 6.months.ago) }
       let!(:invisible_pub) { create(:publication, visible: false) }
       let!(:inaccessible_pub) { create(:publication, visible: true) }
       let(:params) { '' }
@@ -33,7 +33,7 @@ describe API::V1::PublicationsController do
 
       before do
         publications.each { |p| create(:authorship, publication: p, user: user) }
-        create(:user_organization_membership, user: user, organization: org)
+        create(:user_organization_membership, user: user, organization: org, started_on: 1.year.ago)
         create(:organization_api_permission, organization: org, api_token: token)
       end
 
@@ -59,7 +59,7 @@ describe API::V1::PublicationsController do
 
       describe 'params:' do
         describe 'activity_insight_id' do
-          let!(:ai_pub) { create(:publication, visible: true, imports: [pub_import]) }
+          let!(:ai_pub) { create(:publication, visible: true, imports: [pub_import], published_on: 6.months.ago) }
           let!(:pub_import) { create(:publication_import, source: 'Activity Insight', source_identifier: '123') }
 
           before do
@@ -108,7 +108,10 @@ describe API::V1::PublicationsController do
         end
 
         describe 'doi' do
-          let(:doi_pub) { create(:publication, visible: true, doi: 'https://doi.org/10.26207/46a7-9981') }
+          let(:doi_pub) { create(:publication,
+                                 visible: true,
+                                 doi: 'https://doi.org/10.26207/46a7-9981',
+                                 published_on: 6.months.ago) }
 
           before do
             create(:authorship, user: user, publication: doi_pub)
@@ -274,7 +277,9 @@ describe API::V1::PublicationsController do
 
       context 'when valid request params: an activity insight id and a url' do
         let(:activity_insight_id) { '123' }
-        let(:publication) { create(:publication, open_access_locations: open_access_locations) }
+        let(:publication) { create(:publication,
+                                   open_access_locations: open_access_locations,
+                                   published_on: 6.months.ago) }
 
         before do
           create(:api_token, token: 'token123', write_access: true)
@@ -404,8 +409,11 @@ describe API::V1::PublicationsController do
   describe 'GET /v1/publications/:id' do
     let!(:pub) { create(:publication,
                         title: 'requested publication',
-                        visible: visible) }
-    let!(:inaccessible_pub) { create(:publication, visible: true) }
+                        visible: visible,
+                        published_on: 6.months.ago) }
+    let!(:inaccessible_pub) { create(:publication,
+                                     visible: true,
+                                     published_on: 6.months.ago) }
     let!(:token) { create(:api_token,
                           token: 'token123',
                           total_requests: 0,
@@ -416,7 +424,10 @@ describe API::V1::PublicationsController do
 
     before do
       create(:organization_api_permission, organization: org, api_token: token)
-      create(:user_organization_membership, organization: org, user: user)
+      create(:user_organization_membership,
+             organization: org,
+             user: user,
+             started_on: 1.year.ago)
       create(:authorship, user: user, publication: pub)
     end
 
@@ -482,8 +493,12 @@ describe API::V1::PublicationsController do
   end
 
   describe 'GET /v1/publications/:id/grants' do
-    let!(:pub) { create(:publication, visible: visible) }
-    let!(:inaccessible_pub) { create(:publication, visible: true) }
+    let!(:pub) { create(:publication,
+                        visible: visible,
+                        published_on: 6.months.ago) }
+    let!(:inaccessible_pub) { create(:publication,
+                                     visible: true,
+                                     published_on: 6.months.ago) }
     let!(:token) { create(:api_token,
                           token: 'token123',
                           total_requests: 0,
@@ -496,7 +511,10 @@ describe API::V1::PublicationsController do
 
     before do
       create(:organization_api_permission, organization: org, api_token: token)
-      create(:user_organization_membership, organization: org, user: user)
+      create(:user_organization_membership,
+             organization: org,
+             user: user,
+             started_on: 1.year.ago)
       create(:authorship, user: user, publication: pub)
       create(:research_fund, publication: pub, grant: g1)
       create(:research_fund, publication: pub, grant: g2)
