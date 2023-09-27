@@ -204,4 +204,16 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       )
     end
   end
+
+  context 'when there are publications in the workflow' do
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication) }
+
+    it 'renders the doi check card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('all-workflow-publications-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('all-workflow-publications-card').text).to include('2')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/all_workflow_publications')
+    end
+  end
 end

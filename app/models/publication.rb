@@ -97,7 +97,6 @@ class Publication < ApplicationRecord
   has_many :open_access_locations,
            inverse_of: :publication
   has_many :activity_insight_oa_files,
-           -> { order created_at: :asc },
            inverse_of: :publication
 
   belongs_to :duplicate_group,
@@ -148,9 +147,9 @@ class Publication < ApplicationRecord
   scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
-    .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
-    .includes(:activity_insight_oa_files)
-    .order("activity_insight_oa_files.created_at ASC")
+      .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
+      .includes(:activity_insight_oa_files)
+      .order('activity_insight_oa_files.created_at ASC')
   }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }

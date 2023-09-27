@@ -91,7 +91,7 @@
   <br>
   <% if all_workflow_publications_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_all_workflow_publications_path, class: 'card-link' do %>
-      <div class='card' id='all-workflow-publications-check-card'>
+      <div class='card' id='all-workflow-publications-card'>
         <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
           <span class='float-right text-large'><strong><%= all_workflow_publications_count %></strong></span>
         </div>
@@ -99,7 +99,7 @@
       </div>
     <% end %>
   <% else %>
-    <div class='card text-muted' id='all-workflow-publications-check-card'>
+    <div class='card text-muted' id='all-workflow-publications-card'>
       <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
         <span class='float-right text-large'>0</strong></span>
       </div>

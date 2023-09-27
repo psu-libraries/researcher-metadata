@@ -23,8 +23,7 @@
               <%= file.created_at.strftime("%m/%d/%Y") %>
             </td>
             <td class="file-name">
-                <% link_name = file.download_filename.present? ? file.download_filename : "file #{index+1}"%>
-                <%= link_to link_name,
+                <%= link_to file.download_filename,
                   rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
                   target: '_blank' %>
             </td>
