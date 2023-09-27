@@ -21,9 +21,9 @@ class Organization < ApplicationRecord
 
   def all_current_users
     User.joins(:user_organization_memberships)
-        .where(user_organization_memberships: { organization_id: descendant_ids })
-        .where('user_organization_memberships.ended_on IS NULL OR user_organization_memberships.ended_on > ?', DateTime.now)
-        .distinct(:id)
+      .where(user_organization_memberships: { organization_id: descendant_ids })
+      .where('user_organization_memberships.ended_on IS NULL OR user_organization_memberships.ended_on > ?', DateTime.now)
+      .distinct(:id)
   end
 
   def descendant_ids

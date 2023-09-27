@@ -80,4 +80,82 @@ describe APIToken, type: :model do
       expect(token.organization_count).to eq 2
     end
   end
+
+  describe 'token permissions' do
+    let!(:token) { create(:api_token) }
+    let!(:org1) { create(:organization) }
+    let!(:user1) { create(:user) }
+    let!(:user_org_membership1) { create(:user_organization_membership,
+                                         user: user1,
+                                         organization: org1,
+                                         started_on: 1.year.ago,
+                                         ended_on: nil) }
+    let!(:pub1) { create(:publication, published_on: 6.months.ago) }
+    let!(:authorship1) { create(:authorship, publication: pub1, user: user1) }
+    let!(:org2) { create(:organization, parent_id: org1.id) }
+    let!(:user2) { create(:user) }
+    let!(:user_org_membership2) { create(:user_organization_membership,
+                                         user: user2,
+                                         organization: org2,
+                                         started_on: 1.year.ago,
+                                         ended_on: nil) }
+    let!(:pub2_1) { create(:publication, published_on: 6.months.ago) }
+    let!(:authorship2_1) { create(:authorship, publication: pub2_1, user: user2) }
+    # pub2_2 excluded from #all_publications since it was not published during the user's time within the org
+    let!(:pub2_2) { create(:publication, published_on: 2.years.ago) }
+    let!(:authorship2_2) { create(:authorship, publication: pub2_2, user: user2) }
+    let!(:org3) { create(:organization, parent_id: org2.id) }
+    let!(:user3_1) { create(:user) }
+    let!(:user_org_membership3_1) { create(:user_organization_membership,
+                                           user: user3_1,
+                                           organization: org3,
+                                           started_on: 1.year.ago,
+                                           ended_on: nil) }
+    let!(:pub3_1) { create(:publication, published_on: 6.months.ago) }
+    let!(:authorship3_1) { create(:authorship, publication: pub3_1, user: user3_1) }
+    # user3_2 excluded from #all_current_users because the user is not actively in the org
+    let!(:user3_2) { create(:user) }
+    let!(:user_org_membership3_2) { create(:user_organization_membership,
+                                           user: user3_2,
+                                           organization: org3,
+                                           started_on: 1.year.ago,
+                                           ended_on: Date.yesterday) }
+    # pub3_2 included in #all_publications since it was published when the user was a part of the org
+    let!(:pub3_2) { create(:publication, published_on: 6.months.ago) }
+    let!(:authorship3_2) { create(:authorship, publication: pub3_2, user: user3_2) }
+    # org4, its users, and publications excluded from everthing since it is not
+    # linked to the token nor is it a descendant of a linked org
+    let!(:org4) { create(:organization) }
+    let!(:user4) { create(:user) }
+    let!(:user_org_membership4) { create(:user_organization_membership,
+                                         user: user4,
+                                         organization: org4,
+                                         started_on: 1.year.ago,
+                                         ended_on: nil) }
+    let!(:pub4) { create(:publication, published_on: 6.months.ago) }
+    let!(:authorship4) { create(:authorship, publication: pub4, user: user4) }
+
+    before do
+      create(:organization_api_permission, organization: org1, api_token: token)
+    end
+
+    describe '#all_publications' do
+      it "returns publications that were published during their users'
+          memberships in associated organizations and their descendants" do
+        expect(token.all_publications).to match_array [pub1, pub2_1, pub3_1, pub3_2]
+      end
+    end
+
+    describe '#all_current_users' do
+      it 'returns users that are currently members of associated organizations and their descendants' do
+        expect(token.all_current_users).to match_array [user1, user2, user3_1]
+      end
+    end
+
+    describe '#all_organizations' do
+      it 'returns organizations that are associated organizations and their descendants' do
+        expect(token.all_organizations).to match_array [org1, org2, org3]
+      end
+    end
+  end
 end
