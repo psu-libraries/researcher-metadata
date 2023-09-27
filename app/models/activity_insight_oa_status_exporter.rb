@@ -12,6 +12,8 @@ class ActivityInsightOAStatusExporter < ActivityInsightExporter
     response = HTTParty.post webservice_url, body: to_xml(file),
                                              headers: { 'Content-type' => 'text/xml' }, basic_auth: auth, timeout: 180
     unless response.code == 200
+      file.exported_oa_status_to_activity_insight = false
+      file.save!
       raise ExportFailed.new(response.body)
     end
   end

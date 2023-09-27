@@ -47,6 +47,7 @@ describe ActivityInsightOAStatusExporter do
         allow(HTTParty).to receive(:post).and_return response
         exporter_object = exporter.new(aif1.id)
         expect { exporter_object.export }.to raise_error ActivityInsightOAStatusExporter::ExportFailed, response.body
+        expect(aif1.reload.exported_oa_status_to_activity_insight).to be false
       end
     end
 
