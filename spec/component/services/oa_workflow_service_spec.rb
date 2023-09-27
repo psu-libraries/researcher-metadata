@@ -25,17 +25,17 @@ describe OAWorkflowService do
                          title: 'pub5',
                          doi_verified: nil,
                          oa_workflow_state: 'automatic DOI verification pending',
-                         open_access_status: 'hybrid',
                          exported_oa_status_to_activity_insight: true,
                          licence: 'licence')}
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
                          oa_workflow_state: nil,
-                         open_access_status: 'gold')}
+                         open_access_status: 'green')}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
-                         licence: 'licence')}
+                         licence: 'licence',
+                         open_access_status: 'gold',)}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
@@ -135,9 +135,9 @@ describe OAWorkflowService do
 
       it 'calls the AiOAStatusExportJob' do
         service.workflow
-        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
+        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
         expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
-        expect(pub6.reload.exported_oa_status_to_activity_insight).to be true
+        expect(pub7.reload.exported_oa_status_to_activity_insight).to be true
       end
     end
   end
