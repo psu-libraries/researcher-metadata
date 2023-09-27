@@ -8,8 +8,17 @@ require 'support/factory_bot'
 require 'support/fixture'
 require 'support/mail'
 require 'support/fixture'
+require 'support/caching_helpers'
+require 'support/webdrivers'
 
-# Prepare assets for integration tests
-require 'rake'
-Rails.application.load_tasks
-Rake::Task['test:prepare'].invoke
+RSpec.configure do |config|
+  config.include CachingHelpers
+end
+
+# Bundle assets if not bundled
+unless Rails.root.join('app', 'assets', 'builds', 'bundle.js').exist? &&
+    Rails.root.join('app', 'assets', 'builds', 'bundle.css').exist?
+  require 'rake'
+  Rails.application.load_tasks
+  Rake::Task['test:prepare'].invoke
+end

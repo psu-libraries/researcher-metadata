@@ -36,25 +36,78 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   end
 
   def scholarsphere_file_version
-    extra_params = { journal: publication&.journal&.title }
-    exif_uploads = ScholarsphereExifUploads.new(deposit_params.merge(extra_params))
+    file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
+    @jobs ||= []
 
-    if exif_uploads.valid?
-      @cache_files = exif_uploads.cache_files
-      @file_version = exif_uploads.version
-      @file_version_display = exif_uploads.version_display
-      render :scholarsphere_file_version
+    if file_handler.valid?
+      @cache_files = file_handler.cache_files
+
+      # If version is found with exif version check don't bother with the other check
+      if file_handler.version.present?
+        render :scholarsphere_file_version,
+               locals: { file_version: file_handler.version,
+                         cache_files: @cache_files.pluck(:cache_path) }
+      else
+        @cache_files.each do |cache_file|
+          file_version_job = ScholarsphereVersionCheckJob.perform_later(file_path: cache_file[:cache_path].to_s,
+                                                                        publication_id: publication.id)
+          @jobs.push({ provider_id: file_version_job.provider_job_id, job_id: file_version_job.job_id })
+        end
+
+        render :scholarsphere_file_version, locals: { file_version: nil,
+                                                      cache_files: @cache_files.pluck(:cache_path) }
+      end
     else
-      flash.now[:alert] = "Validation failed:  #{exif_uploads.errors.full_messages.join(', ')}"
-      render :edit
+      flash[:alert] = "Validation failed:  #{file_handler.errors.full_messages.join(', ')}"
+      redirect_to edit_open_access_publication_path(publication)
     end
   rescue ActionController::ParameterMissing
-    flash.now[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
-    @form = OpenAccessURLForm.new
-    @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
-    @deposit.file_uploads.build
-    render :edit
+    flash[:alert] = I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+    redirect_to edit_open_access_publication_path(publication)
+  end
+
+  def file_version_result
+    jobs = params[:jobs]
+    pdf_file_versions = []
+    cache_files = []
+
+    # Remove failed Delayed::Job and log an error
+    jobs&.reject! do |job|
+      if Delayed::Job.exists?(job[:provider_id])
+        job = Delayed::Job.find(job[:provider_id])
+        if job.failed_at.nil?
+          false
+        else
+          # Still need the file, so store file now
+          cache_files << job.payload_object.job_data['arguments'].first['file_path']
+          Rails.logger.error "Job with ID #{job[:provider_id]} failed"
+          true
+        end
+      else
+        false
+      end
+    end
+
+    jobs&.each_with_index do |job, _index|
+      cached_data = Rails.cache.read("file_version_job_#{job[:job_id]}")
+      if !cached_data.nil?
+        pdf_file_versions << [cached_data[:pdf_file_version], cached_data[:pdf_file_score]]
+        cache_files << cached_data[:file_path]
+      end
+    end
+
+    if pdf_file_versions.present? && pdf_file_versions.compact.count == jobs&.count
+      # Determine best version by absolute score
+      file_version = pdf_file_versions
+        .select { |i| i.first if i.second.abs == pdf_file_versions.map { |n| n.second.abs }.max }
+        .first
+        .first
+
+      render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version,
+                                                                                cache_files: cache_files }
+    else
+      head :no_content
+    end
   end
 
   def file_serve
@@ -138,6 +191,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                          :publisher,
                                                          :file_version,
                                                          :journal,
+                                                         :job_ids,
                                                          cache_files: [:cache_path, :original_filename],
                                                          file_uploads_attributes: [:file, :file_cache])
     end
