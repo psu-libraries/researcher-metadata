@@ -71,6 +71,7 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:user)
       field(:created_at)
       field(:updated_at)
+      field(:exported_oa_status_to_activity_insight)
       field(:publication)
       field 'File download' do
         formatted_value do
@@ -90,6 +91,7 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:user)
       field(:downloaded)
       field(:download_location_value) { label 'File download' }
+      field(:exported_oa_status_to_activity_insight)
     end
 
     edit do
