@@ -14,12 +14,23 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
       embargo_date: Date.today
     )
   }
-  let!(:aif2) {
+  let!(:aif2a) {
     create(
       :activity_insight_oa_file,
       publication: pub2,
       permissions_last_checked_at: Time.now,
       version: 'acceptedVersion',
+      license: nil,
+      checked_for_set_statement: true,
+      embargo_date: Date.today
+    )
+  }
+  let!(:aif2b) {
+    create(
+      :activity_insight_oa_file,
+      publication: pub2,
+      permissions_last_checked_at: Time.now,
+      version: 'publishedVersion',
       license: nil,
       checked_for_set_statement: true,
       embargo_date: Date.today
@@ -51,7 +62,8 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
     it 'show a table with header and the proper data for the publications in the table' do
       within "#publication_#{pub2.id}" do
         expect(page).to have_link('Pub2', href: "#{rails_admin.edit_path(model_name: :publication, id: pub2.id)}#publication_preferred_version")
-        expect(page).to have_link(aif2.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2.id))
+        expect(page).to have_link(aif2a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2a.id))
+        expect(page).not_to have_text aif2b.download_filename
       end
 
       expect(page).not_to have_text('Pub1')

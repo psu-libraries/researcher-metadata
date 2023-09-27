@@ -16,10 +16,9 @@
                     target: '_blank' %></td>
           <td class="files">
             <ul>
-              <%# TODO:  Only list files that match the preferred version %>
-              <% p.activity_insight_oa_files.each do |f| %>
+              <% p.preferred_ai_oa_files.each do |f| %>
                 <li>
-                  <%= link_to "#{f.download_filename.truncate(45)}",
+                  <%= link_to "#{f.download_filename.truncate(35)} (#{f.version})",
                         rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
                         target: '_blank' %>
                 </li>

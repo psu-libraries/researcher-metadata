@@ -174,6 +174,60 @@ describe Publication, type: :model do
     it { is_expected.to belong_to(:journal).optional.inverse_of(:publications) }
 
     it { is_expected.to have_one(:publisher).through(:journal) }
+
+    describe '#preferred_ai_oa_files' do
+      let!(:pub) { create(:publication, preferred_version: pv) }
+      let!(:aif1) { create(:activity_insight_oa_file, publication: pub, version: 'acceptedVersion') }
+      let!(:aif2) { create(:activity_insight_oa_file, publication: pub, version: 'publishedVersion') }
+      let!(:aif3) { create(:activity_insight_oa_file, publication: pub, version: 'unknown') }
+      let!(:aif4) { create(:activity_insight_oa_file, publication: pub, version: nil) }
+
+      let!(:other_pub) { create(:publication, preferred_version: 'Published or Accepted') }
+      let!(:other_aif1) { create(:activity_insight_oa_file, publication: other_pub, version: 'acceptedVersion') }
+      let!(:other_aif2) { create(:activity_insight_oa_file, publication: other_pub, version: 'publishedVersion') }
+      let!(:other_aif3) { create(:activity_insight_oa_file, publication: other_pub, version: 'unknown') }
+      let!(:other_aif4) { create(:activity_insight_oa_file, publication: other_pub, version: nil) }
+
+      context "when the publication's preferred version is 'acceptedVersion'" do
+        let(:pv) { 'acceptedVersion' }
+
+        it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
+          expect(pub.preferred_ai_oa_files).to match_array [aif1]
+        end
+      end
+
+      context "when the publication's preferred version is 'publishedVersion'" do
+        let(:pv) { 'publishedVersion' }
+
+        it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
+          expect(pub.preferred_ai_oa_files).to match_array [aif2]
+        end
+      end
+
+      context "when the publication's preferred version is 'Published or Accepted'" do
+        let(:pv) { 'Published or Accepted' }
+
+        it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
+          expect(pub.preferred_ai_oa_files).to match_array [aif1, aif2]
+        end
+      end
+
+      context "when the publication's preferred version is 'None'" do
+        let(:pv) { 'None' }
+
+        it 'returns an empty array' do
+          expect(pub.preferred_ai_oa_files).to eq []
+        end
+      end
+
+      context "when the publication's preferred version is nil" do
+        let(:pv) { nil }
+
+        it 'returns an empty array' do
+          expect(pub.preferred_ai_oa_files).to eq []
+        end
+      end
+    end
   end
 
   it { is_expected.to accept_nested_attributes_for(:authorships).allow_destroy(true) }

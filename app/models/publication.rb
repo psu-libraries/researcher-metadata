@@ -110,6 +110,19 @@ class Publication < ApplicationRecord
            inverse_of: :publication
   has_many :activity_insight_oa_files,
            inverse_of: :publication
+  has_many :preferred_ai_oa_files,
+           -> {
+             joins(:publication)
+               .where(
+                 <<-SQL.squish
+                   preferred_version = activity_insight_oa_files.version
+                   OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                   OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+                 SQL
+               )
+           },
+           class_name: :ActivityInsightOAFile,
+           inverse_of: :publication
 
   belongs_to :duplicate_group,
              class_name: :DuplicatePublicationGroup,
