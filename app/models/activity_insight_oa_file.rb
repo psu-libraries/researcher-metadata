@@ -16,6 +16,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(file_download_location: nil)
       .where(downloaded: nil)
       .where.not(location: nil)
+      .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
   }
   scope :send_oa_status_to_activity_insight, -> {
     left_outer_joins(:publication)

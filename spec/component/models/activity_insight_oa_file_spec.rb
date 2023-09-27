@@ -2,7 +2,7 @@
 
 require 'component/component_spec_helper'
 require 'component/models/shared_examples_for_an_application_record'
-
+RSpec::Support::ObjectFormatter.default_instance.max_formatted_output_length = nil
 RSpec.describe ActivityInsightOAFile, type: :model do
   subject(:aif) { described_class.new }
 
@@ -90,6 +90,18 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          ],
                          open_access_status: 'green')
     }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         open_access_status: nil)
+    }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         open_access_status: 'gold')
+    }
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         open_access_status: 'hybrid')
+    }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
@@ -104,7 +116,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file1]
+        expect(described_class.ready_for_download).to match_array [file1, file8]
       end
     end
 

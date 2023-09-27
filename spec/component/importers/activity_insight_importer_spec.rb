@@ -4994,7 +4994,7 @@ describe ActivityInsightImporter do
       let!(:existing_pub) { create(:publication) }
 
       context 'when the existing publication cannot receive new ai oa files?' do
-        let(:oal) { create(:open_access_location) }
+        let(:oal) { create(:open_access_location, source: Source::SCHOLARSPHERE) }
 
         before do
           existing_pub.open_access_locations << oal
