@@ -90,18 +90,6 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          ],
                          open_access_status: 'green')
     }
-    let!(:pub4) { create(:publication,
-                         title: 'pub4',
-                         open_access_status: nil)
-    }
-    let!(:pub5) { create(:publication,
-                         title: 'pub5',
-                         open_access_status: 'gold')
-    }
-    let!(:pub6) { create(:publication,
-                         title: 'pub6',
-                         open_access_status: 'hybrid')
-    }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
@@ -109,14 +97,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file5) { create(:activity_insight_oa_file, publication: pub2, file_download_location: uploader) }
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
-    let!(:file8) { create(:activity_insight_oa_file, publication: pub4, downloaded: true) }
+    let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
     let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true) }
     let!(:file11) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file1, file8]
+        expect(described_class.ready_for_download).to match_array [file1]
       end
     end
 
