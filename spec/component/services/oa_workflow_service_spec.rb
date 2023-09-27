@@ -35,7 +35,7 @@ describe OAWorkflowService do
     let!(:pub7) { create(:publication,
                          title: 'pub7',
                          licence: 'licence',
-                         open_access_status: 'gold',)}
+                         open_access_status: 'gold')}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
