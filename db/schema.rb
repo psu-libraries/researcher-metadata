@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_19_201321) do
+ActiveRecord::Schema.define(version: 2023_09_27_143559) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -55,6 +55,7 @@ ActiveRecord::Schema.define(version: 2023_09_19_201321) do
     t.integer "user_id"
     t.string "intellcont_id"
     t.string "post_file_id"
+    t.boolean "exported_oa_status_to_activity_insight"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end
@@ -496,7 +497,6 @@ ActiveRecord::Schema.define(version: 2023_09_19_201321) do
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
     t.datetime "wrong_oa_version_notification_sent_at"
-    t.boolean "exported_oa_status_to_activity_insight"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"

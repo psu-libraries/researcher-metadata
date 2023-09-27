@@ -35,9 +35,8 @@ class OAWorkflowService
     end
 
     ActivityInsightOAFile.send_oa_status_to_activity_insight.each do |file|
-      publication = file.publication
-      publication.exported_oa_status_to_activity_insight = true
-      publication.save!
+      file.exported_oa_status_to_activity_insight = true
+      file.save!
       AiOAStatusExportJob.perform_later(file.id)
     end
   end

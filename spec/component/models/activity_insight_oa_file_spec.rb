@@ -80,8 +80,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     }
     let!(:pub6) { create(:publication,
                          title: 'pub1',
-                         open_access_status: 'gold',
-                         exported_oa_status_to_activity_insight: true)
+                         open_access_status: 'gold')
     }
     let!(:pub7) { create(:publication,
                          title: 'pub7',
@@ -99,7 +98,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
-    let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true, exported_oa_status_to_activity_insight: true) }
     let!(:file11) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
 
     describe '.ready_for_download' do

@@ -13,8 +13,8 @@ describe AiOAStatusExportJob, type: :job do
   end
 
   describe '#perform_now' do
-    let!(:aif1) { create(:activity_insight_oa_file, publication: pub1) }
-    let(:pub1) { create(:publication, open_access_status: 'gold', exported_oa_status_to_activity_insight: nil) }
+    let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, exported_oa_status_to_activity_insight: nil) }
+    let(:pub1) { create(:publication, open_access_status: 'gold') }
     let(:exporter) { instance_double ActivityInsightOAStatusExporter }
 
     before { allow(ActivityInsightOAStatusExporter).to receive(:new).with(aif1.id).and_return(exporter) }

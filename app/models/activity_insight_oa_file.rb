@@ -25,7 +25,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid'
         OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
         AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
-      .where(publication: { exported_oa_status_to_activity_insight: nil })
+      .where(exported_oa_status_to_activity_insight: nil)
   }
 
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
