@@ -5,7 +5,7 @@ module API::V1
     def index
       limit = params[:limit].presence || 100
 
-      query = api_token.publications.visible.limit(limit)
+      query = api_token.all_current_publications.visible.limit(limit)
 
       if params[:activity_insight_id].present?
         query = Publication.filter_by_activity_insight_id(query, params[:activity_insight_id])
@@ -19,12 +19,12 @@ module API::V1
     end
 
     def show
-      @publication = api_token.publications.visible.find(params[:id])
+      @publication = api_token.all_current_publications.visible.find(params[:id])
       render json: API::V1::PublicationSerializer.new(@publication).serializable_hash
     end
 
     def grants
-      publication = api_token.publications.visible.find(params[:id])
+      publication = api_token.all_current_publications.visible.find(params[:id])
       render json: API::V1::GrantSerializer.new(publication.grants)
     end
 

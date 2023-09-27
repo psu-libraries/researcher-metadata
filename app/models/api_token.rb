@@ -19,6 +19,10 @@ class APIToken < ApplicationRecord
         .distinct(:id)
   end
 
+  def all_organizations
+    Organization.where(organization_id: descendant_org_ids)
+  end
+
   def increment_request_count
     update_column(:total_requests, total_requests + 1)
     update_column(:last_used_at, Time.current)
