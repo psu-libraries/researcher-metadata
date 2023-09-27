@@ -8,7 +8,7 @@ class AiOAWfVersionCheckJob < ApplicationJob
     exif_file_version = ExifFileVersionChecker.new(file_path: file.file_download_location.path,
                                                    journal: file.publication.journal&.title).version
     if exif_file_version.present?
-      file.update! version: exif_file_version
+      file.update_column :version, exif_file_version
       return
     end
 
