@@ -716,6 +716,7 @@ DEPENDENCIES
   jquery-ui-rails
   jsbundling-rails
   jsonapi-serializer
+  kaminari (~> 1.0)
   launchy
   listen (>= 3.0.5, < 3.8)
   lograge

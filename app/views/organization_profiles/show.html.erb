@@ -1,0 +1,48 @@
+<nav class="profile-header">
+  <ul>
+    <li><a href="https://libraries.psu.edu/" target="_blank">University Libraries</a></li>
+  </ul>
+  <div class="clearfix"></div>
+</nav>
+<div class="title-bar" data-responsive-toggle="lower-nav" data-hide-for="large">
+  <a href="#"><%= image_tag('logo.png', alt: "Penn State") %></a>
+</div>
+<div class="top-bar" id="lower-nav">
+  <div class="top-bar-left show-for-large">
+    <a href="#"><%= image_tag('logo.png', alt: "Penn State", class: 'logo') %></a>
+  </div>
+</div>
+<div id="profile">
+  <div class="grid-container">
+    <h3><%= @organization.name %></h3>
+    <div class="grid-x grid-margin-x">
+      <div class="large-12 cell">
+          <% @publications.each do |pub| %>
+            <p><%= AuthorshipDecorator.new(pub).label.html_safe %></p>
+          <% end %>
+        </div>
+        
+      </div>
+      <div class='row'>
+        <div class='col-sm-3 float-left'>
+          <%= page_entries_info @publications %>
+        </div>
+        <div class='col-sm-3 float-right'>
+          <%= paginate @publications %>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="grid-x">
+    <nav class="cell">
+      <ul class="menu social align-center">
+      </ul>
+      <ul class="menu links align-center">
+        <li><a href="https://psu.edu" target="_blank">&copy; 2019 The Pennsylvania State University</a></li>
+      </ul>
+    </nav>
+  </div>
+</footer>
