@@ -74,11 +74,11 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          open_access_status: 'gold')
     }
     let!(:pub5) { create(:publication,
-                         title: 'pub1',
+                         title: 'pub5',
                          open_access_status: 'hybrid')
     }
     let!(:pub6) { create(:publication,
-                         title: 'pub1',
+                         title: 'pub6',
                          open_access_status: 'gold')
     }
     let!(:pub7) { create(:publication,
