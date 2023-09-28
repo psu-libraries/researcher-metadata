@@ -1,6 +1,6 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
-  <h1 class="pb-3 pt-2">Publications Requiring Permissions Review on a File</h1>
+  <h1 class="pb-3 pt-2">Publications Requiring Preferred Version Check</h1>
   <table class="table">
     <thead class='card-header'>
       <tr>
@@ -16,11 +16,17 @@
                     target: '_blank' %></td>
           <td class="files">
             <ul>
-              <% p.preferred_ai_oa_files.each do |f| %>
+              <% p.activity_insight_oa_files.each do |f| %>
                 <li>
-                  <%= link_to "#{f.download_filename.truncate(35)} (#{f.version})",
-                        rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
-                        target: '_blank' %>
+                  <% if f.stored_file_path.present? %>
+                    <%= link_to "#{f.download_filename.truncate(35)}" + (f.version.present? ? " (#{f.version})" : ' (unknown)'),
+                          rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                          target: '_blank' %>
+                  <% else %>
+                    <%= link_to 'Not Yet Downloaded',
+                          rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                          target: '_blank' %>
+                  <% end %>
                 </li>
               <% end %>
             </ul>

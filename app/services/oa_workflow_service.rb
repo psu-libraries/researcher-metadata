@@ -20,7 +20,7 @@ class OAWorkflowService
     Publication.needs_permissions_check.each do |pub|
       pub.permissions_last_checked_at = Time.current
       pub.save!
-      PermissionsCheckJob.perform_later(pub.id)
+      PublicationPermissionsCheckJob.perform_later(pub.id)
     rescue StandardError
       pub.update_column(:permissions_last_checked_at, Time.current)
       raise
@@ -32,6 +32,11 @@ class OAWorkflowService
       PublicationDownloadJob.perform_later(file.id)
     rescue StandardError
       file.update_column(:downloaded, false)
+    end
+
+    ActivityInsightOAFile.needs_permissions_check.each do |file|
+      file.update!(permissions_last_checked_at: Time.current)
+      FilePermissionsCheckJob.perform_later(file.id)
     end
   end
 end

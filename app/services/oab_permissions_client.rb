@@ -2,7 +2,7 @@
 
 class OABPermissionsClient
   class InvalidVersion < StandardError; end
-  attr_reader :doi, :version, :permissions
+  attr_reader :doi, :version
 
   VALID_VERSIONS = [I18n.t('file_versions.accepted_version'),
                     I18n.t('file_versions.published_version')].freeze
@@ -10,7 +10,7 @@ class OABPermissionsClient
   private
 
     def all_permissions
-      JSON.parse(permissions_response)['all_permissions']
+      @all_permissions ||= JSON.parse(permissions_response)['all_permissions']
     rescue JSON::ParserError
       nil
     end
@@ -30,8 +30,8 @@ class OABPermissionsClient
     end
 
     def accepted_version
-      if permissions.present?
-        permissions
+      if all_permissions.present?
+        all_permissions
           .select { |perm| perm if perm['version'] == I18n.t('file_versions.accepted_version') }
           .first
           .presence || {}
@@ -41,8 +41,8 @@ class OABPermissionsClient
     end
 
     def published_version
-      if permissions.present?
-        permissions
+      if all_permissions.present?
+        all_permissions
           .select { |perm| perm if perm['version'] == I18n.t('file_versions.published_version') }
           .first
           .presence || {}

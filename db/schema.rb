@@ -53,6 +53,12 @@ ActiveRecord::Schema.define(version: 2023_09_12_202604) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
+    t.datetime "permissions_last_checked_at"
+    t.string "license"
+    t.date "embargo_date"
+    t.text "set_statement"
+    t.boolean "checked_for_set_statement"
+    t.boolean "checked_for_embargo_date"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end

@@ -1,0 +1,110 @@
+{
+  "best_permission": {
+    "can_archive": true,
+    "version": "submittedVersion",
+    "versions": [
+      "submittedVersion"
+    ],
+    "licence": "other-closed",
+    "locations": [
+      "Institutional Repository",
+      "Preprint Server"
+    ],
+    "deposit_statement": "Posted with permission from the Annual Review of Earth and Planetary Sciences, Volume 39, © by Annual Reviews, https://www.annualreviews.org.",
+    "copyright_owner": "Publisher",
+    "copyright_name": "Annual Reviews",
+    "copyright_year": "2011",
+    "issuer": {
+      "id": [
+        "Annual Reviews"
+      ],
+      "has_policy": "Yes",
+      "type": "Publisher",
+      "journal_oa_type": "hybrid"
+    },
+    "meta": {
+      "monitoring": "Automatic",
+      "contributors": [
+        "libraryrepository@pobox.upenn.edu",
+        "natalia@oa.works"
+      ],
+      "creator": [
+        "libraryrepository@pobox.upenn.edu"
+      ],
+      "reviewer": [
+        "natalia@oa.works"
+      ],
+      "added": "12/07/2017 00:00:00"
+    },
+    "provenance": {
+      "archiving_policy_unarchived": "https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines",
+      "example": "10.1146/annurev-vision-091718-014934",
+      "author_rights": "https://web.archive.org/web/20200106214714/https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines",
+      "archiving_policy": [
+        "https://web.archive.org/web/20200106214714/https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines"
+      ]
+    },
+    "09/05/2023 09:19": "01/07/2020 00:00:00",
+    "score": 999,
+    "licences": [
+      {
+        "type": "other-closed"
+      }
+    ]
+  },
+  "all_permissions": [
+    {
+      "can_archive": true,
+      "version": "submittedVersion",
+      "versions": [
+        "submittedVersion"
+      ],
+      "licence": "other-closed",
+      "locations": [
+        "Institutional Repository",
+        "Preprint Server"
+      ],
+      "deposit_statement": "Posted with permission from the Annual Review of Earth and Planetary Sciences, Volume 39, © by Annual Reviews, https://www.annualreviews.org.",
+      "copyright_owner": "Publisher",
+      "copyright_name": "Annual Reviews",
+      "copyright_year": "2011",
+      "issuer": {
+        "id": [
+          "Annual Reviews"
+        ],
+        "has_policy": "Yes",
+        "type": "Publisher",
+        "journal_oa_type": "hybrid"
+      },
+      "meta": {
+        "monitoring": "Automatic",
+        "contributors": [
+          "libraryrepository@pobox.upenn.edu",
+          "natalia@oa.works"
+        ],
+        "creator": [
+          "libraryrepository@pobox.upenn.edu"
+        ],
+        "reviewer": [
+          "natalia@oa.works"
+        ],
+        "added": "12/07/2017 00:00:00"
+      },
+      "provenance": {
+        "archiving_policy_unarchived": "https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines",
+        "example": "10.1146/annurev-vision-091718-014934",
+        "author_rights": "https://web.archive.org/web/20200106214714/https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines",
+        "archiving_policy": [
+          "https://web.archive.org/web/20200106214714/https://www.annualreviews.org/page/authors/author-instructions/submitting/copyright-guidelines"
+        ]
+      },
+      "09/05/2023 09:19": "01/07/2020 00:00:00",
+      "score": 999,
+      "licences": [
+        {
+          "type": "other-closed"
+        }
+      ]
+    }
+  ]
+}
