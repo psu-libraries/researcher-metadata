@@ -8,6 +8,9 @@ describe 'Admin Metadata Review dashboard', type: :feature do
       :activity_insight_oa_file,
       publication: pub1,
       version: 'publishedVersion',
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      checked_for_set_statement: true,
+      checked_for_embargo_date: true,
       downloaded: true,
       file_download_location: fixture_file_open('test_file.pdf')
     )
@@ -17,6 +20,9 @@ describe 'Admin Metadata Review dashboard', type: :feature do
       :activity_insight_oa_file,
       publication: pub2,
       version: 'acceptedVersion',
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      checked_for_set_statement: true,
+      checked_for_embargo_date: true,
       downloaded: true,
       file_download_location: fixture_file_open('test_file.pdf')
     )
@@ -35,10 +41,7 @@ describe 'Admin Metadata Review dashboard', type: :feature do
     create(
       :publication,
       title: 'Pub2',
-      preferred_version: 'acceptedVersion',
-      licence: 'license',
-      set_statement: 'statement',
-      embargo_date: Date.current
+      preferred_version: 'acceptedVersion'
     )
   }
   let!(:pub3) { create(:publication, title: 'Pub3', preferred_version: nil) }

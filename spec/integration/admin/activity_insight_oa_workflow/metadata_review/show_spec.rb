@@ -8,10 +8,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
     create(
       :publication,
       title: 'Pub2 Title',
-      preferred_version: 'acceptedVersion',
-      licence: 'license',
-      set_statement: 'statement',
-      embargo_date: Date.current
+      preferred_version: 'acceptedVersion'
     )
   }
   let!(:aif2) {
@@ -19,6 +16,9 @@ describe 'Admin Metadata Review publication detail', type: :feature do
       :activity_insight_oa_file,
       publication: pub2,
       version: 'acceptedVersion',
+      license: 'https://creativecommons.org/licenses/by/4.0/',
+      set_statement: 'statement',
+      embargo_date: Date.today,
       downloaded: true,
       file_download_location: fixture_file_open('test_file.pdf')
     )
