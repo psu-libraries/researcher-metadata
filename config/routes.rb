@@ -35,6 +35,7 @@ Rails.application.routes.draw do
     get '/permissions_review' => 'permissions_curation#index'
     get '/files/:activity_insight_oa_file_id/download' => 'files#download', as: :file_download
     get '/metadata_review' => 'metadata_curation#index'
+    get '/all_workflow_publications' => 'all_workflow_publications#index'
   end
 
   root to: 'public#home'

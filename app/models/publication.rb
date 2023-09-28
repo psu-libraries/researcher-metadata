@@ -145,6 +145,12 @@ class Publication < ApplicationRecord
                                                  .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                              }
   scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :troubleshooting_list, -> {
+    activity_insight_oa_publication
+      .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
+      .includes(:activity_insight_oa_files)
+      .order('activity_insight_oa_files.created_at ASC')
+  }
   scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }

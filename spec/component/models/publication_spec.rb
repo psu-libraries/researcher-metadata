@@ -470,6 +470,51 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.troubleshooting_list' do
+    let!(:pub1) { create(:publication,
+                         title: 'pub1',
+                         open_access_locations: [],
+                         open_access_status: nil) }
+    let!(:pub2) { create(:publication,
+                         title: 'pub2',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                         ])
+    }
+    let!(:pub3) { create(:publication,
+                         title: 'pub3',
+                         open_access_locations: [],
+                         open_access_status: 'unknown') }
+    let!(:pub4) { create(:publication,
+                         title: 'pub4',
+                         open_access_locations: [],
+                         open_access_status: 'gold') }
+    let!(:pub5) { create(:publication,
+                         title: 'pub5',
+                         open_access_locations: [],
+                         open_access_status: 'hybrid') }
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ])
+    }
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         open_access_locations: [],
+                         open_access_status: nil) }
+    let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub1) }
+    let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub6) }
+
+    it 'returns all activity insight oa publications without a scholarsphere source or gold/hyrbid oa status' do
+      expect(described_class.troubleshooting_list).to match_array [pub1, pub2, pub3]
+    end
+  end
+
   describe 'open access scopes' do
     let!(:pub1) { create(:publication,
                          title: 'pub1',
