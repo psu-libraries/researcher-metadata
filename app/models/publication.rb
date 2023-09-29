@@ -169,6 +169,7 @@ class Publication < ApplicationRecord
                                                distinct(:id).left_outer_joins(:open_access_locations)
                                                  .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                              }
+  #add a filter to ai oa pub that excludes any pubs that have had an email sent that they are not depositable
   scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
@@ -219,14 +220,6 @@ class Publication < ApplicationRecord
       )
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
-  scope :preferred_file_version_none, -> {
-    #update once preferred none work is merged in
-    activity_insight_oa_publication
-    .where.not(preferred_version: nil)
-    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
-    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
-    .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
-  }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :needs_manual_preferred_version_check, -> {
     activity_insight_oa_publication
@@ -234,6 +227,10 @@ class Publication < ApplicationRecord
       .where.not(permissions_last_checked_at: nil)
       .where(preferred_version: nil)
   }
+  scope :preferred_file_version_none, -> {
+    activity_insight_oa_publication
+    .where(%{preferred_version = '#{NO_VERSION}'})
+    }
   scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
