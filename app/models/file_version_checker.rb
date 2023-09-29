@@ -33,19 +33,26 @@ class FileVersionChecker
     def process_content
       return '' if File.extname(file_path) != '.pdf'
 
-      reader = PDF::Reader.new(file_path)
-      words = []
+      begin
+        reader = PDF::Reader.new(file_path)
+        words = []
 
-      reader.pages.each do |page|
-        break if words.count >= 500
+        reader.pages.each do |page|
+          break if words.count >= 500
 
-        words << page.text.split.first(500)
-        words.flatten!
-      # Formatting issues can cause errors
-      # Best to rescue and move to the next page
-      rescue StandardError
-        next
+          words << page.text.split.first(500)
+          words.flatten!
+        # Formatting issues can cause errors
+        # Best to rescue and move to the next page
+        rescue StandardError
+          next
+        end
+      rescue PDF::Reader::MalformedPDFError,
+             PDF::Reader::InvalidObjectError,
+             PDF::Reader::EncryptedPDFError
+        return ''
       end
+
       words.flatten.join(' ')
     end
 
