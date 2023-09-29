@@ -1,0 +1,80 @@
+{
+  "best_permission": {
+    "versions": [],
+    "copyright_owner": "Publisher",
+    "copyright_name": "American Academy of Pediatrics (AAP)",
+    "copyright_year": "2004",
+    "issuer": {
+      "id": [
+        "American Academy of Pediatrics (AAP)"
+      ],
+      "has_policy": "Permission Required",
+      "type": "Publisher",
+      "journal_oa_type": "closed"
+    },
+    "meta": {
+      "monitoring": "Automatic",
+      "contributors": [
+        "natalia@openaccessbutton.org",
+        "natalia@oa.works"
+      ],
+      "creator": [
+        "natalia@openaccessbutton.org"
+      ],
+      "reviewer": [
+        "natalia@oa.works"
+      ],
+      "added": "10/08/2022 20:38"
+    },
+    "provenance": {
+      "archiving_policy_unarchived": "https://shop.aap.org/licensing-permissions/",
+      "archiving_policy": [
+        "https://web.archive.org/web/20200211122116/https://shop.aap.org/licensing-permissions/"
+      ]
+    },
+    "permissions_contact": "permissions@aap.org",
+    "09/05/2023 09:19": "10/08/2022 20:38",
+    "score": 4,
+    "licences": []
+  },
+  "all_permissions": [
+    {
+      "versions": [],
+      "copyright_owner": "Publisher",
+      "copyright_name": "American Academy of Pediatrics (AAP)",
+      "copyright_year": "2004",
+      "issuer": {
+        "id": [
+          "American Academy of Pediatrics (AAP)"
+        ],
+        "has_policy": "Permission Required",
+        "type": "Publisher",
+        "journal_oa_type": "closed"
+      },
+      "meta": {
+        "monitoring": "Automatic",
+        "contributors": [
+          "natalia@openaccessbutton.org",
+          "natalia@oa.works"
+        ],
+        "creator": [
+          "natalia@openaccessbutton.org"
+        ],
+        "reviewer": [
+          "natalia@oa.works"
+        ],
+        "added": "10/08/2022 20:38"
+      },
+      "provenance": {
+        "archiving_policy_unarchived": "https://shop.aap.org/licensing-permissions/",
+        "archiving_policy": [
+          "https://web.archive.org/web/20200211122116/https://shop.aap.org/licensing-permissions/"
+        ]
+      },
+      "permissions_contact": "permissions@aap.org",
+      "09/05/2023 09:19": "10/08/2022 20:38",
+      "score": 4,
+      "licences": []
+    }
+  ]
+}

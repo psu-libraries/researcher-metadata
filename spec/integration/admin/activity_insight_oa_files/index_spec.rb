@@ -29,11 +29,9 @@ describe 'Admin activity insight oa file list', type: :feature do
 
       it 'shows information about each file' do
         expect(page).to have_link pub1.title
-        expect(page).to have_content aif1.location
         expect(page).to have_content 'acceptedVersion'
 
         expect(page).to have_link pub2.title
-        expect(page).to have_content aif2.location
       end
     end
 

@@ -1,41 +1,30 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
-  <h1 class="pb-3 pt-2">Publications Requiring Permissions Review</h1>
+  <h1 class="pb-3 pt-2">Publications Requiring Permissions Review on a File</h1>
   <table class="table">
     <thead class='card-header'>
       <tr>
         <th>Title</th>
-        <th>License</th>
-        <th>Preferred Version</th>
-        <th>Download Files</th>
-        <th>Deposit Statement</th>
-        <th>Checked Deposit Statement</th>
-        <th>Embargo Date</th>
-        <th>Checked Embargo Date</th>
+        <th>Files:  Name (Version)</th>
       </tr>
     </thead>
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
           <td><%= link_to p.title.truncate(45),
-                  rails_admin.edit_path(model_name: :publication, id: p.id) + "#publication_preferred_version",
-                  target: '_blank' %></td>
-          <td id="license"><%= p.licence.present? ? p.licence.truncate(45) : 'Not Found' %></td>
-          <td id="preferred-version"><%= p.preferred_version.present? ? p.preferred_version_display : 'Not Found' %></td>
-          <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
-            <% if f.stored_file_path.present? %>
-              <%= link_to "#{f.download_filename}",
-                          activity_insight_oa_workflow_file_download_path(f.id),
-                          target: '_blank' %>
-            <% else %>
-              Not Found
-            <% end %>
-          <% end %>
+                    rails_admin.edit_path(model_name: :publication, id: p.id) + "#publication_preferred_version",
+                    target: '_blank' %></td>
+          <td class="files">
+            <ul>
+              <% p.preferred_ai_oa_files.each do |f| %>
+                <li>
+                  <%= link_to "#{f.download_filename.truncate(35)} (#{f.version})",
+                        rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                        target: '_blank' %>
+                </li>
+              <% end %>
+            </ul>
           </td>
-          <td id="set-statement"><%= p.set_statement.present? ? p.set_statement.truncate(45) : 'Not Found' %></td>
-          <td id="checked-set-statement"><%= p.checked_for_set_statement.present? ? '✓' : '' %></td>
-          <td id="embargo-date"><%= p.embargo_date.present? ? p.embargo_date : 'Not Found' %></td>
-          <td id="checked-embargo-date"><%= p.checked_for_embargo_date.present? ? '✓' : '' %></td>
         </tr>
       <% end %>
     </tbody>

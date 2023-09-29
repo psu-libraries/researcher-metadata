@@ -53,17 +53,35 @@
     </div>
   <% end %>
   <br>
-  <% if permissions_check_failed_count.nonzero? %>
+  <% if needs_manual_preferred_version_check_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_preferred_version_review_path, class: 'card-link' do %>
+      <div class='card' id='preferred-version-check-card'>
+        <div class='card-header'><strong><%= i18n('preferred_version_curation_title') %></strong>
+          <span class='float-right text-large'><strong><%= needs_manual_preferred_version_check_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('preferred_version_curation_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='preferred-version-check-card'>
+      <div class='card-header'><strong><%= i18n('preferred_version_curation_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('preferred_version_curation_description') %></div>
+    </div>
+  <% end %>
+  <br>
+  <% if needs_manual_permissions_review_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_permissions_review_path, class: 'card-link' do %>
-      <div class='card' id='permissions-check-card'>
+      <div class='card' id='permissions-review-card'>
         <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= permissions_check_failed_count %></strong></span>
+          <span class='float-right text-large'><strong><%= needs_manual_permissions_review_count %></strong></span>
         </div>
         <div class='card-body'><%= i18n('permissions_curation_description') %></div>
       </div>
     <% end %>
   <% else %>
-    <div class='card text-muted' id='permissions-check-card'>
+    <div class='card text-muted' id='permissions-review-card'>
       <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
         <span class='float-right text-large'>0</strong></span>
       </div>
@@ -86,6 +104,24 @@
         <span class='float-right text-large'>0</strong></span>
       </div>
       <div class='card-body'><%= i18n('metadata_curation_description') %></div>
+    </div>
+  <% end %>
+  <br>
+  <% if all_workflow_publications_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_all_workflow_publications_path, class: 'card-link' do %>
+      <div class='card' id='all-workflow-publications-card'>
+        <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
+          <span class='float-right text-large'><strong><%= all_workflow_publications_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('all_workflow_publications_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='all-workflow-publications-card'>
+      <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('all_workflow_publications_description') %></div>
     </div>
   <% end %>
 </div>

@@ -2,6 +2,6 @@
 
 class ActivityInsightOAWorkflow::PermissionsCurationController < ActivityInsightOAWorkflowController
   def index
-    @publications = Publication.permissions_check_failed
+    @publications = Publication.needs_manual_permissions_review
   end
 end

@@ -1,0 +1,35 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_path %>
+  <h1 class="pb-3 pt-2">All Workflow Publications</h1>
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Title</th>
+        <th>File Created At</th>
+        <th>Edit file in admin dashboard</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= link_to p.title.truncate(45),
+                    rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
+                    target: '_blank' %>
+          </td>
+          <% p.activity_insight_oa_files.each_with_index do |file, index| %>
+          <%= '<tr>'.html_safe unless index == 0 %>
+            <td>
+              <%= file.created_at.strftime("%m/%d/%Y") %>
+            </td>
+            <td class="file-name">
+                <%= link_to file.download_filename,
+                  rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
+                  target: '_blank' %>
+            </td>
+        <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>

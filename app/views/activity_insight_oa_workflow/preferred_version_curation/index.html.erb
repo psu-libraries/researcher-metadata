@@ -1,0 +1,38 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_path %>
+  <h1 class="pb-3 pt-2">Publications Requiring Preferred Version Check</h1>
+  <table class="table">
+    <thead class='card-header'>
+      <tr>
+        <th>Title</th>
+        <th>Files:  Name (Version)</th>
+      </tr>
+    </thead>
+    <tbody class='card-body'>
+      <% @publications.each do |p| %>
+        <tr id="<%= dom_id(p) %>">
+          <td><%= link_to p.title.truncate(45),
+                    rails_admin.edit_path(model_name: :publication, id: p.id) + "#publication_preferred_version",
+                    target: '_blank' %></td>
+          <td class="files">
+            <ul>
+              <% p.activity_insight_oa_files.each do |f| %>
+                <li>
+                  <% if f.stored_file_path.present? %>
+                    <%= link_to "#{f.download_filename.truncate(35)}" + (f.version.present? ? " (#{f.version})" : ' (unknown)'),
+                          rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                          target: '_blank' %>
+                  <% else %>
+                    <%= link_to 'Not Yet Downloaded',
+                          rails_admin.edit_path(model_name: :activity_insight_oa_file, id: f.id),
+                          target: '_blank' %>
+                  <% end %>
+                </li>
+              <% end %>
+            </ul>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
