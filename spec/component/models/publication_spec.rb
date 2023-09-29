@@ -44,6 +44,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:checked_for_set_statement).of_type(:boolean) }
   it { is_expected.to have_db_column(:checked_for_embargo_date).of_type(:boolean) }
+  it { is_expected.to have_db_column(:preferred_file_version_none_email_sent).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }

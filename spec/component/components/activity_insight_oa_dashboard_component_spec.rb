@@ -125,6 +125,38 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when no publications have a preferred version of none' do
+    let!(:oal) { create(:open_access_location, publication: pub2, source: Source::SCHOLARSPHERE) }
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication, doi_verified: nil) }
+    let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now, preferred_version: 'acceptedVersion') }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('preferred-file-version-none-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('preferred-file-version-none-check-card').text).to include('0')
+      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
+    end
+  end
+
+  context 'when publications have a preferred version of none' do
+    let!(:pub1) { create(:publication, permissions_last_checked_at: Time.now) }
+    let!(:pub2) {
+      create(
+        :publication,
+        permissions_last_checked_at: Time.now,
+        preferred_version: 'None'
+      )
+    }
+
+    it 'renders the preferred version review card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('preferred-file-version-none-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('preferred-file-version-none-check-card').text).to include('1')
+      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
+    end
+  end
+
   context 'when no publications need their preferred version verified' do
     let!(:oal) { create(:open_access_location, publication: pub2, source: Source::SCHOLARSPHERE) }
     let!(:pub1) { create(:publication) }

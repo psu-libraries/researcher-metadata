@@ -454,6 +454,7 @@ class Publication < ApplicationRecord
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
+      field(:preferred_file_version_none_email_sent)
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
@@ -506,6 +507,7 @@ class Publication < ApplicationRecord
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
+      field(:preferred_file_version_none_email_sent)
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
