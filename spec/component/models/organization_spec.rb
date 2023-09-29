@@ -219,6 +219,17 @@ describe Organization, type: :model do
     end
   end
 
+  describe '#descendant_ids' do
+    let!(:org) { create(:organization) }
+    let!(:other_org) { create(:organization) }
+    let!(:child_org) { create(:organization, parent: org) }
+    let!(:child_org_child) { create(:organization, parent: child_org) }
+
+    it 'returns the id of the parent organization and all its descendant organization ids' do
+      expect(org.descendant_ids).to match_array([org.id, child_org.id, child_org_child.id])
+    end
+  end
+
   describe '#oa_email_user_count' do
     xit 'returns the number of users who are members of either the organization itself or one of its descendants and who need an open access reminder email' do
     end

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
     post '/wrong_file_version_email' => 'wrong_file_version_curation#email_author'
     get '/preferred_file_version_none_review' => 'preferred_file_version_none_curation#index'
     post '/preferred_file_version_none_email' => 'preferred_file_version_none_curation#email_author'
+    get '/preferred_version_review' => 'preferred_version_curation#index'
     get '/permissions_review' => 'permissions_curation#index'
     get '/files/:activity_insight_oa_file_id/download' => 'files#download', as: :file_download
     get '/metadata_review' => 'metadata_curation#index'

@@ -8,6 +8,9 @@ class Publication < ApplicationRecord
   PUBLISHED_STATUS = 'Published'
   IN_PRESS_STATUS = 'In Press'
 
+  PUBLISHED_OR_ACCEPTED_VERSION = 'Published or Accepted'
+  NO_VERSION = 'None'
+
   def self.publication_types
     [
       'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
@@ -67,7 +70,16 @@ class Publication < ApplicationRecord
   end
 
   def self.preferred_versions
-    [I18n.t('file_versions.accepted_version'), I18n.t('file_versions.published_version')].freeze
+    preferred_version_options.pluck(1)
+  end
+
+  def self.preferred_version_options
+    [
+      [I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
+      [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')],
+      [I18n.t('file_versions.published_or_accepted_version_display'), PUBLISHED_OR_ACCEPTED_VERSION],
+      [I18n.t('file_versions.no_version_display'), NO_VERSION]
+    ].freeze
   end
 
   has_many :authorships, inverse_of: :publication
@@ -97,6 +109,19 @@ class Publication < ApplicationRecord
   has_many :open_access_locations,
            inverse_of: :publication
   has_many :activity_insight_oa_files,
+           inverse_of: :publication
+  has_many :preferred_ai_oa_files,
+           -> {
+             joins(:publication)
+               .where(
+                 <<-SQL.squish
+                   preferred_version = activity_insight_oa_files.version
+                   OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                   OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+                 SQL
+               )
+           },
+           class_name: :ActivityInsightOAFile,
            inverse_of: :publication
 
   belongs_to :duplicate_group,
@@ -155,10 +180,10 @@ class Publication < ApplicationRecord
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
   scope :needs_permissions_check, -> {
-                                    activity_insight_oa_publication
-                                      .filter_oa_status_from_workflow
-                                      .where(licence: nil, doi_verified: true, permissions_last_checked_at: nil)
-                                  }
+    activity_insight_oa_publication
+      .filter_oa_status_from_workflow
+      .where(preferred_version: nil, doi_verified: true, permissions_last_checked_at: nil)
+  }
   scope :needs_oa_metadata_search,
         -> {
           activity_insight_oa_publication
@@ -179,7 +204,19 @@ class Publication < ApplicationRecord
     activity_insight_oa_publication
       .where.not(preferred_version: nil)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
-      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
+      .where(
+        <<-SQL.squish
+          NOT EXISTS (
+            SELECT id FROM activity_insight_oa_files
+            WHERE activity_insight_oa_files.publication_id = publications.id
+              AND (
+                publications.preferred_version = activity_insight_oa_files.version
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+              )
+          )
+        SQL
+      )
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :preferred_file_version_none, -> {
@@ -191,25 +228,63 @@ class Publication < ApplicationRecord
     .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
-  scope :permissions_check_failed, -> {
+  scope :needs_manual_preferred_version_check, -> {
     activity_insight_oa_publication
       .filter_oa_status_from_workflow
       .where.not(permissions_last_checked_at: nil)
-      .where(
-        %{licence IS NULL OR preferred_version IS NULL OR (embargo_date IS NULL AND checked_for_embargo_date IS DISTINCT FROM TRUE) OR (set_statement IS NULL AND checked_for_set_statement IS DISTINCT FROM TRUE)}
-      )
+      .where(preferred_version: nil)
   }
-  scope :ready_for_metadata_review, -> {
+  scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication
+      .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
       .where(
         <<-SQL.squish
           EXISTS (
             SELECT id FROM activity_insight_oa_files
             WHERE activity_insight_oa_files.publication_id = publications.id
-              AND publications.preferred_version = activity_insight_oa_files.version
-              AND licence IS NOT NULL
-              AND (set_statement IS NOT NULL OR checked_for_set_statement IS TRUE)
-              AND (embargo_date IS NOT NULL OR checked_for_embargo_date IS TRUE)
+              AND activity_insight_oa_files.permissions_last_checked_at IS NOT NULL
+              AND (
+                preferred_version = activity_insight_oa_files.version
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+              )
+          )
+        SQL
+      )
+      .where(
+        <<-SQL.squish
+          NOT EXISTS (
+            SELECT id FROM activity_insight_oa_files
+            WHERE activity_insight_oa_files.publication_id = publications.id
+              AND activity_insight_oa_files.permissions_last_checked_at IS NOT NULL
+              AND (
+                preferred_version = activity_insight_oa_files.version
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+              )
+              AND activity_insight_oa_files.license IS NOT NULL
+              AND (activity_insight_oa_files.set_statement IS NOT NULL OR activity_insight_oa_files.checked_for_set_statement IS TRUE)
+              AND (activity_insight_oa_files.embargo_date IS NOT NULL OR activity_insight_oa_files.checked_for_embargo_date IS TRUE)
+          )
+        SQL
+      )
+  }
+  scope :ready_for_metadata_review, -> {
+    activity_insight_oa_publication
+      .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
+      .where(
+        <<-SQL.squish
+          EXISTS (
+            SELECT id FROM activity_insight_oa_files
+            WHERE activity_insight_oa_files.publication_id = publications.id
+              AND (
+                preferred_version = activity_insight_oa_files.version
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'acceptedVersion')
+                OR (preferred_version = '#{PUBLISHED_OR_ACCEPTED_VERSION}' AND activity_insight_oa_files.version = 'publishedVersion')
+              )
+              AND activity_insight_oa_files.license IS NOT NULL
+              AND (activity_insight_oa_files.set_statement IS NOT NULL OR activity_insight_oa_files.checked_for_set_statement IS TRUE)
+              AND (activity_insight_oa_files.embargo_date IS NOT NULL OR activity_insight_oa_files.checked_for_embargo_date IS TRUE)
               AND activity_insight_oa_files.downloaded IS TRUE
               AND activity_insight_oa_files.file_download_location IS NOT NULL
               AND (open_access_status != 'gold' AND open_access_status != 'hybrid' AND open_access_status IS NOT NULL)
@@ -418,10 +493,7 @@ class Publication < ApplicationRecord
       group :open_access_permissions do
         field(:preferred_version, :enum) do
           label 'Preferred Version'
-          enum do
-            [[I18n.t('file_versions.accepted_version_display'), I18n.t('file_versions.accepted_version')],
-             [I18n.t('file_versions.published_version_display'), I18n.t('file_versions.published_version')]]
-          end
+          enum { Publication.preferred_version_options }
         end
         field(:set_statement) { label 'Deposit Statement' }
         field(:checked_for_set_statement) { label 'Checked for deposit statement' }
@@ -578,9 +650,11 @@ class Publication < ApplicationRecord
   end
 
   def preferred_version_display
-    return I18n.t('file_versions.accepted_version_display') if preferred_version == I18n.t('file_versions.accepted_version')
+    option = self.class.preferred_version_options.find do |o|
+      o[1] == preferred_version
+    end
 
-    I18n.t('file_versions.published_version_display')
+    option[0]
   end
 
   def self.filter_by_activity_insight_id(query, activity_insight_id)
