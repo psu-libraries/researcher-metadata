@@ -136,8 +136,8 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          title: 'pub5',
                          open_access_status: 'hybrid',
                          open_access_locations: [
-                          build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
-                        ])
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                         ])
     }
     let!(:pub5) { create(:publication,
                          title: 'pub7',
@@ -194,31 +194,31 @@ RSpec.describe ActivityInsightOAFile, type: :model do
         location: nil,
         permissions_last_checked_at: Time.now
       )
-    }    
-    let!(:file17) { 
+    }
+    let!(:file17) {
       create(
-        :activity_insight_oa_file, 
-        publication: pub1, 
-        file_download_location: 
-        uploader, 
+        :activity_insight_oa_file,
+        publication: pub1,
+        file_download_location:
+        uploader,
         downloaded: true
-      ) 
+      )
     }
-    let!(:file18) { 
+    let!(:file18) {
       create(
-        :activity_insight_oa_file, 
-        publication: pub1, 
-        file_download_location: uploader, 
+        :activity_insight_oa_file,
+        publication: pub1,
+        file_download_location: uploader,
         version_checked: true
-      ) 
+      )
     }
-    let!(:file19) { 
+    let!(:file19) {
       create(
-        :activity_insight_oa_file, 
-        publication: pub1, 
-        file_download_location: uploader, 
+        :activity_insight_oa_file,
+        publication: pub1,
+        file_download_location: uploader,
         version: 'unknown'
-      ) 
+      )
     }
 
     describe '.subject_to_ai_oa_workflow' do
