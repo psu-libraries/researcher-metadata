@@ -160,33 +160,33 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:file9a) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
-    let!(:file10a) { create(:activity_insight_oa_file, publication: pub6, downloaded: true, exported_oa_status_to_activity_insight: true) }
-    let!(:file11a) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
-    let!(:file9) { create(:activity_insight_oa_file, publication: pub5) }
-    let!(:file10) { create(:activity_insight_oa_file, publication: pub6) }
-    let!(:file11) {
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true, exported_oa_status_to_activity_insight: true) }
+    let!(:file11) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
+    let!(:file12) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:file13) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:file14) {
       create(
         :activity_insight_oa_file,
         version: 'acceptedVersion',
         location: nil
       )
     }
-    let!(:file12) {
+    let!(:file15) {
       create(
         :activity_insight_oa_file,
         version: 'publishedVersion',
         location: nil
       )
     }
-    let!(:file13) {
+    let!(:file16) {
       create(
         :activity_insight_oa_file,
         version: 'unknown',
         location: nil
       )
     }
-    let!(:file14) {
+    let!(:file17) {
       create(
         :activity_insight_oa_file,
         version: 'acceptedVersion',
@@ -194,7 +194,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
         permissions_last_checked_at: Time.now
       )
     }
-    let!(:file15) {
+    let!(:file18) {
       create(
         :activity_insight_oa_file,
         version: 'publishedVersion',
@@ -211,13 +211,13 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.send_oa_status_to_activity_insight' do
       it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
-        expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9a, file11a]
+        expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9, file11, file12, file13]
       end
     end
 
     describe '.needs_permissions_check' do
       it 'returns files that have a known version but have not had their permissions checked yet' do
-        expect(described_class.needs_permissions_check).to match_array [file11, file12]
+        expect(described_class.needs_permissions_check).to match_array [file14, file15]
       end
     end
   end

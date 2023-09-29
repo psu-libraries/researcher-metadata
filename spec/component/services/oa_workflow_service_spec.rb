@@ -150,7 +150,6 @@ describe OAWorkflowService do
       end
     end
 
-<<<<<<< HEAD
     context 'when Activity Insight files are ready for oa status export' do
       before { allow(AiOAStatusExportJob).to receive(:perform_later) }
 
@@ -159,21 +158,22 @@ describe OAWorkflowService do
         expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
         expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
         expect(activity_insight_oa_file6.reload.exported_oa_status_to_activity_insight).to be true
-=======
+      end
+    end
+
     context 'when there are Activity Insight files that need to have their permissions checked' do
       before { allow(FilePermissionsCheckJob).to receive(:perform_later) }
 
       it 'sets the permissions check timestamp on each of the files' do
         service.workflow
-        expect(activity_insight_oa_file4.reload.permissions_last_checked_at).not_to be_nil
-        expect(activity_insight_oa_file5.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file7.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file8.reload.permissions_last_checked_at).not_to be_nil
       end
 
       it 'enqueues a file permissions check job for each of the files' do
         service.workflow
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
->>>>>>> main
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file7.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file8.id)
       end
     end
   end

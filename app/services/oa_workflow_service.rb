@@ -39,7 +39,7 @@ class OAWorkflowService
       file.save!
       AiOAStatusExportJob.perform_later(file.id)
     end
-    
+
     ActivityInsightOAFile.needs_permissions_check.each do |file|
       file.update!(permissions_last_checked_at: Time.current)
       FilePermissionsCheckJob.perform_later(file.id)
