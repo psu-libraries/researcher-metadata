@@ -211,6 +211,8 @@ en:
       file_version_curation_description: Publications that still have an unknown file version and no correct version after automated file version checking.
       wrong_file_version_curation_title: Review Wrong File Versions
       wrong_file_version_curation_description: Publications that do not have an unknown file version or correct version after automated file version checking.
+      preferred_file_version_none_curation_title: Review Preferred File Version None
+      preferred_file_version_none_curation_description: Publications for which no version can be deposited
       permissions_curation_title: Review Permissions
       permissions_curation_description: Publications that require manual permissions curation.
       metadata_curation_title: Review Publication Metadata
