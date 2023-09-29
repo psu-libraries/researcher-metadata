@@ -129,18 +129,25 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          publication_type: 'Trade Journal Article')
     }
     let!(:pub3) { create(:publication,
+                         title: 'pub3',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
+                         ],
+                         open_access_status: 'green')
+    }
+    let!(:pub4) { create(:publication,
                          title: 'pub4',
                          open_access_status: 'gold')
     }
-    let!(:pub4) { create(:publication,
+    let!(:pub5) { create(:publication,
                          title: 'pub5',
                          open_access_status: 'hybrid',
                          open_access_locations: [
                            build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
                          ])
     }
-    let!(:pub5) { create(:publication,
-                         title: 'pub7',
+    let!(:pub6) { create(:publication,
+                         title: 'pub6',
                          open_access_locations: [
                            build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
                          ],
@@ -149,15 +156,15 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
-    let!(:file3) { create(:activity_insight_oa_file, publication: pub1, file_download_location: uploader) }
-    let!(:file4) { create(:activity_insight_oa_file, publication: pub1, downloaded: true) }
-    let!(:file5) { create(:activity_insight_oa_file, publication: pub1, location: nil) }
-    let!(:file6) { create(:activity_insight_oa_file, publication: pub3) }
-    let!(:file7) { create(:activity_insight_oa_file, publication: pub4, downloaded: true) }
-    let!(:file8) { create(:activity_insight_oa_file, publication: pub3, downloaded: true, exported_oa_status_to_activity_insight: true) }
-    let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
-    let!(:file10) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:file11) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:file3) { create(:activity_insight_oa_file, publication: pub3, file_download_location: uploader) }
+    let!(:file4) { create(:activity_insight_oa_file, publication: pub3, downloaded: true) }
+    let!(:file5) { create(:activity_insight_oa_file, publication: pub3, location: nil) }
+    let!(:file6) { create(:activity_insight_oa_file, publication: pub4) }
+    let!(:file7) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
+    let!(:file8) { create(:activity_insight_oa_file, publication: pub4, downloaded: true, exported_oa_status_to_activity_insight: true) }
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub6, downloaded: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:file11) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:file12) {
       create(
         :activity_insight_oa_file,
