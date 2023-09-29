@@ -39,7 +39,7 @@ describe ActivityInsightPublicationExporter do
   describe '#to_xml' do
     it 'generates xml' do
       exporter_object = exporter.new([], 'beta')
-      expect(exporter_object.send(:to_xml, publication1)).to eq fixture('activity_insight_export.xml').read
+      expect(exporter_object.send(:to_xml, publication1)).to eq fixture('activity_insight_publication_export.xml').read
     end
   end
 
@@ -87,14 +87,6 @@ describe ActivityInsightPublicationExporter do
         expect_any_instance_of(Logger).to receive(:error).with(/Unexpected EOF|lication ID: #{publication1.id}/).twice
         exporter_object.export
       end
-
-      it 'triggers bugsnag' do
-        exporter_object = exporter.new([publication1], 'beta')
-        expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|#{publication1.id}/).exactly(3).times
-        allow(HTTParty).to receive(:post).and_return response
-        expect(Bugsnag).to receive(:notify).with(I18n.t('models.activity_insight_publication_exporter.bugsnag_message'))
-        exporter_object.export
-      end
     end
 
     context 'when 200 code is returned from DM' do
@@ -110,7 +102,6 @@ describe ActivityInsightPublicationExporter do
           allow(HTTParty).to receive(:post).and_return response
           expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
-          expect(Bugsnag).not_to receive(:notify)
           expect { exporter_object.export }.not_to change(publication1, :exported_to_activity_insight)
         end
       end
@@ -121,7 +112,6 @@ describe ActivityInsightPublicationExporter do
           allow(HTTParty).to receive(:post).and_return response
           expect_any_instance_of(Logger).to receive(:info).with(/started at|ended at|Publications not/).exactly(3).times
           expect_any_instance_of(Logger).not_to receive(:error)
-          expect(Bugsnag).not_to receive(:notify)
           expect { exporter_object.export }.to change(publication1, :exported_to_activity_insight).to true
         end
       end
