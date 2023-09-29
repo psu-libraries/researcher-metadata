@@ -29,30 +29,35 @@ describe OAWorkflowService do
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
-                         oa_workflow_state: nil)}
+                         oa_workflow_state: nil,
+                         open_access_status: 'green')}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
-                         licence: 'licence')}
+                         licence: 'licence',
+                         open_access_status: 'gold')}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:activity_insight_oa_file4) {
+    let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, exported_oa_status_to_activity_insight: true) }
+    let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
+    let!(:activity_insight_oa_file7) {
       create(
         :activity_insight_oa_file,
         publication: pub5,
         version: 'publishedVersion'
       )
     }
-    let!(:activity_insight_oa_file5) {
+    let!(:activity_insight_oa_file8) {
       create(
         :activity_insight_oa_file,
         publication: pub6,
         version: 'acceptedVersion'
       )
     }
-    let!(:activity_insight_oa_file6) {
+    let!(:activity_insight_oa_file9) {
       create(
         :activity_insight_oa_file,
         publication: pub7,
@@ -145,19 +150,30 @@ describe OAWorkflowService do
       end
     end
 
+    context 'when Activity Insight files are ready for oa status export' do
+      before { allow(AiOAStatusExportJob).to receive(:perform_later) }
+
+      it 'calls the AiOAStatusExportJob' do
+        service.workflow
+        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
+        expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
+        expect(activity_insight_oa_file6.reload.exported_oa_status_to_activity_insight).to be true
+      end
+    end
+
     context 'when there are Activity Insight files that need to have their permissions checked' do
       before { allow(FilePermissionsCheckJob).to receive(:perform_later) }
 
       it 'sets the permissions check timestamp on each of the files' do
         service.workflow
-        expect(activity_insight_oa_file4.reload.permissions_last_checked_at).not_to be_nil
-        expect(activity_insight_oa_file5.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file7.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file8.reload.permissions_last_checked_at).not_to be_nil
       end
 
       it 'enqueues a file permissions check job for each of the files' do
         service.workflow
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file7.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file8.id)
       end
     end
   end

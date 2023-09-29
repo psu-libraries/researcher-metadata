@@ -130,19 +130,27 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          title: 'pub3',
                          open_access_locations: [
                            build(:open_access_location, source: Source::OPEN_ACCESS_BUTTON, url: 'url', publication: nil)
-                         ])
+                         ],
+                         open_access_status: 'green')
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
-                         open_access_status: nil)
+                         open_access_status: 'gold')
     }
     let!(:pub5) { create(:publication,
                          title: 'pub5',
-                         open_access_status: 'gold')
+                         open_access_status: 'hybrid')
     }
     let!(:pub6) { create(:publication,
                          title: 'pub6',
-                         open_access_status: 'hybrid')
+                         open_access_status: 'gold')
+    }
+    let!(:pub7) { create(:publication,
+                         title: 'pub7',
+                         open_access_locations: [
+                           build(:open_access_location, source: Source::SCHOLARSPHERE, url: 'url', publication: nil)
+                         ],
+                         open_access_status: 'green')
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
@@ -152,30 +160,33 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     let!(:file6) { create(:activity_insight_oa_file, publication: pub2, downloaded: true) }
     let!(:file7) { create(:activity_insight_oa_file, publication: pub2, location: nil) }
     let!(:file8) { create(:activity_insight_oa_file, publication: pub4) }
-    let!(:file9) { create(:activity_insight_oa_file, publication: pub5) }
-    let!(:file10) { create(:activity_insight_oa_file, publication: pub6) }
-    let!(:file11) {
+    let!(:file9) { create(:activity_insight_oa_file, publication: pub5, downloaded: true) }
+    let!(:file10) { create(:activity_insight_oa_file, publication: pub6, downloaded: true, exported_oa_status_to_activity_insight: true) }
+    let!(:file11) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
+    let!(:file12) { create(:activity_insight_oa_file, publication: pub5) }
+    let!(:file13) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:file14) {
       create(
         :activity_insight_oa_file,
         version: 'acceptedVersion',
         location: nil
       )
     }
-    let!(:file12) {
+    let!(:file15) {
       create(
         :activity_insight_oa_file,
         version: 'publishedVersion',
         location: nil
       )
     }
-    let!(:file13) {
+    let!(:file16) {
       create(
         :activity_insight_oa_file,
         version: 'unknown',
         location: nil
       )
     }
-    let!(:file14) {
+    let!(:file17) {
       create(
         :activity_insight_oa_file,
         version: 'acceptedVersion',
@@ -183,7 +194,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
         permissions_last_checked_at: Time.now
       )
     }
-    let!(:file15) {
+    let!(:file18) {
       create(
         :activity_insight_oa_file,
         version: 'publishedVersion',
@@ -194,13 +205,19 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file1, file8]
+        expect(described_class.ready_for_download).to match_array [file1]
+      end
+    end
+
+    describe '.send_oa_status_to_activity_insight' do
+      it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
+        expect(described_class.send_oa_status_to_activity_insight).to match_array [file8, file9, file11, file12, file13]
       end
     end
 
     describe '.needs_permissions_check' do
       it 'returns files that have a known version but have not had their permissions checked yet' do
-        expect(described_class.needs_permissions_check).to match_array [file11, file12]
+        expect(described_class.needs_permissions_check).to match_array [file14, file15]
       end
     end
   end
