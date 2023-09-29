@@ -10,137 +10,62 @@ describe OABPreferredPermissionsService do
       .and_return(Rails.root.join('spec', 'fixtures', 'oab6.json').read)
     allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1038%2Fs41598-023-28289-6')
       .and_return(Rails.root.join('spec', 'fixtures', 'oab7.json').read)
-  end
-
-  describe '#preferred_permission' do
-    context 'when there is only accepted version permissions' do
-      let(:doi) { '10.1016/S0962-1849(05)80014-9' }
-      let(:response) {
-        {
-          'can_archive' => true,
-          'version' => 'acceptedVersion',
-          'versions' => [
-            'acceptedVersion',
-            'submittedVersion'
-          ],
-          'embargo_end' => '2024-09-01',
-          'licence' => 'cc-by-nc-nd',
-          'locations' => [
-            'Institutional Repository',
-            'Non-commercial Subject Repository'
-          ],
-          'deposit_statement' => '© This manuscript version is made available under the CC-BY-NC-ND 4.0 license https://creativecommons.org/licenses/by-nc-nd/4.0/',
-          'licences' => [
-            {
-              'type' => 'cc-by-nc-nd'
-            }
-          ]
-        }
-      }
-
-      it 'returns the accepted version permission metadata' do
-        expect(service.preferred_permission).to eq response
-      end
-    end
-
-    context 'when there are accepted and published permissions' do
-      let(:doi) { '10.1038/s41598-023-28289-6' }
-      let(:response) {
-        {
-          'can_archive' => true,
-          'version' => 'publishedVersion',
-          'versions' => [
-            'publishedVersion'
-          ],
-          'licence' => 'cc-by',
-          'locations' => [
-            'institutional repository'
-          ],
-          'embargo_months' => 0,
-          'licences' => [
-            {
-              'type' => 'CC BY'
-            }
-          ],
-          'deposit_statement' => 'This is a published article.',
-          'embargo_end' => '2022-01-24'
-        }
-      }
-
-      it 'returns the published version permission metadata' do
-        expect(service.preferred_permission).to eq response
-      end
-    end
+    allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1175%2FJCLI-D-14-00749.1')
+      .and_return(Rails.root.join('spec', 'fixtures', 'oab8.json').read)
+    allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1146%2Fannurev-earth-040610-133408')
+      .and_return(Rails.root.join('spec', 'fixtures', 'oab9.json').read)
+    allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/10.1542%2Fpir.25-11-381')
+      .and_return(Rails.root.join('spec', 'fixtures', 'oab10.json').read)
+    allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/permissions/some_unknown_doi')
+      .and_return(%{{"all_permissions": []}})
   end
 
   describe '#preferred_version' do
-    context 'when there is only accepted version permissions' do
+    context 'when there are only accepted version permissions' do
       let(:doi) { '10.1016/S0962-1849(05)80014-9' }
 
-      it 'returns the preferred version string' do
+      it "returns 'acceptedVersion'" do
         expect(service.preferred_version).to eq 'acceptedVersion'
       end
     end
 
-    context 'when there are accepted and published permissions' do
-      let(:doi) { '10.1038/s41598-023-28289-6' }
+    context 'when there are both accepted and published version permissions and the accepted version has requirements' do
+      let(:doi) { '10.1175/JCLI-D-14-00749.1' }
 
-      it 'returns the preferred version string' do
+      it "returns 'publishedVersion'" do
         expect(service.preferred_version).to eq 'publishedVersion'
       end
     end
-  end
 
-  describe '#set_statement' do
-    context 'when there is only accepted version permissions' do
-      let(:doi) { '10.1016/S0962-1849(05)80014-9' }
-
-      it 'returns the set_statement string' do
-        expect(service.set_statement).to eq '© This manuscript version is made available under the CC-BY-NC-ND 4.0 license https://creativecommons.org/licenses/by-nc-nd/4.0/'
-      end
-    end
-
-    context 'when there are accepted and published permissions' do
+    context 'when there are both accepted and published version permissions with no requirements' do
       let(:doi) { '10.1038/s41598-023-28289-6' }
 
-      it 'returns the set_statement string' do
-        expect(service.set_statement).to eq 'This is a published article.'
-      end
-    end
-  end
-
-  describe '#embargo_end_date' do
-    context 'when there is only accepted version permissions' do
-      let(:doi) { '10.1016/S0962-1849(05)80014-9' }
-
-      it 'returns the embargo_end_date data' do
-        expect(service.embargo_end_date).to eq Date.parse('2024-09-01', '%Y-%m-%d')
+      it "returns 'Published or Accepted'" do
+        expect(service.preferred_version).to eq 'Published or Accepted'
       end
     end
 
-    context 'when there are accepted and published permissions' do
-      let(:doi) { '10.1038/s41598-023-28289-6' }
+    context 'when there are only submitted version permissions' do
+      let(:doi) { '10.1146/annurev-earth-040610-133408' }
 
-      it 'returns the embargo_end_date data' do
-        expect(service.embargo_end_date).to eq Date.parse('2022-01-24', '%Y-%m-%d')
-      end
-    end
-  end
-
-  describe '#licence' do
-    context 'when there is only accepted version permissions' do
-      let(:doi) { '10.1016/S0962-1849(05)80014-9' }
-
-      it 'returns the licence string' do
-        expect(service.licence).to eq 'https://creativecommons.org/licenses/by-nc-nd/4.0/'
+      it "returns 'None'" do
+        expect(service.preferred_version).to eq 'None'
       end
     end
 
-    context 'when there are accepted and published permissions' do
-      let(:doi) { '10.1038/s41598-023-28289-6' }
+    context 'when there are no permissions for any version' do
+      let(:doi) { '10.1542/pir.25-11-381' }
 
-      it 'returns the licence string' do
-        expect(service.licence).to eq 'https://creativecommons.org/licenses/by/4.0/'
+      it "returns 'None'" do
+        expect(service.preferred_version).to eq 'None'
+      end
+    end
+
+    context 'when the publication is not found in Open Access Button' do
+      let(:doi) { 'some_unknown_doi' }
+
+      it 'returns nil' do
+        expect(service.preferred_version).to be_nil
       end
     end
   end

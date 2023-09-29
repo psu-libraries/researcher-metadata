@@ -43,10 +43,31 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, exported_oa_status_to_activity_insight: true) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
+    let!(:activity_insight_oa_file7) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub5,
+        version: 'publishedVersion'
+      )
+    }
+    let!(:activity_insight_oa_file8) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub6,
+        version: 'acceptedVersion'
+      )
+    }
+    let!(:activity_insight_oa_file9) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub7,
+        downloaded: true
+      )
+    }
 
     context 'when publications need doi verification' do
       before do
-        allow(PermissionsCheckJob).to receive(:perform_later)
+        allow(PublicationPermissionsCheckJob).to receive(:perform_later)
         allow(DOIVerificationJob).to receive(:perform_later)
       end
 
@@ -73,21 +94,21 @@ describe OAWorkflowService do
 
     context 'when publications need permissions checks' do
       context 'when there is not an error' do
-        before { allow(PermissionsCheckJob).to receive(:perform_later) }
+        before { allow(PublicationPermissionsCheckJob).to receive(:perform_later) }
 
         it 'calls the permissions check job with that publication' do
           service.workflow
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
-          expect(PermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
-          expect(PermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub1.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub2.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub3.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub4.id)
+          expect(PublicationPermissionsCheckJob).not_to have_received(:perform_later).with(pub5.id)
+          expect(PublicationPermissionsCheckJob).to have_received(:perform_later).with(pub6.id)
         end
       end
 
       context 'when there is an error' do
-        before { allow(PermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+        before { allow(PublicationPermissionsCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
 
         it 'updates permissions_last_checked_at checked' do
           service.workflow
@@ -129,6 +150,7 @@ describe OAWorkflowService do
       end
     end
 
+<<<<<<< HEAD
     context 'when Activity Insight files are ready for oa status export' do
       before { allow(AiOAStatusExportJob).to receive(:perform_later) }
 
@@ -137,6 +159,21 @@ describe OAWorkflowService do
         expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
         expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
         expect(activity_insight_oa_file6.reload.exported_oa_status_to_activity_insight).to be true
+=======
+    context 'when there are Activity Insight files that need to have their permissions checked' do
+      before { allow(FilePermissionsCheckJob).to receive(:perform_later) }
+
+      it 'sets the permissions check timestamp on each of the files' do
+        service.workflow
+        expect(activity_insight_oa_file4.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file5.reload.permissions_last_checked_at).not_to be_nil
+      end
+
+      it 'enqueues a file permissions check job for each of the files' do
+        service.workflow
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file4.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file5.id)
+>>>>>>> main
       end
     end
   end
