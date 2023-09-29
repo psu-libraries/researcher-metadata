@@ -31,11 +31,6 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
   }
 
-  scope :needs_permissions_check, -> {
-    where(%{version = 'acceptedVersion' OR version = 'publishedVersion'})
-      .where(permissions_last_checked_at: nil)
-  }
-
   scope :ready_for_download, -> {
     subject_to_ai_oa_workflow
       .where(file_download_location: nil)
@@ -58,6 +53,11 @@ class ActivityInsightOAFile < ApplicationRecord
         OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
         AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where(exported_oa_status_to_activity_insight: nil)
+  }
+
+  scope :needs_permissions_check, -> {
+    where(%{version = 'acceptedVersion' OR version = 'publishedVersion'})
+      .where(permissions_last_checked_at: nil)
   }
 
   S3_AUTHORIZER_HOST_NAME = 'ai-s3-authorizer.k8s.libraries.psu.edu'
