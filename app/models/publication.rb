@@ -169,11 +169,12 @@ class Publication < ApplicationRecord
                                                distinct(:id).left_outer_joins(:open_access_locations)
                                                  .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                              }
-  scope :activity_insight_oa_publication, -> { 
-    oa_publication.with_no_scholarsphere_oa_locations
-    .joins(:activity_insight_oa_files)
-    .where.not(activity_insight_oa_files: { location: nil })
-    .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL') }
+  scope :activity_insight_oa_publication, -> {
+                                            oa_publication.with_no_scholarsphere_oa_locations
+                                              .joins(:activity_insight_oa_files)
+                                              .where.not(activity_insight_oa_files: { location: nil })
+                                              .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL')
+                                          }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
       .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
@@ -232,9 +233,9 @@ class Publication < ApplicationRecord
       .where(preferred_version: nil)
   }
   scope :preferred_file_version_none, -> {
-    activity_insight_oa_publication
-    .where(%{preferred_version = '#{NO_VERSION}'})
-    }
+                                        activity_insight_oa_publication
+                                          .where(%{preferred_version = '#{NO_VERSION}'})
+                                      }
   scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})

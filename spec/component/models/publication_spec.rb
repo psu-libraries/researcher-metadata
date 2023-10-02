@@ -859,19 +859,19 @@ describe Publication, type: :model do
                            preferred_version: 'Published or Accepted')
     }
     let!(:pub14c) { create(:publication,
-      title: 'pub14c',
-      publication_type: 'Journal Article',
-      doi_verified: true,
-      oa_status_last_checked_at: 1.minute.ago,
-      preferred_version: 'None')
+                           title: 'pub14c',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'None')
     }
     let!(:pub14d) { create(:publication,
-      title: 'pub14d',
-      publication_type: 'Journal Article',
-      doi_verified: true,
-      oa_status_last_checked_at: 1.minute.ago,
-      preferred_version: 'None',
-      preferred_file_version_none_email_sent: true)
+                           title: 'pub14d',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'None',
+                           preferred_file_version_none_email_sent: true)
     }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
