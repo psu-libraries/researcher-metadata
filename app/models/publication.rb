@@ -169,8 +169,11 @@ class Publication < ApplicationRecord
                                                distinct(:id).left_outer_joins(:open_access_locations)
                                                  .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                              }
-  #add a filter to ai oa pub that excludes any pubs that have had an email sent that they are not depositable
-  scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :activity_insight_oa_publication, -> { 
+    oa_publication.with_no_scholarsphere_oa_locations
+    .joins(:activity_insight_oa_files)
+    .where.not(activity_insight_oa_files: { location: nil })
+    .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL') }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
       .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
@@ -204,6 +207,7 @@ class Publication < ApplicationRecord
   scope :wrong_file_version, -> {
     activity_insight_oa_publication
       .where.not(preferred_version: nil)
+      .where.not(preferred_version: NO_VERSION)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(
         <<-SQL.squish

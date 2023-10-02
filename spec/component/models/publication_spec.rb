@@ -864,7 +864,15 @@ describe Publication, type: :model do
       doi_verified: true,
       oa_status_last_checked_at: 1.minute.ago,
       preferred_version: 'None')
-}
+    }
+    let!(:pub14d) { create(:publication,
+      title: 'pub14d',
+      publication_type: 'Journal Article',
+      doi_verified: true,
+      oa_status_last_checked_at: 1.minute.ago,
+      preferred_version: 'None',
+      preferred_file_version_none_email_sent: true)
+    }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
@@ -982,6 +990,14 @@ describe Publication, type: :model do
         version: 'acceptedVersion'
       )
     }
+    let!(:activity_insight_oa_file14d) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14d,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion'
+      )
+    }
 
     let!(:open_access_location5) { create(:open_access_location, publication: pub5) }
     let!(:open_access_location12) { create(:open_access_location, publication: pub12, source: Source::UNPAYWALL) }
@@ -1014,7 +1030,8 @@ describe Publication, type: :model do
           pub13c,
           pub13d,
           pub14a,
-          pub14b
+          pub14b,
+          pub14c
         ]
       end
     end

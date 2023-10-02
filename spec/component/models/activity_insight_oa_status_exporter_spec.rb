@@ -13,7 +13,7 @@ describe ActivityInsightOAStatusExporter do
 
   describe '#to_xml' do
     it 'generates xml' do
-      exporter_object = exporter.new(aif1.id)
+      exporter_object = exporter.new(aif1.id, 'Already Openly Available')
       expect(exporter_object.send(:to_xml, aif1)).to eq fixture('activity_insight_oa_status_export.xml').read
     end
   end
@@ -24,7 +24,7 @@ describe ActivityInsightOAStatusExporter do
     end
 
     it 'returns beta url' do
-      exporter_object = exporter.new(aif1.id)
+      exporter_object = exporter.new(aif1.id, 'Already Openly Available')
       expect(exporter_object.send(:webservice_url)).to eq beta_url
     end
   end
@@ -45,7 +45,7 @@ describe ActivityInsightOAStatusExporter do
 
       it 'raises an error' do
         allow(HTTParty).to receive(:post).and_return response
-        exporter_object = exporter.new(aif1.id)
+        exporter_object = exporter.new(aif1.id, 'Already Openly Available')
         expect { exporter_object.export }.to raise_error ActivityInsightOAStatusExporter::ExportFailed, response.body
         expect(aif1.reload.exported_oa_status_to_activity_insight).to be false
       end
@@ -60,7 +60,7 @@ describe ActivityInsightOAStatusExporter do
 
       it 'does not raise an error' do
         allow(HTTParty).to receive(:post).and_return response
-        exporter_object = exporter.new(aif1.id)
+        exporter_object = exporter.new(aif1.id, 'Already Openly Available')
         expect { exporter_object.export }.not_to raise_error
       end
     end

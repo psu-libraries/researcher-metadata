@@ -15,7 +15,15 @@ class ActivityInsightOAWorkflow::PreferredFileVersionNoneCurationController < Ac
         end
       end
       flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}}"
-      #trigger export job to update AI status to 'Cannot Deposit'
+
+      publications.each do |pub|
+        pub.activity_insight_oa_files.each do |file|
+          AiOAStatusExportJob.perform_later(file.id, 'Cannot Deposit')
+        end
+      end
+
+      #remove unneeded file
+
       redirect_to activity_insight_oa_workflow_preferred_file_version_none_review_path
     end
   end

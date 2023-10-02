@@ -37,7 +37,7 @@ class OAWorkflowService
     ActivityInsightOAFile.send_oa_status_to_activity_insight.each do |file|
       file.exported_oa_status_to_activity_insight = true
       file.save!
-      AiOAStatusExportJob.perform_later(file.id)
+      AiOAStatusExportJob.perform_later(file.id, 'Already Openly Available')
     end
 
     ActivityInsightOAFile.needs_permissions_check.each do |file|
