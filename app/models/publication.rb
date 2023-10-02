@@ -235,6 +235,8 @@ class Publication < ApplicationRecord
   scope :preferred_file_version_none, -> {
                                         activity_insight_oa_publication
                                           .where(%{preferred_version = '#{NO_VERSION}'})
+                                          .includes(:activity_insight_oa_files)
+                                          .order('activity_insight_oa_files.created_at ASC')
                                       }
   scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication

@@ -8,6 +8,7 @@
         <th>Author Batch Email</th>
         <th>Publication Email</th>
         <th>Title</th>
+        <th>File Created At</th>
         <th>File Version</th>
         <th>Download File</th>
       </tr>
@@ -34,6 +35,9 @@
         </td>
         <% p.activity_insight_oa_files.each_with_index do |file, index| %>
           <%= '<tr>'.html_safe unless index == 0 %>
+            <td>
+              <%= file.created_at.strftime("%m/%d/%Y") %>
+            </td>
             <td>
               <%= file.version_status_display %>
             </td>
