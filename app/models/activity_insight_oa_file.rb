@@ -22,15 +22,37 @@ class ActivityInsightOAFile < ApplicationRecord
 
   mount_uploader :file_download_location, ActivityInsightFileUploader
 
-  scope :ready_for_download, -> {
+  scope :subject_to_ai_oa_workflow, -> {
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
-      .where(open_access_locations: { publication_id: nil })
-      .where(file_download_location: nil)
-      .where(downloaded: nil)
+      .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where.not(location: nil)
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
+  }
+
+  scope :ready_for_download, -> {
+    subject_to_ai_oa_workflow
+      .where(file_download_location: nil)
+      .where(downloaded: nil)
+  }
+
+  scope :needs_version_check, -> {
+    subject_to_ai_oa_workflow
+      .where.not(file_download_location: nil)
+      .where(version_checked: nil)
+      .where(downloaded: true)
+      .where(version: nil)
+  }
+
+  scope :send_oa_status_to_activity_insight, -> {
+    left_outer_joins(:publication)
+      .where(publication: { publication_type: Publication.oa_publication_types })
+      .left_outer_joins(publication: :open_access_locations)
+      .where(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid'
+        OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
+        AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
+      .where(exported_oa_status_to_activity_insight: nil)
   }
 
   scope :needs_permissions_check, -> {
@@ -92,12 +114,14 @@ class ActivityInsightOAFile < ApplicationRecord
         field(:user)
         field(:created_at)
         field(:updated_at)
+        field(:exported_oa_status_to_activity_insight)
         field 'File download' do
           formatted_value do
             bindings[:view].link_to(bindings[:object].download_location_value.to_s, Rails.application.routes.url_helpers.activity_insight_oa_workflow_file_download_path(bindings[:object].id))
           end
         end
         field(:downloaded)
+        field(:version_checked)
       end
 
       group :open_access_permissions do
@@ -120,6 +144,8 @@ class ActivityInsightOAFile < ApplicationRecord
       field(:permissions_last_checked_at)
       field(:user)
       field(:download_location_value) { label 'File download' }
+      field(:version_checked)
+      field(:exported_oa_status_to_activity_insight)
       field(:location)
     end
 

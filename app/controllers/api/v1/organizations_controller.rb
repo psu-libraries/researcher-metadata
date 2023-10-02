@@ -3,11 +3,11 @@
 module API::V1
   class OrganizationsController < APIController
     def index
-      render json: API::V1::OrganizationSerializer.new(api_token.organizations.visible)
+      render json: API::V1::OrganizationSerializer.new(api_token.all_organizations.visible)
     end
 
     def publications
-      org = api_token.organizations.visible.find(params[:id])
+      org = api_token.all_organizations.visible.find(params[:id])
       render json: API::V1::PublicationSerializer.new(org.all_publications)
     end
   end

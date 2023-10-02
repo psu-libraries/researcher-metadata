@@ -164,6 +164,7 @@ RSpec/MessageSpies:
     - 'spec/component/jobs/doi_verification_job_spec.rb'
     - 'spec/component/importers/activity_insight_importer_spec.rb'
     - 'spec/component/jobs/publication_download_job_spec.rb'
+    - 'spec/component/jobs/ai_oa_status_export_job_spec.rb'
 
 # Offense count: 40
 RSpec/MultipleDescribes:
@@ -337,6 +338,7 @@ Rails/SkipsModelValidations:
     - 'app/services/oa_workflow_service.rb'
     - 'app/models/activity_insight_oa_file.rb'
     - 'spec/component/models/publication_spec.rb'
+    - 'app/jobs/ai_oa_wf_version_check_job.rb'
 
 
 # Offense count: 1

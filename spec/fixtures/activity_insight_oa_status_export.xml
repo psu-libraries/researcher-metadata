@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Data>
+  <Record username="abc123">
+    <INTELLCONT id="123456789100">
+      <POST_FILE id="123456789101">
+        <ACCESIBLE>Already Openly Available</ACCESIBLE>
+      </POST_FILE>
+      <RMD_ID access="READ_ONLY">123456</RMD_ID>
+    </INTELLCONT>
+  </Record>
+</Data>

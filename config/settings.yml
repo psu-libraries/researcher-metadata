@@ -11,6 +11,7 @@ lograge:
 activity_insight:
   username:
   password:
+  export_url:
 
 activity_insight_s3_authorizer:
   api_key:

@@ -65,6 +65,29 @@ describe FileVersionChecker do
       end
     end
 
+    context "when there's an error parsing the pdf" do
+      context 'when the error is a PDF::Reader error' do
+        before do
+          allow(PDF::Reader).to receive(:new).and_raise(PDF::Reader::MalformedPDFError)
+        end
+
+        it 'catches the error and returns unknown' do
+          expect(pdf_file_version.version).to eq 'unknown'
+          expect(pdf_file_version.score).to eq 0
+        end
+      end
+
+      context 'when the error is not a PDF::Reader error' do
+        before do
+          allow(PDF::Reader).to receive(:new).and_raise(RuntimeError)
+        end
+
+        it 'raises the error' do
+          expect { pdf_file_version.version }.to raise_error RuntimeError
+        end
+      end
+    end
+
     context 'when the file is not a .pdf' do
       let(:test_file) { 'pdf_check_unknown_version.docx' }
 
