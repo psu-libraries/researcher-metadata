@@ -6,6 +6,7 @@
       <tr>
         <th>Title</th>
         <th>Uploaded by</th>
+        <th>Uploaded on</th>
       </tr>
     </thead>
     <tbody class='card-body'>
@@ -14,6 +15,7 @@
           <td><%= link_to p.title.truncate(45),
                   activity_insight_oa_workflow_review_publication_metadata_path(p) %></td>
           <td><%= p.ai_file_for_deposit.user.webaccess_id %>
+          <td><%= p.ai_file_for_deposit.created_at.to_date %>
         </tr>
       <% end %>
     </tbody>
