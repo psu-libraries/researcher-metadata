@@ -34,7 +34,7 @@
           <strong>Creators:</strong> <%= @publication.contributor_names.collect(&:name).join(', ') %>
         </li>
         <li class='list-group-item'>
-          <strong>Depositor:</strong> <%= @publication.ai_file_for_deposit.user.name %>
+          <strong>Depositor:</strong> <%= @publication.ai_file_for_deposit.user.name %> (<%= @publication.ai_file_for_deposit.user.webaccess_id %>)
         </li>
         <li class='list-group-item'>
           <p class='float-left'>

@@ -707,6 +707,8 @@ class Publication < ApplicationRecord
   end
 
   def ai_file_for_deposit
+    return nil if activity_insight_oa_files.map(&:version).uniq.compact.empty?
+
     if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
       return activity_insight_oa_files.where(version: preferred_version).order('created_at DESC').first
     end
