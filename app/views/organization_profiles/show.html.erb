@@ -12,27 +12,26 @@
     <a href="#"><%= image_tag('logo.png', alt: "Penn State", class: 'logo') %></a>
   </div>
 </div>
-<div id="profile">
-  <div class="grid-container">
+<div id="organization-profile">
+  <div class="grid-container grid-org-pubs">
     <h3><%= @organization.name %></h3>
     <div class="grid-x grid-margin-x">
       <div class="large-12 cell">
-          <% @publications.each do |pub| %>
-            <p><%= AuthorshipDecorator.new(pub).label.html_safe %></p>
-          <% end %>
-        </div>
-        
-      </div>
-      <div class='row'>
-        <div class='col-sm-3 float-left'>
-          <%= page_entries_info @publications %>
-        </div>
-        <div class='col-sm-3 float-right'>
-          <%= paginate @publications %>
-        </div>
+        <% @publications.each do |pub| %>
+          <p><%= AuthorshipDecorator.new(pub).label.html_safe %></p>
+        <% end %>
       </div>
     </div>
+
   </div>
+  <div class='grid-container grid-org-paginator'>
+      <div class='col-sm-3 float-left'>
+        <%= page_entries_info @publications %>
+      </div>
+      <div class='col-sm-3 float-right'>
+        <%= paginate @publications %>
+      </div>
+    </div>
 </div>
 
 <footer>

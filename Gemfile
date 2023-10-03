@@ -39,6 +39,7 @@ gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
+gem 'kaminari', '~> 1.0'                # Pagination within Rails
 gem 'lograge'                           # Structured logging for production
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
@@ -61,7 +62,6 @@ gem 'string-similarity'                 # use for string comparison
 gem 'strscan', '~> 3.0.1'               # Must be kept at 3.0 to work with bundler 2.3.8
 gem 'terser'                            # Compressor for JavaScript assets
 gem 'turbolinks', '~> 5'                # makes navigating your web application faster
-gem 'kaminari', '~> 1.0'                # Pagination within Rails
 gem 'view_component'                    # Reusable, testable view components
 
 group :development, :test do
