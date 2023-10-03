@@ -6,8 +6,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
   let!(:pub1) { create(:publication, title: 'Pub1', preferred_version: 'acceptedVersion') }
   let!(:pub2) {
     create(
-      :publication,
-      title: 'Pub2 Title',
+      :sample_publication,
       preferred_version: 'acceptedVersion'
     )
   }
@@ -38,7 +37,22 @@ describe 'Admin Metadata Review publication detail', type: :feature do
       before { visit activity_insight_oa_workflow_review_publication_metadata_path(pub2) }
 
       it 'shows the correct publication metadata and a link to edit the metadata' do
-        expect(page).to have_content 'Pub2 Title'
+        expect(page).to have_content pub2.title
+        expect(page).to have_content pub2.secondary_title
+        expect(page).to have_content pub2.doi
+        expect(page).to have_content pub2.published_on
+        expect(page).to have_content pub2.preferred_journal_title
+        expect(page).to have_content pub2.ai_file_for_deposit.license
+        expect(page).to have_content pub2.ai_file_for_deposit.embargo_date
+        expect(page).to have_content pub2.ai_file_for_deposit.set_statement
+        pub2.contributor_names.each do |name|
+          expect(page).to have_content name.name
+        end
+        expect(page).to have_content pub2.ai_file_for_deposit.user.webaccess_id
+        expect(page).to have_content pub2.ai_file_for_deposit.user.name
+        expect(page).to have_link pub2.ai_file_for_deposit.download_filename,
+                                  href: activity_insight_oa_workflow_file_download_path(pub2.ai_file_for_deposit.id)
+        expect(page).to have_content pub2.ai_file_for_deposit.created_at.to_date
         expect(page).to have_link 'Edit', href: rails_admin.edit_path(model_name: :publication, id: pub2.id)
         expect(page).to have_link 'Back', href: activity_insight_oa_workflow_metadata_review_path
       end
