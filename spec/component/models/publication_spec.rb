@@ -3916,16 +3916,18 @@ describe Publication, type: :model do
       context 'when the publication has a preferred version of "Published or Accepted"' do
         let(:pv) { Publication::PUBLISHED_OR_ACCEPTED_VERSION }
 
-        context 'when the publication only has an Activity Insight OA file that is "publishedVersion"' do
+        context 'when the publication has an Activity Insight OA file that is "publishedVersion"' do
           let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: 'publishedVersion') }
+          let!(:f2) { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
           it 'returns that file' do
             expect(pub.ai_file_for_deposit).to eq f1
           end
         end
 
-        context 'when the publication only has an Activity Insight OA file that is "acceptedVersion"' do
+        context 'when the publication has an Activity Insight OA file that is "acceptedVersion"' do
           let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: 'acceptedVersion') }
+          let!(:f2) { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
           it 'returns that file' do
             expect(pub.ai_file_for_deposit).to eq f1

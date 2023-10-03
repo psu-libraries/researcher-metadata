@@ -707,13 +707,13 @@ class Publication < ApplicationRecord
   end
 
   def ai_file_for_deposit
-    return nil if activity_insight_oa_files.map(&:version).uniq.compact.empty?
+    return nil if preferred_version.blank?
 
     if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
       return activity_insight_oa_files.where(version: preferred_version).order('created_at DESC').first
     end
 
-    activity_insight_oa_files.order('created_at DESC').first
+    activity_insight_oa_files.where("version IS NOT NULL AND version != 'unknown'").order('created_at DESC').first
   end
 
   private
