@@ -48,7 +48,7 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
     end
   end
 
-  describe 'clicking the button to send an email notification' do
+  describe 'clicking the button to send a batch email notification' do
     before { allow(AiOAStatusExportJob).to receive(:perform_later) }
 
     it 'sends an email, calls the status export job, and displays a confirmation message' do
@@ -63,6 +63,20 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
       expect(pub2.reload.preferred_file_version_none_email_sent).not_to be_nil
       expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, 'Cannot Deposit')
       expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, 'Cannot Deposit')
+    end
+  end
+
+  describe 'clicking the button to send a single email notification' do
+    it 'sends an email and displays a confirmation message' do
+      find_all("input[value='Send Email']").first.click
+      expect(page).to have_current_path activity_insight_oa_workflow_preferred_file_version_none_review_path
+      expect(page).to have_content('Email sent to abc123')
+      open_email('abc123@psu.edu')
+      expect(current_email).not_to be_nil
+      expect(current_email.body).to match(/Title 1/)
+      expect(current_email.body).not_to match(/Title 2/)
+      expect(pub1.reload.preferred_file_version_none_email_sent).not_to be_nil
+      expect(pub2.reload.preferred_file_version_none_email_sent).to be_nil
     end
   end
 end

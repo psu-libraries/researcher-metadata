@@ -6,7 +6,7 @@ class ActivityInsightOAWorkflow::PreferredFileVersionNoneCurationController < Ac
   end
 
   def email_author
-    publications = Publication.preferred_file_version_none.find(params[:publications])
+    publications = Publication.preferred_file_version_none.where(id: params[:publications])
 
     FacultyNotificationsMailer.preferred_file_version_none(publications).deliver_now
     ActiveRecord::Base.transaction do
@@ -14,15 +14,13 @@ class ActivityInsightOAWorkflow::PreferredFileVersionNoneCurationController < Ac
         pub.update_column(:preferred_file_version_none_email_sent, true)
       end
     end
-    flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}}"
+    flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}"
 
     publications.each do |pub|
       pub.activity_insight_oa_files.each do |file|
         AiOAStatusExportJob.perform_later(file.id, 'Cannot Deposit')
       end
     end
-
-    # remove unneeded file
 
     redirect_to activity_insight_oa_workflow_preferred_file_version_none_review_path
   end

@@ -7,6 +7,10 @@ class ActivityInsightOAFile < ApplicationRecord
     'unknown'
   ].freeze
 
+  def self.export_statuses
+    ['Cannot Deposit', 'Already Openly Available']
+  end
+
   def self.licenses
     ScholarsphereWorkDeposit.rights
   end
