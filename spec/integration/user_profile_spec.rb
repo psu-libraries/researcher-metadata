@@ -41,7 +41,7 @@ describe UserProfile do
       it 'updates their identity' do
         described_class.new(user)
         u = user.reload
-        expect(u.first_name).to eq 'Daniel'
+        expect(u.first_name).to eq 'Dan'
         expect(u.middle_name).to eq 'M'
         expect(u.last_name).to eq 'Coughlin'
         expect(u.psu_identity.data['givenName']).to eq 'Daniel'
