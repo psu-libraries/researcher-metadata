@@ -7,7 +7,6 @@ class OABPermissionsService < OABPermissionsClient
     super()
     @doi = doi
     @version = version
-    @permissions = all_permissions
   end
 
   def set_statement

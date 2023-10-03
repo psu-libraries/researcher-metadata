@@ -4,6 +4,7 @@ pure:
 activity_insight:
   username: test
   password: secret
+  export_url: 'https://betawebservices.digitalmeasures.com/login/service/v4/SchemaData/INDIVIDUAL-ACTIVITIES-University'
 
 scholarsphere:
   endpoint: "https://scholarsphere.test/api/"

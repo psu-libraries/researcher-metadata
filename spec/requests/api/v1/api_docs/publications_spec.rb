@@ -5,13 +5,19 @@ require 'requests/requests_spec_helper'
 RSpec.describe 'api/v1/publications' do
   let!(:user) { create(:user_with_authorships, webaccess_id: 'xyz321') }
   let!(:authorship) { create(:authorship, user: user, publication: publication) }
-  let!(:publication) { create(:publication, visible: true, doi: 'https://doi.org/10.1000/182') }
+  let!(:publication) { create(:publication,
+                              visible: true,
+                              doi: 'https://doi.org/10.1000/182',
+                              published_on: 6.months.ago) }
   let!(:api_token) { create(:api_token, token: 'token123', write_access: true) }
   let!(:grant) { create(:grant) }
   let!(:research_fund) { create(:research_fund, grant: grant, publication: publication) }
   let!(:org) { create(:organization) }
   let!(:oap) { create(:organization_api_permission, api_token: api_token, organization: org) }
-  let!(:uom) { create(:user_organization_membership, organization: org, user: user) }
+  let!(:uom) { create(:user_organization_membership,
+                      organization: org,
+                      user: user,
+                      started_on: 1.year.ago) }
 
   path '/v1/publications' do
     path '/v1/publications/{id}/grants' do

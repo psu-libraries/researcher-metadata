@@ -51,7 +51,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
     end
   end
 
-  describe 'clicking the button to send an email notification' do
+  describe 'clicking the button to send a batch email notification' do
     it 'sends an email and displays a confirmation message' do
       click_button('Send Batch Email', match: :first)
       expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
@@ -64,6 +64,22 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(current_email.body).to match(/Title 2/)
       expect(pub1.reload.wrong_oa_version_notification_sent_at).not_to be_nil
       expect(pub2.reload.wrong_oa_version_notification_sent_at).not_to be_nil
+    end
+  end
+
+  describe 'clicking the button to send a single email notification' do
+    it 'sends an email and displays a confirmation message' do
+      find_all("input[value='Send Email']").first.click
+      expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
+      expect(page).to have_content('Email sent to abc123')
+      open_email('abc123@psu.edu')
+      expect(current_email).not_to be_nil
+      expect(current_email.body).to match(/Version we have/)
+      expect(current_email.body).to match(/Version that can be deposited/)
+      expect(current_email.body).to match(/Title 1/)
+      expect(current_email.body).not_to match(/Title 2/)
+      expect(pub1.reload.wrong_oa_version_notification_sent_at).not_to be_nil
+      expect(pub2.reload.wrong_oa_version_notification_sent_at).to be_nil
     end
   end
 end

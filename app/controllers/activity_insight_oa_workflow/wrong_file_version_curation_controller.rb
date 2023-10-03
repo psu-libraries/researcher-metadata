@@ -6,7 +6,7 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
   end
 
   def email_author
-    publications = Publication.wrong_file_version.find(params[:publications])
+    publications = Publication.wrong_file_version.where(id: params[:publications])
 
     FacultyNotificationsMailer.wrong_file_version(publications).deliver_now
     ActiveRecord::Base.transaction do
@@ -14,7 +14,7 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
         pub.update_column(:wrong_oa_version_notification_sent_at, Time.current)
       end
     end
-    flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}}"
+    flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}"
     redirect_to activity_insight_oa_workflow_wrong_file_version_review_path
   end
 end
