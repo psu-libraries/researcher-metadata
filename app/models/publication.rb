@@ -707,7 +707,7 @@ class Publication < ApplicationRecord
   end
 
   def ai_file_for_deposit
-    return nil if preferred_version.blank?
+    return nil if preferred_version.blank? || preferred_version == NO_VERSION
 
     if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
       return activity_insight_oa_files

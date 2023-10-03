@@ -3973,8 +3973,36 @@ describe Publication, type: :model do
       end
     end
 
-    context 'when the publication does not have a preferred version' do
+    context "when the publication's preferred_version is nil" do
       let(:pv) { nil }
+
+      context 'when the publication has no Activity Insight OA files' do
+        it 'returns nil' do
+          expect(pub.ai_file_for_deposit).to be_nil
+        end
+      end
+
+      context 'when the publication has an Activity Insight OA file that is not the preferred version' do
+        before do
+          create(:activity_insight_oa_file, publication: pub, version: 'publishedVersion')
+        end
+
+        it 'returns nil' do
+          expect(pub.ai_file_for_deposit).to be_nil
+        end
+      end
+
+      context 'when the publication has an Activity Insight OA file with no version' do
+        before { create(:activity_insight_oa_file, publication: pub, version: nil) }
+
+        it 'returns nil' do
+          expect(pub.ai_file_for_deposit).to be_nil
+        end
+      end
+    end
+
+    context "when the publication's preferred version is 'None'" do
+      let(:pv) { Publication::NO_VERSION }
 
       context 'when the publication has no Activity Insight OA files' do
         it 'returns nil' do
