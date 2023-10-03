@@ -1,0 +1,57 @@
+<div class="container pt-4 pb-5">
+  <%= link_to '<< Back', activity_insight_oa_workflow_metadata_review_path %>
+  <div class='card mt-3'>
+    <div class='card-header'>
+      <strong><%= @publication.title %></strong>
+    </div>
+    <div>
+      <ul class='list-group list-group-flush'>
+        <li class='list-group-item'>
+          <strong>Subtitle:</strong> <%= @publication.secondary_title %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Abstract:</strong> <%= @publication.abstract %>
+        </li>
+        <li class='list-group-item'>
+          <strong>DOI:</strong> <%= @publication.doi %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Published On:</strong> <%= @publication.published_on %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Journal Title:</strong> <%= @publication.preferred_journal_title %>
+        </li>
+        <li class='list-group-item'>
+          <strong>License:</strong> <%= @publication.ai_file_for_deposit.license %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Embargo Date:</strong> <%= @publication.ai_file_for_deposit.embargo_date %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Set Statement:</strong> <%= @publication.ai_file_for_deposit.set_statement %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Creators:</strong> <%= @publication.contributor_names.collect(&:name).join(', ') %>
+        </li>
+        <li class='list-group-item'>
+          <strong>Depositor:</strong> <%= @publication.ai_file_for_deposit.user.name %> (<%= @publication.ai_file_for_deposit.user.webaccess_id %>)
+        </li>
+        <li class='list-group-item'>
+          <p class='float-left'>
+            <strong>File Download:</strong>
+            <%= link_to @publication.ai_file_for_deposit.download_filename,
+                        activity_insight_oa_workflow_file_download_path(@publication.ai_file_for_deposit.id),
+                        target: '_blank' %>
+          </p>
+          <p class='float-right'><strong>Created On:</strong> <%= @publication.ai_file_for_deposit.created_at.to_date %></p>
+        </li>
+      </ul>
+      <div class='card-footer'>
+        <%= link_to(
+          'Edit',
+          rails_admin.edit_path(model_name: :publication, id: @publication.id),
+          target: 'blank') %>
+      </div>
+    </div>
+  </div>
+</div>

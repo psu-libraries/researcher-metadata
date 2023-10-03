@@ -706,6 +706,22 @@ class Publication < ApplicationRecord
                               end
   end
 
+  def ai_file_for_deposit
+    return nil if preferred_version.blank? || preferred_version == NO_VERSION
+
+    if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
+      return activity_insight_oa_files
+          .where(version: preferred_version)
+          .order('created_at DESC')
+          .first
+    end
+
+    activity_insight_oa_files
+      .where("version = 'acceptedVersion' OR version = 'publishedVersion'")
+      .order('created_at DESC')
+      .first
+  end
+
   private
 
     def merge(publications_to_merge)
