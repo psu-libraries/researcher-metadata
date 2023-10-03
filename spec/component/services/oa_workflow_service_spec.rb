@@ -42,22 +42,34 @@ describe OAWorkflowService do
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub5, exported_oa_status_to_activity_insight: true) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub6) }
-    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7, downloaded: true) }
-    let!(:activity_insight_oa_file7) {
+    let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub7,
+                                                                         downloaded: true) }
+    let!(:activity_insight_oa_file7) { create(:activity_insight_oa_file, publication: pub6,
+                                                                         downloaded: true,
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub6,
+                                                                         downloaded: true,
+                                                                         version_checked: true,
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub6,
+                                                                         downloaded: true,
+                                                                         version: 'unknown',
+                                                                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:activity_insight_oa_file10) {
       create(
         :activity_insight_oa_file,
         publication: pub5,
         version: 'publishedVersion'
       )
     }
-    let!(:activity_insight_oa_file8) {
+    let!(:activity_insight_oa_file11) {
       create(
         :activity_insight_oa_file,
         publication: pub6,
         version: 'acceptedVersion'
       )
     }
-    let!(:activity_insight_oa_file9) {
+    let!(:activity_insight_oa_file12) {
       create(
         :activity_insight_oa_file,
         publication: pub7,
@@ -150,6 +162,28 @@ describe OAWorkflowService do
       end
     end
 
+    context 'when Activity Insight OA files need their versions automatically checked' do
+      before { allow(AiOAWfVersionCheckJob).to receive(:perform_later) }
+
+      it 'calls the version check job with that file' do
+        service.workflow
+        expect(AiOAWfVersionCheckJob).to have_received(:perform_later).with(activity_insight_oa_file7.id)
+        expect(AiOAWfVersionCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file8.id)
+        expect(AiOAWfVersionCheckJob).not_to have_received(:perform_later).with(activity_insight_oa_file9.id)
+        expect(activity_insight_oa_file7.reload.version_checked).to be true
+      end
+
+      context 'when there is an error' do
+        before { allow(AiOAWfVersionCheckJob).to receive(:perform_later).and_raise(RuntimeError) }
+
+        it 'updates file version_checked status' do
+          service.workflow
+        rescue RuntimeError
+          expect(activity_insight_oa_file7.reload.version_checked).to be false
+        end
+      end
+    end
+
     context 'when Activity Insight files are ready for oa status export' do
       before { allow(AiOAStatusExportJob).to receive(:perform_later) }
 
@@ -166,14 +200,14 @@ describe OAWorkflowService do
 
       it 'sets the permissions check timestamp on each of the files' do
         service.workflow
-        expect(activity_insight_oa_file7.reload.permissions_last_checked_at).not_to be_nil
-        expect(activity_insight_oa_file8.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file10.reload.permissions_last_checked_at).not_to be_nil
+        expect(activity_insight_oa_file11.reload.permissions_last_checked_at).not_to be_nil
       end
 
       it 'enqueues a file permissions check job for each of the files' do
         service.workflow
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file7.id)
-        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file8.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file10.id)
+        expect(FilePermissionsCheckJob).to have_received(:perform_later).with(activity_insight_oa_file11.id)
       end
     end
   end

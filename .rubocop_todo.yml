@@ -339,6 +339,7 @@ Rails/SkipsModelValidations:
     - 'app/models/activity_insight_oa_file.rb'
     - 'app/controllers/activity_insight_oa_workflow/preferred_file_version_none_curation_controller.rb'
     - 'spec/component/models/publication_spec.rb'
+    - 'app/jobs/ai_oa_wf_version_check_job.rb'
 
 
 # Offense count: 1

@@ -53,6 +53,7 @@ ActiveRecord::Schema.define(version: 2023_09_29_201236) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
+    t.boolean "version_checked"
     t.string "intellcont_id"
     t.string "post_file_id"
     t.boolean "exported_oa_status_to_activity_insight"
