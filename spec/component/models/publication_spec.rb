@@ -3916,21 +3916,35 @@ describe Publication, type: :model do
       context 'when the publication has a preferred version of "Published or Accepted"' do
         let(:pv) { Publication::PUBLISHED_OR_ACCEPTED_VERSION }
 
-        context 'when the publication has an Activity Insight OA file that is "publishedVersion"' do
+        context 'when the publication has an Activity Insight OA file whos version is "publishedVersion"' do
           let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: 'publishedVersion') }
-          let!(:f2) { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
           it 'returns that file' do
             expect(pub.ai_file_for_deposit).to eq f1
           end
         end
 
-        context 'when the publication has an Activity Insight OA file that is "acceptedVersion"' do
+        context 'when the publication has an Activity Insight OA file whos version is "acceptedVersion"' do
           let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: 'acceptedVersion') }
-          let!(:f2) { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
           it 'returns that file' do
             expect(pub.ai_file_for_deposit).to eq f1
+          end
+        end
+
+        context 'when the publication has an Activity Insight OA file whos version is "unknown"' do
+          let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: 'unknown') }
+
+          it 'returns nil' do
+            expect(pub.ai_file_for_deposit).to be_nil
+          end
+        end
+
+        context 'when the publication has an Activity Insight OA file whos version is nil' do
+          let!(:f1) { create(:activity_insight_oa_file, publication: pub, version: nil) }
+
+          it 'returns nil' do
+            expect(pub.ai_file_for_deposit).to be_nil
           end
         end
       end
@@ -3950,6 +3964,8 @@ describe Publication, type: :model do
         let!(:f2) { create(:activity_insight_oa_file, version: 'acceptedVersion') }
         let!(:f3) { create(:activity_insight_oa_file, publication: pub, version: 'acceptedVersion') }
         let!(:f4) { create(:activity_insight_oa_file, publication: pub, version: 'acceptedVersion') }
+        let!(:f5) { create(:activity_insight_oa_file, publication: pub, version: 'unknown') }
+        let!(:f6) { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
         it 'returns the most recent file that is the preferred version' do
           expect(pub.ai_file_for_deposit).to eq f4
@@ -3976,11 +3992,8 @@ describe Publication, type: :model do
         end
       end
 
-      context 'when the publication only has Activity Insight OA files with no version' do
-        before do
-          create(:activity_insight_oa_file, publication: pub, version: nil)
-          create(:activity_insight_oa_file, publication: pub, version: nil)
-        end
+      context 'when the publication has an Activity Insight OA file with no version' do
+        before { create(:activity_insight_oa_file, publication: pub, version: nil) }
 
         it 'returns nil' do
           expect(pub.ai_file_for_deposit).to be_nil

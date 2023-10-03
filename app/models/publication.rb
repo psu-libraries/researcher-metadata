@@ -710,10 +710,16 @@ class Publication < ApplicationRecord
     return nil if preferred_version.blank?
 
     if preferred_version != PUBLISHED_OR_ACCEPTED_VERSION
-      return activity_insight_oa_files.where(version: preferred_version).order('created_at DESC').first
+      return activity_insight_oa_files
+          .where(version: preferred_version)
+          .order('created_at DESC')
+          .first
     end
 
-    activity_insight_oa_files.where("version IS NOT NULL AND version != 'unknown'").order('created_at DESC').first
+    activity_insight_oa_files
+      .where("version = 'acceptedVersion' OR version = 'publishedVersion'")
+      .order('created_at DESC')
+      .first
   end
 
   private
