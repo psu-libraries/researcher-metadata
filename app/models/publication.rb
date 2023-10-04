@@ -353,9 +353,6 @@ class Publication < ApplicationRecord
       end
       field(:doi_verified)
       field(:preferred_version)
-      field(:set_statement)
-      field(:licence)
-      field(:embargo_date)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -421,14 +418,7 @@ class Publication < ApplicationRecord
         end
         field(:doi_verified)
       end
-      group :open_access_permissions do
-        field(:preferred_version)
-        field(:set_statement)
-        field(:checked_for_set_statement)
-        field(:licence)
-        field(:embargo_date)
-        field(:checked_for_embargo_date)
-      end
+      field(:preferred_version)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -482,16 +472,9 @@ class Publication < ApplicationRecord
           end
         end
       end
-      group :open_access_permissions do
-        field(:preferred_version, :enum) do
-          label 'Preferred Version'
-          enum { Publication.preferred_version_options }
-        end
-        field(:set_statement) { label 'Deposit Statement' }
-        field(:checked_for_set_statement) { label 'Checked for deposit statement' }
-        field(:licence) { label 'License' }
-        field(:embargo_date)
-        field(:checked_for_embargo_date)
+      field(:preferred_version, :enum) do
+        label 'Preferred Version'
+        enum { Publication.preferred_version_options }
       end
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
