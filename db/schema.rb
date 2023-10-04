@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(version: 2023_09_29_201236) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
-    t.boolean "version_checked"
     t.string "intellcont_id"
     t.string "post_file_id"
     t.boolean "exported_oa_status_to_activity_insight"
@@ -63,6 +62,7 @@ ActiveRecord::Schema.define(version: 2023_09_29_201236) do
     t.text "set_statement"
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
+    t.boolean "version_checked"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end
