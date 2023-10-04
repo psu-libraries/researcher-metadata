@@ -4,7 +4,8 @@ class ActivityInsightOAFile < ApplicationRecord
   ALLOWED_VERSIONS = [
     I18n.t('file_versions.accepted_version'),
     I18n.t('file_versions.published_version'),
-    'unknown'
+    'unknown',
+    'notArticleFile'
   ].freeze
 
   def self.licenses
@@ -88,6 +89,8 @@ class ActivityInsightOAFile < ApplicationRecord
     return I18n.t('file_versions.published_version_display') if version == I18n.t('file_versions.published_version')
 
     return I18n.t('file_versions.accepted_version_display') if version == I18n.t('file_versions.accepted_version')
+
+    return I18n.t('file_versions.not_article_file_display') if version == I18n.t('file_versions.not_article_file')
 
     'Unknown Version'
   end

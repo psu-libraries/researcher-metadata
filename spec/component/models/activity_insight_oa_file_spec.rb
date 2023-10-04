@@ -43,6 +43,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
         acceptedVersion
         publishedVersion
         unknown
+        notArticleFile
       }
     ).allow_nil }
 
@@ -306,6 +307,14 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
       it 'returns "Final Published Version"' do
         expect(file.version_status_display).to eq 'Final Published Version'
+      end
+    end
+
+    context 'when version is "notArticleFile"' do
+      let(:file) { create(:activity_insight_oa_file, version: 'notArticleFile') }
+
+      it 'returns "Not Article File"' do
+        expect(file.version_status_display).to eq 'Not Article File'
       end
     end
   end

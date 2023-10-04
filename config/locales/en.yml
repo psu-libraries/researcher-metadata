@@ -232,3 +232,5 @@ en:
     published_version_display: 'Final Published Version'
     published_or_accepted_version_display: 'Final Published Version or Accepted Manuscript'
     no_version_display: 'None'
+    not_article_file: 'notArticleFile'
+    not_article_file_display: 'Not Article File'
