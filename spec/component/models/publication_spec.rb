@@ -764,6 +764,12 @@ describe Publication, type: :model do
                           preferred_version: 'acceptedVersion',
                           doi_verified: nil)
     }
+    let!(:pub11b) { create(:publication,
+                           title: 'pub11b',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'None',
+                           doi_verified: nil)
+    }
     let!(:pub12) { create(:publication,
                           title: 'pub12',
                           publication_type: 'Journal Article',
@@ -892,6 +898,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file7j) { create(:activity_insight_oa_file, publication: pub9j) }
     let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
     let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
+    let!(:activity_insight_oa_file9b) { create(:activity_insight_oa_file, publication: pub11b, version: 'unknown') }
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
@@ -1024,6 +1031,7 @@ describe Publication, type: :model do
           pub9j,
           pub10,
           pub11,
+          pub11b,
           pub12,
           pub13a,
           pub13b,
@@ -1047,6 +1055,7 @@ describe Publication, type: :model do
         expect(described_class.needs_doi_verification).to match_array [
           pub4,
           pub11,
+          pub11b,
           pub12,
           pub13a,
           pub13b,
@@ -1101,7 +1110,7 @@ describe Publication, type: :model do
 
     describe '.preferred_file_version_none' do
       it 'returns activity_insight_oa_publications where the preferred version is none' do
-        expect(described_class.preferred_file_version_none).to match_array [pub14c]
+        expect(described_class.preferred_file_version_none).to match_array [pub11b, pub14c]
       end
     end
 
