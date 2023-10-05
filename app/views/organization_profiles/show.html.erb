@@ -18,7 +18,8 @@
     <div class="grid-x grid-margin-x">
       <div class="large-12 cell">
         <% @publications.each do |pub| %>
-          <p><%= AuthorshipDecorator.new(pub).label.html_safe %></p>
+          <p><%= pub.users.collect(&:name).join(', ') %>,
+             <%= AuthorshipDecorator.new(pub).label.html_safe %></p>
         <% end %>
       </div>
     </div>
