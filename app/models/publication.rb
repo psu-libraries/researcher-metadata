@@ -176,7 +176,10 @@ class Publication < ApplicationRecord
       .includes(:activity_insight_oa_files)
       .order('activity_insight_oa_files.created_at ASC')
   }
-  scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
+  scope :doi_failed_verification, -> { activity_insight_oa_publication
+    .where('doi_verified = false')
+    .where('doi_error != true OR doi_error IS NULL') 
+  }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
   scope :needs_permissions_check, -> {
