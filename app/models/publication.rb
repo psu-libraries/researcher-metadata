@@ -418,7 +418,6 @@ class Publication < ApplicationRecord
         end
         field(:doi_verified)
       end
-      field(:preferred_version)
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -447,6 +446,7 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
+      field(:preferred_version)
     end
 
     edit do
@@ -472,10 +472,6 @@ class Publication < ApplicationRecord
           end
         end
       end
-      field(:preferred_version, :enum) do
-        label 'Preferred Version'
-        enum { Publication.preferred_version_options }
-      end
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -489,6 +485,10 @@ class Publication < ApplicationRecord
       field(:authorships)
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
+      field(:preferred_version, :enum) do
+        label 'Preferred Version'
+        enum { Publication.preferred_version_options }
+      end
     end
   end
 
