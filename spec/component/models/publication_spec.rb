@@ -764,6 +764,12 @@ describe Publication, type: :model do
                           preferred_version: 'acceptedVersion',
                           doi_verified: nil)
     }
+    let!(:pub12b) { create(:publication,
+                           title: 'pub12b',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'acceptedVersion',
+                           doi_verified: true)
+    }
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
@@ -874,6 +880,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file12b) { create(:activity_insight_oa_file, publication: pub12b, version: 'notArticleFile') }
     let!(:activity_insight_oa_file13a_1) {
       create(
         :activity_insight_oa_file,
@@ -988,6 +995,7 @@ describe Publication, type: :model do
           pub10,
           pub11,
           pub12,
+          pub12b,
           pub13a,
           pub13b,
           pub13c,
@@ -1044,7 +1052,8 @@ describe Publication, type: :model do
           pub9h,
           pub9i,
           pub9j,
-          pub10
+          pub10,
+          pub12b
         ]
       end
     end
