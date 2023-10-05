@@ -39,7 +39,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
   it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
-  
+
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
 
