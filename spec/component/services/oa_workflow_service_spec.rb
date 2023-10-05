@@ -24,8 +24,7 @@ describe OAWorkflowService do
     let!(:pub5) { create(:publication,
                          title: 'pub5',
                          doi_verified: nil,
-                         oa_workflow_state: 'automatic DOI verification pending',
-                         licence: 'licence')}
+                         oa_workflow_state: 'automatic DOI verification pending')}
     let!(:pub6) { create(:publication,
                          title: 'pub6',
                          doi_verified: true,
@@ -33,7 +32,6 @@ describe OAWorkflowService do
                          open_access_status: 'green')}
     let!(:pub7) { create(:publication,
                          title: 'pub7',
-                         licence: 'licence',
                          open_access_status: 'gold')}
     let!(:open_access_location) { create(:open_access_location, publication: pub1) }
 
