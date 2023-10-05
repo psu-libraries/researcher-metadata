@@ -651,11 +651,11 @@ describe Publication, type: :model do
                          publication_type: 'Academic Journal Article')
     }
     let!(:pub2b) { create(:publication,
-      title: 'pub2b',
-      doi_verified: false,
-      doi_error: true,
-      publication_type: 'Academic Journal Article')
-}
+                          title: 'pub2b',
+                          doi_verified: false,
+                          doi_error: true,
+                          publication_type: 'Academic Journal Article')
+    }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
