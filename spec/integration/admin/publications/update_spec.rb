@@ -8,8 +8,7 @@ describe 'updating a publication via the admin interface', type: :feature do
     create(
       :publication,
       title: 'Test Publication',
-      checked_for_embargo_date: nil,
-      checked_for_set_statement: nil
+      authors_et_al: nil
     )
   }
 
@@ -33,8 +32,7 @@ describe 'updating a publication via the admin interface', type: :feature do
       before do
         fill_in 'Title', with: 'Updated Title'
         select '', from: 'Preferred Version'
-        check 'Checked for deposit statement'
-        check 'Checked for embargo date'
+        check 'Et al authors?'
         click_on 'Save'
       end
 
@@ -42,8 +40,7 @@ describe 'updating a publication via the admin interface', type: :feature do
         reloaded_pub = pub.reload
         expect(reloaded_pub.title).to eq 'Updated Title'
         expect(reloaded_pub.preferred_version).to be_nil
-        expect(reloaded_pub.checked_for_set_statement).to be true
-        expect(reloaded_pub.checked_for_embargo_date).to be true
+        expect(reloaded_pub.authors_et_al).to be true
       end
 
       it 'sets the timestamp on the publication to indicate that it was manually updated' do
