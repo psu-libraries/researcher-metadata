@@ -378,6 +378,7 @@ class Publication < ApplicationRecord
       field(:updated_by_user_at) { read_only true }
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
+      field(:preferred_file_version_none_email_sent)
     end
 
     create do
@@ -451,7 +452,6 @@ class Publication < ApplicationRecord
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
-      field(:preferred_file_version_none_email_sent)
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
@@ -460,7 +460,10 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
-      field(:preferred_version)
+      group :preferred_version do
+        field(:preferred_version)
+        field(:preferred_file_version_none_email_sent)
+      end
     end
 
     edit do
@@ -494,15 +497,17 @@ class Publication < ApplicationRecord
       field(:created_at) { read_only true }
       field(:updated_at) { read_only true }
       field(:updated_by_user_at) { read_only true }
-      field(:preferred_file_version_none_email_sent)
       field(:duplicate_group)
       field(:users) { read_only true }
       field(:authorships)
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
-      field(:preferred_version, :enum) do
-        label 'Preferred Version'
-        enum { Publication.preferred_version_options }
+      group :preferred_version do
+        field(:preferred_version, :enum) do
+          label 'Preferred Version'
+          enum { Publication.preferred_version_options }
+        end
+        field(:preferred_file_version_none_email_sent)
       end
     end
   end
