@@ -66,6 +66,8 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
   end
 
   describe 'clicking the button to send a single email notification' do
+    before { allow(AiOAStatusExportJob).to receive(:perform_later) }
+
     it 'sends an email and displays a confirmation message' do
       find_all("input[value='Send Email']").first.click
       expect(page).to have_current_path activity_insight_oa_workflow_preferred_file_version_none_review_path
