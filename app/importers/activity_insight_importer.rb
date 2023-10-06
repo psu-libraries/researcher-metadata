@@ -202,14 +202,10 @@ class ActivityInsightImporter
           end
 
           activity_insight_file_location = pub.postprints&.first&.location
-          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
-
-          # This is only needed to backfill the post_file_id and intellcont_id on existing ActivityInsightOAFile
-          # records. After this has been run once in production, this #update! call can be removed
-          aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
 
           # rubocop:disable Style/SoleNestedConditional
           if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
               file = ActivityInsightOAFile.create(
                 location: activity_insight_file_location,
