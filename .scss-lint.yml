@@ -30,3 +30,4 @@ linters:
   QualifyingElement:
     exclude:
       - app/assets/stylesheets/rails_admin/custom/variables.scss
+      - app/assets/stylesheets/profile/organization_profile.scss

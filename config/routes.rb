@@ -67,6 +67,7 @@ Rails.application.routes.draw do
   end
 
   get 'profiles/:webaccess_id' => 'profiles#show', as: :profile
+  get 'organization_profiles/:organization_id' => 'organization_profiles#show', as: :organization_profile
 
   get 'profile' => redirect('profile/publications/edit')
   scope 'profile' do

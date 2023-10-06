@@ -1,0 +1,60 @@
+// Color variables
+$white: #fff;
+$light-gray: #ddd;
+
+.pagination a,
+.pagination span.current,
+.pagination span.gap {
+  background-color: $white;
+  border: 1px solid $light-gray;
+  float: left;
+  line-height: 25px;
+  padding: 0 7px;
+  text-decoration: none;
+}
+
+.pagination {
+  border-left: 1px solid $light-gray;
+
+  .first {
+    border: 0;
+    float: none;
+    padding: 0;
+  }
+
+  .prev {
+    border: 0;
+    float: none;
+    padding: 0;
+  }
+
+  .page {
+    border: 0;
+    float: none;
+    padding: 0;
+  }
+
+  .next {
+    border: 0;
+    float: none;
+    padding: 0;
+  }
+
+  .last {
+    border: 0;
+    float: none;
+    padding: 0;
+  }
+}
+
+.grid-org-pubs {
+  background-color: $white;
+  border-radius: 5px;
+  padding: 15px;
+}
+
+.grid-org-paginator {
+  margin-top: 15px;
+  padding-bottom: 10px;
+}
+
