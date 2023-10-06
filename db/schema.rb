@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_09_27_143559) do
+ActiveRecord::Schema.define(version: 2023_10_04_131322) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -53,7 +53,6 @@ ActiveRecord::Schema.define(version: 2023_09_27_143559) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
-    t.boolean "version_checked"
     t.string "intellcont_id"
     t.string "post_file_id"
     t.boolean "exported_oa_status_to_activity_insight"
@@ -63,6 +62,7 @@ ActiveRecord::Schema.define(version: 2023_09_27_143559) do
     t.text "set_statement"
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
+    t.boolean "version_checked"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end
@@ -495,14 +495,9 @@ ActiveRecord::Schema.define(version: 2023_09_27_143559) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
-    t.string "licence"
-    t.date "embargo_date"
-    t.string "set_statement"
     t.string "preferred_version"
     t.datetime "permissions_last_checked_at"
     t.datetime "oa_status_last_checked_at"
-    t.boolean "checked_for_set_statement"
-    t.boolean "checked_for_embargo_date"
     t.datetime "wrong_oa_version_notification_sent_at"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"

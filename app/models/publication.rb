@@ -204,6 +204,7 @@ class Publication < ApplicationRecord
     activity_insight_oa_publication
       .where.not(preferred_version: nil)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'notArticleFile')})
       .where(
         <<-SQL.squish
           NOT EXISTS (
@@ -353,9 +354,6 @@ class Publication < ApplicationRecord
       end
       field(:doi_verified)
       field(:preferred_version)
-      field(:set_statement)
-      field(:licence)
-      field(:embargo_date)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
       field(:visible) { label 'Visible via API' }
@@ -421,14 +419,6 @@ class Publication < ApplicationRecord
         end
         field(:doi_verified)
       end
-      group :open_access_permissions do
-        field(:preferred_version)
-        field(:set_statement)
-        field(:checked_for_set_statement)
-        field(:licence)
-        field(:embargo_date)
-        field(:checked_for_embargo_date)
-      end
       field(:activity_insight_postprint_status)
       field(:open_access_status)
       field(:open_access_button_last_checked_at)
@@ -457,6 +447,7 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
+      field(:preferred_version)
     end
 
     edit do
@@ -482,17 +473,6 @@ class Publication < ApplicationRecord
           end
         end
       end
-      group :open_access_permissions do
-        field(:preferred_version, :enum) do
-          label 'Preferred Version'
-          enum { Publication.preferred_version_options }
-        end
-        field(:set_statement) { label 'Deposit Statement' }
-        field(:checked_for_set_statement) { label 'Checked for deposit statement' }
-        field(:licence) { label 'License' }
-        field(:embargo_date)
-        field(:checked_for_embargo_date)
-      end
       field(:open_access_locations)
       field(:issn) { label 'ISSN' }
       field(:abstract)
@@ -506,6 +486,10 @@ class Publication < ApplicationRecord
       field(:authorships)
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
+      field(:preferred_version, :enum) do
+        label 'Preferred Version'
+        enum { Publication.preferred_version_options }
+      end
     end
   end
 
