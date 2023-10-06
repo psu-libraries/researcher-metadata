@@ -2,7 +2,7 @@
 
 class ActivityInsightFileUploader < CarrierWave::Uploader::Base
   storage :file
-  after :remove, :remove_file
+  after :remove, :remove_file_directory
 
   def store_dir
     if Rails.env.test?
@@ -28,7 +28,7 @@ class ActivityInsightFileUploader < CarrierWave::Uploader::Base
     end
   end
 
-  def remove_file
+  def remove_file_directory
     FileUtils.remove_dir(model_object_dir)
   end
 end
