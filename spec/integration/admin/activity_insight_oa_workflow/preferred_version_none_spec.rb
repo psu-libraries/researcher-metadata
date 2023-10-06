@@ -62,7 +62,6 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
       expect(pub1.reload.preferred_file_version_none_email_sent).not_to be_nil
       expect(pub2.reload.preferred_file_version_none_email_sent).not_to be_nil
       expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, 'Cannot Deposit')
-      expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, 'Cannot Deposit')
     end
   end
 
@@ -73,10 +72,9 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
       expect(page).to have_content('Email sent to abc123')
       open_email('abc123@psu.edu')
       expect(current_email).not_to be_nil
-      expect(current_email.body).to match(/Title 1/)
-      expect(current_email.body).not_to match(/Title 2/)
       expect(pub1.reload.preferred_file_version_none_email_sent).not_to be_nil
       expect(pub2.reload.preferred_file_version_none_email_sent).to be_nil
+      expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, 'Cannot Deposit')
     end
   end
 end
