@@ -32,7 +32,9 @@ describe 'Organization Profile page', type: :feature do
       expect(page).to have_content User.first.publications.first.title
       expect(page).to have_content User.first.publications.first.preferred_journal_title
       expect(page).to have_content User.first.publications.first.published_on.year
-      expect(page).to have_content User.first.name
+      User.first.publications.first.contributor_names.each do |name|
+        expect(page).to have_content name.name
+      end
       expect(page).not_to have_content User.last.publications.first.title
       expect(page).to have_content 'Displaying publications 1 - 25 of 100 in total'
       click_link '3'
