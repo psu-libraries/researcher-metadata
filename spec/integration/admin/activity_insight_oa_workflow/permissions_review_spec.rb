@@ -60,6 +60,11 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
 
   describe 'listing publications that have files that need permissions metadata review prior to deposit' do
     it 'show a table with header and the proper data for the publications in the table' do
+      within 'thead' do
+        expect(page).to have_text('Title')
+        expect(page).to have_text('File metadata: Filename (Version')
+      end
+
       within "#publication_#{pub2.id}" do
         expect(page).to have_link('Pub2', href: "#{rails_admin.edit_path(model_name: :publication, id: pub2.id)}#publication_preferred_version")
         expect(page).to have_link(aif2a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2a.id))
