@@ -69,9 +69,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
 
   describe 'clicking the button to send a single email notification' do
     it 'sends an email and displays a confirmation message' do
-      sleep(1)
-      inputs = find_all("input[value='Send Email']")
-      inputs.first.click
+      find_all("input[name='publications']", visible: false).select { |i| i.value == pub1.id.to_s }.first.sibling('input').click
       expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
       expect(page).to have_content('Email sent to abc123')
       open_email('abc123@psu.edu')
