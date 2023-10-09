@@ -56,9 +56,9 @@
         </div>
         <% if @publication.can_deposit_to_scholarsphere? %>
           <div>
-            <%= link_to "Deposit to ScholarSphere", 
-                        activity_insight_oa_workflow_scholarsphere_deposit_path(@publication.id), 
-                        method: :post, 
+            <%= link_to "Deposit to ScholarSphere",
+                        activity_insight_oa_workflow_scholarsphere_deposit_path(@publication.id),
+                        method: :post,
                         class: 'btn btn-primary' %>
           </div>
         <% elsif @publication.scholarsphere_upload_pending? %>

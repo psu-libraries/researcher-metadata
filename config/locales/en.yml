@@ -222,6 +222,8 @@ en:
   activity_insight_oa_workflow:
     scholarsphere_deposit:
       success: The publication was successfully submitted for deposit to ScholarSphere.  You can check the status of the deposit from the "Scholarsphere work deposits" tab in the RailsAdmin dashboard.
+    metdata_curation_list:
+      record_not_found: This publication is not ready for metadata review.
 
   helpers:
     submit:
