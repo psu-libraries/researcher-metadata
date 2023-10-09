@@ -706,6 +706,16 @@ class Publication < ApplicationRecord
       .first
   end
 
+  def can_deposit_to_scholarsphere?
+    ai_file_for_deposit.license.present? && 
+      title.present? && 
+      abstract.present? && 
+      published_on.present? && 
+      ai_file_for_deposit.file_download_location.present? && 
+      doi.present? &&
+      !scholarsphere_upload_pending?
+  end
+
   private
 
     def merge(publications_to_merge)

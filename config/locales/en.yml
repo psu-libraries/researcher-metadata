@@ -219,6 +219,9 @@ en:
       metadata_curation_description: Publications that have a file which can be deposited and that are ready for a final metadata check prior to submission to ScholarSphere.
       all_workflow_publications_title: All Publications
       all_workflow_publications_description: Troubleshooting list of all publications subject to workflow
+  activity_insight_oa_workflow:
+    scholarsphere_deposit:
+      success: The publication was successfully submitted for deposit to ScholarSphere.  You can check the status of the deposit from the "Scholarsphere work deposits" tab in the RailsAdmin dashboard.
 
   helpers:
     submit:
