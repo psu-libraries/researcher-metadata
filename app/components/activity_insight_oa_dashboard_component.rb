@@ -13,6 +13,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.wrong_file_version.count
   end
 
+  def preferred_file_version_none_count
+    Publication.preferred_file_version_none.count
+  end
+
   def needs_manual_preferred_version_check_count
     Publication.needs_manual_preferred_version_check.count
   end

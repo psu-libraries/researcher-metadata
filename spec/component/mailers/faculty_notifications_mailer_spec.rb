@@ -156,4 +156,62 @@ describe FacultyNotificationsMailer, type: :model do
       end
     end
   end
+
+  describe '#preferred_file_version_none' do
+    subject(:email) { described_class.preferred_file_version_none(publications) }
+
+    let(:user) { create(:user) }
+    let!(:aif1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion',
+        user_id: user.id
+      )
+    }
+    let!(:aif2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub2,
+        version: 'acceptedVersion',
+        user_id: user.id
+      )
+    }
+    let(:publications) { [pub1, pub2] }
+    let(:pub1) { create(:publication, title: 'Test One', preferred_version: 'None') }
+    let(:pub2) { create(:publication, title: 'Test Two', preferred_version: 'None') }
+
+    before do
+      allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
+    end
+
+    it "sends the email to the given user's email address" do
+      expect(email.to).to eq ["#{user.webaccess_id}@psu.edu"]
+    end
+
+    it 'sends the email from the correct address' do
+      expect(email.from).to eq ['openaccess@psu.edu']
+    end
+
+    it 'sends the email with the correct subject' do
+      expect(email.subject).to eq 'Open Access Post-Print Publication Files in Activity Insight'
+    end
+
+    it 'sets the correct reply-to address' do
+      expect(email.reply_to).to eq ['openaccess@psu.edu']
+    end
+
+    describe 'the message body' do
+      let(:body) { email.body.raw_source }
+
+      it 'shows a link to manage open access info for each publication' do
+        expect(body).to match %{<a href="https://metadata.libraries.psu.edu/profile/publications/edit">Manage Profile Publications</a>}
+      end
+
+      it 'mentions the publication title' do
+        expect(body).to match('Test One')
+        expect(body).to match('Test Two')
+      end
+    end
+  end
 end

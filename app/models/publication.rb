@@ -169,7 +169,12 @@ class Publication < ApplicationRecord
                                                distinct(:id).left_outer_joins(:open_access_locations)
                                                  .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publications.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
                                              }
-  scope :activity_insight_oa_publication, -> { oa_publication.with_no_scholarsphere_oa_locations.joins(:activity_insight_oa_files).where.not(activity_insight_oa_files: { location: nil }) }
+  scope :activity_insight_oa_publication, -> {
+                                            oa_publication.with_no_scholarsphere_oa_locations
+                                              .joins(:activity_insight_oa_files)
+                                              .where.not(activity_insight_oa_files: { location: nil })
+                                              .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL')
+                                          }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
       .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
@@ -196,6 +201,7 @@ class Publication < ApplicationRecord
     activity_insight_oa_publication
       .filter_oa_status_from_workflow
       .where.not(preferred_version: nil)
+      .where.not(preferred_version: NO_VERSION)
       .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
@@ -203,6 +209,7 @@ class Publication < ApplicationRecord
   scope :wrong_file_version, -> {
     activity_insight_oa_publication
       .where.not(preferred_version: nil)
+      .where.not(preferred_version: NO_VERSION)
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'notArticleFile')})
       .where(
@@ -227,6 +234,12 @@ class Publication < ApplicationRecord
       .where.not(permissions_last_checked_at: nil)
       .where(preferred_version: nil)
   }
+  scope :preferred_file_version_none, -> {
+                                        activity_insight_oa_publication
+                                          .where(%{preferred_version = '#{NO_VERSION}'})
+                                          .includes(:activity_insight_oa_files)
+                                          .order('activity_insight_oa_files.created_at ASC')
+                                      }
   scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
@@ -366,6 +379,7 @@ class Publication < ApplicationRecord
       field(:updated_by_user_at) { read_only true }
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
+      field(:preferred_file_version_none_email_sent)
     end
 
     create do
@@ -447,7 +461,10 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
-      field(:preferred_version)
+      group :preferred_version do
+        field(:preferred_version)
+        field(:preferred_file_version_none_email_sent)
+      end
     end
 
     edit do
@@ -486,9 +503,12 @@ class Publication < ApplicationRecord
       field(:authorships)
       field(:contributor_names)
       field(:visible) { label 'Visible via API?' }
-      field(:preferred_version, :enum) do
-        label 'Preferred Version'
-        enum { Publication.preferred_version_options }
+      group :preferred_version do
+        field(:preferred_version, :enum) do
+          label 'Preferred Version'
+          enum { Publication.preferred_version_options }
+        end
+        field(:preferred_file_version_none_email_sent)
       end
     end
   end

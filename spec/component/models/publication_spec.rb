@@ -758,6 +758,12 @@ describe Publication, type: :model do
                           preferred_version: 'acceptedVersion',
                           doi_verified: nil)
     }
+    let!(:pub11b) { create(:publication,
+                           title: 'pub11b',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'None',
+                           doi_verified: nil)
+    }
     let!(:pub12) { create(:publication,
                           title: 'pub12',
                           publication_type: 'Journal Article',
@@ -858,6 +864,21 @@ describe Publication, type: :model do
                            oa_status_last_checked_at: 1.minute.ago,
                            preferred_version: 'Published or Accepted')
     }
+    let!(:pub14c) { create(:publication,
+                           title: 'pub14c',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'None')
+    }
+    let!(:pub14d) { create(:publication,
+                           title: 'pub14d',
+                           publication_type: 'Journal Article',
+                           doi_verified: true,
+                           oa_status_last_checked_at: 1.minute.ago,
+                           preferred_version: 'None',
+                           preferred_file_version_none_email_sent: true)
+    }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
@@ -877,6 +898,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file7j) { create(:activity_insight_oa_file, publication: pub9j) }
     let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub10) }
     let!(:activity_insight_oa_file9) { create(:activity_insight_oa_file, publication: pub11, version: 'unknown') }
+    let!(:activity_insight_oa_file9b) { create(:activity_insight_oa_file, publication: pub11b, version: 'unknown') }
     let!(:activity_insight_oa_file10) { create(:activity_insight_oa_file, publication: pub11, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
@@ -968,6 +990,22 @@ describe Publication, type: :model do
         embargo_date: Date.today
       )
     }
+    let!(:activity_insight_oa_file14c) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14c,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion'
+      )
+    }
+    let!(:activity_insight_oa_file14d) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub14d,
+        permissions_last_checked_at: Time.now,
+        version: 'acceptedVersion'
+      )
+    }
 
     let!(:open_access_location5) { create(:open_access_location, publication: pub5) }
     let!(:open_access_location12) { create(:open_access_location, publication: pub12, source: Source::UNPAYWALL) }
@@ -994,6 +1032,7 @@ describe Publication, type: :model do
           pub9j,
           pub10,
           pub11,
+          pub11b,
           pub12,
           pub12b,
           pub13a,
@@ -1001,7 +1040,8 @@ describe Publication, type: :model do
           pub13c,
           pub13d,
           pub14a,
-          pub14b
+          pub14b,
+          pub14c
         ]
       end
     end
@@ -1017,6 +1057,7 @@ describe Publication, type: :model do
         expect(described_class.needs_doi_verification).to match_array [
           pub4,
           pub11,
+          pub11b,
           pub12,
           pub13a,
           pub13b,
@@ -1067,6 +1108,12 @@ describe Publication, type: :model do
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
         expect(described_class.needs_manual_preferred_version_check).to match_array [pub9b]
+      end
+    end
+
+    describe '.preferred_file_version_none' do
+      it 'returns activity_insight_oa_publications where the preferred version is none' do
+        expect(described_class.preferred_file_version_none).to match_array [pub11b, pub14c]
       end
     end
 
