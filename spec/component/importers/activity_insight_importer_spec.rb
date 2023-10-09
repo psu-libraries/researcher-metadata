@@ -5003,7 +5003,7 @@ describe ActivityInsightImporter do
                              file_download_location: fixture_file_open('test_file.pdf'),
                              intellcont_id: '190706413568') }
         let!(:pub1) { create(:publication) }
-        
+
         let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
 
         it 'deletes the ActivityInsightOAFile and downloaded file' do
