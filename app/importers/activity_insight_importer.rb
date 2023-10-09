@@ -208,8 +208,10 @@ class ActivityInsightImporter
           # records. After this has been run once in production, this #update! call can be removed
           aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
 
-          # rubocop:disable Style/SoleNestedConditional
-          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+          existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
+          if activity_insight_file_location.blank? && existing_file.present?
+            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id)
+          elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             if aif.blank?
               file = ActivityInsightOAFile.create(
                 location: activity_insight_file_location,
@@ -226,7 +228,6 @@ class ActivityInsightImporter
               end
             end
           end
-          # rubocop:enable Style/SoleNestedConditional
         end
       rescue StandardError => e
         log_error(pub, e, u)
