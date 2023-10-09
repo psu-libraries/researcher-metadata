@@ -31,6 +31,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where.not(location: nil)
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
+      .distinct
   }
 
   scope :ready_for_download, -> {
@@ -55,6 +56,7 @@ class ActivityInsightOAFile < ApplicationRecord
         OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
         AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where(exported_oa_status_to_activity_insight: nil)
+      .distinct
   }
 
   scope :needs_permissions_check, -> {
