@@ -145,8 +145,8 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          title: 'pub5',
                          open_access_status: 'hybrid',
                          open_access_locations: [
-                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil),
-                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url', publication: nil)
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url1', publication: nil),
+                           build(:open_access_location, source: Source::UNPAYWALL, url: 'url2', publication: nil)
                          ])
     }
     let!(:pub6) { create(:publication,
