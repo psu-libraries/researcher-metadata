@@ -204,6 +204,12 @@ class ActivityInsightImporter
           activity_insight_file_location = pub.postprints&.first&.location
           aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
+          # This is only needed to backfill status in activity insight to 'In Progress' if the status
+          # in activity insight is currently blank
+          if aif.present? && pub.activity_insight_postprint_status.blank?
+            AiOAStatusExportJob.perform_later(aif.id, 'In Progress')
+          end
+
           # This is only needed to backfill the post_file_id and intellcont_id on existing ActivityInsightOAFile
           # records. After this has been run once in production, this #update! call can be removed
           aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
