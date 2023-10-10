@@ -28,4 +28,13 @@ class FacultyNotificationsMailer < ApplicationMailer
          from: 'openaccess@psu.edu',
          reply_to: 'openaccess@psu.edu'
   end
+
+  def preferred_file_version_none(publications)
+    @publications = publications
+    profile = UserProfile.new(@publications.first.activity_insight_upload_user)
+    mail to: profile.email,
+         subject: 'Open Access Post-Print Publication Files in Activity Insight',
+         from: 'openaccess@psu.edu',
+         reply_to: 'openaccess@psu.edu'
+  end
 end
