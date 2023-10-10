@@ -39,6 +39,7 @@ gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jquery-ui-rails'
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
+gem 'kaminari', '~> 1.0'                # Pagination within Rails
 gem 'lograge'                           # Structured logging for production
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility

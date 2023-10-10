@@ -187,8 +187,8 @@ describe OAWorkflowService do
 
       it 'calls the AiOAStatusExportJob' do
         service.workflow
-        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id)
-        expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id)
+        expect(AiOAStatusExportJob).to have_received(:perform_later).with(activity_insight_oa_file6.id, 'Already Openly Available')
+        expect(AiOAStatusExportJob).not_to have_received(:perform_later).with(activity_insight_oa_file4.id, 'Already Openly Available')
         expect(activity_insight_oa_file6.reload.exported_oa_status_to_activity_insight).to be true
       end
     end
