@@ -63,7 +63,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
   describe 'destroy' do
     let!(:aif1) { create(:activity_insight_oa_file,
-      file_download_location: fixture_file_open('test_file.pdf')) }
+                         file_download_location: fixture_file_open('test_file.pdf')) }
     let!(:file_download_directory) { aif1.file_download_location.model_object_dir }
 
     it 'removes the file download directory' do
