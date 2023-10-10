@@ -713,7 +713,8 @@ class Publication < ApplicationRecord
       published_on.present? &&
       ai_file_for_deposit.file_download_location.present? &&
       doi.present? &&
-      !scholarsphere_upload_pending?
+      !scholarsphere_upload_pending? &&
+      !scholarsphere_upload_failed?
   end
 
   private

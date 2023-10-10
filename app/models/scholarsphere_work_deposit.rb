@@ -96,6 +96,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     file_uploads.map { |fu| File.new(fu.stored_file_path) }
   end
 
+  def standard_oa_workflow?
+    deposit_workflow == 'Standard OA Workflow'
+  end
+
   private
 
     def doi_format_is_valid

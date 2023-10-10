@@ -65,6 +65,10 @@
           <div>
             ScholarSphere upload pending...
           </div>
+        <% elsif @publication.scholarsphere_upload_failed? %>
+          <div>
+            ScholarSphere upload failed
+          </div>
         <% else %>
           <div>
             Insufficient metadata to upload to ScholarSphere
