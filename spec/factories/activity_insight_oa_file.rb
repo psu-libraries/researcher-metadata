@@ -5,8 +5,8 @@ FactoryBot.define do
     publication
     user
     sequence(:location) { |n| "abc123/intellcont/test_file#{n}.pdf" }
-    sequence(:intellcont_id) { |n| 100000000000+n }
-    sequence(:post_file_id) { |n| 200000000000+n }
+    sequence(:intellcont_id) { |n| n + 100000000000 }
+    sequence(:post_file_id) { |n| n + 200000000000 }
     version { nil }
     file_download_location { 'path_to_test_file.pdf' }
   end

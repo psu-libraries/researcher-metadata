@@ -40,6 +40,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   describe 'validations' do
     it { is_expected.to validate_presence_of(:intellcont_id) }
     it { is_expected.to validate_presence_of(:post_file_id) }
+
     it { expect(subject).to validate_inclusion_of(:version).in_array(
       %w{
         acceptedVersion
