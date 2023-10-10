@@ -61,6 +61,16 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     }
   end
 
+  describe '.export_statuses' do
+    it 'returns the list of valid values for activity insight export status' do
+      expect(described_class.export_statuses).to eq [
+        'Cannot Deposit',
+        'Already Openly Available',
+        'In Progress'
+      ]
+    end
+  end
+
   describe '.licenses' do
     it 'returns an array of the possible licenses for a file' do
       expect(described_class.licenses).to eq %w{
