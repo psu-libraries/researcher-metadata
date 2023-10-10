@@ -219,6 +219,7 @@ class ActivityInsightImporter
               )
               pub_record.activity_insight_oa_files << file
               pub_record.save!
+              AiOAStatusExportJob.perform_later(file.id, 'In Progress')
               unless pub_record.doi_verified == true
                 pub_record.oa_workflow_state = 'automatic DOI verification pending'
                 pub_record.save!

@@ -24,6 +24,7 @@ describe ActivityInsightImporter do
                                                           Rails.root.join('spec', 'fixtures', 'activity_insight_user_def45.xml').read
                                                         )
     allow(DOIVerificationJob).to receive(:perform_later)
+    allow(AiOAStatusExportJob).to receive(:perform_later)
   end
 
   describe '#call' do
@@ -5005,6 +5006,7 @@ describe ActivityInsightImporter do
           importer.call
 
           expect(existing_pub.activity_insight_oa_files).to eq []
+          expect(AiOAStatusExportJob).not_to receive(:perform_later)
         end
       end
 
@@ -5029,6 +5031,7 @@ describe ActivityInsightImporter do
 
           it 'creates a new ActivityInsightOAFile for that publication' do
             expect(DOIVerificationJob).to receive(:perform_later).exactly(3).times
+            expect(AiOAStatusExportJob).to receive(:perform_later).exactly(3).times
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
