@@ -42,9 +42,18 @@ describe ScholarsphereDepositService do
         service.create
       end
 
-      it 'sends a confirmation email to the user' do
-        expect(email).to receive(:deliver_now)
-        service.create
+      context "when the deposit's deposit_workflow is 'Standard OA Workflow'" do
+        it 'sends a confirmation email to the user' do
+          expect(email).to receive(:deliver_now)
+          service.create
+        end
+      end
+
+      context "when the deposit's deposit_workflow is not 'Standard OA Workflow'" do
+        it 'sends a confirmation email to the user' do
+          expect(email).not_to receive(:deliver_now)
+          service.create
+        end
       end
     end
 

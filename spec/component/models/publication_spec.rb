@@ -4033,4 +4033,91 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#can_deposit_to_scholarsphere?' do
+    let!(:ai_oa_file) { create(:activity_insight_oa_file,
+                               version: 'acceptedVersion',
+                               license: ActivityInsightOAFile.licenses.first,
+                               file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:publication) { create(:sample_publication,
+                                preferred_version: 'acceptedVersion',
+                                activity_insight_oa_files: [ai_oa_file]) }
+
+    context 'when publication and its ai_file_for_deposit have required metdata
+             and no pending or failed scholarsphere deposits' do
+      it 'returns true' do
+        expect(publication.can_deposit_to_scholarsphere?).to be true
+      end
+    end
+
+    context "when publication's ai_file_for_deposit's license is empty" do
+      before { ai_oa_file.update_column :license, nil }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context "when publication's ai_file_for_deposit's file_download_location is empty" do
+      before { ai_oa_file.update_column :file_download_location, nil }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context "when publication's title is empty" do
+      before { publication.update_column :title, '' }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context "when publication's abstract is empty" do
+      before { publication.update_column :abstract, nil }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context "when publication's published_on is empty" do
+      before { publication.update_column :published_on, nil }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context "when publication's doi is empty" do
+      before { publication.update_column :doi, nil }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context 'when publication has a scholarsphere_upload_pending' do
+      before do
+        auth = create(:authorship, publication: publication)
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Pending')
+      end
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
+    context 'when publication has a scholarsphere_upload_failed' do
+      before do
+        auth = create(:authorship, publication: publication)
+        create(:scholarsphere_work_deposit, authorship: auth, status: 'Failed')
+      end
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+  end
 end

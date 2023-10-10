@@ -25,7 +25,7 @@ class ScholarsphereDepositService
       deposit.record_success(scholarsphere_publication_uri)
       profile = UserProfile.new(current_user)
       if deposit.standard_oa_workflow?
-        FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now 
+        FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
       end
     else
       logger.info response.inspect
