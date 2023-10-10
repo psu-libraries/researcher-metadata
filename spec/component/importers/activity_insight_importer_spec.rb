@@ -4993,24 +4993,38 @@ describe ActivityInsightImporter do
                                       publication: existing_pub) }
       let!(:existing_pub) { create(:publication) }
 
-      context 'when the publication to be imported does not have a file' do
-        let!(:existing_import2) { create(:publication_import,
-                                         source: 'Activity Insight',
-                                         source_identifier: '190706413568',
-                                         publication: pub1) }
-        let!(:aif1) { create(:activity_insight_oa_file,
-                             publication: pub1, version: 'publishedVersion',
-                             file_download_location: fixture_file_open('test_file.pdf'),
-                             intellcont_id: '190706413568') }
-        let!(:pub1) { create(:publication) }
+      context 'when the import does not have a file location' do
+        context 'when there is an ActivityInsightOAFile associated with the publication' do
+          let!(:existing_import2) { create(:publication_import,
+                                           source: 'Activity Insight',
+                                           source_identifier: '190706413568',
+                                           publication: pub1) }
+          let!(:aif1) { create(:activity_insight_oa_file,
+                               publication: pub1, version: 'publishedVersion',
+                               file_download_location: fixture_file_open('test_file.pdf'),
+                               intellcont_id: '190706413568') }
+          let!(:pub1) { create(:publication) }
 
-        let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
+          let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
 
-        it 'deletes the ActivityInsightOAFile and downloaded file' do
-          importer.call
+          it 'deletes the ActivityInsightOAFile and downloaded file' do
+            importer.call
 
-          expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
-          expect(File.exists?(file_download_directory1)).to be false
+            expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
+            expect(File.exists?(file_download_directory1)).to be false
+          end
+        end
+
+        context 'when there is not an ActivityInsightOAFile associated with the publication' do
+          let!(:existing_import2) { create(:publication_import,
+                                           source: 'Activity Insight',
+                                           source_identifier: '190706413568',
+                                           publication: pub1) }
+          let!(:pub1) { create(:publication) }
+
+          it 'does not change the existing publication' do
+            expect(pub1).not_to receive(:save!)
+          end
         end
       end
 
