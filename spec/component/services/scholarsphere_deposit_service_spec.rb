@@ -8,7 +8,8 @@ describe ScholarsphereDepositService do
   let(:deposit) { double 'scholarsphere work deposit',
                          metadata: metadata,
                          files: files,
-                         record_success: nil }
+                         record_success: nil,
+                         standard_oa_workflow?: true }
   let(:metadata) { double 'metadata' }
   let(:files) { double 'files' }
   let(:ingest) { double 'scholarsphere client ingest', publish: response }
@@ -42,14 +43,16 @@ describe ScholarsphereDepositService do
         service.create
       end
 
-      context "when the deposit's deposit_workflow is 'Standard OA Workflow'" do
+      context "when deposit's #standard_oa_workflow? is true" do
         it 'sends a confirmation email to the user' do
           expect(email).to receive(:deliver_now)
           service.create
         end
       end
 
-      context "when the deposit's deposit_workflow is not 'Standard OA Workflow'" do
+      context "when deposit's #standard_oa_workflow? is false" do
+        before { allow(deposit).to receive(:standard_oa_workflow?).and_return false }
+
         it 'does not send a confirmation email to the user' do
           expect(email).not_to receive(:deliver_now)
           service.create
