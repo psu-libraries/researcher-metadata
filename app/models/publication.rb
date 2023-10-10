@@ -181,7 +181,11 @@ class Publication < ApplicationRecord
       .includes(:activity_insight_oa_files)
       .order('activity_insight_oa_files.created_at ASC')
   }
-  scope :doi_failed_verification, -> { activity_insight_oa_publication.where('doi_verified = false') }
+  scope :doi_failed_verification, -> {
+    activity_insight_oa_publication
+      .where('doi_verified = false')
+      .where('doi_error != true OR doi_error IS NULL')
+  }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
   scope :needs_permissions_check, -> {
@@ -366,6 +370,7 @@ class Publication < ApplicationRecord
         pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
       end
       field(:doi_verified)
+      field(:doi_error)
       field(:preferred_version)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
@@ -432,6 +437,7 @@ class Publication < ApplicationRecord
           pretty_value { %{<a href="#{value}" target="_blank">#{value}</a>}.html_safe if value }
         end
         field(:doi_verified)
+        field(:doi_error)
       end
       field(:activity_insight_postprint_status)
       field(:open_access_status)
@@ -485,6 +491,12 @@ class Publication < ApplicationRecord
         field(:doi) { label 'DOI' }
         field(:doi_verified, :enum) do
           label 'DOI verified?'
+          enum do
+            [['True', true], ['False', false]]
+          end
+        end
+        field(:doi_error, :enum) do
+          label 'DOI error?'
           enum do
             [['True', true], ['False', false]]
           end

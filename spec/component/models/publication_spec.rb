@@ -39,6 +39,7 @@ describe 'the publications table', type: :model do
   it { is_expected.to have_db_column(:preferred_version).of_type(:string) }
   it { is_expected.to have_db_column(:permissions_last_checked_at).of_type(:datetime) }
   it { is_expected.to have_db_column(:oa_status_last_checked_at).of_type(:datetime) }
+  it { is_expected.to have_db_column(:doi_error).of_type(:boolean) }
 
   it { is_expected.to have_db_foreign_key(:duplicate_publication_group_id) }
   it { is_expected.to have_db_foreign_key(:journal_id) }
@@ -649,6 +650,12 @@ describe Publication, type: :model do
                          doi_verified: false,
                          publication_type: 'Academic Journal Article')
     }
+    let!(:pub2b) { create(:publication,
+                          title: 'pub2b',
+                          doi_verified: false,
+                          doi_error: true,
+                          publication_type: 'Academic Journal Article')
+    }
     let!(:pub3) { create(:publication,
                          title: 'pub3',
                          doi_verified: true,
@@ -881,6 +888,7 @@ describe Publication, type: :model do
     }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
+    let!(:activity_insight_oa_file1b) { create(:activity_insight_oa_file, publication: pub2b) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }
@@ -1016,6 +1024,7 @@ describe Publication, type: :model do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
         expect(described_class.activity_insight_oa_publication).to match_array [
           pub2,
+          pub2b,
           pub3,
           pub4,
           pub6,
