@@ -208,9 +208,9 @@ class ActivityInsightImporter
           # records. After this has been run once in production, this #update! call can be removed
           aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
 
-          existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
-          if activity_insight_file_location.blank? && existing_file.present?
-            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id)
+          if activity_insight_file_location.blank? 
+            existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
+            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
           elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             if aif.blank?
               file = ActivityInsightOAFile.create(
