@@ -752,11 +752,11 @@ describe ActivityInsightImporter do
       end
 
       context 'when no included publications exist in the database' do
-        it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+        it 'creates a new publication import record for every Published or In Press publication' do
           expect { importer.call }.to change(PublicationImport, :count).by 6
         end
 
-        it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+        it 'creates a new publication record for every Published or In Press publication' do
           expect { importer.call }.to change(Publication, :count).by 6
         end
 
@@ -1073,11 +1073,11 @@ describe ActivityInsightImporter do
 
           let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-          it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication import record for every new Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 3
           end
 
-          it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication record for every new Published or In Press publication' do
             expect { importer.call }.to change(Publication, :count).by 3
           end
 
@@ -1364,11 +1364,11 @@ describe ActivityInsightImporter do
 
           let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-          it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication import record for every new Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 3
           end
 
-          it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication record for every new Published or In Press publication' do
             expect { importer.call }.to change(Publication, :count).by 3
           end
 
@@ -2408,11 +2408,11 @@ describe ActivityInsightImporter do
         end
 
         context 'when no included publications exist in the database' do
-          it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication import record for every Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 6
           end
 
-          it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication record for every Published or In Press publication' do
             expect { importer.call }.to change(Publication, :count).by 6
           end
 
@@ -2670,11 +2670,11 @@ describe ActivityInsightImporter do
 
             let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication import record for every new Published or In Press publication' do
               expect { importer.call }.to change(PublicationImport, :count).by 5
             end
 
-            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication record for every new Published or In Press publication' do
               expect { importer.call }.to change(Publication, :count).by 5
             end
 
@@ -2964,11 +2964,11 @@ describe ActivityInsightImporter do
 
             let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication import record for every new Published or In Press publication' do
               expect { importer.call }.to change(PublicationImport, :count).by 5
             end
 
-            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication record for every new Published or In Press publication' do
               expect { importer.call }.to change(Publication, :count).by 5
             end
 
@@ -3985,11 +3985,11 @@ describe ActivityInsightImporter do
         end
 
         context 'when no included publications exist in the database' do
-          it 'creates a new publication import record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication import record for every Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 6
           end
 
-          it 'creates a new publication record for every Published or In Press publication w/o an RMD_ID in the imported data' do
+          it 'creates a new publication record for every Published or In Press publication' do
             expect { importer.call }.to change(Publication, :count).by 6
           end
 
@@ -4247,11 +4247,11 @@ describe ActivityInsightImporter do
 
             let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication import record for every new Published or In Press publication' do
               expect { importer.call }.to change(PublicationImport, :count).by 5
             end
 
-            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication record for every new Published or In Press publication' do
               expect { importer.call }.to change(Publication, :count).by 5
             end
 
@@ -4540,11 +4540,11 @@ describe ActivityInsightImporter do
 
             let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
-            it 'creates a new publication import record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication import record for every new Published or In Press publication' do
               expect { importer.call }.to change(PublicationImport, :count).by 5
             end
 
-            it 'creates a new publication record for every new Published or In Press publication w/o an RMD_ID in the imported data' do
+            it 'creates a new publication record for every new Published or In Press publication' do
               expect { importer.call }.to change(Publication, :count).by 5
             end
 

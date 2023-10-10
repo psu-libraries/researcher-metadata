@@ -787,7 +787,7 @@ class ActivityInsightPublication
   end
 
   def importable?
-    (status == 'Published' || status == 'In Press') && rmd_id.blank?
+    (status == 'Published' || status == 'In Press')
   end
 
   def activity_insight_id
