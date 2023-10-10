@@ -27,9 +27,10 @@ describe 'Admin Metadata Review publication detail', type: :feature do
     before { authenticate_admin_user }
 
     context 'trying to view the details for a publication that is not ready for metadata review' do
-      it 'responds with a 404' do
-        expect { visit activity_insight_oa_workflow_review_publication_metadata_path(pub1) }
-          .to raise_error ActiveRecord::RecordNotFound
+      it 'rescues the ActiveRecord::RecordNotFound error and returns to metadata review list with a flash message' do
+        visit activity_insight_oa_workflow_review_publication_metadata_path(pub1)
+        expect(page).to have_current_path activity_insight_oa_workflow_metadata_review_path
+        expect(page).to have_content 'his publication is not ready for metadata review.'
       end
     end
 
@@ -55,6 +56,44 @@ describe 'Admin Metadata Review publication detail', type: :feature do
         expect(page).to have_content pub2.ai_file_for_deposit.created_at.to_date
         expect(page).to have_link 'Edit', href: rails_admin.edit_path(model_name: :publication, id: pub2.id)
         expect(page).to have_link 'Back', href: activity_insight_oa_workflow_metadata_review_path
+      end
+
+      context 'when the metadata is incomplete' do
+        before do
+          pub2.update abstract: nil
+          visit activity_insight_oa_workflow_review_publication_metadata_path(pub2)
+        end
+
+        it 'does not have a button to deposit to scholarsphere and indicates the metadata is incomplete' do
+          expect(page).to have_content 'Insufficient metadata to upload to ScholarSphere'
+          expect(page).not_to have_button 'Deposit to ScholarSphere'
+        end
+      end
+
+      context 'when the publication has a pending scholarsphere deposit' do
+        before do
+          auth = create(:authorship, publication: pub2)
+          create(:scholarsphere_work_deposit, authorship: auth, status: 'Pending')
+          visit activity_insight_oa_workflow_review_publication_metadata_path(pub2)
+        end
+
+        it 'does not have a button to deposit to scholarsphere and indicates the deposit is pending' do
+          expect(page).to have_content 'ScholarSphere upload pending...'
+          expect(page).not_to have_button 'Deposit to ScholarSphere'
+        end
+      end
+
+      context 'when the publication has a failed scholarsphere deposit' do
+        before do
+          auth = create(:authorship, publication: pub2)
+          create(:scholarsphere_work_deposit, authorship: auth, status: 'Failed')
+          visit activity_insight_oa_workflow_review_publication_metadata_path(pub2)
+        end
+
+        it 'does not have a button to deposit to scholarsphere and indicates the deposit is failed' do
+          expect(page).to have_content 'ScholarSphere upload failed'
+          expect(page).not_to have_button 'Deposit to ScholarSphere'
+        end
       end
     end
   end

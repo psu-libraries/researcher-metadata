@@ -50,7 +50,7 @@ describe ScholarsphereDepositService do
       end
 
       context "when the deposit's deposit_workflow is not 'Standard OA Workflow'" do
-        it 'sends a confirmation email to the user' do
+        it 'does not send a confirmation email to the user' do
           expect(email).not_to receive(:deliver_now)
           service.create
         end
