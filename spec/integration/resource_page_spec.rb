@@ -30,7 +30,6 @@ describe 'Resource page', type: :feature do
     it 'provides a contact link' do
       expect(page).to have_link "Contact us to see another unit's page"
     end
-
   end
 
   context 'when the user is not logged in' do
@@ -55,6 +54,5 @@ describe 'Resource page', type: :feature do
     it 'provides a contact link' do
       expect(page).to have_link "Contact us to see another unit's page"
     end
-
   end
 end
