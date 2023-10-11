@@ -43,7 +43,7 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
     it 'shows a table with header and the proper data for the publications in the table' do
       within 'thead' do
         expect(page).to have_text('Title')
-        expect(page).to have_text('Files')
+        expect(page).to have_text('File metadata: Filename (Version')
       end
 
       within "tr#publication_#{pub1.id}" do

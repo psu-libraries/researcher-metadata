@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_04_131322) do
+ActiveRecord::Schema.define(version: 2023_10_05_205509) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -500,6 +500,7 @@ ActiveRecord::Schema.define(version: 2023_10_04_131322) do
     t.datetime "oa_status_last_checked_at"
     t.datetime "wrong_oa_version_notification_sent_at"
     t.boolean "preferred_file_version_none_email_sent"
+    t.boolean "doi_error"
     t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
