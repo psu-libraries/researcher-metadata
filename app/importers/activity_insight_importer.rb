@@ -203,7 +203,10 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+          if activity_insight_file_location.blank?
+            existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
+            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
+          elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
               file = ActivityInsightOAFile.create(
