@@ -35,8 +35,5 @@ class ActivityInsightOAWorkflow::MetadataCurationController < ActivityInsightOAW
 
     flash[:notice] = I18n.t('activity_insight_oa_workflow.scholarsphere_deposit.success')
     redirect_to activity_insight_oa_workflow_metadata_review_path
-  rescue ActiveRecord::RecordInvalid
-    flash[:alert] = @deposit.errors.full_messages.join(', ')
-    redirect_to activity_insight_oa_workflow_scholarsphere_deposit_path(publication.id)
   end
 end
