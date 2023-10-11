@@ -4098,6 +4098,14 @@ describe Publication, type: :model do
       end
     end
 
+    context "when publication's doi is improperly formatted" do
+      before { publication.update_column :doi, 'invalid doi' }
+
+      it 'returns false' do
+        expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+
     context 'when publication has a scholarsphere_upload_pending' do
       before do
         auth = create(:authorship, publication: publication)
