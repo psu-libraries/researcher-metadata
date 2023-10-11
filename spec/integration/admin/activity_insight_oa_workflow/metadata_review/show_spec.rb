@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin Metadata Review publication detail', type: :feature do
-  let!(:user) { create :user }
+  let!(:user) { create(:user) }
   let!(:pub1) { create(:publication, title: 'Pub1', preferred_version: 'acceptedVersion') }
   let!(:pub2) {
     create(
@@ -113,14 +113,14 @@ describe 'Admin Metadata Review publication detail', type: :feature do
         context 'when there is no validation error' do
           it 'submits the publication to be deposited to scholarsphere' do
             visit activity_insight_oa_workflow_review_publication_metadata_path(pub2)
-            expect { click_link 'Deposit to ScholarSphere' }.to change { ScholarsphereWorkDeposit.count }.by 1
+            expect { click_link 'Deposit to ScholarSphere' }.to change(ScholarsphereWorkDeposit, :count).by 1
             expect(page).to have_current_path activity_insight_oa_workflow_metadata_review_path
             expect(page).to have_content 'The publication was successfully submitted for deposit to ScholarSphere.'
             deposit = ScholarsphereWorkDeposit.last
             expect(deposit.authorship_id).to eq auth.id
-            expect(deposit.status).to eq 'Pending' 
-            expect(deposit.error_message).to eq nil
-            expect(deposit.deposited_at).not_to be nil
+            expect(deposit.status).to eq 'Pending'
+            expect(deposit.error_message).to be_nil
+            expect(deposit.deposited_at).not_to be_nil
             expect(deposit.title).to eq pub2.title
             expect(deposit.description).to eq pub2.abstract
             expect(deposit.published_date).to eq pub2.published_on
@@ -129,7 +129,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
             expect(deposit.doi).to eq pub2.doi
             expect(deposit.subtitle).to eq pub2.secondary_title
             expect(deposit.publisher).to eq pub2.preferred_journal_title
-            expect(deposit.deputy_user_id).to eq nil
+            expect(deposit.deputy_user_id).to be_nil
             expect(deposit.deposit_workflow).to eq 'Activity Insight OA Workflow'
           end
         end
