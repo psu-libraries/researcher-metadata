@@ -40,6 +40,7 @@ RSpec/AnyInstance:
     - 'spec/component/models/activity_insight_oa_status_exporter_spec.rb'
     - 'spec/component/models/file_version_checker_spec.rb'
     - 'spec/integration/admin/activity_insight_oa_workflow/wrong_file_version_review_spec.rb'
+    - 'spec/integration/admin/activity_insight_oa_workflow/preferred_version_none_spec.rb'
 
 RSpec/LeakyConstantDeclaration:
   Exclude:

@@ -3,9 +3,10 @@
 class ActivityInsightOAStatusExporter < ActivityInsightExporter
   class ExportFailed < RuntimeError; end
 
-  def initialize(file_id)
+  def initialize(file_id, export_status)
     super()
     @file = ActivityInsightOAFile.find(file_id)
+    @export_status = export_status
   end
 
   def export
@@ -20,7 +21,7 @@ class ActivityInsightOAStatusExporter < ActivityInsightExporter
 
   private
 
-    attr_accessor :file
+    attr_accessor :file, :export_status
 
     def to_xml(file)
       builder = Nokogiri::XML::Builder.new(encoding: 'UTF-8') do |xml|
@@ -29,7 +30,7 @@ class ActivityInsightOAStatusExporter < ActivityInsightExporter
           xml.Record('username' => user.webaccess_id) do
             xml.INTELLCONT('id' => file.intellcont_id) do
               xml.POST_FILE('id' => file.post_file_id) do
-                xml.ACCESIBLE('Already Openly Available')
+                xml.ACCESIBLE(export_status)
               end
               xml.RMD_ID(file.publication.id, access: 'READ_ONLY')
             end

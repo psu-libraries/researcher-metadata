@@ -9,6 +9,10 @@ class ActivityInsightOAFile < ApplicationRecord
     NOT_ARTICLE_FILE
   ].freeze
 
+  def self.export_statuses
+    ['Cannot Deposit', 'Already Openly Available']
+  end
+
   def self.licenses
     ScholarsphereWorkDeposit.rights
   end
@@ -31,6 +35,7 @@ class ActivityInsightOAFile < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where.not(location: nil)
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
+      .distinct
   }
 
   scope :ready_for_download, -> {
@@ -55,6 +60,7 @@ class ActivityInsightOAFile < ApplicationRecord
         OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
         AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
       .where(exported_oa_status_to_activity_insight: nil)
+      .distinct
   }
 
   scope :needs_permissions_check, -> {
@@ -66,6 +72,7 @@ class ActivityInsightOAFile < ApplicationRecord
 
   validates :license, inclusion: { in: licenses, allow_blank: true }
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
+  validates :intellcont_id, :post_file_id, presence: true
 
   delegate :doi_url_path, to: :publication, prefix: false
   delegate :doi, to: :publication, prefix: false
