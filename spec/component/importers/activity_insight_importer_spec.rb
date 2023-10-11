@@ -5031,7 +5031,7 @@ describe ActivityInsightImporter do
 
           it 'creates a new ActivityInsightOAFile for that publication' do
             expect(DOIVerificationJob).to receive(:perform_later).exactly(3).times
-            expect(AiOAStatusExportJob).to receive(:perform_later).exactly(3).times
+            expect(AiOAStatusExportJob).to receive(:perform_later).once
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',

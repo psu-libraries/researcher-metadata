@@ -208,6 +208,8 @@ class ActivityInsightImporter
           # in activity insight is currently blank
           if aif.present? && pub.activity_insight_postprint_status.blank?
             AiOAStatusExportJob.perform_later(aif.id, 'In Progress')
+            pub_record.activity_insight_postprint_status = 'In Progress'
+            pub_record.save!
           end
 
           # This is only needed to backfill the post_file_id and intellcont_id on existing ActivityInsightOAFile
@@ -224,8 +226,11 @@ class ActivityInsightImporter
                 post_file_id: pub.postprints&.first&.post_file_id
               )
               pub_record.activity_insight_oa_files << file
+              if pub.activity_insight_postprint_status.blank?
+                pub_record.activity_insight_postprint_status = 'In Progress'
+                AiOAStatusExportJob.perform_later(file.id, 'In Progress')
+              end
               pub_record.save!
-              AiOAStatusExportJob.perform_later(file.id, 'In Progress')
               unless pub_record.doi_verified == true
                 pub_record.oa_workflow_state = 'automatic DOI verification pending'
                 pub_record.save!
