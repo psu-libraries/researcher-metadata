@@ -73,7 +73,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       ]
     end
   end
-  
+
   describe 'destroy' do
     let!(:aif1) { create(:activity_insight_oa_file,
                          file_download_location: fixture_file_open('test_file.pdf')) }

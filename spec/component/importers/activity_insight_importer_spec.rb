@@ -4992,7 +4992,7 @@ describe ActivityInsightImporter do
                                       source: 'Activity Insight',
                                       source_identifier: '171620739072',
                                       publication: existing_pub) }
-      let!(:existing_pub) { create(:publication) }   
+      let!(:existing_pub) { create(:publication) }
 
       context 'when the import does not have a file location' do
         context 'when there is an ActivityInsightOAFile associated with the publication' do
@@ -5067,13 +5067,13 @@ describe ActivityInsightImporter do
                                        publication: existing_pub,
                                        location: 'abc123/intellcont/some_other_file.pdf') }
           let!(:existing_import2) { create(:publication_import,
-                                        source: 'Activity Insight',
-                                        source_identifier: '190707482930',
-                                        publication: existing_pub2) }
-          let!(:existing_pub2) { create(:publication) }  
+                                           source: 'Activity Insight',
+                                           source_identifier: '190707482930',
+                                           publication: existing_pub2) }
+          let!(:existing_pub2) { create(:publication) }
           let!(:existing_aif2) { create(:activity_insight_oa_file,
-            publication: existing_pub2,
-            location: 'abc123/intellcont/some_other_file.pdf') }
+                                        publication: existing_pub2,
+                                        location: 'abc123/intellcont/some_other_file.pdf') }
 
           it 'creates a new ActivityInsightOAFile for that publication' do
             expect(DOIVerificationJob).to receive(:perform_later).exactly(3).times
@@ -5094,7 +5094,7 @@ describe ActivityInsightImporter do
 
               expect(existing_pub2.reload.activity_insight_postprint_status).to eq 'Deposited to ScholarSphere'
               expect(AiOAStatusExportJob).not_to receive(:perform_later)
-            end 
+            end
           end
 
           context 'when existing ActivityInsightOAFile already has a valid file version' do

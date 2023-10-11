@@ -212,7 +212,6 @@ class ActivityInsightImporter
             pub_record.save!
           end
 
-          
           if activity_insight_file_location.blank?
             existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
             ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
