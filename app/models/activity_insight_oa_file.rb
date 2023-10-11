@@ -72,6 +72,7 @@ class ActivityInsightOAFile < ApplicationRecord
 
   validates :license, inclusion: { in: licenses, allow_blank: true }
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
+  validates :intellcont_id, :post_file_id, presence: true
 
   delegate :doi_url_path, to: :publication, prefix: false
   delegate :doi, to: :publication, prefix: false
