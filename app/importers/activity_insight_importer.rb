@@ -202,22 +202,22 @@ class ActivityInsightImporter
           end
 
           activity_insight_file_location = pub.postprints&.first&.location
-          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
 
           # This is only needed to backfill status in activity insight to 'In Progress' if the status
           # in activity insight is currently blank
+          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
           if aif.present? && pub.activity_insight_postprint_status.blank?
             AiOAStatusExportJob.perform_later(aif.id, 'In Progress')
             pub_record.activity_insight_postprint_status = 'In Progress'
             pub_record.save!
           end
 
-          # This is only needed to backfill the post_file_id and intellcont_id on existing ActivityInsightOAFile
-          # records. After this has been run once in production, this #update! call can be removed
-          aif&.update!(intellcont_id: pub.activity_insight_id, post_file_id: pub.postprints&.first&.post_file_id)
-
-          # rubocop:disable Style/SoleNestedConditional
-          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+          
+          if activity_insight_file_location.blank?
+            existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
+            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
+          elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+            aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
               file = ActivityInsightOAFile.create(
                 location: activity_insight_file_location,
@@ -238,7 +238,6 @@ class ActivityInsightImporter
               end
             end
           end
-          # rubocop:enable Style/SoleNestedConditional
         end
       rescue StandardError => e
         log_error(pub, e, u)
