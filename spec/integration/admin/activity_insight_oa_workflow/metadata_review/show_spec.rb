@@ -70,6 +70,19 @@ describe 'Admin Metadata Review publication detail', type: :feature do
         end
       end
 
+      context 'when the file download location is not present' do
+        before do
+          pub2.ai_file_for_deposit.file_download_location.remove!
+          visit activity_insight_oa_workflow_review_publication_metadata_path(pub2)
+        end
+
+        it 'does not have a button to deposit to scholarsphere and indicates the metadata is incomplete' do
+          expect(page).to have_content 'Insufficient metadata to upload to ScholarSphere'
+          expect(page).to have_content 'Not Found'
+          expect(page).not_to have_button 'Deposit to ScholarSphere'
+        end
+      end
+
       context 'when the publication has a pending scholarsphere deposit' do
         before do
           auth = create(:authorship, publication: pub2)
