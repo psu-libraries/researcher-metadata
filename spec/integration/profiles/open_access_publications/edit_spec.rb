@@ -350,6 +350,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
             expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
             expect(dep.publisher).to eq 'A Prestegious Journal'
+            expect(dep.deposit_workflow).to eq 'Standard OA Workflow'
           end
 
           it 'sends a request to deposit the publication in ScholarSphere' do
@@ -455,6 +456,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           expect(dep.embargoed_until).to eq Date.new((Date.today.year + 1), 5, 22)
           expect(dep.doi).to eq 'https://doi.org/10.1109/5.771073'
           expect(dep.publisher).to eq 'A Prestegious Journal'
+          expect(dep.deposit_workflow).to eq 'Standard OA Workflow'
         end
 
         it 'shows the publication with the correct status in the profile publication list' do

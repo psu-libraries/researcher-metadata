@@ -25,6 +25,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     ]
   end
 
+  def self.deposit_workflows
+    ['Activity Insight OA Workflow', 'Standard OA Workflow']
+  end
+
   attribute :deposit_agreement, :boolean
 
   after_initialize :set_status
@@ -35,6 +39,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
 
   validates :status, inclusion: { in: statuses }
   validates :rights, inclusion: { in: rights }
+  validates :deposit_workflow, inclusion: { in: deposit_workflows, allow_nil: true }
   validates :title, :description, :published_date, :rights, presence: true
   validate :at_least_one_file_upload
   validate :agreed_to_deposit_agreement
@@ -91,6 +96,10 @@ class ScholarsphereWorkDeposit < ApplicationRecord
     file_uploads.map { |fu| File.new(fu.stored_file_path) }
   end
 
+  def standard_oa_workflow?
+    deposit_workflow == 'Standard OA Workflow'
+  end
+
   private
 
     def doi_format_is_valid
@@ -125,6 +134,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
         field(:status)
         field(:authorship)
         field(:title)
+        field(:deposit_workflow)
       end
     end
 end

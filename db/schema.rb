@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_05_205509) do
+ActiveRecord::Schema.define(version: 2023_10_09_192706) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -53,16 +53,16 @@ ActiveRecord::Schema.define(version: 2023_10_05_205509) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
-    t.string "intellcont_id"
-    t.string "post_file_id"
-    t.boolean "exported_oa_status_to_activity_insight"
+    t.boolean "version_checked"
     t.datetime "permissions_last_checked_at"
     t.string "license"
     t.date "embargo_date"
     t.text "set_statement"
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
-    t.boolean "version_checked"
+    t.string "intellcont_id"
+    t.string "post_file_id"
+    t.boolean "exported_oa_status_to_activity_insight"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end
@@ -495,9 +495,9 @@ ActiveRecord::Schema.define(version: 2023_10_05_205509) do
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
+    t.datetime "oa_status_last_checked_at"
     t.string "preferred_version"
     t.datetime "permissions_last_checked_at"
-    t.datetime "oa_status_last_checked_at"
     t.datetime "wrong_oa_version_notification_sent_at"
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
@@ -560,6 +560,7 @@ ActiveRecord::Schema.define(version: 2023_10_05_205509) do
     t.string "publisher"
     t.text "publisher_statement"
     t.bigint "deputy_user_id"
+    t.string "deposit_workflow"
     t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
     t.index ["deputy_user_id"], name: "index_scholarsphere_work_deposits_on_deputy_user_id"
   end

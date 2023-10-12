@@ -24,6 +24,7 @@ describe 'the scholarsphere_work_deposits table', type: :model do
   it { is_expected.to have_db_column(:created_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:updated_at).of_type(:datetime).with_options(null: false) }
   it { is_expected.to have_db_column(:deputy_user_id).of_type(:integer) }
+  it { is_expected.to have_db_column(:deposit_workflow).of_type(:string) }
 
   it { is_expected.to have_db_index(:authorship_id) }
   it { is_expected.to have_db_index :deputy_user_id }
@@ -62,6 +63,10 @@ describe ScholarsphereFileUpload, type: :model do
     https://rightsstatements.org/page/InC/1.0/
   }
   }
+
+  it { expect(subject).to validate_inclusion_of(:deposit_workflow).in_array ['Activity Insight OA Workflow',
+                                                                             'Standard OA Workflow',
+                                                                             nil] }
 
   it { is_expected.to validate_presence_of(:title) }
   it { is_expected.to validate_presence_of(:description) }
@@ -574,6 +579,24 @@ describe ScholarsphereFileUpload, type: :model do
 
       it 'is valid' do
         expect(dep).to be_valid
+      end
+    end
+  end
+
+  describe '#standard_oa_workflow?' do
+    context 'when deposit_workflow is "Standard OA Workflow"' do
+      let!(:deposit) { create(:scholarsphere_work_deposit, deposit_workflow: 'Standard OA Workflow') }
+
+      it 'returns true' do
+        expect(deposit.standard_oa_workflow?).to be true
+      end
+    end
+
+    context 'when deposit_workflow is not "Standard OA Workflow"' do
+      let!(:deposit) { create(:scholarsphere_work_deposit, deposit_workflow: 'Activity Insight OA Workflow') }
+
+      it 'returns true' do
+        expect(deposit.standard_oa_workflow?).to be false
       end
     end
   end

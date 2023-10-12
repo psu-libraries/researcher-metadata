@@ -39,18 +39,46 @@
         <li class='list-group-item'>
           <p class='float-left'>
             <strong>File Download:</strong>
-            <%= link_to @publication.ai_file_for_deposit.download_filename,
-                        activity_insight_oa_workflow_file_download_path(@publication.ai_file_for_deposit.id),
-                        target: '_blank' %>
+            <% if @publication.ai_file_for_deposit.file_download_location.present? %>
+              <%= link_to @publication.ai_file_for_deposit.download_filename,
+                          activity_insight_oa_workflow_file_download_path(@publication.ai_file_for_deposit.id),
+                          target: '_blank' %>
+            <% else %>
+              Not Found
+            <% end %>
           </p>
           <p class='float-right'><strong>Created On:</strong> <%= @publication.ai_file_for_deposit.created_at.to_date %></p>
         </li>
       </ul>
       <div class='card-footer'>
-        <%= link_to(
-          'Edit',
-          rails_admin.edit_path(model_name: :publication, id: @publication.id),
-          target: 'blank') %>
+      <div class='d-flex'>
+        <div class='mr-auto'>
+          <%= link_to(
+            'Edit',
+            rails_admin.edit_path(model_name: :publication, id: @publication.id),
+            target: 'blank') %>
+        </div>
+        <% if @publication.can_deposit_to_scholarsphere? %>
+          <div>
+            <%= link_to "Deposit to ScholarSphere",
+                        activity_insight_oa_workflow_scholarsphere_deposit_path(@publication.id),
+                        method: :post,
+                        class: 'btn btn-primary' %>
+          </div>
+        <% elsif @publication.scholarsphere_upload_pending? %>
+          <div>
+            ScholarSphere upload pending...
+          </div>
+        <% elsif @publication.scholarsphere_upload_failed? %>
+          <div>
+            ScholarSphere upload failed
+          </div>
+        <% else %>
+          <div>
+            Insufficient metadata to upload to ScholarSphere
+          </div>
+        <% end %>
+        </div>
       </div>
     </div>
   </div>

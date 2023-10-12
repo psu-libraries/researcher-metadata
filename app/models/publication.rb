@@ -738,6 +738,18 @@ class Publication < ApplicationRecord
       .first
   end
 
+  def can_deposit_to_scholarsphere?
+    ai_file_for_deposit.license.present? &&
+      ai_file_for_deposit.file_download_location.present? &&
+      title.present? &&
+      abstract.present? &&
+      published_on.present? &&
+      doi.present? &&
+      doi == DOISanitizer.new(doi).url &&
+      !scholarsphere_upload_pending? &&
+      !scholarsphere_upload_failed?
+  end
+
   private
 
     def merge(publications_to_merge)

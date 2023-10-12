@@ -40,6 +40,7 @@ Rails.application.routes.draw do
     get '/metadata_review' => 'metadata_curation#index'
     get '/all_workflow_publications' => 'all_workflow_publications#index'
     get '/metadata_review/:publication_id' => 'metadata_curation#show', as: :review_publication_metadata
+    post '/metadata_review/:publication_id' => 'metadata_curation#create_scholarsphere_deposit', as: :scholarsphere_deposit
   end
 
   root to: 'public#home'

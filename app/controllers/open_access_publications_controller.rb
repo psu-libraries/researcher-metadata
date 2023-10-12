@@ -141,7 +141,9 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
 
   def create_scholarsphere_deposit
     @authorship = Authorship.find_by(user: current_user, publication: publication)
-    extra_params = { authorship: @authorship, deputy_user_id: current_user.deputy.id }
+    extra_params = { authorship: @authorship,
+                     deputy_user_id: current_user.deputy.id,
+                     deposit_workflow: 'Standard OA Workflow' }
     @deposit = ScholarsphereWorkDeposit.new(deposit_params.merge(extra_params))
     @deposit.file_uploads = []
 

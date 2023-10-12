@@ -24,7 +24,9 @@ class ScholarsphereDepositService
       scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
       profile = UserProfile.new(current_user)
-      FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
+      if deposit.standard_oa_workflow?
+        FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
+      end
     else
       logger.info response.inspect
       raise DepositFailed.new(response.body)
