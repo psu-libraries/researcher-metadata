@@ -12,7 +12,7 @@ class ActivityInsightOAFile < ApplicationRecord
   ].freeze
 
   def self.export_statuses
-    ['Cannot Deposit', 
+    ['Cannot Deposit',
      'Already Openly Available',
      'Deposited to ScholarSphere',
      'In Progress']

@@ -8,7 +8,7 @@ class ScholarsphereDepositService
     @user = user
   end
 
-  def create(ai_oa_file_id = nil)
+  def create
     logger = Logger.new('log/scholarsphere_deposit.log')
 
     ingest = Scholarsphere::Client::Ingest.new(
