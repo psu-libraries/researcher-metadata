@@ -13,7 +13,7 @@
   <main role="main" class="container">
     <div class="row">
       <div class="col-lg-4">
-        <h5>Check out our template ...</h5>
+        <h5>Check out our profiles template</h5>
         <p>
         To make constructing profiles easier, we created a profile template written in plain HTML/CSS and Javascript that pulls content from our API to present a rich, clean looking profile page. Follow the links below to see a live demo or download the code. See the documentation in Quick_Start_Guide.md in the downloaded code as a starting point for development of your own faculty profile site.
         </p>
@@ -23,6 +23,17 @@
       <div class="col-lg-8">
         <p>Example of our faculty profile pages</p>
         <%= image_tag('profile-page-2.png', alt: 'Faculty Profile Page', id: 'profile-page') %>
+      </div>
+      <div class="col-lg-8">
+        <br>
+        <h5>Check out publications by unit</h5>
+        <p>
+        To show another way to organize publications from RMD, we created a demo page.
+        </p>
+        <a href="https://metadata.libraries.psu.edu/organization_profiles/20" target="_blank"><%= image_tag('profile-sm.png', alt: 'Example Page') %><strong>Visit the example page</strong></a>
+        <p>
+          <%= link_to "Contact us to see another unit's page", 'mailto:openaccess@psu.edu?subject=RMD unit profiles', target: '_blank' %>
+        </p>
       </div>
     </div>
   </main>

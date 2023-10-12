@@ -64,6 +64,28 @@ RSpec.describe ActivityInsightOAFile, type: :model do
     }
   end
 
+  describe '.export_statuses' do
+    it 'returns the list of valid values for activity insight export status' do
+      expect(described_class.export_statuses).to eq [
+        'Cannot Deposit',
+        'Already Openly Available',
+        'In Progress'
+      ]
+    end
+  end
+
+  describe 'destroy' do
+    let!(:aif1) { create(:activity_insight_oa_file,
+                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:file_download_directory) { aif1.file_download_location.model_object_dir }
+
+    it 'removes the file download directory' do
+      expect(File.exists?(file_download_directory)).to be true
+      aif1.destroy
+      expect(File.exists?(file_download_directory)).to be false
+    end
+  end
+
   describe '.licenses' do
     it 'returns an array of the possible licenses for a file' do
       expect(described_class.licenses).to eq %w{

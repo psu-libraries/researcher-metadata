@@ -203,7 +203,19 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          if activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
+          # This is only needed to backfill status in activity insight to 'In Progress' if the status
+          # in activity insight is currently blank
+          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
+          if aif.present? && pub.activity_insight_postprint_status.blank?
+            AiOAStatusExportJob.perform_later(aif.id, 'In Progress')
+            pub_record.activity_insight_postprint_status = 'In Progress'
+            pub_record.save!
+          end
+
+          if activity_insight_file_location.blank?
+            existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
+            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
+          elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
               file = ActivityInsightOAFile.create(
@@ -213,6 +225,10 @@ class ActivityInsightImporter
                 post_file_id: pub.postprints&.first&.post_file_id
               )
               pub_record.activity_insight_oa_files << file
+              if pub.activity_insight_postprint_status.blank?
+                pub_record.activity_insight_postprint_status = 'In Progress'
+                AiOAStatusExportJob.perform_later(file.id, 'In Progress')
+              end
               pub_record.save!
               unless pub_record.doi_verified == true
                 pub_record.oa_workflow_state = 'automatic DOI verification pending'
@@ -781,7 +797,7 @@ class ActivityInsightPublication
   end
 
   def importable?
-    (status == 'Published' || status == 'In Press') && rmd_id.blank?
+    (status == 'Published' || status == 'In Press')
   end
 
   def activity_insight_id
