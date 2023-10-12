@@ -18,4 +18,13 @@ class FacultyConfirmationsMailer < ApplicationMailer
          from: 'scholarsphere@psu.edu',
          reply_to: 'scholarsphere@psu.edu'
   end
+
+  def ai_oa_workflow_scholarsphere_deposit_confirmation(user, deposit)
+    @user = user
+    @deposit = deposit
+    mail to: @user.email,
+         subject: 'Publication deposited to ScholarSphere',
+         from: 'openaccess@psu.edu',
+         reply_to: 'openaccess@psu.edu'
+  end
 end

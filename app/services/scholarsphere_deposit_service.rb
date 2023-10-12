@@ -3,9 +3,9 @@
 class ScholarsphereDepositService
   class DepositFailed < RuntimeError; end
 
-  def initialize(deposit, current_user)
+  def initialize(deposit, user)
     @deposit = deposit
-    @current_user = current_user
+    @user = user
   end
 
   def create
@@ -23,9 +23,11 @@ class ScholarsphereDepositService
     if response.status == 200
       scholarsphere_publication_uri = "#{ResearcherMetadata::Application.scholarsphere_base_uri}#{response_body['url']}"
       deposit.record_success(scholarsphere_publication_uri)
-      profile = UserProfile.new(current_user)
+      profile = UserProfile.new(user)
       if deposit.standard_oa_workflow?
         FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
+      else
+        FacultyConfirmationsMailer.ai_oa_workflow_scholarsphere_deposit_confirmation(profile, deposit).deliver_now
       end
     else
       logger.info response.inspect
@@ -37,5 +39,5 @@ class ScholarsphereDepositService
 
   private
 
-    attr_reader :deposit, :current_user
+    attr_reader :deposit, :user
 end
