@@ -8,13 +8,13 @@ class ScholarsphereDepositService
     @user = user
   end
 
-  def create
+  def create(ai_oa_file_id = nil)
     logger = Logger.new('log/scholarsphere_deposit.log')
 
     ingest = Scholarsphere::Client::Ingest.new(
       metadata: deposit.metadata,
       files: deposit.files,
-      depositor: current_user.webaccess_id
+      depositor: user.webaccess_id
     )
 
     response = ingest.publish
@@ -28,6 +28,7 @@ class ScholarsphereDepositService
         FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(profile, deposit).deliver_now
       else
         FacultyConfirmationsMailer.ai_oa_workflow_scholarsphere_deposit_confirmation(profile, deposit).deliver_now
+        AiOAStatusExportJob.perform_later(deposit.activity_insight_oa_file_id, 'Deposited to ScholarSphere')
       end
     else
       logger.info response.inspect

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_09_192706) do
+ActiveRecord::Schema.define(version: 2023_10_12_202905) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
@@ -561,6 +561,7 @@ ActiveRecord::Schema.define(version: 2023_10_09_192706) do
     t.text "publisher_statement"
     t.bigint "deputy_user_id"
     t.string "deposit_workflow"
+    t.integer "activity_insight_oa_file_id"
     t.index ["authorship_id"], name: "index_scholarsphere_work_deposits_on_authorship_id"
     t.index ["deputy_user_id"], name: "index_scholarsphere_work_deposits_on_deputy_user_id"
   end
