@@ -4993,6 +4993,41 @@ describe ActivityInsightImporter do
                                       publication: existing_pub) }
       let!(:existing_pub) { create(:publication) }
 
+      context 'when the import does not have a file location' do
+        context 'when there is an ActivityInsightOAFile associated with the publication' do
+          let!(:existing_import2) { create(:publication_import,
+                                           source: 'Activity Insight',
+                                           source_identifier: '190706413568',
+                                           publication: pub1) }
+          let!(:aif1) { create(:activity_insight_oa_file,
+                               publication: pub1, version: 'publishedVersion',
+                               file_download_location: fixture_file_open('test_file.pdf'),
+                               intellcont_id: '190706413568') }
+          let!(:pub1) { create(:publication) }
+
+          let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
+
+          it 'deletes the ActivityInsightOAFile and downloaded file' do
+            importer.call
+
+            expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
+            expect(File.exists?(file_download_directory1)).to be false
+          end
+        end
+
+        context 'when there is not an ActivityInsightOAFile associated with the publication' do
+          let!(:existing_import2) { create(:publication_import,
+                                           source: 'Activity Insight',
+                                           source_identifier: '190706413568',
+                                           publication: pub1) }
+          let!(:pub1) { create(:publication) }
+
+          it 'does not change the existing publication' do
+            expect(pub1).not_to receive(:save!)
+          end
+        end
+      end
+
       context 'when the existing publication cannot receive new ai oa files?' do
         let(:oal) { create(:open_access_location, source: Source::SCHOLARSPHERE) }
 
@@ -5012,6 +5047,7 @@ describe ActivityInsightImporter do
         context 'when existing ActivityInsightOAFile has same location as imported file' do
           let!(:existing_aif) { create(:activity_insight_oa_file,
                                        publication: existing_pub,
+                                       file_download_location: fixture_file_open('test_file.pdf'),
                                        location: 'abc123/intellcont/file.pdf') }
 
           it 'does not create a ActivityInsightOAFile for that publication' do
@@ -5019,6 +5055,7 @@ describe ActivityInsightImporter do
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/file.pdf'])
+            expect(File.exists?(existing_aif.file_download_location.model_object_dir)).to be true
           end
         end
 

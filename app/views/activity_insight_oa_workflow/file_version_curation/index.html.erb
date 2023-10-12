@@ -23,15 +23,14 @@
                       rails_admin.edit_path(model_name: :activity_insight_oa_file, id: file.id),
                       target: '_blank' %>
                 </td>
-                <td class="file-name"><% p.activity_insight_oa_files.each do |f| %>
-                <% if f.stored_file_path.present? %>
-                  <%= link_to "#{f.download_filename}",
-                              activity_insight_oa_workflow_file_download_path(f.id),
+                <td class="file-name">
+                <% if file.stored_file_path.present? %>
+                  <%= link_to "#{file.download_filename}",
+                              activity_insight_oa_workflow_file_download_path(file.id),
                               target: '_blank' %>
                 <% else %>
                   Not Found
                 <% end %>
-              <% end %>
           </td>
                 <td>
                   <%= file.version_status_display %>

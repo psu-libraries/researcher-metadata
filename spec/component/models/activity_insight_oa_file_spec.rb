@@ -38,6 +38,9 @@ RSpec.describe ActivityInsightOAFile, type: :model do
   end
 
   describe 'validations' do
+    it { is_expected.to validate_presence_of(:intellcont_id) }
+    it { is_expected.to validate_presence_of(:post_file_id) }
+
     it { expect(subject).to validate_inclusion_of(:version).in_array(
       %w{
         acceptedVersion
@@ -59,6 +62,18 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                                                                        https://rightsstatements.org/page/InC/1.0/
                                                                      }).allow_blank
     }
+  end
+
+  describe 'destroy' do
+    let!(:aif1) { create(:activity_insight_oa_file,
+                         file_download_location: fixture_file_open('test_file.pdf')) }
+    let!(:file_download_directory) { aif1.file_download_location.model_object_dir }
+
+    it 'removes the file download directory' do
+      expect(File.exists?(file_download_directory)).to be true
+      aif1.destroy
+      expect(File.exists?(file_download_directory)).to be false
+    end
   end
 
   describe '.licenses' do

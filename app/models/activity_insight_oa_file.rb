@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class ActivityInsightOAFile < ApplicationRecord
+  after_destroy :remove_file_download_location!
+
   NOT_ARTICLE_FILE = 'notArticleFile'
   ALLOWED_VERSIONS = [
     I18n.t('file_versions.accepted_version'),
@@ -72,6 +74,7 @@ class ActivityInsightOAFile < ApplicationRecord
 
   validates :license, inclusion: { in: licenses, allow_blank: true }
   validates :version, inclusion: { in: ALLOWED_VERSIONS, allow_nil: true }
+  validates :intellcont_id, :post_file_id, presence: true
 
   delegate :doi_url_path, to: :publication, prefix: false
   delegate :doi, to: :publication, prefix: false

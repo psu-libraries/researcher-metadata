@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 
 describe 'Resource page', type: :feature do
-  let(:page_content) { 'Check out our template' }
+  let(:page_content) { 'Check out our profiles template' }
 
   context 'when the user is logged in' do
     before do
@@ -22,6 +22,14 @@ describe 'Resource page', type: :feature do
     it 'provides a link to download code' do
       expect(page).to have_link 'Download code'
     end
+
+    it 'provides a link to the organization demo page' do
+      expect(page).to have_link 'Visit the example page'
+    end
+
+    it 'provides a contact link' do
+      expect(page).to have_link "Contact us to see another unit's page"
+    end
   end
 
   context 'when the user is not logged in' do
@@ -37,6 +45,14 @@ describe 'Resource page', type: :feature do
 
     it 'provides a link to download code' do
       expect(page).to have_link 'Download code'
+    end
+
+    it 'provides a link to the organization demo page' do
+      expect(page).to have_link 'Visit the example page'
+    end
+
+    it 'provides a contact link' do
+      expect(page).to have_link "Contact us to see another unit's page"
     end
   end
 end
