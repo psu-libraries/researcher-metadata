@@ -69,6 +69,7 @@ RSpec.describe ActivityInsightOAFile, type: :model do
       expect(described_class.export_statuses).to eq [
         'Cannot Deposit',
         'Already Openly Available',
+        'Deposited to ScholarSphere',
         'In Progress'
       ]
     end
