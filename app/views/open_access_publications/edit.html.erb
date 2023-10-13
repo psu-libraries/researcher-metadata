@@ -46,24 +46,6 @@
       </div>
       <div class="open-access-actions">
         <div class="open-access-action">
-          <h5>Submit a URL</h5>
-          <p>
-            If an open access version of your publication is already available anywhere on the public web,
-            then please submit the URL here. This should be a full and valid URL that points directly
-            to a publicly accessible copy of your publication. Not sure whether your URL is publicly accessible?
-            Use <a href="https://openaccessbutton.org">Open Access Button</a> to check, and
-            <a href="mailto:openaccess@psu.edu?subject=feedback">contact us</a> with questions.
-          </p>
-
-          <%= simple_form_for @form, url: open_access_publication_path(publication), method: :patch, id: 'open-access' do |f| %>
-            <div class='form-group'>
-              <%= f.input :open_access_url, label: 'Open Access URL' %>
-            </div>
-            <%= f.submit 'Submit URL', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
-          <% end %>
-        </div>
-        <div class="action-separator">-- or --</div>
-        <div class="open-access-action">
           <h5>Upload to ScholarSphere</h5>
           <p>
             If there isn’t already an open access version of your work available on the web, please
@@ -91,6 +73,25 @@
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>
+        <div class="action-separator">-- or --</div>
+        <div class="open-access-action">
+          <h5>Submit a URL</h5>
+          <p>
+            If an open access version of your publication is already available anywhere on the public web,
+            then please submit the URL here. This should be a full and valid URL that points directly
+            to a publicly accessible copy of your publication. Not sure whether your URL is publicly accessible?
+            Use <a href="https://openaccessbutton.org">Open Access Button</a> to check, and
+            <a href="mailto:openaccess@psu.edu?subject=feedback">contact us</a> with questions.
+          </p>
+
+          <%= simple_form_for @form, url: open_access_publication_path(publication), method: :patch, id: 'open-access' do |f| %>
+            <div class='form-group'>
+              <%= f.input :open_access_url, label: 'Open Access URL' %>
+            </div>
+            <%= f.submit 'Submit URL', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
+          <% end %>
+        </div>
+        <div class="action-separator">-- or --</div>
         <div class="open-access-action">
           <h5>Get a Waiver</h5>
           <p>
