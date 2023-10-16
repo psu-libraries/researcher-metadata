@@ -16,7 +16,7 @@ en:
             deputy_webaccess_id:
               not_found: could not be found, did you mistype it?
               already_assigned: has already been assigned as your proxy!
-              invalid: must contain only letters an numbers
+              invalid: must contain only letters and numbers
   activerecord:
     errors:
       models:
