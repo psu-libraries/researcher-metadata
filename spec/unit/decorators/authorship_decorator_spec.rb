@@ -411,7 +411,7 @@ describe AuthorshipDecorator do
 
   describe '#open_access_status_icon_alt_text' do
     context 'when the icon is unlock-alt' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('unlock-alt')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('unlock-alt') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'known open access version'
@@ -419,7 +419,7 @@ describe AuthorshipDecorator do
     end
 
     context 'when the icon is lock' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('lock')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('lock') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'Open access obligations waived'
@@ -427,7 +427,7 @@ describe AuthorshipDecorator do
     end
 
     context 'when the icon is hourglass-half' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('hourglass-half')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('hourglass-half') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'Upload to ScholarSphere pending'
@@ -435,7 +435,7 @@ describe AuthorshipDecorator do
     end
 
     context 'when the icon is exclamation-circle' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('exclamation-circle')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('exclamation-circle') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'Scholarsphere upload failed. Please try again'
@@ -443,7 +443,7 @@ describe AuthorshipDecorator do
     end
 
     context 'when the icon is circle-o-notch' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('circle-o-notch')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('circle-o-notch') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'not be subject to the open access policy until published'
@@ -451,7 +451,7 @@ describe AuthorshipDecorator do
     end
 
     context 'when the icon is question' do
-      before { allow(ad).to receive(:open_access_status_icon).and_return('question')}
+      before { allow(ad).to receive(:open_access_status_icon).and_return('question') }
 
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'open access status currently unknown. Click publication title link to add information or submit a waiver'
