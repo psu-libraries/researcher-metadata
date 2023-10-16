@@ -1,5 +1,6 @@
 <div class="manage-profile-list">
   <h4>Manage Profile Publications</h4>
+  <span aria-hidden="true">
   <div id="icon-key">
     <h5>Icon key:</h5>
     <h6>Open Access Status</h6>
@@ -41,6 +42,7 @@
       </tr>
     </table>
   </div>
+  </span>
   <p>
     If you need to waive open access obligations for a publication that is not in the list below, then please fill
     out this <%= link_to "waiver form", new_external_publication_waiver_path %>.
@@ -70,13 +72,19 @@
             <% end %>
           </td>
           <td class="oa-status">
-            <%= fa_icon(a.open_access_status_icon) %>
+            <span aria-label="<%= a.open_access_status_icon_alt_text %>">
+              <%= fa_icon(a.open_access_status_icon) %>
+            </span>
           </td>
           <td>
             <% if a.confirmed %>
-              <%= fa_icon('check') %>
+              <span aria-label='your authorship is confirmed'>
+                <%= fa_icon('check') %>
+              </span>
             <% else %>
-              <%= fa_icon('minus') %>
+              <span aria-label='Authorship Pending Review'>
+                <%= fa_icon('minus') %>
+              </span>
             <% end %>
           </td>
           <td>
