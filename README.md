@@ -463,6 +463,14 @@ If a user takes any of the possible actions to comply with the open access polic
 result will be recorded in RMD, the open access status of the publication will change, and the user will no
 longer be notified about the publication.
 
+### Activity Insight Open Access Post-Print Publication file
+
+While users will not be directed here from our open access reminder emails, users also have the option to upload an open access 
+file to Activity Insight.  These files are imported into RMD during the regular Activity Insight import.  A handful of 
+automated processes are used to help determine if the file and its associated metadata is fit for deposit to ScholarSphere.  
+A workflow interface complements these processes to allow admins to do manual work where automation was not successful.  The 
+files are deposited in ScholarSphere at the end of this workflow.
+
 ## ScholarSphere Open Access Deposit Workflow
 
 Users can upload their open access publications within RMD's profile section from the ScholarSphere deposit workflow.  
@@ -475,25 +483,8 @@ There are several steps to this process:
 1. The user is presented a form with prefilled fields using permissions data and data stored in RMD to be reviewed and/or editted
 1. The user submits the form and the files and metadata are sent to ScholarSphere
 
-## OA Workflow
-
-WIP:  The OA Workflow is an admin feature meant to replace some manual, external processes in which admins gather open access publications
-uploaded to Activity Insight, do some curation and analysis, and upload them to ScholarSphere.  Since much of the curation and analysis 
-uses data stored in RMD, this process can be implemented in a more centralized, organized fashion within RMD.
-
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
-
-## Development Notes
-
-### Frontend
-
-Jsbundling-rails is used to bundle assets in the `app/javascript` directory.  After bundling, the bundled manifests are added to `app/assets/builds` for sprockets to load.
-Javascripts requiring node modules should be added to the `app/javascript` directory to be bundled.  Other assets should be placed in `app/assets` to be loaded by sprockets.
-This results in the application having two entrypoints for styles and javascripts (total of four files): `application.js application.css bundle.js bundle.css`.  Both must be 
-loaded in the layouts.  To make the rails server "watch" the `app/javascript` directory for changes and automatically trigger a re-bundle when changes are detected, run `bin/dev` 
-instead of `rails s`.  At the time of writing this documentation, rspec-rails does not have a builtin hook to prepare assets with jsbundling for tests.  
-We are invoking the rake task `test:prepare` in the `integration_helper.rb` to do this ourselves.
 
 ---
 
