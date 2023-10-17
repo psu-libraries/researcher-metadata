@@ -25,8 +25,12 @@ describe 'Home page', type: :feature do
       expect(page).to have_content home_content
     end
 
-    it 'shows an email link' do
-      expect(page).to have_link 'Learn More', href: 'mailto:L-FAMS@lists.psu.edu?Subject=RMD%20Inquiry'
+    it 'shows a link to the open access policy' do
+      expect(page).to have_link "Penn State's open access policy", href: 'https://openaccess.psu.edu/'
+    end
+
+    it 'shows a link to the wiki' do
+      expect(page).to have_link 'Learn More', href: 'https://github.com/psu-libraries/researcher-metadata/wiki'
     end
 
     it 'shows a link to the API documentation' do
@@ -58,8 +62,12 @@ describe 'Home page', type: :feature do
       expect(page).to have_content home_content
     end
 
-    it 'shows an email link' do
-      expect(page).to have_link 'Learn More', href: 'mailto:L-FAMS@lists.psu.edu?Subject=RMD%20Inquiry'
+    it 'shows a link to the open access policy' do
+      expect(page).to have_link "Penn State's open access policy", href: 'https://openaccess.psu.edu/'
+    end
+
+    it 'shows a link to the wiki' do
+      expect(page).to have_link 'Learn More', href: 'https://github.com/psu-libraries/researcher-metadata/wiki'
     end
 
     it 'shows a link to the API documentation' do
@@ -88,8 +96,12 @@ describe 'Home page', type: :feature do
       expect(page).to have_content home_content
     end
 
-    it 'shows an email link' do
-      expect(page).to have_link 'Learn More', href: 'mailto:L-FAMS@lists.psu.edu?Subject=RMD%20Inquiry'
+    it 'shows a link to the open access policy' do
+      expect(page).to have_link "Penn State's open access policy", href: 'https://openaccess.psu.edu/'
+    end
+
+    it 'shows a link to the wiki' do
+      expect(page).to have_link 'Learn More', href: 'https://github.com/psu-libraries/researcher-metadata/wiki'
     end
 
     it 'shows a link to the API documentation' do
