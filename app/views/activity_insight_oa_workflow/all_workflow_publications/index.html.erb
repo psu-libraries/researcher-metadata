@@ -4,6 +4,7 @@
   <table class="table">
     <thead class='card-header'>
       <tr>
+        <th>Author</th>
         <th>Title</th>
         <th>File Created At</th>
         <th>Edit file in admin dashboard</th>
@@ -12,6 +13,9 @@
     <tbody class='card-body'>
       <% @publications.each do |p| %>
         <tr id="<%= dom_id(p) %>">
+          <td rowspan="<%= p.activity_insight_oa_files.count %>">
+            <%= p.activity_insight_upload_user.webaccess_id %>
+          </td>
           <td rowspan="<%= p.activity_insight_oa_files.count %>">
             <%= link_to p.title.truncate(45),
                     rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
