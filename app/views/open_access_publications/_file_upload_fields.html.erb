@@ -6,6 +6,7 @@
         <%= link_to fname, f.object.file_url, target: '_blank', class: 'form-control disabled' %>
       </div>
     <% else %>
+      <%= f.label :file, 'Choose File', class: 'sr-only' %>
       <%= f.input :file, as: :file, input_html: { class: 'form-control file' } %>
     <% end %>
 
