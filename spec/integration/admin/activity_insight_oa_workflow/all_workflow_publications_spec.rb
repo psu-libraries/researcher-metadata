@@ -17,6 +17,8 @@ describe 'Admin troubleshooting dashboard', type: :feature do
 
   describe 'listing all publications currently in workflow' do
     it 'show a table with header and the proper data for the publications in the table' do
+      expect(page).to have_text('Author')
+      expect(page).to have_text(pub1.activity_insight_upload_user.webaccess_id)
       expect(page).to have_text('Title')
       expect(page).to have_link(pub1.title)
       expect(page).to have_text('File Created At')
@@ -26,13 +28,13 @@ describe 'Admin troubleshooting dashboard', type: :feature do
     end
 
     it 'orders the publications by file creation date' do
-      within(:xpath, '//table/tbody/tr[1]/td[1]') do
+      within(:xpath, '//table/tbody/tr[1]/td[2]') do
         expect(page).to have_content('Title 3')
       end
-      within(:xpath, '//table/tbody/tr[2]/td[1]') do
+      within(:xpath, '//table/tbody/tr[2]/td[2]') do
         expect(page).to have_content('Title 1')
       end
-      within(:xpath, '//table/tbody/tr[3]/td[1]') do
+      within(:xpath, '//table/tbody/tr[3]/td[2]') do
         expect(page).to have_content('Title 2')
       end
     end
