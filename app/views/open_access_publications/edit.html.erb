@@ -5,14 +5,13 @@
         <h2>Open Access <%= fa_icon('unlock-alt') %></h2>
         <p>
           We haven't been able to find an open access version of your publication,
-          <em><%= publication.title %></em>, on the web. If an open access version
-          of your work has been published, you can let us know about it by submitting a URL for
-          the document in the first form below. If an open access version of this publication
+          <em><%= publication.title %></em>, on the web. If an open access version of this publication
           has not yet been published, we encourage you to submit the
           <a href="https://psu.libanswers.com/faq/279953" target="_blank">accepted manuscript version</a>
-          to ScholarSphere, Penn State's institutional repository, via the second form below
-          so that your research can be preserved and made freely available to everyone.
-          If you wish to waive the open access policy for this article,
+          to ScholarSphere, Penn State's institutional repository, via the first form below
+          so that your research can be preserved and made freely available to everyone. If an open access version
+          of your work has been published, you can let us know about it by submitting a URL for
+          the document in the second form below. If you wish to waive the open access policy for this article,
           you can do so at the bottom of this page.
         </p>
       </div>
@@ -46,24 +45,6 @@
       </div>
       <div class="open-access-actions">
         <div class="open-access-action">
-          <h5>Submit a URL</h5>
-          <p>
-            If an open access version of your publication is already available anywhere on the public web,
-            then please submit the URL here. This should be a full and valid URL that points directly
-            to a publicly accessible copy of your publication. Not sure whether your URL is publicly accessible?
-            Use <a href="https://openaccessbutton.org">Open Access Button</a> to check, and
-            <a href="mailto:openaccess@psu.edu?subject=feedback">contact us</a> with questions.
-          </p>
-
-          <%= simple_form_for @form, url: open_access_publication_path(publication), method: :patch, id: 'open-access' do |f| %>
-            <div class='form-group'>
-              <%= f.input :open_access_url, label: 'Open Access URL' %>
-            </div>
-            <%= f.submit 'Submit URL', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
-          <% end %>
-        </div>
-        <div class="action-separator">-- or --</div>
-        <div class="open-access-action">
           <h5>Upload to ScholarSphere</h5>
           <p>
             If there isn’t already an open access version of your work available on the web, please
@@ -91,6 +72,25 @@
             <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
           <% end %>
         </div>
+        <div class="action-separator">-- or --</div>
+        <div class="open-access-action">
+          <h5>Submit a URL</h5>
+          <p>
+            If an open access version of your publication is already available anywhere on the public web,
+            then please submit the URL here. This should be a full and valid URL that points directly
+            to a publicly accessible copy of your publication. Not sure whether your URL is publicly accessible?
+            Use <a href="https://openaccessbutton.org">Open Access Button</a> to check, and
+            <a href="mailto:openaccess@psu.edu?subject=feedback">contact us</a> with questions.
+          </p>
+
+          <%= simple_form_for @form, url: open_access_publication_path(publication), method: :patch, id: 'open-access' do |f| %>
+            <div class='form-group'>
+              <%= f.input :open_access_url, label: 'Open Access URL' %>
+            </div>
+            <%= f.submit 'Submit URL', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
+          <% end %>
+        </div>
+        <div class="action-separator">-- or --</div>
         <div class="open-access-action">
           <h5>Get a Waiver</h5>
           <p>
