@@ -30,6 +30,23 @@ class AuthorshipDecorator < BaseDecorator
     end
   end
 
+  def open_access_status_icon_alt_text
+    case open_access_status_icon
+    when 'unlock-alt'
+      'known open access version'
+    when 'lock'
+      'Open access obligations waived'
+    when 'hourglass-half'
+      'Upload to ScholarSphere pending'
+    when 'exclamation-circle'
+      'Scholarsphere upload failed. Please try again'
+    when 'circle-o-notch'
+      'publication is in press and will not be subject to the open access policy until published'
+    else
+      'open access status currently unknown. Click publication title link to add information or submit a waiver'
+    end
+  end
+
   def exportable_to_orcid?
     !!user.orcid_access_token && publication.orcid_allowed? && confirmed
   end
