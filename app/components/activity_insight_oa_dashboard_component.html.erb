@@ -35,24 +35,6 @@
     </div>
   <% end %>
   <br>
-  <% if wrong_file_version_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_wrong_file_version_review_path, class: 'card-link' do %>
-      <div class='card' id='wrong-file-version-check-card'>
-        <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= wrong_file_version_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='wrong-file-version-check-card'>
-      <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
-    </div>
-  <% end %>
-  <br>
   <% if needs_manual_preferred_version_check_count.nonzero? %>
     <%= link_to activity_insight_oa_workflow_preferred_version_review_path, class: 'card-link' do %>
       <div class='card' id='preferred-version-check-card'>
@@ -68,6 +50,23 @@
         <span class='float-right text-large'>0</strong></span>
       </div>
       <div class='card-body'><%= i18n('preferred_version_curation_description') %></div>
+    </div>
+  <% end %><br>
+  <% if wrong_file_version_count.nonzero? %>
+    <%= link_to activity_insight_oa_workflow_wrong_file_version_review_path, class: 'card-link' do %>
+      <div class='card' id='wrong-file-version-check-card'>
+        <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
+          <span class='float-right text-large'><strong><%= wrong_file_version_count %></strong></span>
+        </div>
+        <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
+      </div>
+    <% end %>
+  <% else %>
+    <div class='card text-muted' id='wrong-file-version-check-card'>
+      <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
+        <span class='float-right text-large'>0</strong></span>
+      </div>
+      <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
     </div>
   <% end %>
   <br>
