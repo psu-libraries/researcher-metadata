@@ -82,7 +82,7 @@ describe FacultyConfirmationsMailer, type: :model do
     end
 
     it 'sends the email with the correct subject' do
-      expect(email.subject).to eq 'Your publication has been deposited in ScholarSphere'
+      expect(email.subject).to eq 'File deposited in ScholarSphere'
     end
 
     it 'sets the correct reply-to address' do

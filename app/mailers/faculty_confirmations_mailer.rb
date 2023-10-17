@@ -14,7 +14,7 @@ class FacultyConfirmationsMailer < ApplicationMailer
     @user = user
     @deposit = deposit
     mail to: @user.email,
-         subject: 'Your publication has been deposited in ScholarSphere',
+         subject: 'File deposited in ScholarSphere',
          from: 'scholarsphere@psu.edu',
          reply_to: 'scholarsphere@psu.edu'
   end

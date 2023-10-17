@@ -1,10 +1,17 @@
 <p>Hello <%= @user.name %>,</p>
 
 <p>
-  You recently submitted an open access version of your publication,
-  <em><%= @deposit.publication_title %></em>, for deposit in ScholarSphere in
-  order to comply with Penn State Policy AC02: Open Access to Scholarly Articles.
-  This message is to let you know that the deposit of your publication was successful,
-  and you can now view the open access version of your publication here:
+  You (or someone acting on your behalf) recently submitted a copy of your publication,
+  <em><%= @deposit.publication_title %></em> for deposit in ScholarSphere in accordance with
+  Penn State Policy AC02: Open Access to Scholarly Articles. This message is to let you know
+  that the deposit of your publication was successful. You can now view the open access
+  version of your publication here:
   <%= link_to @deposit.scholarsphere_open_access_url, @deposit.scholarsphere_open_access_url %>
+</p>
+<p>
+  A ScholarSphere curator will review your deposit and contact you if there are any issues
+  with it. If you would like to update or correct publication information in ScholarSphere,
+  you may do so by logging in and clicking the “Create New Version” button on the deposit page.
+  To manage all of your ScholarSphere deposits, visit your
+  <a href='https://scholarsphere.psu.edu/dashboard'>ScholarSphere dashboard</a>.
 </p>
