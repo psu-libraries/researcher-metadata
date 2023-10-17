@@ -1,0 +1,25 @@
+<p>Hello <%= @user.name %>,</p>
+
+<p>The following file, which you
+   <%= link_to 'uploaded in Activity Insight to be made available for public access', 'https://openaccess.psu.edu/deposit/activity-insight/' %>,
+   has been deposited for public access in ScholarSphere:</p>
+
+<ul>
+  <li><%= link_to @deposit.publication_title, @deposit.scholarsphere_open_access_url %></li>
+</ul>
+
+<p>If you would like to update or correct the publication information in ScholarSphere,
+   you may do so by logging in and clicking the “Create New Version” button on the publication page.</p>
+
+<p>If you have provided additional files in Activity Insight, we will follow up about those as soon
+   as we can.  If you have any questions, please contact us at <a href='mailto:openaccess@psu.edu'>openaccess@psu.edu</a>.
+   Thank you for making your research available to the public.</p>
+<p>Sincerely,</p>
+
+<p>
+Office of Scholarly Communications and Copyright
+<br>
+Penn State University Libraries
+<br>
+<a href='mailto:openaccess@psu.edu'>openaccess@psu.edu</a>
+</p>

@@ -56,6 +56,21 @@ describe AiOAStatusExportJob, type: :job do
       end
     end
 
+    context 'when the export status is Deposited to ScholarSphere' do
+      let(:export_status) { 'Deposited to ScholarSphere' }
+
+      it 'calls the ActivityInsightOAStatusExporter without error' do
+        expect(exporter).to receive(:export)
+        job.perform_now(aif1.id, export_status)
+        expect(File.exists?(aif1.file_download_location.model_object_dir)).to be true
+        expect(aif1.stored_file_path).not_to be_nil
+      end
+
+      it 'does not raise an error' do
+        expect { job.perform_now(aif1.id, export_status) }.not_to raise_error AiOAStatusExportJob::InvalidExportStatus
+      end
+    end
+
     context 'when the export status is invalid' do
       let(:export_status) { 'Not valid' }
 

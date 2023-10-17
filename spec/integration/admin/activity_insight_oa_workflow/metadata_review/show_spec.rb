@@ -131,6 +131,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
             expect(deposit.publisher).to eq pub2.preferred_journal_title
             expect(deposit.deputy_user_id).to be_nil
             expect(deposit.deposit_workflow).to eq 'Activity Insight OA Workflow'
+            expect(deposit.activity_insight_oa_file_id).to eq pub2.ai_file_for_deposit.id
           end
         end
       end

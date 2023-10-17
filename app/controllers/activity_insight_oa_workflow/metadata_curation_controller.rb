@@ -23,7 +23,8 @@ class ActivityInsightOAWorkflow::MetadataCurationController < ActivityInsightOAW
                                                             embargoed_until: activity_insight_oa_file.embargo_date,
                                                             deposit_agreement: true,
                                                             deposited_at: Time.now,
-                                                            deposit_workflow: 'Activity Insight OA Workflow')
+                                                            deposit_workflow: 'Activity Insight OA Workflow',
+                                                            activity_insight_oa_file_id: activity_insight_oa_file.id)
     @deposit.file_uploads = []
     ss_file_upload = ScholarsphereFileUpload.new
     ss_file_upload.file = activity_insight_oa_file.file_download_location.file
