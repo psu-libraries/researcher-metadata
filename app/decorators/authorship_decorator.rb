@@ -41,7 +41,7 @@ class AuthorshipDecorator < BaseDecorator
     when 'exclamation-circle'
       'Scholarsphere upload failed. Please try again'
     when 'circle-o-notch'
-      'not be subject to the open access policy until published'
+      'publication is in press and will not be subject to the open access policy until published'
     else
       'open access status currently unknown. Click publication title link to add information or submit a waiver'
     end
