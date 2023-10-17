@@ -446,7 +446,7 @@ describe AuthorshipDecorator do
       before { allow(ad).to receive(:open_access_status_icon).and_return('circle-o-notch') }
 
       it 'returns the correct alt text' do
-        expect(ad.open_access_status_icon_alt_text).to eq 'not be subject to the open access policy until published'
+        expect(ad.open_access_status_icon_alt_text).to eq 'publication is in press and will not be subject to the open access policy until published'
       end
     end
 
