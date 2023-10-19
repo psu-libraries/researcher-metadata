@@ -64,7 +64,27 @@ describe 'api/v1/organizations' do
 
   path '/v1/organizations/{id}/publications' do
     let(:id) { org.id }
-    parameter name: 'id', in: :path, type: :integer, description: 'The ID of an organization', required: true
+    parameter name: 'id',
+              in: :path,
+              type: :integer,
+              description: 'The ID of an organization',
+              required: true
+    parameter name: 'offset',
+              in: :query,
+              description: 'The number of items to skip before starting to collect the result set',
+              required: false,
+              schema: {
+                type: :integer,
+                format: :int32
+              }
+    parameter name: 'limit',
+              in: :query,
+              description: 'The numbers of items to return',
+              required: false,
+              schema: {
+                type: :integer,
+                format: :int32
+              }
 
     get "Retrieve an organization's publications" do
       description 'Returns publications that were authored by users while they were members of the organization'

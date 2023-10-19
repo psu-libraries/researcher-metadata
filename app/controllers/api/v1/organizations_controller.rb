@@ -8,7 +8,9 @@ module API::V1
 
     def publications
       org = api_token.all_organizations.visible.find(params[:id])
-      render json: API::V1::PublicationSerializer.new(org.all_publications)
+      render json: API::V1::PublicationSerializer.new(org.all_publications
+                                                         .offset(params[:offset])
+                                                         .limit(params[:limit]))
     end
   end
 end
