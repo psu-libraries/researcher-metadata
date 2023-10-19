@@ -103,8 +103,10 @@ describe API::V1::OrganizationsController do
 
     context 'when a valid authorization header value is included in the request' do
       context 'when given the ID of a visible organization' do
+        let(:query_params) { nil }
+
         before do
-          get "/v1/organizations/#{org.id}/publications", headers: headers
+          get "/v1/organizations/#{org.id}/publications#{query_params}", headers: headers
         end
 
         it 'updates the usage statistics on the API token' do
@@ -113,8 +115,38 @@ describe API::V1::OrganizationsController do
           expect(updated_token.last_used_at).not_to be_nil
         end
 
-        it "returns all the organization's visible publications" do
-          expect(json_response[:data].size).to eq(3)
+        context 'when no query parameters are passed' do
+          it "returns all the organization's visible publications" do
+            expect(json_response[:data].size).to eq(3)
+            expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_1.title, pub_2.title, pub_3.title])
+          end
+        end
+
+        context 'when the offset query parameter is passed' do
+          let(:query_params) { '?offset=1' }
+
+          it "returns all the organization's visible publications" do
+            expect(json_response[:data].size).to eq(2)
+            expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_2.title, pub_3.title])
+          end
+        end
+
+        context 'when the limit query parameter is passed' do
+          let(:query_params) { '?limit=1' }
+
+          it "returns all the organization's visible publications" do
+            expect(json_response[:data].size).to eq(1)
+            expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_1.title])
+          end
+        end
+
+        context 'when the limit and offset query parameters are passed' do
+          let(:query_params) { '?offset=1&limit=1' }
+
+          it "returns all the organization's visible publications" do
+            expect(json_response[:data].size).to eq(1)
+            expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_2.title])
+          end
         end
       end
 
