@@ -13,6 +13,14 @@ class FacultyConfirmationsMailerPreview < ActionMailer::Preview
     FacultyConfirmationsMailer.open_access_waiver_confirmation(fake_user, fake_waiver)
   end
 
+  def scholarsphere_deposit_confirmation
+    fake_deposit = OpenStruct.new({ title: 'Test Title',
+                                    scholarsphere_open_access_url: 'scholarsphere.psu.edu' })
+    fake_user = OpenStruct.new({ email: 'test@example.com',
+                                 name: 'Example User' })
+    FacultyConfirmationsMailer.scholarsphere_deposit_confirmation(fake_user, fake_deposit)
+  end
+
   def ai_oa_workflow_scholarsphere_deposit_confirmation
     fake_deposit = OpenStruct.new({ title: 'Test Title',
                                     scholarsphere_open_access_url: 'scholarsphere.psu.edu' })
