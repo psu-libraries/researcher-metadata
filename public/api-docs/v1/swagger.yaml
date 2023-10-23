@@ -307,6 +307,21 @@ paths:
       required: true
       schema:
         type: integer
+    - name: offset
+      in: query
+      description: The number of items to skip before starting to collect the result
+        set
+      required: false
+      schema:
+        type: integer
+        format: int32
+    - name: limit
+      in: query
+      description: The numbers of items to return
+      required: false
+      schema:
+        type: integer
+        format: int32
     get:
       summary: Retrieve an organization's publications
       description: Returns publications that were authored by users while they were
