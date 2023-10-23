@@ -125,7 +125,7 @@ describe API::V1::OrganizationsController do
         context 'when the offset query parameter is passed' do
           let(:query_params) { '?offset=1' }
 
-          it "returns all the organization's visible publications" do
+          it "returns all the organization's visible publications after the offset number" do
             expect(json_response[:data].size).to eq(2)
             expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_2.title, pub_3.title])
           end
@@ -134,7 +134,7 @@ describe API::V1::OrganizationsController do
         context 'when the limit query parameter is passed' do
           let(:query_params) { '?limit=1' }
 
-          it "returns all the organization's visible publications" do
+          it "returns a limited number of the organization's visible publications" do
             expect(json_response[:data].size).to eq(1)
             expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_1.title])
           end
@@ -143,7 +143,7 @@ describe API::V1::OrganizationsController do
         context 'when the limit and offset query parameters are passed' do
           let(:query_params) { '?offset=1&limit=1' }
 
-          it "returns all the organization's visible publications" do
+          it "returns a limited number of the organization's visible publications after the offset number" do
             expect(json_response[:data].size).to eq(1)
             expect(json_response[:data].pluck(:attributes).pluck(:title)).to eq([pub_2.title])
           end
