@@ -5011,15 +5011,16 @@ describe ActivityInsightImporter do
                                publication: pub1, version: 'publishedVersion',
                                file_download_location: fixture_file_open('test_file.pdf'),
                                intellcont_id: '190706413568') }
-          let!(:pub1) { create(:publication) }
+          let!(:pub1) { create(:publication, activity_insight_postprint_status: 'In Progress') }
 
           let!(:file_download_directory1) { aif1.file_download_location.model_object_dir }
 
-          it 'deletes the ActivityInsightOAFile and downloaded file' do
+          it 'deletes the ActivityInsightOAFile and downloaded file and sets postprint status to nil' do
             importer.call
 
             expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
             expect(File.exists?(file_download_directory1)).to be false
+            expect(pub1.reload.activity_insight_postprint_status).to be_nil
           end
         end
 
