@@ -296,7 +296,7 @@ class ActivityInsightImporter
         doi: pub.doi
       }
       if pub.activity_insight_postprint_status.present?
-        attrs.merge!(activity_insight_postprint_status: pub.activity_insight_postprint_status)
+        attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
       end
       attrs
     end
