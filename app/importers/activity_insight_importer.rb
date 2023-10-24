@@ -263,7 +263,9 @@ class ActivityInsightImporter
 
     def always_update_pub_attrs(pub, pub_record)
       attrs = {}
-      attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      if pub.activity_insight_postprint_status.present?
+        attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      end
       if pub.status == 'Published'
         attrs[:status] = pub.status
       end
@@ -274,14 +276,13 @@ class ActivityInsightImporter
     end
 
     def pub_attrs(pub)
-      {
+      attrs = {
         title: pub.title,
         publication_type: pub.publication_type,
         journal_title: pub.journal_title,
         publisher_name: pub.publisher,
         secondary_title: pub.secondary_title,
         status: pub.status,
-        activity_insight_postprint_status: pub.activity_insight_postprint_status,
         volume: pub.volume,
         issue: pub.issue,
         edition: pub.edition,
@@ -294,6 +295,10 @@ class ActivityInsightImporter
         published_on: pub.published_on,
         doi: pub.doi
       }
+      if pub.activity_insight_postprint_status.present?
+        attrs.merge!(activity_insight_postprint_status: pub.activity_insight_postprint_status)
+      end
+      attrs
     end
 
     def ai_users

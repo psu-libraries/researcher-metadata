@@ -1034,7 +1034,7 @@ describe ActivityInsightImporter do
                                      publisher_name: 'Existing Publisher 2',
                                      secondary_title: 'Existing Subtitle 2',
                                      status: 'Published',
-                                     activity_insight_postprint_status: 'Cannot Deposit',
+                                     activity_insight_postprint_status: 'In Progress',
                                      volume: '112',
                                      issue: '223',
                                      edition: '334',
@@ -1178,6 +1178,8 @@ describe ActivityInsightImporter do
 
             # testing that publication status does not revert to 'in press' when existing record status is 'published'
             expect(p5.status).to eq 'Published'
+            # testing that publication activity insight postprint status does not revert to nil when existing record status is 'In Progress'
+            expect(p5.activity_insight_postprint_status).to eq 'In Progress'
           end
 
           it 'groups duplicates of new publication records' do
@@ -1384,6 +1386,8 @@ describe ActivityInsightImporter do
                                            source_identifier: '92747188475').publication
             p4 = PublicationImport.find_by(source: 'Activity Insight',
                                            source_identifier: '190707482930').publication
+            p5 = PublicationImport.find_by(source: 'Activity Insight',
+                                           source_identifier: '271620739072').publication
 
             expect(p1.title).to eq 'First Test Publication With a Really Unique Title'
             expect(p1.publication_type).to eq 'Journal Article'
@@ -1464,6 +1468,9 @@ describe ActivityInsightImporter do
             expect(p4.visible).to be true
             expect(p4.updated_by_user_at).to be_nil
             expect(p4.doi).to eq 'https://doi.org/10.1186/s40543-020-00345-w'
+
+            # testing that publication activity insight postprint status does not revert to nil when existing record status is 'In Progress'
+            expect(p5.activity_insight_postprint_status).to eq 'In Progress'
           end
 
           it 'groups duplicates of new publication records' do
