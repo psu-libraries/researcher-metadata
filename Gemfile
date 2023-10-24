@@ -36,7 +36,6 @@ gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
-gem 'jquery-ui-rails'
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'kaminari', '~> 1.0'                # Pagination within Rails
@@ -46,7 +45,6 @@ gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibil
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
 gem 'net-pop', require: false           # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-smtp', require: false          # For Ruby 3 and Rails 6 mail compatibility
-gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
 gem 'okcomputer'                        # Healthchecks
 gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
@@ -73,8 +71,6 @@ end
 
 group :development do
   gem 'bcrypt_pbkdf' # net-ssh requires for ed25519 support
-  gem 'capistrano-ext'
-  gem 'capistrano-helpers'
   gem 'ed25519'
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
