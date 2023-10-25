@@ -203,18 +203,12 @@ class ActivityInsightImporter
 
           activity_insight_file_location = pub.postprints&.first&.location
 
-          # This is only needed to backfill status in activity insight to 'In Progress' if the status
-          # in activity insight is currently blank
-          aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
-          if aif.present? && pub.activity_insight_postprint_status.blank?
-            AiOAStatusExportJob.perform_later(aif.id, 'In Progress')
-            pub_record.activity_insight_postprint_status = 'In Progress'
-            pub_record.save!
-          end
-
           if activity_insight_file_location.blank?
             existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
-            ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id) if existing_file.present?
+            if existing_file.present?
+              ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id)
+              pub_record.update! activity_insight_postprint_status: nil
+            end
           elsif activity_insight_file_location.present? && pub_record.can_receive_new_ai_oa_files?
             aif = pub_record.activity_insight_oa_files.find_by(location: activity_insight_file_location)
             if aif.blank?
@@ -272,7 +266,9 @@ class ActivityInsightImporter
 
     def always_update_pub_attrs(pub, pub_record)
       attrs = {}
-      attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      if pub.activity_insight_postprint_status.present?
+        attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      end
       if pub.status == 'Published'
         attrs[:status] = pub.status
       end
@@ -283,14 +279,13 @@ class ActivityInsightImporter
     end
 
     def pub_attrs(pub)
-      {
+      attrs = {
         title: pub.title,
         publication_type: pub.publication_type,
         journal_title: pub.journal_title,
         publisher_name: pub.publisher,
         secondary_title: pub.secondary_title,
         status: pub.status,
-        activity_insight_postprint_status: pub.activity_insight_postprint_status,
         volume: pub.volume,
         issue: pub.issue,
         edition: pub.edition,
@@ -303,6 +298,10 @@ class ActivityInsightImporter
         published_on: pub.published_on,
         doi: pub.doi
       }
+      if pub.activity_insight_postprint_status.present?
+        attrs[:activity_insight_postprint_status] = pub.activity_insight_postprint_status
+      end
+      attrs
     end
 
     def ai_users
