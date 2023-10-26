@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 Rails.application.config.to_prepare do
   require_relative '../../app/rails_admin_actions/index_publications_by_organization'
   require_relative '../../app/rails_admin_actions/export_publications_by_organization'
