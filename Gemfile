@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 6.1'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 2.2'
+gem 'rails_admin', '~> 3.1'
 gem 'rails_admin_toggleable'
 
 # Support for Penn State Azure Active Directory authentication
@@ -95,3 +95,4 @@ group :test do
   gem 'webdrivers'
   gem 'webmock'
 end
+gem 'cssbundling-rails'

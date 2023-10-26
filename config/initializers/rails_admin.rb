@@ -12,6 +12,7 @@ RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicat
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsToActivityInsight)
 
 RailsAdmin.config do |config|
+  config.asset_source = :webpack
   config.parent_controller = 'ApplicationController'
 
   ### Popular gems integration
