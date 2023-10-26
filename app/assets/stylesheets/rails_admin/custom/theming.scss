@@ -1,12 +1,13 @@
-$pugh-blue: #96BEE6;
-$black: #000000;
+$pugh-blue: #96bee6;
+$black: #000;
 
 $primary: $black; // Colours nav bar, side links & primary buttons
 $info: $pugh-blue; // Colours secondary buttons
 
 // Force light color for top-nav links
-$navbar-dark-color: white;
+$navbar-dark-color: #fff;
 
 // Contrast ratio used to calculate color for text within elements (ie. buttons)
 // https://getbootstrap.com/docs/5.0/customize/sass/#color-contrast
 $min-contrast-ratio: 2;
+
