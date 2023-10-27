@@ -76,7 +76,8 @@
         </div>
         <div class="col-sm-6 text-end">
           <% if export_action %>
-            <%= link_to wording_for(:link, export_action), export_path(params.except('page')), class: 'btn btn-info' %>
+            <!-- Customized path to custom exporter -->
+            <%= link_to wording_for(:link, export_action), export_publications_by_organization_path(params.except('page')), class: 'btn btn-info' %>
             <!-- Include custom action -->
             <%= link_to "<i class='fa fa-circle-arrow-up'></i> #{wording_for(:link, ai_export_action)}".html_safe, 
                         export_publications_to_activity_insight_path(params.except('page')), 
