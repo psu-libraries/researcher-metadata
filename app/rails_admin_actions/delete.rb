@@ -50,7 +50,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-remove'
+          'fa fa-times'
         end
       end
     end

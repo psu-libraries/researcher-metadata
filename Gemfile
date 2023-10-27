@@ -7,7 +7,6 @@ gem 'rails', '~> 6.1'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem 'rails_admin', '~> 3.1'
-gem 'rails_admin_toggleable'
 
 # Support for Penn State Azure Active Directory authentication
 gem 'omniauth', '~> 2.0'

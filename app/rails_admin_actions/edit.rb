@@ -26,7 +26,7 @@ module RailsAdmin
             elsif request.put? # UPDATE
               sanitize_params_for!(request.xhr? ? :modal : :update)
 
-              @object.set_attributes(params[@abstract_model.param_key])
+              @object.assign_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
               @authorization_adapter&.attributes_for(:update, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
@@ -53,7 +53,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-pencil'
+          'fa fa-pencil'
         end
       end
     end

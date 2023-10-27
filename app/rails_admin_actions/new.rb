@@ -24,7 +24,7 @@ module RailsAdmin
               end
               if object_params = params[@abstract_model.param_key]
                 sanitize_params_for!(request.xhr? ? :modal : :create)
-                @object.set_attributes(@object.attributes.merge(object_params.to_h))
+                @object.assign_attributes(@object.attributes.merge(object_params.to_h))
               end
               respond_to do |format|
                 format.html { render @action.template_name }
@@ -37,7 +37,7 @@ module RailsAdmin
               @object = @abstract_model.new
               sanitize_params_for!(request.xhr? ? :modal : :create)
 
-              @object.set_attributes(params[@abstract_model.param_key])
+              @object.assign_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
               @authorization_adapter&.attributes_for(:create, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
@@ -58,7 +58,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-plus'
+          'fa fa-plus'
         end
       end
     end

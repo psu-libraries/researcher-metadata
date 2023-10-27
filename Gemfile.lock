@@ -449,8 +449,6 @@ GEM
       nested_form (~> 0.3)
       rails (>= 6.0, < 8)
       turbo-rails (~> 1.0)
-    rails_admin_toggleable (0.8.3)
-      rails_admin
     railties (6.1.7.6)
       actionpack (= 6.1.7.6)
       activesupport (= 6.1.7.6)
@@ -697,7 +695,6 @@ DEPENDENCIES
   rails (~> 6.1)
   rails-controller-testing
   rails_admin (~> 3.1)
-  rails_admin_toggleable
   rspec-its
   rspec-rails
   rss

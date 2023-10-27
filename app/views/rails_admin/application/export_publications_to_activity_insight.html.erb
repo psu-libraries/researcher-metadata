@@ -1,0 +1,31 @@
+<% params = request.params.except(:action, :controller, :utf8, :page, :per_page, :format, :authenticity_token) %>
+
+<div class="panel panel-integration">
+  <div class="row row-integration">
+    <p>You have found <strong><%= @objects.count %></strong> publications from <%= @org_name %> to integrate with Activity Insight.</p>
+  </div>
+
+  <div class="row row-integration">
+    <p>Select which system you would like to integrate with below. It is recommended to integrate with beta before production to check for errors.</p>
+  </div>
+</div>
+
+<%= form_tag export_publications_to_activity_insight_path(params.merge(all: true)), method: 'post', class: 'form-horizontal' do %>
+  <div class="row-integration">
+    <button class="btn btn-secondary btn-md" type="submit" name="_integrate" value="beta" data-confirm="Are you sure you want to integrate with beta?">
+      <i class="fa fa-circle-arrow-up"></i>
+      Integrate with Beta
+    </button>
+  </div>
+
+  <div class="row-integration">
+    <button class="btn btn-secondary btn-md" type="submit" name="_integrate" value="production" data-confirm="Are you sure you want to integrate with production?">
+      <i class="fa fa-circle-arrow-up"></i>
+      Integrate with Production
+    </button>
+  </div>
+
+  <div class="row-integration">
+    <%= link_to '<< Back', :back %>
+  </div>
+<% end %>
