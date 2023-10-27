@@ -7,5 +7,4 @@ class AiPublicationExportJob < ApplicationJob
     publications = Publication.find(publication_ids)
     ActivityInsightPublicationExporter.new(publications, target).export
   end
-  handle_asynchronously :perform
 end
