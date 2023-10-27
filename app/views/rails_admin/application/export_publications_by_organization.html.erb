@@ -2,7 +2,7 @@
 <% visible_fields = @model_config.export.with(view: self, object: @abstract_model.model.new, controller: self.controller).visible_fields %>
 <!-- Customized path to custom exporter -->
 <%= form_tag export_publications_by_organization_path(params.merge(all: true)), method: 'post', class: "main", data: {turbo: false} do %>
-  <input name="send_data" type="hidden" value="true" />
+  <input name="send_data" type="hidden" value="true">
   <fieldset id="fields_to_export" class="mb-3">
     <legend>
       <i class="fas fa-chevron-down"></i>
@@ -130,7 +130,7 @@
   </fieldset>
   <div class="form-actions row justify-content-end mb-3">
     <div class="col-sm-offset-2 col-sm-10">
-      <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>" />
+      <input name="return_to" type="<%= :hidden %>" value="<%= (params[:return_to].presence || request.referer) %>">
       <button class="btn btn-primary" name="csv" type="submit">
         <i class="fas fa-check"></i>
         <%= t("admin.export.confirmation", name: 'csv') %>
