@@ -2,7 +2,7 @@
 
 shared_examples_for 'a page with the admin layout' do
   it 'shows the correct navigation links' do
-    within '.sidebar-nav' do
+    within '.sidebar' do
       expect(page).to have_link 'Duplicate publication groups'
       expect(page).to have_link 'ETDs'
       expect(page).to have_link 'Organizations'
