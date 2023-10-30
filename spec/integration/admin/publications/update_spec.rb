@@ -32,7 +32,7 @@ describe 'updating a publication via the admin interface', type: :feature do
       before do
         fill_in 'Title', with: 'Updated Title'
         select '', from: 'Preferred Version'
-        find('#publication_authors_et_al_1').click
+        find_by_id('publication_authors_et_al_1').click
         click_on 'Save'
       end
 
