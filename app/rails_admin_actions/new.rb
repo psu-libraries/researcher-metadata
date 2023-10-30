@@ -19,16 +19,18 @@ module RailsAdmin
             if request.get? # NEW
 
               @object = @abstract_model.new
+              @action = @action.with(@action.bindings.merge(object: @object))
               @authorization_adapter&.attributes_for(:new, @abstract_model)&.each do |name, value|
                 @object.send("#{name}=", value)
               end
-              if object_params = params[@abstract_model.param_key]
+              object_params = params[@abstract_model.param_key]
+              if object_params
                 sanitize_params_for!(request.xhr? ? :modal : :create)
                 @object.assign_attributes(@object.attributes.merge(object_params.to_h))
               end
               respond_to do |format|
                 format.html { render @action.template_name }
-                format.js   { render @action.template_name, layout: false }
+                format.js   { render @action.template_name, layout: 'rails_admin/modal', content_type: Mime[:html].to_s }
               end
 
             elsif request.post? # CREATE
@@ -39,9 +41,7 @@ module RailsAdmin
 
               @object.assign_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
-              @authorization_adapter&.attributes_for(:create, @abstract_model)&.each do |name, value|
-                @object.send("#{name}=", value)
-              end
+              @authorization_adapter&.assign_attributes(params[@abstract_model.param_key])
 
               if @object.save
                 @auditing_adapter&.create_object(@object, @abstract_model, _current_user)
@@ -59,6 +59,10 @@ module RailsAdmin
 
         register_instance_option :link_icon do
           'fa fa-plus'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

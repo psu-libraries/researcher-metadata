@@ -20,7 +20,7 @@ module RailsAdmin
 
               respond_to do |format|
                 format.html { render @action.template_name }
-                format.js   { render @action.template_name, layout: false }
+                format.js   { render @action.template_name, layout: 'rails_admin/modal', content_type: Mime[:html].to_s }
               end
 
             elsif request.put? # UPDATE
@@ -28,9 +28,7 @@ module RailsAdmin
 
               @object.assign_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
-              @authorization_adapter&.attributes_for(:update, @abstract_model)&.each do |name, value|
-                @object.send("#{name}=", value)
-              end
+              @authorization_adapter&.authorize(:update, @abstract_model, @object)
               changes = @object.changes
               if @object.save
                 @auditing_adapter&.update_object(@object, @abstract_model, _current_user, changes)
@@ -42,7 +40,7 @@ module RailsAdmin
                       redirect_to_on_success
                     end
                   end
-                  format.js { render json: { id: @object.id.to_s, label: @model_config.with(object: @object).object_label } }
+                  format.json { render json: { id: @object.id.to_s, label: @model_config.with(object: @object).object_label } }
                 end
               else
                 handle_save_error :edit
@@ -54,6 +52,10 @@ module RailsAdmin
 
         register_instance_option :link_icon do
           'fa fa-pencil'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end
