@@ -49,7 +49,7 @@ describe 'Admin API token edit page', type: :feature do
 
     describe 'submitting the form to update an API Token with write access' do
       before do
-        check 'Write access'
+        find_by_id('api_token_write_access_1').click
 
         click_button 'Save'
       end
@@ -63,7 +63,7 @@ describe 'Admin API token edit page', type: :feature do
 
     describe 'submitting the form to update an API Token with no write access' do
       before do
-        uncheck 'Write access'
+        find_by_id('api_token_write_access_0').click
 
         click_button 'Save'
       end

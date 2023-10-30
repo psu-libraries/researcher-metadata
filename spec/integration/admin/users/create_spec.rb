@@ -31,9 +31,9 @@ describe 'Creating a user', type: :feature do
         fill_in 'Pure ID', with: 'pure-12345'
         fill_in 'Activity Insight ID', with: 'ai-67890'
         fill_in 'Penn State ID', with: '9999999'
-        check 'Admin user?'
-        check 'Show all publications'
-        check 'Show all contracts'
+        find_by_id('user_is_admin_1').click
+        find_by_id('user_show_all_publications_1').click
+        find_by_id('user_show_all_contracts_1').click
         click_button 'Save'
       end
 

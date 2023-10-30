@@ -36,9 +36,9 @@ describe 'Creating a publication', type: :feature do
         fill_in 'ISSN', with: 'Test ISSN'
         fill_in 'DOI', with: 'https://doi.org/10.000/test'
         fill_in 'Abstract', with: 'Test Abstract'
-        check 'Et al authors?'
+        find_by_id('publication_authors_et_al_1').click
         fill_in 'Published on', with: 'August 23, 2018'
-        check 'Visible via API?'
+        find_by_id('publication_visible_1').click
 
         click_button 'Save'
       end

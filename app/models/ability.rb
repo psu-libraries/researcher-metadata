@@ -15,7 +15,7 @@ class Ability
         can :edit, User, user.managed_users.distinct do |u|
           user.managed_users.include?(u)
         end
-        can :toggle, User, user.managed_users.distinct do |u|
+        can :update, User, user.managed_users.distinct do |u|
           user.managed_users.include?(u)
         end
       end

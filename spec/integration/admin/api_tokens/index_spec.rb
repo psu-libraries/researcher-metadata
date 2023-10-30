@@ -26,10 +26,8 @@ describe 'Admin API tokens list', type: :feature do
         expect(page).to have_content 'secret_token_2'
         expect(page).to have_content 'Another Application'
 
-        click_link href: '/admin/api_token?model_name=api_token&set=1', match: :first
-
-        expect(page).to have_css 'span.label-success', exact_text: '✓', count: 1
-        expect(page).to have_css 'span.label-danger', exact_text: '✘', count: 1
+        expect(page).to have_css 'span.fa-check', count: 1
+        expect(page).to have_css 'span.fa-times', count: 1
       end
     end
 

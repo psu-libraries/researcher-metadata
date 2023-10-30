@@ -47,7 +47,7 @@ describe 'Admin authorship edit page', type: :feature do
       end
 
       it "allows the authorship's confirmation flag to be set" do
-        expect(page.find_field('Confirmed').value).to eq '1'
+        expect(page.find_by_id('authorship_confirmed_1').value).to eq '1'
       end
     end
 

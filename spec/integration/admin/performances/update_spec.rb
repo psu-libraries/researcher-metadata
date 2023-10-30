@@ -12,7 +12,7 @@ describe 'updating a performance via the admin interface', type: :feature do
     describe "changing the performance's visibility" do
       before do
         visit rails_admin.edit_path(model_name: :performance, id: perf.id)
-        check 'Visible via API?'
+        find_by_id('performance_visible_1').click
         click_on 'Save'
       end
 

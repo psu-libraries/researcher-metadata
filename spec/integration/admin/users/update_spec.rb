@@ -60,9 +60,9 @@ describe 'updating a user via the admin interface', type: :feature do
         fill_in 'Pure ID', with: 'pure-def456'
         fill_in 'Activity Insight ID', with: 'ai-ghi111'
         fill_in 'Penn State ID', with: '123456789'
-        check 'Admin user?'
-        check 'Show all publications'
-        check 'Show all contracts'
+        find_by_id('user_is_admin_1').click
+        find_by_id('user_show_all_publications_1').click
+        find_by_id('user_show_all_contracts_1').click
         click_on 'Save'
       end
 
@@ -114,7 +114,7 @@ describe 'updating a user via the admin interface', type: :feature do
 
   context 'when the current user is not an admin' do
     context 'when the current user manages an organization of the user that is being edited' do
-      let!(:member_org) { create(:organization, owner: current_user, name: 'Test Org') }
+      let!(:member_org) { create(:organization, owner_id: current_user.id, name: 'Test Org') }
 
       before do
         create(:user_organization_membership, user: user, organization: member_org)
@@ -199,8 +199,8 @@ describe 'updating a user via the admin interface', type: :feature do
 
       describe 'submitting the form with new data to update the user record' do
         before do
-          check 'Show all publications'
-          check 'Show all contracts'
+          find_by_id('user_show_all_publications_1').click
+          find_by_id('user_show_all_contracts_1').click
           click_on 'Save'
         end
 

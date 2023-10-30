@@ -26,7 +26,7 @@ describe 'OA Notification Settings edit page', type: :feature do
     describe 'submitting the form to update an OA Notification Setting' do
       before do
         fill_in 'Email cap', with: 400
-        uncheck 'Is active'
+        find_by_id('oa_notification_setting_is_active_0').click
 
         click_button 'Save'
       end

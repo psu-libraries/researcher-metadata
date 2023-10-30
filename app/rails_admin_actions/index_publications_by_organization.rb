@@ -33,7 +33,7 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-            associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.map { |f| f.association.name }
+            associations = model_config.list.fields.select { |f| f.try(:eager_load) }.map { |f| f.association.name }
             options = {}
             options = options.merge(include: associations) if associations.present?
             options = options.merge(get_sort_hash(model_config))

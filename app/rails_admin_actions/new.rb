@@ -11,7 +11,7 @@ module RailsAdmin
         end
 
         register_instance_option :http_methods do
-          [:get, :post] # NEW / CREATE
+          %i[get post] # NEW / CREATE
         end
 
         register_instance_option :controller do
@@ -41,7 +41,7 @@ module RailsAdmin
 
               @object.assign_attributes(params[@abstract_model.param_key])
               @object.mark_as_updated_by_user
-              @authorization_adapter&.assign_attributes(params[@abstract_model.param_key])
+              @authorization_adapter&.authorize(:create, @abstract_model, @object)
 
               if @object.save
                 @auditing_adapter&.create_object(@object, @abstract_model, _current_user)
