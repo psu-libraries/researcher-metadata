@@ -32,14 +32,13 @@ describe 'updating an internal publication waiver via the admin interface', type
         find_all('label[title="Show All Items"]').first.click
         expect(page).to have_content 'Other User'
         click_link 'Add a new User'
-        expect(page).to have_content "New User"
+        expect(page).to have_content 'New User'
       end
 
       it 'has link to edit and new modal forms for the publication associated with the waiver and dropdown of publications' do
         click_link 'Edit this Publication'
         sleep 0.5
         expect(page).to have_content "Edit Publication 'A Test Publication'"
-        
       end
     end
 
