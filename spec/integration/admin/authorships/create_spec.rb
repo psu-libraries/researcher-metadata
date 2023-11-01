@@ -31,9 +31,10 @@ describe 'Creating an authorship', type: :feature do
         end
         find('a', text: 'New Scientific Research').click
         fill_in 'Author number', with: 2
-        check 'Confirmed'
+        find('label[for="authorship_confirmed_1"]').click
 
         click_button 'Save'
+        sleep 0.1
       end
 
       it 'creates a new authorship record in the database with the provided data' do

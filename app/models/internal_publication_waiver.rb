@@ -53,8 +53,8 @@ class InternalPublicationWaiver < ApplicationRecord
     edit do
       field(:authorship) { read_only true }
       field(:reason_for_waiver)
-      field(:user)
-      field(:publication)
+      field(:user) { read_only true }
+      field(:publication) { read_only true }
     end
   end
 end

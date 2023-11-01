@@ -24,14 +24,14 @@ describe 'updating an authorship via the admin interface', type: :feature do
   context 'when the current user is an admin' do
     before do
       authenticate_admin_user
-      visit rails_admin.edit_path(model_name: :publication, id: pub.id)
+      visit rails_admin.edit_path(model_name: :authorship, id: auth.id)
     end
 
     describe 'submitting the form with new data to update an authorship record' do
       before do
         fill_in 'Orcid resource identifier', with: 'Test Orcid Resource Identifier'
         fill_in 'Author number', with: 2
-        check 'Confirmed'
+        find_by_id('authorship_confirmed_1').click
         click_on 'Save'
       end
 
@@ -48,7 +48,7 @@ describe 'updating an authorship via the admin interface', type: :feature do
     before { authenticate_user }
 
     it 'redirects back to the home page with an error message' do
-      visit rails_admin.edit_path(model_name: :publication, id: pub.id)
+      visit rails_admin.edit_path(model_name: :authorship, id: auth.id)
       expect(page).to have_current_path root_path, ignore_query: true
       expect(page).to have_content I18n.t('admin.authorization.not_authorized')
     end

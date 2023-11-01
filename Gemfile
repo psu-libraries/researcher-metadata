@@ -6,8 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 6.1'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 2.2'
-gem 'rails_admin_toggleable'
+gem 'rails_admin', '~> 3.1'
 
 # Support for Penn State Azure Active Directory authentication
 gem 'omniauth', '~> 2.0'
@@ -22,6 +21,7 @@ gem 'carrierwave'                       # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'config', '~> 4.1'
+gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
@@ -36,7 +36,6 @@ gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
-gem 'jquery-ui-rails'
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'kaminari', '~> 1.0'                # Pagination within Rails
@@ -46,7 +45,6 @@ gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibil
 gem 'net-ldap'                          # lightweight Directory Access Protocol client
 gem 'net-pop', require: false           # For Ruby 3 and Rails 6 mail compatibility
 gem 'net-smtp', require: false          # For Ruby 3 and Rails 6 mail compatibility
-gem 'net-ssh', '7.0.0.beta1'            # Needed for cap to run with ruby 3.  Can be removed if net-ssh gets updated.
 gem 'okcomputer'                        # Healthchecks
 gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
@@ -73,8 +71,6 @@ end
 
 group :development do
   gem 'bcrypt_pbkdf' # net-ssh requires for ed25519 support
-  gem 'capistrano-ext'
-  gem 'capistrano-helpers'
   gem 'ed25519'
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'

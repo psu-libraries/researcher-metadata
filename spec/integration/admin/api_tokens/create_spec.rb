@@ -47,7 +47,7 @@ describe 'Creating an API Token', type: :feature do
       before do
         fill_in 'App name', with: 'Test App'
         fill_in 'Admin email', with: 'test_write@email.com'
-        check 'Write access'
+        find_by_id('api_token_write_access_1').click
 
         click_button 'Save'
       end

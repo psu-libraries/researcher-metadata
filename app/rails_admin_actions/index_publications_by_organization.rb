@@ -14,7 +14,7 @@ module RailsAdmin
         end
 
         register_instance_option :http_methods do
-          [:get, :post]
+          %i[get post]
         end
 
         register_instance_option :route_fragment do
@@ -23,7 +23,8 @@ module RailsAdmin
 
         register_instance_option :breadcrumb_parent do
           parent_model = bindings[:abstract_model].try(:config).try(:parent)
-          if am = parent_model && RailsAdmin.config(parent_model).try(:abstract_model)
+          am = parent_model && RailsAdmin.config(parent_model).try(:abstract_model)
+          if am
             [:index, am]
           else
             [:dashboard]
@@ -32,7 +33,7 @@ module RailsAdmin
 
         register_instance_option :controller do
           proc do
-            associations = model_config.list.fields.select { |f| f.try(:eager_load?) }.map { |f| f.association.name }
+            associations = model_config.list.fields.select { |f| f.try(:eager_load) }.map { |f| f.association.name }
             options = {}
             options = options.merge(include: associations) if associations.present?
             options = options.merge(get_sort_hash(model_config))
@@ -47,9 +48,7 @@ module RailsAdmin
 
             unless @model_config.list.scopes.empty?
               if params[:scope].blank?
-                unless @model_config.list.scopes.first.nil?
-                  @objects = @objects.send(@model_config.list.scopes.first)
-                end
+                @objects = @objects.send(@model_config.list.scopes.first) unless @model_config.list.scopes.first.nil?
               elsif @model_config.list.scopes.map(&:to_s).include?(params[:scope])
                 @objects = @objects.send(params[:scope].to_sym)
               end
@@ -100,7 +99,7 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-th-list'
+          'fa fa-th-list'
         end
       end
     end

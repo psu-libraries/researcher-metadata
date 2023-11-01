@@ -50,7 +50,11 @@ module RailsAdmin
         end
 
         register_instance_option :link_icon do
-          'icon-remove'
+          'fa fa-times'
+        end
+
+        register_instance_option :writable? do
+          !(bindings[:object] && bindings[:object].readonly?)
         end
       end
     end

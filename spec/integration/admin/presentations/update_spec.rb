@@ -12,7 +12,7 @@ describe 'updating a presentation via the admin interface', type: :feature do
     describe "changing the presentation's visibility" do
       before do
         visit rails_admin.edit_path(model_name: :presentation, id: pres.id)
-        check 'Visible via API?'
+        find_by_id('presentation_visible_1').click
         click_on 'Save'
       end
 

@@ -42,7 +42,7 @@ describe 'Admin activity insight oa file detail page', type: :feature do
         expect(page).to have_content aif.created_at.strftime('%B %d, %Y')
         expect(page).to have_content aif.updated_at.strftime('%B %d, %Y')
         expect(page).to have_link 'test_file.pdf'
-        expect(page).to have_content '✓'
+        expect(page).to have_css 'span.fa-check'
         expect(page).to have_content 'https://rightsstatements.org/page/InC/1.0/'
         expect(page).to have_content 'publisher set statement'
         expect(page).to have_content 'August 31, 2025'

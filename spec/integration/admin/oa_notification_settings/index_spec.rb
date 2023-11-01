@@ -18,7 +18,7 @@ describe 'Admin OA Notification Settings list', type: :feature do
 
       it 'shows information about each OA Notification Setting' do
         expect(page).to have_content setting.email_cap
-        expect(page).to have_css 'span.label-success', exact_text: '✓', count: 1
+        expect(page).to have_css 'span.fa-check', count: 1
       end
     end
 

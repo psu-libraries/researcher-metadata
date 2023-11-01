@@ -29,7 +29,7 @@ describe 'Admin API token detail page', type: :feature do
         expect(page).to have_content 'secret_token_1'
         expect(page).to have_content 'Test Application'
         expect(page).to have_content 'admin123@psu.edu'
-        expect(page).to have_css 'span.label-success', exact_text: '✓'
+        expect(page).to have_css 'span.fa-check'
         expect(page).to have_content 472
         expect(page).to have_content 'August 14, 2019 16:44'
         expect(page).to have_link 'Organization One'

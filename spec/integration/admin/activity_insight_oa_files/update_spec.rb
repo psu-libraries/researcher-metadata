@@ -42,9 +42,9 @@ describe 'updating a activity insight oa file via the admin interface', type: :f
         select 'unknown', from: 'Version'
         select 'Public Domain Mark 1.0', from: 'License'
         fill_in 'Set statement', with: 'test statement'
-        check 'Checked for set statement'
+        find_by_id('activity_insight_oa_file_checked_for_set_statement_1').click
         fill_in 'Embargo date', with: 'September 04, 2023'
-        check 'Checked for embargo date'
+        find_by_id('activity_insight_oa_file_checked_for_embargo_date_1').click
         click_on 'Save'
       end
 

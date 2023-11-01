@@ -7,7 +7,8 @@
     "css-loader": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
     "node-polyfill-webpack-plugin": "^2.0.1",
-    "sass": "^1.63.6",
+    "rails_admin": "3.1.2",
+    "sass": "^1.69.4",
     "sass-loader": "^13.3.2",
     "swagger-ui-dist": "5.1.0",
     "webpack": "^5.88.0",
@@ -15,6 +16,7 @@
     "webpack-remove-empty-scripts": "^1.0.3"
   },
   "scripts": {
-    "build": "webpack --config webpack.config.js"
+    "build": "webpack --config webpack.config.js",
+    "build:css": "sass ./app/assets/stylesheets/rails_admin.sass.scss:./app/assets/builds/rails_admin.css --no-source-map --load-path=node_modules"
   }
 }

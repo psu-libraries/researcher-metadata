@@ -3,12 +3,6 @@
 require 'component/component_spec_helper'
 
 describe OpenAccessNotifier do
-  let(:error_response) do
-    struct = Struct.new(:message)
-    error_response = struct.new
-    error_response.message = 'The error message'
-    error_response
-  end
   let(:notifier) { described_class.new(user_collection) }
   let(:user1) { double 'user 1',
                        old_potential_open_access_publications: pubs1,
@@ -77,7 +71,7 @@ describe OpenAccessNotifier do
     end
 
     context 'when an error is raised while sending an email' do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new(error_response) }
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The error message' }
 
       it "sends emails that don't raise errors" do
         expect(email1).not_to receive(:deliver_now)
@@ -240,7 +234,7 @@ describe OpenAccessNotifier do
     end
 
     context 'when an error is raised while sending an email' do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError.new(error_response) }
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The error message' }
 
       it "sends emails that don't raise errors for the first five users that need one" do
         expect(email1).not_to receive(:deliver_now)
