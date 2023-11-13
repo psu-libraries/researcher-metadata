@@ -38,7 +38,7 @@ gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: 
 gem 'jquery-rails'                      # jQuery packages for Rails
 # Maintainers never released jquery-ui-rails to rubygems.
 # This will be the only gem that can't be cached in vendor/cache
-gem 'jquery-ui-rails', github: 'jquery-ui-rails/jquery-ui-rails', tag: 'v7.0.0' 
+gem 'jquery-ui-rails', github: 'jquery-ui-rails/jquery-ui-rails', tag: 'v7.0.0'
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'kaminari', '~> 1.0'                # Pagination within Rails
