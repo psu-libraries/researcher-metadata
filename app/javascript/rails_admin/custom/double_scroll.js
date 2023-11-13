@@ -1,4 +1,4 @@
-$(document).on('turbolinks:load', function () {
+$(document).on('rails_admin.dom_ready', function () {
     $(".scroll-wrapper1").scroll(function () {
         $(".scroll-wrapper2")
             .scrollLeft($(".scroll-wrapper1").scrollLeft());
