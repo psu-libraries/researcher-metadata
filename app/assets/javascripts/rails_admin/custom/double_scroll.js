@@ -1,9 +1,9 @@
-$(document).on('ready pjax:end', function(){
-    $(".scroll-wrapper1").scroll(function(){
+$(document).on('turbolinks:load', function () {
+    $(".scroll-wrapper1").scroll(function () {
         $(".scroll-wrapper2")
             .scrollLeft($(".scroll-wrapper1").scrollLeft());
     });
-    $(".scroll-wrapper2").scroll(function(){
+    $(".scroll-wrapper2").scroll(function () {
         $(".scroll-wrapper1")
             .scrollLeft($(".scroll-wrapper2").scrollLeft());
     });

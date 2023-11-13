@@ -11,8 +11,7 @@ const RemoveEmptyScriptsPlugin = require('webpack-remove-empty-scripts');
 module.exports = {
   mode,
   entry: {
-    bundle: "./app/javascript/bundle.js",
-    rails_admin: "./app/javascript/rails_admin.js"
+    bundle: "./app/javascript/bundle.js"
   },
   output: {
     filename: "[name].js",

@@ -36,6 +36,7 @@ gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
+gem 'jquery-ui-rails', github: 'jquery-ui-rails/jquery-ui-rails', tag: 'v7.0.0' # Maintainers never released this to rubygems
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
 gem 'kaminari', '~> 1.0'                # Pagination within Rails

@@ -1,4 +1,4 @@
-$(document).on('ready pjax:end', ->
+$(document).on('turbolinks:load', ->
   if $('.grouped-publications').length
     merge_target_value = ->
       $('input[name=merge_target_publication_id]:checked').val()

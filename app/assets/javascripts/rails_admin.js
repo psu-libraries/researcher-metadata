@@ -13,10 +13,8 @@
 //= require rails-ujs
 //= require jquery
 //= require jquery_ujs
-//= require jquery-ui
 //= require bootstrap-sprockets
 //= require activestorage
 //= require turbolinks
-//= require foundation
-//= require cocoon
-//= require_tree ./profile
+//= require_tree ./rails_admin/custom
+//= require_tree .
