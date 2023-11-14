@@ -24,6 +24,8 @@ describe ScholarsphereImporter do
                            doi: 'https://doi.org/10.26207/phe9-4e57') }
       let!(:pub4) { create(:publication,
                            doi: 'https://doi.org/10.1111/1462-2920.15276') }
+      let!(:pub5) { create(:publication,
+                           doi: nil) }
 
       context 'when one of the publications already has an open access location that matches a URL from ScholarSphere' do
         let!(:oal) { create(:open_access_location,
