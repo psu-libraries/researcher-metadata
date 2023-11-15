@@ -1,3 +1,3 @@
 import './controllers';
 import './frontend';
-import './manage_profile';
+import './profile';

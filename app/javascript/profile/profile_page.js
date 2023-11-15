@@ -1,9 +1,11 @@
-$(document).on('turbolinks:load', function() {
-  $(function(){ $(document).foundation(); });
+import Foundation from './foundation';
+
+$(window).on('load', function () {
+  $(function () { $(document).foundation(); });
 });
 
-$(document).on('ready', function() {
-  if($('ul#profile-tabs').children().length > 0) {
+$(window).on('load', function () {
+  if ($('ul#profile-tabs').children().length > 0) {
     $('ul#profile-tabs').children().first().addClass('is-active');
     $('ul#profile-tabs:first-child').attr('aria-selected', 'true');
 
@@ -11,19 +13,19 @@ $(document).on('ready', function() {
   }
 
   // Scroll
-  $('.tabs li a').on('click', function() {
+  $('.tabs li a').on('click', function () {
     $([document.documentElement, document.body]).animate({
       scrollTop: $(".tabs-wrapper").offset().top + 20
     }, 150);
   });
 
-// Sticky nav
+  // Sticky nav
   var tabNav = $('#profile-tabs');
   var stickyNavTop = tabNav.offset().top;
   var navWidth = tabNav.width();
   var padding = tabNav.height();
 
-  var stickyNav = function(){
+  var stickyNav = function () {
     var scrollTop = $(window).scrollTop();
     if (scrollTop > stickyNavTop) {
       tabNav.addClass('sticky');
@@ -40,7 +42,7 @@ $(document).on('ready', function() {
 
   stickyNav();
 
-  $(window).scroll(function() {
+  $(window).scroll(function () {
     stickyNav();
   });
 });
