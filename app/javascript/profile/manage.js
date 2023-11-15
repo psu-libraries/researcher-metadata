@@ -1,4 +1,4 @@
-$(window).on('load', function () {
+$(document).ready(function () {
   $('form.visibility-control').each(function () {
     var form = $(this);
 

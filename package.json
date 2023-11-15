@@ -4,6 +4,7 @@
   "dependencies": {
     "@hotwired/stimulus": "^3.0.1",
     "@hotwired/stimulus-webpack-helpers": "^1.0.1",
+    "cocoon": "github:nathanvda/cocoon#c24ba53",
     "css-loader": "^6.8.1",
     "foundation-sites": "^6.8.1",
     "mini-css-extract-plugin": "^2.7.6",
