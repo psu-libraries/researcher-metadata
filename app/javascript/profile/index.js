@@ -1,4 +1,4 @@
-require("cocoon")
+require("@nathanvda/cocoon")
 import $ from 'jquery'
 
 import 'webpack-jquery-ui/css'
