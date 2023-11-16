@@ -142,7 +142,12 @@ RSpec.describe 'api/v1/publications' do
 
         response 200, 'publication response' do
           let(:'X-API-Key') { 'token123' }
-          schema '$ref' => '#/components/schemas/PublicationV1'
+          schema type: :object,
+                 properties: {
+                   data: {
+                     '$ref' => '#/components/schemas/PublicationV1'
+                   }
+                 }
           run_test!
         end
 

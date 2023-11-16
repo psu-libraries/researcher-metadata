@@ -488,10 +488,16 @@ paths:
           content:
             application/json:
               schema:
-                "$ref": "#/components/schemas/PublicationV1"
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/PublicationV1"
             text/html:
               schema:
-                "$ref": "#/components/schemas/PublicationV1"
+                type: object
+                properties:
+                  data:
+                    "$ref": "#/components/schemas/PublicationV1"
         '401':
           description: unauthorized
           content:
