@@ -131,6 +131,12 @@ components:
               example: 50
               description: The number of times that the publication has been cited
                 in other works
+            supplementary_url:
+              type: string
+              nullable: true
+              example: https://blog.com/post
+              description: A URL for supplementary information or a secondary location
+                of the publication
             contributors:
               type: array
               items:
@@ -479,10 +485,31 @@ paths:
       responses:
         '200':
           description: publication response
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/PublicationV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/PublicationV1"
         '401':
           description: unauthorized
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
         '404':
           description: not found
+          content:
+            application/json:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
+            text/html:
+              schema:
+                "$ref": "#/components/schemas/ErrorModelV1"
   "/v1/publications":
     get:
       summary: All Publications

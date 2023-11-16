@@ -18,6 +18,7 @@ describe API::V1::PublicationSerializer do
                              published_on: date,
                              abstract: 'an abstract',
                              total_scopus_citations: 1000,
+                             url: 'https://example.org/article',
                              doi: 'https://doi.org/10.000/example',
                              open_access_locations: [build(:open_access_location,
                                                            source: Source::OPEN_ACCESS_BUTTON,
@@ -46,6 +47,7 @@ describe API::V1::PublicationSerializer do
     it { is_expected.to include(abstract: 'an abstract') }
     it { is_expected.to include(citation_count: 1000) }
     it { is_expected.to include(doi: 'https://doi.org/10.000/example') }
+    it { is_expected.to include(supplementary_url: 'https://example.org/article') }
     it { is_expected.to include(preferred_open_access_url: 'OA URL') }
 
     context 'when the publication has a published_on date' do
