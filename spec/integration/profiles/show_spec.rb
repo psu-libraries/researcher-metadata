@@ -2,7 +2,7 @@
 
 require 'integration/integration_spec_helper'
 
-describe 'Profile page', type: :feature do
+describe 'Profile page', type: :feature, js: true do
   let!(:user) { create(:user,
                        :with_psu_identity,
                        webaccess_id: 'abc123',
@@ -214,6 +214,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's publications in the Publications tab" do
+      click_link 'Publications'
       within '#publications' do
         expect(page).to have_content 'Publications'
         expect(page).to have_content 'First Publication, Journal 1, 2010'
@@ -224,6 +225,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's presentations in the Presentations tab" do
+      click_link 'Presentations'
       within '#presentations' do
         expect(page).to have_content 'Presentations'
         expect(page).to have_content 'First Presentation, Organization 1, Location 1'
@@ -232,6 +234,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's performances in the Performances tab" do
+      click_link 'Performances'
       within '#performances' do
         expect(page).to have_content 'Performances'
         expect(page).to have_content 'First Performance, Location 1, 1/2/2018'
@@ -240,6 +243,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's PhD advising roles in the Graduate Advising tab" do
+      click_link 'Graduate Advising'
       within '#advising' do
         expect(page).to have_content 'Graduate Advising'
         expect(page).to have_content 'PhD Committees'
@@ -250,6 +254,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's masters advising roles in the Graduate Advising tab" do
+      click_link 'Graduate Advising'
       within '#advising' do
         expect(page).to have_content 'Masters Committees'
         expect(page).to have_content 'Committee Member for Anne Author'
@@ -259,6 +264,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's new stories in the News tab" do
+      click_link 'News'
       within '#news' do
         expect(page).to have_content 'News'
         expect(page).to have_link 'First Story'
@@ -269,6 +275,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's grants in the Grants tab" do
+      click_link 'Grants'
       within '#grants' do
         expect(page).to have_content 'Grants'
         expect(page).to have_content 'First Grant, National Science Foundation, 2/2001 - 5/2004'
@@ -277,6 +284,7 @@ describe 'Profile page', type: :feature do
     end
 
     it "shows the requested user's other publications in the Others tab" do
+      click_link 'Other Works'
       within '#other-publications' do
         expect(page).to have_content 'Books'
         expect(page).not_to have_content 'Letters'
