@@ -84,7 +84,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
       let(:pub1_group) { group }
       let(:pub2_group) { group }
 
-      describe 'the page content' do
+      describe 'the page content', js: true do
         before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
         it 'shows the correct data for the group' do
@@ -148,9 +148,20 @@ describe 'Admin duplicate publication group detail page', type: :feature do
 
           expect(page).to have_content 'Select'
           expect(page).to have_content 'Merge Target'
-          expect(page).to have_button 'Merge Selected'
-          expect(page).to have_button 'Ignore Selected'
           expect(page).not_to have_content 'Delete'
+        end
+
+        it 'disables/enables buttons' do
+          expect(page).to have_button 'Merge Selected', disabled: true
+          expect(page).to have_button 'Ignore Selected', disabled: true
+          check "selected_publication_ids_#{pub1.id}"
+          check "selected_publication_ids_#{pub2.id}"
+          expect(page).to have_button 'Merge Selected', disabled: true
+          expect(page).to have_button 'Ignore Selected', disabled: false
+          uncheck "selected_publication_ids_#{pub1.id}"
+          find("#merge_target_publication_id_#{pub1.id}").set(true)
+          expect(page).to have_button 'Merge Selected', disabled: false
+          expect(page).to have_button 'Ignore Selected', disabled: true
         end
       end
     end

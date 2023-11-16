@@ -31,6 +31,9 @@ module.exports = {
   resolve: {
     // Add additional file types
     extensions: ['.js', '.jsx', '.scss', '.css'],
+    alias: {
+      jquery: "jquery/src/jquery"
+    }
   },
   plugins: [
     new webpack.optimize.LimitChunkCountPlugin({
