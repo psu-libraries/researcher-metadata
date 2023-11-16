@@ -2,7 +2,7 @@
 
 require 'integration/integration_spec_helper'
 
-describe 'Profile page', type: :feature, js: true do
+describe 'Profile page', js: true, type: :feature do
   let!(:user) { create(:user,
                        :with_psu_identity,
                        webaccess_id: 'abc123',
