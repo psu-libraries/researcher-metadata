@@ -138,12 +138,16 @@ RSpec.describe 'api/v1/publications' do
         tags 'publication'
         description 'Returns a single publication if the user has access'
         operationId 'findPublicationById'
+        produces 'application/json', 'text/html'
 
         response 200, 'publication response' do
           let(:'X-API-Key') { 'token123' }
-          schema type: :object, properties: {
-            data: { type: :object, '$ref' => '#/components/schemas/PublicationV1' }
-          }
+          schema type: :object,
+                 properties: {
+                   data: {
+                     '$ref' => '#/components/schemas/PublicationV1'
+                   }
+                 }
           run_test!
         end
 

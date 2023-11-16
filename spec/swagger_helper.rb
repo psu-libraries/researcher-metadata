@@ -158,6 +158,12 @@ RSpec.configure do |config|
                     example: 50,
                     description: 'The number of times that the publication has been cited in other works'
                   },
+                  supplementary_url: {
+                    type: :string,
+                    nullable: true,
+                    example: 'https://blog.com/post',
+                    description: 'A URL for supplementary information or a secondary location of the publication'
+                  },
                   contributors: {
                     type: :array,
                     items: {

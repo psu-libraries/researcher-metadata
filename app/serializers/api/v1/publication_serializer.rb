@@ -15,6 +15,7 @@ module API::V1
     end
 
     attribute :citation_count, &:total_scopus_citations
+    attribute :supplementary_url, &:url
 
     attribute :contributors do |object|
       object.contributor_names.map do |c|
