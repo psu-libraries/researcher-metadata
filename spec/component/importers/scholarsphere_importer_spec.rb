@@ -20,6 +20,8 @@ describe ScholarsphereImporter do
                            doi: 'https://doi.org/10.1109/5.771073') }
       let!(:pub2) { create(:publication,
                            doi: 'https://doi.org/10.1109/5.771073') }
+      let!(:pub3) { create(:publication,
+                           doi: 'https://doi.org/10.26207/PHE9-4e57') }
 
       context 'when one of the publications already has an open access location that matches a URL from ScholarSphere' do
         let!(:oal) { create(:open_access_location,
@@ -28,7 +30,7 @@ describe ScholarsphereImporter do
                             url: 'https://scholarsphere.test/resources/67b85129-8431-494a-8a3e-a8d07cd350bc')}
 
         it 'creates new open access locations only for new URLs from ScholarSphere for each publication' do
-          expect { importer.call }.to change(OpenAccessLocation, :count).by 5
+          expect { importer.call }.to change(OpenAccessLocation, :count).by 6
           expect(pub1.open_access_locations.find_by(
                    source: Source::SCHOLARSPHERE,
                    url: 'https://scholarsphere.test/resources/0b591fea-7bef-4e06-9554-6417bf2c040e'
@@ -49,6 +51,10 @@ describe ScholarsphereImporter do
           expect(pub2.open_access_locations.find_by(
                    source: Source::SCHOLARSPHERE,
                    url: 'https://scholarsphere.test/resources/21dd75c1-65c8-49ba-959a-9443ab27dc16'
+                 )).not_to be_nil
+          expect(pub3.open_access_locations.find_by(
+                   source: Source::SCHOLARSPHERE,
+                   url: 'https://scholarsphere.test/resources/80adcde0-b62f-4cfb-8cd4-0a69e196e504'
                  )).not_to be_nil
         end
       end
