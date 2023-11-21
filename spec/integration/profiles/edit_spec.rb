@@ -99,14 +99,14 @@ describe 'editing profile preferences' do
         end
 
         it 'allows the admin to become and unbecome the user in the profile' do
-          click_link('Become this user')
+          click_button('Become this user')
           expect(page).to have_content('You are acting on behalf of abc123')
           expect(page).to have_link('Unbecome abc123')
-          click_link('Manage my profile')
+          click_button('Manage my profile')
           expect(page).to have_link('Stop being abc123')
-          click_link('Stop being abc123')
-          click_link('Become this user')
-          click_link('Unbecome abc123')
+          click_button('Stop being abc123')
+          click_button('Become this user')
+          click_button('Unbecome abc123')
         end
       end
 
