@@ -48,7 +48,7 @@ describe 'editing profile preferences' do
   let(:orcid_id) { nil }
   let(:orcid_token) { nil }
 
-  describe 'the manage profile link', type: :feature do
+  describe 'the manage profile link', js: true, type: :feature do
     describe 'visiting the profile page for a given user' do
       context 'when not logged in' do
         before do
@@ -100,13 +100,13 @@ describe 'editing profile preferences' do
 
         it 'allows the admin to become and unbecome the user in the profile' do
           click_button('Become this user')
-          expect(page).to have_content('You are acting on behalf of abc123')
-          expect(page).to have_link('Unbecome abc123')
-          click_button('Manage my profile')
-          expect(page).to have_link('Stop being abc123')
-          click_button('Stop being abc123')
+          expect(page).to have_content("You are acting on behalf of #{user.webaccess_id}")
+          expect(page).to have_button("Unbecome #{user.webaccess_id}")
+          click_link('Manage my profile')
+          expect(page).to have_button("Stop being #{user.webaccess_id}")
+          click_button("Stop being #{user.webaccess_id}")
           click_button('Become this user')
-          click_button('Unbecome abc123')
+          click_button("Unbecome #{user.webaccess_id}")
         end
       end
 
@@ -124,14 +124,14 @@ describe 'editing profile preferences' do
         end
 
         it 'allows the deputy to become and unbecome the user in the profile' do
-          click_link('Become this user')
+          click_button('Become this user')
           expect(page).to have_content('You are acting on behalf of abc123')
-          expect(page).to have_link('Unbecome abc123')
+          expect(page).to have_button('Unbecome abc123')
           click_link('Manage my profile')
-          expect(page).to have_link('Stop being abc123')
-          click_link('Stop being abc123')
-          click_link('Become this user')
-          click_link('Unbecome abc123')
+          expect(page).to have_button('Stop being abc123')
+          click_button('Stop being abc123')
+          click_button('Become this user')
+          click_button('Unbecome abc123')
         end
       end
     end
