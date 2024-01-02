@@ -52,9 +52,6 @@ describe 'managing duplicate publication groups', type: :feature do
     let!(:pub3) { create(:publication, duplicate_group: group) }
     let!(:pub3_import1) { create(:publication_import, publication: pub3) }
 
-    before do
-    end
-
     context 'trying to merge without selecting anything' do
       before do
         visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
@@ -188,7 +185,7 @@ describe 'managing duplicate publication groups', type: :feature do
       end
     end
 
-    context "choosing one publication as the merge target and selecting another 
+    context "choosing one publication as the merge target and selecting another
              publication that's in the same non-duplicate group to merge", js: true do
       let(:ndpg) { create(:non_duplicate_publication_group) }
 
