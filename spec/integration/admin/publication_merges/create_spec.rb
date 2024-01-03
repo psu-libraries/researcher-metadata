@@ -52,12 +52,12 @@ describe 'managing duplicate publication groups', type: :feature do
     let!(:pub3) { create(:publication, duplicate_group: group) }
     let!(:pub3_import1) { create(:publication_import, publication: pub3) }
 
-    before do
-      visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
-      click_on 'Merge Selected'
-    end
-
     context 'trying to merge without selecting anything' do
+      before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        click_on 'Merge Selected'
+      end
+
       it 'redirects back to the group' do
         expect(page).to have_current_path rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id), ignore_query: true
       end
@@ -79,6 +79,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'trying to merge without selecting a merge target' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         check "selected_publication_ids_#{pub1.id}"
         click_on 'Merge Selected'
       end
@@ -104,6 +105,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'trying to merge without selecting any publications' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         click_on 'Merge Selected'
       end
@@ -129,6 +131,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'selecting the same publication as the chosen merge target and merging' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub1.id}"
         click_on 'Merge Selected'
@@ -151,6 +154,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'choosing one publication as the merge target and selecting another publication to merge' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
         click_on 'Merge Selected'
@@ -181,7 +185,8 @@ describe 'managing duplicate publication groups', type: :feature do
       end
     end
 
-    context "choosing one publication as the merge target and selecting another publication that's in the same non-duplicate group to merge" do
+    context "choosing one publication as the merge target and selecting another
+             publication that's in the same non-duplicate group to merge", js: true do
       let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
@@ -192,9 +197,12 @@ describe 'managing duplicate publication groups', type: :feature do
                publication: pub2,
                non_duplicate_group: ndpg)
 
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
-        click_on 'Merge Selected'
+        accept_confirm do
+          click_on 'Merge Selected'
+        end
       end
 
       it 'redirects back to the group and displays modal' do
@@ -243,28 +251,33 @@ describe 'managing duplicate publication groups', type: :feature do
         end
 
         it 'deletes the merged publication' do
+          sleep 0.5
           expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it "reassigns the merged publication's imports" do
+          sleep 0.5
           expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
         end
 
         it "doesn't change the unselected publication" do
+          sleep 0.5
           expect(pub3.reload.imports).to eq [pub3_import1]
         end
 
         it 'leaves the group containing the correct publications' do
+          sleep 0.5
           expect(group.reload.publications).to match_array [pub1, pub3]
         end
 
         it 'deletes the non-duplicate group' do
+          sleep 0.5
           expect { ndpg.reload }.to raise_error ActiveRecord::RecordNotFound
         end
       end
     end
 
-    context 'choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group' do
+    context 'choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group', js: true do
       let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
@@ -275,10 +288,13 @@ describe 'managing duplicate publication groups', type: :feature do
                publication: pub3,
                non_duplicate_group: ndpg)
 
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
         check "selected_publication_ids_#{pub3.id}"
-        click_on 'Merge Selected'
+        accept_confirm do
+          click_on 'Merge Selected'
+        end
       end
 
       describe 'overriding and removing the non duplicate group' do
@@ -295,19 +311,23 @@ describe 'managing duplicate publication groups', type: :feature do
         end
 
         it 'deletes the merged publications' do
+          sleep 0.5
           expect { pub2.reload }.to raise_error ActiveRecord::RecordNotFound
           expect { pub3.reload }.to raise_error ActiveRecord::RecordNotFound
         end
 
         it "reassigns the merged publication's imports" do
+          sleep 0.5
           expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2, pub3_import1]
         end
 
         it 'leaves the group containing the correct publications' do
+          sleep 0.5
           expect(group.reload.publications).to match_array [pub1]
         end
 
         it 'deletes the non-duplicate group' do
+          sleep 0.5
           expect { ndpg.reload }.to raise_error ActiveRecord::RecordNotFound
         end
       end
@@ -315,6 +335,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'choosing one publication as the merge target and selecting both the merge target and another publication to merge' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         choose "merge_target_publication_id_#{pub1.id}"
         check "selected_publication_ids_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
@@ -348,6 +369,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'selecting one publication to ignore' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         check "selected_publication_ids_#{pub1.id}"
         click_on 'Ignore Selected'
       end
@@ -363,6 +385,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
     context 'selecting two publications to ignore' do
       before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
         check "selected_publication_ids_#{pub1.id}"
         check "selected_publication_ids_#{pub2.id}"
         click_on 'Ignore Selected'
