@@ -1,9 +1,6 @@
 require("@nathanvda/cocoon")
 import $ from 'jquery'
 
-import 'webpack-jquery-ui/css'
-import 'webpack-jquery-ui/sortable'
-
 window.jQuery = $;
 window.$ = $;
 
