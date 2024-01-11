@@ -15,7 +15,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('doi-verification-card').to_json).to include('text-muted')
       expect(page.find_by_id('doi-verification-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/doi_verification')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/doi_verification')
     end
   end
 
@@ -27,7 +27,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('doi-verification-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('doi-verification-card').text).to include('1')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/doi_verification')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/doi_verification')
     end
   end
 
@@ -40,7 +40,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('file-version-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('file-version-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/file_version_review')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/file_version_review')
     end
   end
 
@@ -52,7 +52,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('file-version-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('file-version-check-card').text).to include('2')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/file_version_review')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/file_version_review')
     end
   end
 
@@ -79,7 +79,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('wrong-file-version-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('wrong-file-version-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
     end
   end
 
@@ -121,7 +121,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('wrong-file-version-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('wrong-file-version-check-card').text).to include('2')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/wrong_file_version_review')
     end
   end
 
@@ -135,7 +135,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('preferred-file-version-none-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('preferred-file-version-none-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
     end
   end
 
@@ -153,7 +153,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('preferred-file-version-none-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('preferred-file-version-none-check-card').text).to include('1')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/preferred_file_version_none_review')
     end
   end
 
@@ -167,7 +167,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('preferred-version-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('preferred-version-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
     end
   end
 
@@ -185,7 +185,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('preferred-version-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('preferred-version-check-card').text).to include('1')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/preferred_version_review')
     end
   end
 
@@ -197,7 +197,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('permissions-review-card').to_json).to include('text-muted')
       expect(page.find_by_id('permissions-review-card').text).to include('0')
-      expect(rendered_component).not_to have_link(
+      expect(rendered_content).not_to have_link(
         href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_permissions_review_path
       )
     end
@@ -227,7 +227,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('permissions-review-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('permissions-review-card').text).to include('1')
-      expect(rendered_component).to have_link(
+      expect(rendered_content).to have_link(
         href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_permissions_review_path
       )
     end
@@ -241,7 +241,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('metadata-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('metadata-check-card').text).to include('0')
-      expect(rendered_component).not_to have_link(
+      expect(rendered_content).not_to have_link(
         href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_metadata_review_path
       )
     end
@@ -272,7 +272,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('metadata-check-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('metadata-check-card').text).to include('1')
-      expect(rendered_component).to have_link(
+      expect(rendered_content).to have_link(
         href: Rails.application.routes.url_helpers.activity_insight_oa_workflow_metadata_review_path
       )
     end
@@ -286,7 +286,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('all-workflow-publications-card').to_json).not_to include('text-muted')
       expect(page.find_by_id('all-workflow-publications-card').text).to include('2')
-      expect(rendered_component).to have_link(href: '/activity_insight_oa_workflow/all_workflow_publications')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/all_workflow_publications')
     end
   end
 end

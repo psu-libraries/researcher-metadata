@@ -1,3 +1,5 @@
+require('jquery-ui/ui/widgets/sortable')
+
 $(document).ready(function () {
   $('form.visibility-control').each(function () {
     var form = $(this);
