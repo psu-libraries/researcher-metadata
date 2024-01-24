@@ -4149,8 +4149,8 @@ describe Publication, type: :model do
     context "when publication's doi is empty" do
       before { publication.update_column :doi, nil }
 
-      it 'returns false' do
-        expect(publication.can_deposit_to_scholarsphere?).to be false
+      it 'returns true' do
+        expect(publication.can_deposit_to_scholarsphere?).to be true
       end
     end
 

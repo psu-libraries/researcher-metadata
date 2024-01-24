@@ -744,7 +744,6 @@ class Publication < ApplicationRecord
       title.present? &&
       abstract.present? &&
       published_on.present? &&
-      doi.present? &&
       doi == DOISanitizer.new(doi).url &&
       !scholarsphere_upload_pending? &&
       !scholarsphere_upload_failed?
