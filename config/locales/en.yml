@@ -226,6 +226,7 @@ en:
       success: The publication was successfully submitted for deposit to ScholarSphere.  You can view the details of the deposit from the "Scholarsphere work deposits" tab in the RailsAdmin dashboard.
     metadata_curation_list:
       record_not_found: This publication is not ready for metadata review.
+      cannot_be_deposited: This publication cannot be deposited.
 
   helpers:
     submit:
