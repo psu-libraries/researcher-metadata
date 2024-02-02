@@ -63,7 +63,8 @@
             <%= link_to "Deposit to ScholarSphere",
                         activity_insight_oa_workflow_scholarsphere_deposit_path(@publication.id),
                         method: :post,
-                        class: 'btn btn-primary' %>
+                        class: 'btn btn-primary',
+                        data: { disable_with: "Submitting..." } %>
           </div>
         <% elsif @publication.scholarsphere_upload_pending? %>
           <div>
