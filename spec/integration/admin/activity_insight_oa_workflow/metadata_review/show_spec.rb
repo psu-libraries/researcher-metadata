@@ -29,7 +29,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
   context 'when the user is signed in as an admin' do
     before { authenticate_admin_user }
 
-    context 'trying to deposit a publication that is not ready for metadata review' do
+    context 'trying to view the details for a publication that is not ready for metadata review' do
       it 'rescues the ActiveRecord::RecordNotFound error and returns to metadata review list with a flash message' do
         visit activity_insight_oa_workflow_review_publication_metadata_path(pub1)
         expect(page).to have_current_path activity_insight_oa_workflow_metadata_review_path
