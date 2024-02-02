@@ -13,7 +13,7 @@ class ActivityInsightOAWorkflow::MetadataCurationController < ActivityInsightOAW
   end
 
   def create_scholarsphere_deposit
-    publication = Publication.find(params[:publication_id])
+    publication = Publication.ready_for_metadata_review.find(params[:publication_id])
     unless publication.can_deposit_to_scholarsphere?
       flash[:alert] = I18n.t('activity_insight_oa_workflow.metadata_curation_list.cannot_be_deposited')
       return redirect_to activity_insight_oa_workflow_metadata_review_path
@@ -39,6 +39,9 @@ class ActivityInsightOAWorkflow::MetadataCurationController < ActivityInsightOAW
     ScholarsphereUploadJob.perform_later(@deposit.id, activity_insight_oa_file.user.id)
 
     flash[:notice] = I18n.t('activity_insight_oa_workflow.scholarsphere_deposit.success')
+    redirect_to activity_insight_oa_workflow_metadata_review_path
+  rescue ActiveRecord::RecordNotFound
+    flash[:notice] = I18n.t('activity_insight_oa_workflow.metadata_curation_list.record_not_found')
     redirect_to activity_insight_oa_workflow_metadata_review_path
   end
 end
