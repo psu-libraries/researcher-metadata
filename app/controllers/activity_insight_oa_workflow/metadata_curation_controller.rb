@@ -15,7 +15,7 @@ class ActivityInsightOAWorkflow::MetadataCurationController < ActivityInsightOAW
   def create_scholarsphere_deposit
     publication = Publication.find(params[:publication_id])
     unless publication.can_deposit_to_scholarsphere?
-      flash[:warning] = I18n.t('activity_insight_oa_workflow.metadata_curation_list.cannot_be_deposited')
+      flash[:alert] = I18n.t('activity_insight_oa_workflow.metadata_curation_list.cannot_be_deposited')
       return redirect_to activity_insight_oa_workflow_metadata_review_path
     end
     activity_insight_oa_file = publication.ai_file_for_deposit

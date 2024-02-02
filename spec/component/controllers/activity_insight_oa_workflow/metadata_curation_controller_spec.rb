@@ -17,7 +17,7 @@ describe ActivityInsightOAWorkflow::MetadataCurationController, type: :controlle
 
       it 'redirects to metadata review list' do
         post :create_scholarsphere_deposit, params: { publication_id: publication.id }
-        expect(flash[:warning]).to eq 'This publication cannot be deposited.'
+        expect(flash[:alert]).to eq 'This publication cannot be deposited.'
         expect(response.redirect_url).to include activity_insight_oa_workflow_metadata_review_path
       end
     end
