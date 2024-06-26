@@ -23,10 +23,6 @@ azure_ad_oauth:
   oauth_token_url:
   oauth_authorize_url:
 
-datadog:
-  enabled: false
-  env: dev
-
 delayed_job:
   failure_threshold_minutes: 10
   upload_queue: scholarsphere-uploads
