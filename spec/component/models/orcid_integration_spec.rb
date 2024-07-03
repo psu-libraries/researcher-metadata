@@ -53,7 +53,7 @@ describe OrcidAPIClient do
 
     it 'successfully POSTs to ORCID and does not return an error' do
       post = client.post
-      expect(post.response.message).to eq 'Created'
+      expect(post.code).to eq 201 # Created code
       expect(post['location']).to include employment_path
       expect(employment_summary['department-name']).to eq json_resource['department-name']
       expect(employment_summary['role-title']).to eq json_resource['role-title']
