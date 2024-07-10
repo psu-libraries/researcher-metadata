@@ -108,7 +108,7 @@ GEM
       autoprefixer-rails (>= 9.1.0)
       popper_js (>= 1.14.3, < 2)
       sassc-rails (>= 2.0.0)
-    bugsnag (6.24.2)
+    bugsnag (6.27.1)
       concurrent-ruby (~> 1.0)
     builder (3.3.0)
     byebug (11.1.3)
@@ -160,12 +160,6 @@ GEM
       database_cleaner-core (~> 2.0.0)
     database_cleaner-core (2.0.1)
     date (3.3.4)
-    ddtrace (1.4.0)
-      debase-ruby_core_source (= 0.10.16)
-      libdatadog (~> 0.7.0.1.1)
-      libddwaf (~> 1.3.0.2.0)
-      msgpack
-    debase-ruby_core_source (0.10.16)
     deep_merge (1.2.2)
     delayed_job (4.1.11)
       activesupport (>= 3.0, < 8.0)
@@ -271,7 +265,7 @@ GEM
     hashdiff (1.0.1)
     hashery (2.1.2)
     hashie (3.6.0)
-    html_tokenizer (0.0.7)
+    html_tokenizer (0.0.8)
     httparty (0.21.0)
       mini_mime (>= 1.0.0)
       multi_xml (>= 0.5.2)
@@ -310,9 +304,6 @@ GEM
     kaminari-core (1.2.2)
     launchy (2.5.0)
       addressable (~> 2.7)
-    libdatadog (0.7.0.1.1)
-    libddwaf (1.3.0.2.0)
-      ffi (~> 1.0)
     listen (3.7.0)
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
@@ -336,7 +327,6 @@ GEM
     mini_mime (1.1.5)
     mini_portile2 (2.8.7)
     minitest (5.24.1)
-    msgpack (1.5.6)
     multi_json (1.15.0)
     multi_xml (0.6.0)
     multipart-post (2.1.1)
@@ -646,7 +636,7 @@ DEPENDENCIES
   activerecord-import
   bcrypt_pbkdf
   bootstrap (< 5.0)
-  bugsnag
+  bugsnag (~> 6.26)
   byebug
   cancancan (~> 3.3)
   capybara (>= 2.15, < 4.0)
@@ -658,7 +648,6 @@ DEPENDENCIES
   cssbundling-rails
   daemons
   database_cleaner
-  ddtrace (~> 1.4)
   delayed_job_active_record
   delayed_job_web
   devise (~> 4.8)
@@ -669,6 +658,7 @@ DEPENDENCIES
   fieldhand (~> 0.12)
   font-awesome-rails
   foundation-rails
+  html_tokenizer (~> 0.0.8)
   httparty
   jbuilder (~> 2.11)
   jquery-rails

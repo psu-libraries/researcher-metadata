@@ -15,7 +15,7 @@ gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
 gem 'bootstrap', '< 5.0'
-gem 'bugsnag'                           # notify the team of any exceptions
+gem 'bugsnag', '~> 6.26'                # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave', '~> 2.2'             # file uploading
 gem 'cocoon'                            # build nested HTML forms
@@ -23,7 +23,6 @@ gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'config', '~> 4.1'
 gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
-gem 'ddtrace', '~> 1.4'                 # DataDog APM
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
 gem 'devise', '~> 4.8'                  # for authentication and user management
@@ -72,6 +71,7 @@ end
 group :development do
   gem 'bcrypt_pbkdf' # net-ssh requires for ed25519 support
   gem 'ed25519'
+  gem 'html_tokenizer', '~> 0.0.8' # HTML Tokenizer
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
   gem 'spring-commands-rspec'
