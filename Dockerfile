@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 as base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.6-node-16:20241028 AS base
 # Isilon has issues with uid 2000 for some reason
 # change the app to run as 201
 ARG UID=201
@@ -17,7 +17,7 @@ COPY Gemfile Gemfile.lock /app/
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
 
-FROM base as builder 
+FROM base as builder
 SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 COPY vendor/cache vendor/cache
@@ -58,7 +58,7 @@ USER app
 
 CMD ["sleep", "infinity"]
 
-FROM app as production 
+FROM app as production
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=secret\
  bundle exec rails assets:precompile && \
