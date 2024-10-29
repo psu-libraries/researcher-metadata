@@ -46,7 +46,7 @@ jobs:
       - setup_remote_docker:
           docker_layer_caching: false
           # https://circleci.com/docs/building-docker-images/#docker-version docker 23, docker24
-          version: default
+          version: 23
       - checkout
       - docker/check:
           registry: harbor.k8s.libraries.psu.edu
