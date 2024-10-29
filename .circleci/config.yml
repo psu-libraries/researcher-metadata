@@ -90,6 +90,7 @@ jobs:
     # A series of steps to run, some are similar to those in "build".
     steps:
       - run: sudo apt-get update
+      - run: sudo apt-get update && sudo apt-get install -y libffi-dev
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
