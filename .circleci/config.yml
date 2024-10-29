@@ -45,7 +45,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-          version: 20.10.18
+          version: docker24
       - checkout
       - docker/check:
           registry: harbor.k8s.libraries.psu.edu
@@ -116,7 +116,7 @@ jobs:
           command: bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rspec 
+          command: bundle exec rspec
       - run:
           name: Upload Coverage
           when: on_success
