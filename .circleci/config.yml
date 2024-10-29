@@ -45,6 +45,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
+          version: 20.10.24
       - checkout
       - docker/check:
           registry: harbor.k8s.libraries.psu.edu
