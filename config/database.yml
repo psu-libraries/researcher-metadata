@@ -6,11 +6,13 @@ common: &common
   username: <%= ENV.fetch("POSTGRES_USER", Settings.postgres.username ) %>
   password: <%= ENV.fetch("POSTGRES_PASSWORD", Settings.postgres.password) %>
   port: <%= ENV.fetch("POSTGRES_PORT", Settings.postgres.port ) %>
-  host: <%= ENV.fetch("POSTGRES_HOST", Settings.postgres.host ) %>
+  host: <%= ENV.fetch("POSTGRES_HOST", nil) %>
+
 
 development:
   <<: *common
-  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_development
+  # database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_development
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>
 test: &test
   <<: *common
   database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_test
