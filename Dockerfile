@@ -40,7 +40,7 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
 
     # hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends\
-  rsync \
+  rsync locate\
   google-chrome-stable \
   && rm -rf /var/lib/apt/lists/*
 RUN chown -R app:app /app
