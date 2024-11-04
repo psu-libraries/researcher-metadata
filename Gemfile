@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.2'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem 'rails_admin', '~> 3.1'
@@ -31,7 +31,6 @@ gem 'factory_bot_rails'                 # For generating records in test, develo
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
-gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
@@ -49,7 +48,7 @@ gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
-gem 'puma', '~> 5.6'                    # use Puma as the app server
+gem 'puma', '~> 6'                    # use Puma as the app server
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
