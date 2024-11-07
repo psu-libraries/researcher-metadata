@@ -45,7 +45,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-          version: 23
+          version: docker24
       - checkout
       - docker/check:
           registry: harbor.k8s.libraries.psu.edu
@@ -62,7 +62,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/ruby:3.1.4-node
+      - image: cimg/ruby:3.1.2-node
     executor: ruby/default
     steps:
       - checkout
@@ -73,7 +73,7 @@ jobs:
 
   test:
     docker:
-      - image: cimg/ruby:3.1.4-browsers
+      - image: cimg/ruby:3.1.2-browsers
       - image: cimg/postgres:12.7
         environment:
           POSTGRES_USER: psu_research_metadata_test
