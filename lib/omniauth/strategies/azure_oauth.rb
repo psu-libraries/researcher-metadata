@@ -15,6 +15,9 @@ module OmniAuth
              token_url: Settings.azure_ad_oauth.oauth_token_url,
              authorize_url: Settings.azure_ad_oauth.oauth_authorize_url
 
+             def authenticate!
+             end
+
       uid do
         raw_info['upn'].split('@')[0]
       end

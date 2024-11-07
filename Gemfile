@@ -9,8 +9,8 @@ gem 'rails', '~> 7.2'
 gem 'rails_admin', '~> 3.1'
 
 # Support for Penn State Azure Active Directory authentication
-gem 'omniauth', '~> 2.0'
-gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth', '~> 2.1'
+gem 'omniauth-oauth2', '~> 1.8'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
@@ -25,7 +25,7 @@ gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
-gem 'devise', '~> 4.8'                  # for authentication and user management
+gem 'devise', '~> 4.9'                  # for authentication and user management
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
@@ -73,8 +73,6 @@ group :development do
   gem 'html_tokenizer', '~> 0.0.8' # HTML Tokenizer
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'tty-prompt'
   gem 'web-console', '>= 3.3.0'
 end

@@ -10,9 +10,14 @@ Bundler.require(*Rails.groups)
 
 module ResearcherMetadata
   class Application < Rails::Application
-    # Initialize configuration defaults for Rails 6.1 (includes zeitwerk).
-    config.load_defaults 6.1
+    # Initialize configuration defaults for Rails 7.2 (includes zeitwerk).
+    config.load_defaults 7.2
     require 'healthchecks'
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Mail settings
     config.action_mailer.perform_caching = false
