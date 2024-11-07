@@ -10,7 +10,7 @@ common: &common
 
 development:
   <<: *common
-  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_development
+  database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>
 test: &test
   <<: *common
   database: <%= ENV.fetch("POSTGRES_DB", Settings.postgres.database ) %>_test
