@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
-  ruby: circleci/ruby@1.0
+  ruby: circleci/ruby@2.3.0
   node: circleci/node@2
   browser-tools: circleci/browser-tools@1.4.8
 
@@ -45,7 +45,7 @@ jobs:
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
-          version: 20.10.18
+          version: docker24
       - checkout
       - docker/check:
           registry: harbor.k8s.libraries.psu.edu
@@ -116,7 +116,7 @@ jobs:
           command: bundle exec niftany
       - run:
           name: RSpec
-          command: bundle exec rspec 
+          command: bundle exec rspec
       - run:
           name: Upload Coverage
           when: on_success
