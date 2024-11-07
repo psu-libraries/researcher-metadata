@@ -1,0 +1,49 @@
+version: '3.5'
+x-web_env: &web_env
+  environment:
+      BUNDLE_DEFAULT_INSTALL_USES_PATH: vendor/bundle
+      REDIS_PASSWORD: redispassword
+      DEFAULT_URL_HOST: web
+      APP_HOST: web
+      POSTGRES_HOST: db
+      POSTGRES_PASSWORD: rmdrmd
+      POSTGRES_USER: rmd
+      POSTGRES_DB: rmd
+services:
+  web:
+    #user: ${CURRENT_UID}
+    tty: true
+    stdin_open: true
+    <<: *web_env
+    build:
+      context: .
+      target: dev
+    volumes:
+    - bundle-data:/app/vendor/bundle
+    - node-data:/app/node_modules
+    - type: bind
+      source: ./
+      target: /app
+    ports:
+      - "3000:3000"
+  db:
+    environment:
+      POSTGRES_PASSWORD: rmdrmd
+      POSTGRES_USER: rmd
+      POSTGRES_DB: rmd
+    image: postgres:12.7
+    ports:
+    - "5432:5432"
+    volumes:
+    - db-data:/var/lib/postgresql/data
+
+networks:
+  default:
+    driver: bridge
+    driver_opts:
+      com.docker.network.driver.mtu: 1400
+
+volumes:
+  bundle-data:
+  node-data:
+  db-data:
