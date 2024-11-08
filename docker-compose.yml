@@ -11,7 +11,8 @@ x-web_env: &web_env
       POSTGRES_DB: rmd
 services:
   web:
-    #user: ${CURRENT_UID}
+    # Configure in .env
+    user: "${UID}:${GID}"
     tty: true
     stdin_open: true
     <<: *web_env
