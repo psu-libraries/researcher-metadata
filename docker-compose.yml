@@ -11,9 +11,9 @@ x-web_env: &web_env
 services:
   web:
     # Configure in .env
+    user: "${UID}:${GID}"
     depends_on:
       - db
-    user: "${UID}:${GID}"
     tty: true
     stdin_open: true
     <<: *web_env
