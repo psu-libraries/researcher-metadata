@@ -1,6 +1,6 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 AS base
 # Isilon has issues with uid 2000 for some reason
-# change the app to run as 201
+# change the app to run as 201, or as your local user id (1000 - jrp22)
 ARG UID=3000
 
 USER root
@@ -38,7 +38,7 @@ USER root
 RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key add - \
     && echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list
 
-    # hadolint ignore=DL3008
+# hadolint ignore=DL3008
 RUN apt-get update && apt-get install -y --no-install-recommends\
   rsync \
   google-chrome-stable \
@@ -54,9 +54,9 @@ CMD ["/app/bin/start"]
 FROM base AS production
 
 RUN RAILS_ENV=production SECRET_KEY_BASE=secret\
- bundle exec rails assets:precompile && \
- rm -rf /app/.cache/ && \
- rm -rf /app/node_modules/.cache/ && \
- rm -rf /app/tmp/
+  bundle exec rails assets:precompile && \
+  rm -rf /app/.cache/ && \
+  rm -rf /app/node_modules/.cache/ && \
+  rm -rf /app/tmp/
 
 CMD ["/app/bin/start"]
