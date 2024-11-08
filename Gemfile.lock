@@ -1,11 +1,3 @@
-GIT
-  remote: https://github.com/wardencommunity/warden.git
-  revision: 67f5ba6baaa7564ec79afef02cf3a4d0f7d312e5
-  ref: 67f5ba6baaa7564ec79afef02cf3a4d0f7d312e5
-  specs:
-    warden (1.2.9)
-      rack (>= 2.2.3)
-
 GEM
   remote: https://rubygems.org/
   specs:
@@ -611,6 +603,8 @@ GEM
       activesupport (>= 5.2.0, < 8.0)
       concurrent-ruby (~> 1.0)
       method_source (~> 1.0)
+    warden (1.2.9)
+      rack (>= 2.0.9)
     web-console (4.2.0)
       actionview (>= 6.0.0)
       activemodel (>= 6.0.0)
@@ -710,7 +704,6 @@ DEPENDENCIES
   turbolinks (~> 5)
   vcr
   view_component
-  warden!
   web-console (>= 3.3.0)
   webdrivers
   webmock

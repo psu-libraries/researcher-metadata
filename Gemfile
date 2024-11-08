@@ -26,7 +26,6 @@ gem 'daemons'                           # for running delayed_job daemon (or oth
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
 gem 'devise', '~> 4.9'                  # for authentication and user management
-gem 'warden', git: 'https://github.com/wardencommunity/warden.git', ref: '67f5ba6baaa7564ec79afef02cf3a4d0f7d312e5'
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
