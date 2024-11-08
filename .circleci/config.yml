@@ -1,6 +1,6 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@2.8.1
+  docker: circleci/docker@2.2.0
   ruby: circleci/ruby@2.3.0
   node: circleci/node@2
   browser-tools: circleci/browser-tools@1.4.8
