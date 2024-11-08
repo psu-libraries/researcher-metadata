@@ -1,7 +1,7 @@
 FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 AS base
 # Isilon has issues with uid 2000 for some reason
-# change the app to run as 201, or as your local user id (1000 - jrp22)
-ARG UID=3000
+# change the app to run as 201
+ARG UID=201
 
 USER root
 WORKDIR /app
