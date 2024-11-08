@@ -31,7 +31,7 @@ services:
       POSTGRES_PASSWORD: rmdrmd
       POSTGRES_USER: rmd
       POSTGRES_DB: rmd
-    image: postgres:12.7
+    image: postgres:15.8
     ports:
     - "5432:5432"
     volumes:
