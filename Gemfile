@@ -3,7 +3,7 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 7.0.0'
+gem 'rails', '~> 7.2'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
 gem 'rails_admin', '~> 3.1'
@@ -20,12 +20,13 @@ gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave', '~> 2.2'             # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
-gem 'config', '~> 4.1'
+gem 'config', '~> 5.1'
 gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
-gem 'devise', '4.8.1'                  # for authentication and user management
+gem 'devise', '~> 4.9'                  # for authentication and user management
+gem 'warden', git: 'https://github.com/wardencommunity/warden.git', ref: '67f5ba6baaa7564ec79afef02cf3a4d0f7d312e5'
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
