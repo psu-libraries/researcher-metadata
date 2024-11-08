@@ -1,4 +1,3 @@
-version: '3.5'
 x-web_env: &web_env
   environment:
       BUNDLE_DEFAULT_INSTALL_USES_PATH: vendor/bundle
