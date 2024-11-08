@@ -39,8 +39,8 @@ imported from multiple sources.
 
 Below is a list of the data sources along with the types of records that are imported from each:
 
-1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a 
-wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure, 
+1. **Activity Insight** - This is web application/database made by Digital Measures where faculty enter a
+wide variety of data about themselves mainly for the purpose of job/performance review, attaining tenure,
 etc. We use this application's [REST API](https://webservices.digitalmeasures.com/login/service/v4) (API key
 required) for directly importing data. A cron job automatically runs this import in production once per weekday
 beginning at around 10:15 PM, and the import usually takes around 8 hours to finish. We import the
@@ -86,7 +86,7 @@ local MySQL database and export several .csv files which we then import into our
 following types of records from eTD:
     - committee_memberships
     - etds
-    
+
 1. **Penn State News RSS feeds** - The Penn State News website publishes many
 [RSS feeds](https://news.psu.edu/rss-feeds), and we import news story metadata directly from several of
 them whenever a story involves a specific Penn State Faculty member. A cron job automatically runs this
@@ -125,7 +125,7 @@ and before the weekly open access emails go out.  We import the following types 
 
 1. **Unpaywall** - Very similarly to Open Access Button, we import metadata about open access copies of
 publications from Unpaywall's web [API](https://unpaywall.org/products/api). Like the Open Access Button
-import, we search Unpaywall by DOI or title (if the publication has no DOI).  However, this is not 
+import, we search Unpaywall by DOI or title (if the publication has no DOI).  However, this is not
 split into two imports like the Open Access Button import, since the title search for Unpaywall is much
 faster. Much of the data imported from Unpaywall overlaps with data imported from Open Access Button, but each
 source may provide some metadata that is not provided by the other. In general, Unpaywall provides richer
@@ -138,8 +138,8 @@ We import the following types of records from Unpaywall:
     - open_access_locations
 
 1. **Penn State Law School repositories** - We import publication metadata from the repositories maintained
-by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open 
-Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). Dickinson maintains the 
+by the Penn State Law School at University Park and the Dickinson School of Law at Carlisle via the Open
+Archives Initiative Protocol for Metadata Harvesting (OAI-PMH). Dickinson maintains the
 [IDEAS repository](https://ideas.dickinsonlaw.psu.edu/), and Penn State Law maintains the
 [Penn State Law eLibrary](https://elibrary.law.psu.edu/). Part of our reason for importing metadata from
 these sources is to facilitate onboarding the law school faculty into Activity Insight. In the future, we
@@ -152,7 +152,7 @@ repositories:
     - open_access_locations
 
 ### Obtaining New Data
-While much of our data importing is fully automated, some of it involves parsing files that are manually 
+While much of our data importing is fully automated, some of it involves parsing files that are manually
 exported/downloaded from a data source. By convention, we place those files in the `db/data/` directory
 within the application and give them the names that are  defined in `lib/tasks/imports.rake`. This directory
 in the repository is ignored by revision control, and on the application servers it is shared between
@@ -200,11 +200,11 @@ session like so: `mysql.server start --sql-mode=''` To verify no modes were acti
 ``` mysql> SELECT @@sql_mode; ```
 Note: This approach is somewhat heavy-handed, but the results from the `student_submissions` view seem okay. A more precise approach would be to not invoke `ONLY_FULL_GROUP_BY` when starting a new MySQL session and leave all
 the other modes activated.
-    
+
 1. After starting up MySQL with SQL modes turned off, dump the new view of the eTD data to a tab-separated file with `echo 'SELECT submission_id, submission_semester, submission_year, submission_status, submission_acccess_level, submission_title, access_id, first_name, middle_name, last_name, degree_name, submission_public_id FROM metadata_import_view' | mysql -B -u root etdgradrailprod > etds.tsv`,
 substituting your local database name if you called it something different.
 1. Open the TSV file in vim. You'll probably see that the file is littered with `^M` control characters that we
-need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in 
+need to remove. Enter the command `:%s/^M//g` to remove all of them (NOTE: you'll need to literally type ctrl-vm in
 that vim command, not carrot-M). Write the file.
 1. Open the TSV file in Excel or Numbers and export it as a UTF-8 encoded CSV file. Save it in the data import
 directory in this project (`db/data/`) as `etds.csv`.
@@ -284,7 +284,7 @@ imported from Activity Insight) will be deleted. Then when we reimport publicati
 we come to this publication in the source data, we'll find the import record for Activity Insight attached to
 Publication Record 2, and we won't create a new record even though Publication Record 1 has been deleted from RMD.
 
-Occasionally publication records that are not actually duplicates appear similar enough that they are mistakenly 
+Occasionally publication records that are not actually duplicates appear similar enough that they are mistakenly
 grouped as potential duplicates by our duplicate identification process. In this situation, it's possible for admin
 users to select and group publications as a way of indicating that they have been reviewed and have been determined
 to not be duplicates even though they look similar. This will prevent the same publications from automatically being
@@ -293,7 +293,7 @@ grouped as potential duplicates again in the future.
 #### Auto-merging
 The task of manually inspecting possible duplicate publication records and merging them is somewhat tedious. To help
 reduce the amount of labor necessary to curate the publication metadata, we have decided that suspected duplicates can be
-automatically merged under some circumstances. 
+automatically merged under some circumstances.
 
 Often when duplicate groups containing one publication import from
 Pure and one import from another source are merged, the Pure import is the record that is chosen to be kept, and
@@ -307,12 +307,12 @@ matches are actually being merged when they shouldn't be. We deemed the amount o
 to be worth the small amount of data that we'll lose from occasionally merging non-duplicate publications by accident.
 
 If two publications have the same DOI, and are grouped as duplicates, they will likely be merged by an admin.
-To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI 
+To save some manual merging, we've created a process that will merge grouped publications if they have the same DOI
 and some of their metadata either matches exactly or matches very closely.  We also have a process that will make an attempt
 at merging publications that have been grouped, but one or both of the publications do _not_ have a DOI.  The merging criteria
 is more strict in this case, and checks that most of the publication's metadata is matching.  Both of these processes can be
-run at the same time with the rake task, `rake auto_merge:duplicate_pubs_on_matching`.  The logic 
-should be alterred by a programmer if users feel the matching should be less strict.  When merging, this process tries 
+run at the same time with the rake task, `rake auto_merge:duplicate_pubs_on_matching`.  The logic
+should be alterred by a programmer if users feel the matching should be less strict.  When merging, this process tries
 to determine which data is best to keep between the two records.  This is done, in some cases, with somewhat complicated logic.
 
 Both of the above rake tasks are run every Monday at 2:00 AM and 2:30 AM respectively.  They are meant to be run
@@ -331,7 +331,7 @@ data source.
 
 Importing `user` records involves some additional logic since we import user data from two sources (Pure and Activity
 Insight). We take Activity Insight to be the authority on user data when it is present, so an import of a user's data
-from Activity Insight will overwrite existing data for that user that has already been imported from Pure, but not 
+from Activity Insight will overwrite existing data for that user that has already been imported from Pure, but not
 vice versa.
 
 What constitues a "match" for the sake of finding and updating existing records depends on the type of record. For
@@ -339,30 +339,30 @@ example, we uniquely identify users by their Penn State WebAccess ID. For most o
 ID within the data source.
 
 ### Open Access Publication vs. Non-open Access Publications
-All publication types are imported during the publication import from Activity Insight and Pure.  Journal articles, 
-conference proceedings, books, editorials, abstracts, and many others are being imported as publications. An open access 
-publication is defined as any publication that has a publication_type to which Open Access policy applies. Non-open access 
-publications (which are sometimes referred to as "Other Works" in the UI and other_publications in the code) are defined 
+All publication types are imported during the publication import from Activity Insight and Pure.  Journal articles,
+conference proceedings, books, editorials, abstracts, and many others are being imported as publications. An open access
+publication is defined as any publication that has a publication_type to which Open Access policy applies. Non-open access
+publications (which are sometimes referred to as "Other Works" in the UI and other_publications in the code) are defined
 as any publication that does not have a publication_type to which Open Access policy applies.
-Open Access and Non-open Access publications are displayed in separate interfaces of the user profile interface, public 
-profile interface, and profile API endpoint.  All publications are displayed together in the publication API endpoint.  
-Non-open access publications are not included in the open access workflow. However, they can be exported to ORCiD if 
+Open Access and Non-open Access publications are displayed in separate interfaces of the user profile interface, public
+profile interface, and profile API endpoint.  All publications are displayed together in the publication API endpoint.
+Non-open access publications are not included in the open access workflow. However, they can be exported to ORCiD if
 they have a url.  All publications behave the same in the Admin interface.
 
 ### Activity Insight Publication Export
-Admins can export publications to Activity Insight through the "Organizations" resource.  To do this, admins must go to the organizations 
-index page and view the details of a specific organization by clicking the "i" on the right side of the datatable.  Then, view the 
-organization's publications by clicking the "View Publications" link in the details.  Here, admins can filter which publications they 
-would like to export from this screen. Once filtered down to the desired publications, they should click the "Export to Activity Insight" button. 
-This button will take admins to a page that tells them how many publications they are exporting and from which 
+Admins can export publications to Activity Insight through the "Organizations" resource.  To do this, admins must go to the organizations
+index page and view the details of a specific organization by clicking the "i" on the right side of the datatable.  Then, view the
+organization's publications by clicking the "View Publications" link in the details.  Here, admins can filter which publications they
+would like to export from this screen. Once filtered down to the desired publications, they should click the "Export to Activity Insight" button.
+This button will take admins to a page that tells them how many publications they are exporting and from which
 organization. From here, publications can either be exported to Activity Insight's beta environment for testing, or the production environment.
 
-The export job is handled in its own process via delayed_job.  The output from Activity Insight's API is written to 
-`log/ai_publication_export.log` off of the application's root directory.  Depending on how many publications are being exported, 
+The export job is handled in its own process via delayed_job.  The output from Activity Insight's API is written to
+`log/ai_publication_export.log` off of the application's root directory.  Depending on how many publications are being exported,
 the process can take awhile.
 
-Publications exported to Activity Insight store the records' `RMD_ID` in Activity Insight.  To avoid the cyclical nature of exporting and then 
-reimporting the same records, Activity Insight records with an `RMD_ID` are skipped during the RMD's Activity Insight import.  
+Publications exported to Activity Insight store the records' `RMD_ID` in Activity Insight.  To avoid the cyclical nature of exporting and then
+reimporting the same records, Activity Insight records with an `RMD_ID` are skipped during the RMD's Activity Insight import.
 Once a record has been exported to Activity Insight, it is flagged so it cannot be exported again.
 
 ## API
@@ -375,7 +375,7 @@ The RMD API is intended to conform to the Swagger 2.0 specification. As such, we
 - **swagger-ui-dist**: serves up live, interactive API documentation as part of our site. Basically provides a sandbox where users can read about the endpoints and then "try them out". It builds all of this from the API file we build from Rswag.
 
 ### Suggested API Development Workflow
-- Document the new endpoint using the Rswag DSL. Then generate the swagger manifest with `rake rswag:specs:swaggerize`.  Pro tip: Until you get the hang of the DSL, you can use the [interactive swagger editor](https://editor.swagger.io/) for guidance and to check that you have valid Swagger 2.0. Try it out by pasting in the current API file as a starting point: ``` pbcopy < public/api_docs/v1/swagger.yaml ``` 
+- Document the new endpoint using the Rswag DSL. Then generate the swagger manifest with `rake rswag:specs:swaggerize`.  Pro tip: Until you get the hang of the DSL, you can use the [interactive swagger editor](https://editor.swagger.io/) for guidance and to check that you have valid Swagger 2.0. Try it out by pasting in the current API file as a starting point: ``` pbcopy < public/api_docs/v1/swagger.yaml ```
 - Once you've got valid Swagger documentation of the new endpoint, try running rspec on those Rswag test files.  You can add headers, parameters, request bodies, etc. with the Rswag DSL.  Once the proper inputs are set and the swagger definitions match up with what the API is returning, you'll start seeing green tests.
 - In addition to the Rswag specs, we've also been using request specs to "integration" test our endpoints and params. See: ```spec/requests/api/v1/users_spec.rb``` for an example. The Rswag specs are good for ensuring the DSL/documentation jives with the actual enpoints, but the request specs allow us to be more thorough.
 - Once specs are passing it's a good idea to manually test the endpoint using the swagger-ui: ```/api_docs```
@@ -391,13 +391,13 @@ Penn State has a system that allows users to connect their ORCID records to thei
 Accounts. This system uses the usual 3-legged OAuth process to obtain the user's ORCID iD and a
 read/write access token from ORCID. The access token so obtained has permission to read data from the
 user's ORCID record and also to write data to their record via ORCID's API. This access token and ORCID
-iD are stored in a database managed by Penn State central IT. The ORCID iD is then published in the 
+iD are stored in a database managed by Penn State central IT. The ORCID iD is then published in the
 user's Penn State LDAP record.
 
 ### Researcher Metadata Database Integration
 #### Current Workflow
 In our production environment, a job runs hourly that queries Penn State LDAP for each user in our database
-and saves their ORCID iD if it is present in their LDAP record. We then use the presence of the ORCID iD 
+and saves their ORCID iD if it is present in their LDAP record. We then use the presence of the ORCID iD
 that we obtained in this way to determine if the user can connect their Researcher Metadata profile to
 their ORCID record. If we've obtained an ORCID iD from LDAP, then they are able to make this new
 connection.
@@ -419,7 +419,7 @@ for our users and prevent Penn State from needing to pay for an additional ORCID
 will probably add a little complexity in terms of caching access tokens and attempting to retrieve a new
 token if we find the one in our cache to no longer be valid.
 
-The best compromise for now is to only allow users who have linked their ORCID records to their Penn State 
+The best compromise for now is to only allow users who have linked their ORCID records to their Penn State
 Access Accounts to also link them to their Researcher Metadata profile. This ensures that if we are later
 able to use the centralized access tokens, then one of those tokens will exist for every user who has linked
 their ORCID record to their Researcher Metadata profile. It also gives users one more incentive to link their
@@ -445,7 +445,7 @@ Before notifying users in this way, we attempt to obtain as much open access sta
 that we're not bothering people about publications that are already open access. To do this, we use the DOIs that
 we have imported from various sources to query Open Access Button and Unpaywall and attempt to obtain a URL for an existing
 open access version of the work. The task for sending the notifications is `rake email_notifications:send_all_open_access_reminders`.
-As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with 
+As the name indicates, it sends an email to *every* user who meets the criteria for receiving one. The task for sending emails with
 a maximum limit to how many can be sent is `rake email_notifications:send_capped_open_access_reminders[number]`.  This task is run
 weekly on Monday at 3:00 AM.  Ideally, we want to have collected as much publication data throughout the week as possible.  Then,
 before the emails go out, make sure that any new publications have had their open access locations checked with Open Access Button
@@ -465,15 +465,15 @@ longer be notified about the publication.
 
 ### Activity Insight Open Access Post-Print Publication file
 
-While users will not be directed here from our open access reminder emails, users also have the option to upload an open access 
-file to Activity Insight.  These files are imported into RMD during the regular Activity Insight import.  A handful of 
-automated processes are used to help determine if the file and its associated metadata is fit for deposit to ScholarSphere.  
-A workflow interface complements these processes to allow admins to do manual work where automation was not successful.  The 
+While users will not be directed here from our open access reminder emails, users also have the option to upload an open access
+file to Activity Insight.  These files are imported into RMD during the regular Activity Insight import.  A handful of
+automated processes are used to help determine if the file and its associated metadata is fit for deposit to ScholarSphere.
+A workflow interface complements these processes to allow admins to do manual work where automation was not successful.  The
 files are deposited in ScholarSphere at the end of this workflow.
 
 ## ScholarSphere Open Access Deposit Workflow
 
-Users can upload their open access publications within RMD's profile section from the ScholarSphere deposit workflow.  
+Users can upload their open access publications within RMD's profile section from the ScholarSphere deposit workflow.
 There are several steps to this process:
 
 1. The user uploads their files to be sent to ScholarSphere
@@ -485,6 +485,13 @@ There are several steps to this process:
 
 ## Dependencies
 This application requires PostgreSQL for a data store, and it has been tested with PostgreSQL 9.5 and 10.10. Some functionality requires the [pg_trgm module](https://www.postgresql.org/docs/9.6/pgtrgm.html) to be enabled by running `CREATE EXTENSION pg_trgm;` as the PostgreSQL superuser for the application's database.
+
+## Docker Compose Local Setup
+```
+cp .env.example .env
+docker compose build
+docker compose up
+```
 
 ---
 
