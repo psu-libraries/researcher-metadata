@@ -6,6 +6,9 @@ Rails.application.routes.draw do
   mount OkComputer::Engine, at: '/health'
 
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  devise_scope :user do
+    match 'sign_out', to: 'devise/sessions#destroy', via: [:get, :delete], as: :destroy_user_session
+  end
 
   authenticated :user, ->(user) { user.admin? } do
     mount DelayedJobWeb, at: '/delayed_job'

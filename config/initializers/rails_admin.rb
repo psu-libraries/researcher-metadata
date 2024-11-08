@@ -11,10 +11,6 @@ RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::IndexPublicati
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsByOrganization)
 RailsAdmin::Config::Actions.register(RailsAdmin::Config::Actions::ExportPublicationsToActivityInsight)
 
-# If the RailsAdmin configuration is not wrapped in the 'to_prepare' block, the autoloader throws an error.
-# Engines need to be handled a special way, but I'm not too sure what exactly is causing this error.
-# Constants must be getting loaded under the hood somewhere.  This fix may not be ideal, but it works for now.
-# See: https://guides.rubyonrails.org/autoloading_and_reloading_constants.html#autoloading-and-engines
 RailsAdmin.config do |config|
   config.asset_source = :webpack
   config.parent_controller = 'ApplicationController'
