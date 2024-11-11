@@ -2,11 +2,12 @@ FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 AS base
 # Isilon has issues with uid 2000 for some reason
 # change the app to run as 201
 ARG UID=201
+ARG GID=201
 
 USER root
 WORKDIR /app
-RUN groupadd -g $UID app
-RUN useradd -l -u $UID app -g $UID -d /app
+RUN groupadd -g $GID app
+RUN useradd -l -u $UID app -g $GID -d /app
 RUN mkdir /app/tmp && mkdir -p /app/vendor/cache
 RUN chown -R app /app
 
