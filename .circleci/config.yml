@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
   ruby: circleci/ruby@2.3.0
-  node: circleci/node@2
+  node: circleci/node@6.3.0
   browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
@@ -67,9 +67,10 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
+      - node/install:
+          install-yarn: true
+          node-version: '18.20'
+      - run: node --version
 
   test:
     docker:
