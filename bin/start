@@ -6,6 +6,12 @@ if [ -f /vault/secrets/config ]; then
    . /vault/secrets/config
 fi
 
+if [ "${RAILS_ENV:-development}" != "production" ]; then
+   bundle check || bundle
+   echo "Initalizing the database"
+   bundle exec rails db:create db:migrate
+fi
+
 echo "Starting Rails"
 rm -f tmp/pids/server.pid
 
