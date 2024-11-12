@@ -8,6 +8,18 @@ x-web_env: &web_env
       POSTGRES_PASSWORD: rmdrmd
       POSTGRES_USER: rmd
       POSTGRES_DB: rmd
+      SETTINGS__activity_insight__username: ${SETTINGS__activity_insight__username}
+      SETTINGS__activity_insight__password: ${SETTINGS__activity_insight__password}
+      SETTINGS__activity_insight__export_url: ${SETTINGS__activity_insight__export_url}
+      SETTINGS__activity_insight_s3_authorizer__api_key: ${SETTINGS__activity_insight_s3_authorizer__api_ke}
+      SETTINGS__azure_ad_oauth__client_id: ${SETTINGS__azure_ad_oauth__client_id}
+      SETTINGS__azure_ad_oauth__client_secret: ${SETTINGS__azure_ad_oauth__client_secret}
+      SETTINGS__azure_ad_oauth__oauth_app_url: ${SETTINGS__azure_ad_oauth__oauth_app_url}
+      SETTINGS__azure_ad_oauth__oauth_authorize_url: ${SETTINGS__azure_ad_oauth__oauth_authorize_url}
+      SETTINGS__azure_ad_oauth__oauth_token_url: ${SETTINGS__azure_ad_oauth__oauth_token_url}
+      SETTINGS__pure__api_key: ${SETTINGS__pure__api_key}
+      SETTINGS__scholarsphere__client_key: ${SETTINGS__scholarsphere__client_key}
+      SETTINGS__scholarsphere__endpoint: ${SETTINGS__scholarsphere__endpoint}
 services:
   web:
     # Configure in .env
