@@ -67,10 +67,10 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - node/install:
-          install-yarn: true
-          node-version: '18.20'
-      - run: node --version
+      - node/install-packages:
+          node-version: 18
+          pkg-manager: yarn
+          cache-key: "yarn.lock"
 
   test:
     docker:
@@ -95,10 +95,10 @@ jobs:
       - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
-      - node/install:
-          install-yarn: true
-          node-version: '18.20'
-      - run: node --version
+      - node/install-packages:
+          node-version: 18
+          pkg-manager: yarn
+          cache-key: "yarn.lock"
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
