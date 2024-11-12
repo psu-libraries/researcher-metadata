@@ -26,7 +26,7 @@ module ResearcherMetadata
     config.action_mailer.smtp_settings = { address: Settings.action_mailer.smtp_server, port: Settings.action_mailer.smtp_port }
     config.action_mailer.default_url_options = { protocol: Settings.default_url_options.protocol, host: Settings.default_url_options.host }
     config.action_mailer.raise_delivery_errors = Settings.action_mailer.raise_delivery_errors
-    config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
+    config.action_mailer.preview_paths = ["#{Rails.root}/lib/mailer_previews"]
 
     # Ignore bad email addresses and do not raise email delivery errors.
 
