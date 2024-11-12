@@ -95,9 +95,10 @@ jobs:
       - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
+      - node/install:
+          install-yarn: true
+          node-version: '18.20'
+      - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:
