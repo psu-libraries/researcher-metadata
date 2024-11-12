@@ -2,5 +2,5 @@ $fa-font-path: '.';
 @import 'rails_admin/custom/variables';
 @import 'rails_admin/custom/theming';
 @import 'foundation-sites/scss/foundation';
-// Import default styles last so they don't override above
+// Use default styles last so they don't override above
 @import 'rails_admin/src/rails_admin/styles/base';
