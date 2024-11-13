@@ -68,7 +68,6 @@ jobs:
       - checkout
       - ruby/install-deps
       - node/install:
-          install-yarn: true
           node-version: '18'
       - run: node --version
 
@@ -96,7 +95,6 @@ jobs:
       - checkout
       - ruby/install-deps
       - node/install:
-          install-yarn: true
           node-version: '18'
       - run: node --version
       # Here we make sure that the secondary container boots
