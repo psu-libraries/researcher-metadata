@@ -24,7 +24,16 @@ module.exports = {
       // Add CSS/SASS/SCSS rule with loaders
       {
         test: /\.(?:sa|sc|c)ss$/i,
-        use: [MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader'],
+        use: [
+          MiniCssExtractPlugin.loader,
+          'css-loader',
+          {
+            loader: 'sass-loader',
+            options: {
+              implementation: require('sass'),
+            },
+          },
+        ],
       },
     ],
   },
