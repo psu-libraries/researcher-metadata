@@ -1,3 +1,11 @@
+GIT
+  remote: https://github.com/puma/puma.git
+  revision: fba741b91780224a1db1c456645335b2dd7f27dd
+  branch: master
+  specs:
+    puma (6.4.3)
+      nio4r (~> 2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -59,8 +67,8 @@ GEM
       activemodel (= 7.2.2)
       activesupport (= 7.2.2)
       timeout (>= 0.4.0)
-    activerecord-import (1.2.0)
-      activerecord (>= 3.2)
+    activerecord-import (1.8.1)
+      activerecord (>= 4.2)
     activestorage (7.2.2)
       actionpack (= 7.2.2)
       activejob (= 7.2.2)
@@ -172,8 +180,8 @@ GEM
     database_cleaner-core (2.0.1)
     date (3.4.0)
     deep_merge (1.2.2)
-    delayed_job (4.1.11)
-      activesupport (>= 3.0, < 8.0)
+    delayed_job (4.1.13)
+      activesupport (>= 3.0, < 9.0)
     delayed_job_active_record (4.1.7)
       activerecord (>= 3.0, < 8.0)
       delayed_job (>= 3.0, < 5)
@@ -317,7 +325,7 @@ GEM
     multi_xml (0.7.1)
       bigdecimal (~> 3.1)
     multipart-post (2.4.1)
-    mustermann (3.0.0)
+    mustermann (3.0.3)
       ruby2_keywords (~> 0.0.1)
     nested_form (0.3.2)
     net-imap (0.5.0)
@@ -389,12 +397,11 @@ GEM
     psych (5.2.0)
       stringio
     public_suffix (6.0.1)
-    puma (6.4.3)
-      nio4r (~> 2.0)
     racc (1.8.1)
     rack (2.2.10)
-    rack-protection (3.0.5)
-      rack
+    rack-protection (3.2.0)
+      base64 (>= 0.1.0)
+      rack (~> 2.2, >= 2.2.4)
     rack-session (1.0.2)
       rack (< 3)
     rack-test (2.1.0)
@@ -548,10 +555,10 @@ GEM
       json (>= 1.8, < 3)
       simplecov-html (~> 0.10.0)
     simplecov-html (0.10.2)
-    sinatra (3.0.5)
+    sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
-      rack-protection (= 3.0.5)
+      rack-protection (= 3.2.0)
       tilt (~> 2.0)
     smart_properties (1.17.0)
     smarter_csv (1.2.8)
@@ -573,7 +580,7 @@ GEM
     terser (1.1.16)
       execjs (>= 0.3.0, < 3)
     thor (1.3.2)
-    tilt (2.0.11)
+    tilt (2.4.0)
     timeout (0.4.2)
     ttfunk (1.7.0)
     tty-color (0.6.0)
@@ -681,7 +688,7 @@ DEPENDENCIES
   progressbar
   pry-byebug
   psu_identity (~> 0.2)
-  puma (~> 6)
+  puma!
   rails (~> 7.2)
   rails-controller-testing
   rails_admin (~> 3.1)
