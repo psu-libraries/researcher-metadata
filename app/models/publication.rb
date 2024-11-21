@@ -446,7 +446,7 @@ class Publication < ApplicationRecord
       field(:open_access_locations) do
         pretty_value do
           bindings[:view].render(
-            partial: 'rails_admin/partials/publications/open_access_locations.html.erb',
+            partial: 'rails_admin/partials/publications/open_access_locations',
             locals: { open_access_locations: PreferredOpenAccessPolicy.new(value).rank_all }
           )
         end

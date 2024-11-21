@@ -162,7 +162,7 @@ class DuplicatePublicationGroup < ApplicationRecord
   rails_admin do
     configure :publications do
       pretty_value do
-        bindings[:view].render partial: 'rails_admin/partials/duplicate_publication_groups/publications.html.erb', locals: { publications: value }
+        bindings[:view].render partial: 'rails_admin/partials/duplicate_publication_groups/publications', locals: { publications: value }
       end
     end
 
