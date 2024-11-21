@@ -6,11 +6,12 @@ describe OmniAuth::Strategies::AzureOauth do
   let(:app) { double 'rack app' }
   let(:strategy) { described_class.new(app) }
   let(:client) { double 'oauth2 client' }
-  let(:access_token) { { 'id_token' => "prefix.#{Base64.encode64(auth_hash.to_json)}" } }
+  let(:token_hash) { { 'access_token' => 'xyz987', 
+                         'id_token' => "prefix.#{Base64.encode64(auth_hash.to_json)}" } }
   let(:auth_hash) { { upn: 'abc123@psu.edu' } }
 
   before do
-    strategy.access_token = OAuth2::AccessToken.from_hash(client, access_token)
+    strategy.access_token = OAuth2::AccessToken.from_hash(client, token_hash)
   end
 
   describe '.default_params' do

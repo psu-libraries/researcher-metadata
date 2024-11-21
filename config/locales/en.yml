@@ -131,6 +131,7 @@ en:
         success: "Thank you for taking the time to submit your open access URL. It was successfully saved."
       create_scholarsphere_deposit:
         success: "Thank you for taking the time to submit your publication for deposit in ScholarSphere. Your submission has been received, and you should receive an email shortly about the status of your deposit."
+        fail: "There was an error submitting your publication for deposit in ScholarSphere. Please try again later, and contact support if the problem continues."
     external_publication_waivers:
       create:
         success: "Your waiver has been successfully submitted."
