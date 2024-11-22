@@ -27,8 +27,10 @@ RUN yarn --frozen-lockfile && \
   rm -rf /app/tmp
 
 COPY --chown=app . /app
-RUN rm -rf /app/vendor/cache && \
-  rm -rf /app/.bundle/cache
+# Only remove .gem files 
+# Gems pulled directly from Github (not .gem files) should stay
+RUN rm -rf /app/vendor/cache/*.gem && \
+  rm -rf /app/.bundle/cache/*.gem
 
 CMD ["/app/bin/start"]
 
