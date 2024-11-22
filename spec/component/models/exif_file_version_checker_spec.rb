@@ -8,9 +8,10 @@ describe ExifFileVersionChecker do
   let(:file) { double 'file', path: 'the/file/path' }
   let(:journal) { nil }
   let(:exif_data) { nil }
+  let(:exif_tool) { double 'ExifTool', to_hash: exif_data }
 
   before {
-    allow(exif_file_version).to receive(:exif).and_return(exif_data)
+    allow(Exiftool).to receive(:new).and_return(exif_tool)
   }
 
   describe '#version' do
