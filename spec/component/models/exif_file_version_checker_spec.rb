@@ -10,7 +10,7 @@ describe ExifFileVersionChecker do
   let(:exif_data) { nil }
 
   before {
-    exif_file_version.stub(:exif) { exif_data }
+    allow(exif_file_version).to receive(:exif).and_return(exif_data)
   }
 
   describe '#version' do
