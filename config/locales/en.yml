@@ -96,6 +96,7 @@ en:
         params_missing_url: "The open access location url is missing."
         params_missing_id: "You must provide either a doi or an activity insight id."
         params_both_ids: "You must provide either a doi or an activity insight id, not both."
+        unauthorized: "You are not authorized to update this publication."
   deputy_assignments:
     index:
       deputies_heading: Your Proxies
