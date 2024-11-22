@@ -198,7 +198,7 @@ GEM
       responders
       warden (~> 1.2.3)
     diff-lcs (1.5.1)
-    docile (1.4.0)
+    docile (1.4.1)
     drb (2.2.1)
     ed25519 (1.2.4)
     erb_lint (0.0.37)
@@ -552,11 +552,12 @@ GEM
     simple_form (5.1.0)
       actionpack (>= 5.2)
       activemodel (>= 5.2)
-    simplecov (0.17.1)
+    simplecov (0.22.0)
       docile (~> 1.1)
-      json (>= 1.8, < 3)
-      simplecov-html (~> 0.10.0)
-    simplecov-html (0.10.2)
+      simplecov-html (~> 0.11)
+      simplecov_json_formatter (~> 0.1)
+    simplecov-html (0.13.1)
+    simplecov_json_formatter (0.1.4)
     sinatra (3.2.0)
       mustermann (~> 3.0)
       rack (~> 2.2, >= 2.2.4)
@@ -702,7 +703,7 @@ DEPENDENCIES
   selenium-webdriver
   shoulda-matchers (~> 5.0)
   simple_form
-  simplecov (< 0.18)
+  simplecov (~> 0.18)
   smarter_csv
   spring
   string-similarity
