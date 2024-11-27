@@ -35,7 +35,7 @@
             <% if current_user %>
               <%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %>
             <% else %>
-              <%= button_to "Sign in", user_azure_oauth_omniauth_authorize_path, class: "nav-link" %>
+              <%= button_to "Sign in", user_azure_oauth_omniauth_authorize_path, class: "btn nav-link" %>
             <% end %>
           </li>
         </ul>
