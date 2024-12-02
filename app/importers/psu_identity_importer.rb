@@ -19,7 +19,7 @@ class PSUIdentityImporter
   private
 
     def progress_bar
-      @progress_bar ||= ProgressBarTTY.create(title: 'Importing data from Penn State Identity API', total: User.count)
+      @progress_bar ||= Utilities::ProgressBarTTY.create(title: 'Importing data from Penn State Identity API', total: User.count)
     end
 
     def log_error(error, user = nil)

@@ -4,7 +4,7 @@ class ActivityInsightImporter
   IMPORT_SOURCE = 'Activity Insight'
 
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing Activity Insight Data', total: ai_users.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Activity Insight Data', total: ai_users.count)
 
     ai_users.each do |aiu|
       pbar.increment

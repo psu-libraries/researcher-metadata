@@ -2,7 +2,7 @@
 
 class PureOrganizationsImporter < PureImporter
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Pure organisational-units (organizations)', total: total_pages)
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)
@@ -30,7 +30,7 @@ class PureOrganizationsImporter < PureImporter
     end
     pbar.finish
 
-    pbar = ProgressBarTTY.create(title: 'Importing Pure organization relationships', total: total_pages)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Pure organization relationships', total: total_pages)
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size
       organizations = get_records(type: record_type, page_size: page_size, offset: offset)

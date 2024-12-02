@@ -2,7 +2,7 @@
 
 class PurePublicationTagImporter < PureImporter
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing Pure publication tags', total: total_pages)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Pure publication tags', total: total_pages)
 
     1.upto(total_pages) do |i|
       offset = (i - 1) * page_size

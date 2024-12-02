@@ -4,7 +4,7 @@ class PurePublicationImporter < PureImporter
   IMPORT_SOURCE = 'Pure'
 
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing Pure research-outputs (publications)', total: total_pages)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Pure research-outputs (publications)', total: total_pages)
 
     1.upto(total_pages) do |page|
       offset = (page - 1) * page_size

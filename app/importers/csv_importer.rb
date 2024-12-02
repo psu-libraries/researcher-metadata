@@ -17,7 +17,7 @@ class CSVImporter
   end
 
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing CSV', total: line_count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing CSV', total: line_count)
     chunk_number = 0
     SmarterCSV.process(filename, chunk_size: batch_size, headers_in_file: true, file_encoding: encoding) do |chunk|
       objects = []
