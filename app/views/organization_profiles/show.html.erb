@@ -15,6 +15,13 @@
 <div id="organization-profile">
   <div class="grid-container grid-org-pubs">
     <h3><%= @organization.name %></h3>
+    <div>
+      <p>This is a list of the Researcher Publications from the <%= @organization.name %> and is sorted by publication date.
+      This list is created by the <a class="link" href="https://metadata.libraries.psu.edu/">Researcher Metadata Database</a>
+      in the University Libraries. Please contact <a class="link" href="mailto:L-FAMS@lists.psu.edu">L-FAMS@lists.psu.edu</a>
+       with any updates or corrections.</p>
+    </div>
+    <br>
     <div class="grid-x grid-margin-x">
       <div class="large-12 cell">
         <% @publications.each do |pub| %>
