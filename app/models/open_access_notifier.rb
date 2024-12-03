@@ -40,7 +40,7 @@ class OpenAccessNotifier
             p.authorships.find_by(user: user).record_open_access_notification
           end
         end
-      rescue Net::SMTPFatalError => e
+      rescue Net::SMTPFatalError, Net::ReadTimeout => e
         EmailError.create!(message: e.message, user: user)
       end
     end

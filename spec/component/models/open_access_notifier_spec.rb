@@ -12,38 +12,56 @@ describe OpenAccessNotifier do
                        old_potential_open_access_publications: pubs3,
                        new_potential_open_access_publications: pubs4,
                        record_open_access_notification: nil }
-  let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2] }
+  let(:user3) { double 'user 3',
+                       old_potential_open_access_publications: pubs5,
+                       new_potential_open_access_publications: pubs6,
+                       record_open_access_notification: nil }
+  let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2, user3] }
   let(:pubs1) { [pub1] }
   let(:pubs2) { [pub2] }
   let(:pubs3) { [pub3] }
   let(:pubs4) { [pub4] }
+  let(:pubs5) { [pub5] }
+  let(:pubs6) { [pub6] }
   let(:profile1) { double 'user profile 1', active?: true }
   let(:profile2) { double 'user profile 2', active?: true }
+  let(:profile3) { double 'user profile 3', active?: true }
   let(:email1) { double 'email 1', deliver_now: nil }
   let(:email2) { double 'email 2', deliver_now: nil }
+  let(:email3) { double 'email 3', deliver_now: nil }
   let(:pub1) { double 'publication 1', authorships: pub1_auths }
   let(:pub2) { double 'publication 2', authorships: pub2_auths }
   let(:pub3) { double 'publication 3', authorships: pub3_auths }
   let(:pub4) { double 'publication 4', authorships: pub4_auths }
+  let(:pub5) { double 'publication 5', authorships: pub5_auths }
+  let(:pub6) { double 'publication 6', authorships: pub6_auths }
   let(:pub1_auths) { double 'auth set 1' }
   let(:pub2_auths) { double 'auth set 2' }
   let(:pub3_auths) { double 'auth set 3' }
   let(:pub4_auths) { double 'auth set 4' }
+  let(:pub5_auths) { double 'auth set 5' }
+  let(:pub6_auths) { double 'auth set 6' }
   let(:auth1) { double 'authorship 1', record_open_access_notification: nil }
   let(:auth2) { double 'authorship 2', record_open_access_notification: nil }
   let(:auth3) { double 'authorship 3', record_open_access_notification: nil }
   let(:auth4) { double 'authorship 4', record_open_access_notification: nil }
+  let(:auth5) { double 'authorship 5', record_open_access_notification: nil }
+  let(:auth6) { double 'authorship 6', record_open_access_notification: nil }
 
   describe '#send_notifications' do
     before do
       allow(UserProfile).to receive(:new).with(user1).and_return profile1
       allow(UserProfile).to receive(:new).with(user2).and_return profile2
+      allow(UserProfile).to receive(:new).with(user3).and_return profile3
       allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_return email1
       allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, pubs3, pubs4).and_return email2
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, pubs5, pubs6).and_return email3
       allow(pub1_auths).to receive(:find_by).with(user: user1).and_return auth1
       allow(pub2_auths).to receive(:find_by).with(user: user1).and_return auth2
       allow(pub3_auths).to receive(:find_by).with(user: user2).and_return auth3
       allow(pub4_auths).to receive(:find_by).with(user: user2).and_return auth4
+      allow(pub5_auths).to receive(:find_by).with(user: user3).and_return auth5
+      allow(pub6_auths).to receive(:find_by).with(user: user3).and_return auth6
       allow(EmailError).to receive(:create!)
     end
 
@@ -71,7 +89,10 @@ describe OpenAccessNotifier do
     end
 
     context 'when an error is raised while sending an email' do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The error message' }
+      before do
+        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The SMTPFatalError message'
+        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, pubs5, pubs6).and_raise Net::ReadTimeout, 'The ReadTimeout message'
+      end
 
       it "sends emails that don't raise errors" do
         expect(email1).not_to receive(:deliver_now)
@@ -97,7 +118,8 @@ describe OpenAccessNotifier do
       end
 
       it 'records the error' do
-        expect(EmailError).to receive(:create!).with(message: 'The error message', user: user1)
+        expect(EmailError).to receive(:create!).with(message: 'The SMTPFatalError message', user: user1)
+        expect(EmailError).to receive(:create!).with(message: 'Net::ReadTimeout with "The ReadTimeout message"', user: user3)
 
         notifier.send_notifications
       end
