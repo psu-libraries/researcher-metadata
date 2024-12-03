@@ -10,9 +10,11 @@ Bundler.require(*Rails.groups)
 
 module ResearcherMetadata
   class Application < Rails::Application
-    # Initialize configuration defaults for Rails 6.1 (includes zeitwerk).
-    config.load_defaults 6.1
+    # Initialize configuration defaults for Rails 7.2 (includes zeitwerk).
+    config.load_defaults 7.2
     require 'healthchecks'
+
+    config.autoload_paths << Rails.root.join('lib')
 
     # Mail settings
     config.action_mailer.perform_caching = false
@@ -21,7 +23,7 @@ module ResearcherMetadata
     config.action_mailer.smtp_settings = { address: Settings.action_mailer.smtp_server, port: Settings.action_mailer.smtp_port }
     config.action_mailer.default_url_options = { protocol: Settings.default_url_options.protocol, host: Settings.default_url_options.host }
     config.action_mailer.raise_delivery_errors = Settings.action_mailer.raise_delivery_errors
-    config.action_mailer.preview_path = "#{Rails.root}/lib/mailer_previews"
+    config.action_mailer.preview_paths = ["#{Rails.root}/lib/mailer_previews"]
 
     # Ignore bad email addresses and do not raise email delivery errors.
 

@@ -597,13 +597,15 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
     context 'when requesting a publication that does not belong to the user' do
       it 'returns 404' do
-        expect { visit edit_open_access_publication_path(other_pub) }.to raise_error ActiveRecord::RecordNotFound
+        visit edit_open_access_publication_path(other_pub)
+        expect(page.status_code).to eq 404
       end
     end
 
     context 'when requesting a publication that is not a journal article' do
       it 'returns 404' do
-        expect { visit edit_open_access_publication_path(non_article_pub) }.to raise_error ActiveRecord::RecordNotFound
+        visit edit_open_access_publication_path(non_article_pub)
+        expect(page.status_code).to eq 404
       end
     end
   end

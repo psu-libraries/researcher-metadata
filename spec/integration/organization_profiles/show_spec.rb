@@ -20,8 +20,9 @@ describe 'Organization Profile page', type: :feature do
   end
 
   context 'when the organization does not exist' do
-    it 'raises an ActiveRecord::RecordNotFound error' do
-      expect { visit organization_profile_path(org.id + 1) }.to raise_error ActiveRecord::RecordNotFound
+    it 'returns 404' do
+      visit organization_profile_path(org.id + 1)
+      expect(page.status_code).to eq 404
     end
   end
 

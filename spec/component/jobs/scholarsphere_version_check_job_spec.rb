@@ -5,7 +5,7 @@ require 'component/component_spec_helper'
 describe ScholarsphereVersionCheckJob, type: :job do
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
-    let(:args) { { file_path: [], publication: [] } }
+    let(:args) { { file_path: [], publication_id: [] } }
 
     it 'enqueues a job' do
       expect { described_class.perform_later(args) }.to have_enqueued_job.with(args).on_queue('scholarsphere-pdf-file-version')

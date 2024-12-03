@@ -22,11 +22,15 @@
           <%= author.webaccess_id %>
         </td>
         <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
-          <%= button_to "Send Batch Email", activity_insight_oa_workflow_preferred_file_version_none_email_path, params: {publications: publications} %>
+          <%= button_to "Send Batch Email", activity_insight_oa_workflow_preferred_file_version_none_email_path,
+                                            params: {publications: publications},
+                                            class: 'btn btn-secondary' %>
         </td>
       <% publications.each do |p| %>
         <td rowspan="<%= p.activity_insight_oa_files.count %>">
-          <%= button_to "Send Email", activity_insight_oa_workflow_preferred_file_version_none_email_path, params: {publications: p} %>
+          <%= button_to "Send Email", activity_insight_oa_workflow_preferred_file_version_none_email_path,
+                                      params: {publications: p},
+                                      class: 'btn btn-secondary' %>
         </td>
         <td rowspan="<%= p.activity_insight_oa_files.count %>">
           <%= link_to p.title.truncate(45),

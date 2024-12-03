@@ -4,7 +4,7 @@ class OAIImporter
   def call
     puts "Loading publication records from #{repo_url} ..." unless Rails.env.test?
     load_records
-    pbar = ProgressBarTTY.create(title: 'Importing publications', total: repo_records.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publications', total: repo_records.count)
 
     repo_records.each do |rr|
       pbar.increment

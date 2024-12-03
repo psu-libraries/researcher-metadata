@@ -2,7 +2,7 @@
 
 class LDAPImporter
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing user data from LDAP', total: User.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing user data from LDAP', total: User.count)
     ldap.open do
       User.find_each do |u|
         filter = Net::LDAP::Filter.eq('uid', u.webaccess_id)

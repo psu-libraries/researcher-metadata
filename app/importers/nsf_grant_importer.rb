@@ -12,7 +12,7 @@ class NSFGrantImporter
 
     import_dirs.each do |d|
       import_files = Dir.children(dirname.join(d)).select { |f| File.extname(f) == '.xml' }
-      pbar = ProgressBarTTY.create(title: "Importing NSF Grant Data for #{d}", total: import_files.count)
+      pbar = Utilities::ProgressBarTTY.create(title: "Importing NSF Grant Data for #{d}", total: import_files.count)
       import_files.each do |file|
         nsf_grant = NSFGrant.new(File.open(dirname.join(d).join(file)) { |f| Nokogiri::XML(f) })
 

@@ -13,8 +13,8 @@ class UnpaywallPublicationImporter
   end
 
   def import_new
-    pbar = ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
-                                 total: new_pubs.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publication data from Unpaywall',
+                                            total: new_pubs.count)
 
     new_pubs.find_each do |p|
       import_from_unpaywall(p)

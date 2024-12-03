@@ -3,16 +3,10 @@
 require 'component/component_spec_helper'
 
 RSpec.describe NullObjectPattern do
-  subject { NullTest.new }
-
-  before(:all) do
-    class NullTest
+  subject do
+    Class.new do
       include NullObjectPattern
-    end
-  end
-
-  after(:all) do
-    ActiveSupport::Dependencies.remove_constant('NullTest')
+    end.new
   end
 
   it { is_expected.to be_nil }

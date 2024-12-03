@@ -39,7 +39,7 @@ describe ActivityInsightPublicationExporter do
   describe '#to_xml' do
     it 'generates xml' do
       exporter_object = exporter.new([], 'beta')
-      expect(exporter_object.send(:to_xml, publication1)).to eq fixture('activity_insight_publication_export.xml').read
+      expect(exporter_object.send(:to_xml, publication1)).to eq fixture_file_open('activity_insight_publication_export.xml').read
     end
   end
 

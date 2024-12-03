@@ -34,7 +34,7 @@ class ContributorName < ApplicationRecord
 
     def at_least_one_name_present
       unless first_name.present? || middle_name.present? || last_name.present?
-        errors[:base] << 'At least one name must be present.'
+        errors.add(:base, 'At least one name must be present.')
       end
     end
 end

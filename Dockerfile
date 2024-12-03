@@ -1,4 +1,4 @@
-FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-16:20240701 AS base
+FROM harbor.k8s.libraries.psu.edu/library/ruby-3.1.2-node-18:20240827 as base
 # Isilon has issues with uid 2000 for some reason
 # change the app to run as 201
 ARG UID=201
@@ -27,8 +27,10 @@ RUN yarn --frozen-lockfile && \
   rm -rf /app/tmp
 
 COPY --chown=app . /app
-RUN rm -rf /app/vendor/cache && \
-  rm -rf /app/.bundle/cache
+# Only remove .gem files 
+# Gems pulled directly from Github (not .gem files) should stay
+RUN rm -rf /app/vendor/cache/*.gem && \
+  rm -rf /app/.bundle/cache/*.gem
 
 CMD ["/app/bin/start"]
 

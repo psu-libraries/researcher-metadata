@@ -21,7 +21,7 @@ end
 describe CSVImporter do
   subject(:importer) { SpecifiedImporter.new filename: filename }
 
-  let(:filename) { fixture('dummy-publications-10.csv') }
+  let(:filename) { fixture_path('dummy-publications-10.csv') }
 
   it { is_expected.to have_attr_accessor :filename }
   it { is_expected.to have_attr_accessor :fatal_errors }
@@ -38,7 +38,7 @@ describe CSVImporter do
     end
 
     context 'for an empty file' do
-      let(:empty_file) { fixture('error_unreadable') }
+      let(:empty_file) { fixture_path('error_unreadable') }
       let(:csv_importer) { described_class.new(filename: empty_file) }
       let(:called_importer) { csv_importer.call }
 
@@ -59,7 +59,7 @@ describe CSVImporter do
     end
 
     context 'for a file with one line' do
-      let(:file_with_no_records) { fixture('file_with_no_records.csv') }
+      let(:file_with_no_records) { fixture_path('file_with_no_records.csv') }
       let(:csv_importer) { described_class.new(filename: file_with_no_records) }
       let(:called_importer) { csv_importer.call }
 
