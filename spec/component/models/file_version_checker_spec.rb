@@ -34,6 +34,15 @@ describe FileVersionChecker do
       end
     end
 
+    context 'when the file was created from LaTex' do
+      # The test_file filename contains an arXiv watermark signal
+      let(:test_file) { 'pdf_tex_version.pdf' }
+
+      it 'returns accepted version' do
+        expect(pdf_file_version.version).to eq I18n.t('file_versions.accepted_version')
+      end
+    end
+
     context 'when published version' do
       # The test_file filename contains an publishedVersion signal
       let(:test_file) { 'pdf_check_published_versionS123456abc.pdf' }
@@ -98,5 +107,8 @@ describe FileVersionChecker do
         expect(PDF::Reader).not_to have_received(:new)
       end
     end
+
+
+
   end
 end

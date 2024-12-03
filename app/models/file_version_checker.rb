@@ -7,8 +7,8 @@ class FileVersionChecker
     @file_path = file_path
     @filename = File.basename(file_path)
     @publication = publication
-    @content = process_content
     @score = 0
+    @content = process_content
     calculate_score
   end
 
@@ -35,8 +35,11 @@ class FileVersionChecker
 
       begin
         reader = PDF::Reader.new(file_path)
+        if created_by_latex?(reader)
+          @score = -9999
+          return ''
+        end
         words = []
-
         reader.pages.each do |page|
           break if words.count >= 500
 
@@ -128,5 +131,11 @@ class FileVersionChecker
         doi: publication.doi,
         publisher: publication.preferred_publisher_name
       }
+    end
+
+    def created_by_latex?(reader)
+      if reader != nil
+        reader.info[:Creator].downcase.include?("latex with hyperref")
+      end
     end
 end
