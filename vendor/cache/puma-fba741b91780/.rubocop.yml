@@ -1,0 +1,84 @@
+require:
+  - rubocop-performance
+
+AllCops:
+  DisabledByDefault: true
+  TargetRubyVersion: 2.4
+  DisplayCopNames: true
+  StyleGuideCopsOnly: false
+  Exclude:
+    - 'tmp/**/*'
+    - '**/vendor/bundle/**/*'
+    - 'examples/**/*'
+    - 'pkg/**/*'
+    - 'Rakefile'
+  SuggestExtensions: false
+  NewCops: enable
+
+# enable all Performance cops
+Performance:
+  Enabled: true
+
+# ————————————————————————————————————————— disabled cops
+
+# ————————————————————————————————————————— enabled cops
+Layout/AccessModifierIndentation:
+  EnforcedStyle: indent
+
+Layout/IndentationStyle:
+  Enabled: true
+
+Layout/SpaceAfterColon:
+  Enabled: true
+
+Layout/SpaceAroundKeyword:
+  Enabled: true
+
+Layout/SpaceBeforeBlockBraces:
+  EnforcedStyleForEmptyBraces: no_space
+  Enabled: true
+
+Layout/SpaceBeforeFirstArg:
+  Enabled: true
+
+Layout/SpaceInsideParens:
+  Enabled: true
+
+Layout/TrailingEmptyLines:
+  Enabled: true
+
+Layout/TrailingWhitespace:
+  Enabled: true
+
+Lint/Debugger:
+  Enabled: true
+
+Metrics/ParameterLists:
+  Max: 7
+
+Naming/ConstantName:
+  Enabled: true
+
+Naming/MethodName:
+  Enabled: true
+  EnforcedStyle: snake_case
+  Exclude:
+    - 'test/**/**'
+
+Naming/VariableName:
+  Enabled: true
+
+Style/MethodDefParentheses:
+  Enabled: true
+
+Style/SafeNavigation:
+  Enabled: true
+
+Style/TernaryParentheses:
+  Enabled: true
+
+Style/TrailingCommaInArguments:
+  Enabled: true
+
+Style/WhileUntilModifier:
+  Enabled: true

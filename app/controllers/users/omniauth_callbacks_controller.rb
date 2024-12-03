@@ -10,7 +10,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   rescue User::OmniauthError
     if session['user_return_to'] == Rails.application.routes.url_helpers.new_external_publication_waiver_path ||
         session['user_return_to'] == Rails.application.routes.url_helpers.profile_bio_path
-      redirect_to 'https://sites.psu.edu/openaccess/waiver-form/'
+      redirect_to 'https://sites.psu.edu/openaccess/waiver-form/', allow_other_host: true
     else
       redirect_to root_path, alert: t('omniauth.user_not_found')
     end

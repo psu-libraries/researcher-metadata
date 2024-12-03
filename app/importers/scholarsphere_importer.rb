@@ -2,7 +2,7 @@
 
 class ScholarsphereImporter
   def call
-    pbar = ProgressBarTTY.create(title: 'Importing ScholarSphere publication URLs', total: ss_dois.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing ScholarSphere publication URLs', total: ss_dois.count)
     ss_dois.each do |k, v|
       doi_url = k.gsub('doi:', 'https://doi.org/')
       matching_pubs = Publication.where('lower(doi) = ?', doi_url.downcase)

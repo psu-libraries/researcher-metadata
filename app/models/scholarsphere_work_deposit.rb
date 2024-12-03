@@ -112,7 +112,7 @@ class ScholarsphereWorkDeposit < ApplicationRecord
 
     def at_least_one_file_upload
       if file_uploads.blank? && status == 'Pending'
-        errors[:base] << I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence')
+        errors.add(:base, I18n.t('models.scholarsphere_work_deposit.validation_errors.file_upload_presence'))
       end
     end
 

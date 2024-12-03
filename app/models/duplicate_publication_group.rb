@@ -4,8 +4,8 @@ class DuplicatePublicationGroup < ApplicationRecord
   has_many :publications, inverse_of: :duplicate_group
 
   def self.group_duplicates
-    pbar = ProgressBarTTY.create(title: 'Grouping duplicate publications',
-                                 total: Publication.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Grouping duplicate publications',
+                                            total: Publication.count)
 
     Publication.find_each do |p|
       already_grouped = p.duplicate_group.present?
@@ -65,8 +65,8 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def self.auto_merge
-    pbar = ProgressBarTTY.create(title: 'Auto-merging Pure and AI groups',
-                                 total: count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Auto-merging Pure and AI groups',
+                                            total: count)
 
     find_each do |g|
       g.auto_merge
@@ -108,8 +108,8 @@ class DuplicatePublicationGroup < ApplicationRecord
   end
 
   def self.auto_merge_matching
-    pbar = ProgressBarTTY.create(title: 'Auto-merging duplicate groups on doi',
-                                 total: count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Auto-merging duplicate groups on doi',
+                                            total: count)
 
     find_each do |g|
       g.auto_merge_matching
@@ -162,7 +162,7 @@ class DuplicatePublicationGroup < ApplicationRecord
   rails_admin do
     configure :publications do
       pretty_value do
-        bindings[:view].render partial: 'rails_admin/partials/duplicate_publication_groups/publications.html.erb', locals: { publications: value }
+        bindings[:view].render partial: 'rails_admin/partials/duplicate_publication_groups/publications', locals: { publications: value }
       end
     end
 

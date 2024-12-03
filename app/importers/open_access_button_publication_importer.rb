@@ -2,8 +2,8 @@
 
 class OpenAccessButtonPublicationImporter
   def import_all
-    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
-                                 total: all_pubs.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                            total: all_pubs.count)
 
     all_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -13,8 +13,8 @@ class OpenAccessButtonPublicationImporter
   end
 
   def import_new
-    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
-                                 total: new_pubs.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                            total: new_pubs.count)
 
     new_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -24,8 +24,8 @@ class OpenAccessButtonPublicationImporter
   end
 
   def import_with_doi
-    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
-                                 total: doi_pubs.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                            total: doi_pubs.count)
 
     doi_pubs.find_each do |p|
       query_open_access_button_for(p)
@@ -35,8 +35,8 @@ class OpenAccessButtonPublicationImporter
   end
 
   def import_without_doi
-    pbar = ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
-                                 total: no_doi_pubs.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing publication data from Open Access Button',
+                                            total: no_doi_pubs.count)
 
     no_doi_pubs.find_each do |p|
       query_open_access_button_for(p)

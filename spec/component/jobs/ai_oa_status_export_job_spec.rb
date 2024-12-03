@@ -8,7 +8,7 @@ describe AiOAStatusExportJob, type: :job do
   describe '.perform_later' do
     ActiveJob::Base.queue_adapter = :test
     it 'enqueues a job' do
-      expect { job.perform_later(1) }.to have_enqueued_job.with(1).on_queue('default')
+      expect { job.perform_later(1, 'test') }.to have_enqueued_job.with(1, 'test').on_queue('default')
     end
   end
 

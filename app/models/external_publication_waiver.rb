@@ -25,7 +25,7 @@ class ExternalPublicationWaiver < ApplicationRecord
   rails_admin do
     configure :matching_publications do
       pretty_value do
-        bindings[:view].render partial: 'rails_admin/partials/external_publication_waivers/matching_publications.html.erb', locals: { publications: value }
+        bindings[:view].render partial: 'rails_admin/partials/external_publication_waivers/matching_publications', locals: { publications: value }
       end
     end
     list do

@@ -31,4 +31,5 @@ ActiveSupport::Inflector.inflections(:en) do |inflect|
   inflect.acronym 'ISBN'
   inflect.acronym 'ISSN'
   inflect.acronym 'IO'
+  inflect.acronym 'TTY'
 end

@@ -101,7 +101,8 @@ describe 'visiting the page to submit an open access waiver for a publication' d
 
     context 'when requesting a publication that does not belong to the user' do
       it 'returns 404' do
-        expect { visit new_internal_publication_waiver_path(other_pub) }.to raise_error ActiveRecord::RecordNotFound
+        visit new_internal_publication_waiver_path(other_pub)
+        expect(page.status_code).to eq 404
       end
     end
   end

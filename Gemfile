@@ -3,14 +3,14 @@
 source 'https://rubygems.org'
 git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
-gem 'rails', '~> 6.1'
+gem 'rails', '~> 7.2'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 3.1'
+gem 'rails_admin', '~> 3.2'
 
 # Support for Penn State Azure Active Directory authentication
-gem 'omniauth', '~> 2.0'
-gem 'omniauth-oauth2', '~> 1.7'
+gem 'omniauth', '~> 2.1'
+gem 'omniauth-oauth2', '~> 1.8'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
@@ -20,24 +20,23 @@ gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave', '~> 2.2'             # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
-gem 'config', '~> 4.1'
+gem 'config', '~> 5.1'
 gem 'cssbundling-rails'                 # For bundling stylesheets
 gem 'daemons'                           # for running delayed_job daemon (or other processes)
 gem 'delayed_job_active_record'         # for running async jobs
 gem 'delayed_job_web'                   # /delayed_job UI for delayed job
-gem 'devise', '~> 4.8'                  # for authentication and user management
+gem 'devise', '~> 4.9'                  # for authentication and user management
 gem 'exiftool_vendored', '~> 12.33'     # ExifTool for parsing PDF metadata
 gem 'factory_bot_rails'                 # For generating records in test, development, and staging/beta envs
 gem 'ffaker'                            # For generating fake data in test, development, and staging/beta envs
 gem 'fieldhand', '~> 0.12'              # harvest metadata from OAI-PMH repositories
 gem 'font-awesome-rails'                # UI Icons
-gem 'foundation-rails'                  # Foundation for Rails
 gem 'httparty'                          # HTTP client
 gem 'jbuilder', '~> 2.11'               # build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jquery-rails'                      # jQuery packages for Rails
 gem 'jsbundling-rails'                  # Bundle assets
 gem 'jsonapi-serializer'                # a fast JSON:API serializer for Ruby Objects
-gem 'kaminari', '~> 1.0'                # Pagination within Rails
+gem 'kaminari', '~> 1.2'                # Pagination within Rails
 gem 'lograge'                           # Structured logging for production
 gem 'multi_json'                        # JSON parser wrapper
 gem 'net-imap', require: false          # For Ruby 3 and Rails 6 mail compatibility
@@ -49,7 +48,7 @@ gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
-gem 'puma', '~> 5.6'                    # use Puma as the app server
+gem 'puma', github: 'puma/puma', branch: 'master' # use Puma as the app server (master branch until bug fixed: https://github.com/puma/puma/issues/3531)
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere
@@ -74,8 +73,6 @@ group :development do
   gem 'html_tokenizer', '~> 0.0.8' # HTML Tokenizer
   gem 'listen', '>= 3.0.5', '< 3.8'
   gem 'spring'
-  gem 'spring-commands-rspec'
-  gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'tty-prompt'
   gem 'web-console', '>= 3.3.0'
 end
@@ -90,7 +87,7 @@ group :test do
   gem 'rspec-rails'
   gem 'selenium-webdriver'
   gem 'shoulda-matchers', '~> 5.0'
-  gem 'simplecov', '< 0.18', require: false # CodeClimate does not work with .18 or later
+  gem 'simplecov', '~> 0.18'
   gem 'vcr'
   gem 'webdrivers'
   gem 'webmock'

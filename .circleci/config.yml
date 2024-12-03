@@ -2,7 +2,7 @@ version: 2.1
 orbs:
   docker: circleci/docker@2.2.0
   ruby: circleci/ruby@2.3.0
-  node: circleci/node@2
+  node: circleci/node@6.3.0
   browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
@@ -67,9 +67,9 @@ jobs:
     steps:
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
+      - node/install:
+          node-version: '18'
+      - run: node --version
 
   test:
     docker:
@@ -94,9 +94,9 @@ jobs:
       - browser-tools/install-chromedriver
       - checkout
       - ruby/install-deps
-      - node/install-packages:
-          pkg-manager: yarn
-          cache-key: "yarn.lock"
+      - node/install:
+          node-version: '18'
+      - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
       - run:

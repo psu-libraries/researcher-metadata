@@ -7,7 +7,7 @@ module Admin::Users
     rails_admin do
       configure :publications do
         pretty_value do
-          bindings[:view].render partial: 'rails_admin/partials/users/publications.html.erb', locals: { publications: value }
+          bindings[:view].render partial: 'rails_admin/partials/users/publications', locals: { publications: value }
         end
       end
 

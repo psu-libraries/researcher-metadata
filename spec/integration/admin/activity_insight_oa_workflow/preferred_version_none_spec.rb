@@ -69,7 +69,7 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
     before { allow(AiOAStatusExportJob).to receive(:perform_later) }
 
     it 'sends an email and displays a confirmation message' do
-      find_all("input[value='Send Email']").first.click
+      click_button('Send Email', match: :first)
       expect(page).to have_current_path activity_insight_oa_workflow_preferred_file_version_none_review_path
       expect(page).to have_content('Email sent to abc123')
       open_email('abc123@psu.edu')

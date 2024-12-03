@@ -14,7 +14,7 @@ describe ActivityInsightOAStatusExporter do
   describe '#to_xml' do
     it 'generates xml' do
       exporter_object = exporter.new(aif1.id, 'Already Openly Available')
-      expect(exporter_object.send(:to_xml, aif1)).to eq fixture('activity_insight_oa_status_export.xml').read
+      expect(exporter_object.send(:to_xml, aif1)).to eq fixture_file_open('activity_insight_oa_status_export.xml').read
     end
   end
 

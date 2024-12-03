@@ -9,7 +9,7 @@ class WebOfScienceFileImporter
 
   def call
     import_files = Dir.children(dirname).select { |f| File.extname(f) == '.xml' }
-    pbar = ProgressBarTTY.create(title: 'Importing Web of Science Data', total: import_files.count)
+    pbar = Utilities::ProgressBarTTY.create(title: 'Importing Web of Science Data', total: import_files.count)
     import_files.each do |file|
       Nokogiri::XML::Reader(File.open(dirname.join(file))).each do |node|
         if node.name == 'REC' && node.node_type == Nokogiri::XML::Reader::TYPE_ELEMENT

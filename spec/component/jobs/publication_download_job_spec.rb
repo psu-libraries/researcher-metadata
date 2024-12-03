@@ -18,6 +18,9 @@ describe PublicationDownloadJob, type: :job do
   # if the Activity Insight S3 Authorizer is unreachable (i.e. if you're running this test from a
   # machine that is not on the Penn State network). The network firewall is also the reason why
   # this test can't currently be run on the CI server.
+  #
+  # Also, the API key needed for the Activity Insight S3 Authorizer is not stored in settings/test.yml.
+  # So, you'll need to override this in your test.local.yml to live test this.
   describe '#perform_now', no_ci: true do
     let!(:publication) { create(:publication) }
     let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'nmg110/intellcont/test_file-1.pdf') }
