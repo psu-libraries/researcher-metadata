@@ -45,6 +45,8 @@ describe FilePermissionsCheckJob, type: :job do
           'and is subject to Springer Nature’s AM terms of use, but is not the Version of Record and does not reflect post-acceptance improvements, or any corrections. The Version of Record is available online at: http://dx.doi.org/10.1038/s41598-023-28289-6'
         )
         expect(f.embargo_date).to eq Date.new(2024, 1, 24)
+        expect(f.checked_for_set_statement).to be true
+        expect(f.checked_for_embargo_date).to be true
       end
     end
 
@@ -58,6 +60,8 @@ describe FilePermissionsCheckJob, type: :job do
         expect(f.license).to eq 'https://creativecommons.org/licenses/by/4.0/'
         expect(f.set_statement).to eq 'This is a published article.'
         expect(f.embargo_date).to eq Date.new(2022, 1, 24)
+        expect(f.checked_for_set_statement).to be true
+        expect(f.checked_for_embargo_date).to be true
       end
     end
   end

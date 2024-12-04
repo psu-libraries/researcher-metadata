@@ -10,6 +10,8 @@ class FilePermissionsCheckJob < ApplicationJob
     file.license = permissions.licence
     file.set_statement = permissions.set_statement
     file.embargo_date = permissions.embargo_end_date
+    file.checked_for_set_statement = true
+    file.checked_for_embargo_date = true
     file.save!
   end
 end
