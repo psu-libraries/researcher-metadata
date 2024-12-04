@@ -32,6 +32,7 @@
                   as: :boolean,
                   required: true,
                   label: "I have read and agree to #{link_to 'the deposit agreement', 'https://scholarsphere.psu.edu/agreement', target: '_blank'}.".html_safe %>
+      <p>ScholarSphere curators will review your work after publication to enhance metadata quality, recommend improvements, and remediate files as necessary for accessibility. Note, because curatorial review occurs after publication, any changes or updates may result in a versioned work.</p>
       <%= f.submit 'Submit Files', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
     <% end %>
   </div>
