@@ -448,7 +448,7 @@ describe User, type: :model do
                              user: email_user_1,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil) }
-    let!(:eu_pub_1) { create(:publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit') }
+    let!(:eu_pub_1) { create(:publication, published_on: Date.new(2020, 7, 1)) }
     let!(:eu_auth_1) { create(:authorship,
                               user: email_user_1,
                               publication: eu_pub_1,
@@ -472,7 +472,7 @@ describe User, type: :model do
                              user: email_user_2,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: nil) }
-    let!(:eu_pub_2) { create(:publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit') }
+    let!(:eu_pub_2) { create(:publication, published_on: Date.new(2020, 7, 1)) }
     let!(:eu_auth_2) { create(:authorship,
                               user: email_user_2,
                               publication: eu_pub_2,
@@ -496,7 +496,7 @@ describe User, type: :model do
                              user: email_user_3,
                              started_on: Date.new(2019, 1, 1),
                              ended_on: Date.new(2020, 7, 2)) }
-    let!(:eu_pub_3) { create(:publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'Cannot Deposit') }
+    let!(:eu_pub_3) { create(:publication, published_on: Date.new(2020, 7, 1)) }
     let!(:eu_auth_3) { create(:authorship,
                               user: email_user_3,
                               publication: eu_pub_3,
@@ -794,7 +794,7 @@ describe User, type: :model do
                                publication: ou_pub_17,
                                confirmed: true) }
 
-    # filtered out due to the publication being in process of deposit to Scholarsphere via AI (activity_insight_postprint_status is 'In Progress')
+    # filtered out due to the publication being in the Activity Insight OA Workflow (has activity_insight_oa_file)
     let!(:other_user_18) { create(:user, :with_psu_identity,
                                   open_access_notification_sent_at: 1.year.ago,
                                   first_name: 'other_user_18') }
@@ -802,7 +802,8 @@ describe User, type: :model do
                               user: other_user_18,
                               started_on: Date.new(2019, 1, 1),
                               ended_on: nil)}
-    let!(:ou_pub_18) { create(:publication, published_on: Date.new(2020, 7, 1), activity_insight_postprint_status: 'In Progress') }
+    let!(:ou_pub_18) { create(:publication, published_on: Date.new(2020, 7, 1)) }
+    let!(:ou_aif18) { create(:activity_insight_oa_file, publication: ou_pub_18, version: 'publishedVersion', user: other_user_18) }
     let!(:ou_auth_18) { create(:authorship,
                                user: other_user_18,
                                publication: ou_pub_18,
@@ -865,6 +866,16 @@ describe User, type: :model do
                              publication: other_pub_1,
                              confirmed: true,
                              open_access_notification_sent_at: 1.month.ago) }
+
+    # Filtered out due to being in the Activity Insight OA Workflow (has activity_insight_oa_file)
+    let!(:other_pub_2) { create(:publication,
+                                published_on: Date.new(2020, 7, 1)) }
+    let!(:o_auth_2) { create(:authorship,
+                             user: user,
+                             publication: other_pub_2,
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago) }
+    let!(:o_aif_2) { create(:activity_insight_oa_file, publication: other_pub_2, version: 'publishedVersion', user: user) }
 
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create(:publication,
@@ -1035,6 +1046,15 @@ describe User, type: :model do
                              user: user,
                              publication: other_pub_1,
                              confirmed: true) }
+    # Filtered out due to being in the Activity Insight OA Workflow (has activity_insight_oa_file)
+    let!(:other_pub_2) { create(:publication,
+                                published_on: Date.new(2020, 7, 1)) }
+    let!(:o_auth_2) { create(:authorship,
+                             user: user,
+                             publication: other_pub_2,
+                             confirmed: true,
+                             open_access_notification_sent_at: 1.month.ago) }
+    let!(:o_aif_2) { create(:activity_insight_oa_file, publication: other_pub_2, version: 'publishedVersion', user: user) }
 
     # Filtered out due to presence of open_access_url
     let!(:other_pub_5) { create(:publication,
