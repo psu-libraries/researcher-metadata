@@ -107,8 +107,5 @@ describe FileVersionChecker do
         expect(PDF::Reader).not_to have_received(:new)
       end
     end
-
-
-
   end
 end

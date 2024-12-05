@@ -134,8 +134,8 @@ class FileVersionChecker
     end
 
     def created_by_latex?(reader)
-      if reader != nil
-        reader.info[:Creator].downcase.include?("latex with hyperref")
+      if !reader.nil?
+        reader.info[:Creator].downcase.include?('latex with hyperref')
       end
     end
 end
