@@ -34,9 +34,8 @@ describe FileVersionChecker do
       end
     end
 
-    context 'when the file was created from LaTex' do
-      # The test_file filename contains an arXiv watermark signal
-      let(:test_file) { 'pdf_tex_version.pdf' }
+    context 'when the file contains an arXiv artifact' do
+      let(:test_file) { 'watermark-6.pdf' }
 
       it 'returns accepted version' do
         expect(pdf_file_version.version).to eq I18n.t('file_versions.accepted_version')

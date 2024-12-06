@@ -35,7 +35,7 @@ class FileVersionChecker
 
       begin
         reader = PDF::Reader.new(file_path)
-        if created_by_latex?(reader)
+        if contains_arxiv_watermark?(reader)
           @score = -9999
           return ''
         end
@@ -133,9 +133,9 @@ class FileVersionChecker
       }
     end
 
-    def created_by_latex?(reader)
-      if !reader.nil?
-        reader.info[:Creator].downcase.include?('latex with hyperref')
+    def contains_arxiv_watermark?(reader)
+      if !reader.nil? && !reader.objects[8].nil? && !reader.objects[8][:A].nil? && !reader.objects[8][:A][:URI].nil?
+        reader.objects[8][:A][:URI].include?('arxiv.org')
       end
     end
 end
