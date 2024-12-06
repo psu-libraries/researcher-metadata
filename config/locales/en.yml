@@ -221,6 +221,8 @@ en:
       permissions_curation_description: Publications with a file that can be deposited that does not have all required permissions metadata.
       metadata_curation_title: Review Publication Metadata
       metadata_curation_description: Publications that have a file which can be deposited and that are ready for a final metadata check prior to submission to ScholarSphere.
+      flagged_for_review_title: Flagged for Review
+      flagged_for_review_description: Publications that an admin user has flagged due to unusual issues with the publication or associated files
       all_workflow_publications_title: All Publications
       all_workflow_publications_description: Troubleshooting list of all publications subject to workflow
   activity_insight_oa_workflow:

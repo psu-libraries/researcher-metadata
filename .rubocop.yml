@@ -49,6 +49,7 @@ RSpec/LeakyConstantDeclaration:
 RSpec/MultipleMemoizedHelpers:
   Exclude:
     - 'spec/component/models/user_spec.rb'
+    - 'spec/component/models/publication_spec.rb'
 
 Style/Semicolon:
   Exclude:

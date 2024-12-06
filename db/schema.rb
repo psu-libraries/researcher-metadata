@@ -10,8 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2023_10_12_202905) do
-
+ActiveRecord::Schema[7.2].define(version: 2024_12_06_152534) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -21,7 +20,7 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "record_type", null: false
     t.bigint "record_id", null: false
     t.bigint "blob_id", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
     t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
   end
@@ -34,7 +33,7 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "service_name", null: false
     t.bigint "byte_size", null: false
     t.string "checksum", null: false
-    t.datetime "created_at", null: false
+    t.datetime "created_at", precision: nil, null: false
     t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
   end
 
@@ -47,22 +46,22 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "activity_insight_oa_files", force: :cascade do |t|
     t.string "location"
     t.bigint "publication_id", null: false
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.string "version"
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
-    t.datetime "permissions_last_checked_at"
+    t.string "intellcont_id"
+    t.string "post_file_id"
+    t.boolean "exported_oa_status_to_activity_insight"
+    t.datetime "permissions_last_checked_at", precision: nil
     t.string "license"
     t.date "embargo_date"
     t.text "set_statement"
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
     t.boolean "version_checked"
-    t.string "intellcont_id"
-    t.string "post_file_id"
-    t.boolean "exported_oa_status_to_activity_insight"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end
@@ -71,10 +70,10 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "token", null: false
     t.string "app_name"
     t.string "admin_email"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "total_requests", default: 0
-    t.datetime "last_used_at"
+    t.datetime "last_used_at", precision: nil
     t.boolean "write_access", default: false
     t.index ["token"], name: "index_api_tokens_on_token", unique: true
   end
@@ -83,15 +82,15 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "user_id", null: false
     t.integer "publication_id", null: false
     t.integer "author_number"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "visible_in_profile", default: true
     t.integer "position_in_profile"
     t.boolean "confirmed", default: true
     t.string "role"
-    t.datetime "open_access_notification_sent_at"
+    t.datetime "open_access_notification_sent_at", precision: nil
     t.string "orcid_resource_identifier"
-    t.datetime "updated_by_owner_at"
+    t.datetime "updated_by_owner_at", precision: nil
     t.boolean "claimed_by_user", default: false
     t.index ["publication_id"], name: "index_authorships_on_publication_id"
     t.index ["user_id"], name: "index_authorships_on_user_id"
@@ -101,8 +100,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "etd_id", null: false
     t.integer "user_id", null: false
     t.string "role", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["etd_id"], name: "index_committee_memberships_on_etd_id"
     t.index ["user_id"], name: "index_committee_memberships_on_user_id"
   end
@@ -110,8 +109,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "contract_imports", force: :cascade do |t|
     t.integer "contract_id", null: false
     t.bigint "activity_insight_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["activity_insight_id"], name: "index_contract_imports_on_activity_insight_id", unique: true
     t.index ["contract_id"], name: "index_contract_imports_on_contract_id"
   end
@@ -125,8 +124,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "ospkey", null: false
     t.date "award_start_on"
     t.date "award_end_on"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "visible", default: false
     t.index ["ospkey"], name: "index_contracts_on_ospkey", unique: true
   end
@@ -137,8 +136,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "middle_name"
     t.string "last_name"
     t.integer "position", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "role"
     t.bigint "user_id"
     t.index ["publication_id"], name: "index_contributor_names_on_publication_id"
@@ -150,24 +149,24 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "attempts", default: 0, null: false
     t.text "handler", null: false
     t.text "last_error"
-    t.datetime "run_at"
-    t.datetime "locked_at"
-    t.datetime "failed_at"
+    t.datetime "run_at", precision: nil
+    t.datetime "locked_at", precision: nil
+    t.datetime "failed_at", precision: nil
     t.string "locked_by"
     t.string "queue"
-    t.datetime "created_at"
-    t.datetime "updated_at"
+    t.datetime "created_at", precision: nil
+    t.datetime "updated_at", precision: nil
     t.index ["priority", "run_at"], name: "delayed_jobs_priority"
   end
 
   create_table "deputy_assignments", force: :cascade do |t|
     t.bigint "primary_user_id"
     t.bigint "deputy_user_id"
-    t.datetime "deactivated_at"
+    t.datetime "deactivated_at", precision: nil
     t.boolean "is_active"
-    t.datetime "confirmed_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "confirmed_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "active_uniqueness_key", default: 0
     t.index ["deputy_user_id"], name: "index_deputy_assignments_on_deputy_user_id"
     t.index ["primary_user_id", "deputy_user_id", "active_uniqueness_key"], name: "index_deputy_assignments_on_unique_users_if_active", unique: true
@@ -175,8 +174,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   end
 
   create_table "duplicate_publication_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "education_history_items", force: :cascade do |t|
@@ -197,8 +196,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.text "comments"
     t.integer "start_year"
     t.integer "end_year"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["activity_insight_identifier"], name: "index_education_history_items_on_activity_insight_identifier", unique: true
     t.index ["user_id"], name: "index_education_history_items_on_user_id"
   end
@@ -206,8 +205,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "email_errors", force: :cascade do |t|
     t.integer "user_id", null: false
     t.text "message"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["user_id"], name: "index_email_errors_on_user_id"
   end
 
@@ -222,9 +221,9 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "submission_type", null: false
     t.string "external_identifier", null: false
     t.string "access_level", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.datetime "updated_by_user_at"
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
+    t.datetime "updated_by_user_at", precision: nil
     t.index ["external_identifier"], name: "index_etds_on_external_identifier", unique: true
     t.index ["webaccess_id"], name: "index_etds_on_webaccess_id", unique: true
   end
@@ -237,8 +236,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "doi"
     t.string "journal_title", null: false
     t.string "publisher"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "internal_publication_waiver_id"
     t.bigint "deputy_user_id"
     t.index ["deputy_user_id"], name: "index_external_publication_waivers_on_deputy_user_id"
@@ -249,8 +248,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "grants", force: :cascade do |t|
     t.text "wos_agency_name"
     t.string "wos_identifier"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "title"
     t.date "start_date"
     t.date "end_date"
@@ -268,10 +267,10 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "importer_type", null: false
     t.string "error_type", null: false
     t.text "stacktrace", null: false
-    t.datetime "occurred_at", null: false
+    t.datetime "occurred_at", precision: nil, null: false
     t.jsonb "metadata"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "error_message", null: false
     t.index ["importer_type"], name: "index_importer_error_logs_on_importer_type"
   end
@@ -279,8 +278,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "internal_publication_waivers", force: :cascade do |t|
     t.integer "authorship_id", null: false
     t.text "reason_for_waiver"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "deputy_user_id"
     t.index ["authorship_id"], name: "index_internal_publication_waivers_on_authorship_id"
     t.index ["deputy_user_id"], name: "index_internal_publication_waivers_on_deputy_user_id"
@@ -289,8 +288,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "journals", force: :cascade do |t|
     t.string "pure_uuid"
     t.text "title", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "publisher_id"
     t.index ["publisher_id"], name: "index_journals_on_publisher_id"
   end
@@ -300,8 +299,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "title", null: false
     t.text "url", null: false
     t.text "description", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.date "published_on", null: false
     t.index ["url", "user_id"], name: "index_news_feed_items_on_url_and_user_id", unique: true
   end
@@ -309,23 +308,23 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "non_duplicate_publication_group_memberships", force: :cascade do |t|
     t.integer "publication_id", null: false
     t.integer "non_duplicate_publication_group_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["non_duplicate_publication_group_id"], name: "index_ndpg_memberships_on_ndpg_id"
     t.index ["publication_id"], name: "index_ndpg_memberships_on_publication_id"
   end
 
   create_table "non_duplicate_publication_groups", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "oa_notification_settings", force: :cascade do |t|
     t.integer "singleton_guard"
     t.integer "email_cap"
     t.boolean "is_active"
-    t.datetime "created_at", precision: 6, null: false
-    t.datetime "updated_at", precision: 6, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
     t.index ["singleton_guard"], name: "index_oa_notification_settings_on_singleton_guard", unique: true
   end
 
@@ -336,13 +335,13 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "license"
     t.date "oa_date"
     t.string "source"
-    t.datetime "source_updated_at"
+    t.datetime "source_updated_at", precision: nil
     t.string "url"
     t.string "landing_page_url"
     t.string "pdf_url"
     t.string "version"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "deputy_user_id"
     t.index ["deputy_user_id"], name: "index_open_access_locations_on_deputy_user_id"
     t.index ["publication_id"], name: "index_open_access_locations_on_publication_id"
@@ -351,8 +350,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "organization_api_permissions", force: :cascade do |t|
     t.integer "api_token_id", null: false
     t.integer "organization_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["api_token_id"], name: "index_organization_api_permissions_on_api_token_id"
     t.index ["organization_id"], name: "index_organization_api_permissions_on_organization_id"
   end
@@ -364,8 +363,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "pure_external_identifier"
     t.string "organization_type"
     t.integer "parent_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "owner_id"
     t.index ["owner_id"], name: "index_organizations_on_owner_id"
     t.index ["parent_id"], name: "index_organizations_on_parent_id"
@@ -377,8 +376,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "screening_type"
     t.string "name"
     t.string "location"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.bigint "activity_insight_id", null: false
     t.index ["activity_insight_id"], name: "index_performance_screenings_on_activity_insight_id", unique: true
     t.index ["performance_id"], name: "index_performance_screenings_on_performance_id"
@@ -395,9 +394,9 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "scope"
     t.date "start_on"
     t.date "end_on"
-    t.datetime "updated_by_user_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "updated_by_user_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "visible", default: true
     t.bigint "activity_insight_id", null: false
     t.index ["activity_insight_id"], name: "index_performances_on_activity_insight_id", unique: true
@@ -409,8 +408,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "position"
     t.string "activity_insight_identifier"
     t.string "role"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "visible_in_profile", default: true
     t.integer "position_in_profile"
     t.index ["activity_insight_identifier"], name: "index_presentation_contributions_on_activity_insight_identifier", unique: true
@@ -434,10 +433,10 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.text "abstract"
     t.text "comment"
     t.string "scope"
-    t.datetime "updated_by_user_at"
+    t.datetime "updated_by_user_at", precision: nil
     t.boolean "visible", default: true
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["activity_insight_identifier"], name: "index_presentations_on_activity_insight_identifier", unique: true
   end
 
@@ -445,9 +444,9 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "publication_id", null: false
     t.string "source", null: false
     t.string "source_identifier", null: false
-    t.datetime "source_updated_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "source_updated_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "auto_merged"
     t.index ["publication_id"], name: "index_publication_imports_on_publication_id"
     t.index ["source_identifier", "source"], name: "index_publication_imports_on_source_identifier_and_source", unique: true
@@ -457,15 +456,15 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.integer "publication_id", null: false
     t.integer "tag_id", null: false
     t.float "rank"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["publication_id"], name: "index_publication_taggings_on_publication_id"
     t.index ["tag_id"], name: "index_publication_taggings_on_tag_id"
   end
 
   create_table "publications", force: :cascade do |t|
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "title", null: false
     t.string "publication_type", null: false
     t.text "journal_title"
@@ -485,23 +484,24 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.date "published_on"
     t.integer "total_scopus_citations"
     t.integer "duplicate_publication_group_id"
-    t.datetime "updated_by_user_at"
+    t.datetime "updated_by_user_at", precision: nil
     t.boolean "visible", default: true
-    t.datetime "open_access_button_last_checked_at"
+    t.datetime "open_access_button_last_checked_at", precision: nil
     t.integer "journal_id"
     t.boolean "exported_to_activity_insight"
     t.string "open_access_status"
-    t.datetime "unpaywall_last_checked_at"
+    t.datetime "unpaywall_last_checked_at", precision: nil
     t.string "activity_insight_postprint_status"
     t.boolean "doi_verified"
     t.string "oa_workflow_state"
     t.string "preferred_version"
-    t.datetime "permissions_last_checked_at"
-    t.datetime "oa_status_last_checked_at"
-    t.datetime "wrong_oa_version_notification_sent_at"
+    t.datetime "permissions_last_checked_at", precision: nil
+    t.datetime "oa_status_last_checked_at", precision: nil
+    t.datetime "wrong_oa_version_notification_sent_at", precision: nil
     t.boolean "preferred_file_version_none_email_sent"
     t.boolean "doi_error"
-    t.index "EXTRACT(year FROM published_on)", name: "index_publications_on_published_on_year"
+    t.boolean "flagged_for_review"
+    t.index "date_part('year'::text, published_on)", name: "index_publications_on_published_on_year"
     t.index ["doi"], name: "index_publications_on_doi"
     t.index ["duplicate_publication_group_id"], name: "index_publications_on_duplicate_publication_group_id"
     t.index ["issue"], name: "index_publications_on_issue"
@@ -513,15 +513,15 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "publishers", force: :cascade do |t|
     t.string "pure_uuid"
     t.text "name", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "research_funds", force: :cascade do |t|
     t.integer "grant_id", null: false
     t.integer "publication_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["grant_id"], name: "index_research_funds_on_grant_id"
     t.index ["publication_id"], name: "index_research_funds_on_publication_id"
   end
@@ -529,16 +529,16 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "researcher_funds", force: :cascade do |t|
     t.integer "grant_id", null: false
     t.integer "user_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["grant_id"], name: "index_researcher_funds_on_grant_id"
     t.index ["user_id"], name: "index_researcher_funds_on_user_id"
   end
 
   create_table "scholarsphere_file_uploads", force: :cascade do |t|
     t.string "file"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.integer "scholarsphere_work_deposit_id"
     t.index ["scholarsphere_work_deposit_id"], name: "scholarsphere_file_uploads_on_deposit_id"
   end
@@ -547,9 +547,9 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.bigint "authorship_id"
     t.string "status"
     t.text "error_message"
-    t.datetime "deposited_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "deposited_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.text "title"
     t.text "description"
     t.date "published_date"
@@ -569,23 +569,23 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "statistics_snapshots", force: :cascade do |t|
     t.integer "total_article_count"
     t.integer "open_access_article_count"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
   end
 
   create_table "tags", force: :cascade do |t|
     t.string "name", null: false
     t.string "source"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["name"], name: "index_tags_on_name"
   end
 
   create_table "user_contracts", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "contract_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.index ["contract_id"], name: "index_user_contracts_on_contract_id"
     t.index ["user_id"], name: "index_user_contracts_on_user_id"
   end
@@ -596,9 +596,9 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "source_identifier"
     t.string "position_title"
     t.boolean "primary"
-    t.datetime "updated_by_user_at"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "updated_by_user_at", precision: nil
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.date "started_on"
     t.date "ended_on"
     t.string "orcid_resource_identifier"
@@ -612,8 +612,8 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
   create_table "user_performances", force: :cascade do |t|
     t.integer "user_id", null: false
     t.integer "performance_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.string "contribution"
     t.string "student_level"
     t.string "role_other"
@@ -630,13 +630,13 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "first_name"
     t.string "middle_name"
     t.string "last_name"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.datetime "created_at", precision: nil, null: false
+    t.datetime "updated_at", precision: nil, null: false
     t.boolean "is_admin", default: false
     t.string "webaccess_id", null: false
     t.string "pure_uuid"
     t.string "penn_state_identifier"
-    t.datetime "updated_by_user_at"
+    t.datetime "updated_by_user_at", precision: nil
     t.boolean "show_all_publications", default: true
     t.boolean "show_all_contracts", default: false
     t.integer "scopus_h_index"
@@ -661,11 +661,11 @@ ActiveRecord::Schema.define(version: 2023_10_12_202905) do
     t.string "orcid_access_token_scope"
     t.integer "orcid_access_token_expires_in"
     t.string "authenticated_orcid_identifier"
-    t.datetime "open_access_notification_sent_at"
+    t.datetime "open_access_notification_sent_at", precision: nil
     t.string "provider"
     t.string "uid"
     t.jsonb "psu_identity"
-    t.datetime "psu_identity_updated_at"
+    t.datetime "psu_identity_updated_at", precision: nil
     t.boolean "suppress_oa_reminders", default: false
     t.index ["activity_insight_identifier"], name: "index_users_on_activity_insight_identifier", unique: true
     t.index ["first_name"], name: "index_users_on_first_name"

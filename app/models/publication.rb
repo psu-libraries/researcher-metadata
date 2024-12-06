@@ -175,6 +175,12 @@ class Publication < ApplicationRecord
                                               .where.not(activity_insight_oa_files: { location: nil })
                                               .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL')
                                           }
+  scope :flagged_for_review, -> {
+    activity_insight_oa_publication
+      .where(flagged_for_review: true)
+      .includes(:activity_insight_oa_files)
+      .order('activity_insight_oa_files.created_at ASC')
+  }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
       .where(%{(open_access_status != 'gold' AND open_access_status != 'hybrid') OR open_access_status IS NULL})
@@ -185,6 +191,7 @@ class Publication < ApplicationRecord
     activity_insight_oa_publication
       .where('doi_verified = false')
       .where('doi_error != true OR doi_error IS NULL')
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
   }
   scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
@@ -206,6 +213,7 @@ class Publication < ApplicationRecord
       .filter_oa_status_from_workflow
       .where.not(preferred_version: nil)
       .where.not(preferred_version: NO_VERSION)
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
       .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
@@ -214,6 +222,7 @@ class Publication < ApplicationRecord
     activity_insight_oa_publication
       .where.not(preferred_version: nil)
       .where.not(preferred_version: NO_VERSION)
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'unknown')})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version = 'notArticleFile')})
       .where(
@@ -241,12 +250,14 @@ class Publication < ApplicationRecord
   scope :preferred_file_version_none, -> {
                                         activity_insight_oa_publication
                                           .where(%{preferred_version = '#{NO_VERSION}'})
+                                          .where('flagged_for_review != true OR flagged_for_review IS NULL')
                                           .includes(:activity_insight_oa_files)
                                           .order('activity_insight_oa_files.created_at ASC')
                                       }
   scope :needs_manual_permissions_review, -> {
     activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
       .where(
         <<-SQL.squish
           EXISTS (
@@ -282,6 +293,7 @@ class Publication < ApplicationRecord
   scope :ready_for_metadata_review, -> {
     activity_insight_oa_publication
       .where(%{preferred_version IS NOT NULL AND preferred_version != '#{NO_VERSION}'})
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
       .where(
         <<-SQL.squish
           EXISTS (
@@ -371,6 +383,7 @@ class Publication < ApplicationRecord
       end
       field(:doi_verified)
       field(:doi_error)
+      field(:flagged_for_review)
       field(:preferred_version)
       field(:published_on)
       field(:total_scopus_citations) { label 'Citations' }
@@ -431,6 +444,7 @@ class Publication < ApplicationRecord
       field(:page_range)
       field(:url) { label 'URL' }
       field(:issn) { label 'ISSN' }
+      field(:flagged_for_review)
       group :doi do
         field(:doi) do
           label 'DOI'
@@ -487,6 +501,7 @@ class Publication < ApplicationRecord
       field(:issue)
       field(:edition)
       field(:page_range)
+      field(:flagged_for_review)
       group :doi do
         field(:doi) { label 'DOI' }
         field(:doi_verified, :enum) do
