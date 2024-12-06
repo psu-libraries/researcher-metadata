@@ -4184,4 +4184,68 @@ describe Publication, type: :model do
       end
     end
   end
+
+  describe '#has_verified_doi?' do
+    let(:pub) { Publication.new(doi: doi, doi_verified: doi_verified) }
+
+    context 'when the publication has no DOI value' do
+      let(:doi) { nil }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it "returns false" do
+          expect(pub.has_verified_doi?).to eq false
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+        
+        it "returns false" do
+          expect(pub.has_verified_doi?).to eq false
+        end
+      end
+    end
+
+    context 'when the publication has a blank DOI value' do
+      let(:doi) { '' }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it "returns false" do
+          expect(pub.has_verified_doi?).to eq false
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+        
+        it "returns false" do
+          expect(pub.has_verified_doi?).to eq false
+        end
+      end
+    end
+
+    context 'when the publication has a non-blank DOI value' do
+      let(:doi) { 'not blank' }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it "returns true" do
+          expect(pub.has_verified_doi?).to eq true
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+        
+        it "returns false" do
+          expect(pub.has_verified_doi?).to eq false
+        end
+      end
+    end
+  end
 end

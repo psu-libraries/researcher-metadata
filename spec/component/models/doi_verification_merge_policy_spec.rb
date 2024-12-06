@@ -5,6 +5,8 @@ require 'component/component_spec_helper'
 describe DOIVerificationMergePolicy do
   let(:policy) { described_class.new(merge_target_pub, publications_to_merge) }
 
+  # TODO:  There should be a test somewhere for the case where the merge target doesn't have
+  # a DOI and there are multiple publications to merge with the same verified DOI.
   describe '#merge!' do
     context 'when the given merge target has a verified DOI' do
       let(:merge_target_pub) { create(:publication, doi_verified: true, doi: 'https://doi.org/10.1103/physrevlett.80.3915') }

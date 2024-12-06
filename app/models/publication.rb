@@ -749,6 +749,10 @@ class Publication < ApplicationRecord
       !scholarsphere_upload_failed?
   end
 
+  def has_verified_doi?
+    doi.present? && doi_verified
+  end
+
   private
 
     def merge(publications_to_merge)
