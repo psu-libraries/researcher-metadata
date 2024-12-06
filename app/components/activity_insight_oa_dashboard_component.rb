@@ -29,6 +29,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.ready_for_metadata_review.count
   end
 
+  def flagged_for_review_count
+    Publication.flagged_for_review.count
+  end
+
   def all_workflow_publications_count
     Publication.troubleshooting_list.count
   end
