@@ -7,11 +7,13 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2) }
   let!(:aif4a) { create(:activity_insight_oa_file, publication: pub4) }
   let!(:aif4b) { create(:activity_insight_oa_file, publication: pub4, version: 'acceptedVersion') }
+  let!(:aif5) { create(:activity_insight_oa_file, publication: pub5) }
   let!(:pub1) {
     create(
       :publication,
       title: 'Pub1',
-      permissions_last_checked_at: Time.now
+      permissions_last_checked_at: Time.now,
+      doi: 'https://doi.org/10.123/def123'
     )
   }
   let!(:pub2) {
@@ -26,7 +28,16 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
     create(
       :publication,
       title: 'Pub4',
-      permissions_last_checked_at: Time.now
+      permissions_last_checked_at: Time.now,
+      doi: nil
+    )
+  }
+  let!(:pub5) {
+    create(
+      :publication,
+      title: 'Pub5',
+      permissions_last_checked_at: Time.now,
+      doi: 'https://doi.org/10.123/abc123'
     )
   }
   let(:uploader) { double 'uploader', file: file }
@@ -40,7 +51,7 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
   end
 
   describe 'listing publications that need their preferred version reviewed' do
-    it 'shows a table with header and the proper data for the publications in the table' do
+    it 'shows a table with header and the proper data for the publications in the table ordered by doi' do
       within 'thead' do
         expect(page).to have_text('Title')
         expect(page).to have_text('File metadata: Filename (Version')
@@ -48,6 +59,7 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
 
       within "tr#publication_#{pub1.id}" do
         expect(page).to have_link('Pub1')
+        expect(page).to have_text('10.123/def123')
 
         within 'td.files' do
           expect(page).to have_link(
@@ -58,6 +70,7 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
       end
 
       within "tr#publication_#{pub4.id}" do
+      byebug
         expect(page).to have_link('Pub4')
 
         within 'td.files' do
@@ -72,7 +85,17 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
         end
       end
 
-      expect(page).to have_css('tr').exactly(3).times
+      within "tr#publication_#{pub5.id}" do
+        expect(page).to have_link('Pub4')
+        expect(page).to have_text('10.123/abc123')
+      end
+
+      tr_elements = all('tr')
+      expect(tr_elements[1][:id]).to eq "publication_#{pub5.id}"
+      expect(tr_elements[2][:id]).to eq "publication_#{pub1.id}"
+      expect(tr_elements[3][:id]).to eq "publication_#{pub4.id}"
+
+      expect(page).to have_css('tr').exactly(4).times
     end
   end
 
