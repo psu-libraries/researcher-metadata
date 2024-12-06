@@ -35,7 +35,7 @@ describe FileVersionChecker do
     end
 
     context 'when the file contains an arXiv artifact' do
-      let(:test_file) { 'watermark-6.pdf' }
+      let(:test_file) { 'watermark-2.pdf' }
 
       it 'returns accepted version' do
         expect(pdf_file_version.version).to eq I18n.t('file_versions.accepted_version')
