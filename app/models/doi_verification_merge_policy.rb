@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class DOIVerificationMergePolicy
+  class UnmergablePublications < RuntimeError; end
+
   def initialize(main_pub, publications)
     @publications = publications
     @main_pub = main_pub
