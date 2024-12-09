@@ -57,6 +57,18 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
         expect(page).to have_text('File metadata: Filename (Version')
       end
 
+      within "tr#publication_#{pub5.id}" do
+        expect(page).to have_link('Pub5')
+        expect(page).to have_text('10.123/abc123')
+
+        within 'td.files' do
+          expect(page).to have_link(
+            "#{aif5.download_filename} (unknown)",
+            href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif5.id)
+          )
+        end
+      end
+
       within "tr#publication_#{pub1.id}" do
         expect(page).to have_link('Pub1')
         expect(page).to have_text('10.123/def123')
@@ -70,7 +82,6 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
       end
 
       within "tr#publication_#{pub4.id}" do
-      byebug
         expect(page).to have_link('Pub4')
 
         within 'td.files' do
@@ -83,11 +94,6 @@ describe 'Admin Preferred Version Review dashboard', type: :feature do
             href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif4b.id)
           )
         end
-      end
-
-      within "tr#publication_#{pub5.id}" do
-        expect(page).to have_link('Pub4')
-        expect(page).to have_text('10.123/abc123')
       end
 
       tr_elements = all('tr')
