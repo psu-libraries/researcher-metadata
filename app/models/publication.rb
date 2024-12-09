@@ -183,7 +183,7 @@ class Publication < ApplicationRecord
   }
   scope :nonflagged_activity_insight_oa_publication, -> {
     activity_insight_oa_publication
-    .where('flagged_for_review != true OR flagged_for_review IS NULL')
+      .where('flagged_for_review != true OR flagged_for_review IS NULL')
   }
   scope :troubleshooting_list, -> {
     activity_insight_oa_publication
@@ -249,7 +249,7 @@ class Publication < ApplicationRecord
       .where(preferred_version: nil)
   }
   scope :preferred_file_version_none, -> {
-    nonflagged_activity_insight_oa_publication
+                                        nonflagged_activity_insight_oa_publication
                                           .where(%{preferred_version = '#{NO_VERSION}'})
                                           .includes(:activity_insight_oa_files)
                                           .order('activity_insight_oa_files.created_at ASC')
