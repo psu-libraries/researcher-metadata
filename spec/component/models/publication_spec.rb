@@ -4186,7 +4186,7 @@ describe Publication, type: :model do
   end
 
   describe '#has_verified_doi?' do
-    let(:pub) { Publication.new(doi: doi, doi_verified: doi_verified) }
+    let(:pub) { described_class.new(doi: doi, doi_verified: doi_verified) }
 
     context 'when the publication has no DOI value' do
       let(:doi) { nil }
@@ -4194,16 +4194,16 @@ describe Publication, type: :model do
       context "when the publication's DOI has been verified" do
         let(:doi_verified) { true }
 
-        it "returns false" do
-          expect(pub.has_verified_doi?).to eq false
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
         end
       end
 
       context "when the publication's DOI has not been verified" do
         let(:doi_verified) { false }
-        
-        it "returns false" do
-          expect(pub.has_verified_doi?).to eq false
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
         end
       end
     end
@@ -4214,16 +4214,16 @@ describe Publication, type: :model do
       context "when the publication's DOI has been verified" do
         let(:doi_verified) { true }
 
-        it "returns false" do
-          expect(pub.has_verified_doi?).to eq false
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
         end
       end
 
       context "when the publication's DOI has not been verified" do
         let(:doi_verified) { false }
-        
-        it "returns false" do
-          expect(pub.has_verified_doi?).to eq false
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
         end
       end
     end
@@ -4234,16 +4234,16 @@ describe Publication, type: :model do
       context "when the publication's DOI has been verified" do
         let(:doi_verified) { true }
 
-        it "returns true" do
-          expect(pub.has_verified_doi?).to eq true
+        it 'returns true' do
+          expect(pub.has_verified_doi?).to be true
         end
       end
 
       context "when the publication's DOI has not been verified" do
         let(:doi_verified) { false }
-        
-        it "returns false" do
-          expect(pub.has_verified_doi?).to eq false
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
         end
       end
     end

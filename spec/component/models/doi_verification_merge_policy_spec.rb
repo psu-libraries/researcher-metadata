@@ -161,7 +161,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -172,7 +172,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -206,7 +206,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -217,7 +217,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -232,7 +232,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -243,7 +243,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -258,7 +258,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -269,7 +269,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -284,7 +284,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -295,7 +295,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -310,7 +310,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -321,7 +321,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -337,7 +337,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -348,7 +348,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -382,7 +382,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -393,7 +393,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -408,7 +408,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -419,7 +419,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -434,7 +434,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -445,7 +445,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -460,7 +460,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -471,7 +471,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -486,7 +486,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -497,7 +497,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -513,7 +513,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -524,7 +524,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -558,7 +558,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -569,7 +569,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -584,7 +584,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -595,7 +595,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -610,7 +610,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -621,7 +621,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -636,7 +636,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -647,7 +647,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -662,7 +662,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -673,7 +673,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -689,7 +689,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -700,7 +700,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -734,7 +734,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -745,7 +745,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -760,7 +760,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -771,7 +771,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -786,7 +786,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -797,7 +797,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -812,7 +812,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -823,7 +823,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -838,7 +838,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -849,7 +849,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -865,7 +865,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -876,7 +876,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -910,7 +910,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -921,7 +921,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -936,7 +936,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -947,7 +947,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -962,7 +962,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -973,7 +973,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -988,7 +988,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -999,7 +999,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1014,7 +1014,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1025,7 +1025,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1041,7 +1041,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -1052,7 +1052,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -1086,7 +1086,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1097,7 +1097,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1112,7 +1112,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1123,7 +1123,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1138,7 +1138,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1149,7 +1149,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1164,7 +1164,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1175,7 +1175,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1190,7 +1190,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1201,7 +1201,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1221,7 +1221,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -1232,7 +1232,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -1266,7 +1266,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1277,7 +1277,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1292,7 +1292,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1303,7 +1303,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1318,7 +1318,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1329,7 +1329,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1344,7 +1344,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1355,7 +1355,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1370,7 +1370,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1381,7 +1381,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1397,7 +1397,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1408,7 +1408,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1422,7 +1422,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1433,7 +1433,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1448,7 +1448,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1459,7 +1459,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1474,7 +1474,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1485,7 +1485,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1500,7 +1500,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1511,7 +1511,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1526,7 +1526,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1537,7 +1537,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1552,7 +1552,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1563,7 +1563,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1579,7 +1579,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1590,7 +1590,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1604,7 +1604,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1615,7 +1615,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1630,7 +1630,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1641,7 +1641,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1656,7 +1656,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1667,7 +1667,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1682,7 +1682,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1693,7 +1693,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1708,7 +1708,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1719,7 +1719,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1734,7 +1734,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1745,7 +1745,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1761,7 +1761,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1772,7 +1772,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1786,7 +1786,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1797,7 +1797,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1812,7 +1812,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1823,7 +1823,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1838,7 +1838,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1849,7 +1849,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1864,7 +1864,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1875,7 +1875,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1890,7 +1890,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1901,7 +1901,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1916,7 +1916,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -1927,7 +1927,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -1943,7 +1943,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1954,7 +1954,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -1968,7 +1968,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -1979,7 +1979,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -1994,7 +1994,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2005,7 +2005,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2020,7 +2020,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2031,7 +2031,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2046,7 +2046,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2057,7 +2057,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2072,7 +2072,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2083,8 +2083,8 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
-            end          
+              expect(reloaded_target.doi_verified).to be false
+            end
           end
         end
 
@@ -2098,7 +2098,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2109,7 +2109,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2125,7 +2125,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -2136,7 +2136,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -2150,7 +2150,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2161,7 +2161,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2176,7 +2176,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2187,7 +2187,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2202,7 +2202,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2213,7 +2213,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2228,7 +2228,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2239,7 +2239,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2254,7 +2254,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2265,7 +2265,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2280,7 +2280,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -2291,7 +2291,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -2311,7 +2311,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -2322,7 +2322,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -2356,7 +2356,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2367,7 +2367,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2382,7 +2382,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2393,7 +2393,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2408,7 +2408,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2419,7 +2419,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2434,7 +2434,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2445,7 +2445,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2460,7 +2460,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2471,7 +2471,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2487,7 +2487,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2498,7 +2498,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2512,7 +2512,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2523,7 +2523,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2538,7 +2538,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2549,7 +2549,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2564,7 +2564,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2575,7 +2575,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2590,7 +2590,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2601,7 +2601,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2616,7 +2616,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2627,7 +2627,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2642,7 +2642,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2653,7 +2653,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2669,7 +2669,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2680,7 +2680,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2694,7 +2694,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2705,7 +2705,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2720,7 +2720,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2731,7 +2731,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2746,7 +2746,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2757,7 +2757,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2772,7 +2772,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2783,7 +2783,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2798,7 +2798,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2809,7 +2809,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2824,7 +2824,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2835,7 +2835,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2851,7 +2851,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2862,7 +2862,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -2876,7 +2876,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -2887,7 +2887,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -2902,7 +2902,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2913,7 +2913,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2928,7 +2928,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2939,7 +2939,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2954,7 +2954,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2965,7 +2965,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -2980,7 +2980,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -2991,7 +2991,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3006,7 +3006,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3017,7 +3017,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3033,7 +3033,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3044,7 +3044,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3058,7 +3058,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3069,7 +3069,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3084,7 +3084,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3095,7 +3095,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3110,7 +3110,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3121,7 +3121,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3136,7 +3136,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3147,7 +3147,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3162,7 +3162,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3173,8 +3173,8 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
-            end          
+              expect(reloaded_target.doi_verified).to be_nil
+            end
           end
         end
 
@@ -3188,7 +3188,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3199,7 +3199,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3215,7 +3215,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3226,7 +3226,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3240,7 +3240,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3251,7 +3251,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3266,7 +3266,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3277,7 +3277,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3292,7 +3292,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3303,7 +3303,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3318,7 +3318,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3329,7 +3329,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3344,7 +3344,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3355,7 +3355,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3370,7 +3370,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3381,7 +3381,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1103/physrevlett.80.3915'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3401,7 +3401,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -3412,7 +3412,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -3446,7 +3446,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3457,7 +3457,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3472,7 +3472,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3483,7 +3483,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3498,7 +3498,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3509,7 +3509,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3524,7 +3524,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3535,7 +3535,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3550,7 +3550,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3561,7 +3561,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3577,7 +3577,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -3588,7 +3588,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -3602,7 +3602,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3613,7 +3613,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3662,7 +3662,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -3673,7 +3673,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -3688,7 +3688,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -3699,7 +3699,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -3714,7 +3714,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -3725,7 +3725,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -3741,7 +3741,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3752,7 +3752,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -3766,7 +3766,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3777,7 +3777,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3824,7 +3824,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3835,7 +3835,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3850,7 +3850,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3861,7 +3861,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3876,7 +3876,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3887,7 +3887,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -3903,7 +3903,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -3914,7 +3914,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -3928,7 +3928,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -3939,7 +3939,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -3954,7 +3954,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -3965,7 +3965,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -3980,7 +3980,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -3991,7 +3991,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4006,7 +4006,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4017,7 +4017,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4032,7 +4032,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4043,7 +4043,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4058,7 +4058,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4069,7 +4069,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4085,7 +4085,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4096,7 +4096,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4110,7 +4110,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4121,7 +4121,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4136,7 +4136,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -4147,7 +4147,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -4162,7 +4162,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -4173,7 +4173,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4188,7 +4188,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4199,7 +4199,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4214,7 +4214,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4225,7 +4225,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4240,7 +4240,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4251,7 +4251,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4267,7 +4267,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4278,7 +4278,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4292,7 +4292,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4303,7 +4303,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4318,7 +4318,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -4329,7 +4329,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -4344,7 +4344,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -4355,7 +4355,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4370,7 +4370,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4381,7 +4381,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4396,7 +4396,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4407,7 +4407,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4422,7 +4422,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4433,7 +4433,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4453,7 +4453,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4464,7 +4464,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4498,7 +4498,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4509,7 +4509,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4524,7 +4524,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4535,7 +4535,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4550,7 +4550,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4561,7 +4561,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4576,7 +4576,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4587,7 +4587,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4602,7 +4602,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4613,7 +4613,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4629,7 +4629,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -4640,7 +4640,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -4654,7 +4654,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4665,7 +4665,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4712,7 +4712,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -4723,7 +4723,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -4738,7 +4738,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -4749,7 +4749,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -4764,7 +4764,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -4775,7 +4775,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -4791,7 +4791,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -4802,7 +4802,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -4816,7 +4816,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4827,7 +4827,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -4874,7 +4874,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -4885,7 +4885,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4900,7 +4900,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -4911,7 +4911,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4926,7 +4926,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -4937,7 +4937,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -4953,7 +4953,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4964,7 +4964,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -4978,7 +4978,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -4989,7 +4989,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5004,7 +5004,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5015,8 +5015,8 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
-            end          
+              expect(reloaded_target.doi_verified).to be false
+            end
           end
         end
 
@@ -5030,7 +5030,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5041,7 +5041,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -5056,7 +5056,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5067,7 +5067,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5082,7 +5082,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5093,7 +5093,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5108,7 +5108,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5119,7 +5119,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5135,7 +5135,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5146,7 +5146,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5160,7 +5160,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5171,7 +5171,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5186,7 +5186,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5197,7 +5197,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5212,7 +5212,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5223,7 +5223,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -5238,7 +5238,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5249,7 +5249,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5264,7 +5264,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5275,7 +5275,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5290,7 +5290,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5301,7 +5301,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5317,7 +5317,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5328,7 +5328,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5342,7 +5342,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5353,7 +5353,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5368,7 +5368,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5379,7 +5379,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5394,7 +5394,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5405,7 +5405,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -5420,7 +5420,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5431,7 +5431,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5446,7 +5446,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5457,7 +5457,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5472,7 +5472,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5483,7 +5483,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5503,7 +5503,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -5514,7 +5514,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -5548,7 +5548,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5559,7 +5559,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5574,7 +5574,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5585,7 +5585,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5600,7 +5600,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5611,7 +5611,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5626,7 +5626,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5637,7 +5637,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5652,7 +5652,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5663,7 +5663,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5679,7 +5679,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5690,7 +5690,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -5704,7 +5704,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5715,7 +5715,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5762,7 +5762,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5773,7 +5773,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5788,7 +5788,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5799,7 +5799,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5814,7 +5814,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -5825,7 +5825,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -5841,7 +5841,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -5852,7 +5852,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -5866,7 +5866,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -5877,7 +5877,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -5924,7 +5924,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5935,7 +5935,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -5950,7 +5950,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5961,7 +5961,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -5976,7 +5976,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -5987,7 +5987,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -6003,7 +6003,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -6014,7 +6014,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq true
+            expect(reloaded_target.doi_verified).to be true
           end
         end
 
@@ -6028,7 +6028,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6039,7 +6039,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6054,7 +6054,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6065,8 +6065,8 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
-            end          
+              expect(reloaded_target.doi_verified).to be false
+            end
           end
         end
 
@@ -6080,7 +6080,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -6091,7 +6091,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -6106,7 +6106,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6117,7 +6117,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6132,7 +6132,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6143,7 +6143,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6158,7 +6158,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6169,7 +6169,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6185,7 +6185,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -6196,7 +6196,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq false
+            expect(reloaded_target.doi_verified).to be false
           end
         end
 
@@ -6210,7 +6210,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6221,7 +6221,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6236,7 +6236,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6247,7 +6247,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -6262,7 +6262,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -6273,7 +6273,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -6288,7 +6288,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6299,7 +6299,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6314,7 +6314,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6325,7 +6325,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -6340,7 +6340,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6351,7 +6351,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -6367,7 +6367,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -6378,7 +6378,7 @@ describe DOIVerificationMergePolicy do
             policy.merge!
             reloaded_target = merge_target_pub.reload
             expect(reloaded_target.doi).to be_nil
-            expect(reloaded_target.doi_verified).to eq nil
+            expect(reloaded_target.doi_verified).to be_nil
           end
         end
 
@@ -6392,7 +6392,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6403,7 +6403,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6418,7 +6418,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6429,7 +6429,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -6444,7 +6444,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -6455,7 +6455,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
@@ -6470,7 +6470,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
 
@@ -6481,7 +6481,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq true
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
@@ -6496,7 +6496,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
 
@@ -6507,7 +6507,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq false
+              expect(reloaded_target.doi_verified).to be false
             end
           end
         end
@@ -6522,7 +6522,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
 
@@ -6533,7 +6533,7 @@ describe DOIVerificationMergePolicy do
               policy.merge!
               reloaded_target = merge_target_pub.reload
               expect(reloaded_target.doi).to be_nil
-              expect(reloaded_target.doi_verified).to eq nil
+              expect(reloaded_target.doi_verified).to be_nil
             end
           end
         end
