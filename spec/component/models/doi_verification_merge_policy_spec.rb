@@ -5,8 +5,6 @@ require 'component/component_spec_helper'
 describe DOIVerificationMergePolicy do
   let(:policy) { described_class.new(merge_target_pub, publications_to_merge) }
 
-  # TODO:  There should be a test somewhere for the case where the merge target doesn't have
-  # a DOI and there are multiple publications to merge with the same verified DOI.
   describe '#merge!' do
     context 'when the given merge target has a verified DOI' do
       let(:merge_target_pub) { create(:publication, doi_verified: true, doi: 'https://doi.org/10.1103/physrevlett.80.3915') }
@@ -1252,6 +1250,32 @@ describe DOIVerificationMergePolicy do
 
             it 'raises an error' do
               expect { policy.merge! }.to raise_error DOIVerificationMergePolicy::UnmergablePublications
+            end
+          end
+        end
+
+        context 'when given a second publication to be merged that has a verified DOI that is different than the merge target DOI and the same as the DOI from the first publication' do
+          let(:pub3) { create(:publication, doi_verified: true, doi: 'https://doi.org/10.1001/archderm.139.10.1363-g') }
+
+          context 'when the set of given publications to be merged includes the merge target' do
+            let(:publications_to_merge) { [merge_target_pub, pub2] }
+
+            it 'saves the verified DOI from the merged publications on the merge target' do
+              policy.merge!
+              reloaded_target = merge_target_pub.reload
+              expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(reloaded_target.doi_verified).to be true
+            end
+          end
+
+          context 'when the set of given publications to be merged does not include the merge target' do
+            let(:publications_to_merge) { [pub2] }
+
+            it 'saves the verified DOI from the merged publications on the merge target' do
+              policy.merge!
+              reloaded_target = merge_target_pub.reload
+              expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+              expect(reloaded_target.doi_verified).to be true
             end
           end
         end
