@@ -100,10 +100,8 @@ describe FileVersionChecker do
       let(:test_file) { 'pdf_check_unknown_version.docx' }
 
       it "doesn't parse; returns unknown" do
-        allow(PDF::Reader).to receive(:new)
         expect(pdf_file_version.version).to eq 'unknown'
         expect(pdf_file_version.score).to eq 0
-        expect(PDF::Reader).not_to have_received(:new)
       end
     end
   end

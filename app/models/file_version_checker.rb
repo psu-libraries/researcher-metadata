@@ -13,10 +13,11 @@ class FileVersionChecker
   end
 
   def version
-    if @score.positive?
-      I18n.t('file_versions.published_version')
-    elsif @score.negative?
+    if contains_arxiv_watermark?(reader) || @score.negative?
       I18n.t('file_versions.accepted_version')
+    elsif
+      @score.positive?
+      I18n.t('file_versions.published_version')
     else
       'unknown'
     end
@@ -31,14 +32,9 @@ class FileVersionChecker
     attr_accessor :file_path, :filename, :publication, :content
 
     def process_content
-      return '' if File.extname(file_path) != '.pdf'
+      return '' if File.extname(file_path) != '.pdf' || reader.nil?
 
       begin
-        reader = PDF::Reader.new(file_path)
-        if contains_arxiv_watermark?(reader)
-          @score = -9999
-          return ''
-        end
         words = []
         reader.pages.each do |page|
           break if words.count >= 500
@@ -57,6 +53,14 @@ class FileVersionChecker
       end
 
       words.flatten.join(' ')
+    end
+
+    def reader
+      @reader ||= PDF::Reader.new(file_path)
+    rescue PDF::Reader::MalformedPDFError,
+           PDF::Reader::InvalidObjectError,
+           PDF::Reader::EncryptedPDFError
+      @reader = nil
     end
 
     def calculate_score
