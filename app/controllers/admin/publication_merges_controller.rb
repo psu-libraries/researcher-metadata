@@ -41,6 +41,10 @@ class Admin::PublicationMergesController < RailsAdmin::ApplicationController
                                           merge_target_publication_id: params[:merge_target_publication_id],
                                           selected_publication_ids: params[:selected_publication_ids])
         return
+      rescue DOIVerificationMergePolicy::UnmergablePublications
+        flash[:error] = I18n.t('admin.publication_merges.create.unmergable_publications_error')
+        redirect_to rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        return
       end
 
       flash[:success] = I18n.t('admin.publication_merges.create.merge_success')

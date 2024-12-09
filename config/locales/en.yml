@@ -59,6 +59,7 @@ en:
       create:
         merge_success: "The publications were successfully merged."
         missing_params_error: "To perform a merge, you must select a merge target and at least one other publication to merge into the target."
+        unmergable_publications_error: "You have attempted to merge two or more publications that cannot be merged because they have distinct, verified DOIs. Please double-check the publications in this group."
         too_few_pubs_to_ignore_error: "You must select at least two publications that are false duplicates to ignore."
         ignore_success: "The suspected duplication of the selected publications has been ignored. These publications will no longer be automatically grouped as duplicates, and they will be prevented from being merged."
     publication_waiver_links:
