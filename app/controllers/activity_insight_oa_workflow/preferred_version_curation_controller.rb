@@ -2,6 +2,6 @@
 
 class ActivityInsightOAWorkflow::PreferredVersionCurationController < ActivityInsightOAWorkflowController
   def index
-    @publications = Publication.needs_manual_preferred_version_check
+    @publications = Publication.needs_manual_preferred_version_check.order(:doi)
   end
 end
