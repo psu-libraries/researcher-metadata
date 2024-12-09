@@ -648,6 +648,26 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
 
+    context 'given a publication with the same DOI as another publication but with different doi casing, titles, and publication date' do
+      let!(:p1) { create(:publication,
+                         title: 'A Generic Title',
+                         published_on: Date.new(2000, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-22357634') }
+
+      let!(:p2) { create(:publication,
+                         title: 'A Different One',
+                         published_on: Date.new(2003, 1, 1),
+                         doi: 'https://doi.org/10.000/some-DOI-22357634') }
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p1)
+        group = p1.reload.duplicate_group
+
+        expect(group).not_to be_nil
+        expect(p2.reload.duplicate_group).to eq group
+      end
+    end
+
     context 'given a publication with different DOIs. titles, and publication years' do
       let!(:p1) { create(:publication,
                          title: 'A Generic Title',
@@ -976,6 +996,30 @@ describe DuplicatePublicationGroup, type: :model do
                          title: 'A Different Title',
                          published_on: Date.new(1986, 1, 1),
                          doi: 'https://doi.org/10.000/some-doi-457472486') }
+
+      let!(:p2_import_1) { create(:publication_import,
+                                  source: 'Activity Insight',
+                                  publication: p2)}
+
+      it 'groups the publications' do
+        described_class.group_duplicates_of(p2)
+        group = p2.reload.duplicate_group
+
+        expect(group).not_to be_nil
+        expect(p1.reload.duplicate_group).to eq group
+      end
+    end
+
+    context 'given a publication that has the same DOI but different doi casing, title, and year and the other has only an Activity Insight import' do
+      let!(:p1) { create(:publication,
+                         title: 'A match with only one import from Activity Insight',
+                         published_on: Date.new(1989, 1, 1),
+                         doi: 'https://doi.org/10.000/some-doi-457472486') }
+
+      let!(:p2) { create(:publication,
+                         title: 'A Different Title',
+                         published_on: Date.new(1986, 1, 1),
+                         doi: 'https://doi.org/10.000/some-DOI-457472486') }
 
       let!(:p2_import_1) { create(:publication_import,
                                   source: 'Activity Insight',
