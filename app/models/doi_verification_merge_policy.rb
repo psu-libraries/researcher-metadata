@@ -9,7 +9,6 @@ class DOIVerificationMergePolicy
   end
 
   def merge!
-    # TODO:  We need to handle these exceptions somewhere and show admin users a helpful message.
     raise UnmergablePublications if given_unmergable_pubs?
 
     return if main_pub.has_verified_doi?
