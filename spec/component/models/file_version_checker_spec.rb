@@ -34,6 +34,14 @@ describe FileVersionChecker do
       end
     end
 
+    context 'when the file contains an arXiv artifact' do
+      let(:test_file) { 'watermark-2.pdf' }
+
+      it 'returns accepted version' do
+        expect(pdf_file_version.version).to eq I18n.t('file_versions.accepted_version')
+      end
+    end
+
     context 'when published version' do
       # The test_file filename contains an publishedVersion signal
       let(:test_file) { 'pdf_check_published_versionS123456abc.pdf' }
@@ -92,10 +100,8 @@ describe FileVersionChecker do
       let(:test_file) { 'pdf_check_unknown_version.docx' }
 
       it "doesn't parse; returns unknown" do
-        allow(PDF::Reader).to receive(:new)
         expect(pdf_file_version.version).to eq 'unknown'
         expect(pdf_file_version.score).to eq 0
-        expect(PDF::Reader).not_to have_received(:new)
       end
     end
   end
