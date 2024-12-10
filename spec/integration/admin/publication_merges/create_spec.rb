@@ -409,4 +409,40 @@ describe 'managing duplicate publication groups', type: :feature do
       end
     end
   end
+
+  context 'a group with two publications that are verified to be distinct from each other' do
+    let!(:pub1) {
+      create(
+        :publication,
+        duplicate_group: group,
+        doi: 'https://doi.org/10.1001/archderm.139.10.1363-g',
+        doi_verified: true
+      )
+    }
+    let!(:pub2) {
+      create(
+        :publication,
+        duplicate_group: group,
+        doi: 'https://doi.org/10.1103/physrevlett.80.3915',
+        doi_verified: true
+      )
+    }
+
+    context 'choosing one publication as the merge target and selecting another publication to merge' do
+      before do
+        visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id)
+        choose "merge_target_publication_id_#{pub1.id}"
+        check "selected_publication_ids_#{pub2.id}"
+        click_on 'Merge Selected'
+      end
+
+      it 'redirects back to the group' do
+        expect(page).to have_current_path rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id), ignore_query: true
+      end
+
+      it 'shows an error message' do
+        expect(page).to have_content I18n.t('admin.publication_merges.create.unmergable_publications_error')
+      end
+    end
+  end
 end

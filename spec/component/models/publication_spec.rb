@@ -3754,6 +3754,35 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#has_pure_import?' do
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+
+    context 'when the publication has an import from Pure' do
+      let(:pub) { create(:publication, imports: [pure_import]) }
+
+      it 'returns true' do
+        expect(pub.has_pure_import?).to be true
+      end
+    end
+
+    context 'when the publication has an import from another source' do
+      let(:pub) { create(:publication, imports: [ai_import]) }
+
+      it 'returns false' do
+        expect(pub.has_pure_import?).to be false
+      end
+    end
+
+    context 'when the publication does not have any imports' do
+      let(:pub) { create(:publication) }
+
+      it 'returns false' do
+        expect(pub.has_pure_import?).to be false
+      end
+    end
+  end
+
   describe '#has_single_import_from_pure?' do
     let(:pure_import) { build(:publication_import, source: 'Pure') }
     let(:other_pure_import) { build(:publication_import, source: 'Pure') }
@@ -4281,6 +4310,70 @@ describe Publication, type: :model do
 
       it 'returns false' do
         expect(publication.can_deposit_to_scholarsphere?).to be false
+      end
+    end
+  end
+
+  describe '#has_verified_doi?' do
+    let(:pub) { described_class.new(doi: doi, doi_verified: doi_verified) }
+
+    context 'when the publication has no DOI value' do
+      let(:doi) { nil }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
+        end
+      end
+    end
+
+    context 'when the publication has a blank DOI value' do
+      let(:doi) { '' }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
+        end
+      end
+    end
+
+    context 'when the publication has a non-blank DOI value' do
+      let(:doi) { 'not blank' }
+
+      context "when the publication's DOI has been verified" do
+        let(:doi_verified) { true }
+
+        it 'returns true' do
+          expect(pub.has_verified_doi?).to be true
+        end
+      end
+
+      context "when the publication's DOI has not been verified" do
+        let(:doi_verified) { false }
+
+        it 'returns false' do
+          expect(pub.has_verified_doi?).to be false
+        end
       end
     end
   end
