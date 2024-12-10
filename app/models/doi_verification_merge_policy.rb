@@ -13,17 +13,19 @@ class DOIVerificationMergePolicy
 
     return if main_pub.has_verified_doi?
 
-    pubs_to_merge.each do |p|
-      if p.has_verified_doi? || (main_pub.doi.blank? && p.doi.present?)
-        main_pub.doi = p.doi
-        main_pub.doi_verified = p.doi_verified
-      end
-    end
-
-    if main_pub.doi.blank?
-      if pubs_to_merge.find { |p| p.doi.blank? && p.doi_verified }
+    if pub_to_merge_with_verified_doi
+      main_pub.doi = pub_to_merge_with_verified_doi.doi
+      main_pub.doi_verified = pub_to_merge_with_verified_doi.doi_verified
+    elsif main_pub.doi.blank?
+      if pub_to_merge_with_unverified_doi_from_pure
+        main_pub.doi = pub_to_merge_with_unverified_doi_from_pure.doi
+        main_pub.doi_verified = pub_to_merge_with_unverified_doi_from_pure.doi_verified
+      elsif pub_to_merge_with_unverified_doi
+        main_pub.doi = pub_to_merge_with_unverified_doi.doi
+        main_pub.doi_verified = pub_to_merge_with_unverified_doi.doi_verified
+      elsif pub_to_merge_with_verified_blank_doi
         main_pub.doi_verified = true
-      elsif pubs_to_merge.find { |p| p.doi.blank? && p.doi_verified == false } && !main_pub.doi_verified
+      elsif pubs_to_merge_with_unverified_blank_doi && !main_pub.doi_verified
         main_pub.doi_verified = false
       end
     end
@@ -37,6 +39,30 @@ class DOIVerificationMergePolicy
 
     def pubs_to_merge
       publications - [main_pub]
+    end
+
+    def pub_to_merge_with_verified_doi
+      @pub_to_merge_with_verified_doi ||= pubs_to_merge.find(&:has_verified_doi?)
+    end
+
+    def pub_to_merge_with_unverified_doi_from_pure
+      @pub_to_merge_with_unverified_doi_from_pure ||= pubs_to_merge.find do |p|
+        p.doi.present? && !p.doi_verified && p.has_pure_import?
+      end
+    end
+
+    def pub_to_merge_with_unverified_doi
+      @pub_to_merge_with_unverified_doi ||= pubs_to_merge.find do |p|
+        p.doi.present? && !p.doi_verified
+      end
+    end
+
+    def pub_to_merge_with_verified_blank_doi
+      pubs_to_merge.find { |p| p.doi.blank? && p.doi_verified }
+    end
+
+    def pubs_to_merge_with_unverified_blank_doi
+      pubs_to_merge.find { |p| p.doi.blank? && p.doi_verified == false }
     end
 
     def all_verified_dois

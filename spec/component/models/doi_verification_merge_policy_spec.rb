@@ -3645,34 +3645,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          # TODO:  We need additional contexts here for groups of publications with and
-          # without Pure imports.
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 
@@ -3809,32 +3883,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 
@@ -4697,32 +4847,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 
@@ -4859,32 +5085,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 
@@ -5747,32 +6049,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 
@@ -5909,32 +6287,108 @@ describe DOIVerificationMergePolicy do
         context 'when given a second publication to be merged that has an unverified DOI' do
           let(:pub3) { create(:publication, doi_verified: false, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the unverified DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be false
+              end
+            end
           end
         end
 
         context 'when given a second publication to be merged that has a DOI with unknown verification' do
           let(:pub3) { create(:publication, doi_verified: nil, doi: 'https://doi.org/10.1126/science.ads5951') }
 
-          context 'when the set of given publications to be merged includes the merge target' do
-            let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+          context 'when none of the publications to be merged have an import from Pure' do
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the first publication on the merge target' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1001/archderm.139.10.1363-g'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
 
-          context 'when the set of given publications to be merged does not include the merge target' do
-            let(:publications_to_merge) { [pub2, pub3] }
+          context 'when the second publication to be merged has an import from Pure' do
+            before { create(:publication_import, publication: pub3, source: 'Pure') }
 
-            xit 'it saves the DOI from the publication with a Pure import'
+            context 'when the set of given publications to be merged includes the merge target' do
+              let(:publications_to_merge) { [merge_target_pub, pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
+
+            context 'when the set of given publications to be merged does not include the merge target' do
+              let(:publications_to_merge) { [pub2, pub3] }
+
+              it 'saves the DOI from the publication with a Pure import' do
+                policy.merge!
+                reloaded_target = merge_target_pub.reload
+                expect(reloaded_target.doi).to eq 'https://doi.org/10.1126/science.ads5951'
+                expect(reloaded_target.doi_verified).to be_nil
+              end
+            end
           end
         end
 

@@ -3654,6 +3654,35 @@ describe Publication, type: :model do
     end
   end
 
+  describe '#has_pure_import?' do
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+
+    context 'when the publication has an import from Pure' do
+      let(:pub) { create(:publication, imports: [pure_import]) }
+
+      it 'returns true' do
+        expect(pub.has_pure_import?).to be true
+      end
+    end
+
+    context 'when the publication has an import from another source' do
+      let(:pub) { create(:publication, imports: [ai_import]) }
+
+      it 'returns false' do
+        expect(pub.has_pure_import?).to be false
+      end
+    end
+
+    context 'when the publication does not have any imports' do
+      let(:pub) { create(:publication) }
+
+      it 'returns false' do
+        expect(pub.has_pure_import?).to be false
+      end
+    end
+  end
+
   describe '#has_single_import_from_pure?' do
     let(:pure_import) { build(:publication_import, source: 'Pure') }
     let(:other_pure_import) { build(:publication_import, source: 'Pure') }

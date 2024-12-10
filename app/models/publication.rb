@@ -625,8 +625,12 @@ class Publication < ApplicationRecord
     merge([self, publication_to_merge]) { PublicationMergeOnMatchingPolicy.new(self, publication_to_merge).merge! }
   end
 
+  def has_pure_import?
+    imports.where(source: 'Pure').any?
+  end
+
   def has_single_import_from_pure?
-    imports.count == 1 && imports.where(source: 'Pure').any?
+    imports.count == 1 && has_pure_import?
   end
 
   def has_single_import_from_ai?
