@@ -7,16 +7,17 @@ class FileVersionChecker
     @file_path = file_path
     @filename = File.basename(file_path)
     @publication = publication
-    @content = process_content
     @score = 0
+    @content = process_content
     calculate_score
   end
 
   def version
-    if @score.positive?
-      I18n.t('file_versions.published_version')
-    elsif @score.negative?
+    if contains_arxiv_watermark?(reader) || @score.negative?
       I18n.t('file_versions.accepted_version')
+    elsif
+      @score.positive?
+      I18n.t('file_versions.published_version')
     else
       'unknown'
     end
@@ -31,12 +32,10 @@ class FileVersionChecker
     attr_accessor :file_path, :filename, :publication, :content
 
     def process_content
-      return '' if File.extname(file_path) != '.pdf'
+      return '' if File.extname(file_path) != '.pdf' || reader.nil?
 
       begin
-        reader = PDF::Reader.new(file_path)
         words = []
-
         reader.pages.each do |page|
           break if words.count >= 500
 
@@ -54,6 +53,14 @@ class FileVersionChecker
       end
 
       words.flatten.join(' ')
+    end
+
+    def reader
+      @reader ||= PDF::Reader.new(file_path)
+    rescue PDF::Reader::MalformedPDFError,
+           PDF::Reader::InvalidObjectError,
+           PDF::Reader::EncryptedPDFError
+      @reader = nil
     end
 
     def calculate_score
@@ -128,5 +135,11 @@ class FileVersionChecker
         doi: publication.doi,
         publisher: publication.preferred_publisher_name
       }
+    end
+
+    def contains_arxiv_watermark?(reader)
+      if !reader.nil? && !reader.objects[8].nil? && !reader.objects[8][:A].nil? && !reader.objects[8][:A][:URI].nil?
+        reader.objects[8][:A][:URI].include?('arxiv.org')
+      end
     end
 end
