@@ -278,6 +278,31 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when no publications are flagged for review' do
+    let!(:oal) { create(:open_access_location, publication: pub2, source: Source::UNPAYWALL) }
+    let!(:pub1) { create(:publication, doi_verified: true) }
+    let!(:pub2) { create(:publication, doi_verified: nil) }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('flagged-for-review-card').to_json).to include('text-muted')
+      expect(page.find_by_id('flagged-for-review-card').text).to include('0')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/flagged_for_review')
+    end
+  end
+
+  context 'when publications are flagged for review' do
+    let!(:pub1) { create(:publication, flagged_for_review: true) }
+    let!(:pub2) { create(:publication, doi_verified: nil) }
+
+    it 'renders the flagged for review card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('flagged-for-review-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('flagged-for-review-card').text).to include('1')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/flagged_for_review')
+    end
+  end
+
   context 'when there are publications in the workflow' do
     let!(:pub1) { create(:publication) }
     let!(:pub2) { create(:publication) }
