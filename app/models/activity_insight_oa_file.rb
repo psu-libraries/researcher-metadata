@@ -37,7 +37,19 @@ class ActivityInsightOAFile < ApplicationRecord
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
-      .where(%{NOT EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
+      .where(
+        <<-SQL.squish
+          NOT EXISTS (
+            SELECT * FROM open_access_locations
+            WHERE open_access_locations.publication_id = publication.id
+              AND (
+                open_access_locations.source = '#{Source::SCHOLARSPHERE}'
+                OR open_access_locations.source = '#{Source::PSU_LAW_ELIBRARY}'
+                OR open_access_locations.source = '#{Source::DICKINSON_IDEAS}'
+              )
+          )
+        SQL
+      )
       .where.not(location: nil)
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
       .distinct
@@ -61,9 +73,21 @@ class ActivityInsightOAFile < ApplicationRecord
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
-      .where(%{publication.open_access_status = 'gold' OR publication.open_access_status = 'hybrid'
-        OR EXISTS (SELECT * FROM open_access_locations WHERE open_access_locations.publication_id = publication.id
-        AND open_access_locations.source = '#{Source::SCHOLARSPHERE}')})
+      .where(
+        <<-SQL.squish
+          publication.open_access_status = 'gold'
+          OR publication.open_access_status = 'hybrid'
+          OR EXISTS (
+            SELECT * FROM open_access_locations
+            WHERE open_access_locations.publication_id = publication.id
+              AND (
+                open_access_locations.source = '#{Source::SCHOLARSPHERE}'
+                OR open_access_locations.source = '#{Source::PSU_LAW_ELIBRARY}'
+                OR open_access_locations.source = '#{Source::DICKINSON_IDEAS}'
+              )
+          )
+        SQL
+      )
       .where(exported_oa_status_to_activity_insight: nil)
       .distinct
   }
