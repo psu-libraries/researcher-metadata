@@ -165,9 +165,9 @@ class User < ApplicationRecord
   def notifiable_potential_open_access_publications
     potential_open_access_publications
       .where('publications.published_on >= ?', 2.years.ago)
-      .select(&:no_open_access_information?)
       .order(published_on: :desc)
-      .limit(6)
+      .select(&:no_open_access_information?)
+      .first(6)
   end
 
   def confirmed_publications

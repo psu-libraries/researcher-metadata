@@ -4,7 +4,7 @@ require 'component/component_spec_helper'
 
 describe FacultyNotificationsMailer, type: :model do
   describe '#open_access_reminder' do
-    subject(:email) { described_class.open_access_reminder(user, old_publications, new_publications) }
+    subject(:email) { described_class.open_access_reminder(user, old_publications + new_publications) }
 
     let(:user) { double 'user',
                         email: 'test123@psu.edu',
