@@ -66,6 +66,21 @@ describe OABClient do
         end
       end
     end
+
+    context 'when the publication type is Extension Publication' do
+      before { allow(OABResponse).to receive(:new).with({}).and_return(empty_response) }
+
+      let(:pub) { create(:publication,
+                         doi: nil,
+                         title: title,
+                         publication_type: 'Extension Publication') }
+
+      let(:empty_response) { instance_double OABResponse }
+
+      it 'returns an empty hash' do
+        expect(client.query_open_access_button(pub)).to eq empty_response
+      end
+    end
   end
 
   describe '#query_open_access_button' do
