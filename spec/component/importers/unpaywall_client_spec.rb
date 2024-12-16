@@ -66,23 +66,6 @@ describe UnpaywallClient do
         end
       end
     end
-
-    context 'when the publication type is Extension Publication' do
-      before do
-        allow(UnpaywallResponse).to receive(:new).with({}).and_return(empty_response)
-      end
-
-      let(:pub) { create(:publication,
-                         doi: doi,
-                         title: title,
-                         publication_type: 'Extension Publication') }
-      let(:doi) { nil }
-      let(:empty_response) { instance_double UnpaywallResponse }
-
-      it 'returns an empty hash' do
-        expect(client.query_unpaywall(pub)).to eq empty_response
-      end
-    end
   end
 
   describe '#query_unpaywall' do

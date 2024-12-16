@@ -106,6 +106,36 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.doi_verified).not_to be true
         end
       end
+
+      context 'when the publication type is Extension Publication' do
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil,
+                                          publication_type: 'Extension Publication',
+                                          title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
+
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_before }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_before
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_before
+          expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI from Unpaywall to the publication' do
+          importer.import_before
+          expect(pub.reload.doi).to be_nil
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_before
+          expect(pub.reload.doi_verified).not_to be true
+        end
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -586,6 +616,36 @@ describe UnpaywallPublicationImporter, :vcr do
           expect(pub.reload.doi_verified).not_to be true
         end
       end
+
+      context 'when the publication type is Extension Publication' do
+        let!(:pub) { create(:publication, doi: nil, open_access_status: nil,
+                                          publication_type: 'Extension Publication',
+                                          title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
+
+        it 'does not create any open access locations for the publication' do
+          expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
+        end
+
+        it "does not update the publication's Unpaywall check timestamp" do
+          importer.import_new
+          expect(pub.reload.unpaywall_last_checked_at).to be_nil
+        end
+
+        it 'does not update the open access status on the publication' do
+          importer.import_new
+          expect(pub.reload.open_access_status).to be_nil
+        end
+
+        it 'does not update the DOI from Unpaywall to the publication' do
+          importer.import_new
+          expect(pub.reload.doi).to be_nil
+        end
+
+        it 'does not update the DOI verification on the publication' do
+          importer.import_new
+          expect(pub.reload.doi_verified).not_to be true
+        end
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -625,36 +685,6 @@ describe UnpaywallPublicationImporter, :vcr do
 
       context 'when the title is ambiguous and does not have an exact match with an article listed with Unpaywall' do
         let!(:pub) { create(:publication, doi: '', open_access_status: nil, title: 'Economic Development') }
-
-        it 'does not create any open access locations for the publication' do
-          expect { importer.import_new }.not_to change(OpenAccessLocation, :count)
-        end
-
-        it "updates the publication's Unpaywall check timestamp" do
-          importer.import_new
-          expect(pub.reload.unpaywall_last_checked_at).to be_within(1.minute).of(Time.zone.now)
-        end
-
-        it 'updates the open access status on the publication to unknown' do
-          importer.import_new
-          expect(pub.reload.open_access_status).to eq 'unknown'
-        end
-
-        it 'does not update the DOI from Unpaywall to the publication' do
-          importer.import_new
-          expect(pub.reload.doi).to eq ''
-        end
-
-        it 'does not update the DOI verification on the publication' do
-          importer.import_new
-          expect(pub.reload.doi_verified).not_to be true
-        end
-      end
-
-      context 'when the publication type is Extension Publication' do
-        let!(:pub) { create(:publication, doi: '', open_access_status: nil,
-                                          publication_type: 'Extension Publication',
-                                          title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes') }
 
         it 'does not create any open access locations for the publication' do
           expect { importer.import_new }.not_to change(OpenAccessLocation, :count)

@@ -8,7 +8,7 @@ class OABClient
                  "https://api.openaccessbutton.org/find?title=#{CGI.escape(cleaned_title(publication))}"
                end
 
-    json = publication.publication_type == 'Extension Publication' ? {} : JSON.parse(HttpService.get(find_url))
+    json = JSON.parse(HttpService.get(find_url))
     OABResponse.new(json)
   end
 
