@@ -569,7 +569,7 @@ describe User, type: :model do
                               publication: ou_pub_3,
                               confirmed: true) }
 
-    # Filtered out due to publication being published before open access policy
+    # Filtered out due to publication being published more than two years ago
     let!(:other_user_4) { create(:user, :with_psu_identity,
                                  open_access_notification_sent_at: 1.year.ago,
                                  first_name: 'other_user_4') }
