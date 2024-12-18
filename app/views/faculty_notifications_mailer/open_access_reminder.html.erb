@@ -5,23 +5,12 @@
   for which you are listed as an author:
 </p>
 
-<% if @new_publications.any? %>
-  <strong>New publications awaiting action:</strong>
-  <ul>
-    <% @new_publications.each do |p| %>
-      <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<% if @old_publications.any? %>
-  <strong>Previous publications awaiting action:</strong>
-  <ul>
-    <% @old_publications.each do |p| %>
-      <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
-    <% end %>
-  </ul>
-<% end %>
+<strong>Publications awaiting action:</strong>
+<ul>
+  <% @publications.each do |p| %>
+    <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
+  <% end %>
+</ul>
 
 <p>
   Pursuant to <%= link_to "Penn State's open access policy", "https://openaccess.psu.edu/" %>, we would like

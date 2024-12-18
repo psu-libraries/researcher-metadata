@@ -5,24 +5,15 @@ require 'component/component_spec_helper'
 describe OpenAccessNotifier do
   let(:notifier) { described_class.new(user_collection) }
   let(:user1) { double 'user 1',
-                       old_potential_open_access_publications: pubs1,
-                       new_potential_open_access_publications: pubs2,
+                       notifiable_potential_open_access_publications: [pub1, pub2],
                        record_open_access_notification: nil }
   let(:user2) { double 'user 2',
-                       old_potential_open_access_publications: pubs3,
-                       new_potential_open_access_publications: pubs4,
+                       notifiable_potential_open_access_publications: [pub3, pub4],
                        record_open_access_notification: nil }
   let(:user3) { double 'user 3',
-                       old_potential_open_access_publications: pubs5,
-                       new_potential_open_access_publications: pubs6,
+                       notifiable_potential_open_access_publications: [pub5, pub6],
                        record_open_access_notification: nil }
   let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2, user3] }
-  let(:pubs1) { [pub1] }
-  let(:pubs2) { [pub2] }
-  let(:pubs3) { [pub3] }
-  let(:pubs4) { [pub4] }
-  let(:pubs5) { [pub5] }
-  let(:pubs6) { [pub6] }
   let(:profile1) { double 'user profile 1', active?: true }
   let(:profile2) { double 'user profile 2', active?: true }
   let(:profile3) { double 'user profile 3', active?: true }
@@ -53,9 +44,9 @@ describe OpenAccessNotifier do
       allow(UserProfile).to receive(:new).with(user1).and_return profile1
       allow(UserProfile).to receive(:new).with(user2).and_return profile2
       allow(UserProfile).to receive(:new).with(user3).and_return profile3
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_return email1
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, pubs3, pubs4).and_return email2
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, pubs5, pubs6).and_return email3
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, [pub1, pub2]).and_return email1
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, [pub3, pub4]).and_return email2
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, [pub5, pub6]).and_return email3
       allow(pub1_auths).to receive(:find_by).with(user: user1).and_return auth1
       allow(pub2_auths).to receive(:find_by).with(user: user1).and_return auth2
       allow(pub3_auths).to receive(:find_by).with(user: user2).and_return auth3
@@ -90,8 +81,8 @@ describe OpenAccessNotifier do
 
     context 'when an error is raised while sending an email' do
       before do
-        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The SMTPFatalError message'
-        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, pubs5, pubs6).and_raise Net::ReadTimeout, 'The ReadTimeout message'
+        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, [pub1, pub2]).and_raise Net::SMTPFatalError, 'The SMTPFatalError message'
+        allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, [pub5, pub6]).and_raise Net::ReadTimeout, 'The ReadTimeout message'
       end
 
       it "sends emails that don't raise errors" do
@@ -156,20 +147,16 @@ describe OpenAccessNotifier do
   describe '#send_notifications_with_cap' do
     let(:user_collection) { double 'user collection', needs_open_access_notification: [user1, user2, user3, user4, user5, user6] }
     let(:user3) { double 'user 3',
-                         old_potential_open_access_publications: pubs1,
-                         new_potential_open_access_publications: pubs2,
+                         notifiable_potential_open_access_publications: [pub1, pub2],
                          record_open_access_notification: nil }
     let(:user4) { double 'user 4',
-                         old_potential_open_access_publications: pubs1,
-                         new_potential_open_access_publications: pubs2,
+                         notifiable_potential_open_access_publications: [pub1, pub2],
                          record_open_access_notification: nil }
     let(:user5) { double 'user 5',
-                         old_potential_open_access_publications: pubs1,
-                         new_potential_open_access_publications: pubs2,
+                         notifiable_potential_open_access_publications: [pub1, pub2],
                          record_open_access_notification: nil }
     let(:user6) { double 'user 6',
-                         old_potential_open_access_publications: pubs1,
-                         new_potential_open_access_publications: pubs2,
+                         notifiable_potential_open_access_publications: [pub1, pub2],
                          record_open_access_notification: nil }
     let(:profile3) { double 'user profile 3', active?: true }
     let(:profile4) { double 'user profile 4', active?: true }
@@ -195,12 +182,12 @@ describe OpenAccessNotifier do
       allow(UserProfile).to receive(:new).with(user4).and_return profile4
       allow(UserProfile).to receive(:new).with(user5).and_return profile5
       allow(UserProfile).to receive(:new).with(user6).and_return profile6
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_return email1
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, pubs3, pubs4).and_return email2
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, pubs1, pubs2).and_return email3
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile4, pubs1, pubs2).and_return email4
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile5, pubs1, pubs2).and_return email5
-      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile6, pubs1, pubs2).and_return email6
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, [pub1, pub2]).and_return email1
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile2, [pub3, pub4]).and_return email2
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile3, [pub1, pub2]).and_return email3
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile4, [pub1, pub2]).and_return email4
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile5, [pub1, pub2]).and_return email5
+      allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile6, [pub1, pub2]).and_return email6
       allow(pub1_auths).to receive(:find_by).with(user: user1).and_return auth1
       allow(pub2_auths).to receive(:find_by).with(user: user1).and_return auth2
       allow(pub1_auths).to receive(:find_by).with(user: user3).and_return auth5
@@ -256,7 +243,7 @@ describe OpenAccessNotifier do
     end
 
     context 'when an error is raised while sending an email' do
-      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, pubs1, pubs2).and_raise Net::SMTPFatalError, 'The error message' }
+      before { allow(FacultyNotificationsMailer).to receive(:open_access_reminder).with(profile1, [pub1, pub2]).and_raise Net::SMTPFatalError, 'The error message' }
 
       it "sends emails that don't raise errors for the first five users that need one" do
         expect(email1).not_to receive(:deliver_now)

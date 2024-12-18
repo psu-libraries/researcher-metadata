@@ -9,8 +9,11 @@ describe 'sending open access reminder emails' do
                         first_name: 'Tester',
                         last_name: 'Testerson') }
 
+  let!(:recently_sent) { 1.week.ago }
+
   let!(:membership1) { create(:user_organization_membership, user: user1, started_on: Date.new(2019, 1, 1)) }
-  let!(:pub1) { create(:publication, published_on: Date.new(2020, 8, 1), title: 'Test Pub') }
+  let!(:pub1) { create(:publication, published_on: recently_sent, title: 'Test Pub') }
+  # Irrelevant publication due to being more than 2 years old
   let!(:pub2) { create(:publication, published_on: Date.new(2019, 2, 1), title: 'Irrelevant Pub') }
 
   let!(:auth1) { create(:authorship,
@@ -28,7 +31,7 @@ describe 'sending open access reminder emails' do
   let!(:membership2) { create(:user_organization_membership, user: user2, started_on: Date.new(2019, 1, 1)) }
 
   let!(:u2_pub2) { create(:publication,
-                          published_on: Date.new(2020, 8, 1),
+                          published_on: recently_sent,
                           title: 'Other Pub',
                           open_access_locations: [build(:open_access_location,
                                                         source: Source::OPEN_ACCESS_BUTTON,
@@ -38,7 +41,7 @@ describe 'sending open access reminder emails' do
 
   before { OpenAccessNotifier.new.send_notifications }
 
-  context 'when notifications have not been sent about mentioned publications before' do
+  context 'when a user has a publication that warrants a reminder email' do
     let(:nts) { nil }
 
     it 'successfully sends a message only to applicable users' do
@@ -52,12 +55,6 @@ describe 'sending open access reminder emails' do
     it "includes the user's name in the message" do
       open_email('abc123@psu.edu')
       expect(current_email.body).to match(/Tester Testerson/)
-    end
-
-    it "shows only the list of publications that haven't been mentioned in notifications before" do
-      open_email('abc123@psu.edu')
-      expect(current_email.body).to match(/New publications/)
-      expect(current_email.body).not_to match(/Old publications/)
     end
 
     it 'includes the titles of only relevant publications in the message' do
@@ -80,16 +77,6 @@ describe 'sending open access reminder emails' do
         open_email('abc123@psu.edu')
         expect(current_email).to be_nil
       end
-    end
-  end
-
-  context 'when notifications have been sent about mentioned publications before' do
-    let(:nts) { 1.week.ago }
-
-    it 'shows only the list of publications that have been mentioned in notifications before' do
-      open_email('abc123@psu.edu')
-      expect(current_email.body).to match(/Previous publications/)
-      expect(current_email.body).not_to match(/New publications/)
     end
   end
 end
