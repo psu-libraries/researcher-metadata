@@ -49,7 +49,7 @@ class OpenAccessButtonPublicationImporter
   private
 
     def all_pubs
-      Publication.all
+      Publication.not_extension_publication
     end
 
     def new_pubs
