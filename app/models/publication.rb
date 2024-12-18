@@ -396,6 +396,11 @@ class Publication < ApplicationRecord
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
       field(:preferred_file_version_none_email_sent)
+      field(:users) do
+        filterable true
+        searchable [:webaccess_id]
+        queryable true
+      end
     end
 
     create do
@@ -479,6 +484,7 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
+      field(:users)
       group :preferred_version do
         field(:preferred_version)
         field(:preferred_file_version_none_email_sent)
@@ -535,6 +541,10 @@ class Publication < ApplicationRecord
         end
         field(:preferred_file_version_none_email_sent)
       end
+    end
+
+    scope do
+      Publication.left_joins(:users)
     end
   end
 
