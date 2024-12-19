@@ -45,7 +45,7 @@ describe FacultyNotificationsMailer, type: :model do
       end
 
       it 'shows some instructions for managing the open access info' do
-        expect(body).to match "Please click the publication"
+        expect(body).to match 'Please click the publication'
       end
     end
   end
