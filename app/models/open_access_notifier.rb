@@ -30,12 +30,11 @@ class OpenAccessNotifier
 
       begin
         FacultyNotificationsMailer.open_access_reminder(user_profile,
-                                                        user.old_potential_open_access_publications,
-                                                        user.new_potential_open_access_publications).deliver_now
+                                                        user.notifiable_potential_open_access_publications).deliver_now
 
         ActiveRecord::Base.transaction do
           user.record_open_access_notification
-          pubs = user.old_potential_open_access_publications + user.new_potential_open_access_publications
+          pubs = user.notifiable_potential_open_access_publications
           pubs.each do |p|
             p.authorships.find_by(user: user).record_open_access_notification
           end
