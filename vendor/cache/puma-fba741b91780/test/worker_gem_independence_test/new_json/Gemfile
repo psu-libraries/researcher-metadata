@@ -1,8 +1,0 @@
-source "https://rubygems.org"
-
-gem 'puma', path: '../../..'
-gem 'json', '= 2.7.0'
-
-if RUBY_VERSION > '3.4'
-  gem 'ostruct', '>= 0.6.0'
-end

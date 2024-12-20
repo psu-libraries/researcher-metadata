@@ -17,7 +17,7 @@ describe 'OA Notification Settings show page', type: :feature do
         expect(page).to have_content 'Details for OA notification setting'
         expect(page).to have_content settings.email_cap
         expect(page).to have_css 'span.fa-check', count: 1
-        expect(page).not_to have_content 'Singleton guard'
+        expect(page).to have_no_content 'Singleton guard'
       end
     end
 

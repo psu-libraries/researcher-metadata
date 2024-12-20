@@ -42,7 +42,7 @@ describe 'Home page', type: :feature do
     end
 
     it 'does not show a link to the admin interface' do
-      expect(page).not_to have_link 'Admin'
+      expect(page).to have_no_link 'Admin'
     end
 
     it 'shows a sign out link' do
@@ -113,11 +113,11 @@ describe 'Home page', type: :feature do
     end
 
     it 'does not show a link to the admin interface' do
-      expect(page).not_to have_link 'Admin'
+      expect(page).to have_no_link 'Admin'
     end
 
     it 'does not show a sign out link' do
-      expect(page).not_to have_link 'Sign out'
+      expect(page).to have_no_link 'Sign out'
     end
 
     it_behaves_like 'a page with the public layout'

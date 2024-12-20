@@ -51,7 +51,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
     it 'renders editable doi field' do
       view_render
-      expect(rendered_content).not_to have_field('DOI', readonly: true)
+      expect(rendered_content).to have_no_field('DOI', readonly: true)
       expect(rendered_content).to have_field('DOI')
     end
   end
@@ -91,7 +91,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'renders no notice and defaults to "All Rights Reserved"' do
         view_render
-        expect(rendered_content).not_to have_text('We found the license for your work')
+        expect(rendered_content).to have_no_text('We found the license for your work')
         expect(rendered_content).to have_field('License', with: 'https://rightsstatements.org/page/InC/1.0/')
       end
     end
@@ -111,7 +111,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'does not render any notice and does not prefill data' do
         view_render
-        expect(rendered_content).not_to have_text('We found the set statement for your work')
+        expect(rendered_content).to have_no_text('We found the set statement for your work')
         expect(rendered_content).to have_field('Publisher Statement', with: '')
       end
     end
@@ -149,7 +149,7 @@ RSpec.describe ScholarsphereDepositFormComponent, type: :component do
 
       it 'does not render any notice and does not prefill data' do
         view_render
-        expect(rendered_content).not_to have_text('We found the embargo end date for your work')
+        expect(rendered_content).to have_no_text('We found the embargo end date for your work')
         expect(rendered_content).to have_css('#scholarsphere_work_deposit_embargoed_until_1i', text: '')
         expect(rendered_content).to have_css('#scholarsphere_work_deposit_embargoed_until_2i', text: '')
         expect(rendered_content).to have_css('#scholarsphere_work_deposit_embargoed_until_3i', text: '')

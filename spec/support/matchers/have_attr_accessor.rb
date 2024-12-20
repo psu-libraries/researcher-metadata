@@ -3,7 +3,7 @@
 RSpec::Matchers.define :have_attr_accessor do |attribute_name|
   match do |model|
     model.respond_to?(attribute_name) &&
-      model.respond_to?("#{attribute_name}=")
+      model.respond_to?(:"#{attribute_name}=")
   end
 
   failure_message do |model|

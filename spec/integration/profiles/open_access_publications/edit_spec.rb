@@ -71,7 +71,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
     before { visit edit_open_access_publication_path(pub) }
 
     it 'does not allow them to visit the page' do
-      expect(page).not_to have_current_path edit_open_access_publication_path(pub), ignore_query: true
+      expect(page).to have_no_current_path edit_open_access_publication_path(pub), ignore_query: true
     end
   end
 
@@ -150,7 +150,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         end
       end
 
-      describe 'file upload and version check', js: true do
+      describe 'file upload and version check', :js do
         include ActiveJob::TestHelper
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
@@ -244,7 +244,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         end
 
         # Tagged as glacial.  This test takes over a minute to complete.
-        context 'when timeout is reached', glacial: true do
+        context 'when timeout is reached', :glacial do
           let(:exif_version) { nil }
           let(:test_file) { "#{Rails.root}/spec/fixtures/pdf_check_unknown_version.pdf" }
           let(:cache_file) { { original_filename: 'pdf_check_unknown_version.pdf',
@@ -262,7 +262,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             expect(page).to have_content('Attempting to determine file version, please wait...')
             sleep 10
             expect(page).to have_content('Attempting to determine file version, please wait...')
-            expect(page).not_to have_content('Attempting to determine file version, please wait...', wait: 15)
+            expect(page).to have_no_content('Attempting to determine file version, please wait...', wait: 15)
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article.', wait: 15)
             expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
             expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
@@ -270,7 +270,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
         end
       end
 
-      describe 'completing the workflow', js: true do
+      describe 'completing the workflow', :js do
         include ActiveJob::TestHelper
         let(:file_store) { ActiveSupport::Cache.lookup_store(:file_store, file_caching_path) }
         let(:cache) { Rails.cache }
@@ -357,7 +357,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             ScholarsphereWorkDeposit.find_by(title: 'Test Publication')
             expect(Scholarsphere::Client::Ingest).to have_received(:new) do |args|
               expect(args).to be_a Hash
-              expect(args.keys).to match_array [:metadata, :files, :depositor]
+              expect(args.keys).to contain_exactly(:metadata, :files, :depositor)
               expect(args[:metadata]).to eq({
                                               creators: [{ display_name: 'Bob Author', psu_id: 'xyz123' }],
                                               description: 'An abstract of the test publication',
@@ -403,7 +403,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             within "#authorship_row_#{auth.id}" do
               expect(page).to have_css '.fa-unlock-alt'
               expect(page).to have_content pub.title
-              expect(page).not_to have_link pub.title
+              expect(page).to have_no_link pub.title
             end
           end
         end

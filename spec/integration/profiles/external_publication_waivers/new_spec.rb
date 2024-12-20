@@ -10,7 +10,7 @@ describe 'visiting the page to submit an open access waiver for a publication th
     before { visit new_external_publication_waiver_path }
 
     it 'does not allow them to visit the page' do
-      expect(page).not_to have_current_path new_external_publication_waiver_path, ignore_query: true
+      expect(page).to have_no_current_path new_external_publication_waiver_path, ignore_query: true
     end
   end
 

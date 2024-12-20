@@ -18,7 +18,7 @@ describe 'Creating a publication', type: :feature do
       end
 
       it 'does not allow the total Scopus citations to be set' do
-        expect(page).not_to have_field 'Total scopus citations'
+        expect(page).to have_no_field 'Total scopus citations'
       end
     end
 

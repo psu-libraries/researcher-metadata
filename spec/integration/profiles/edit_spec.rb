@@ -48,7 +48,7 @@ describe 'editing profile preferences' do
   let(:orcid_id) { nil }
   let(:orcid_token) { nil }
 
-  describe 'the manage profile link', js: true, type: :feature do
+  describe 'the manage profile link', :js, type: :feature do
     describe 'visiting the profile page for a given user' do
       context 'when not logged in' do
         before do
@@ -59,7 +59,7 @@ describe 'editing profile preferences' do
         end
 
         it 'does not display a link to manage the profile' do
-          expect(page).not_to have_link 'Manage my profile'
+          expect(page).to have_no_link 'Manage my profile'
         end
       end
 
@@ -84,7 +84,7 @@ describe 'editing profile preferences' do
         end
 
         it 'does not display a link to manage the profile' do
-          expect(page).not_to have_link 'Manage my profile'
+          expect(page).to have_no_link 'Manage my profile'
         end
       end
 
@@ -149,11 +149,11 @@ describe 'editing profile preferences' do
 
         context 'when the user has no ORCID ID' do
           it 'does not display an ORCID ID link' do
-            expect(page).not_to have_link 'ORCID iD'
+            expect(page).to have_no_link 'ORCID iD'
           end
 
           it 'does not display an ORCID call to action' do
-            expect(page).not_to have_link 'Link my ORCID ID'
+            expect(page).to have_no_link 'Link my ORCID ID'
           end
         end
 
@@ -165,7 +165,7 @@ describe 'editing profile preferences' do
           end
 
           it 'does not display an ORCID call to action' do
-            expect(page).not_to have_link 'Link my ORCID ID'
+            expect(page).to have_no_link 'Link my ORCID ID'
           end
         end
       end
@@ -178,7 +178,7 @@ describe 'editing profile preferences' do
 
         context 'when the user has no ORCID ID' do
           it 'does not display an ORCID ID link' do
-            expect(page).not_to have_link 'ORCID iD'
+            expect(page).to have_no_link 'ORCID iD'
           end
 
           it 'does display an ORCID call to action' do
@@ -194,7 +194,7 @@ describe 'editing profile preferences' do
           end
 
           it 'does not display an ORCID call to action' do
-            expect(page).not_to have_link 'Link my ORCID ID'
+            expect(page).to have_no_link 'Link my ORCID ID'
           end
         end
       end
@@ -211,11 +211,11 @@ describe 'editing profile preferences' do
 
         context 'when the user has no ORCID ID' do
           it 'does not display an ORCID ID link' do
-            expect(page).not_to have_link 'ORCID iD'
+            expect(page).to have_no_link 'ORCID iD'
           end
 
           it 'does not display an ORCID call to action' do
-            expect(page).not_to have_link 'Link my ORCID ID'
+            expect(page).to have_no_link 'Link my ORCID ID'
           end
         end
 
@@ -227,7 +227,7 @@ describe 'editing profile preferences' do
           end
 
           it 'does not display an ORCID call to action' do
-            expect(page).not_to have_link 'Link my ORCID ID'
+            expect(page).to have_no_link 'Link my ORCID ID'
           end
         end
       end
@@ -300,17 +300,17 @@ describe 'editing profile preferences' do
         it "shows descriptions of the user's visible publications" do
           expect(page).to have_content "Bob's Publication, The Journal, 2007"
           expect(page).to have_link "Bob's Publication", href: edit_open_access_publication_path(pub_1)
-          expect(page).not_to have_content "Bob's Other Publication"
+          expect(page).to have_no_content "Bob's Other Publication"
           expect(page).to have_content "Bob's Open Access Publication"
-          expect(page).not_to have_link "Bob's Open Access Publication"
+          expect(page).to have_no_link "Bob's Open Access Publication"
           expect(page).to have_content "Bob's Other Open Access Publication"
-          expect(page).not_to have_link "Bob's Other Open Access Publication"
+          expect(page).to have_no_link "Bob's Other Open Access Publication"
           expect(page).to have_content "Bob's Non-Open Access Publication"
-          expect(page).not_to have_link "Bob's Non-Open Access Publication"
+          expect(page).to have_no_link "Bob's Non-Open Access Publication"
           expect(page).to have_content "Bob's Pending Scholarsphere Publication"
-          expect(page).not_to have_link "Bob's Pending Scholarsphere Publication"
+          expect(page).to have_no_link "Bob's Pending Scholarsphere Publication"
           expect(page).to have_content "Bob's In Press Publication"
-          expect(page).not_to have_link "Bob's In Press Publication"
+          expect(page).to have_no_link "Bob's In Press Publication"
         end
 
         it "shows an icon to indicate when we don't have open access information for a publication" do
@@ -352,7 +352,7 @@ describe 'editing profile preferences' do
         end
 
         it 'does not show the empty list message' do
-          expect(page).not_to have_content 'There are currently no publications to show for your profile.'
+          expect(page).to have_no_content 'There are currently no publications to show for your profile.'
         end
       end
 
@@ -364,7 +364,7 @@ describe 'editing profile preferences' do
 
       context 'when the user has no external publication waivers' do
         it 'does not show the waiver list' do
-          expect(page).not_to have_content 'Open Access Waivers'
+          expect(page).to have_no_content 'Open Access Waivers'
         end
       end
 
@@ -400,7 +400,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_publications_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).not_to have_current_path edit_profile_publications_path, ignore_query: true
+        expect(page).to have_no_current_path edit_profile_publications_path, ignore_query: true
       end
     end
   end
@@ -444,7 +444,7 @@ describe 'editing profile preferences' do
         it "shows descriptions of the user's visible other publications" do
           expect(page).to have_content 'Chapter'
           expect(page).to have_content 'Title 1, 2007'
-          expect(page).not_to have_content 'Title 2, 2008'
+          expect(page).to have_no_content 'Title 2, 2008'
           expect(page).to have_content 'Letter'
           expect(page).to have_content 'Title 1, Journal 1, 2008'
         end
@@ -455,7 +455,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_other_publications_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).not_to have_current_path edit_profile_other_publications_path, ignore_query: true
+        expect(page).to have_no_current_path edit_profile_other_publications_path, ignore_query: true
       end
     end
   end
@@ -475,7 +475,7 @@ describe 'editing profile preferences' do
 
       it "shows descriptions of the user's visible presentations" do
         expect(page).to have_content "Bob's Presentation - Penn State - University Park, PA"
-        expect(page).not_to have_content "Bob's Other Presentation - -"
+        expect(page).to have_no_content "Bob's Other Presentation - -"
       end
     end
 
@@ -483,7 +483,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_presentations_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).not_to have_current_path edit_profile_presentations_path, ignore_query: true
+        expect(page).to have_no_current_path edit_profile_presentations_path, ignore_query: true
       end
     end
   end
@@ -503,7 +503,7 @@ describe 'editing profile preferences' do
 
       it "shows descriptions of the user's visible performances" do
         expect(page).to have_content "Bob's Performance - University Park, PA - 2000-01-01"
-        expect(page).not_to have_content "Bob's Other Performance - -"
+        expect(page).to have_no_content "Bob's Other Performance - -"
       end
     end
 
@@ -511,7 +511,7 @@ describe 'editing profile preferences' do
       before { visit edit_profile_performances_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).not_to have_current_path edit_profile_performances_path, ignore_query: true
+        expect(page).to have_no_current_path edit_profile_performances_path, ignore_query: true
       end
     end
   end
@@ -535,7 +535,7 @@ describe 'editing profile preferences' do
 
       context "when the user doesn't belong to an organization" do
         it 'does not show organization information' do
-          expect(page).not_to have_content 'Organizations'
+          expect(page).to have_no_content 'Organizations'
         end
       end
 
@@ -587,11 +587,11 @@ describe 'editing profile preferences' do
 
         context 'when the user does not have an ORCID iD' do
           it "does not show a button to connect to the user's ORCID record" do
-            expect(page).not_to have_button connect_orcid_button_text
+            expect(page).to have_no_button connect_orcid_button_text
           end
 
           it 'does not show a button to add an employment to their ORCID record' do
-            expect(page).not_to have_button employment_button_text
+            expect(page).to have_no_button employment_button_text
           end
         end
 
@@ -602,7 +602,7 @@ describe 'editing profile preferences' do
             let(:orcid_token) { 'abc123' }
 
             it "does not show a button to connect to the user's ORCID record" do
-              expect(page).not_to have_button connect_orcid_button_text
+              expect(page).to have_no_button connect_orcid_button_text
             end
 
             it "shows the user's ORCID iD" do
@@ -615,7 +615,7 @@ describe 'editing profile preferences' do
 
               it 'does not show a button to add that employment to their ORCID record' do
                 within "#organization_membership_#{mem1.id}" do
-                  expect(page).not_to have_button employment_button_text
+                  expect(page).to have_no_button employment_button_text
                 end
               end
 
@@ -646,7 +646,7 @@ describe 'editing profile preferences' do
             end
 
             it 'does not show a button to add the employment to their ORCID record' do
-              expect(page).not_to have_button employment_button_text
+              expect(page).to have_no_button employment_button_text
             end
           end
         end
@@ -657,7 +657,7 @@ describe 'editing profile preferences' do
       before { visit profile_bio_path }
 
       it 'does not allow the user to visit the page' do
-        expect(page).not_to have_current_path profile_bio_path, ignore_query: true
+        expect(page).to have_no_current_path profile_bio_path, ignore_query: true
       end
     end
   end

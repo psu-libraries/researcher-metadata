@@ -84,7 +84,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
       let(:pub1_group) { group }
       let(:pub2_group) { group }
 
-      describe 'the page content', js: true do
+      describe 'the page content', :js do
         before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
         it 'shows the correct data for the group' do
@@ -148,7 +148,7 @@ describe 'Admin duplicate publication group detail page', type: :feature do
 
           expect(page).to have_content 'Select'
           expect(page).to have_content 'Merge Target'
-          expect(page).not_to have_content 'Delete'
+          expect(page).to have_no_content 'Delete'
         end
 
         it 'disables/enables buttons' do
@@ -173,10 +173,10 @@ describe 'Admin duplicate publication group detail page', type: :feature do
         before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
         it 'shows the correct controls' do
-          expect(page).not_to have_content 'Select'
-          expect(page).not_to have_content 'Merge Target'
-          expect(page).not_to have_content 'Merge Selected'
-          expect(page).not_to have_content 'Ignore Selected'
+          expect(page).to have_no_content 'Select'
+          expect(page).to have_no_content 'Merge Target'
+          expect(page).to have_no_content 'Merge Selected'
+          expect(page).to have_no_content 'Ignore Selected'
           expect(page).to have_button 'Delete Group'
         end
       end
@@ -187,10 +187,10 @@ describe 'Admin duplicate publication group detail page', type: :feature do
         before { visit rails_admin.show_path(model_name: :duplicate_publication_group, id: group.id) }
 
         it 'shows the correct controls' do
-          expect(page).not_to have_content 'Select'
-          expect(page).not_to have_content 'Merge Target'
-          expect(page).not_to have_content 'Merge Selected'
-          expect(page).not_to have_content 'Ignore Selected'
+          expect(page).to have_no_content 'Select'
+          expect(page).to have_no_content 'Merge Target'
+          expect(page).to have_no_content 'Merge Selected'
+          expect(page).to have_no_content 'Ignore Selected'
           expect(page).to have_button 'Delete Group'
         end
       end

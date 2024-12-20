@@ -38,6 +38,6 @@ class WOSAuthorName
     end
 
     def first_and_middle
-      full_name.split(',')[1]&.strip&.split(' ')
+      full_name.split(',')[1]&.strip&.split
     end
 end

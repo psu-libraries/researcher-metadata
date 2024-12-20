@@ -2,7 +2,7 @@
 
 require 'integration/integration_spec_helper'
 
-describe 'Profile page', js: true, type: :feature do
+describe 'Profile page', :js, type: :feature do
   let!(:user) { create(:user,
                        :with_psu_identity,
                        webaccess_id: 'abc123',
@@ -287,10 +287,10 @@ describe 'Profile page', js: true, type: :feature do
       click_link 'Other Works'
       within '#other-publications' do
         expect(page).to have_content 'Books'
-        expect(page).not_to have_content 'Letters'
+        expect(page).to have_no_content 'Letters'
         expect(page).to have_content 'Third Publication, Journal 3, 2013'
-        expect(page).not_to have_content 'Conference Proceedings'
-        expect(page).not_to have_content 'Fourth Publication, Journal 4, 2010'
+        expect(page).to have_no_content 'Conference Proceedings'
+        expect(page).to have_no_content 'Fourth Publication, Journal 4, 2010'
       end
     end
   end
@@ -302,7 +302,7 @@ describe 'Profile page', js: true, type: :feature do
     end
 
     it 'does NOT show the email' do
-      expect(page).not_to have_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
+      expect(page).to have_no_link 'abc123@psu.edu', href: 'mailto:abc123@psu.edu'
     end
   end
 end

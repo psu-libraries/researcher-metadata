@@ -83,7 +83,7 @@ describe Organization, type: :model do
     end
 
     it 'returns a collection of unique users who have been members of the organization' do
-      expect(org.users).to match_array [u1, u2]
+      expect(org.users).to contain_exactly(u1, u2)
     end
   end
 
@@ -155,7 +155,7 @@ describe Organization, type: :model do
     end
 
     it 'returns visible, unique publications by users who were members of the organization or one of its descendants when they were published' do
-      expect(org.all_publications).to match_array [pub_1, pub_4, pub_5, pub_7, pub_9]
+      expect(org.all_publications).to contain_exactly(pub_1, pub_4, pub_5, pub_7, pub_9)
     end
   end
 
@@ -185,7 +185,7 @@ describe Organization, type: :model do
     end
 
     it 'retuns the users who are members of the organization or one of its descendants' do
-      expect(org.all_users).to match_array [user_1, user_2, user_3]
+      expect(org.all_users).to contain_exactly(user_1, user_2, user_3)
     end
   end
 
@@ -226,7 +226,7 @@ describe Organization, type: :model do
     let!(:child_org_child) { create(:organization, parent: child_org) }
 
     it 'returns the id of the parent organization and all its descendant organization ids' do
-      expect(org.descendant_ids).to match_array([org.id, child_org.id, child_org_child.id])
+      expect(org.descendant_ids).to contain_exactly(org.id, child_org.id, child_org_child.id)
     end
   end
 

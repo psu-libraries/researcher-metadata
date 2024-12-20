@@ -22,7 +22,7 @@ describe 'updating a activity insight oa file via the admin interface', type: :f
 
     describe 'viewing the form' do
       it 'does not allow the location to be set' do
-        expect(page).not_to have_field 'Location'
+        expect(page).to have_no_field 'Location'
         expect(page).to have_content aif.location
       end
 
