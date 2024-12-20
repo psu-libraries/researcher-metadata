@@ -90,7 +90,7 @@ describe API::V1::PublicationsController do
                 query_pubs
               end
 
-              it 'returns a unique list of publications matching the specified Activity Insight ID', skip_before: true do
+              it 'returns a unique list of publications matching the specified Activity Insight ID', :skip_before do
                 expect(json_response[:data].size).to eq(1)
                 expect(json_response[:data].first[:attributes][:activity_insight_ids].size).to eq(1)
                 expect(json_response[:data].first[:attributes][:activity_insight_ids].first).to eq('123')
@@ -138,7 +138,7 @@ describe API::V1::PublicationsController do
                 query_pubs
               end
 
-              it 'returns a unique list of publications matching the specified DOI', skip_before: true do
+              it 'returns a unique list of publications matching the specified DOI', :skip_before do
                 expect(json_response[:data].size).to eq(1)
                 expect(json_response[:data].first[:attributes][:doi]).to eq('https://doi.org/10.26207/46a7-9981')
               end

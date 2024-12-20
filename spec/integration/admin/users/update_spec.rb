@@ -35,7 +35,7 @@ describe 'updating a user via the admin interface', type: :feature do
       end
 
       it "does not allow the user's webaccess ID to be updated" do
-        expect(page).not_to have_field 'Penn State WebAccess ID'
+        expect(page).to have_no_field 'Penn State WebAccess ID'
       end
 
       it "shows the user record's managed organizations" do
@@ -43,12 +43,12 @@ describe 'updating a user via the admin interface', type: :feature do
       end
 
       it "does not allow the user's database timestamps to be manually updated" do
-        expect(page).not_to have_field 'Created at'
-        expect(page).not_to have_field 'Updated at'
+        expect(page).to have_no_field 'Created at'
+        expect(page).to have_no_field 'Updated at'
       end
 
       it "does not allow the user's manual update timestamp to be updated" do
-        expect(page).not_to have_field 'Updated by user at'
+        expect(page).to have_no_field 'Updated by user at'
       end
     end
 
@@ -144,56 +144,56 @@ describe 'updating a user via the admin interface', type: :feature do
         end
 
         it "does not allow the user's webaccess ID to be updated" do
-          expect(page).not_to have_field 'Penn State WebAccess ID'
+          expect(page).to have_no_field 'Penn State WebAccess ID'
         end
 
         it "does not allow the user's first name to be updated" do
-          expect(page).not_to have_field 'First name'
+          expect(page).to have_no_field 'First name'
         end
 
         it "does not allow the user's middle name to be updated" do
-          expect(page).not_to have_field 'Middle name'
+          expect(page).to have_no_field 'Middle name'
         end
 
         it "does not allow the user's last name to be updated" do
-          expect(page).not_to have_field 'Last name'
+          expect(page).to have_no_field 'Last name'
         end
 
         it "does not allow the user's admin flag to be updated" do
-          expect(page).not_to have_field 'Admin user?'
+          expect(page).to have_no_field 'Admin user?'
         end
 
         it "does not show the user's Pure ID" do
-          expect(page).not_to have_content 'pure-abc123'
+          expect(page).to have_no_content 'pure-abc123'
         end
 
         it "does not allow the user's Pure ID to be updated" do
-          expect(page).not_to have_field 'Pure ID'
+          expect(page).to have_no_field 'Pure ID'
         end
 
         it "does not show the user's Activity Insight ID" do
-          expect(page).not_to have_content 'ai-xyz789'
+          expect(page).to have_no_content 'ai-xyz789'
         end
 
         it "does not allow the user's Activity Insight ID to be updated" do
-          expect(page).not_to have_field 'Activity Insight ID'
+          expect(page).to have_no_field 'Activity Insight ID'
         end
 
         it "does not show the user's Penn State ID" do
-          expect(page).not_to have_content '987654321'
+          expect(page).to have_no_content '987654321'
         end
 
         it "does not allow the user's Penn State ID to be updated" do
-          expect(page).not_to have_field 'Penn State ID'
+          expect(page).to have_no_field 'Penn State ID'
         end
 
         it "does not show the user's H-Index" do
-          expect(page).not_to have_content '649'
+          expect(page).to have_no_content '649'
         end
 
         it "does not allow the user's H-Index to be updated" do
-          expect(page).not_to have_field 'H-Index'
-          expect(page).not_to have_field 'Scopus h index'
+          expect(page).to have_no_field 'H-Index'
+          expect(page).to have_no_field 'Scopus h index'
         end
       end
 

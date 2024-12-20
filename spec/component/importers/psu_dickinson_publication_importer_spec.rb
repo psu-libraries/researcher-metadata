@@ -152,7 +152,7 @@ describe PSUDickinsonPublicationImporter do
 
       group = pub.duplicate_group
 
-      expect(group.publications).to match_array [pub, duplicate_pub]
+      expect(group.publications).to contain_exactly(pub, duplicate_pub)
     end
 
     it 'hides new publications that might be duplicates' do

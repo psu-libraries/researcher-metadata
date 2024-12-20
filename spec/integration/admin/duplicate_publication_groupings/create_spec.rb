@@ -75,7 +75,7 @@ describe "grouping publications from a user's list of publications", type: :feat
       it 'groups all of the selected publications into the same group' do
         group = pub1.reload.duplicate_group || pub2.reload.duplicate_group
 
-        expect(group.publications).to match_array [pub1, pub2, pub3, pub4, pub5]
+        expect(group.publications).to contain_exactly(pub1, pub2, pub3, pub4, pub5)
       end
 
       it 'redirects back to the user details page' do

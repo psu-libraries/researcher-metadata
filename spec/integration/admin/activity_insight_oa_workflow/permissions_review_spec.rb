@@ -68,11 +68,11 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
       within "#publication_#{pub2.id}" do
         expect(page).to have_link('Pub2', href: "#{rails_admin.edit_path(model_name: :publication, id: pub2.id)}#publication_preferred_version")
         expect(page).to have_link(aif2a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2a.id))
-        expect(page).not_to have_text aif2b.download_filename
+        expect(page).to have_no_text aif2b.download_filename
       end
 
-      expect(page).not_to have_text('Pub1')
-      expect(page).not_to have_text('Pub3')
+      expect(page).to have_no_text('Pub1')
+      expect(page).to have_no_text('Pub3')
     end
   end
 

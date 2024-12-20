@@ -8,7 +8,7 @@ describe 'Destroying a Proxy', type: :feature do
     before { visit deputy_assignments_path }
 
     it 'is not allowed' do
-      expect(page).not_to have_current_path(deputy_assignments_path)
+      expect(page).to have_no_current_path(deputy_assignments_path)
     end
   end
 
@@ -30,7 +30,7 @@ describe 'Destroying a Proxy', type: :feature do
 
       it 'allows the deputy assignment to be deactivated' do
         expect(deputy_assignment.reload).not_to be_active
-        expect(page).not_to have_selector "##{dom_id(deputy_assignment)}"
+        expect(page).to have_no_css "##{dom_id(deputy_assignment)}"
       end
 
       it 'emails the other user' do
@@ -47,7 +47,7 @@ describe 'Destroying a Proxy', type: :feature do
 
       it 'allows the deputy assignment to be destroyed' do
         expect { deputy_assignment.reload }.to raise_error(ActiveRecord::RecordNotFound)
-        expect(page).not_to have_selector "##{dom_id(deputy_assignment)}"
+        expect(page).to have_no_css "##{dom_id(deputy_assignment)}"
       end
 
       it 'emails the other user' do

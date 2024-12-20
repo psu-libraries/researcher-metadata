@@ -31,7 +31,7 @@ describe 'visiting the page to submit an open access waiver for a publication' d
     before { visit new_internal_publication_waiver_path(pub) }
 
     it 'does not allow them to visit the page' do
-      expect(page).not_to have_current_path new_internal_publication_waiver_path(pub), ignore_query: true
+      expect(page).to have_no_current_path new_internal_publication_waiver_path(pub), ignore_query: true
     end
   end
 

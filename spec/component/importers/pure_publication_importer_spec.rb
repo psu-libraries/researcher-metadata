@@ -228,7 +228,7 @@ describe PurePublicationImporter do
           p2 = found_pub2.publication
           group = p2.duplicate_group
 
-          expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+          expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
         end
 
         it 'hides existing publications that might be duplicates' do
@@ -433,7 +433,7 @@ describe PurePublicationImporter do
             p2 = found_pub2.publication
             group = p2.duplicate_group
 
-            expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+            expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
           end
 
           it 'hides existing publications that might be duplicates' do
@@ -604,7 +604,7 @@ describe PurePublicationImporter do
             p2 = found_pub2.publication
             group = p2.duplicate_group
 
-            expect(group.publications).to match_array [p2, duplicate_pub1, duplicate_pub2]
+            expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
           end
 
           it 'hides existing publications that might be duplicates' do

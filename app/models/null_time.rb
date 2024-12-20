@@ -5,6 +5,7 @@ class NullTime
 
   def <=>(other)
     return -1 if other.is_a? Time
-    return 0 if other.is_a? NullTime
+
+    0 if other.is_a? NullTime
   end
 end

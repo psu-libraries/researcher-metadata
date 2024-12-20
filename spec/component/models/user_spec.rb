@@ -384,7 +384,7 @@ describe User, type: :model do
       end
 
       it 'returns one instance of each matching user' do
-        expect(described_class.find_all_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
+        expect(described_class.find_all_by_wos_pub(wp)).to contain_exactly(u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13)
       end
     end
   end
@@ -406,7 +406,7 @@ describe User, type: :model do
       before { create(:user, orcid_identifier: nil) }
 
       it 'returns one instance of each matching user' do
-        expect(described_class.find_confirmed_by_wos_pub(wp)).to match_array [u1, u2]
+        expect(described_class.find_confirmed_by_wos_pub(wp)).to contain_exactly(u1, u2)
       end
     end
   end
@@ -422,7 +422,7 @@ describe User, type: :model do
       let(:grant) { double 'grant', investigators: [i1, i2] }
 
       it 'returns the existing users' do
-        expect(described_class.find_by_nsf_grant(grant)).to match_array [u1, u2]
+        expect(described_class.find_by_nsf_grant(grant)).to contain_exactly(u1, u2)
       end
     end
   end
@@ -824,10 +824,7 @@ describe User, type: :model do
                                confirmed: true) }
 
     it 'returns only users who should currently receive an email reminder about open access publications' do
-      expect(described_class.needs_open_access_notification).to match_array [email_user_1,
-                                                                             email_user_2,
-                                                                             email_user_3,
-                                                                             email_user_4]
+      expect(described_class.needs_open_access_notification).to contain_exactly(email_user_1, email_user_2, email_user_3, email_user_4)
     end
   end
 
@@ -1007,8 +1004,7 @@ describe User, type: :model do
                               open_access_notification_sent_at: 1.month.ago) }
 
     it "returns the user's recent publications that they've been notified about before that don't have any associated open access information and have a 'Published' status" do
-      expect(user.old_potential_open_access_publications).to match_array [potential_pub_1,
-                                                                          potential_pub_2]
+      expect(user.old_potential_open_access_publications).to contain_exactly(potential_pub_1, potential_pub_2)
     end
   end
 
@@ -1176,8 +1172,7 @@ describe User, type: :model do
                               open_access_notification_sent_at: nil) }
 
     it "returns the user's recent publications that they haven't been notified about before that don't have any associated open access information and have a 'Published' status" do
-      expect(user.new_potential_open_access_publications).to match_array [potential_pub_1,
-                                                                          potential_pub_2]
+      expect(user.new_potential_open_access_publications).to contain_exactly(potential_pub_1, potential_pub_2)
     end
   end
 

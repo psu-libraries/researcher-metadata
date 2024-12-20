@@ -21,11 +21,11 @@ describe 'Admin API token edit page', type: :feature do
       end
 
       it "does not allow the token's value to be set" do
-        expect(page).not_to have_field 'Token'
+        expect(page).to have_no_field 'Token'
       end
 
       it "does not allow the token's total requests to be set" do
-        expect(page).not_to have_field 'Total requests'
+        expect(page).to have_no_field 'Total requests'
       end
     end
 
