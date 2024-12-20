@@ -125,7 +125,7 @@ class User < ApplicationRecord
       .where.not(users: { psu_identity: nil })
       .where("psu_identity->'data'->>'affiliation' != '[\"MEMBER\"]'")
       .where('users.open_access_notification_sent_at IS NULL OR users.open_access_notification_sent_at < ?', 6.months.ago)
-      .where(publications: { published_on: Publication::OPEN_ACCESS_POLICY_START.. })
+      .where('publications.published_on >= ?', 2.years.ago)
       .where('publications.published_on >= user_organization_memberships.started_on AND (publications.published_on <= user_organization_memberships.ended_on OR user_organization_memberships.ended_on IS NULL)')
       .where('authorships.confirmed IS TRUE')
       .where('publications.visible = true')
@@ -162,16 +162,12 @@ class User < ApplicationRecord
       .any?
   end
 
-  def old_potential_open_access_publications
+  def notifiable_potential_open_access_publications
     potential_open_access_publications
-      .where.not('authorships.open_access_notification_sent_at' => nil)
+      .where('publications.published_on >= ?', 2.years.ago)
+      .order(published_on: :desc)
       .select(&:no_open_access_information?)
-  end
-
-  def new_potential_open_access_publications
-    potential_open_access_publications
-      .where(authorships: { open_access_notification_sent_at: nil })
-      .select(&:no_open_access_information?)
+      .first(6)
   end
 
   def confirmed_publications
