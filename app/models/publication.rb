@@ -162,6 +162,7 @@ class Publication < ApplicationRecord
   scope :oab_open_access, -> { open_access.where(open_access_locations: { source: Source::OPEN_ACCESS_BUTTON }) }
   scope :unpaywall_open_access, -> { open_access.where(open_access_locations: { source: Source::UNPAYWALL }) }
 
+  scope :not_extension_publication, -> { where.not(publication_type: 'Extension Publication') }
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
