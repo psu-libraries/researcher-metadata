@@ -43,7 +43,10 @@ class PurePublicationImporter < PureImporter
             end
           else
             p = Publication.create!(pub_attrs(publication))
+            # Where does this DOI check go? Maybe here?
+            DOIVerificationJob.perform_later(p.id)
             pi.publication = p
+
 
             DuplicatePublicationGroup.group_duplicates_of(p)
             group = p.reload.duplicate_group

@@ -27,6 +27,8 @@ class OAIImporter
             p.publication_type = 'Journal Article'
             p.status = 'Published'
             p.save!
+            # todo: conditional?
+            DOIVerificationJob.perform_later(p.id)
 
             pi.publication = p
             pi.source = import_source
