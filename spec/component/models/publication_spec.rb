@@ -1450,6 +1450,20 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.not_extension_publication' do
+    let(:pub1) { create(:publication, publication_type: 'Journal Article') }
+    let(:pub2) { create(:publication, publication_type: 'Academic Journal Article') }
+    let(:pub3) { create(:publication, publication_type: 'In-house Journal Article') }
+    let(:pub4) { create(:publication, publication_type: 'Book') }
+    let(:pub5) { create(:publication, publication_type: 'Letter') }
+    let(:pub6) { create(:publication, publication_type: 'Extension Publication') }
+    let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
+
+    it 'returns publications that have open access publication types' do
+      expect(described_class.not_extension_publication).to match_array [pub1, pub2, pub3, pub4, pub5, pub7]
+    end
+  end
+
   describe '.oa_publication' do
     let(:pub1) { create(:publication, publication_type: 'Journal Article') }
     let(:pub2) { create(:publication, publication_type: 'Academic Journal Article') }
