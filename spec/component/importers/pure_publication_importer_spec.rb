@@ -246,7 +246,7 @@ describe PurePublicationImporter do
         it 'runs the DOI verification' do
           importer.call
           pub_import = PublicationImport.find_by(source: 'Pure',
-                                         source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a').publication
+                                                 source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a').publication
           expect(DOIVerificationJob).to have_received(:perform_later).with(pub_import.id)
         end
       end

@@ -169,7 +169,7 @@ describe PSUDickinsonPublicationImporter do
     it 'runs the DOI verification' do
       importer.call
       pub_import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-        source_identifier: 'non-existing-identifier').publication
+                                             source_identifier: 'non-existing-identifier').publication
       expect(DOIVerificationJob).to have_received(:perform_later).with(pub_import.id)
     end
 
