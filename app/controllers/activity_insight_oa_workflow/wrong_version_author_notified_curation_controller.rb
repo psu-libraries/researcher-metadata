@@ -1,16 +1,12 @@
 # frozen_string_literal: true
 
-class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityInsightOAWorkflowController
+class ActivityInsightOAWorkflow::WrongVersionAuthorNotifiedCurationController < ActivityInsightOAWorkflowController
   def index
-    @publications = Publication.wrong_file_version
-      .left_joins(:activity_insight_oa_files)
-      .select('publications.*, MIN(activity_insight_oa_files.created_at) AS oldest_file_date')
-      .group('publications.id')
-      .order('oldest_file_date ASC')
+    @publications = Publication.wrong_version_author_notified.order('wrong_oa_version_notification_sent_at DESC')
   end
 
   def email_author
-    publications = Publication.wrong_file_version.where(id: params[:publications])
+    publications = Publication.wrong_version_author_notified.where(id: params[:publications])
 
     FacultyNotificationsMailer.wrong_file_version(publications).deliver_now
     ActiveRecord::Base.transaction do
@@ -22,6 +18,6 @@ class ActivityInsightOAWorkflow::WrongFileVersionCurationController < ActivityIn
       end
     end
     flash[:notice] = "Email sent to #{publications.first.activity_insight_upload_user.webaccess_id}"
-    redirect_to activity_insight_oa_workflow_wrong_file_version_review_path
+    redirect_to activity_insight_oa_workflow_wrong_version_author_notified_review_path
   end
 end

@@ -125,6 +125,89 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
     end
   end
 
+  context 'when no publications with only wrong file versions have author notifications' do
+    let!(:oal) { create(:open_access_location, publication: pub1) }
+    let!(:aif1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion'
+      )
+    }
+    let!(:aif2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub2,
+        version: 'publishedVersion',
+        wrong_version_emails_sent: 0
+      )
+    }
+    let!(:aif3) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub3,
+        version: 'acceptedVersion',
+        wrong_version_emails_sent: nil
+      )
+    }
+    let!(:pub1) { create(:publication, preferred_version: 'publishedVersion') }
+    let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion') }
+
+    it 'renders a muted card with no link' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('wrong-version-author-notified-check-card').to_json).to include('text-muted')
+      expect(page.find_by_id('wrong-version-author-notified-check-card').text).to include('0')
+      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/wrong_version_author_notified_review')
+    end
+  end
+
+  context 'when publications with only wrong file versions have author notifications' do
+    let!(:aif1) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub1,
+        version: 'acceptedVersion',
+        wrong_version_emails_sent: 1
+      )
+    }
+    let!(:aif2) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub2,
+        version: 'publishedVersion',
+        wrong_version_emails_sent: 2
+      )
+    }
+    let!(:aif3) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub3,
+        version: 'unknown',
+        wrong_version_emails_sent: 1
+      )
+    }
+    let!(:aif4) {
+      create(
+        :activity_insight_oa_file,
+        publication: pub4,
+        version: nil,
+        wrong_version_emails_sent: 3
+      )
+    }
+    let!(:pub1) { create(:publication, preferred_version: 'publishedVersion') }
+    let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion') }
+    let!(:pub4) { create(:publication, preferred_version: 'acceptedVersion') }
+
+    it 'renders the file version check card with a link and the number of publications in the corner' do
+      render_inline(described_class.new)
+      expect(page.find_by_id('wrong-version-author-notified-check-card').to_json).not_to include('text-muted')
+      expect(page.find_by_id('wrong-version-author-notified-check-card').text).to include('2')
+      expect(rendered_content).to have_link(href: '/activity_insight_oa_workflow/wrong_version_author_notified_review')
+    end
+  end
+
   context 'when no publications have a preferred version of none' do
     let!(:oal) { create(:open_access_location, publication: pub2, source: Source::SCHOLARSPHERE) }
     let!(:pub1) { create(:publication) }

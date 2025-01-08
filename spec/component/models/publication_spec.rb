@@ -836,6 +836,12 @@ describe Publication, type: :model do
                            preferred_version: 'acceptedVersion',
                            doi_verified: nil)
     }
+    let!(:pub12d) { create(:publication,
+                           title: 'pub12d',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'acceptedVersion',
+                           doi_verified: nil)
+    }
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
@@ -984,8 +990,10 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file10d) { create(:activity_insight_oa_file, publication: pub11d, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file12a) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion', wrong_version_emails_sent: 1) }
     let!(:activity_insight_oa_file12b) { create(:activity_insight_oa_file, publication: pub12b, version: 'notArticleFile') }
     let!(:activity_insight_oa_file12c) { create(:activity_insight_oa_file, publication: pub12c, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file12d) { create(:activity_insight_oa_file, publication: pub12d, version: 'publishedVersion', wrong_version_emails_sent: 1) }
     let!(:activity_insight_oa_file13o) { create(:activity_insight_oa_file, publication: pub13o) }
     let!(:activity_insight_oa_file13a_1) {
       create(
@@ -1128,6 +1136,7 @@ describe Publication, type: :model do
           pub12,
           pub12b,
           pub12c,
+          pub12d,
           pub13a,
           pub13b,
           pub13c,
@@ -1158,6 +1167,7 @@ describe Publication, type: :model do
           pub11d,
           pub12,
           pub12c,
+          pub12d,
           pub13a,
           pub13b,
           pub13c,
@@ -1176,6 +1186,12 @@ describe Publication, type: :model do
     describe '.wrong_file_version' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
         expect(described_class.wrong_file_version).to match_array [pub12]
+      end
+    end
+
+    describe '.wrong_version_author_notified' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
+        expect(described_class.wrong_version_author_notified).to match_array [pub12d]
       end
     end
 

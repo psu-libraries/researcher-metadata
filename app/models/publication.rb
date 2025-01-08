@@ -220,7 +220,7 @@ class Publication < ApplicationRecord
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND publications.preferred_version = activity_insight_oa_files.version)})
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
   }
-  scope :wrong_file_version, -> {
+  scope :wrong_file_version_base, -> {
     nonflagged_activity_insight_oa_publication
       .where.not(preferred_version: nil)
       .where.not(preferred_version: NO_VERSION)
@@ -240,6 +240,14 @@ class Publication < ApplicationRecord
         SQL
       )
       .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND activity_insight_oa_files.version IS NULL)})
+  }
+  scope :wrong_file_version, -> {
+    wrong_file_version_base
+      .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.wrong_version_emails_sent IS NULL OR activity_insight_oa_files.wrong_version_emails_sent = 0))})
+  }
+  scope :wrong_version_author_notified, -> {
+    wrong_file_version_base
+      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.wrong_version_emails_sent IS NULL OR activity_insight_oa_files.wrong_version_emails_sent = 0))})
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :needs_manual_preferred_version_check, -> {

@@ -326,6 +326,7 @@ Rails/SkipsModelValidations:
     - 'app/controllers/presentation_contributions_controller.rb'
     - 'app/controllers/user_performances_controller.rb'
     - 'app/controllers/activity_insight_oa_workflow/wrong_file_version_curation_controller.rb'
+    - 'app/controllers/activity_insight_oa_workflow/wrong_version_author_notified_curation_controller.rb'
     - 'app/importers/pure_publication_importer.rb'
     - 'app/models/api_token.rb'
     - 'app/models/authorship.rb'

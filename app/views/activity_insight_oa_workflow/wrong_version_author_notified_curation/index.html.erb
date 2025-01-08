@@ -1,16 +1,17 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
-  <h1 class="pb-3 pt-2">Publications with Wrong File Version</h1>
+  <h1 class="pb-3 pt-2">Publications with Wrong File Version - Author Notified</h1>
   <table class="table">
     <thead class='card-header'>
       <tr>
         <th>Author</th>
         <th>Author Batch Email</th>
         <th>Publication Email</th>
+        <th>Email Last Sent On</th>
         <th>Title</th>
         <th>Preferred Version</th>
         <th>File Version</th>
-        <th>File Created On</th>
+        <th>Notification Emails Sent</th>
         <th>Download File</th>
       </tr>
     </thead>
@@ -23,11 +24,14 @@
           <%= author.webaccess_id %>
         </td>
         <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
-          <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: publications}, class: 'btn btn-secondary' %>
+          <%= button_to "Send Batch Email", activity_insight_oa_workflow_wrong_version_author_notified_email_path, params: {publications: publications}, class: 'btn btn-secondary' %>
         </td>
       <% publications.each do |p| %>
         <td rowspan="<%= p.activity_insight_oa_files.count %>">
-          <%= button_to "Send Email", activity_insight_oa_workflow_wrong_file_version_email_path, params: {publications: p}, class: 'btn btn-secondary' %>
+          <%= button_to "Send Email", activity_insight_oa_workflow_wrong_version_author_notified_email_path, params: {publications: p}, class: 'btn btn-secondary' %>
+        </td>
+        <td rowspan="<%= p.activity_insight_oa_files.count %>">
+          <%= p.wrong_oa_version_notification_sent_at.present? ? p.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y") : '' %>
         </td>
         <td rowspan="<%= p.activity_insight_oa_files.count %>">
           <%= link_to p.title.truncate(45),
@@ -43,7 +47,7 @@
               <%= file.version_status_display %>
             </td>
             <td>
-              <%= file.created_at.strftime("%m/%d/%Y") %>
+              <%= file.wrong_version_emails_sent %>
             </td>
             <td class="file-name">
                 <% if file.stored_file_path.present? %>
