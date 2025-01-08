@@ -309,6 +309,11 @@ describe PurePublicationImporter do
             expect { importer.call }.to change(Publication, :count).by 2
           end
 
+          it 'does not call the DOI Verification Job' do
+            importer.call
+            expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
+          end
+
           context 'when no contributor records exist' do
             it 'creates a new contributor record for each author on each publication' do
               expect { importer.call }.to change(ContributorName, :count).by 13

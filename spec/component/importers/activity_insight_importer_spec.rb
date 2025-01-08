@@ -2424,6 +2424,11 @@ describe ActivityInsightImporter do
             expect { importer.call }.to change(Publication, :count).by 6
           end
 
+          it 'calls the DOI Verification Job for each new publication record' do
+            importer.call
+            expect(DOIVerificationJob).to have_received(:perform_later).exactly(6).times
+          end
+
           it 'saves the correct data to the new publication records' do
             importer.call
 
@@ -2680,6 +2685,11 @@ describe ActivityInsightImporter do
 
             it 'creates a new publication import record for every new Published or In Press publication' do
               expect { importer.call }.to change(PublicationImport, :count).by 5
+            end
+
+            it 'does not call DOI Verification for the existing publications' do
+              importer.call
+              expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
             end
 
             it 'creates a new publication record for every new Published or In Press publication' do
@@ -5084,7 +5094,7 @@ describe ActivityInsightImporter do
                                         location: 'abc123/intellcont/some_other_file.pdf') }
 
           it 'creates a new ActivityInsightOAFile for that publication' do
-            expect(DOIVerificationJob).to receive(:perform_later).exactly(3).times
+            expect(DOIVerificationJob).to receive(:perform_later).with(existing_pub2.id)
             expect(AiOAStatusExportJob).to receive(:perform_later).once
             importer.call
 
