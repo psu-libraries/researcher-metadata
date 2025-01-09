@@ -5099,7 +5099,6 @@ describe ActivityInsightImporter do
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
                                                                                               'abc123/intellcont/some_other_file.pdf'].sort)
-            expect(existing_pub.oa_workflow_state).to eq('automatic DOI verification pending')
             expect(existing_pub2.reload.activity_insight_postprint_status).to eq 'In Progress'
           end
 

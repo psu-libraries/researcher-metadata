@@ -166,8 +166,12 @@ class ActivityInsightImporter
           if pi.persisted?
             update_pub_record(pub_record, pub)
           else
-            DOIVerificationJob.perform_later(pub_record.id)
-            pi.save!
+            unless pub_record.doi_verified == true
+              pub_record.oa_workflow_state = 'automatic DOI verification pending'
+              pub_record.save!
+              DOIVerificationJob.perform_later(pub_record.id)
+              pi.save!
+            end
 
             DuplicatePublicationGroup.group_duplicates_of(pub_record)
             if pub_record.reload.duplicate_group
@@ -225,10 +229,6 @@ class ActivityInsightImporter
                 AiOAStatusExportJob.perform_later(file.id, 'In Progress')
               end
               pub_record.save!
-              unless pub_record.doi_verified == true
-                pub_record.oa_workflow_state = 'automatic DOI verification pending'
-                pub_record.save!
-              end
             end
           end
         end
