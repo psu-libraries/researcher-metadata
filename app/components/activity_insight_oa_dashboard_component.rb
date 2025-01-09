@@ -40,8 +40,4 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
   def all_workflow_publications_count
     Publication.troubleshooting_list.count
   end
-
-  def i18n(key, **options)
-    I18n.t("view_component.#{self.class.name.underscore}.#{key}", **options)
-  end
 end
