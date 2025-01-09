@@ -1,72 +1,43 @@
-<p>Dear <%= @user.name %>,</p>
-
 <p>
-  We're contacting you from the Penn State University Libraries about the following publication(s),
-  for which you are listed as an author:
+  Dear <%= @user.name %>,
 </p>
 
-<% if @new_publications.any? %>
-  <strong>New publications awaiting action:</strong>
-  <ul>
-    <% @new_publications.each do |p| %>
-      <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
-    <% end %>
-  </ul>
-<% end %>
-
-<% if @old_publications.any? %>
-  <strong>Previous publications awaiting action:</strong>
-  <ul>
-    <% @old_publications.each do |p| %>
-      <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
-    <% end %>
-  </ul>
-<% end %>
+<p>
+  Pursuant to <%= link_to "Penn State's open access policy", "https://openaccess.psu.edu/" %>,
+  we're contacting you about the publication(s) listed below for which you are listed as an author.
+</p>
 
 <p>
-  Pursuant to <%= link_to "Penn State's open access policy", "https://openaccess.psu.edu/" %>, we would like
-  to assist you in making the <%= link_to "accepted manuscript version", "https://psu.libanswers.com/faq/279953" %>
-  of these publication(s) available to the public free of charge. Please click the link(s) above and follow the
-  instructions to take one of the following actions:
+  Please click the publication link(s) below and take one of the following actions:
 </p>
 
 <ul>
-  <li>
-    <p>
-      Submit a URL (Use this option if an open access version of your publication is already available anywhere
-      on the public web.)
-    </p>
-  </li>
-  <li>
-    <p>
-      Upload to ScholarSphere (If there isn't already an open access version of your work available on the web,
-      please consider uploading the accepted manuscript version to ScholarSphere, an institutional repository
-      maintained by the Libraries. Refer to
-      <%= link_to "this FAQ to check the terms of your publishing agreement", "https://psu.libanswers.com/faq/279046" %>.)
-    </p>
-  </li>
-  <li>
-    <p>
-      Get a Waiver (Use this option if you'd like to waive Penn State's policy for the publication in question,
-      and we will not contact you about the publication again.)
-    </p>
-  </li>
+  <li><strong>Submit a URL</strong> (Use this option if an open access version of your publication is already available.)</li>
+  <li><strong>Upload the <%= link_to "accepted manuscript", "https://psu.libanswers.com/faq/279953" %></strong>
+    to ScholarSphere for public access. Refer to <%= link_to "this FAQ to check the terms of your publishing agreement",
+    "https://psu.libanswers.com/faq/279046" %>. </li>
+  <li><strong>Get a waiver</strong> (Use this option if you'd like to waive Penn State's policy for the publication in question,
+    and we will not contact you about the publication again.) </li>
+</ul>
+
+<p>Publications awaiting action:</p>
+<ul>
+  <% @publications.each do |p| %>
+    <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
+  <% end %>
 </ul>
 
 <p>
-  The publication links will only work for you and designated proxies. If you would like to authorize someone
-  else to take these actions on your behalf,
-  <%= link_to "please designate them as your proxy", "https://openaccess.psu.edu/proxies-in-the-researcher-metadata-database/" %>.
+  The publication links will only work for you and designated proxies.
+  If you would like someone to act on your behalf, please
+  <%= link_to "designate them as your proxy", "https://openaccess.psu.edu/proxies-in-the-researcher-metadata-database/" %>.
+  If you would like assistance or have any questions, please reply to this email.  If you would like us to make the deposit on your behalf,
+  please attach the <%= link_to "accepted manuscripts", "https://psu.libanswers.com/faq/279953" %> to a reply email. We will follow the policies
+  of the journal(s) in question when depositing them to <%= link_to "ScholarSphere", "https://scholarsphere.psu.edu/" %>.
 </p>
 
 <p>
-  If you would like assistance or have any questions, please reply to this email. If you have accepted manuscripts
-  you would like us to deposit on your behalf, please attach them to a reply email. We will follow the policies
-  of the journal(s) in question when depositing them to ScholarSphere.
-</p>
-
-<p>
-  You may also wish to review one of the following frequently asked questions:
+  You may also find the following FAQs helpful:
 </p>
 
 <ul>

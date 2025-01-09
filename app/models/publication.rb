@@ -162,6 +162,7 @@ class Publication < ApplicationRecord
   scope :oab_open_access, -> { open_access.where(open_access_locations: { source: Source::OPEN_ACCESS_BUTTON }) }
   scope :unpaywall_open_access, -> { open_access.where(open_access_locations: { source: Source::UNPAYWALL }) }
 
+  scope :not_extension_publication, -> { where.not(publication_type: 'Extension Publication') }
   scope :oa_publication, -> { where(publication_type: oa_publication_types) }
   scope :non_oa_publication, -> { where.not(publication_type: oa_publication_types) }
 
@@ -404,6 +405,11 @@ class Publication < ApplicationRecord
       field(:open_access_button_last_checked_at)
       field(:unpaywall_last_checked_at)
       field(:preferred_file_version_none_email_sent)
+      field(:users) do
+        filterable true
+        searchable [:webaccess_id]
+        queryable true
+      end
     end
 
     create do
@@ -487,6 +493,7 @@ class Publication < ApplicationRecord
       field(:imports)
       field(:organizations)
       field(:visible) { label 'Visible via API?' }
+      field(:users)
       group :preferred_version do
         field(:preferred_version)
         field(:preferred_file_version_none_email_sent)
@@ -543,6 +550,10 @@ class Publication < ApplicationRecord
         end
         field(:preferred_file_version_none_email_sent)
       end
+    end
+
+    scope do
+      Publication.left_joins(:users)
     end
   end
 

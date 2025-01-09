@@ -50,11 +50,8 @@ namespace :email_notifications do
     pub1 = OpenStruct.new({ title: 'Example Publication One' })
     pub2 = OpenStruct.new({ title: 'Example Publication Two' })
     pub3 = OpenStruct.new({ title: 'Example Publication Three' })
-    old_fake_pubs = [pub1, pub2]
-    new_fake_pubs = [pub3]
     FacultyNotificationsMailer.open_access_reminder(test_user,
-                                                    old_fake_pubs,
-                                                    new_fake_pubs).deliver_now
+                                                    [pub1, pub2, pub3]).deliver_now
     $stdout.puts "Test open access reminder email sent to #{args[:address]}"
   end
 end

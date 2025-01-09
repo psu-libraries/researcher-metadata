@@ -9,6 +9,7 @@ activity_insight:
 scholarsphere:
   endpoint: "https://scholarsphere.test/api/"
   client_key:  "secret_key"
+  webhook_secret: "webhooksecret123"
 
 azure_ad_oauth:
   client_secret: test-azure-oauth-client-secret

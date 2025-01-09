@@ -44,5 +44,6 @@ pure:
 scholarsphere:
   endpoint: 
   client_key: 
+  webhook_secret: 
 
 
