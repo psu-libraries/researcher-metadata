@@ -167,8 +167,7 @@ class ActivityInsightImporter
             update_pub_record(pub_record, pub)
           else
             unless pub_record.doi_verified == true
-              pub_record.oa_workflow_state = 'automatic DOI verification pending'
-              pub_record.save!
+              pub_record.update(oa_workflow_state: 'automatic DOI verification pending') if pub_record.can_receive_new_ai_oa_files?
               DOIVerificationJob.perform_later(pub_record.id)
               pi.save!
             end
