@@ -1147,9 +1147,9 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.needs_doi_verification' do
+    describe '.oa_workflow_needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
-        expect(described_class.needs_doi_verification).to match_array [
+        expect(described_class.oa_workflow_needs_doi_verification).to match_array [
           pub4,
           pub4b,
           pub11,
@@ -1162,6 +1162,45 @@ describe Publication, type: :model do
           pub13b,
           pub13c,
           pub13d,
+          pub13o
+        ]
+      end
+    end
+
+    describe '.all_pubs_needs_doi_verification' do
+      it 'returns all publications whose doi_verified is false or nil' do
+        byebug
+        expect(described_class.all_pubs_needs_doi_verification).to match_array [
+          pub1,
+          pub2,
+          pub2b,
+          pub2c,
+          pub4,
+
+          pub4b,
+          pub5,
+          pub7,
+          pub11,
+          pub11b,
+
+          pub11c,
+          pub11d,
+          pub12,
+          pub12c,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub13e,
+          pub13f,
+          pub13g,
+          pub13h,
+          pub13i,
+          pub13j,
+          pub13k,
+          pub13l,
+          pub13m,
+          pub13n,
           pub13o
         ]
       end

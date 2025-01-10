@@ -2,7 +2,7 @@
 
 class OAWorkflowService
   def workflow
-    Publication.needs_doi_verification.each do |pub|
+    Publication.oa_workflow_needs_doi_verification.each do |pub|
       pub.oa_workflow_state = 'automatic DOI verification pending'
       pub.save!
       DOIVerificationJob.perform_later(pub.id)

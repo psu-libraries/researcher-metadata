@@ -197,7 +197,8 @@ class Publication < ApplicationRecord
       .where('doi_verified = false')
       .where('doi_error != true OR doi_error IS NULL')
   }
-  scope :needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
+  scope :oa_workflow_needs_doi_verification, -> { activity_insight_oa_publication.where(doi_verified: nil).where(%{oa_workflow_state IS DISTINCT FROM 'automatic DOI verification pending'}) }
+  scope :all_pubs_needs_doi_verification, -> {where(%{doi_verified = false OR doi_verified IS NULL})}
   scope :filter_oa_status_from_workflow, -> { where.not(%{open_access_status = 'gold' OR open_access_status = 'hybrid' OR open_access_status IS NULL}) }
   scope :needs_permissions_check, -> {
     activity_insight_oa_publication

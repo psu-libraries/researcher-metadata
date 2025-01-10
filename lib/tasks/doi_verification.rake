@@ -8,8 +8,7 @@ namespace :doi_verification do
   end
 
   task :check_unverified :environment do
-    unverified_publications = Publication.where(:doi_verified == false || :doi_verified == nil)
-    unverified_publications.find_each do |pub|
+    Publication.all_pubs_needs_doi_verification.find_each do |pub|
       DOIVerificationJob.perform_later(pub.id)
     end
   end
