@@ -1169,7 +1169,6 @@ describe Publication, type: :model do
 
     describe '.all_pubs_needs_doi_verification' do
       it 'returns all publications whose doi_verified is false or nil' do
-        byebug
         expect(described_class.all_pubs_needs_doi_verification).to match_array [
           pub1,
           pub2,
