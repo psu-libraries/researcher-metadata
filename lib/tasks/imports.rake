@@ -136,33 +136,6 @@ namespace :import do
     PurePublicationImporter.new.call
     PurePublicationTagImporter.new.call
   end
-
-  desc 'Import all data'
-  task all: :environment do
-    PureOrganizationsImporter.new.call
-    ActivityInsightImporter.new.call
-    PureUserImporter.new.call
-    PurePublishersImporter.new.call
-    PureJournalsImporter.new.call
-    PurePublicationImporter.new.call
-    PurePublicationTagImporter.new.call
-
-    ETDCSVImporter.new(
-      filename: filename_for(:etds)
-    ).call
-
-    CommitteeImporter.new(
-      filename: filename_for(:committees)
-    ).call
-
-    NSFGrantImporter.new(
-      dirname: dirname_for(:nsf_grants)
-    ).call
-
-    OpenAccessButtonPublicationImporter.new.import_all
-    UnpaywallPublicationImporter.new.import_all
-    ScholarsphereImporter.new.call
-  end
 end
 
 def filename_for(key)

@@ -53,6 +53,21 @@ describe OpenAccessButtonPublicationImporter do
           expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
+
+      context 'when the publication type is extension publication' do
+        let!(:pub) { create(:publication, doi: nil, doi_verified: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'", publication_type: 'Extension Publication') }
+
+        it 'does not update doi' do
+          importer.import_all
+          expect(pub.reload.doi).to be_nil
+          expect(pub.reload.doi_verified).to be_nil
+        end
+
+        it 'does not update Open Access Button check timestamp on the publication' do
+          importer.import_all
+          expect(pub.reload.open_access_button_last_checked_at).to be_nil
+        end
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -292,6 +307,21 @@ describe OpenAccessButtonPublicationImporter do
           expect(pub.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
         end
       end
+
+      context 'when the publication type is extension publication' do
+        let!(:pub) { create(:publication, doi: nil, doi_verified: nil, title: "Stable \"characteristic\" evolution of generic three-dimensional single-black-hole spacetimes'", publication_type: 'Extension Publication') }
+
+        it 'does not update doi' do
+          importer.import_new
+          expect(pub.reload.doi).to be_nil
+          expect(pub.reload.doi_verified).to be_nil
+        end
+
+        it 'does not update Open Access Button check timestamp on the publication' do
+          importer.import_new
+          expect(pub.reload.open_access_button_last_checked_at).to be_nil
+        end
+      end
     end
 
     context 'when an existing publication has a blank DOI' do
@@ -499,6 +529,12 @@ describe OpenAccessButtonPublicationImporter do
              doi: 'https://doi.org/10.000/doi1',
              title: 'Publication 2')
     end
+    let!(:pub3) do
+      create(:publication,
+             doi: '',
+             title: 'Stable characteristic evolution of generic three-dimensional single-black-hole spacetimes',
+             publication_type: 'Extension Publication')
+    end
 
     before do
       allow(HTTParty).to receive(:get).with('https://api.openaccessbutton.org/find?title=Stable+characteristic+evolution+of+generic+three-dimensional+single-black-hole+spacetimes')
@@ -513,6 +549,7 @@ describe OpenAccessButtonPublicationImporter do
     it 'updates Open Access Button check timestamp on the publication' do
       importer.import_without_doi
       expect(pub1.reload.open_access_button_last_checked_at).to be_within(1.minute).of(Time.zone.now)
+      expect(pub3.reload.open_access_button_last_checked_at).to be_nil
     end
   end
 end
