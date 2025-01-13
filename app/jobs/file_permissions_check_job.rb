@@ -7,7 +7,7 @@ class FilePermissionsCheckJob < ApplicationJob
     file = ActivityInsightOAFile.find(file_id)
     permissions = OABPermissionsService.new(file.doi_url_path, file.version)
 
-    file.license = permissions.licence
+    file.license = (permissions.licence.presence || 'https://rightsstatements.org/page/InC/1.0/')
     file.set_statement = permissions.set_statement
     file.embargo_date = permissions.embargo_end_date
     file.checked_for_set_statement = true
