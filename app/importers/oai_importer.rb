@@ -27,6 +27,7 @@ class OAIImporter
             p.publication_type = 'Journal Article'
             p.status = 'Published'
             p.save!
+            DOIVerificationJob.perform_later(p.id)
 
             pi.publication = p
             pi.source = import_source

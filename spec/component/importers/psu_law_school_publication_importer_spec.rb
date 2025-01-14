@@ -56,6 +56,7 @@ describe PSULawSchoolPublicationImporter do
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record1).and_return r1
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record2).and_return r2
     allow(PSULawSchoolOAIRepoRecord).to receive(:new).with(record3).and_return r3
+    allow(DOIVerificationJob).to receive(:perform_later)
   end
 
   describe '#call' do
@@ -163,6 +164,13 @@ describe PSULawSchoolPublicationImporter do
       pub = import.publication
 
       expect(pub.visible).to be false
+    end
+
+    it 'runs the DOI verification' do
+      importer.call
+      pub_import = PublicationImport.find_by(source: 'Penn State Law eLibrary Repo',
+                                             source_identifier: 'non-existing-identifier').publication
+      expect(DOIVerificationJob).to have_received(:perform_later).with(pub_import.id)
     end
 
     it 'returns nil' do
