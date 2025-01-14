@@ -545,7 +545,7 @@ class Publication < ApplicationRecord
     end
 
     scope do
-      Publication.left_joins(:users)
+      Publication.left_joins(:users).distinct
     end
   end
 
