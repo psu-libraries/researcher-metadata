@@ -953,6 +953,11 @@ describe Publication, type: :model do
                            oa_status_last_checked_at: 1.minute.ago,
                            preferred_version: 'Published or Accepted')
     }
+    let!(:pub15) { create(:publication,
+                          title: 'pub15',
+                          publication_type: 'Extension Publication',
+                          doi_verified: false)
+    }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file1b) { create(:activity_insight_oa_file, publication: pub2b) }
@@ -1202,6 +1207,11 @@ describe Publication, type: :model do
           pub13n,
           pub13o
         ]
+      end
+
+      it 'does not return publications with publication_type Extension Publication' do
+        doi_list = described_class.all_pubs_needs_doi_verification
+        expect(doi_list).not_to include(pub15)
       end
     end
 
