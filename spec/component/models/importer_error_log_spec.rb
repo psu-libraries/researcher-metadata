@@ -27,8 +27,9 @@ describe ImporterErrorLog, type: :model do
   end
 
   describe 'older_than_six_months' do
-    let!(:recent_log) {create(:importer_error_log)}
-    let(:older_log) {create(:importer_error_log, created_at: DateTime.now - 7.months)}
+    let!(:recent_log) { create(:importer_error_log) }
+    let(:older_log) { create(:importer_error_log, created_at: DateTime.now - 7.months) }
+
     it do
       expect(described_class.older_than_six_months).not_to include(recent_log)
       expect(described_class.older_than_six_months).to include(older_log)
