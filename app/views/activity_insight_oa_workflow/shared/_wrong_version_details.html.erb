@@ -1,0 +1,52 @@
+<% authors_grouped = all_publications.group_by { |p| p.activity_insight_upload_user } %>
+<% authors_grouped.each do |author, publications| %>
+  <tr id="<%= dom_id(author) %>">
+    <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
+      <%= author.webaccess_id %>
+    </td>
+    <td rowspan="<%= publications.collect(&:activity_insight_oa_files).flatten.count %>">
+      <%= button_to "Send Batch Email", email_path, params: {publications: publications}, class: 'btn btn-secondary' %>
+    </td>
+<% publications.each do |p| %>
+  <td rowspan="<%= p.activity_insight_oa_files.count %>">
+    <%= button_to "Send Email", email_path, params: {publications: p}, class: 'btn btn-secondary' %>
+  </td>
+  <% if show_notification_details %>
+  <td rowspan="<%= p.activity_insight_oa_files.count %>">
+    <%= p.wrong_oa_version_notification_sent_at.present? ? p.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y") : '' %>
+  </td>
+  <% end %>
+<td rowspan="<%= p.activity_insight_oa_files.count %>">
+  <%= link_to p.title.truncate(45),
+      rails_admin.edit_path(model_name: :publication, id: p.id) + '#publication_doi',
+      target: '_blank' %>
+</td>
+<td rowspan="<%= p.activity_insight_oa_files.count %>">
+  <%= p.preferred_version_display %>
+</td>
+<% p.activity_insight_oa_files.each_with_index do |file, index| %>
+  <%= '<tr>'.html_safe unless index == 0 %>
+    <td>
+      <%= file.version_status_display %>
+    </td>
+    <td> 
+      <% if show_notification_details %>
+        <%= file.wrong_version_emails_sent %>
+      <% else %>
+        <%= file.created_at.strftime("%m/%d/%Y") %>
+      <% end %>
+    </td>
+    <td class="file-name">
+        <% if file.stored_file_path.present? %>
+          <%= link_to "#{file.download_filename}",
+                      activity_insight_oa_workflow_file_download_path(file.id),
+                      target: '_blank' %>
+        <% else %>
+          Not Found
+        <% end %>
+    </td>
+<% end %>
+
+</tr>
+<% end %>
+<% end %>

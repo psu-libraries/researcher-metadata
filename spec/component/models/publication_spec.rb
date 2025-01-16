@@ -1183,8 +1183,14 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.wrong_file_version' do
+    describe '.wrong_file_version_base' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
+        expect(described_class.wrong_file_version_base).to match_array [pub12, pub12d]
+      end
+    end
+
+    describe '.wrong_file_version' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have not been sent for at least one file" do
         expect(described_class.wrong_file_version).to match_array [pub12]
       end
     end

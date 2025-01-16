@@ -11,6 +11,13 @@ class Publication < ApplicationRecord
   PUBLISHED_OR_ACCEPTED_VERSION = 'Published or Accepted'
   NO_VERSION = 'None'
 
+  WRONG_VERSION_EMAIL_NOT_SENT = <<-SQL.squish
+    SELECT id#{' '}
+    FROM activity_insight_oa_files#{' '}
+    WHERE activity_insight_oa_files.publication_id = publications.id#{' '}
+      AND (activity_insight_oa_files.wrong_version_emails_sent IS NULL OR activity_insight_oa_files.wrong_version_emails_sent = 0)
+  SQL
+
   def self.publication_types
     [
       'Academic Journal Article', 'In-house Journal Article', 'Professional Journal Article',
@@ -244,11 +251,11 @@ class Publication < ApplicationRecord
   }
   scope :wrong_file_version, -> {
     wrong_file_version_base
-      .where(%{EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.wrong_version_emails_sent IS NULL OR activity_insight_oa_files.wrong_version_emails_sent = 0))})
+      .where("EXISTS (#{WRONG_VERSION_EMAIL_NOT_SENT})")
   }
   scope :wrong_version_author_notified, -> {
     wrong_file_version_base
-      .where(%{NOT EXISTS (SELECT * FROM activity_insight_oa_files WHERE activity_insight_oa_files.publication_id = publications.id AND (activity_insight_oa_files.wrong_version_emails_sent IS NULL OR activity_insight_oa_files.wrong_version_emails_sent = 0))})
+      .where("NOT EXISTS (#{WRONG_VERSION_EMAIL_NOT_SENT})")
   }
   scope :published, -> { where(publications: { status: PUBLISHED_STATUS }) }
   scope :needs_manual_preferred_version_check, -> {
