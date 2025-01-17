@@ -21,6 +21,9 @@ class AuthorshipDecorator < BaseDecorator
 
     if scholarsphere_upload_pending?
       'hourglass-half'
+    elsif
+      activity_insight_upload_processing?
+      'upload'
     elsif scholarsphere_upload_failed?
       'exclamation-circle'
     elsif open_access_waived?
