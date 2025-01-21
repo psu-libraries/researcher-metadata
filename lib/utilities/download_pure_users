@@ -3,7 +3,7 @@
 
 require_relative 'pure_downloader'
 
-downloader = PureDownloader.new
+downloader = Utilities::PureDownloader.new
 
 if File.exists? downloader.user_data_file
   print 'User data file already exists. Overwrite (Yn)?  '
