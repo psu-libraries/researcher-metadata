@@ -13,6 +13,7 @@ describe AuthorshipDecorator do
                       year: year,
                       preferred_open_access_url: url,
                       scholarsphere_upload_pending?: pending,
+                      activity_insight_upload_processing?: in_activity_insight,
                       scholarsphere_upload_failed?: failed,
                       open_access_waived?: waived,
                       no_open_access_information?: no_info,
@@ -28,6 +29,7 @@ describe AuthorshipDecorator do
   let(:pending) { false }
   let(:failed) { false }
   let(:waived) { false }
+  let(:in_activity_insight) { false }
   let(:no_info) { true }
   let(:pub) { double 'publication' }
   let(:context) { double 'view context' }
@@ -280,6 +282,14 @@ describe AuthorshipDecorator do
               end
             end
           end
+
+          context 'when the given object has been added to Activity Insight and is being processed' do
+            let(:in_activity_insight) { true }
+
+            it "returns 'upload'" do
+              expect(ad.open_access_status_icon).to eq 'upload'
+            end
+          end
         end
 
         context 'when the given object has a failed ScholarSphere upload' do
@@ -446,7 +456,7 @@ describe AuthorshipDecorator do
       before { allow(ad).to receive(:open_access_status_icon).and_return('circle-o-notch') }
 
       it 'returns the correct alt text' do
-        expect(ad.open_access_status_icon_alt_text).to eq 'publication is in press and will not be subject to the open access policy until published'
+        expect(ad.open_access_status_icon_alt_text).to eq 'Publication is in press and will not be subject to the open access policy until published'
       end
     end
 
@@ -456,6 +466,14 @@ describe AuthorshipDecorator do
       it 'returns the correct alt text' do
         expect(ad.open_access_status_icon_alt_text).to eq 'open access status currently unknown. Click publication title link to add information or submit a waiver'
       end
+    end
+  end
+
+  context 'when the icon is "upload"' do
+    before { allow(ad).to receive(:open_access_status_icon).and_return('upload') }
+
+    it 'returns the correct alt text' do
+      expect(ad.open_access_status_icon_alt_text).to eq 'A file for the publication was uploaded in Activity Insight and is being processed for deposit in ScholarSphere.'
     end
   end
 

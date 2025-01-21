@@ -1849,7 +1849,7 @@ describe Publication, type: :model do
 
   describe '#activity_insight_upload_processing?' do
     let(:default_pub) { create(:publication) }
-    let(:in_progress_pub) { create(:publication, activity_insight_postprint_status: 'In Progress')}
+    let(:in_progress_pub) { create(:publication, activity_insight_postprint_status: 'In Progress') }
 
     context 'when the publication has "In Progress" for activity_insight_postprint_status' do
       it 'returns true' do
@@ -1862,7 +1862,6 @@ describe Publication, type: :model do
         expect(default_pub.activity_insight_upload_processing?).to be false
       end
     end
-
   end
 
   describe '#open_access_waived?' do

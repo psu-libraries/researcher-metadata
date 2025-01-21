@@ -618,7 +618,7 @@ class Publication < ApplicationRecord
   end
 
   def has_open_access_information?
-    preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived?
+    preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived? || activity_insight_upload_processing?
   end
 
   def orcid_allowed?
