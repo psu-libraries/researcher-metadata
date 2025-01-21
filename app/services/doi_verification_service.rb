@@ -10,6 +10,8 @@ class DOIVerificationService
   end
 
   def verify
+    return if publication.publication_type == 'Extension Publication'
+
     pub_title = publication.matchable_title
     unpaywall_title = UnpaywallClient.query_unpaywall(publication).matchable_title
     publication.doi_verified = compare_title(pub_title, unpaywall_title)

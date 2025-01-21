@@ -29,6 +29,8 @@ describe PurePublicationImporter do
 
     allow(HTTParty).to receive(:get).with('https://pure.psu.edu/ws/api/524/research-outputs?navigationLink=false&size=500&offset=0',
                                           headers: { 'api-key' => 'fake_api_key', 'Accept' => 'application/json' }).and_return http_response_2
+
+    allow(DOIVerificationJob).to receive(:perform_later)
   end
 
   describe '#call' do
@@ -240,6 +242,13 @@ describe PurePublicationImporter do
           expect(duplicate_pub1.reload.visible).to be false
           expect(duplicate_pub2.reload.visible).to be false
         end
+
+        it 'runs the DOI verification' do
+          importer.call
+          pub_import = PublicationImport.find_by(source: 'Pure',
+                                                 source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a').publication
+          expect(DOIVerificationJob).to have_received(:perform_later).with(pub_import.id)
+        end
       end
 
       context 'when a publication record and a publication import record already exist for one of the publications in the imported data' do
@@ -298,6 +307,11 @@ describe PurePublicationImporter do
 
           it 'creates a new publication record for each new Published or Accepted/In press publication in the imported data' do
             expect { importer.call }.to change(Publication, :count).by 2
+          end
+
+          it 'does not call the DOI Verification Job' do
+            importer.call
+            expect(DOIVerificationJob).not_to have_received(:perform_later).with(existing_pub.id)
           end
 
           context 'when no contributor records exist' do

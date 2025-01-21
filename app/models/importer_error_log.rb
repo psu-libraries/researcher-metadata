@@ -7,6 +7,8 @@ class ImporterErrorLog < ApplicationRecord
             :occurred_at,
             presence: true
 
+  scope :older_than_six_months, -> { where('created_at <= ?', DateTime.now - 6.months) }
+
   def self.log_error(importer_class:, error:, metadata:)
     create!(
       importer_type: importer_class.to_s,

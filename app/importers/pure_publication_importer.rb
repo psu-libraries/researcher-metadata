@@ -43,6 +43,8 @@ class PurePublicationImporter < PureImporter
             end
           else
             p = Publication.create!(pub_attrs(publication))
+            # Verify the DOI for new publications
+            DOIVerificationJob.perform_later(p.id)
             pi.publication = p
 
             DuplicatePublicationGroup.group_duplicates_of(p)

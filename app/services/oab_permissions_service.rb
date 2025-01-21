@@ -38,4 +38,8 @@ class OABPermissionsService < OABPermissionsClient
 
     {}
   end
+
+  def permissions_found?
+    all_permissions.present?
+  end
 end

@@ -162,11 +162,16 @@ class ActivityInsightImporter
                                   source_identifier: pub.activity_insight_id,
                                   publication: Publication.create!(pub_attrs(pub)))
           pub_record = pi.publication
+          activity_insight_file_location = pub.postprints&.first&.location
 
           if pi.persisted?
             update_pub_record(pub_record, pub)
           else
-            pi.save!
+            unless pub_record.doi_verified == true
+              pub_record.update(oa_workflow_state: 'automatic DOI verification pending') if pub_record.can_receive_new_ai_oa_files? && activity_insight_file_location.present?
+              DOIVerificationJob.perform_later(pub_record.id)
+              pi.save!
+            end
 
             DuplicatePublicationGroup.group_duplicates_of(pub_record)
             if pub_record.reload.duplicate_group
@@ -201,8 +206,6 @@ class ActivityInsightImporter
             end
           end
 
-          activity_insight_file_location = pub.postprints&.first&.location
-
           if activity_insight_file_location.blank?
             existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
             if existing_file.present?
@@ -224,11 +227,6 @@ class ActivityInsightImporter
                 AiOAStatusExportJob.perform_later(file.id, 'In Progress')
               end
               pub_record.save!
-              unless pub_record.doi_verified == true
-                pub_record.oa_workflow_state = 'automatic DOI verification pending'
-                pub_record.save!
-                DOIVerificationJob.perform_later(pub_record.id)
-              end
             end
           end
         end

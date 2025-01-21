@@ -25,6 +25,23 @@ describe DOIVerificationService do
       end
     end
 
+    context 'when the publication is of type Extension Publication' do
+      let(:extension_publication) { create(:publication,
+                                           doi: 'https://doi.org/10.1016/S0962-1849(05)80014-9',
+                                           title: title,
+                                           publication_type: 'Extension Publication',
+                                           secondary_title: secondary_title,
+                                           doi_verified: nil)}
+
+      let(:service_b) { described_class.new(extension_publication) }
+
+      it 'does not proceed to check the doi' do
+        service_b.verify
+        expect(HttpService).not_to have_received(:get)
+        expect(extension_publication.reload.doi_verified).to be_nil
+      end
+    end
+
     context 'when the publication title matches but has different punctuation and casing' do
       let(:title) { 'Psychotherapy Integration, and the Need for Better Theories of Change: A Rejoinder to Alford' }
 

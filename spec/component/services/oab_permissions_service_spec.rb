@@ -218,6 +218,28 @@ describe OABPermissionsService do
         end
       end
     end
+
+    describe '#permissions_found?' do
+      context 'when some permissions are found' do
+        before do
+          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oab7.json').read)
+        end
+
+        it 'returns true' do
+          expect(service.permissions_found?).to be true
+        end
+      end
+
+      context 'when no permissions data is returned' do
+        before do
+          allow(HTTParty).to receive(:get).and_return(Rails.root.join('spec', 'fixtures', 'oab5.json').read)
+        end
+
+        it 'returns false' do
+          expect(service.permissions_found?).to be false
+        end
+      end
+    end
   end
 
   context 'when version is not valid' do

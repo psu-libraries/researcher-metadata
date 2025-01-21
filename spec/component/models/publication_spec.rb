@@ -953,6 +953,11 @@ describe Publication, type: :model do
                            oa_status_last_checked_at: 1.minute.ago,
                            preferred_version: 'Published or Accepted')
     }
+    let!(:pub15) { create(:publication,
+                          title: 'pub15',
+                          publication_type: 'Extension Publication',
+                          doi_verified: false)
+    }
 
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file1b) { create(:activity_insight_oa_file, publication: pub2b) }
@@ -1109,9 +1114,66 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.needs_doi_verification' do
+    describe '.oa_workflow_needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
-        expect(described_class.needs_doi_verification).to contain_exactly(pub4, pub4b, pub11, pub11b, pub11c, pub11d, pub12, pub12c, pub13a, pub13b, pub13c, pub13d, pub13o)
+        expect(described_class.oa_workflow_needs_doi_verification).to contain_exactly(
+          pub4,
+          pub4b,
+          pub11,
+          pub11b,
+          pub11c,
+          pub11d,
+          pub12,
+          pub12c,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub13o
+        )
+      end
+    end
+
+    describe '.all_pubs_needs_doi_verification' do
+      it 'returns all publications whose doi_verified is false or nil' do
+        expect(described_class.all_pubs_needs_doi_verification).to match_array [
+          pub1,
+          pub2,
+          pub2b,
+          pub2c,
+          pub4,
+
+          pub4b,
+          pub5,
+          pub7,
+          pub11,
+          pub11b,
+
+          pub11c,
+          pub11d,
+          pub12,
+          pub12c,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub13e,
+          pub13f,
+          pub13g,
+          pub13h,
+          pub13i,
+          pub13j,
+          pub13k,
+          pub13l,
+          pub13m,
+          pub13n,
+          pub13o
+        ]
+      end
+
+      it 'does not return publications with publication_type Extension Publication' do
+        doi_list = described_class.all_pubs_needs_doi_verification
+        expect(doi_list).not_to include(pub15)
       end
     end
 
@@ -1378,6 +1440,20 @@ describe Publication, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe '.not_extension_publication' do
+    let(:pub1) { create(:publication, publication_type: 'Journal Article') }
+    let(:pub2) { create(:publication, publication_type: 'Academic Journal Article') }
+    let(:pub3) { create(:publication, publication_type: 'In-house Journal Article') }
+    let(:pub4) { create(:publication, publication_type: 'Book') }
+    let(:pub5) { create(:publication, publication_type: 'Letter') }
+    let(:pub6) { create(:publication, publication_type: 'Extension Publication') }
+    let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
+
+    it 'returns publications that have open access publication types' do
+      expect(described_class.not_extension_publication).to match_array [pub1, pub2, pub3, pub4, pub5, pub7]
     end
   end
 
