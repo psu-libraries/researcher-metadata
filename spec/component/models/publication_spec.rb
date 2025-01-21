@@ -1214,7 +1214,7 @@ describe Publication, type: :model do
 
     describe '.wrong_version_author_notified' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have been sent for each file" do
-        expect(described_class.wrong_version_author_notified).to match_array [pub12d]
+        expect(described_class.wrong_version_author_notified).to contain_exactly(pub12d)
       end
     end
 

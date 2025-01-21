@@ -158,7 +158,7 @@ RSpec.describe ActivityInsightOADashboardComponent, type: :component do
       render_inline(described_class.new)
       expect(page.find_by_id('wrong-version-author-notified-check-card').to_json).to include('text-muted')
       expect(page.find_by_id('wrong-version-author-notified-check-card').text).to include('0')
-      expect(rendered_content).not_to have_link(href: '/activity_insight_oa_workflow/wrong_version_author_notified_review')
+      expect(rendered_content).to have_no_link(href: '/activity_insight_oa_workflow/wrong_version_author_notified_review')
     end
   end
 
