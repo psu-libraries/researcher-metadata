@@ -1857,7 +1857,7 @@ describe Publication, type: :model do
       end
     end
 
-    context 'when the publication does not "in progress" for activity_insight_postprint_status' do
+    context 'when the publication does not have "in progress" for activity_insight_postprint_status' do
       it 'returns false' do
         expect(default_pub.activity_insight_upload_processing?).to be false
       end
