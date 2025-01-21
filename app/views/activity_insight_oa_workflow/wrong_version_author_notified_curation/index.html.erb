@@ -1,16 +1,17 @@
 <div class="container pt-4 pb-5">
   <%= link_to '<< Back', activity_insight_oa_workflow_path %>
-  <h1 class="pb-3 pt-2">Publications with Wrong File Version</h1>
+  <h1 class="pb-3 pt-2">Publications with Wrong File Version - Author Notified</h1>
   <table class="table">
     <thead class='card-header'>
       <tr>
         <th>Author</th>
         <th>Author Batch Email</th>
         <th>Publication Email</th>
+        <th>Email Last Sent On</th>
         <th>Title</th>
         <th>Preferred Version</th>
         <th>File Version</th>
-        <th>File Created On</th>
+        <th>Notification Emails Sent</th>
         <th>Download File</th>
       </tr>
     </thead>
@@ -18,7 +19,7 @@
       <%= render partial: 'activity_insight_oa_workflow/shared/wrong_version_details',
       locals: {
         show_notification_details: false,
-        email_path: activity_insight_oa_workflow_wrong_file_version_email_path,
+        email_path: activity_insight_oa_workflow_wrong_version_author_notified_email_path,
         all_publications: @publications } %>
     </tbody>
   </table>

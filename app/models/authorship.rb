@@ -22,6 +22,7 @@ class Authorship < ApplicationRecord
            :preferred_open_access_url,
            :scholarsphere_upload_pending?,
            :scholarsphere_upload_failed?,
+           :activity_insight_upload_processing?,
            :open_access_waived?,
            :no_open_access_information?,
            :is_oa_publication?,
@@ -33,6 +34,7 @@ class Authorship < ApplicationRecord
            :doi_url_path,
            to: :publication,
            prefix: false
+
   delegate :webaccess_id, :name, to: :user, prefix: true
 
   scope :unclaimable, -> { where('claimed_by_user IS TRUE OR confirmed IS TRUE') }

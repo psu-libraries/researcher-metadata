@@ -19,12 +19,14 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
     )
   }
   let!(:aif5) { create(:activity_insight_oa_file, publication: pub5, version: 'publishedVersion') }
+  let!(:aif6) { create(:activity_insight_oa_file, publication: pub6, version: 'publishedVersion', wrong_version_emails_sent: 1) }
   let!(:pub1) { create(:publication, doi_verified: false) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion') }
   let!(:pub3) { create(:publication, permissions_last_checked_at: Time.now) }
   let!(:pub4) { create(:publication, preferred_version: 'acceptedVersion')
   }
   let!(:pub5) { create(:publication, preferred_version: 'acceptedVersion') }
+  let!(:pub6) { create(:publication, preferred_version: 'acceptedVersion') }
 
   context 'when the current user is an admin' do
     before do
@@ -57,6 +59,13 @@ describe 'Admin Activity Insight OA Workflow dashboard', type: :feature do
       it 'redirects to the Wrong File Version Review page' do
         click_on 'Review Wrong File Versions'
         expect(page).to have_current_path activity_insight_oa_workflow_wrong_file_version_review_path
+      end
+    end
+
+    describe 'clicking the link to the Wrong Version - Author Notified page' do
+      it 'redirects to the Wrong Version - Author Notified page' do
+        click_on 'Wrong Version - Author Notified'
+        expect(page).to have_current_path activity_insight_oa_workflow_wrong_version_author_notified_review_path
       end
     end
 

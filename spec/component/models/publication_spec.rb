@@ -836,6 +836,12 @@ describe Publication, type: :model do
                            preferred_version: 'acceptedVersion',
                            doi_verified: nil)
     }
+    let!(:pub12d) { create(:publication,
+                           title: 'pub12d',
+                           publication_type: 'Journal Article',
+                           preferred_version: 'acceptedVersion',
+                           doi_verified: nil)
+    }
     let!(:pub13a) { create(:publication,
                            title: 'pub13a',
                            publication_type: 'Journal Article',
@@ -989,8 +995,10 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file10d) { create(:activity_insight_oa_file, publication: pub11d, version: 'publishedVersion') }
     let!(:activity_insight_oa_file11) { create(:activity_insight_oa_file, publication: pub4, version: 'unknown') }
     let!(:activity_insight_oa_file12) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file12a) { create(:activity_insight_oa_file, publication: pub12, version: 'publishedVersion', wrong_version_emails_sent: 1) }
     let!(:activity_insight_oa_file12b) { create(:activity_insight_oa_file, publication: pub12b, version: 'notArticleFile') }
     let!(:activity_insight_oa_file12c) { create(:activity_insight_oa_file, publication: pub12c, version: 'publishedVersion') }
+    let!(:activity_insight_oa_file12d) { create(:activity_insight_oa_file, publication: pub12d, version: 'publishedVersion', wrong_version_emails_sent: 1) }
     let!(:activity_insight_oa_file13o) { create(:activity_insight_oa_file, publication: pub13o) }
     let!(:activity_insight_oa_file13a_1) {
       create(
@@ -1103,8 +1111,47 @@ describe Publication, type: :model do
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
-        expect(described_class.activity_insight_oa_publication).to contain_exactly(pub2, pub2b, pub2c, pub3, pub4, pub4b, pub6, pub8, pub8c, pub9a, pub9b, pub9c, pub9d, pub9e, pub9f, pub9g, pub9h, pub9i, pub9j, pub9k, pub10, pub10b, pub11, pub11b, pub11c, pub11d, pub12, pub12b, pub12c, pub13a,
-                                                                                   pub13b, pub13c, pub13d, pub13o, pub14a, pub14b, pub14c, pub14e)
+        expect(described_class.activity_insight_oa_publication).to contain_exactly(
+          pub2,
+          pub2b,
+          pub2c,
+          pub3,
+          pub4,
+          pub4b,
+          pub6,
+          pub8,
+          pub8c,
+          pub9a,
+          pub9b,
+          pub9c,
+          pub9d,
+          pub9e,
+          pub9f,
+          pub9g,
+          pub9h,
+          pub9i,
+          pub9j,
+          pub9k,
+          pub10,
+          pub10b,
+          pub11,
+          pub11b,
+          pub11c,
+          pub11d,
+          pub12,
+          pub12b,
+          pub12c,
+          pub12d,
+          pub13a,
+          pub13b,
+          pub13c,
+          pub13d,
+          pub13o,
+          pub14a,
+          pub14b,
+          pub14c,
+          pub14e
+        )
       end
     end
 
@@ -1125,6 +1172,7 @@ describe Publication, type: :model do
           pub11d,
           pub12,
           pub12c,
+          pub12d,
           pub13a,
           pub13b,
           pub13c,
@@ -1152,9 +1200,21 @@ describe Publication, type: :model do
       end
     end
 
-    describe '.wrong_file_version' do
+    describe '.wrong_file_version_base' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
+        expect(described_class.wrong_file_version_base).to contain_exactly(pub12, pub12d)
+      end
+    end
+
+    describe '.wrong_file_version' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have not been sent for at least one file" do
         expect(described_class.wrong_file_version).to contain_exactly(pub12)
+      end
+    end
+
+    describe '.wrong_version_author_notified' do
+      it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have been sent for each file" do
+        expect(described_class.wrong_version_author_notified).to match_array [pub12d]
       end
     end
 
@@ -1805,6 +1865,23 @@ describe Publication, type: :model do
 
       it 'returns false' do
         expect(pub.scholarsphere_upload_failed?).to be false
+      end
+    end
+  end
+
+  describe '#activity_insight_upload_processing?' do
+    let(:default_pub) { create(:publication) }
+    let(:in_progress_pub) { create(:publication, activity_insight_postprint_status: 'In Progress') }
+
+    context 'when the publication has "In Progress" for activity_insight_postprint_status' do
+      it 'returns true' do
+        expect(in_progress_pub.activity_insight_upload_processing?).to be true
+      end
+    end
+
+    context 'when the publication does not have "in progress" for activity_insight_postprint_status' do
+      it 'returns false' do
+        expect(default_pub.activity_insight_upload_processing?).to be false
       end
     end
   end
