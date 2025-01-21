@@ -602,6 +602,10 @@ class Publication < ApplicationRecord
     authorships.where(%{id IN (SELECT authorship_id FROM scholarsphere_work_deposits WHERE status = 'Failed')}).any?
   end
 
+  def activity_insight_upload_processing?
+    activity_insight_postprint_status == 'In Progress'
+  end
+
   def open_access_waived?
     waivers.any?
   end
@@ -615,7 +619,7 @@ class Publication < ApplicationRecord
   end
 
   def has_open_access_information?
-    preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived?
+    preferred_open_access_url.present? || scholarsphere_upload_pending? || open_access_waived? || activity_insight_upload_processing?
   end
 
   def orcid_allowed?
