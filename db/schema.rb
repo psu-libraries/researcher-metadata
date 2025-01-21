@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_06_152534) do
+ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -62,6 +62,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_06_152534) do
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
     t.boolean "version_checked"
+    t.integer "wrong_version_emails_sent"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
   end

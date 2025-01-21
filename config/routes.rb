@@ -32,6 +32,8 @@ Rails.application.routes.draw do
     get '/file_version_review' => 'file_version_curation#index'
     get '/wrong_file_version_review' => 'wrong_file_version_curation#index'
     post '/wrong_file_version_email' => 'wrong_file_version_curation#email_author'
+    get '/wrong_version_author_notified_review' => 'wrong_version_author_notified_curation#index'
+    post '/wrong_version_author_notified_email' => 'wrong_version_author_notified_curation#email_author'
     get '/preferred_file_version_none_review' => 'preferred_file_version_none_curation#index'
     post '/preferred_file_version_none_email' => 'preferred_file_version_none_curation#email_author'
     get '/preferred_version_review' => 'preferred_version_curation#index'
