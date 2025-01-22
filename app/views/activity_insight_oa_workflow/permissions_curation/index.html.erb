@@ -6,6 +6,7 @@
       <tr>
         <th>Title</th>
         <th>File metadata: Filename (Version)</th>
+        <th>DOI</th>
       </tr>
     </thead>
     <tbody class='card-body'>
@@ -24,6 +25,11 @@
                 </li>
               <% end %>
             </ul>
+          </td>
+          <td class="col-sm-5">
+            <% if p.doi.present? %>
+              <%= p.doi %>
+            <% end %>
           </td>
         </tr>
       <% end %>
