@@ -1201,6 +1201,7 @@ describe Publication, type: :model do
           pub11d,
           pub12,
           pub12c,
+          pub12d,
           pub13a,
           pub13b,
           pub13c,
