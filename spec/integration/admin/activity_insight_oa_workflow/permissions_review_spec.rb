@@ -43,15 +43,46 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
       version: 'acceptedVersion'
     )
   }
+  let!(:aif4a) {
+    create(
+      :activity_insight_oa_file,
+      publication: pub4,
+      permissions_last_checked_at: Time.now,
+      version: 'acceptedVersion',
+      license: nil,
+      checked_for_set_statement: true,
+      embargo_date: Date.today
+    )
+  }
+  let!(:aif4b) {
+    create(
+      :activity_insight_oa_file,
+      publication: pub4,
+      permissions_last_checked_at: Time.now,
+      version: 'publishedVersion',
+      license: nil,
+      checked_for_set_statement: true,
+      embargo_date: Date.today
+    )
+  }
   let!(:pub1) { create(:publication, title: 'Pub1', preferred_version: 'acceptedVersion') }
   let!(:pub2) {
     create(
       :publication,
       title: 'Pub2',
-      preferred_version: 'acceptedVersion'
+      preferred_version: 'acceptedVersion',
+      doi: 'https://doi.org/10.123/zzz123'
     )
   }
   let!(:pub3) { create(:publication, title: 'Pub3', preferred_version: nil) }
+  let!(:pub4) {
+    create(
+      :publication,
+      title: 'Pub4',
+      preferred_version: 'acceptedVersion',
+      doi: 'https://doi.org/10.123/aaa123'
+    )
+  }
 
   before do
     authenticate_admin_user
@@ -59,17 +90,31 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
   end
 
   describe 'listing publications that have files that need permissions metadata review prior to deposit' do
-    it 'show a table with header and the proper data for the publications in the table' do
+    it 'show a table with header and the proper data for the publications in the table sorted by DOI' do
       within 'thead' do
         expect(page).to have_text('Title')
         expect(page).to have_text('File metadata: Filename (Version')
+        expect(page).to have_text('DOI')
       end
 
       within "#publication_#{pub2.id}" do
         expect(page).to have_link('Pub2', href: "#{rails_admin.edit_path(model_name: :publication, id: pub2.id)}#publication_preferred_version")
         expect(page).to have_link(aif2a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2a.id))
+        expect(page).to have_text('https://doi.org/10.123/zzz123')
         expect(page).not_to have_text aif2b.download_filename
       end
+
+      within "#publication_#{pub4.id}" do
+        expect(page).to have_link('Pub4', href: "#{rails_admin.edit_path(model_name: :publication, id: pub4.id)}#publication_preferred_version")
+        expect(page).to have_link(aif4a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif4a.id))
+        expect(page).to have_text('https://doi.org/10.123/aaa123')
+        expect(page).not_to have_text aif4b.download_filename
+      end
+
+      tr_elements = all('tr')
+      # Publication 4 has a DOI ordered before that of Publication 2 so it appears first
+      expect(tr_elements[1][:id]).to eq "publication_#{pub4.id}"
+      expect(tr_elements[2][:id]).to eq "publication_#{pub2.id}"
 
       expect(page).not_to have_text('Pub1')
       expect(page).not_to have_text('Pub3')
