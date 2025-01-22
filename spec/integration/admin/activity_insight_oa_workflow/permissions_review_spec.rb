@@ -105,11 +105,11 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
       end
 
       within "#publication_#{pub4.id}" do
-      expect(page).to have_link('Pub4', href: "#{rails_admin.edit_path(model_name: :publication, id: pub4.id)}#publication_preferred_version")
-      expect(page).to have_link(aif4a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif4a.id))
-      expect(page).to have_text('https://doi.org/10.123/aaa123')
-      expect(page).not_to have_text aif4b.download_filename
-    end
+        expect(page).to have_link('Pub4', href: "#{rails_admin.edit_path(model_name: :publication, id: pub4.id)}#publication_preferred_version")
+        expect(page).to have_link(aif4a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif4a.id))
+        expect(page).to have_text('https://doi.org/10.123/aaa123')
+        expect(page).not_to have_text aif4b.download_filename
+      end
 
       tr_elements = all('tr')
       # Publication 4 has a DOI ordered before that of Publication 2 so it appears first
