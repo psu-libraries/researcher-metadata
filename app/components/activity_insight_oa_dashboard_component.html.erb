@@ -1,162 +1,82 @@
 <div class="container">
-  <% if doi_failed_verification_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_doi_verification_path, class: 'card-link' do %>
-      <div class='card' id='doi-verification-card'>
-        <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
-          <span class='float-right text-large'><strong><%= doi_failed_verification_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('doi_verification_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='doi-verification-card'>
-      <div class='card-header'><strong><%= i18n('doi_verification_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('doi_verification_description') %></div>
-    </div>
-  <% end %>
+  <%= render DashboardCardComponent.new(
+        count: doi_failed_verification_count,
+        title: 'doi_verification_title',
+        description: 'doi_verification_description',
+        path: activity_insight_oa_workflow_doi_verification_path,
+        card_id: 'doi-verification-card'
+      ) %>
   <br>
-  <% if file_version_check_failed_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_file_version_review_path, class: 'card-link' do %>
-      <div class='card' id='file-version-check-card'>
-        <div class='card-header'><strong><%= i18n('file_version_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= file_version_check_failed_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('file_version_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='file-version-check-card'>
-      <div class='card-header'><strong><%= i18n('file_version_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('file_version_curation_description') %></div>
-    </div>
-  <% end %>
+    <%= render DashboardCardComponent.new(
+        count: file_version_check_failed_count,
+        title: 'file_version_curation_title',
+        description: 'file_version_curation_description',
+        path: activity_insight_oa_workflow_file_version_review_path,
+        card_id: 'file-version-check-card'
+      ) %>
   <br>
-  <% if needs_manual_preferred_version_check_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_preferred_version_review_path, class: 'card-link' do %>
-      <div class='card' id='preferred-version-check-card'>
-        <div class='card-header'><strong><%= i18n('preferred_version_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= needs_manual_preferred_version_check_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('preferred_version_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='preferred-version-check-card'>
-      <div class='card-header'><strong><%= i18n('preferred_version_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('preferred_version_curation_description') %></div>
-    </div>
-  <% end %><br>
-  <% if wrong_file_version_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_wrong_file_version_review_path, class: 'card-link' do %>
-      <div class='card' id='wrong-file-version-check-card'>
-        <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= wrong_file_version_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='wrong-file-version-check-card'>
-      <div class='card-header'><strong><%= i18n('wrong_file_version_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('wrong_file_version_curation_description') %></div>
-    </div>
-  <% end %>
+  <%= render DashboardCardComponent.new(
+        count: needs_manual_preferred_version_check_count,
+        title: 'preferred_version_curation_title',
+        description: 'preferred_version_curation_description',
+        path: activity_insight_oa_workflow_preferred_version_review_path,
+        card_id: 'preferred-version-check-card'
+      ) %>
   <br>
-  <% if preferred_file_version_none_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_preferred_file_version_none_review_path, class: 'card-link' do %>
-      <div class='card' id='preferred-file-version-none-check-card'>
-        <div class='card-header'><strong><%= i18n('preferred_file_version_none_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= preferred_file_version_none_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('preferred_file_version_none_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='preferred-file-version-none-check-card'>
-      <div class='card-header'><strong><%= i18n('preferred_file_version_none_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('preferred_file_version_none_curation_description') %></div>
-    </div>
-  <% end %>
+    <%= render DashboardCardComponent.new(
+        count: wrong_file_version_count,
+        title: 'wrong_file_version_curation_title',
+        description: 'wrong_file_version_curation_description',
+        path: activity_insight_oa_workflow_wrong_file_version_review_path,
+        card_id: 'wrong-file-version-check-card'
+      ) %>
   <br>
-  <% if needs_manual_permissions_review_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_permissions_review_path, class: 'card-link' do %>
-      <div class='card' id='permissions-review-card'>
-        <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= needs_manual_permissions_review_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('permissions_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='permissions-review-card'>
-      <div class='card-header'><strong><%= i18n('permissions_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('permissions_curation_description') %></div>
-    </div>
-  <% end %>
+      <%= render DashboardCardComponent.new(
+        count: wrong_version_author_notified_count,
+        title: 'wrong_version_author_notified_curation_title',
+        description: 'wrong_version_author_notified_curation_description',
+        path: activity_insight_oa_workflow_wrong_version_author_notified_review_path,
+        card_id: 'wrong-version-author-notified-check-card'
+      ) %>
   <br>
-  <% if ready_for_metadata_review_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_metadata_review_path, class: 'card-link' do %>
-      <div class='card' id='metadata-check-card'>
-        <div class='card-header'><strong><%= i18n('metadata_curation_title') %></strong>
-          <span class='float-right text-large'><strong><%= ready_for_metadata_review_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('metadata_curation_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='metadata-check-card'>
-      <div class='card-header'><strong><%= i18n('metadata_curation_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('metadata_curation_description') %></div>
-    </div>
-  <% end %>
+        <%= render DashboardCardComponent.new(
+        count: preferred_file_version_none_count,
+        title: 'preferred_file_version_none_curation_title',
+        description: 'preferred_file_version_none_curation_description',
+        path: activity_insight_oa_workflow_preferred_file_version_none_review_path,
+        card_id: 'preferred-file-version-none-check-card'
+      ) %>
   <br>
-  <% if flagged_for_review_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_flagged_for_review_path, class: 'card-link' do %>
-      <div class='card' id='flagged-for-review-card'>
-        <div class='card-header'><strong><%= i18n('flagged_for_review_title') %></strong>
-          <span class='float-right text-large'><strong><%= flagged_for_review_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('flagged_for_review_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='flagged-for-review-card'>
-      <div class='card-header'><strong><%= i18n('flagged_for_review_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('flagged_for_review_description') %></div>
-    </div>
-  <% end %>
+      <%= render DashboardCardComponent.new(
+        count: needs_manual_permissions_review_count,
+        title: 'permissions_curation_title',
+        description: 'permissions_curation_description',
+        path: activity_insight_oa_workflow_permissions_review_path,
+        card_id: 'permissions-review-card'
+      ) %>
   <br>
-  <% if all_workflow_publications_count.nonzero? %>
-    <%= link_to activity_insight_oa_workflow_all_workflow_publications_path, class: 'card-link' do %>
-      <div class='card' id='all-workflow-publications-card'>
-        <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
-          <span class='float-right text-large'><strong><%= all_workflow_publications_count %></strong></span>
-        </div>
-        <div class='card-body'><%= i18n('all_workflow_publications_description') %></div>
-      </div>
-    <% end %>
-  <% else %>
-    <div class='card text-muted' id='all-workflow-publications-card'>
-      <div class='card-header'><strong><%= i18n('all_workflow_publications_title') %></strong>
-        <span class='float-right text-large'>0</strong></span>
-      </div>
-      <div class='card-body'><%= i18n('all_workflow_publications_description') %></div>
-    </div>
-  <% end %>
+      <%= render DashboardCardComponent.new(
+        count: ready_for_metadata_review_count,
+        title: 'metadata_curation_title',
+        description: 'metadata_curation_description',
+        path: activity_insight_oa_workflow_metadata_review_path,
+        card_id: 'metadata-check-card'
+      ) %>
+  <br>
+      <%= render DashboardCardComponent.new(
+        count: flagged_for_review_count,
+        title: 'flagged_for_review_title',
+        description: 'flagged_for_review_description',
+        path: activity_insight_oa_workflow_flagged_for_review_path,
+        card_id: 'flagged-for-review-card'
+      ) %>
+  <br>
+      <%= render DashboardCardComponent.new(
+        count: all_workflow_publications_count,
+        title: 'all_workflow_publications_title',
+        description: 'all_workflow_publications_description',
+        path: activity_insight_oa_workflow_all_workflow_publications_path,
+        card_id: 'all-workflow-publications-card'
+      ) %>
+  <br>
 </div>

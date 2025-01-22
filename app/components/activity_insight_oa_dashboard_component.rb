@@ -13,6 +13,10 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
     Publication.wrong_file_version.count
   end
 
+  def wrong_version_author_notified_count
+    Publication.wrong_version_author_notified.count
+  end
+
   def preferred_file_version_none_count
     Publication.preferred_file_version_none.count
   end
@@ -35,9 +39,5 @@ class ActivityInsightOADashboardComponent < ViewComponent::Base
 
   def all_workflow_publications_count
     Publication.troubleshooting_list.count
-  end
-
-  def i18n(key, **options)
-    I18n.t("view_component.#{self.class.name.underscore}.#{key}", **options)
   end
 end
