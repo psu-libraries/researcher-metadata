@@ -9,7 +9,7 @@ describe 'sending open access reminder emails' do
                         first_name: 'Tester',
                         last_name: 'Testerson') }
 
-  let!(:recently_sent) { 1.week.ago }
+  let!(:recently_sent) { DateTime.now }
 
   let!(:membership1) { create(:user_organization_membership, user: user1, started_on: Date.new(2019, 1, 1)) }
   let!(:journal) { create(:journal, title: 'Test Journal')}
@@ -67,6 +67,11 @@ describe 'sending open access reminder emails' do
     it 'includes the journal name of the publication when available' do
       open_email('abc123@psu.edu')
       expect(current_email.body).to match(/Test Journal/)
+    end
+
+    it 'includes the year of the publication when available' do
+      open_email('abc123@psu.edu')
+      expect(current_email.body).to match(/#{DateTime.now.year}/)
     end
 
     it 'records when the notification was sent on each authorship' do
