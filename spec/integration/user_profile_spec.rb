@@ -12,7 +12,7 @@ describe UserProfile do
         create(
           :user,
           :with_psu_identity,
-          webaccess_id: 'dmc186',
+          webaccess_id: 'ajk5603',
           first_name: 'Test',
           last_name: 'User'
         )
@@ -24,7 +24,7 @@ describe UserProfile do
         expect(u.first_name).to eq 'Test'
         expect(u.middle_name).to be_nil
         expect(u.last_name).to eq 'User'
-        expect(u.psu_identity.data).to eq({ 'affiliation' => ['FACULTY'], 'familyName' => 'User', 'givenName' => 'Test', 'userid' => 'dmc186' })
+        expect(u.psu_identity.data).to eq({ 'affiliation' => ['FACULTY'], 'familyName' => 'User', 'givenName' => 'Test', 'userid' => 'ajk5603' })
       end
     end
 
