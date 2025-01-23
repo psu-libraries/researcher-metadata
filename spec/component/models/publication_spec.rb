@@ -1190,13 +1190,11 @@ describe Publication, type: :model do
           pub2b,
           pub2c,
           pub4,
-
           pub4b,
           pub5,
           pub7,
           pub11,
           pub11b,
-
           pub11c,
           pub11d,
           pub12,
