@@ -12,7 +12,8 @@ describe 'sending open access reminder emails' do
   let!(:recently_sent) { 1.week.ago }
 
   let!(:membership1) { create(:user_organization_membership, user: user1, started_on: Date.new(2019, 1, 1)) }
-  let!(:pub1) { create(:publication, published_on: recently_sent, title: 'Test Pub') }
+  let!(:journal) { create(:journal, title: 'Test Journal')}
+  let!(:pub1) { create(:publication, published_on: recently_sent, title: 'Test Pub', journal: journal) }
   # Irrelevant publication due to being more than 2 years old
   let!(:pub2) { create(:publication, published_on: Date.new(2019, 2, 1), title: 'Irrelevant Pub') }
 
@@ -61,6 +62,11 @@ describe 'sending open access reminder emails' do
       open_email('abc123@psu.edu')
       expect(current_email.body).to match(/Test Pub/)
       expect(current_email.body).not_to match(/Irrelevant Pub/)
+    end
+
+    it 'includes the journal name of the publication when available' do
+      open_email('abc123@psu.edu')
+      expect(current_email.body).to match(/Test Journal/)
     end
 
     it 'records when the notification was sent on each authorship' do
