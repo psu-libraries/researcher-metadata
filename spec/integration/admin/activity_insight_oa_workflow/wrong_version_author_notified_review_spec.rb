@@ -3,10 +3,10 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin Wrong File Version Author Notified Review dashboard', type: :feature do
-  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, version: 'publishedVersion', user: user, wrong_version_emails_sent: 1) }
+  let!(:aif1) { create(:activity_insight_oa_file, publication: pub1, version: 'publishedVersion', user: user, wrong_version_emails_sent: 1, created_at: DateTime.now - 1.year) }
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion', user: user, wrong_version_emails_sent: 3) }
   let!(:aif3) { create(:activity_insight_oa_file, publication: pub3, version: 'publishedVersion', user: user, wrong_version_emails_sent: nil) }
-  let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1') }
+  let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1', wrong_oa_version_notification_sent_at: DateTime.now) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2') }
   let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 3') }
   let!(:user) { create(:user, webaccess_id: 'abc123') }
@@ -33,6 +33,8 @@ describe 'Admin Wrong File Version Author Notified Review dashboard', type: :fea
       expect(page).to have_text('Notification Emails Sent')
       expect(page).to have_text('Download File')
       expect(page).to have_text(pub1.title)
+      expect(page).to have_text(pub1.wrong_oa_version_notification_sent_at.strftime("%m/%d/%Y"))
+      expect(page).not_to have_text(aif1.created_at.strftime("%m/%d/%Y"))
       expect(page).to have_text(pub2.title)
       expect(page).not_to have_text(pub3.title)
       expect(page).to have_text('Accepted Manuscript').twice
