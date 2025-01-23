@@ -81,7 +81,7 @@ Metrics/BlockLength:
 # Configuration parameters: CountComments, CountAsOne.
 Metrics/ClassLength:
   Max: 755
-  exclude:
+  Exclude:
     - 'app/models/publication.rb'
 
 # Offense count: 39
