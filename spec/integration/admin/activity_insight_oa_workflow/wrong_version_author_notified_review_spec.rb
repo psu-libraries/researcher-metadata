@@ -7,7 +7,7 @@ describe 'Admin Wrong File Version Author Notified Review dashboard', type: :fea
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion', user: user, wrong_version_emails_sent: 3) }
   let!(:aif3) { create(:activity_insight_oa_file, publication: pub3, version: 'publishedVersion', user: user, wrong_version_emails_sent: nil) }
   let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1', wrong_oa_version_notification_sent_at: DateTime.now) }
-  let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2') }
+  let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2', wrong_oa_version_notification_sent_at: DateTime.now - 1.week) }
   let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 3') }
   let!(:user) { create(:user, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
@@ -90,9 +90,9 @@ describe 'Admin Wrong File Version Author Notified Review dashboard', type: :fea
       expect(current_email.body).to match(/Title 1/)
       expect(current_email.body).not_to match(/Title 2/)
       expect(current_email.body).not_to match(/Title 3/)
-      expect(pub1.reload.wrong_oa_version_notification_sent_at).not_to be_nil
+      expect(pub1.reload.wrong_oa_version_notification_sent_at).to be_within(1.minute).of(Time.zone.now)
       expect(aif1.reload.wrong_version_emails_sent).to eq(2)
-      expect(pub2.reload.wrong_oa_version_notification_sent_at).to be_nil
+      expect(pub2.reload.wrong_oa_version_notification_sent_at).not_to be_within(1.minute).of(Time.zone.now)
       expect(aif2.reload.wrong_version_emails_sent).to eq(3)
       expect(pub3.reload.wrong_oa_version_notification_sent_at).to be_nil
       expect(aif3.reload.wrong_version_emails_sent).to be_nil
