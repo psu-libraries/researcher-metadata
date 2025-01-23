@@ -23,7 +23,7 @@
 <p>Publications awaiting action:</p>
 <ul>
   <% @publications.each do |p| %>
-    <li><%= link_to p.title, edit_open_access_publication_url(p) %></li>
+    <li><%= link_to p.title, edit_open_access_publication_url(p) %><%= ", #{p.published_by}" if p.published_by.present? %><%= ", #{p.year}" if p.year.present? %></li>
   <% end %>
 </ul>
 
