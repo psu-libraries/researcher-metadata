@@ -47,7 +47,7 @@ namespace :email_notifications do
   task :test_open_access_reminder, [:address] => :environment do |_task, args|
     test_user = OpenStruct.new({ email: args[:address],
                                  name: 'Email Tester' })
-    pub1 = OpenStruct.new({ title: 'Example Publication One', year: 2020, published_by: 'Journal One'})
+    pub1 = OpenStruct.new({ title: 'Example Publication One', year: 2020, published_by: 'Journal One' })
     pub2 = OpenStruct.new({ title: 'Example Publication Two' })
     pub3 = OpenStruct.new({ title: 'Example Publication Three' })
     FacultyNotificationsMailer.open_access_reminder(test_user,

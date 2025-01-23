@@ -12,7 +12,7 @@ describe 'sending open access reminder emails' do
   let!(:recently_sent) { DateTime.now }
 
   let!(:membership1) { create(:user_organization_membership, user: user1, started_on: Date.new(2019, 1, 1)) }
-  let!(:journal) { create(:journal, title: 'Test Journal')}
+  let!(:journal) { create(:journal, title: 'Test Journal') }
   let!(:pub1) { create(:publication, published_on: recently_sent, title: 'Test Pub', journal: journal) }
   # Irrelevant publication due to being more than 2 years old
   let!(:pub2) { create(:publication, published_on: Date.new(2019, 2, 1), title: 'Irrelevant Pub') }
