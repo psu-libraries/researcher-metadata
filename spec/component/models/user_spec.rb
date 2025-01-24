@@ -384,7 +384,7 @@ describe User, type: :model do
       end
 
       it 'returns one instance of each matching user' do
-        expect(described_class.find_all_by_wos_pub(wp)).to contain_exactly(u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13)
+        expect(described_class.find_all_by_wos_pub(wp)).to match_array [u1, u2, u3, u4, u5, u6, u7, u8, u9, u10, u11, u12, u13]
       end
     end
   end
@@ -406,7 +406,7 @@ describe User, type: :model do
       before { create(:user, orcid_identifier: nil) }
 
       it 'returns one instance of each matching user' do
-        expect(described_class.find_confirmed_by_wos_pub(wp)).to contain_exactly(u1, u2)
+        expect(described_class.find_confirmed_by_wos_pub(wp)).to match_array [u1, u2]
       end
     end
   end
@@ -422,7 +422,7 @@ describe User, type: :model do
       let(:grant) { double 'grant', investigators: [i1, i2] }
 
       it 'returns the existing users' do
-        expect(described_class.find_by_nsf_grant(grant)).to contain_exactly(u1, u2)
+        expect(described_class.find_by_nsf_grant(grant)).to match_array [u1, u2]
       end
     end
   end
@@ -826,7 +826,10 @@ describe User, type: :model do
                                confirmed: true) }
 
     it 'returns only users who should currently receive an email reminder about open access publications' do
-      expect(described_class.needs_open_access_notification).to contain_exactly(email_user_1, email_user_2, email_user_3, email_user_4)
+      expect(described_class.needs_open_access_notification).to match_array [email_user_1,
+                                                                             email_user_2,
+                                                                             email_user_3,
+                                                                             email_user_4]
     end
   end
 
@@ -960,7 +963,6 @@ describe User, type: :model do
                               publication: other_pub_16,
                               confirmed: true,
                               open_access_notification_sent_at: 1.month.ago) }
-
     let!(:org) { create(:organization) }
     let!(:now) { DateTime.now }
     let!(:membership) { create(:user_organization_membership,
@@ -971,20 +973,20 @@ describe User, type: :model do
 
     # Publications that meet the criteria for an open access reminder
     7.times do |x|
-      let!(:"potential_pub_#{x + 1}") { create(:publication,
-                                               # The publication dates are different so that we can test the sorting of the results
-                                               published_on: 1.month.ago + x.days) }
-      let!(:"p_auth_#{x + 1}") { create(:authorship,
-                                        user: user,
-                                        publication: send("potential_pub_#{x + 1}"),
-                                        confirmed: true,
-                                        open_access_notification_sent_at: 1.month.ago) }
+      let!("potential_pub_#{x + 1}".to_sym) { create(:publication,
+                                                     # The publication dates are different so that we can test the sorting of the results
+                                                     published_on: 1.month.ago + x.days) }
+      let!("p_auth_#{x + 1}".to_sym) { create(:authorship,
+                                              user: user,
+                                              publication: send("potential_pub_#{x + 1}"),
+                                              confirmed: true,
+                                              open_access_notification_sent_at: 1.month.ago) }
     end
 
     it "returns the user's six most recent recent publications that don't have any associated open access information and have a 'Published' status" do
       results = user.notifiable_potential_open_access_publications
       # We expect potential_pub_1 to be filtered out because we only want to include the most recent 6 publications
-      expect(results).to contain_exactly(potential_pub_7, potential_pub_6, potential_pub_5, potential_pub_4, potential_pub_3, potential_pub_2)
+      expect(results).to match_array [potential_pub_7, potential_pub_6, potential_pub_5, potential_pub_4, potential_pub_3, potential_pub_2]
       expect(results.length).to eq 6
       # We expect the results to be sorted by publication date in descending order
       expect(results[0].published_on).to be > results[1].published_on

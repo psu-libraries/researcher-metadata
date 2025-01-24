@@ -15,8 +15,9 @@ class Admin::PublicationMergesController < RailsAdmin::ApplicationController
 
       if params[:known_non_duplicate]
         pub_ids = [params[:selected_publication_ids], params[:merge_target_publication_id]].flatten
-        known_non_dup_ids = pub_ids.map do |pub_id|
-          Publication.find(pub_id).non_duplicate_group_ids
+        known_non_dup_ids = []
+        pub_ids.each do |pub_id|
+          known_non_dup_ids << Publication.find(pub_id).non_duplicate_group_ids
         end
         hashed_kwn_non_dup = known_non_dup_ids
           .flatten

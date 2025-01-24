@@ -1,9 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative 'pure_downloader'
+require_relative './pure_downloader'
 
-downloader = Utilities::PureDownloader.new
+downloader = PureDownloader.new
 
 if File.exists? downloader.fingerprint_data_file
   print 'Publication fingerprint data file already exists. Overwrite (Yn)?  '

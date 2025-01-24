@@ -48,7 +48,7 @@ gem 'pdf-reader'                        # Pdf reader
 gem 'pg', '>= 0.18', '< 2.0'            # use postgresql as the database for Active Record
 gem 'progressbar'                       # the ultimate text progress bar library for Ruby
 gem 'psu_identity', '~> 0.2'            # connect to Penn State's identity API
-gem 'puma', '~> 6.5'                    # use Puma as the app server
+gem 'puma', github: 'puma/puma', branch: 'master' # use Puma as the app server (master branch until bug fixed: https://github.com/puma/puma/issues/3531)
 gem 'rss'                               # RSS reading and writing
 gem 'sass-rails'                        # sass for stylesheets
 gem 'scholarsphere-client', '~> 0.3'    # upload content into ScholarSphere

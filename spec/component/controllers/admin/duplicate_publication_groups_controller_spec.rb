@@ -53,7 +53,7 @@ describe Admin::DuplicatePublicationGroupsController, type: :controller do
         it "doesn't remove the publications from the group" do
           delete :delete, params: { id: group.id }
 
-          expect(group.publications).to contain_exactly(pub1, pub2)
+          expect(group.publications).to match_array [pub1, pub2]
         end
 
         it "doesn't delete the group" do

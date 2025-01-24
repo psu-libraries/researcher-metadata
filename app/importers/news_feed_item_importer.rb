@@ -35,6 +35,7 @@ class NewsFeedItemImporter
                     tag_names: binding.local_variable_get(:tag_names)
                   })
       end
+
     rescue StandardError => e
       log_error(e, { feed: feed })
     end

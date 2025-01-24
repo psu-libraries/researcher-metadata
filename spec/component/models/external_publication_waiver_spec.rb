@@ -70,7 +70,7 @@ describe ExternalPublicationWaiver, type: :model do
     let!(:pub5) { create(:publication, title: 'A Publication with a Distinct Title of Some Sort') }
 
     it 'returns all publications with a title that closely matches the title in the waiver' do
-      expect(waiver.matching_publications).to contain_exactly(pub1, pub2, pub5)
+      expect(waiver.matching_publications).to match_array [pub1, pub2, pub5]
     end
   end
 

@@ -8,7 +8,7 @@ describe 'Proxies page', type: :feature do
     before { visit deputy_assignments_path }
 
     it 'is not allowed' do
-      expect(page).to have_no_current_path(deputy_assignments_path)
+      expect(page).not_to have_current_path(deputy_assignments_path)
     end
   end
 
@@ -45,10 +45,10 @@ describe 'Proxies page', type: :feature do
       expect(page).to have_content deputy_unconfirmed.name
       expect(page).to have_link primary_confirmed.name
       expect(page).to have_content primary_unconfirmed.name
-      expect(page).to have_no_link primary_unconfirmed.name
+      expect(page).not_to have_link primary_unconfirmed.name
 
-      expect(page).to have_no_content deputy_inactive
-      expect(page).to have_no_content primary_inactive
+      expect(page).not_to have_content deputy_inactive
+      expect(page).not_to have_content primary_inactive
     end
 
     describe "when link is clicked in confirmed primary's name" do

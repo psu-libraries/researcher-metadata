@@ -17,8 +17,8 @@ describe 'Creating a user', type: :feature do
       end
 
       it "does not allow the new user's H-Index to be set" do
-        expect(page).to have_no_field 'H-Index'
-        expect(page).to have_no_field 'Scopus h index'
+        expect(page).not_to have_field 'H-Index'
+        expect(page).not_to have_field 'Scopus h index'
       end
     end
 

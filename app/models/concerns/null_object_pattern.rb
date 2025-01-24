@@ -4,7 +4,7 @@ module NullObjectPattern
   extend ActiveSupport::Concern
 
   def respond_to_missing?(_name, _include_private)
-    false
+    nil
   end
 
   def method_missing(_name, *_args)

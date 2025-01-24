@@ -104,7 +104,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -192,7 +192,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -274,7 +274,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -350,7 +350,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -408,7 +408,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -526,7 +526,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -665,7 +665,7 @@ describe API::V1::UsersController do
       end
 
       it 'returns 404' do
-        expect(response).to have_http_status :not_found
+        expect(response.code).to eq '404'
       end
     end
   end
@@ -693,7 +693,11 @@ describe API::V1::UsersController do
       before do
         person = instance_spy(PsuIdentity::SearchService::Person)
         allow_any_instance_of(PsuIdentity::SearchService::Client).to receive(:userid).with(webaccess_id).and_return(person) # rubocop:todo RSpec/AnyInstance
-        allow(person).to receive_messages(as_json: { 'data' => {} }, preferred_given_name: 'Bob', preferred_middle_name: '', middle_name: '', preferred_family_name: 'Testerson')
+        allow(person).to receive(:as_json).and_return({ 'data' => {} })
+        allow(person).to receive(:preferred_given_name).and_return('Bob')
+        allow(person).to receive(:preferred_middle_name).and_return('')
+        allow(person).to receive(:middle_name).and_return('')
+        allow(person).to receive(:preferred_family_name).and_return('Testerson')
 
         get "/v1/users/#{webaccess_id}/profile", headers: headers
       end

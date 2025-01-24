@@ -327,7 +327,7 @@ describe AuthorshipMergePolicy do
     let(:auth3) { double 'authorship 3', scholarsphere_work_deposits: [] }
 
     it 'returns all of the associated ScholarSphere work deposits from each authorship' do
-      expect(amp.scholarsphere_deposits_to_keep).to contain_exactly(dep1, dep2, dep3)
+      expect(amp.scholarsphere_deposits_to_keep).to match_array [dep1, dep2, dep3]
     end
   end
 end

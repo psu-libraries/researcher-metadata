@@ -162,7 +162,7 @@ describe API::V1::OrganizationsController do
         end
 
         it 'returns 404' do
-          expect(response).to have_http_status :not_found
+          expect(response.code).to eq '404'
         end
       end
 
@@ -178,7 +178,7 @@ describe API::V1::OrganizationsController do
         end
 
         it 'returns 404' do
-          expect(response).to have_http_status :not_found
+          expect(response.code).to eq '404'
         end
       end
     end

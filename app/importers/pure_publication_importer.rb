@@ -93,6 +93,7 @@ class PurePublicationImporter < PureImporter
             end
           end
         end
+
       rescue StandardError => e
         log_error(e, { publication: publication })
       end

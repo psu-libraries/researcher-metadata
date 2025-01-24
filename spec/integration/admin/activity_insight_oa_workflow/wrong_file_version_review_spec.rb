@@ -33,7 +33,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(page).to have_text('Download File')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub2.title)
-      expect(page).to have_no_text(pub3.title)
+      expect(page).not_to have_text(pub3.title)
       expect(page).to have_text('Accepted Manuscript').twice
       expect(page).to have_text('Final Published Version').twice
       expect(page).to have_link(aif1.download_filename)

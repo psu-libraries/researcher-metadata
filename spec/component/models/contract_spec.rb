@@ -62,7 +62,7 @@ describe Contract, type: :model do
     let(:invisible_contract) { create(:contract, visible: false) }
 
     it 'returns the contracts that are marked as visible' do
-      expect(described_class.visible).to contain_exactly(visible_contract1, visible_contract2)
+      expect(described_class.visible).to match_array [visible_contract1, visible_contract2]
     end
   end
 end

@@ -67,12 +67,12 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "doesn't change the group" do
-        expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub2, pub3]
       end
 
       it "doesn't change the publications" do
         expect(pub1.reload.imports).to eq [pub1_import1]
-        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
         expect(pub3.reload.imports).to eq [pub3_import1]
       end
     end
@@ -93,12 +93,12 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "doesn't change the group" do
-        expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub2, pub3]
       end
 
       it "doesn't change the publications" do
         expect(pub1.reload.imports).to eq [pub1_import1]
-        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
         expect(pub3.reload.imports).to eq [pub3_import1]
       end
     end
@@ -119,12 +119,12 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "doesn't change the group" do
-        expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub2, pub3]
       end
 
       it "doesn't change the publications" do
         expect(pub1.reload.imports).to eq [pub1_import1]
-        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
         expect(pub3.reload.imports).to eq [pub3_import1]
       end
     end
@@ -142,12 +142,12 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "doesn't change the group" do
-        expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub2, pub3]
       end
 
       it "doesn't change the publications" do
         expect(pub1.reload.imports).to eq [pub1_import1]
-        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
         expect(pub3.reload.imports).to eq [pub3_import1]
       end
     end
@@ -173,7 +173,7 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "reassigns the merged publication's imports" do
-        expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2)
+        expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
       end
 
       it "doesn't change the unselected publication" do
@@ -181,12 +181,12 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it 'leaves the group containing the correct publications' do
-        expect(group.reload.publications).to contain_exactly(pub1, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub3]
       end
     end
 
     context "choosing one publication as the merge target and selecting another
-             publication that's in the same non-duplicate group to merge", :js do
+             publication that's in the same non-duplicate group to merge", js: true do
       let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
@@ -224,8 +224,8 @@ describe 'managing duplicate publication groups', type: :feature do
         end
 
         it "does not reassign the merged publication's imports" do
-          expect(pub1.reload.imports).to contain_exactly(pub1_import1)
-          expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+          expect(pub1.reload.imports).to match_array [pub1_import1]
+          expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
         end
 
         it "doesn't change the unselected publication" do
@@ -233,7 +233,7 @@ describe 'managing duplicate publication groups', type: :feature do
         end
 
         it "doesn't change the contents of the duplicate group" do
-          expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+          expect(group.reload.publications).to match_array [pub1, pub2, pub3]
         end
       end
 
@@ -257,7 +257,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
         it "reassigns the merged publication's imports" do
           sleep 0.5
-          expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2)
+          expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
         end
 
         it "doesn't change the unselected publication" do
@@ -267,7 +267,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
         it 'leaves the group containing the correct publications' do
           sleep 0.5
-          expect(group.reload.publications).to contain_exactly(pub1, pub3)
+          expect(group.reload.publications).to match_array [pub1, pub3]
         end
 
         it 'deletes the non-duplicate group' do
@@ -277,7 +277,7 @@ describe 'managing duplicate publication groups', type: :feature do
       end
     end
 
-    context 'choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group', :js do
+    context 'choosing one publication as the merge target and selecting two other publications to merge who are in a non-duplicate group', js: true do
       let(:ndpg) { create(:non_duplicate_publication_group) }
 
       before do
@@ -318,12 +318,12 @@ describe 'managing duplicate publication groups', type: :feature do
 
         it "reassigns the merged publication's imports" do
           sleep 0.5
-          expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2, pub3_import1)
+          expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2, pub3_import1]
         end
 
         it 'leaves the group containing the correct publications' do
           sleep 0.5
-          expect(group.reload.publications).to contain_exactly(pub1)
+          expect(group.reload.publications).to match_array [pub1]
         end
 
         it 'deletes the non-duplicate group' do
@@ -355,7 +355,7 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it "reassigns the merged publication's imports" do
-        expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2)
+        expect(pub1.reload.imports).to match_array [pub1_import1, pub2_import1, pub2_import2]
       end
 
       it "doesn't change the unselected publication" do
@@ -363,7 +363,7 @@ describe 'managing duplicate publication groups', type: :feature do
       end
 
       it 'leaves the group containing the correct publications' do
-        expect(group.reload.publications).to contain_exactly(pub1, pub3)
+        expect(group.reload.publications).to match_array [pub1, pub3]
       end
     end
 
@@ -397,7 +397,7 @@ describe 'managing duplicate publication groups', type: :feature do
 
       it 'creates a new non-duplicate group with the selected publications' do
         g = NonDuplicatePublicationGroup.last
-        expect(g.publications).to contain_exactly(pub1, pub2)
+        expect(g.publications).to match_array [pub1, pub2]
       end
 
       it 'redirects back to the group' do
