@@ -76,7 +76,7 @@ describe Authorship, type: :model do
     let!(:auth4) { create(:authorship, claimed_by_user: true, confirmed: true) }
 
     it 'only returns authorships that are either confirmed or already claimed by a user' do
-      expect(described_class.unclaimable).to contain_exactly(auth2, auth3, auth4)
+      expect(described_class.unclaimable).to match_array [auth2, auth3, auth4]
     end
   end
 
@@ -96,7 +96,7 @@ describe Authorship, type: :model do
     let!(:auth4) { create(:authorship, claimed_by_user: true, confirmed: true) }
 
     it 'only returns authorships that are both claimed by a user and unconfirmed' do
-      expect(described_class.claimed_and_unconfirmed).to contain_exactly(auth2)
+      expect(described_class.claimed_and_unconfirmed).to match_array [auth2]
     end
   end
 

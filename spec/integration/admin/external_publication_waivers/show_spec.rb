@@ -70,7 +70,7 @@ describe 'Admin external publication waiver detail page', type: :feature do
               expect(page).to have_content 'Author Three'
             end
 
-            expect(page).to have_no_content 'Some Other Publication'
+            expect(page).not_to have_content 'Some Other Publication'
           end
 
           describe 'linking a publication to the waiver' do
@@ -103,16 +103,16 @@ describe 'Admin external publication waiver detail page', type: :feature do
           end
 
           it 'does not list matching publications' do
-            expect(page).to have_no_content '2011'
-            expect(page).to have_no_content 'Some Journal'
-            expect(page).to have_no_content 'Joe Testerson, Author One, Author Two'
+            expect(page).not_to have_content '2011'
+            expect(page).not_to have_content 'Some Journal'
+            expect(page).not_to have_content 'Joe Testerson, Author One, Author Two'
 
-            expect(page).to have_no_link 'Another publication'
-            expect(page).to have_no_content '1999'
-            expect(page).to have_no_content 'Another Journal'
-            expect(page).to have_no_content 'Author Three'
+            expect(page).not_to have_link 'Another publication'
+            expect(page).not_to have_content '1999'
+            expect(page).not_to have_content 'Another Journal'
+            expect(page).not_to have_content 'Author Three'
 
-            expect(page).to have_no_content 'Some Other Publication'
+            expect(page).not_to have_content 'Some Other Publication'
           end
 
           it 'shows a link to the internal waiver' do

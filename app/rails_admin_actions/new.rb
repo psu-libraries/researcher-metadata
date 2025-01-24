@@ -21,7 +21,7 @@ module RailsAdmin
               @object = @abstract_model.new
               @action = @action.with(@action.bindings.merge(object: @object))
               @authorization_adapter&.attributes_for(:new, @abstract_model)&.each do |name, value|
-                @object.send(:"#{name}=", value)
+                @object.send("#{name}=", value)
               end
               object_params = params[@abstract_model.param_key]
               if object_params

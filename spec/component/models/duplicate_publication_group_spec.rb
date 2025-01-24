@@ -294,28 +294,28 @@ describe DuplicatePublicationGroup, type: :model do
       it 'finds similar publications and groups them' do
         described_class.group_duplicates
 
-        expect(p1_1.reload.duplicate_group.publications).to contain_exactly(p1_1, p1_2, p1_3, p1)
+        expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
 
-        expect(p2_1.reload.duplicate_group.publications).to contain_exactly(p2_1, p2_2)
+        expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
 
         expect(p3_1.reload.duplicate_group).to be_nil
         expect(p3_2.reload.duplicate_group).to be_nil
 
-        expect(p4_1.reload.duplicate_group.publications).to contain_exactly(p4_1, p4_2)
+        expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
 
-        expect(p5_1.reload.duplicate_group.publications).to contain_exactly(p5_1, p5_2)
+        expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
 
         expect(p6_1.reload.duplicate_group).to be_nil
         expect(p6_2.reload.duplicate_group).to be_nil
 
-        expect(p7_1.reload.duplicate_group.publications).to contain_exactly(p7_1, p7_2)
+        expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
 
-        expect(p8_1.reload.duplicate_group.publications).to contain_exactly(p8_1, p8_2)
+        expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
 
         expect(p9_1.reload.duplicate_group).to be_nil
         expect(p9_2.reload.duplicate_group).to be_nil
 
-        expect(p10_1.reload.duplicate_group.publications).to contain_exactly(p10_1, p10_2)
+        expect(p10_1.reload.duplicate_group.publications).to match_array [p10_1, p10_2]
 
         expect(p11_1.reload.duplicate_group).to be_nil
         expect(p11_2.reload.duplicate_group).to be_nil
@@ -349,21 +349,21 @@ describe DuplicatePublicationGroup, type: :model do
         #      deduplication process.
         #   4. The same scenarios as #2 and #3 above may occur only with the second and third
         #      publication being the true match instead of the first and the second.
-        expect(p12_1.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
-        expect(p12_2.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
-        expect(p12_3.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
+        expect(p12_1.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_2.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_3.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
 
         expect(p13_1.reload.duplicate_group).to be_nil
         expect(p13_2.reload.duplicate_group).to be_nil
 
-        expect(p14_1.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_2.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_3.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_4.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
+        expect(p14_1.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
 
-        expect(p15_1.reload.duplicate_group.publications).to contain_exactly(p15_1, p15_2)
+        expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
 
-        expect(p16_1.reload.duplicate_group.publications).to contain_exactly(p16_1, p16_2)
+        expect(p16_1.reload.duplicate_group.publications).to match_array [p16_1, p16_2]
 
         expect(p17_1.reload.duplicate_group).to be_nil
         expect(p17_2.reload.duplicate_group).to be_nil
@@ -372,65 +372,65 @@ describe DuplicatePublicationGroup, type: :model do
       it 'is idempotent' do
         expect { 2.times { described_class.group_duplicates } }.to change(described_class, :count).by 10
 
-        expect(p1_1.reload.duplicate_group.publications).to contain_exactly(p1_1, p1_2, p1_3, p1)
-        expect(p2_1.reload.duplicate_group.publications).to contain_exactly(p2_1, p2_2)
+        expect(p1_1.reload.duplicate_group.publications).to match_array [p1_1, p1_2, p1_3, p1]
+        expect(p2_1.reload.duplicate_group.publications).to match_array [p2_1, p2_2]
         expect(p3_1.reload.duplicate_group).to be_nil
         expect(p3_2.reload.duplicate_group).to be_nil
-        expect(p4_1.reload.duplicate_group.publications).to contain_exactly(p4_1, p4_2)
-        expect(p5_1.reload.duplicate_group.publications).to contain_exactly(p5_1, p5_2)
+        expect(p4_1.reload.duplicate_group.publications).to match_array [p4_1, p4_2]
+        expect(p5_1.reload.duplicate_group.publications).to match_array [p5_1, p5_2]
         expect(p6_1.reload.duplicate_group).to be_nil
         expect(p6_2.reload.duplicate_group).to be_nil
-        expect(p7_1.reload.duplicate_group.publications).to contain_exactly(p7_1, p7_2)
-        expect(p8_1.reload.duplicate_group.publications).to contain_exactly(p8_1, p8_2)
+        expect(p7_1.reload.duplicate_group.publications).to match_array [p7_1, p7_2]
+        expect(p8_1.reload.duplicate_group.publications).to match_array [p8_1, p8_2]
         expect(p9_1.reload.duplicate_group).to be_nil
         expect(p9_2.reload.duplicate_group).to be_nil
-        expect(p10_1.reload.duplicate_group.publications).to contain_exactly(p10_1, p10_2)
+        expect(p10_1.reload.duplicate_group.publications).to match_array [p10_1, p10_2]
         expect(p11_1.reload.duplicate_group).to be_nil
         expect(p11_2.reload.duplicate_group).to be_nil
         expect(p11_3.reload.duplicate_group).to be_nil
-        expect(p12_1.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
-        expect(p12_2.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
-        expect(p12_3.reload.duplicate_group.publications).to contain_exactly(p12_1, p12_2, p12_3)
+        expect(p12_1.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_2.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
+        expect(p12_3.reload.duplicate_group.publications).to match_array [p12_1, p12_2, p12_3]
         expect(p13_1.reload.duplicate_group).to be_nil
         expect(p13_2.reload.duplicate_group).to be_nil
-        expect(p14_1.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_2.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_3.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p14_4.reload.duplicate_group.publications).to contain_exactly(p14_1, p14_2, p14_3, p14_4)
-        expect(p15_1.reload.duplicate_group.publications).to contain_exactly(p15_1, p15_2)
-        expect(p16_1.reload.duplicate_group.publications).to contain_exactly(p16_1, p16_2)
+        expect(p14_1.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_2.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_3.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p14_4.reload.duplicate_group.publications).to match_array [p14_1, p14_2, p14_3, p14_4]
+        expect(p15_1.reload.duplicate_group.publications).to match_array [p15_1, p15_2]
+        expect(p16_1.reload.duplicate_group.publications).to match_array [p16_1, p16_2]
       end
 
       it "sets grouped publications' visible statuses to false when publication was not already grouped before process started" do
         described_class.group_duplicates
 
-        expect(p1_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(true, false, false, false)
-        expect(p2_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
+        expect(p1_1.reload.duplicate_group.publications.map(&:visible)).to match_array [true, false, false, false]
+        expect(p2_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
         expect(p3_1.reload.visible).to be true
         expect(p3_2.reload.visible).to be true
-        expect(p4_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
-        expect(p5_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
+        expect(p4_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p5_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
         expect(p6_1.reload.visible).to be true
         expect(p6_2.reload.visible).to be true
-        expect(p7_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
-        expect(p8_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
+        expect(p7_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p8_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
         expect(p9_1.reload.visible).to be true
         expect(p9_2.reload.visible).to be true
-        expect(p10_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
+        expect(p10_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
         expect(p11_1.reload.visible).to be true
         expect(p11_2.reload.visible).to be true
         expect(p11_3.reload.visible).to be true
-        expect(p12_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false)
-        expect(p12_2.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false)
-        expect(p12_3.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false)
+        expect(p12_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
+        expect(p12_2.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
+        expect(p12_3.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false]
         expect(p13_1.reload.visible).to be true
         expect(p13_2.reload.visible).to be true
-        expect(p14_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false, false)
-        expect(p14_2.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false, false)
-        expect(p14_3.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false, false)
-        expect(p14_4.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false, false, false)
-        expect(p15_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(false, false)
-        expect(p16_1.reload.duplicate_group.publications.map(&:visible)).to contain_exactly(true, false)
+        expect(p14_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_2.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_3.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p14_4.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false, false, false]
+        expect(p15_1.reload.duplicate_group.publications.map(&:visible)).to match_array [false, false]
+        expect(p16_1.reload.duplicate_group.publications.map(&:visible)).to match_array [true, false]
         expect(p17_1.reload.visible).to be true
         expect(p17_2.reload.visible).to be true
       end
@@ -484,7 +484,7 @@ describe DuplicatePublicationGroup, type: :model do
       it 'leaves the publications in the existing group' do
         described_class.group_duplicates_of(p1)
 
-        expect(group.reload.publications).to contain_exactly(p1, p2, p3)
+        expect(group.reload.publications).to match_array [p1, p2, p3]
       end
     end
 
@@ -1099,7 +1099,7 @@ describe DuplicatePublicationGroup, type: :model do
 
           new_group = pub1.reload.duplicate_group
 
-          expect(new_group.publications).to contain_exactly(pub1, pub2, pub3)
+          expect(new_group.publications).to match_array [pub1, pub2, pub3]
         end
       end
 
@@ -1111,7 +1111,7 @@ describe DuplicatePublicationGroup, type: :model do
         it 'adds all of the given publications to the existing group' do
           described_class.group_publications([pub1, pub2, grouped_pub1])
 
-          expect(existing_group1.reload.publications).to contain_exactly(pub1, pub2, grouped_pub1, grouped_pub2)
+          expect(existing_group1.reload.publications).to match_array [pub1, pub2, grouped_pub1, grouped_pub2]
         end
       end
 
@@ -1123,7 +1123,7 @@ describe DuplicatePublicationGroup, type: :model do
         it 'adds all of the given publications to the existing group' do
           described_class.group_publications([pub2, grouped_pub1, grouped_pub2])
 
-          expect(existing_group1.reload.publications).to contain_exactly(pub2, grouped_pub1, grouped_pub2)
+          expect(existing_group1.reload.publications).to match_array [pub2, grouped_pub1, grouped_pub2]
         end
       end
 
@@ -1137,7 +1137,11 @@ describe DuplicatePublicationGroup, type: :model do
 
           remaining_group = grouped_pub1.reload.duplicate_group || grouped_pub3.reload.duplicate_group
 
-          expect(remaining_group.publications).to contain_exactly(pub2, grouped_pub1, grouped_pub2, grouped_pub3, grouped_pub4)
+          expect(remaining_group.publications).to match_array [pub2,
+                                                               grouped_pub1,
+                                                               grouped_pub2,
+                                                               grouped_pub3,
+                                                               grouped_pub4]
         end
       end
     end
@@ -1182,13 +1186,13 @@ describe DuplicatePublicationGroup, type: :model do
       expect { group2.reload }.to raise_error ActiveRecord::RecordNotFound
       expect(group3.reload).to eq group3
 
-      expect(group1_pub1.reload.imports).to contain_exactly(group1_pub1_pure_import, group1_pub2_ai_import)
+      expect(group1_pub1.reload.imports).to match_array [group1_pub1_pure_import, group1_pub2_ai_import]
       expect { group1_pub2.reload }.to raise_error ActiveRecord::RecordNotFound
 
-      expect(group2_pub1.reload.imports).to contain_exactly(group2_pub1_pure_import, group2_pub2_ai_import)
+      expect(group2_pub1.reload.imports).to match_array [group2_pub1_pure_import, group2_pub2_ai_import]
       expect { group2_pub2.reload }.to raise_error ActiveRecord::RecordNotFound
 
-      expect(group3.reload.publications).to contain_exactly(group3_pub1, group3_pub2)
+      expect(group3.reload.publications).to match_array [group3_pub1, group3_pub2]
       expect(group3_pub1.reload.imports).to eq [group3_pub1_ai_import]
       expect(group3_pub2.reload.imports).to eq [group3_pub2_ai_import]
     end
@@ -1371,7 +1375,7 @@ describe DuplicatePublicationGroup, type: :model do
 
         it 'does not change the group membership' do
           group.auto_merge
-          expect(group.reload.publications).to contain_exactly(pub1, pub2)
+          expect(group.reload.publications).to match_array [pub1, pub2]
         end
 
         it 'returns false' do
@@ -1400,7 +1404,7 @@ describe DuplicatePublicationGroup, type: :model do
 
         it 'does not change the group membership' do
           group.auto_merge
-          expect(group.reload.publications).to contain_exactly(pub1, pub2)
+          expect(group.reload.publications).to match_array [pub1, pub2]
         end
 
         it "does not change the member publications' imports" do
@@ -1437,7 +1441,7 @@ describe DuplicatePublicationGroup, type: :model do
 
         it 'does not change the group membership' do
           group.auto_merge
-          expect(group.reload.publications).to contain_exactly(pub1, pub2)
+          expect(group.reload.publications).to match_array [pub1, pub2]
         end
 
         it "does not change the member publications' imports" do
@@ -1471,7 +1475,7 @@ describe DuplicatePublicationGroup, type: :model do
 
         it "reassigns the Activity Insight publication's import to the Pure publication" do
           group.auto_merge
-          expect(pub2.reload.imports).to contain_exactly(ai_import, pure_import)
+          expect(pub2.reload.imports).to match_array [ai_import, pure_import]
         end
 
         it "does not mark the Pure publication's import as having been auto merged" do
@@ -1513,7 +1517,7 @@ describe DuplicatePublicationGroup, type: :model do
 
       it 'does not change the group membership' do
         group.auto_merge
-        expect(group.reload.publications).to contain_exactly(pub1, pub2)
+        expect(group.reload.publications).to match_array [pub1, pub2]
       end
 
       it "does not change the member publications' imports" do
@@ -1557,7 +1561,7 @@ describe DuplicatePublicationGroup, type: :model do
 
         it 'does not change the group membership' do
           group.auto_merge
-          expect(group.reload.publications).to contain_exactly(pub1, pub2, pub3)
+          expect(group.reload.publications).to match_array [pub1, pub2, pub3]
         end
 
         it "does not change the member publications' imports" do

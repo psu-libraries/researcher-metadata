@@ -86,7 +86,7 @@ describe PurePublicationTagImporter do
             expect { importer.call }.to change(PublicationTagging, :count).by 3
 
             expect(pub1.tags).to eq [found_tag1]
-            expect(pub2.tags).to contain_exactly(found_tag2, found_tag3)
+            expect(pub2.tags).to match_array [found_tag2, found_tag3]
           end
 
           it 'saves the correct ranks on the taggings' do
@@ -121,7 +121,7 @@ describe PurePublicationTagImporter do
             expect { importer.call }.to change(PublicationTagging, :count).by 3
 
             expect(pub1.tags).to eq [found_tag1]
-            expect(pub2.tags).to contain_exactly(found_tag2, found_tag3)
+            expect(pub2.tags).to match_array [found_tag2, found_tag3]
           end
 
           it 'saves the correct ranks on the taggings' do

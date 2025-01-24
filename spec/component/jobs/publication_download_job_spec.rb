@@ -21,7 +21,7 @@ describe PublicationDownloadJob, type: :job do
   #
   # Also, the API key needed for the Activity Insight S3 Authorizer is not stored in settings/test.yml.
   # So, you'll need to override this in your test.local.yml to live test this.
-  describe '#perform_now', :no_ci do
+  describe '#perform_now', no_ci: true do
     let!(:publication) { create(:publication) }
     let!(:ai_oa_file) { create(:activity_insight_oa_file, publication: publication, version: 'acceptedVersion', location: 'nmg110/intellcont/test_file-1.pdf') }
     let(:file_path) { Rails.root.join("tmp/uploads/activity_insight_file_uploads/#{ai_oa_file.id}/file/test_file-1.pdf") }

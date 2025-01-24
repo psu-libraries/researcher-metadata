@@ -43,7 +43,7 @@ describe API::V1::UserQuery do
       end
 
       it "returns all of the user's grants" do
-        expect(uq.grants).to contain_exactly(g1, g2)
+        expect(uq.grants).to match_array [g1, g2]
       end
     end
   end
@@ -110,7 +110,7 @@ describe API::V1::UserQuery do
 
         context 'when given params with a flag to include unconfirmed publications' do
           it "returns all of the user's visible publications" do
-            expect(uq.publications({ include_unconfirmed: true })).to contain_exactly(vis_conf_pub, vis_unconf_pub)
+            expect(uq.publications({ include_unconfirmed: true })).to match_array [vis_conf_pub, vis_unconf_pub]
           end
         end
       end

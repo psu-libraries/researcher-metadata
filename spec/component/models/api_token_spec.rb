@@ -140,19 +140,19 @@ describe APIToken, type: :model do
     describe '#all_publications' do
       it "returns publications that were published during their users'
           memberships in associated organizations and their descendants" do
-        expect(token.all_publications).to contain_exactly(pub1, pub2_1, pub3_1, pub3_2)
+        expect(token.all_publications).to match_array [pub1, pub2_1, pub3_1, pub3_2]
       end
     end
 
     describe '#all_current_users' do
       it 'returns users that are currently members of associated organizations and their descendants' do
-        expect(token.all_current_users).to contain_exactly(user1, user2, user3_1)
+        expect(token.all_current_users).to match_array [user1, user2, user3_1]
       end
     end
 
     describe '#all_organizations' do
       it 'returns organizations that are associated organizations and their descendants' do
-        expect(token.all_organizations).to contain_exactly(org1, org2, org3)
+        expect(token.all_organizations).to match_array [org1, org2, org3]
       end
     end
   end

@@ -20,6 +20,7 @@ class PurePublishersImporter < PureImporter
                   })
       end
       pbar.increment
+
     rescue StandardError => e
       log_error(e, {})
     end

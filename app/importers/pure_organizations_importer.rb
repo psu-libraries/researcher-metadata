@@ -22,6 +22,7 @@ class PureOrganizationsImporter < PureImporter
                   })
       end
       pbar.increment
+
     rescue StandardError => e
       log_error(e, {
                   organizations: organizations
@@ -50,6 +51,7 @@ class PureOrganizationsImporter < PureImporter
                   })
       end
       pbar.increment
+
     rescue StandardError => e
       log_error(e, {
                   organizations: organizations

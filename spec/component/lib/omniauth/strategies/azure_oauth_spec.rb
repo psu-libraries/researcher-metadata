@@ -24,9 +24,9 @@ describe OmniAuth::Strategies::AzureOauth do
     end
   end
 
-  # describe '#callback_url' do
-  #   xit
-  # end
+  describe '#callback_url' do
+    xit
+  end
 
   describe '#uid' do
     it "returns user's WebAccess ID that's parsed out of the access token" do

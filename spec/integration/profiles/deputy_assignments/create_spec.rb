@@ -7,7 +7,7 @@ describe 'Creating a new proxy', type: :feature do
     before { visit deputy_assignments_path }
 
     it 'is not allowed' do
-      expect(page).to have_no_current_path(deputy_assignments_path)
+      expect(page).not_to have_current_path(deputy_assignments_path)
     end
   end
 
@@ -55,7 +55,7 @@ describe 'Creating a new proxy', type: :feature do
         click_button I18n.t!('helpers.submit.new_deputy_assignment_form.create')
 
         expect(find_field('new_deputy_assignment_form_deputy_webaccess_id').value).to eq 'agw13'
-        expect(page).to have_css('.invalid-feedback')
+        expect(page).to have_selector('.invalid-feedback')
       end
     end
   end

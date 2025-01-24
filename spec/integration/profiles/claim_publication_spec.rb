@@ -45,7 +45,7 @@ describe 'claiming authorship of a publication' do
             expect(page).to have_content 'Another Researcher Metadata Database Test Publication'
           end
 
-          expect(page).to have_no_content pub3.title
+          expect(page).not_to have_content pub3.title
         end
 
         it 'shows the term used in the search' do
@@ -59,7 +59,7 @@ describe 'claiming authorship of a publication' do
           before { do_title_search }
 
           it 'does not show the matching publications' do
-            expect(page).to have_no_content 'Researcher Metadata Database Test Publication'
+            expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
           end
 
           it 'shows the term used in the search' do
@@ -74,7 +74,7 @@ describe 'claiming authorship of a publication' do
           before { do_title_search }
 
           it 'does not show the matching publications' do
-            expect(page).to have_no_content 'Researcher Metadata Database Test Publication'
+            expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
           end
 
           it 'shows the term used in the search' do
@@ -94,7 +94,7 @@ describe 'claiming authorship of a publication' do
           end
 
           it 'does not show the matching publications' do
-            expect(page).to have_no_content 'Researcher Metadata Database Test Publication'
+            expect(page).not_to have_content 'Researcher Metadata Database Test Publication'
           end
 
           it 'shows the term used in the search' do
@@ -116,8 +116,8 @@ describe 'claiming authorship of a publication' do
             expect(page).to have_content 'Researcher Metadata Database Test Publication'
           end
 
-          expect(page).to have_no_content 'Another Researcher Metadata Database Test Publication'
-          expect(page).to have_no_content pub3.title
+          expect(page).not_to have_content 'Another Researcher Metadata Database Test Publication'
+          expect(page).not_to have_content pub3.title
         end
 
         it 'shows the term used in the search' do
@@ -132,9 +132,9 @@ describe 'claiming authorship of a publication' do
         end
 
         it 'does not show any publications' do
-          expect(page).to have_no_content 'Test Publication'
-          expect(page).to have_no_content pub3.title
-          expect(page).to have_no_content 'Matching Publications'
+          expect(page).not_to have_content 'Test Publication'
+          expect(page).not_to have_content pub3.title
+          expect(page).not_to have_content 'Matching Publications'
         end
 
         it 'shows a helpful message' do
@@ -204,12 +204,12 @@ describe 'claiming authorship of a publication' do
 
           it "does not show a button to add the claimed publication to the user's ORCiD record" do
             within "#authorship_row_#{new_authorship.id}" do
-              expect(page).to have_no_css '.orcid-button'
+              expect(page).not_to have_css '.orcid-button'
             end
           end
 
           it 'does not show a link to edit open access information for the claimed publication' do
-            expect(page).to have_no_link 'Another Researcher Metadata Database Test Publication'
+            expect(page).not_to have_link 'Another Researcher Metadata Database Test Publication'
           end
         end
       end

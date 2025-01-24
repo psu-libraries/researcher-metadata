@@ -53,7 +53,7 @@ describe Performance, type: :model do
     let(:invisible_performance) { create(:performance, visible: false) }
 
     it 'returns the performances that are marked as visible' do
-      expect(described_class.visible).to contain_exactly(visible_performance1, visible_performance2)
+      expect(described_class.visible).to match_array [visible_performance1, visible_performance2]
     end
   end
 end

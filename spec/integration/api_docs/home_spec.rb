@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 require 'support/webdrivers'
 
-describe 'API documentation home page', :js, type: :feature do
+describe 'API documentation home page', js: true, type: :feature do
   context 'when the user is logged in' do
     before do
       authenticate_user
@@ -19,7 +19,7 @@ describe 'API documentation home page', :js, type: :feature do
     end
 
     it 'does not show a link to the Admin interface' do
-      expect(page).to have_no_link 'Admin'
+      expect(page).not_to have_link 'Admin'
     end
   end
 
@@ -46,15 +46,15 @@ describe 'API documentation home page', :js, type: :feature do
     end
 
     it 'shows a link for publications API' do
-      expect(page).to have_css 'a.nostyle span', text: 'publication'
+      expect(page).to have_selector 'a.nostyle span', text: 'publication'
     end
 
     it 'shows a link for users API' do
-      expect(page).to have_css 'a.nostyle span', text: 'user'
+      expect(page).to have_selector 'a.nostyle span', text: 'user'
     end
 
     it 'shows a link for organizations API' do
-      expect(page).to have_css 'a.nostyle span', text: 'organization'
+      expect(page).to have_selector 'a.nostyle span', text: 'organization'
     end
 
     it 'shows a link to the home page' do
@@ -62,7 +62,7 @@ describe 'API documentation home page', :js, type: :feature do
     end
 
     it 'does not show a link to the Admin interface' do
-      expect(page).to have_no_link 'Admin'
+      expect(page).not_to have_link 'Admin'
     end
   end
 end

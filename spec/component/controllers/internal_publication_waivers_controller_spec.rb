@@ -114,7 +114,7 @@ describe InternalPublicationWaiversController, type: :controller do
       context 'when given the ID for a publication that belongs to the user and is not open access' do
         it 'returns 200 OK' do
           get :new, params: { id: pub.id }
-          expect(response).to have_http_status :ok
+          expect(response.code).to eq '200'
         end
       end
     end

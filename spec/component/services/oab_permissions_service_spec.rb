@@ -188,7 +188,8 @@ describe OABPermissionsService do
 
           context 'when accepted version is present and published version is not' do
             before do
-              allow(service).to receive_messages(accepted_version: { 'version' => I18n.t('file_versions.accepted_version') }, published_version: {})
+              allow(service).to receive(:accepted_version).and_return({ 'version' => I18n.t('file_versions.accepted_version') })
+              allow(service).to receive(:published_version).and_return({})
             end
 
             it 'returns true' do
@@ -198,7 +199,8 @@ describe OABPermissionsService do
 
           context 'when published version is present and accepted version is not' do
             before do
-              allow(service).to receive_messages(accepted_version: {}, published_version: { 'version' => I18n.t('file_versions.published_version') })
+              allow(service).to receive(:accepted_version).and_return({})
+              allow(service).to receive(:published_version).and_return({ 'version' => I18n.t('file_versions.published_version') })
             end
 
             it 'returns true' do
@@ -208,7 +210,8 @@ describe OABPermissionsService do
 
           context 'when no version is present' do
             before do
-              allow(service).to receive_messages(accepted_version: {}, published_version: {})
+              allow(service).to receive(:accepted_version).and_return({})
+              allow(service).to receive(:published_version).and_return({})
             end
 
             it 'returns false' do

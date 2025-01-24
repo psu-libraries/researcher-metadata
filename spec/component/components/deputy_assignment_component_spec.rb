@@ -35,7 +35,7 @@ RSpec.describe DeputyAssignmentComponent, type: :component do
       let(:confirmed_at) { Time.zone.now }
 
       it 'does not show a "pending" message' do
-        expect(rendered_content).to have_no_text(I18n.t!('view_component.deputy_assignment_component.pending_as_primary'))
+        expect(rendered_content).not_to have_text(I18n.t!('view_component.deputy_assignment_component.pending_as_primary'))
       end
 
       it 'shows the delete button' do
@@ -75,15 +75,15 @@ RSpec.describe DeputyAssignmentComponent, type: :component do
       let(:confirmed_at) { Time.zone.now }
 
       it 'does not add an action-required class' do
-        expect(rendered_content).to have_no_css('.deputy-assignment--action-required')
+        expect(rendered_content).not_to have_css('.deputy-assignment--action-required')
       end
 
       it 'does not show an action-required message' do
-        expect(rendered_content).to have_no_text(I18n.t!('view_component.deputy_assignment_component.pending_as_deputy'))
+        expect(rendered_content).not_to have_text(I18n.t!('view_component.deputy_assignment_component.pending_as_deputy'))
       end
 
       it 'does not show a button to accept the DeputyAssignment' do
-        expect(rendered_content).to have_no_button(I18n.t!('view_component.deputy_assignment_component.accept'))
+        expect(rendered_content).not_to have_button(I18n.t!('view_component.deputy_assignment_component.accept'))
       end
 
       it 'shows the delete button' do

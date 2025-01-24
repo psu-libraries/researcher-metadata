@@ -39,9 +39,9 @@ class PSUIdentityUserService
 
       def attrs(identity)
         {
-          first_name: identity.preferred_given_name.presence || identity.given_name,
-          middle_name: identity.preferred_middle_name.presence || identity.middle_name,
-          last_name: identity.preferred_family_name.presence || identity.family_name,
+          first_name: (identity.preferred_given_name.presence || identity.given_name),
+          middle_name: (identity.preferred_middle_name.presence || identity.middle_name),
+          last_name: (identity.preferred_family_name.presence || identity.family_name),
           psu_identity: identity,
           psu_identity_updated_at: Time.zone.now
         }

@@ -23,7 +23,7 @@ class ScholarsphereFileHandler
     @exif_file_versions ||= []
     @file_uploads ||= []
 
-    attributes.each_value do |file_upload_params|
+    attributes.each do |_i, file_upload_params|
       file = file_upload_params[:file]
       if file.present?
         exif_file_version = ExifFileVersionChecker.new(file_path: file.path,

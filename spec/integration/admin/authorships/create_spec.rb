@@ -20,7 +20,7 @@ describe 'Creating an authorship', type: :feature do
       end
     end
 
-    describe 'submitting the form to create a new authorship', :js do
+    describe 'submitting the form to create a new authorship', js: true do
       before do
         within '#authorship_user_id_field' do
           find('.dropdown-toggle').click

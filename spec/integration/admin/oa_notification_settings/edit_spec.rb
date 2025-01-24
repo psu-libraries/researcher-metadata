@@ -19,7 +19,7 @@ describe 'OA Notification Settings edit page', type: :feature do
       end
 
       it 'does not allow the singleton_guard value to be set' do
-        expect(page).to have_no_field 'Singleton guard'
+        expect(page).not_to have_field 'Singleton guard'
       end
     end
 

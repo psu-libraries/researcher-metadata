@@ -148,7 +148,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     @deposit.file_uploads = []
 
     files = params.dig(:scholarsphere_work_deposit, :file_uploads_attributes)
-    files&.each_value do |file|
+    files&.each do |_index, file|
       if file.present? && file[:cache_path].present?
         ss_file_upload = ScholarsphereFileUpload.new
         ss_file_upload.file = File.new(file[:cache_path])

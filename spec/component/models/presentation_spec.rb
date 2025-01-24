@@ -49,7 +49,7 @@ describe Presentation, type: :model do
     let(:invisible_pres) { create(:presentation, visible: false) }
 
     it 'returns the presentations that are marked as visible' do
-      expect(described_class.visible).to contain_exactly(visible_pres1, visible_pres2)
+      expect(described_class.visible).to match_array [visible_pres1, visible_pres2]
     end
   end
 
