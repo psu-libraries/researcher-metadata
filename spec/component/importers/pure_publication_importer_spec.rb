@@ -126,7 +126,7 @@ describe PurePublicationImporter do
           expect(p3.total_scopus_citations).to eq 6
 
           expect(p1.abstract).to be_nil
-          expect(p2.abstract).to eq '<p>This is the third abstract.</p>'
+          expect(p2.abstract).to eq 'This is the third abstract.'
           expect(p3.abstract).to be_nil
 
           expect(p1.visible).to be true
@@ -436,7 +436,7 @@ describe PurePublicationImporter do
             expect(new_pub.status).to eq 'In Press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
-            expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
+            expect(new_pub.abstract).to eq 'This is the third abstract.'
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
           end
@@ -607,7 +607,7 @@ describe PurePublicationImporter do
             expect(new_pub.status).to eq 'In Press'
             expect(new_pub.published_on).to eq Date.new(2010, 5, 1)
             expect(new_pub.total_scopus_citations).to eq 32
-            expect(new_pub.abstract).to eq '<p>This is the third abstract.</p>'
+            expect(new_pub.abstract).to eq 'This is the third abstract.'
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
           end

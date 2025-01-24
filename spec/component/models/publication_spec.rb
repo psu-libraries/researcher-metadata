@@ -55,6 +55,37 @@ end
 describe Publication, type: :model do
   it_behaves_like 'an application record'
 
+  describe 'validation callbacks' do
+    let(:pub) { build :publication }
+
+    context 'when the abstract field is nil' do
+      before { pub.abstract = nil }
+
+      it 'leaves the field nil' do
+        pub.validate
+        expect(pub.abstract).to be_nil
+      end
+    end
+
+    context 'when the contents of the abstract field are surrounded by HTML paragraph tags' do
+      before { pub.abstract = '<p>the content</p>' }
+
+      it 'removes the paragraph tags' do
+        pub.validate
+        expect(pub.abstract).to eq 'the content'
+      end
+    end
+
+    context 'when the contents of the abstract field are not surrounded by HTML paragraph tags' do
+      before { pub.abstract = 'the content' }
+
+      it 'does not modify the abstract content' do
+        pub.validate
+        expect(pub.abstract).to eq 'the content'
+      end
+    end
+  end
+
   describe 'validations' do
     it { is_expected.to validate_presence_of(:title) }
     it { is_expected.to validate_presence_of(:publication_type) }
@@ -1518,6 +1549,25 @@ describe Publication, type: :model do
           end
         end
       end
+    end
+  end
+
+  describe '.strip_p_tags_from_abstracts' do
+    let!(:pub1) { create :publication}
+    let!(:pub2) { create :publication }
+    let!(:pub3) { create :publication }
+
+    before {
+      pub1.update_column(:abstract, '<p>pub1</p>')
+      pub2.update_column(:abstract, 'pub2')
+      pub3.update_column(:abstract, '<p>pub3</p>')
+    }
+
+    it 'removes surrounding HTML paragraph tags from all abstracts' do
+      Publication.strip_p_tags_from_abstracts
+      expect(pub1.reload.abstract).to eq 'pub1'
+      expect(pub2.reload.abstract).to eq 'pub2'
+      expect(pub3.reload.abstract).to eq 'pub3'
     end
   end
 
