@@ -56,7 +56,7 @@ describe Publication, type: :model do
   it_behaves_like 'an application record'
 
   describe 'validation callbacks' do
-    let(:pub) { build :publication }
+    let(:pub) { build(:publication) }
 
     context 'when the abstract field is nil' do
       before { pub.abstract = nil }
@@ -1553,9 +1553,9 @@ describe Publication, type: :model do
   end
 
   describe '.strip_p_tags_from_abstracts' do
-    let!(:pub1) { create :publication}
-    let!(:pub2) { create :publication }
-    let!(:pub3) { create :publication }
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication) }
+    let!(:pub3) { create(:publication) }
 
     before {
       pub1.update_column(:abstract, '<p>pub1</p>')
@@ -1564,7 +1564,7 @@ describe Publication, type: :model do
     }
 
     it 'removes surrounding HTML paragraph tags from all abstracts' do
-      Publication.strip_p_tags_from_abstracts
+      described_class.strip_p_tags_from_abstracts
       expect(pub1.reload.abstract).to eq 'pub1'
       expect(pub2.reload.abstract).to eq 'pub2'
       expect(pub3.reload.abstract).to eq 'pub3'
