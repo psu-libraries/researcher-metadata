@@ -9,8 +9,8 @@ describe FacultyNotificationsMailer, type: :model do
     let(:user) { double 'user',
                         email: 'test123@psu.edu',
                         name: 'Test User' }
-    let(:pub1) { double 'publication 1', to_param: '1', title: 'Test Pub One' }
-    let(:pub2) { double 'publication 2', to_param: '2', title: 'Test Pub Two' }
+    let(:pub1) { create(:publication, title: 'Test Pub One') }
+    let(:pub2) { create(:publication, title: 'Test Pub Two') }
 
     before do
       allow(ActionMailer::Base).to receive(:default_url_options).and_return({ host: 'example.com' })
@@ -40,8 +40,8 @@ describe FacultyNotificationsMailer, type: :model do
       end
 
       it 'shows a link to manage open access info for each publication' do
-        expect(body).to match %{<a href="http://example.com/profile/publications/1/open_access/edit">Test Pub One</a>}
-        expect(body).to match %{<a href="http://example.com/profile/publications/2/open_access/edit">Test Pub Two</a>}
+        expect(body).to match %{<a href="http://example.com/profile/publications/#{pub1.id}/open_access/edit">Test Pub One</a>}
+        expect(body).to match %{<a href="http://example.com/profile/publications/#{pub2.id}/open_access/edit">Test Pub Two</a>}
       end
 
       it 'shows some instructions for managing the open access info' do
