@@ -89,6 +89,8 @@ class Publication < ApplicationRecord
     ].freeze
   end
 
+  before_validation :strip_p_tags_from_abstract
+
   has_many :authorships, inverse_of: :publication
   has_many :users, through: :authorships
   has_many :user_organization_memberships, through: :users
@@ -347,6 +349,10 @@ class Publication < ApplicationRecord
             "%#{pub.title}%",
             pub.publication_date.try(:year))
     end
+  end
+
+  def self.strip_p_tags_from_abstracts
+    where(%{abstract LIKE '<p>%' AND abstract LIKE '%</p>'}).find_each(&:save!)
   end
 
   def status=(new_status)
@@ -896,5 +902,12 @@ class Publication < ApplicationRecord
 
     def no_valid_file_version?
       !(preferred_version.present? && activity_insight_oa_files.map(&:version).include?(preferred_version))
+    end
+
+    def strip_p_tags_from_abstract
+      if abstract
+        abstract.slice!(0..2) if abstract[0..2] == '<p>'
+        abstract.slice!(-4..-1) if abstract[-4..] == '</p>'
+      end
     end
 end
