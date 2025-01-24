@@ -188,7 +188,7 @@ describe Publication, type: :model do
         let(:pv) { 'acceptedVersion' }
 
         it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
-          expect(pub.preferred_ai_oa_files).to match_array [aif1]
+          expect(pub.preferred_ai_oa_files).to contain_exactly(aif1)
         end
       end
 
@@ -196,7 +196,7 @@ describe Publication, type: :model do
         let(:pv) { 'publishedVersion' }
 
         it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
-          expect(pub.preferred_ai_oa_files).to match_array [aif2]
+          expect(pub.preferred_ai_oa_files).to contain_exactly(aif2)
         end
       end
 
@@ -204,7 +204,7 @@ describe Publication, type: :model do
         let(:pv) { 'Published or Accepted' }
 
         it "returns the publication's Activity Insight open access files with versions that match the publication's preferred version" do
-          expect(pub.preferred_ai_oa_files).to match_array [aif1, aif2]
+          expect(pub.preferred_ai_oa_files).to contain_exactly(aif1, aif2)
         end
       end
 
@@ -379,7 +379,7 @@ describe Publication, type: :model do
     let(:invisible_pub) { create(:publication, visible: false) }
 
     it 'returns the publications that are marked as visible' do
-      expect(described_class.visible).to match_array [visible_pub1, visible_pub2]
+      expect(described_class.visible).to contain_exactly(visible_pub1, visible_pub2)
     end
   end
 
@@ -430,7 +430,7 @@ describe Publication, type: :model do
     end
 
     it 'returns visible, unique publications by users who were members of an organization when they were published' do
-      expect(described_class.published_during_membership).to match_array [pub_1, pub_4, pub_5, pub_6, pub_7]
+      expect(described_class.published_during_membership).to contain_exactly(pub_1, pub_4, pub_5, pub_6, pub_7)
     end
   end
 
@@ -477,7 +477,7 @@ describe Publication, type: :model do
     let!(:pub5) { create(:publication, published_on: Date.new(2020, 7, 2), status: 'In Press') }
 
     it "returns publications that were published after Penn State's open access policy went into effect and have a status of 'Published'" do
-      expect(described_class.subject_to_open_access_policy).to match_array [pub2, pub3]
+      expect(described_class.subject_to_open_access_policy).to contain_exactly(pub2, pub3)
     end
   end
 
@@ -528,7 +528,7 @@ describe Publication, type: :model do
     before { oa_location.update_column(:publication_id, nil) }
 
     it 'only returns publications without scholarsphere open access locations' do
-      expect(described_class.with_no_scholarsphere_oa_locations).to match_array [pub1, pub2, pub3, pub7]
+      expect(described_class.with_no_scholarsphere_oa_locations).to contain_exactly(pub1, pub2, pub3, pub7)
     end
   end
 
@@ -573,7 +573,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub6) }
 
     it 'returns all activity insight oa publications without a scholarsphere source or gold/hyrbid oa status' do
-      expect(described_class.troubleshooting_list).to match_array [pub1, pub2, pub3]
+      expect(described_class.troubleshooting_list).to contain_exactly(pub1, pub2, pub3)
     end
   end
 
@@ -1111,7 +1111,7 @@ describe Publication, type: :model do
 
     describe '.activity_insight_oa_publication' do
       it 'returns not_open_access publications that are linked to an activity insight oa file with a location' do
-        expect(described_class.activity_insight_oa_publication).to match_array [
+        expect(described_class.activity_insight_oa_publication).to contain_exactly(
           pub2,
           pub2b,
           pub2c,
@@ -1151,19 +1151,19 @@ describe Publication, type: :model do
           pub14b,
           pub14c,
           pub14e
-        ]
+        )
       end
     end
 
     describe '.doi_failed_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is false' do
-        expect(described_class.doi_failed_verification).to match_array [pub2]
+        expect(described_class.doi_failed_verification).to contain_exactly(pub2)
       end
     end
 
     describe '.oa_workflow_needs_doi_verification' do
       it 'returns activity_insight_oa_publications whose doi_verified is nil' do
-        expect(described_class.oa_workflow_needs_doi_verification).to match_array [
+        expect(described_class.oa_workflow_needs_doi_verification).to contain_exactly(
           pub4,
           pub4b,
           pub11,
@@ -1178,25 +1178,23 @@ describe Publication, type: :model do
           pub13c,
           pub13d,
           pub13o
-        ]
+        )
       end
     end
 
     describe '.all_pubs_needs_doi_verification' do
       it 'returns all publications whose doi_verified is false or nil' do
-        expect(described_class.all_pubs_needs_doi_verification).to match_array [
+        expect(described_class.all_pubs_needs_doi_verification).to contain_exactly(
           pub1,
           pub2,
           pub2b,
           pub2c,
           pub4,
-
           pub4b,
           pub5,
           pub7,
           pub11,
           pub11b,
-
           pub11c,
           pub11d,
           pub12,
@@ -1217,7 +1215,7 @@ describe Publication, type: :model do
           pub13m,
           pub13n,
           pub13o
-        ]
+        )
       end
 
       it 'does not return publications with publication_type Extension Publication' do
@@ -1228,66 +1226,49 @@ describe Publication, type: :model do
 
     describe '.file_version_check_failed' do
       it "returns activity_insight_oa_publications whose associated files' versions still contain an 'unknown' version and no correct version" do
-        expect(described_class.file_version_check_failed).to match_array [pub11]
+        expect(described_class.file_version_check_failed).to contain_exactly(pub11)
       end
     end
 
     describe '.wrong_file_version_base' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version" do
-        expect(described_class.wrong_file_version_base).to match_array [pub12, pub12d]
+        expect(described_class.wrong_file_version_base).to contain_exactly(pub12, pub12d)
       end
     end
 
     describe '.wrong_file_version' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have not been sent for at least one file" do
-        expect(described_class.wrong_file_version).to match_array [pub12]
+        expect(described_class.wrong_file_version).to contain_exactly(pub12)
       end
     end
 
     describe '.wrong_version_author_notified' do
       it "returns activity_insight_oa_publications whose associated files' versions does not contain an 'unknown' version or correct version and email notifications have been sent for each file" do
-        expect(described_class.wrong_version_author_notified).to match_array [pub12d]
+        expect(described_class.wrong_version_author_notified).to contain_exactly(pub12d)
       end
     end
 
     describe '.needs_oa_metadata_search' do
       it 'returns activity_insight_oa_publications with a verified doi that have not been checked' do
-        expect(described_class.needs_oa_metadata_search).to match_array [
-          pub8,
-          pub8c,
-          pub9a,
-          pub9b,
-          pub9c,
-          pub9d,
-          pub9e,
-          pub9f,
-          pub9g,
-          pub9h,
-          pub9i,
-          pub9j,
-          pub9k,
-          pub10,
-          pub10b,
-          pub12b
-        ]
+        expect(described_class.needs_oa_metadata_search).to contain_exactly(pub8, pub8c, pub9a, pub9b, pub9c, pub9d, pub9e, pub9f, pub9g, pub9h, pub9i, pub9j, pub9k, pub10, pub10b, pub12b)
       end
     end
 
     describe '.needs_permissions_check' do
       it 'returns activity_insight_oa_publications that have not been checked for a preferred version' do
-        expect(described_class.needs_permissions_check).to match_array [pub8, pub8c]
+        expect(described_class.needs_permissions_check).to contain_exactly(pub8, pub8c)
       end
     end
 
     describe '.needs_manual_preferred_version_check' do
       it 'returns activity_insight_oa_publications that have had their permissions checked but are still missing permissions data' do
-        expect(described_class.needs_manual_preferred_version_check).to match_array [pub9b, pub9k]
+        expect(described_class.needs_manual_preferred_version_check).to contain_exactly(pub9b, pub9k)
       end
     end
 
     describe '.preferred_file_version_none' do
       it 'returns activity_insight_oa_publications where the preferred version is none' do
-        expect(described_class.preferred_file_version_none).to match_array [pub11b, pub14c]
+        expect(described_class.preferred_file_version_none).to contain_exactly(pub11b, pub14c)
       end
     end
 
@@ -1295,7 +1276,7 @@ describe Publication, type: :model do
       # TODO:  Ideally, we should create more records to exercise more of the logic in the
       # SQL query for this scope.
       it 'returns activity_insight_oa_publications that have a preferred version, matching file(s) with incomplete permissions metadata, and no matching file(s) with complete permissions metadata' do
-        expect(described_class.needs_manual_permissions_review).to match_array [pub14a]
+        expect(described_class.needs_manual_permissions_review).to contain_exactly(pub14a)
       end
     end
 
@@ -1303,13 +1284,13 @@ describe Publication, type: :model do
       # TODO:  Ideally, we should create more records to exercise more of the logic in the
       # SQL query for this scope.
       it 'returns activity_insight_oa_publications with a preferred version and a downloaded file that matches the preferred version' do
-        expect(described_class.ready_for_metadata_review).to match_array [pub13b, pub13c]
+        expect(described_class.ready_for_metadata_review).to contain_exactly(pub13b, pub13c)
       end
     end
 
     describe '.flagged_for_review' do
       it 'returns activity_insight_oa_publications that have been flagged for review' do
-        expect(described_class.flagged_for_review).to match_array [pub2c, pub4b, pub8c, pub9k, pub10b, pub11c, pub11d, pub12c, pub13o, pub14e]
+        expect(described_class.flagged_for_review).to contain_exactly(pub2c, pub4b, pub8c, pub9k, pub10b, pub11c, pub11d, pub12c, pub13o, pub14e)
       end
     end
   end
@@ -1531,7 +1512,7 @@ describe Publication, type: :model do
     let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
 
     it 'returns publications that have open access publication types' do
-      expect(described_class.not_extension_publication).to match_array [pub1, pub2, pub3, pub4, pub5, pub7]
+      expect(described_class.not_extension_publication).to contain_exactly(pub1, pub2, pub3, pub4, pub5, pub7)
     end
   end
 
@@ -1545,7 +1526,7 @@ describe Publication, type: :model do
     let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
 
     it 'returns publications that have open access publication types' do
-      expect(described_class.oa_publication).to match_array [pub1, pub2, pub3, pub6]
+      expect(described_class.oa_publication).to contain_exactly(pub1, pub2, pub3, pub6)
     end
   end
 
@@ -1559,7 +1540,7 @@ describe Publication, type: :model do
     let(:pub7) { create(:publication, publication_type: 'Trade Journal Article') }
 
     it 'returns publications that do not have open access publication types' do
-      expect(described_class.non_oa_publication).to match_array [pub4, pub5, pub7]
+      expect(described_class.non_oa_publication).to contain_exactly(pub4, pub5, pub7)
     end
   end
 
@@ -1568,7 +1549,7 @@ describe Publication, type: :model do
     let(:pub2) { create(:publication, status: 'In Press') }
 
     it 'returns publications that are not journal articles' do
-      expect(described_class.published).to match_array [pub1]
+      expect(described_class.published).to contain_exactly(pub1)
     end
   end
 
@@ -1661,7 +1642,7 @@ describe Publication, type: :model do
       end
 
       it "returns an array of the source identifiers from the publication's Activity Insight imports" do
-        expect(pub.ai_import_identifiers).to match_array ['ai-abc123', 'ai-xyz789']
+        expect(pub.ai_import_identifiers).to contain_exactly('ai-abc123', 'ai-xyz789')
       end
     end
   end
@@ -1693,7 +1674,7 @@ describe Publication, type: :model do
       end
 
       it "returns an array of the source identifiers from the publication's Pure imports" do
-        expect(pub.pure_import_identifiers).to match_array ['pure-abc123', 'pure-xyz789']
+        expect(pub.pure_import_identifiers).to contain_exactly('pure-abc123', 'pure-xyz789')
       end
     end
   end
@@ -2424,10 +2405,7 @@ describe Publication, type: :model do
     it 'reassigns all of the imports from the given publications to the publication' do
       pub1.merge!([pub2, pub3, pub4])
 
-      expect(pub1.reload.imports).to match_array [pub1_import1,
-                                                  pub2_import1,
-                                                  pub2_import2,
-                                                  pub3_import1]
+      expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2, pub3_import1)
     end
 
     it 'transfers all of the authorships from all of the given publications to the publication' do
@@ -2519,7 +2497,7 @@ describe Publication, type: :model do
       auth2 = pub1.authorships.find_by(user: user2)
       auth3 = pub1.authorships.find_by(user: user3)
 
-      expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+      expect(auth1.scholarsphere_work_deposits).to contain_exactly(deposit1, deposit2, deposit3)
       expect(auth2.scholarsphere_work_deposits).to eq []
       expect(auth3.scholarsphere_work_deposits).to eq []
     end
@@ -2592,18 +2570,14 @@ describe Publication, type: :model do
       pub1.merge!([pub2, pub3, pub4])
 
       expect(pub1.reload.activity_insight_oa_files.count).to eq 2
-      expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
-                                                                    activity_insight_oa_file2]
+      expect(pub1.reload.activity_insight_oa_files).to contain_exactly(activity_insight_oa_file1, activity_insight_oa_file2)
     end
 
     context 'when the given publications include the publication' do
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub1, pub2, pub3, pub4])
 
-        expect(pub1.reload.imports).to match_array [pub1_import1,
-                                                    pub2_import1,
-                                                    pub2_import2,
-                                                    pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2, pub3_import1)
       end
 
       it 'transfers all activity insight oa files from publications to the publication' do
@@ -2611,8 +2585,7 @@ describe Publication, type: :model do
         pub1.merge!([pub2, pub3, pub4])
 
         expect(pub1.reload.activity_insight_oa_files.count).to eq 2
-        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
-                                                                      activity_insight_oa_file2]
+        expect(pub1.reload.activity_insight_oa_files).to contain_exactly(activity_insight_oa_file1, activity_insight_oa_file2)
       end
 
       it 'transfers doi verification from publications to the publication' do
@@ -2660,9 +2633,9 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue RuntimeError; end
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1)
+        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub3.reload.imports).to contain_exactly(pub3_import1)
         expect(pub4.reload.imports).to eq []
       end
 
@@ -2808,10 +2781,7 @@ describe Publication, type: :model do
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.imports).to match_array [pub1_import1,
-                                                    pub2_import1,
-                                                    pub2_import2,
-                                                    pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2, pub3_import1)
       end
 
       it 'deletes the given publications' do
@@ -2923,7 +2893,7 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth1.scholarsphere_work_deposits).to contain_exactly(deposit1, deposit2, deposit3)
         expect(auth2.scholarsphere_work_deposits).to eq []
         expect(auth3.scholarsphere_work_deposits).to eq []
       end
@@ -2982,8 +2952,7 @@ describe Publication, type: :model do
         pub1.merge!([pub2, pub3, pub4])
 
         expect(pub1.reload.activity_insight_oa_files.count).to eq 2
-        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
-                                                                      activity_insight_oa_file2]
+        expect(pub1.reload.activity_insight_oa_files).to contain_exactly(activity_insight_oa_file1, activity_insight_oa_file2)
       end
     end
 
@@ -2994,10 +2963,7 @@ describe Publication, type: :model do
       it 'reassigns all of the imports from the given publications to the publication' do
         pub1.merge!([pub2, pub3, pub4])
 
-        expect(pub1.reload.imports).to match_array [pub1_import1,
-                                                    pub2_import1,
-                                                    pub2_import2,
-                                                    pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1, pub2_import1, pub2_import2, pub3_import1)
       end
 
       it 'deletes the given publications' do
@@ -3110,7 +3076,7 @@ describe Publication, type: :model do
         auth2 = pub1.authorships.find_by(user: user2)
         auth3 = pub1.authorships.find_by(user: user3)
 
-        expect(auth1.scholarsphere_work_deposits).to match_array [deposit1, deposit2, deposit3]
+        expect(auth1.scholarsphere_work_deposits).to contain_exactly(deposit1, deposit2, deposit3)
         expect(auth2.scholarsphere_work_deposits).to eq []
         expect(auth3.scholarsphere_work_deposits).to eq []
       end
@@ -3169,8 +3135,7 @@ describe Publication, type: :model do
         pub1.merge!([pub2, pub3, pub4])
 
         expect(pub1.reload.activity_insight_oa_files.count).to eq 2
-        expect(pub1.reload.activity_insight_oa_files).to match_array [activity_insight_oa_file1,
-                                                                      activity_insight_oa_file2]
+        expect(pub1.reload.activity_insight_oa_files).to contain_exactly(activity_insight_oa_file1, activity_insight_oa_file2)
       end
     end
 
@@ -3185,9 +3150,9 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1)
+        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub3.reload.imports).to contain_exactly(pub3_import1)
         expect(pub4.reload.imports).to eq []
       end
 
@@ -3211,7 +3176,7 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(ndpg.reload.publications).to match_array [pub2, pub4]
+        expect(ndpg.reload.publications).to contain_exactly(pub2, pub4)
       end
 
       it 'does not transfer any authorships' do
@@ -3346,9 +3311,9 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1)
+        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub3.reload.imports).to contain_exactly(pub3_import1)
         expect(pub4.reload.imports).to eq []
       end
 
@@ -3372,8 +3337,8 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(ndpg1.reload.publications).to match_array [pub2, pub4]
-        expect(ndpg2.reload.publications).to match_array [pub2, pub4]
+        expect(ndpg1.reload.publications).to contain_exactly(pub2, pub4)
+        expect(ndpg2.reload.publications).to contain_exactly(pub2, pub4)
       end
 
       it 'does not transfer any authorships' do
@@ -3507,9 +3472,9 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1)
+        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub3.reload.imports).to contain_exactly(pub3_import1)
         expect(pub4.reload.imports).to eq []
       end
 
@@ -3533,7 +3498,7 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(ndpg.reload.publications).to match_array [pub1, pub3]
+        expect(ndpg.reload.publications).to contain_exactly(pub1, pub3)
       end
 
       it 'does not transfer any authorships' do
@@ -3667,9 +3632,9 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(pub1.reload.imports).to match_array [pub1_import1]
-        expect(pub2.reload.imports).to match_array [pub2_import1, pub2_import2]
-        expect(pub3.reload.imports).to match_array [pub3_import1]
+        expect(pub1.reload.imports).to contain_exactly(pub1_import1)
+        expect(pub2.reload.imports).to contain_exactly(pub2_import1, pub2_import2)
+        expect(pub3.reload.imports).to contain_exactly(pub3_import1)
         expect(pub4.reload.imports).to eq []
       end
 
@@ -3693,7 +3658,7 @@ describe Publication, type: :model do
         begin
           pub1.merge!([pub2, pub3, pub4])
         rescue Publication::NonDuplicateMerge; end
-        expect(ndpg.reload.publications).to match_array [pub1, pub2, pub3, pub4]
+        expect(ndpg.reload.publications).to contain_exactly(pub1, pub2, pub3, pub4)
       end
 
       it 'does not transfer any authorships' do

@@ -102,8 +102,8 @@ describe 'Admin Metadata Review dashboard', type: :feature do
         expect(page).to have_content(aif5.user.webaccess_id)
         expect(page).to have_content(aif5.created_at.to_date)
 
-        expect(page).not_to have_text('Pub1')
-        expect(page).not_to have_text('Pub3')
+        expect(page).to have_no_text('Pub1')
+        expect(page).to have_no_text('Pub3')
 
         expect(page).to have_link 'Back', href: activity_insight_oa_workflow_path
       end

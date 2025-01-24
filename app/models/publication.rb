@@ -160,7 +160,7 @@ class Publication < ApplicationRecord
             .distinct(:id)
         }
 
-  scope :subject_to_open_access_policy, -> { oa_publication.published.where('published_on >= ?', Publication::OPEN_ACCESS_POLICY_START) }
+  scope :subject_to_open_access_policy, -> { oa_publication.published.where(published_on: Publication::OPEN_ACCESS_POLICY_START..) }
   scope :claimable_by, ->(user) { oa_publication.visible.where.not(id: user.authorships.unclaimable.map(&:publication_id)) }
 
   scope :open_access, -> { distinct(:id).left_outer_joins(:open_access_locations).where.not(open_access_locations: { publication_id: nil }) }

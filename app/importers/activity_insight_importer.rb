@@ -794,7 +794,7 @@ class ActivityInsightPublication
   end
 
   def importable?
-    (status == 'Published' || status == 'In Press')
+    status == 'Published' || status == 'In Press'
   end
 
   def activity_insight_id
