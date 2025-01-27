@@ -11,9 +11,20 @@
     <title>Penn State University Libraries | Researcher Metadata Database</title>
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= javascript_include_tag "bundle", "data-turbo-track": "reload", defer: true %>
+    <link rel="dns-prefetch" href="//assets.libraries.psu.edu">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-bold-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-italic-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Slab/static/RobotoSlab-Bold.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Condensed/RobotoCondensed-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/fonts.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header_mark/header_mark.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header/header.css">
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark mb-4">
+    <header>
+    <nav class="navbar navbar-expand-lg mb-4">
       <a class="navbar-brand" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
@@ -41,7 +52,7 @@
         </ul>
       </div>
     </nav>
-
+    </header>
     <% if flash[:alert].present? %>
       <section>
         <div class="alert alert-danger">
