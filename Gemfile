@@ -14,7 +14,7 @@ gem 'omniauth-oauth2', '~> 1.8'
 gem 'omniauth-rails_csrf_protection', '~> 1.0'
 
 gem 'activerecord-import'               # library for bulk inserting data using ActiveRecord
-gem 'bootstrap', '< 5.0'
+gem 'bootstrap', '5.3'
 gem 'bugsnag', '~> 6.26'                # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
 gem 'carrierwave', '~> 2.2'             # file uploading
