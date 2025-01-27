@@ -50,7 +50,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
       # TODO: The code below may be less flaky than the line above
       # If it is keep the less flaky code and remove the line above
       # and replace it anywhere else in the test suite.
-      second_tr = find_all("tr")[1]
+      second_tr = find_all('tr')[1]
       within second_tr do
         click_link 'Edit metadata in admin dashboard'
       end
