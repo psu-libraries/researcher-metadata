@@ -56,7 +56,9 @@ describe 'Admin Metadata Review publication detail', type: :feature do
         expect(page).to have_link pub2.ai_file_for_deposit.download_filename,
                                   href: activity_insight_oa_workflow_file_download_path(pub2.ai_file_for_deposit.id)
         expect(page).to have_content pub2.ai_file_for_deposit.created_at.to_date
-        expect(page).to have_link 'Edit', href: rails_admin.edit_path(model_name: :publication, id: pub2.id)
+        expect(page).to have_link 'Edit Publication Metadata', href: rails_admin.edit_path(model_name: :publication, id: pub2.id)
+        expect(page).to have_link 'Edit File Metadata', href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: pub2.ai_file_for_deposit.id)
+
         expect(page).to have_link 'Back', href: activity_insight_oa_workflow_metadata_review_path
       end
 
