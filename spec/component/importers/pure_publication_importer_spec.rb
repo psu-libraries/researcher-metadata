@@ -36,6 +36,9 @@ describe PurePublicationImporter do
   describe '#call' do
     let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
     let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
+    let(:now) { Time.new(2025, 1, 29, 12, 17, 0) }
+
+    before { allow(Time).to receive(:current).and_return now }
 
     context 'when the API endpoint is found' do
       let(:email) { spy 'notification email' }
@@ -50,6 +53,41 @@ describe PurePublicationImporter do
       end
 
       context 'when no publication import records exist in the database' do
+        it 'creates a record of running the import process' do
+          expect { importer.call }.to change(Import, :count).by 1
+
+          import = Import.last
+          expect(import.started_at).to eq now
+          expect(import.completed_at).not_to be_nil
+          expect(import.source).to eq 'Pure'
+        end
+
+        it 'creates a record of each publication that is available from the source' do
+          expect { importer.call }.to change(SourcePublication, :count).by 5
+
+          import = Import.last
+          sp1 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a')
+          sp2 = SourcePublication.find_by(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+          sp3 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b')
+          sp4 = SourcePublication.find_by(source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0')
+          sp5 = SourcePublication.find_by(source_identifier: 'a4bu4gc2-4a4f-984c-9e61-2bf014979456e')
+
+          expect(sp1.import).to eq import
+          expect(sp1.status).to eq 'Published'
+
+          expect(sp2.import).to eq import
+          expect(sp2.status).to eq 'Accepted/In press'
+
+          expect(sp3.import).to eq import
+          expect(sp3.status).to eq 'Accepted/In press'
+
+          expect(sp4.import).to eq import
+          expect(sp4.status).to eq 'Published'
+
+          expect(sp5.import).to eq import
+          expect(sp5.status).to eq 'Submitted'
+        end
+
         it 'creates a new publication import record for each Published or Accepted/In press publication in the imported data' do
           expect { importer.call }.to change(PublicationImport, :count).by 4
         end
@@ -301,6 +339,41 @@ describe PurePublicationImporter do
         context 'when the existing publication record has not been manually updated' do
           let(:updated_ts) { nil }
 
+          it 'creates a record of running the import process' do
+            expect { importer.call }.to change(Import, :count).by 1
+
+            import = Import.last
+            expect(import.started_at).to eq now
+            expect(import.completed_at).not_to be_nil
+            expect(import.source).to eq 'Pure'
+          end
+
+          it 'creates a record of each publication that is available from the source' do
+            expect { importer.call }.to change(SourcePublication, :count).by 5
+
+            import = Import.last
+            sp1 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a')
+            sp2 = SourcePublication.find_by(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+            sp3 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b')
+            sp4 = SourcePublication.find_by(source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0')
+            sp5 = SourcePublication.find_by(source_identifier: 'a4bu4gc2-4a4f-984c-9e61-2bf014979456e')
+
+            expect(sp1.import).to eq import
+            expect(sp1.status).to eq 'Published'
+
+            expect(sp2.import).to eq import
+            expect(sp2.status).to eq 'Accepted/In press'
+
+            expect(sp3.import).to eq import
+            expect(sp3.status).to eq 'Accepted/In press'
+
+            expect(sp4.import).to eq import
+            expect(sp4.status).to eq 'Published'
+
+            expect(sp5.import).to eq import
+            expect(sp5.status).to eq 'Submitted'
+          end
+
           it 'creates a new publication import record for each new Published or Accepted/In press publication in the imported data' do
             expect { importer.call }.to change(PublicationImport, :count).by 2
           end
@@ -465,6 +538,41 @@ describe PurePublicationImporter do
           let(:updated_ts) { Time.now }
           let!(:new_journal) { create(:journal,
                                       pure_uuid: 'e72f86d9-88a4-4dea-9b0a-8cb1cccb82ad') }
+
+          it 'creates a record of running the import process' do
+            expect { importer.call }.to change(Import, :count).by 1
+
+            import = Import.last
+            expect(import.started_at).to eq now
+            expect(import.completed_at).not_to be_nil
+            expect(import.source).to eq 'Pure'
+          end
+
+          it 'creates a record of each publication that is available from the source' do
+            expect { importer.call }.to change(SourcePublication, :count).by 5
+
+            import = Import.last
+            sp1 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51a')
+            sp2 = SourcePublication.find_by(source_identifier: 'bfc570c3-10d8-451e-9145-c370d6f01c64')
+            sp3 = SourcePublication.find_by(source_identifier: 'e1b21d75-4579-4efc-9fcc-dcd9827ee51b')
+            sp4 = SourcePublication.find_by(source_identifier: 'fc65cb12-5a98-477e-b2f8-e191e0aae9d0')
+            sp5 = SourcePublication.find_by(source_identifier: 'a4bu4gc2-4a4f-984c-9e61-2bf014979456e')
+
+            expect(sp1.import).to eq import
+            expect(sp1.status).to eq 'Published'
+
+            expect(sp2.import).to eq import
+            expect(sp2.status).to eq 'Accepted/In press'
+
+            expect(sp3.import).to eq import
+            expect(sp3.status).to eq 'Accepted/In press'
+
+            expect(sp4.import).to eq import
+            expect(sp4.status).to eq 'Published'
+
+            expect(sp5.import).to eq import
+            expect(sp5.status).to eq 'Submitted'
+          end
 
           it 'creates a new publication import record for each new Published or Accepted/In press publication in the imported data' do
             expect { importer.call }.to change(PublicationImport, :count).by 2
