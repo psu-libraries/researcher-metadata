@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
+ActiveRecord::Schema[7.2].define(version: 2025_01_29_020354) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_trgm"
   enable_extension "plpgsql"
@@ -52,9 +52,6 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
     t.string "file_download_location"
     t.boolean "downloaded"
     t.integer "user_id"
-    t.string "intellcont_id"
-    t.string "post_file_id"
-    t.boolean "exported_oa_status_to_activity_insight"
     t.datetime "permissions_last_checked_at", precision: nil
     t.string "license"
     t.date "embargo_date"
@@ -62,6 +59,9 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
     t.boolean "checked_for_set_statement"
     t.boolean "checked_for_embargo_date"
     t.boolean "version_checked"
+    t.string "intellcont_id"
+    t.string "post_file_id"
+    t.boolean "exported_oa_status_to_activity_insight"
     t.integer "wrong_version_emails_sent"
     t.index ["publication_id"], name: "index_activity_insight_oa_files_on_publication_id"
     t.index ["user_id"], name: "index_activity_insight_oa_files_on_user_id"
@@ -274,6 +274,14 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
     t.datetime "updated_at", precision: nil, null: false
     t.text "error_message", null: false
     t.index ["importer_type"], name: "index_importer_error_logs_on_importer_type"
+  end
+
+  create_table "imports", force: :cascade do |t|
+    t.string "source", null: false
+    t.datetime "started_at", null: false
+    t.datetime "completed_at"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "internal_publication_waivers", force: :cascade do |t|
@@ -567,6 +575,15 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
     t.index ["deputy_user_id"], name: "index_scholarsphere_work_deposits_on_deputy_user_id"
   end
 
+  create_table "source_publications", force: :cascade do |t|
+    t.string "source_identifier", null: false
+    t.string "status"
+    t.bigint "import_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["import_id"], name: "index_source_publications_on_import_id"
+  end
+
   create_table "statistics_snapshots", force: :cascade do |t|
     t.integer "total_article_count"
     t.integer "open_access_article_count"
@@ -723,6 +740,7 @@ ActiveRecord::Schema[7.2].define(version: 2024_12_19_163624) do
   add_foreign_key "scholarsphere_file_uploads", "scholarsphere_work_deposits", name: "scholarsphere_file_uploads_deposit_id_fk"
   add_foreign_key "scholarsphere_work_deposits", "authorships"
   add_foreign_key "scholarsphere_work_deposits", "users", column: "deputy_user_id", name: "scholarsphere_work_deposits_deputy_user_id_fk"
+  add_foreign_key "source_publications", "imports"
   add_foreign_key "user_contracts", "contracts", on_delete: :cascade
   add_foreign_key "user_contracts", "users", on_delete: :cascade
   add_foreign_key "user_organization_memberships", "organizations", name: "user_organization_memberships_organization_id_fk", on_delete: :cascade
