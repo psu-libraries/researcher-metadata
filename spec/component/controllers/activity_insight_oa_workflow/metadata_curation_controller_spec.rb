@@ -5,7 +5,7 @@ require 'component/component_spec_helper'
 describe ActivityInsightOAWorkflow::MetadataCurationController, type: :controller do
   describe '#create_scholarsphere_deposit' do
     let!(:user) { create(:user, is_admin: true) }
-    let!(:author) { create(:user) }
+    let!(:author) { create(:user, :with_psu_identity) }
     let!(:publication) { create(:sample_publication, :oa_publication, preferred_version: 'acceptedVersion') }
     let!(:auth) { create(:authorship, publication: publication, user: author) }
     let!(:ai_oa_file) {

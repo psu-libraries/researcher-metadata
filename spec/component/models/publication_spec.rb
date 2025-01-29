@@ -533,6 +533,7 @@ describe Publication, type: :model do
   end
 
   describe '.troubleshooting_list' do
+    let!(:member_user) { create(:user, :with_psu_member_affiliation) }
     let!(:pub1) { create(:publication,
                          title: 'pub1',
                          open_access_locations: [],
@@ -565,12 +566,17 @@ describe Publication, type: :model do
                          title: 'pub7',
                          open_access_locations: [],
                          open_access_status: nil) }
+    let!(:pub8) { create(:publication,
+                         title: 'pub8',
+                         open_access_locations: [],
+                         open_access_status: nil) }
     let!(:activity_insight_oa_file1) { create(:activity_insight_oa_file, publication: pub1) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub3) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file5) { create(:activity_insight_oa_file, publication: pub5) }
     let!(:activity_insight_oa_file6) { create(:activity_insight_oa_file, publication: pub6) }
+    let!(:activity_insight_oa_file8) { create(:activity_insight_oa_file, publication: pub8, user: member_user) }
 
     it 'returns all activity insight oa publications without a scholarsphere source or gold/hyrbid oa status' do
       expect(described_class.troubleshooting_list).to match_array [pub1, pub2, pub3]
@@ -642,6 +648,7 @@ describe Publication, type: :model do
   end
 
   describe 'other scopes' do
+    let!(:member_user) { create(:user, :with_psu_member_affiliation) }
     let!(:pub1) { create(:publication,
                          title: 'pub1')
     }
@@ -668,6 +675,13 @@ describe Publication, type: :model do
                          oa_workflow_state: 'oa metadata search pending',
                          publication_type: 'Conference Proceeding',
                          open_access_status: nil)
+    }
+    let!(:pub3b) { create(:publication,
+                          title: 'pub3b',
+                          doi_verified: true,
+                          oa_workflow_state: 'oa metadata search pending',
+                          publication_type: 'Conference Proceeding',
+                          open_access_status: nil)
     }
     let!(:pub4) { create(:publication,
                          title: 'pub4',
@@ -969,6 +983,7 @@ describe Publication, type: :model do
     let!(:activity_insight_oa_file1b) { create(:activity_insight_oa_file, publication: pub2b) }
     let!(:activity_insight_oa_file1c) { create(:activity_insight_oa_file, publication: pub2c) }
     let!(:activity_insight_oa_file2) { create(:activity_insight_oa_file, publication: pub3) }
+    let!(:activity_insight_oa_file2b) { create(:activity_insight_oa_file, publication: pub3b, user: member_user) }
     let!(:activity_insight_oa_file3) { create(:activity_insight_oa_file, publication: pub4) }
     let!(:activity_insight_oa_file3b) { create(:activity_insight_oa_file, publication: pub4b) }
     let!(:activity_insight_oa_file4) { create(:activity_insight_oa_file, publication: pub6, version: 'unknown') }

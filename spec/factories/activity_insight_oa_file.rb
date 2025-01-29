@@ -3,7 +3,7 @@
 FactoryBot.define do
   factory :activity_insight_oa_file do
     publication
-    user
+    user { create(:user, :with_psu_identity) }
     sequence(:location) { |n| "abc123/intellcont/test_file#{n}.pdf" }
     sequence(:intellcont_id) { |n| n + 100000000000 }
     sequence(:post_file_id) { |n| n + 200000000000 }

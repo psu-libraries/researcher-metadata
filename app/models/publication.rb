@@ -180,8 +180,10 @@ class Publication < ApplicationRecord
   scope :activity_insight_oa_publication, -> {
                                             oa_publication.with_no_scholarsphere_oa_locations
                                               .joins(:activity_insight_oa_files)
+                                              .joins('INNER JOIN users ON users.id = activity_insight_oa_files.user_id')
                                               .where.not(activity_insight_oa_files: { location: nil })
                                               .where('preferred_file_version_none_email_sent != true OR preferred_file_version_none_email_sent IS NULL')
+                                              .where.not("users.psu_identity->'data'->>'affiliation' = ?", '["MEMBER"]')
                                           }
   scope :flagged_for_review, -> {
     activity_insight_oa_publication
