@@ -6,6 +6,8 @@ class ActivityInsightImporter
   def call
     pbar = Utilities::ProgressBarTTY.create(title: 'Importing Activity Insight Data', total: ai_users.count)
 
+    import = Import.create!(source: 'Activity Insight', started_at: Time.current)
+
     ai_users.each do |aiu|
       pbar.increment
       u = User.find_by(webaccess_id: aiu.webaccess_id) || User.new
@@ -156,6 +158,12 @@ class ActivityInsightImporter
       end
 
       details.publications.each do |pub|
+        SourcePublication.create!(
+          import: import,
+          source_identifier: pub.activity_insight_id,
+          status: pub.status
+        )
+
         if pub.importable?
           pi = PublicationImport.find_by(source: IMPORT_SOURCE, source_identifier: pub.activity_insight_id) ||
             PublicationImport.new(source: IMPORT_SOURCE,
@@ -235,6 +243,7 @@ class ActivityInsightImporter
       end
     end
 
+    import.update!(completed_at: Time.current)
     pbar.finish
   end
 
