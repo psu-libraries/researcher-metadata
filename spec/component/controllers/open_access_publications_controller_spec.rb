@@ -330,6 +330,29 @@ describe OpenAccessPublicationsController, type: :controller do
     end
   end
 
+  describe '#activity_insight_file_download' do
+    let(:perform_request) { get :activity_insight_file_download, params: { id: blank_oa_pub.id } }
+    let!(:aif) { create(:activity_insight_oa_file,
+                        publication: blank_oa_pub,
+                        user: user,
+                        file_download_location: fixture_file_open('test_file.pdf')) }
+
+    it_behaves_like 'an unauthenticated controller'
+
+    context 'when authenticated' do
+      before do
+        allow(request.env['warden']).to receive(:authenticate!).and_return(user)
+        allow(controller).to receive(:current_user).and_return(user)
+      end
+
+      it 'sends the correct file' do
+        get :activity_insight_file_download, params: { id: blank_oa_pub.id }
+        expect(response).to be_successful
+        expect(response.headers['Content-Disposition']).to include('attachment; filename="test_file.pdf"; filename*=UTF-8\'\'test_file.pdf')
+      end
+    end
+  end
+
   describe '#scholarsphere_file_version' do
     let(:perform_request) { post :scholarsphere_file_version, params: { id: 1 } }
 

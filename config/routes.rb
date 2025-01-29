@@ -87,6 +87,7 @@ Rails.application.routes.draw do
     post 'bio/orcid/employments/:membership_id' => 'orcid_employments#create', as: :orcid_employments
     post 'bio/orcid/works' => 'orcid_works#create', as: :orcid_works
     get 'publications/:id/open_access/edit' => 'open_access_publications#edit', as: :edit_open_access_publication
+    get 'publications/:id/open_access/activity_insight_file_download' => 'open_access_publications#activity_insight_file_download', as: :activity_insight_file_download
     post 'publications/:id/open_access/scholarsphere_file_version' => 'open_access_publications#scholarsphere_file_version', as: :scholarsphere_file_version
     get 'publications/:id/open_access/file_version_result' => 'open_access_publications#file_version_result', as: :file_version_result
     post 'publications/:id/open_access/scholarsphere_deposit_form' => 'open_access_publications#scholarsphere_deposit_form', as: :scholarsphere_deposit_form

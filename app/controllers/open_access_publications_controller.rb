@@ -35,6 +35,11 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     end
   end
 
+  def activity_insight_file_download
+    file = ActivityInsightOAFile.find(publication.activity_insight_oa_files.first.id)
+    send_file(file.stored_file_path)
+  end
+
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @jobs ||= []

@@ -63,8 +63,10 @@ describe 'Admin File Version Review dashboard', type: :feature do
       expect(current_email).not_to be_nil
       expect(current_email.body).to match(/Version we have/)
       expect(current_email.body).to match(/Version that can be deposited/)
+      expect(current_email.body).to match(/Download File/)
       expect(current_email.body).to match(/Title 1/)
       expect(current_email.body).to match(/Title 2/)
+      expect(current_email.body).to have_link(aif1.download_filename)
       expect(current_email.body).not_to match(/Title 3/)
       expect(pub1.reload.wrong_oa_version_notification_sent_at).not_to be_nil
       expect(pub2.reload.wrong_oa_version_notification_sent_at).not_to be_nil

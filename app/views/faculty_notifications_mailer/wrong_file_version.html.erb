@@ -17,6 +17,24 @@
   published version.
 </p>
 
+<h3>
+  Examples
+</h3>
+
+<h4>
+  Accepted Manuscript
+</h4>
+<p>
+  <%= image_tag "accepted_manuscript_example.png", id: "accepted-manuscript-example", width: "241", height: "311", alt: "A screenshot of a text document with a title and blue section headers" %>
+</p>
+
+<h4>
+  Final Published Version
+</h4>
+<p>
+  <%= image_tag "final_published_example.png", id: "final-published-example", width: "221", height: "311", alt: "A screenshot of a journal article with the title and headings in blue, a header containing the journal name and the Routledge logo, and additional complex typesetting" %>
+</p>
+
 <p>
   One or more of the files you (or an Activity Insight Proxy) uploaded appear to be a version of the article
   that the journal's default policy does not allow to be deposited in ScholarSphere. If you have the version of
@@ -30,19 +48,30 @@
       <th>Title</th>
       <th>Version we have</th>
       <th>Version that can be deposited</th>
+      <th>Download File</th>
     </tr>
   </thead>
   <tbody class='card-body'>
     <% @publications.each do |p| %>
+      <% file = p.activity_insight_oa_files.first %>
       <tr>
         <td>
           <%= p.title %>
         </td>
         <td>
-          <%= p.activity_insight_oa_files.first.version_status_display %>
+          <%= file.version_status_display %>
         </td>
         <td>
           <%= p.preferred_version_display %>
+        </td>
+        <td>
+          <% if file.stored_file_path.present? %>
+                  <%= link_to "#{file.download_filename}",
+                              activity_insight_file_download_url(p.id),
+                              target: '_blank' %>
+          <% else %>
+            Not Found
+          <% end %>
         </td>
       </tr>
     <% end %>
