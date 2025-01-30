@@ -46,7 +46,14 @@ describe 'Admin File Version Review dashboard', type: :feature do
 
   describe 'clicking a link to edit a file' do
     it "redirects to that Activity Insight OA File's edit page" do
-      click_link('Edit metadata in admin dashboard', match: :first)
+      # click_link('Edit metadata in admin dashboard', match: :first)
+      # TODO: The code below may be less flaky than the line above
+      # If it is keep the less flaky code and remove the line above
+      # and replace it anywhere else in the test suite.
+      second_tr = find_all('tr')[1]
+      within second_tr do
+        click_link 'Edit metadata in admin dashboard'
+      end
       expect(page).to have_current_path rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif1.id)
     end
   end
