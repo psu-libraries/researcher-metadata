@@ -9,7 +9,7 @@ describe 'Admin Wrong File Version Author Notified Review dashboard', type: :fea
   let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1', wrong_oa_version_notification_sent_at: DateTime.now) }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2', wrong_oa_version_notification_sent_at: DateTime.now - 1.week) }
   let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 3') }
-  let!(:user) { create(:user, webaccess_id: 'abc123') }
+  let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }

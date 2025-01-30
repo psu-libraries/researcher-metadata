@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 
 describe 'Admin Metadata Review publication detail', type: :feature do
-  let!(:user) { create(:user) }
+  let!(:user) { create(:user, :with_psu_identity) }
   let!(:pub1) { create(:publication, title: 'Pub1', preferred_version: 'acceptedVersion') }
   let!(:pub2) {
     create(

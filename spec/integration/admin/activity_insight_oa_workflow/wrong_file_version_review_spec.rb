@@ -9,7 +9,7 @@ describe 'Admin File Version Review dashboard', type: :feature do
   let!(:pub1) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 1') }
   let!(:pub2) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 2') }
   let!(:pub3) { create(:publication, preferred_version: 'acceptedVersion', title: 'Title 3') }
-  let!(:user) { create(:user, webaccess_id: 'abc123') }
+  let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }

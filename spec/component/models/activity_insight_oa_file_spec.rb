@@ -195,7 +195,9 @@ RSpec.describe ActivityInsightOAFile, type: :model do
                          ])
     }
     let(:uploader) { fixture_file_open('test_file.pdf') }
+    let!(:member_user) { create(:user, :with_psu_member_affiliation) }
     let!(:file1) { create(:activity_insight_oa_file, publication: pub1) }
+    let!(:file1b) { create(:activity_insight_oa_file, publication: pub1, user: member_user) }
     let!(:file2) { create(:activity_insight_oa_file, publication: pub2) }
     let!(:file3) { create(:activity_insight_oa_file, publication: pub3, file_download_location: uploader) }
     let!(:file4) { create(:activity_insight_oa_file, publication: pub3, downloaded: true) }

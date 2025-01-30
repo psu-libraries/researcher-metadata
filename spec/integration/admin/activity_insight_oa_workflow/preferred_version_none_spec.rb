@@ -7,7 +7,7 @@ describe 'Admin Preferred File Version None Review dashboard', type: :feature do
   let!(:aif2) { create(:activity_insight_oa_file, publication: pub2, version: 'publishedVersion', user: user) }
   let!(:pub1) { create(:publication, preferred_version: 'None', title: 'Title 1') }
   let!(:pub2) { create(:publication, preferred_version: 'None', title: 'Title 2') }
-  let!(:user) { create(:user, webaccess_id: 'abc123') }
+  let!(:user) { create(:user, :with_psu_identity, webaccess_id: 'abc123') }
   let(:uploader) { double 'uploader', file: file }
   let(:file) { double 'file', file: path }
   let(:path) { 'the/file/path' }

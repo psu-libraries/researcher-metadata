@@ -37,6 +37,7 @@ class ActivityInsightOAFile < ApplicationRecord
     left_outer_joins(:publication)
       .where(publication: { publication_type: Publication.oa_publication_types })
       .left_outer_joins(publication: :open_access_locations)
+      .joins(:user)
       .where(
         <<-SQL.squish
           NOT EXISTS (
@@ -52,6 +53,7 @@ class ActivityInsightOAFile < ApplicationRecord
       )
       .where.not(location: nil)
       .where(%{(publication.open_access_status != 'gold' AND publication.open_access_status != 'hybrid') OR publication.open_access_status IS NULL})
+      .where.not("users.psu_identity->'data'->>'affiliation' = ?", '["MEMBER"]')
       .distinct
   }
 
