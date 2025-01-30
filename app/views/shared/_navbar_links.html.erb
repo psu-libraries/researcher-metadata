@@ -1,0 +1,23 @@
+<div class="navbar-nav">
+    <ul class="navbar-nav ml-auto">
+        <% loc = local_assigns[:current_location] %>
+        <li class="nav-item menu-level-0">
+            <%= link_to "Home", root_path, class: loc=='home' ? "nav-link is-active" : "nav-link" %>
+        </li>
+        <% if current_user && current_user.is_admin? %>
+            <li class="nav-item menu-level-0">
+                <%= link_to "Admin", rails_admin_path, class: "nav-link" %>
+            </li>
+        <% end %>
+        <li class="nav-item menu-level-0">
+            <%= link_to "Profile", profile_bio_path, class: "nav-link" %>
+        </li>
+        <li class="nav-item menu-level-0">
+            <% if current_user %>
+            <%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %>
+            <% else %>
+            <%= button_to "Sign in", user_azure_oauth_omniauth_authorize_path, class: "btn nav-link" %>
+            <% end %>
+        </li>
+    </ul>
+<div>

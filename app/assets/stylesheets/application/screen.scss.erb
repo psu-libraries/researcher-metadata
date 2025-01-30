@@ -15,10 +15,6 @@ img {
 .navbar.mb-4 {
   margin-bottom: 0 !important;
 }
-.navbar-dark,
-footer {
-  background: #18161b;
-}
 .navbar-brand img {
   height: 55px;
 }
@@ -28,12 +24,9 @@ footer {
     border: none;
   }
 }
-header {
-  background-image: image-url('wave.png');
-  background-position: left bottom;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 2rem 0;
+
+.sidebar-menu .navbar-nav li.menu-level-0 .btn {
+  font-weight: 500;
 }
 #rmd header {
   padding-bottom: 6rem;
@@ -41,6 +34,15 @@ header {
 main {
   padding: 2rem 0 4rem;
 }
+
+#lp .top-section {
+  background-image: image-url('wave.png');
+  background-position: left bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 2rem 0;
+}
+
 #lp main .row img {
   width: 100%;
   max-width: 200px;
@@ -61,13 +63,6 @@ main {
 #rmd main a img {
   width: 16px;
   margin: -4px 0.5rem 0 0;
-}
-footer {
-  padding: 2rem 0;
-  color: white;
-}
-footer a {
-  color: white;
 }
 footer .logos {
   text-align: center;
@@ -93,10 +88,10 @@ footer .list-unstyled img {
 }
 /* Mobile only */
 @media screen and (max-width: 992px) {
-  header {
+#lp .top-section {
     padding-bottom: 5rem;
     background-image: image-url('wave-sm.png');
-  }
+}
   #rmd main .col-lg-8 {
     margin-top: 2rem;
   }

@@ -21,38 +21,43 @@
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css">
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header_mark/header_mark.css">
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header/header.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/footer/footer.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/sidebar_menu/sidebar_menu.css">
   </head>
   <body>
     <header>
-    <nav class="navbar navbar-expand-lg mb-4">
-      <a class="navbar-brand" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <%= link_to "Home", root_path, class: "nav-link" %>
-          </li>
-          <% if current_user && current_user.is_admin? %>
-            <li class="nav-item">
-              <%= link_to "Admin", rails_admin_path, class: "nav-link" %>
-            </li>
-          <% end %>
-          <li class="nav-item">
-            <%= link_to "Profile", profile_bio_path, class: "nav-link" %>
-          </li>
-          <li>
-            <% if current_user %>
-              <%= link_to "Sign out", destroy_user_session_path, class: "nav-link" %>
-            <% else %>
-              <%= button_to "Sign in", user_azure_oauth_omniauth_authorize_path, class: "btn nav-link" %>
-            <% end %>
-          </li>
-        </ul>
-      </div>
-    </nav>
+      <nav class="navbar navbar-expand-lg">
+        <div class="container-fluid" >
+          <div class="header-mark navbar-brand">
+            <a class="site-logo" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
+            <div class="header--nav-search">
+              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMain" aria-controls="offcanvasMain" aria-expanded="false" aria-label="Show offcanvas nav">
+                <span class="navbar-toggler-icon navbar-dark"></span>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="d-none d-md-block container-fluid">
+          <%= render partial: 'shared/navbar_links' %>
+        </div>
+      </nav>
     </header>
+    <div id="offcanvasMain" class="offcanvas offcanvas-end offcanvas_main" tabindex="-1">
+      <div class="offcanvas-header">
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+      </div>
+      <div class="offcanvas-body">
+        <div class="region region-nav-offcanvas">
+          <nav role="navigation" aria-labelledby="block-alumni-mainnavigation-2-menu" id="block-alumni-mainnavigation-2" class="block block-menu navigation menu--main">
+            <div id="block-alumni-mainnavigation-2-menu" class="visually-hidden block-menu--title block-menu--title--main">Main navigation</div>
+              <div class="sidebar-menu sidebar-menu--main">
+                <%= render partial: 'shared/navbar_links', locals: { current_location: params[:action] }%>
+              </div>
+            </div>
+          </nav>
+        </div>
+      </div>
+    </div>
     <% if flash[:alert].present? %>
       <section>
         <div class="alert alert-danger">
@@ -74,7 +79,7 @@
 
     <%= yield %>
 
-    <footer>
+    <footer class="text-light">
       <div class="container">
         <div class="row">
           <div class="col-lg-3">
