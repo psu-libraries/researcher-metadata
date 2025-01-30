@@ -12,11 +12,11 @@
     <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
     <%= javascript_include_tag "bundle", "data-turbo-track": "reload", defer: true %>
     <link rel="dns-prefetch" href="//assets.libraries.psu.edu">
-    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
-    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-bold-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
-    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-italic-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
-    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Slab/static/RobotoSlab-Bold.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
-    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Condensed/RobotoCondensed-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="crossorigin" />
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-bold-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-italic-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Slab/static/RobotoSlab-Bold.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Condensed/RobotoCondensed-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/fonts.css">
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css">
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header_mark/header_mark.css">
@@ -25,39 +25,8 @@
     <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/sidebar_menu/sidebar_menu.css">
   </head>
   <body>
-    <header>
-      <nav class="navbar navbar-expand-lg">
-        <div class="container-fluid" >
-          <div class="header-mark navbar-brand">
-            <a class="site-logo" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
-            <div class="header--nav-search">
-              <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMain" aria-controls="offcanvasMain" aria-expanded="false" aria-label="Show offcanvas nav">
-                <span class="navbar-toggler-icon navbar-dark"></span>
-              </button>
-            </div>
-          </div>
-        </div>
-        <div class="d-none d-md-block container-fluid">
-          <%= render partial: 'shared/navbar_links' %>
-        </div>
-      </nav>
-    </header>
-    <div id="offcanvasMain" class="offcanvas offcanvas-end offcanvas_main" tabindex="-1">
-      <div class="offcanvas-header">
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
-      </div>
-      <div class="offcanvas-body">
-        <div class="region region-nav-offcanvas">
-          <nav role="navigation" aria-labelledby="block-alumni-mainnavigation-2-menu" id="block-alumni-mainnavigation-2" class="block block-menu navigation menu--main">
-            <div id="block-alumni-mainnavigation-2-menu" class="visually-hidden block-menu--title block-menu--title--main">Main navigation</div>
-              <div class="sidebar-menu sidebar-menu--main">
-                <%= render partial: 'shared/navbar_links', locals: { current_location: params[:action] }%>
-              </div>
-            </div>
-          </nav>
-        </div>
-      </div>
-    </div>
+    <%= render partial: 'shared/header' %>
+    <%= render partial: 'shared/offcanvas_main' %>
     <% if flash[:alert].present? %>
       <section>
         <div class="alert alert-danger">
@@ -76,34 +45,7 @@
         </div>
       </section>
     <% end %>
-
     <%= yield %>
-
-    <footer class="text-light">
-      <div class="container">
-        <div class="row">
-          <div class="col-lg-3">
-            <p>
-              <strong>Researcher Metadata Database</strong><br>
-              Change the way you access Penn State researcher metadata.
-            </p>
-          </div>
-          <div class="col-lg-6 logos">
-            <p>RMD is a collaboration between the
-              <a href="https://libraries.psu.edu">PSU Libraries</a>,
-              <a href="https://research.psu.edu">OSVPR</a> and
-              <a href="https://westarete.com">West Arête</a>.
-            </p>
-          </div>
-          <div class="col-lg-3">
-            <ul class="list-unstyled">
-              <li><strong>Faculty Activity Management Services</strong></li>
-              <li>University Libraries</li>
-              <li><%= image_tag('metadata-email-icon.png', alt: 'Email') %><a href="mailto:L-FAMS@lists.psu.edu">L-FAMS@lists.psu.edu</a></li>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </footer>
+  <%= render partial: 'shared/footer' %>
   </body>
 </html>

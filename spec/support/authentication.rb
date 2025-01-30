@@ -34,7 +34,7 @@ end
 def authenticate_as(user)
   sign_in_as user
   visit root_path
-  click_on 'Sign in'
+  click_on 'Sign in', match: :first
 end
 
 def impersonate_user(primary:, deputy:)
@@ -46,13 +46,13 @@ end
 def authenticate_user
   sign_in_as current_user
   visit root_path
-  click_on 'Sign in'
+  click_on 'Sign in', match: :first
 end
 
 def authenticate_admin_user
   sign_in_as current_admin_user
   visit root_path
-  click_on 'Sign in'
+  click_on 'Sign in', match: :first
 end
 
 def current_user
