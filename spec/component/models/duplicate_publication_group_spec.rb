@@ -1750,4 +1750,14 @@ describe DuplicatePublicationGroup, type: :model do
       end
     end
   end
+
+  describe '#after_save' do
+    let!(:group1) { create(:duplicate_publication_group) }
+
+    it 'runs the auto_merge methods' do
+      expect(group1).to receive(:auto_merge)
+      expect(group1).to receive(:auto_merge_matching)
+      group1.save!
+    end
+  end
 end

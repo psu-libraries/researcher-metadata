@@ -3,6 +3,8 @@
 class DuplicatePublicationGroup < ApplicationRecord
   has_many :publications, inverse_of: :duplicate_group
 
+  after_save :auto_merge, :auto_merge_matching
+
   def self.group_duplicates
     pbar = Utilities::ProgressBarTTY.create(title: 'Grouping duplicate publications',
                                             total: Publication.count)
