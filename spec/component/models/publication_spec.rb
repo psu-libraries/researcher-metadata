@@ -1341,6 +1341,27 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.with_only_pure_imports' do
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication) }
+    let!(:pub3) { create(:publication) }
+    let!(:pub4) { create(:publication) }
+    let!(:pub5) { create(:publication) }
+
+    before do
+      create(:publication_import, publication: pub2, source: 'Activity Insight')
+      create(:publication_import, publication: pub3, source: 'Pure')
+      create(:publication_import, publication: pub4, source: 'Pure')
+      create(:publication_import, publication: pub4, source: 'Pure')
+      create(:publication_import, publication: pub5, source: 'Activity Insight')
+      create(:publication_import, publication: pub5, source: 'Pure')
+    end
+
+    it 'returns publications that have one or more imports from Pure and no imports from other sources' do
+      expect(described_class.with_only_pure_imports).to match_array [pub3, pub4]
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
@@ -3883,6 +3904,35 @@ describe Publication, type: :model do
 
     it 'returns the IDs of all publications that are known to not be duplicates of the publication' do
       expect(pub.all_non_duplicate_ids).to eq [800000, 900000]
+    end
+  end
+
+  describe '#pure_imports' do
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+
+    context 'when the publication has an import from Pure' do
+      let(:pub) { create(:publication, imports: [pure_import]) }
+
+      it 'returns an array containing the import' do
+        expect(pub.pure_imports).to match_array [pure_import]
+      end
+    end
+
+    context 'when the publication has an import from another source' do
+      let(:pub) { create(:publication, imports: [ai_import]) }
+
+      it 'returns an empty array' do
+        expect(pub.pure_imports).to eq []
+      end
+    end
+
+    context 'when the publication does not have any imports' do
+      let(:pub) { create(:publication) }
+
+      it 'returns an empty array' do
+        expect(pub.pure_imports).to eq []
+      end
     end
   end
 

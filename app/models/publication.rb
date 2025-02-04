@@ -334,6 +334,22 @@ class Publication < ApplicationRecord
       )
   }
 
+  scope :with_only_pure_imports, -> {
+    where(
+      <<-SQL.squish
+        EXISTS (
+          SELECT id FROM publication_imports
+          WHERE publication_imports.publication_id = publications.id
+        )
+        AND NOT EXISTS (
+          SELECT id FROM publication_imports
+          WHERE publication_imports.publication_id = publications.id
+            AND publication_imports.source != 'Pure'
+        )
+      SQL
+    )
+  }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
@@ -677,8 +693,12 @@ class Publication < ApplicationRecord
     merge([self, publication_to_merge]) { PublicationMergeOnMatchingPolicy.new(self, publication_to_merge).merge! }
   end
 
+  def pure_imports
+    imports.where(source: 'Pure')
+  end
+
   def has_pure_import?
-    imports.where(source: 'Pure').any?
+    pure_imports.any?
   end
 
   def has_single_import_from_pure?

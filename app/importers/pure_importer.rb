@@ -1,21 +1,9 @@
 # frozen_string_literal: true
 
-class PureImporter
+class PureImporter < PureAPIClient
   class ServiceNotFound < RuntimeError; end
 
   private
-
-    def api_version
-      '524'
-    end
-
-    def base_url
-      "https://pure.psu.edu/ws/api/#{api_version}"
-    end
-
-    def pure_api_key
-      Settings.pure.api_key
-    end
 
     def total_records
       response = get_records(type: record_type, page_size: 1, offset: 0)
