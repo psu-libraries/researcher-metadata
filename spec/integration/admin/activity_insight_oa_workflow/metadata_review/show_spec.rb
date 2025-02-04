@@ -70,7 +70,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
 
         it 'does not have a button to deposit to scholarsphere and indicates the metadata is incomplete' do
           expect(page).to have_content 'Insufficient metadata to upload to ScholarSphere'
-          expect(page).not_to have_link 'Deposit to ScholarSphere'
+          expect(page).to have_no_link 'Deposit to ScholarSphere'
         end
       end
 
@@ -83,7 +83,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
         it 'does not have a button to deposit to scholarsphere and indicates the metadata is incomplete' do
           expect(page).to have_content 'Insufficient metadata to upload to ScholarSphere'
           expect(page).to have_content 'Not Found'
-          expect(page).not_to have_link 'Deposit to ScholarSphere'
+          expect(page).to have_no_link 'Deposit to ScholarSphere'
         end
       end
 
@@ -95,7 +95,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
 
         it 'does not have a button to deposit to scholarsphere and indicates the deposit is pending' do
           expect(page).to have_content 'ScholarSphere upload pending...'
-          expect(page).not_to have_link 'Deposit to ScholarSphere'
+          expect(page).to have_no_link 'Deposit to ScholarSphere'
         end
       end
 
@@ -107,7 +107,7 @@ describe 'Admin Metadata Review publication detail', type: :feature do
 
         it 'does not have a button to deposit to scholarsphere and indicates the deposit is failed' do
           expect(page).to have_content 'ScholarSphere upload failed'
-          expect(page).not_to have_link 'Deposit to ScholarSphere'
+          expect(page).to have_no_link 'Deposit to ScholarSphere'
         end
       end
 

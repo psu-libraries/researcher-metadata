@@ -275,31 +275,31 @@ RSpec.describe ActivityInsightOAFile, type: :model do
 
     describe '.subject_to_ai_oa_workflow' do
       it 'returns files that have an associated publication that is subject to the activity insight oa workflow' do
-        expect(described_class.subject_to_ai_oa_workflow).to match_array [file1, file3, file4, file17, file18, file19]
+        expect(described_class.subject_to_ai_oa_workflow).to contain_exactly(file1, file3, file4, file17, file18, file19)
       end
     end
 
     describe '.ready_for_download' do
       it 'returns files that are ready to download from Activity Insight' do
-        expect(described_class.ready_for_download).to match_array [file1]
+        expect(described_class.ready_for_download).to contain_exactly(file1)
       end
     end
 
     describe '.needs_version_check' do
       it 'returns files that are ready to have their versions automatically determined' do
-        expect(described_class.needs_version_check).to match_array [file17]
+        expect(described_class.needs_version_check).to contain_exactly(file17)
       end
     end
 
     describe '.send_oa_status_to_activity_insight' do
       it 'returns files that have not yet been exported to activity insight & whose publication has a gold or hybrid oa status' do
-        expect(described_class.send_oa_status_to_activity_insight).to match_array [file6, file7, file9, file10, file11, file20, file21]
+        expect(described_class.send_oa_status_to_activity_insight).to contain_exactly(file6, file7, file9, file10, file11, file20, file21)
       end
     end
 
     describe '.needs_permissions_check' do
       it 'returns files that have a known version but have not had their permissions checked yet' do
-        expect(described_class.needs_permissions_check).to match_array [file12, file13]
+        expect(described_class.needs_permissions_check).to contain_exactly(file12, file13)
       end
     end
   end

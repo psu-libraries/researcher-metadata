@@ -914,7 +914,7 @@ describe ActivityInsightImporter do
 
           group = p1.duplicate_group
 
-          expect(group.publications).to match_array [p1, duplicate_pub]
+          expect(group.publications).to contain_exactly(p1, duplicate_pub)
         end
 
         it 'hides new publications that might be duplicates' do
@@ -1278,7 +1278,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -1612,7 +1612,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -2661,7 +2661,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -2928,7 +2928,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -3222,7 +3222,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -4243,7 +4243,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -4505,7 +4505,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -4798,7 +4798,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do

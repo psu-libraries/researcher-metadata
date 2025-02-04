@@ -5,7 +5,7 @@ require 'support/webdrivers'
 require 'integration/admin/shared_examples_for_admin_page'
 
 describe 'Admin list of publications by organization', type: :feature do
-  context 'when the current user is an admin', js: true do
+  context 'when the current user is an admin', :js do
     before { authenticate_admin_user }
 
     let(:user1) { create(:user) }
@@ -68,9 +68,9 @@ describe 'Admin list of publications by organization', type: :feature do
 
         expect(page).to have_content '2 publications'
 
-        expect(page).not_to have_content 'Pub Three'
-        expect(page).not_to have_content 'Pub Four'
-        expect(page).not_to have_content 'Pub Five'
+        expect(page).to have_no_content 'Pub Three'
+        expect(page).to have_no_content 'Pub Four'
+        expect(page).to have_no_content 'Pub Five'
       end
     end
 
@@ -87,10 +87,10 @@ describe 'Admin list of publications by organization', type: :feature do
 
         expect(page).to have_content '1 publication'
 
-        expect(page).not_to have_content 'Pub One'
-        expect(page).not_to have_content 'Pub Three'
-        expect(page).not_to have_content 'Pub Four'
-        expect(page).not_to have_content 'Pub Five'
+        expect(page).to have_no_content 'Pub One'
+        expect(page).to have_no_content 'Pub Three'
+        expect(page).to have_no_content 'Pub Four'
+        expect(page).to have_no_content 'Pub Five'
       end
     end
 
@@ -109,14 +109,14 @@ describe 'Admin list of publications by organization', type: :feature do
         (3..26).each do |i|
           expect(page).to have_content "Pub #{i}"
         end
-        expect(page).not_to have_content 'Pub One'
+        expect(page).to have_no_content 'Pub One'
 
         click_link '2'
 
         expect(page).to have_content '26 publications'
-        expect(page).not_to have_content 'Pub Two'
+        expect(page).to have_no_content 'Pub Two'
         (3..26).each do |i|
-          expect(page).not_to have_content "Pub #{i}"
+          expect(page).to have_no_content "Pub #{i}"
         end
         expect(page).to have_content 'Pub One'
       end

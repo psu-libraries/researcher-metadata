@@ -550,7 +550,7 @@ describe ScholarsphereFileUpload, type: :model do
     end
 
     it "returns a file object for each of the deposit's associated uploads" do
-      expect(dep.files).to match_array [file1, file2]
+      expect(dep.files).to contain_exactly(file1, file2)
     end
   end
 
