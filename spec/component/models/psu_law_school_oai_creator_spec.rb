@@ -136,7 +136,7 @@ describe PSULawSchoolOAICreator do
       end
 
       it 'returns the matching users' do
-        expect(creator.ambiguous_user_matches).to match_array [user1, user2]
+        expect(creator.ambiguous_user_matches).to contain_exactly(user1, user2)
       end
     end
   end

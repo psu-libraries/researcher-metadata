@@ -21,6 +21,6 @@ class WebhooksController < ApplicationController
     def authenticate_request
       raise 'ScholarSphere webhook secret not configured.' if Settings.scholarsphere.webhook_secret.blank?
 
-      return head(:unauthorized) unless request.headers['X-API-KEY'] == Settings.scholarsphere.webhook_secret
+      head(:unauthorized) unless request.headers['X-API-KEY'] == Settings.scholarsphere.webhook_secret
     end
 end

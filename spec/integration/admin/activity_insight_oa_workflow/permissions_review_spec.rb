@@ -101,14 +101,14 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
         expect(page).to have_link('Pub2', href: "#{rails_admin.edit_path(model_name: :publication, id: pub2.id)}#publication_preferred_version")
         expect(page).to have_link(aif2a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif2a.id))
         expect(page).to have_text('https://doi.org/10.123/zzz123')
-        expect(page).not_to have_text aif2b.download_filename
+        expect(page).to have_no_text aif2b.download_filename
       end
 
       within "#publication_#{pub4.id}" do
         expect(page).to have_link('Pub4', href: "#{rails_admin.edit_path(model_name: :publication, id: pub4.id)}#publication_preferred_version")
         expect(page).to have_link(aif4a.download_filename, href: rails_admin.edit_path(model_name: :activity_insight_oa_file, id: aif4a.id))
         expect(page).to have_text('https://doi.org/10.123/aaa123')
-        expect(page).not_to have_text aif4b.download_filename
+        expect(page).to have_no_text aif4b.download_filename
       end
 
       tr_elements = all('tr')
@@ -116,8 +116,8 @@ describe 'Admin Open Access Permissions Review dashboard', type: :feature do
       expect(tr_elements[1][:id]).to eq "publication_#{pub4.id}"
       expect(tr_elements[2][:id]).to eq "publication_#{pub2.id}"
 
-      expect(page).not_to have_text('Pub1')
-      expect(page).not_to have_text('Pub3')
+      expect(page).to have_no_text('Pub1')
+      expect(page).to have_no_text('Pub3')
     end
   end
 

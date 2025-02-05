@@ -6,11 +6,19 @@ class PurePublicationImporter < PureImporter
   def call
     pbar = Utilities::ProgressBarTTY.create(title: 'Importing Pure research-outputs (publications)', total: total_pages)
 
+    import = Import.create!(source: 'Pure', started_at: Time.current)
+
     1.upto(total_pages) do |page|
       offset = (page - 1) * page_size
       pubs = get_records(type: record_type, page_size: page_size, offset: offset)
 
       pubs['items'].each do |publication|
+        SourcePublication.create!(
+          import: import,
+          source_identifier: publication['uuid'],
+          status: status_value(publication)
+        )
+
         next unless importable?(publication)
 
         ActiveRecord::Base.transaction do
@@ -93,7 +101,6 @@ class PurePublicationImporter < PureImporter
             end
           end
         end
-
       rescue StandardError => e
         log_error(e, { publication: publication })
       end
@@ -101,6 +108,8 @@ class PurePublicationImporter < PureImporter
     rescue StandardError => e
       log_error(e, {})
     end
+
+    import.update_column(:completed_at, Time.current)
     pbar.finish
   rescue StandardError => e
     log_error(e, {})

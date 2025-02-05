@@ -35,8 +35,7 @@ describe DeputyAssignmentsController, type: :controller do
 
       context 'when all is well' do
         before do
-          allow(mock_form).to receive(:save).and_return(true)
-          allow(mock_form).to receive(:deputy_assignment).and_return(mock_assignment)
+          allow(mock_form).to receive_messages(save: true, deputy_assignment: mock_assignment)
         end
 
         it 'creates the DeputyAssignment' do
@@ -169,9 +168,7 @@ describe DeputyAssignmentsController, type: :controller do
 
         allow(DeputyAssignmentDeleteService).to receive(:call)
 
-        allow(DeputyAssignmentsMailer).to receive(:deputy_assignment_declination).and_return(mock_mailer)
-        allow(DeputyAssignmentsMailer).to receive(:deputy_status_revoked).and_return(mock_mailer)
-        allow(DeputyAssignmentsMailer).to receive(:deputy_status_ended).and_return(mock_mailer)
+        allow(DeputyAssignmentsMailer).to receive_messages(deputy_assignment_declination: mock_mailer, deputy_status_revoked: mock_mailer, deputy_status_ended: mock_mailer)
       end
 
       context 'when the current user is the primary' do
