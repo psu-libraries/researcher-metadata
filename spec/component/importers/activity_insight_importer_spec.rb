@@ -917,6 +917,12 @@ describe ActivityInsightImporter do
           expect(group.publications).to contain_exactly(p1, duplicate_pub)
         end
 
+        it 'calls the auto-merge methods' do
+          expect(DuplicatePublicationGroup).to receive(:auto_merge).exactly(2).times
+          expect(DuplicatePublicationGroup).to receive(:auto_merge_matching).exactly(2).times
+          importer.call
+        end
+
         it 'hides new publications that might be duplicates' do
           importer.call
 
