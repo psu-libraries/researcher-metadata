@@ -48,8 +48,6 @@ describe PSUDickinsonPublicationImporter do
                                   source: 'Dickinson Law IDEAS Repo',
                                   source_identifier: 'existing-identifier') }
 
-  let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
-
   before do
     allow(Fieldhand::Repository).to receive(:new).with('https://ideas.dickinsonlaw.psu.edu/do/oai').and_return dickinson_law_repo
     allow(dickinson_law_repo).to receive(:records).with(metadata_prefix: 'dcs', set: 'publication:fac-works').and_return records
@@ -144,26 +142,41 @@ describe PSUDickinsonPublicationImporter do
       expect(oal.url).to eq 'https://example.com/article'
     end
 
-    it 'groups duplicates of new publication records' do
-      expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+    context 'when there are duplicate records' do
+      let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
+      it 'calls the auto_merge methods' do
+        duplicate_pub = create(:publication, title: 'A Penn State Law Article')
+        expect(DuplicatePublicationGroup).to receive(:auto_merge)
+        expect(DuplicatePublicationGroup).to receive(:auto_merge_matching)
+        importer.call
+      end
 
-      import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                         source_identifier: 'non-existing-identifier')
-      pub = import.publication
+      context 'when the auto_merge do not automatically merge the publications' do
+        before do
+          allow(DuplicatePublicationGroup).to receive(:auto_merge).and_return nil
+          allow(DuplicatePublicationGroup).to receive(:auto_merge_matching).and_return nil
+        end
 
-      group = pub.duplicate_group
+        it 'groups duplicates of new publication records' do
+          expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+          import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                            source_identifier: 'non-existing-identifier')
+          pub = import.publication
+
+          group = pub.duplicate_group
 
       expect(group.publications).to contain_exactly(pub, duplicate_pub)
     end
 
-    it 'hides new publications that might be duplicates' do
-      importer.call
+        it 'hides new publications that might be duplicates' do
+          importer.call
 
-      import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                         source_identifier: 'non-existing-identifier')
-      pub = import.publication
-
-      expect(pub.visible).to be false
+          import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                            source_identifier: 'non-existing-identifier')
+          pub = import.publication
+          expect(pub.visible).to be false
+        end
+      end
     end
 
     it 'runs the DOI verification' do
