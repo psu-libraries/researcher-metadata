@@ -261,39 +261,36 @@ describe PurePublicationImporter do
         end
 
         context 'when possible duplicate publications exists' do
-        let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
-        let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
+          let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
+          let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
-          it 'runs the auto-merge methods' do
-            expect(DuplicatePublicationGroup).to receive(:auto_merge)
-            expect(DuplicatePublicationGroup).to receive(:auto_merge_matching)
-            importer.call
+          before do
+            allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
           end
 
-          context 'when the auto-merge methods do not merge the duplicate records' do
-            before do
-              allow(DuplicatePublicationGroup).to receive(:auto_merge).and_return nil
-              allow(DuplicatePublicationGroup).to receive(:auto_merge_matching).and_return nil
-            end
+          it 'runs the auto-merge methods' do
+            importer.call
+            expect(DuplicatePublicationGroup).to have_received(:auto_merge)
+            expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
+          end
 
-            it 'groups possible duplicates of new publication records' do
-              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
-              importer.call
-              p2 = found_pub2.publication
-              group = p2.duplicate_group
+          it 'groups possible duplicates of new publication records' do
+            expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+            importer.call
+            p2 = found_pub2.publication
+            group = p2.duplicate_group
 
-          expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
-        end
+            expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
+          end
 
-            it 'hides existing publications that might be duplicates' do
-              importer.call
+          it 'hides existing publications that might be duplicates' do
+            importer.call
 
-              p2 = found_pub2.publication
+            p2 = found_pub2.publication
 
-              expect(p2.visible).to be true
-              expect(duplicate_pub1.reload.visible).to be false
-              expect(duplicate_pub2.reload.visible).to be false
-            end
+            expect(p2.visible).to be true
+            expect(duplicate_pub1.reload.visible).to be false
+            expect(duplicate_pub2.reload.visible).to be false
           end
         end
 
@@ -529,39 +526,38 @@ describe PurePublicationImporter do
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
           end
+
           context 'when there are possible duplicates' do
             let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
             let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
-            it 'runs the auto-merge methods' do
-              expect(DuplicatePublicationGroup).to receive(:auto_merge)
-              expect(DuplicatePublicationGroup).to receive(:auto_merge_matching)
-              importer.call
+            before do
+              allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
             end
 
-            context 'when the auto_merge methods do not merge the records' do
-              before do
-                allow(DuplicatePublicationGroup).to receive(:auto_merge).and_return nil
-                allow(DuplicatePublicationGroup).to receive(:auto_merge_matching).and_return nil
-              end
-              it 'groups possible duplicates of new publication records' do
-                expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+            it 'runs the auto-merge methods' do
+              importer.call
+              expect(DuplicatePublicationGroup).to have_received(:auto_merge)
+              expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
+            end
 
-                p2 = found_pub2.publication
-                group = p2.duplicate_group
+            it 'groups possible duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
-            expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
-          end
+              p2 = found_pub2.publication
+              group = p2.duplicate_group
 
-              it 'hides existing publications that might be duplicates' do
-                importer.call
+              expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
+            end
 
-                p2 = found_pub2.publication
+            it 'hides existing publications that might be duplicates' do
+              importer.call
 
-                expect(p2.visible).to be true
-                expect(duplicate_pub1.reload.visible).to be false
-                expect(duplicate_pub2.reload.visible).to be false
-              end
+              p2 = found_pub2.publication
+
+              expect(p2.visible).to be true
+              expect(duplicate_pub1.reload.visible).to be false
+              expect(duplicate_pub2.reload.visible).to be false
             end
           end
         end
@@ -751,40 +747,38 @@ describe PurePublicationImporter do
             expect(new_pub.visible).to be true
             expect(new_pub.doi).to be_nil
           end
+
           context 'when there are possible duplicates' do
             let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
             let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
-            it 'runs the auto-merge methods' do
-              expect(DuplicatePublicationGroup).to receive(:auto_merge)
-              expect(DuplicatePublicationGroup).to receive(:auto_merge_matching)
-              importer.call
+            before do
+              allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
             end
 
-            context 'when the automerge methods do not merge the possible duplicates' do
-              before do
-                allow(DuplicatePublicationGroup).to receive(:auto_merge).and_return nil
-                allow(DuplicatePublicationGroup).to receive(:auto_merge_matching).and_return nil
-              end
+            it 'runs the auto-merge methods' do
+              importer.call
+              expect(DuplicatePublicationGroup).to have_received(:auto_merge)
+              expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
+            end
 
-              it 'groups possible duplicates of new publication records' do
-                expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+            it 'groups possible duplicates of new publication records' do
+              expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
 
-                p2 = found_pub2.publication
-                group = p2.duplicate_group
+              p2 = found_pub2.publication
+              group = p2.duplicate_group
 
-            expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
-          end
+              expect(group.publications).to contain_exactly(p2, duplicate_pub1, duplicate_pub2)
+            end
 
-              it 'hides existing publications that might be duplicates' do
-                importer.call
+            it 'hides existing publications that might be duplicates' do
+              importer.call
 
-                p2 = found_pub2.publication
+              p2 = found_pub2.publication
 
-                expect(p2.visible).to be true
-                expect(duplicate_pub1.reload.visible).to be false
-                expect(duplicate_pub2.reload.visible).to be false
-              end
+              expect(p2.visible).to be true
+              expect(duplicate_pub1.reload.visible).to be false
+              expect(duplicate_pub2.reload.visible).to be false
             end
           end
         end

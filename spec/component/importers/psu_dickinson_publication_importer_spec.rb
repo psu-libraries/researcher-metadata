@@ -144,38 +144,36 @@ describe PSUDickinsonPublicationImporter do
 
     context 'when there are duplicate records' do
       let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
-      it 'calls the auto_merge methods' do
-        duplicate_pub = create(:publication, title: 'A Penn State Law Article')
-        expect(DuplicatePublicationGroup).to receive(:auto_merge)
-        expect(DuplicatePublicationGroup).to receive(:auto_merge_matching)
-        importer.call
+
+      before do
+        allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
       end
 
-      context 'when the auto_merge do not automatically merge the publications' do
-        before do
-          allow(DuplicatePublicationGroup).to receive(:auto_merge).and_return nil
-          allow(DuplicatePublicationGroup).to receive(:auto_merge_matching).and_return nil
-        end
+      it 'calls the auto_merge methods' do
+        create(:publication, title: 'A Penn State Law Article')
+        importer.call
+        expect(DuplicatePublicationGroup).to have_received(:auto_merge)
+        expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
+      end
 
-        it 'groups duplicates of new publication records' do
-          expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
-          import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                            source_identifier: 'non-existing-identifier')
-          pub = import.publication
+      it 'groups duplicates of new publication records' do
+        expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                           source_identifier: 'non-existing-identifier')
+        pub = import.publication
 
-          group = pub.duplicate_group
+        group = pub.duplicate_group
 
-      expect(group.publications).to contain_exactly(pub, duplicate_pub)
-    end
+        expect(group.publications).to contain_exactly(pub, duplicate_pub)
+      end
 
-        it 'hides new publications that might be duplicates' do
-          importer.call
+      it 'hides new publications that might be duplicates' do
+        importer.call
 
-          import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                            source_identifier: 'non-existing-identifier')
-          pub = import.publication
-          expect(pub.visible).to be false
-        end
+        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                           source_identifier: 'non-existing-identifier')
+        pub = import.publication
+        expect(pub.visible).to be false
       end
     end
 

@@ -918,8 +918,8 @@ describe ActivityInsightImporter do
         end
 
         it 'calls the auto-merge methods' do
-          expect(DuplicatePublicationGroup).to receive(:auto_merge).exactly(2).times
-          expect(DuplicatePublicationGroup).to receive(:auto_merge_matching).exactly(2).times
+          expect(DuplicatePublicationGroup).to receive(:auto_merge).twice
+          expect(DuplicatePublicationGroup).to receive(:auto_merge_matching).twice
           importer.call
         end
 
