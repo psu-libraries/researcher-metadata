@@ -34,8 +34,6 @@ describe PurePublicationImporter do
   end
 
   describe '#call' do
-    let!(:duplicate_pub1) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
-    let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
     let(:now) { Time.new(2025, 1, 29, 12, 17, 0) }
 
     before { allow(Time).to receive(:current).and_return now }
