@@ -41,26 +41,8 @@
         </ul>
       </div>
     </nav>
-
-    <% if flash[:alert].present? %>
-      <section>
-        <div class="alert alert-danger">
-          <%= flash[:alert] %>
-        </div>
-      </section>
-    <% end %>
-    <% if flash[:notice].present? %>
-      <section>
-        <div class="alert alert-success alert-dismissable">
-          <button type="button" class="close" data-dismiss="alert">
-            <span aria-hidden="true">&times;</span>
-            <span class="sr-only">Close</span>
-          </button>
-          <%= flash[:notice] %>
-        </div>
-      </section>
-    <% end %>
-
+    <%= render partial: 'shared/flash_notice' %>
+    <%= render partial: 'shared/flash_alert' %>
     <%= yield %>
 
     <footer>
