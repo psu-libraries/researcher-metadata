@@ -1,17 +1,17 @@
 <header>
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <div class="header-mark navbar-brand">
-        <a class="site-logo" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
-        <div class="header--nav-search">
-          <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasMain" aria-controls="offcanvasMain" aria-expanded="false" aria-label="Show offcanvas nav">
-            <span class="navbar-toggler-icon navbar-dark"></span>
-          </button>
-        </div>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+    <a class="navbar-brand" href="#"> <%= image_tag("penn-state-libraries-logo.png") %> </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#metadata-navbar" aria-controls="metadata-navbar" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="metadata-navbar">
+      <div class="navbar-nav ml-auto">
+        <%= link_to "Home", "/", class: "nav-item nav-link active" %>
+        <%= link_to "Admin", "/admin", class: "nav-item nav-link" %>
+        <%= link_to "API", "/api_docs", class: "nav-item nav-link" %>
       </div>
     </div>
-    <div class="d-none d-md-block container-fluid">
-      <%= render partial: 'shared/navbar_links' %>
     </div>
   </nav>
 </header>

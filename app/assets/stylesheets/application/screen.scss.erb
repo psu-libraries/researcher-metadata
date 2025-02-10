@@ -15,6 +15,10 @@ img {
 .navbar.mb-4 {
   margin-bottom: 0 !important;
 }
+.navbar-dark,
+footer {
+  background: #18161b;
+}
 .navbar-brand img {
   height: 55px;
 }
@@ -24,12 +28,12 @@ img {
     border: none;
   }
 }
-.navbar-dark,
-footer {
-  background: #18161b;
-}
-.sidebar-menu .navbar-nav li.menu-level-0 .btn {
-  font-weight: 500;
+header {
+  background-image: image-url('wave.png');
+  background-position: left bottom;
+  background-size: cover;
+  background-repeat: no-repeat;
+  padding: 2rem 0;
 }
 #rmd header {
   padding-bottom: 6rem;
@@ -37,16 +41,6 @@ footer {
 main {
   padding: 2rem 0 4rem;
 }
-
-.top-section {
-  background-image: image-url('wave.png');
-  background-position: left bottom;
-  background-size: cover;
-  background-repeat: no-repeat;
-  padding: 2rem 0;
-  min-height: 190px;
-}
-
 #lp main .row img {
   width: 100%;
   max-width: 200px;
@@ -99,10 +93,10 @@ footer .list-unstyled img {
 }
 /* Mobile only */
 @media screen and (max-width: 992px) {
-.top-section {
+  header {
     padding-bottom: 5rem;
     background-image: image-url('wave-sm.png');
-}
+  }
   #rmd main .col-lg-8 {
     margin-top: 2rem;
   }
