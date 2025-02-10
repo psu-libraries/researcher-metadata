@@ -1,9 +1,16 @@
 # frozen_string_literal: true
 
 module PublicationCleanupService
-  def self.clean_up_pure_publications(dry_run: true)
-    Publication.with_only_pure_imports.find_each do |pub|
-      if !SourcePublication.find_in_latest_pure_list(pub) && PurePersonFinder.new.detect_publication_author(pub)
+  class IneligiblePublication < RuntimeError; end
+
+  def self.call(dry_run: true)
+    Publication.eligible_for_cleanup_check.find_each do |pub|
+      raise IneligiblePublication if pub.pure_imports.none? && pub.ai_imports.none?
+
+      if (pub.pure_imports.none? ||
+          (!SourcePublication.find_in_latest_pure_list(pub) &&
+            PurePersonFinder.new.detect_publication_author(pub))
+         ) && (pub.ai_imports.none? || !SourcePublication.find_in_latest_ai_list(pub))
         if dry_run
           puts "Publication #{pub.id} will be deleted"
         else

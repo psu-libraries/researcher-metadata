@@ -3,107 +3,430 @@
 require 'component/component_spec_helper'
 
 describe PublicationCleanupService do
-  describe '.clean_up_pure_publications' do
+  describe '.call' do
     context 'with dependencies mocked' do
       let(:relation) { instance_double ActiveRecord::Relation }
-      let(:pub) { instance_spy Publication, id: 123 }
+      let(:pub) {
+        instance_spy(
+          Publication,
+          id: 123,
+          pure_imports: pure_imports,
+          ai_imports: ai_imports
+        )
+      }
       let(:ppf) { instance_double PurePersonFinder }
 
       before do
         allow(relation).to receive(:find_each).and_yield(pub)
-        allow(Publication).to receive(:with_only_pure_imports).and_return relation
+        allow(Publication).to receive(:eligible_for_cleanup_check).and_return relation
         allow(PurePersonFinder).to receive(:new).and_return ppf
       end
 
-      context 'when a publication with only Pure imports is not in the current list of Pure publications' do
-        before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return nil }
+      context 'when a publication that is eligible for cleanup has imports from Pure' do
+        let(:pure_imports) { [instance_double(PublicationImport)] }
 
-        context 'when the publication has an author that is currently in Pure' do
-          before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+        context 'when the publication is present in the latest pure import list' do
+          before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return pub }
 
-          context 'when the dry_run option is not set' do
-            it 'outputs a message saying that the publication will be deleted' do
-              expect { described_class.clean_up_pure_publications }.to output("Publication 123 will be deleted\n").to_stdout
+          context 'when the publication has an author that is currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
             end
 
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications
-              expect(pub).not_to have_received(:destroy!)
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
             end
           end
 
-          context 'when the dry_run option is set to false' do
-            it 'outputs a message saying the the publication is being deleted' do
-              expect { described_class.clean_up_pure_publications(dry_run: false) }.to output("Deleting publication 123\n").to_stdout
+          context 'when the publication has no authors that are currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
             end
 
-            it 'deletes the publication' do
-              described_class.clean_up_pure_publications(dry_run: false)
-              expect(pub).to have_received(:destroy!)
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
             end
           end
         end
 
-        context 'when the publication has no authors that are currently in Pure' do
-          before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+        context 'when the publication is not present in the latest pure import list' do
+          before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return nil }
 
-          context 'when the dry_run option is not set' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has an author that is currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              # Not expected to occur
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
             end
           end
 
-          context 'when the dry_run option is set to false' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications(dry_run: false)
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has no authors that are currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
             end
           end
         end
       end
 
-      context 'when a publication with only Pure imports is in the current list of Pure publications' do
-        before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return pub }
+      context 'when a publication that is eligible for cleanup does not have imports from Pure' do
+        let(:pure_imports) { [] }
 
-        context 'when the publication has an author that is currently in Pure' do
-          before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+        # Not expected to occur
+        context 'when the publication is present in the latest pure import list' do
+          before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return pub }
 
-          context 'when the dry_run option is not set' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has an author that is currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
             end
           end
 
-          context 'when the dry_run option is set to false' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications(dry_run: false)
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has no authors that are currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
             end
           end
         end
 
-        context 'when the publication has no authors that are currently in Pure' do
-          before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+        context 'when the publication is not present in the latest pure import list' do
+          before { allow(SourcePublication).to receive(:find_in_latest_pure_list).with(pub).and_return nil }
 
-          context 'when the dry_run option is not set' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has an author that is currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(instance_double(User)) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
             end
           end
 
-          context 'when the dry_run option is set to false' do
-            it 'does not delete the publication' do
-              described_class.clean_up_pure_publications(dry_run: false)
-              expect(pub).not_to have_received(:destroy!)
+          context 'when the publication has no authors that are currently in Pure' do
+            before { allow(ppf).to receive(:detect_publication_author).with(pub).and_return(nil) }
+
+            context 'when the publication has imports from Activity Insight' do
+              let(:ai_imports) { [instance_double(PublicationImport)] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'does not delete the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).not_to have_received(:destroy!)
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'deletes the publication' do
+                  described_class.call(dry_run: false)
+                  expect(pub).to have_received(:destroy!)
+                end
+              end
+            end
+
+            context 'when the publication does not have imports from Activity Insight' do
+              let(:ai_imports) { [] }
+
+              context 'when the publication is present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return pub }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
+
+              context 'when the publication is not present in the latest Activity Insight import list' do
+                before { allow(SourcePublication).to receive(:find_in_latest_ai_list).with(pub).and_return nil }
+
+                it 'raises an error' do
+                  expect { described_class.call(dry_run: false) }.to raise_error PublicationCleanupService::IneligiblePublication
+                end
+              end
             end
           end
         end
       end
     end
 
+    # This is intended only to test that all of the units are correctly integrated from end to end
+    # for a couple of scenarios.
     context 'with real internal dependencies' do
       let!(:pub1) { create(:publication) }
       let!(:pub1_author) { create(:user, pure_uuid: 'asdfghjkl') }
@@ -118,6 +441,15 @@ describe PublicationCleanupService do
         create(
           :import,
           source: 'Pure',
+          started_at: 2.hours.ago,
+          completed_at: 1.hour.ago
+        )
+      }
+
+      let!(:latest_ai_import) {
+        create(
+          :import,
+          source: 'Activity Insight',
           started_at: 2.hours.ago,
           completed_at: 1.hour.ago
         )
@@ -147,7 +479,7 @@ describe PublicationCleanupService do
 
       it 'deletes the correct publications' do
         expect {
-          described_class.clean_up_pure_publications(dry_run: false)
+          described_class.call(dry_run: false)
         }.to change(Publication, :count).by(-1)
 
         expect { pub2.reload }.to raise_error(ActiveRecord::RecordNotFound)

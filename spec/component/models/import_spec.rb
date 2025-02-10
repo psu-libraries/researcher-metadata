@@ -62,4 +62,43 @@ describe Import, type: :model do
       end
     end
   end
+
+  describe '.latest_completed_from_ai' do
+    context 'when there are no import records' do
+      it 'returns nil' do
+        expect(described_class.latest_completed_from_ai).to be_nil
+      end
+    end
+
+    context 'when there is only an incomplete import from Activity Insight' do
+      before { create(:import, source: 'Activity Insight', completed_at: nil) }
+
+      it 'returns nil' do
+        expect(described_class.latest_completed_from_ai).to be_nil
+      end
+    end
+
+    context 'when there is only a completed import from Pure' do
+      before { create(:import, source: 'Pure', completed_at: Time.current) }
+
+      it 'returns nil' do
+        expect(described_class.latest_completed_from_ai).to be_nil
+      end
+    end
+
+    context 'when there are multiple import records' do
+      let!(:import) { create(:import, source: 'Activity Insight', completed_at: 1.week.ago) }
+
+      before do
+        create(:import, source: 'Pure', completed_at: 1.day.ago)
+        create(:import, source: 'Activity Insight', completed_at: nil)
+        create(:import, source: 'Activity Insight', completed_at: 1.year.ago)
+        create(:import, source: 'Activity Insight', completed_at: 1.month.ago)
+      end
+
+      it 'returns the most recently completed import from Activity Insight' do
+        expect(described_class.latest_completed_from_ai).to eq import
+      end
+    end
+  end
 end
