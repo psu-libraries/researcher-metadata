@@ -1414,7 +1414,7 @@ describe Publication, type: :model do
     end
 
     it 'returns publications that have a Pure or Activity Insight import, no imports from other sources, no files, no waivers, and no user or ScholarSphere open access locations' do
-      expect(described_class.eligible_for_cleanup_check).to match_array [pub2, pub3, pub4, pub9, pub14, pub15]
+      expect(described_class.eligible_for_cleanup_check).to contain_exactly(pub2, pub3, pub4, pub9, pub14, pub15)
     end
   end
 
@@ -3971,7 +3971,7 @@ describe Publication, type: :model do
       let(:pub) { create(:publication, imports: [pure_import]) }
 
       it 'returns an array containing the import' do
-        expect(pub.pure_imports).to match_array [pure_import]
+        expect(pub.pure_imports).to contain_exactly(pure_import)
       end
     end
 
@@ -4000,7 +4000,7 @@ describe Publication, type: :model do
       let(:pub) { create(:publication, imports: [ai_import]) }
 
       it 'returns an array containing the import' do
-        expect(pub.ai_imports).to match_array [ai_import]
+        expect(pub.ai_imports).to contain_exactly(ai_import)
       end
     end
 
