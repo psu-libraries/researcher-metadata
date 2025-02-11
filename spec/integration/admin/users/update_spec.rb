@@ -57,6 +57,7 @@ describe 'updating a user via the admin interface', type: :feature do
         fill_in 'First name', with: 'Robert'
         fill_in 'Middle name', with: 'Allen'
         fill_in 'Last name', with: 'Testerson'
+        fill_in 'Title', with: 'Staff'
         fill_in 'Pure ID', with: 'pure-def456'
         fill_in 'Activity Insight ID', with: 'ai-ghi111'
         fill_in 'Penn State ID', with: '123456789'
@@ -76,6 +77,10 @@ describe 'updating a user via the admin interface', type: :feature do
 
       it "updates the user record's last name" do
         expect(user.reload.last_name).to eq 'Testerson'
+      end
+
+      it "updates the user record's title" do
+        expect(user.reload.ai_title).to eq 'Staff'
       end
 
       it "updates the user record's Pure UUID" do
