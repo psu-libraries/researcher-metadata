@@ -209,6 +209,7 @@ class ActivityInsightImporter
           if activity_insight_file_location.blank?
             existing_file = ActivityInsightOAFile.find_by(intellcont_id: pub.activity_insight_id)
             if existing_file.present?
+              AiOAStatusExportJob.perform_later(existing_file.id, nil)
               ActivityInsightOAFile.destroy_by(intellcont_id: pub.activity_insight_id)
               pub_record.update! activity_insight_postprint_status: nil
             end
