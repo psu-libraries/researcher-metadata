@@ -24,6 +24,15 @@ body {
   color: #fff;
 }
 
+.btn-link {
+  color: $pa-link;
+}
+
+.btn-link:hover:focus {
+  color: $perpetual-wonder;
+  text-decoration: underline;
+}
+
 .manage-profile-nav {
   background-color: #fff;
   border-bottom: 1px solid lightgrey;

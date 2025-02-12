@@ -7,11 +7,13 @@ $nittany-navy: #001e44;
 
 a {
   color: $pa-link;
+  text-decoration: none;
 }
 
 a:hover,
 a:focus {
   color: $perpetual-wonder;
+  text-decoration: underline;
 }
 
 .button,

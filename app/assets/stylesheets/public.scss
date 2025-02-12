@@ -1,0 +1,11 @@
+@import 'variables';
+
+a {
+  color: $pa-link;
+  text-decoration: none;
+}
+
+a:hover {
+  color: $nittany-navy;
+  text-decoration: underline;
+}
