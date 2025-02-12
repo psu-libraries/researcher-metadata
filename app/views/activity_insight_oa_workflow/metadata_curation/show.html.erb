@@ -37,7 +37,7 @@
           <strong>Depositor:</strong> <%= @publication.ai_file_for_deposit.user.name %> (<%= @publication.ai_file_for_deposit.user.webaccess_id %>)
         </li>
         <li class='list-group-item'>
-          <p class='float-left'>
+          <p class='float-start'>
             <strong>File Download:</strong>
             <% if @publication.ai_file_for_deposit.file_download_location.present? %>
               <%= link_to @publication.ai_file_for_deposit.download_filename,
@@ -47,17 +47,17 @@
               Not Found
             <% end %>
           </p>
-          <p class='float-right'><strong>Created On:</strong> <%= @publication.ai_file_for_deposit.created_at.to_date %></p>
+          <p class='float-end'><strong>Created On:</strong> <%= @publication.ai_file_for_deposit.created_at.to_date %></p>
         </li>
       </ul>
       <div class='card-footer'>
       <div class='d-flex'>
-        <div class='mr-auto'>
+        <div class='me-auto'>
           <%= link_to(
             'Edit Publication Metadata',
             rails_admin.edit_path(model_name: :publication, id: @publication.id),
             target: 'blank') %>
-            <span class="ml-3"><%= link_to(
+            <span class="ms-3"><%= link_to(
               'Edit File Metadata',
               rails_admin.edit_path(model_name: :activity_insight_oa_file, id: @publication.ai_file_for_deposit.id),
               target: 'blank') %>
