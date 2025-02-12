@@ -1,5 +1,5 @@
 @import 'base';
-
+@import 'variables';
 img {
   max-width: 100%;
 }
@@ -29,6 +29,9 @@ img {
 footer {
   background: #18161b;
 }
+.navbar-dark, header {
+  background: transparent;
+}
 .sidebar-menu .navbar-nav li.menu-level-0 .btn {
   font-weight: 500;
 }
@@ -48,11 +51,11 @@ main {
   min-height: 190px;
 }
 
-#lp main .row img {
+#home-page main .row img {
   width: 100%;
   max-width: 200px;
 }
-#lp main .col-lg-4 {
+#home-page main .col-lg-4 {
   margin-bottom: 2rem;
 }
 #rmd header h1 {
@@ -91,7 +94,7 @@ footer .list-unstyled img {
   .lead {
     font-size: 1.5em;
   }
-  #lp main .col-lg-4 {
+  #home-page main .col-lg-4 {
     padding: 0 2rem;
   }
   #rmd main .col-lg-4 {
@@ -126,4 +129,20 @@ footer .list-unstyled img {
 
 .notice {
   margin-bottom: 0;
+}
+
+a {
+  text-decoration: none;
+}
+a:hover {
+  color: $nittany-navy;
+  text-decoration: underline;
+}
+
+// Bootstrap 5 added card styling that we don't want – keeps the look with inherit
+.card {
+  color: inherit;
+}
+a.card-link:hover{
+  text-decoration: none;
 }
