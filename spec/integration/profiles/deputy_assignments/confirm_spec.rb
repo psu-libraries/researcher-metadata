@@ -8,7 +8,7 @@ describe 'Confirming a Proxy', type: :feature do
     before { visit deputy_assignments_path }
 
     it 'is not allowed' do
-      expect(page).not_to have_current_path(deputy_assignments_path)
+      expect(page).to have_no_current_path(deputy_assignments_path)
     end
   end
 
@@ -31,7 +31,7 @@ describe 'Confirming a Proxy', type: :feature do
       expect(deputy_assignment.reload).to be_confirmed
 
       within "##{dom_id(deputy_assignment)}" do
-        expect(page).not_to have_button(accept_button)
+        expect(page).to have_no_button(accept_button)
       end
     end
 

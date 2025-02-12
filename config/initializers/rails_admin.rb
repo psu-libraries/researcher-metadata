@@ -107,7 +107,8 @@ RailsAdmin.config do |config|
             :OpenAccessLocation,
             :Publication,
             :User,
-            :Authorship]
+            :Authorship,
+            :EducationHistoryItem]
     end
     index_publications_by_organization do
       only [:Publication]

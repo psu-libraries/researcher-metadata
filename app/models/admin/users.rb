@@ -163,6 +163,7 @@ module Admin::Users
             !bindings[:view]._current_user.is_admin
           end
         end
+        field(:ai_title) { label 'Title' }
         field(:pure_uuid) do
           label 'Pure ID'
           read_only do

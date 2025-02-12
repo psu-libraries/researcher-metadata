@@ -34,9 +34,9 @@ describe 'Admin Wrong File Version Author Notified Review dashboard', type: :fea
       expect(page).to have_text('Download File')
       expect(page).to have_text(pub1.title)
       expect(page).to have_text(pub1.wrong_oa_version_notification_sent_at.strftime('%m/%d/%Y'))
-      expect(page).not_to have_text(aif1.created_at.strftime('%m/%d/%Y'))
+      expect(page).to have_no_text(aif1.created_at.strftime('%m/%d/%Y'))
       expect(page).to have_text(pub2.title)
-      expect(page).not_to have_text(pub3.title)
+      expect(page).to have_no_text(pub3.title)
       expect(page).to have_text('Accepted Manuscript').twice
       expect(page).to have_text('Final Published Version').twice
       expect(page).to have_link(aif1.download_filename)

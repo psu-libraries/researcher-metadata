@@ -4,6 +4,7 @@ require 'component/component_spec_helper'
 
 describe ActivityInsightImporter do
   let(:importer) { described_class.new }
+  let(:now) { Time.new(2025, 1, 29, 15, 20, 0) }
 
   before do
     allow(HTTParty).to receive(:get).with('https://webservices.digitalmeasures.com/login/service/v4/User',
@@ -25,6 +26,7 @@ describe ActivityInsightImporter do
                                                         )
     allow(DOIVerificationJob).to receive(:perform_later)
     allow(AiOAStatusExportJob).to receive(:perform_later)
+    allow(Time).to receive(:current).and_return(now)
   end
 
   describe '#call' do
@@ -753,6 +755,49 @@ describe ActivityInsightImporter do
       end
 
       context 'when no included publications exist in the database' do
+        it 'creates a record of running the import process' do
+          expect { importer.call }.to change(Import, :count).by 1
+
+          import = Import.last
+          expect(import.started_at).to eq now
+          expect(import.completed_at).not_to be_nil
+          expect(import.source).to eq 'Activity Insight'
+        end
+
+        it 'creates a record of each publication that is available from the source' do
+          expect { importer.call }.to change(SourcePublication, :count).by 7
+
+          import = Import.last
+          sp1 = SourcePublication.find_by(source_identifier: '190706413568')
+          sp2 = SourcePublication.find_by(source_identifier: '171620739072')
+          sp3 = SourcePublication.find_by(source_identifier: '271620739072')
+          sp4 = SourcePublication.find_by(source_identifier: '837619053822')
+          sp5 = SourcePublication.find_by(source_identifier: '92747188475')
+          sp6 = SourcePublication.find_by(source_identifier: '190707482930')
+          sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+
+          expect(sp1.import).to eq import
+          expect(sp1.status).to eq 'Published'
+
+          expect(sp2.import).to eq import
+          expect(sp2.status).to eq 'Published'
+
+          expect(sp3.import).to eq import
+          expect(sp3.status).to eq 'In Press'
+
+          expect(sp4.import).to eq import
+          expect(sp4.status).to eq 'Other'
+
+          expect(sp5.import).to eq import
+          expect(sp5.status).to eq 'Published'
+
+          expect(sp6.import).to eq import
+          expect(sp6.status).to eq 'In Press'
+
+          expect(sp7.import).to eq import
+          expect(sp7.status).to eq 'Published'
+        end
+
         it 'creates a new publication import record for every Published or In Press publication' do
           expect { importer.call }.to change(PublicationImport, :count).by 6
         end
@@ -869,7 +914,7 @@ describe ActivityInsightImporter do
 
           group = p1.duplicate_group
 
-          expect(group.publications).to match_array [p1, duplicate_pub]
+          expect(group.publications).to contain_exactly(p1, duplicate_pub)
         end
 
         it 'hides new publications that might be duplicates' do
@@ -1074,6 +1119,49 @@ describe ActivityInsightImporter do
 
           let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
+          it 'creates a record of running the import process' do
+            expect { importer.call }.to change(Import, :count).by 1
+
+            import = Import.last
+            expect(import.started_at).to eq now
+            expect(import.completed_at).not_to be_nil
+            expect(import.source).to eq 'Activity Insight'
+          end
+
+          it 'creates a record of each publication that is available from the source' do
+            expect { importer.call }.to change(SourcePublication, :count).by 7
+
+            import = Import.last
+            sp1 = SourcePublication.find_by(source_identifier: '190706413568')
+            sp2 = SourcePublication.find_by(source_identifier: '171620739072')
+            sp3 = SourcePublication.find_by(source_identifier: '271620739072')
+            sp4 = SourcePublication.find_by(source_identifier: '837619053822')
+            sp5 = SourcePublication.find_by(source_identifier: '92747188475')
+            sp6 = SourcePublication.find_by(source_identifier: '190707482930')
+            sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+
+            expect(sp1.import).to eq import
+            expect(sp1.status).to eq 'Published'
+
+            expect(sp2.import).to eq import
+            expect(sp2.status).to eq 'Published'
+
+            expect(sp3.import).to eq import
+            expect(sp3.status).to eq 'In Press'
+
+            expect(sp4.import).to eq import
+            expect(sp4.status).to eq 'Other'
+
+            expect(sp5.import).to eq import
+            expect(sp5.status).to eq 'Published'
+
+            expect(sp6.import).to eq import
+            expect(sp6.status).to eq 'In Press'
+
+            expect(sp7.import).to eq import
+            expect(sp7.status).to eq 'Published'
+          end
+
           it 'creates a new publication import record for every new Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 3
           end
@@ -1190,7 +1278,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -1367,6 +1455,49 @@ describe ActivityInsightImporter do
 
           let!(:existing_cont) { create(:contributor_name, publication: existing_pub) }
 
+          it 'creates a record of running the import process' do
+            expect { importer.call }.to change(Import, :count).by 1
+
+            import = Import.last
+            expect(import.started_at).to eq now
+            expect(import.completed_at).not_to be_nil
+            expect(import.source).to eq 'Activity Insight'
+          end
+
+          it 'creates a record of each publication that is available from the source' do
+            expect { importer.call }.to change(SourcePublication, :count).by 7
+
+            import = Import.last
+            sp1 = SourcePublication.find_by(source_identifier: '190706413568')
+            sp2 = SourcePublication.find_by(source_identifier: '171620739072')
+            sp3 = SourcePublication.find_by(source_identifier: '271620739072')
+            sp4 = SourcePublication.find_by(source_identifier: '837619053822')
+            sp5 = SourcePublication.find_by(source_identifier: '92747188475')
+            sp6 = SourcePublication.find_by(source_identifier: '190707482930')
+            sp7 = SourcePublication.find_by(source_identifier: '171620739090')
+
+            expect(sp1.import).to eq import
+            expect(sp1.status).to eq 'Published'
+
+            expect(sp2.import).to eq import
+            expect(sp2.status).to eq 'Published'
+
+            expect(sp3.import).to eq import
+            expect(sp3.status).to eq 'In Press'
+
+            expect(sp4.import).to eq import
+            expect(sp4.status).to eq 'Other'
+
+            expect(sp5.import).to eq import
+            expect(sp5.status).to eq 'Published'
+
+            expect(sp6.import).to eq import
+            expect(sp6.status).to eq 'In Press'
+
+            expect(sp7.import).to eq import
+            expect(sp7.status).to eq 'Published'
+          end
+
           it 'creates a new publication import record for every new Published or In Press publication' do
             expect { importer.call }.to change(PublicationImport, :count).by 3
           end
@@ -1481,7 +1612,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -2530,7 +2661,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -2797,7 +2928,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -3091,7 +3222,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -4112,7 +4243,7 @@ describe ActivityInsightImporter do
 
             group = p1.duplicate_group
 
-            expect(group.publications).to match_array [p1, duplicate_pub]
+            expect(group.publications).to contain_exactly(p1, duplicate_pub)
           end
 
           it 'hides new publications that might be duplicates' do
@@ -4374,7 +4505,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do
@@ -4667,7 +4798,7 @@ describe ActivityInsightImporter do
 
               group = p1.duplicate_group
 
-              expect(group.publications).to match_array [p1, duplicate_pub]
+              expect(group.publications).to contain_exactly(p1, duplicate_pub)
             end
 
             it 'hides new publications that might be duplicates' do

@@ -38,6 +38,8 @@ module RailsAdmin
                 flash[:success] = t('admin.flash.successful', name: @model_config.label, action: t('admin.actions.delete.done'))
                 if @object.is_a? OpenAccessLocation
                   redirect_to show_path(model_name: :publication, id: @object.publication.id)
+                elsif @object.is_a? EducationHistoryItem
+                  redirect_to show_path(model_name: :user, id: @object.user.id)
                 else
                   redirect_to index_path
                 end
