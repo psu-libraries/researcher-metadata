@@ -16,7 +16,7 @@ class ActivityInsightOAFile < ApplicationRecord
      'Already Openly Available',
      'Deposited to ScholarSphere',
      'In Progress',
-    nil]
+     nil]
   end
 
   def self.licenses

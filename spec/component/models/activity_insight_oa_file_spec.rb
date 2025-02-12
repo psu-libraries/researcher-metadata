@@ -70,7 +70,8 @@ RSpec.describe ActivityInsightOAFile, type: :model do
         'Cannot Deposit',
         'Already Openly Available',
         'Deposited to ScholarSphere',
-        'In Progress'
+        'In Progress',
+        nil
       ]
     end
   end
