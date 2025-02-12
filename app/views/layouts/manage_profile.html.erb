@@ -23,14 +23,14 @@
 
   <nav class="navbar navbar-expand-lg navbar-light manage-profile-nav">
     <span class="navbar-brand"><%= image_tag('logo.png', alt: "Penn State", class: 'logo') %></span>
-    <ul class="navbar-nav mr-auto">
+    <ul class="navbar-nav me-auto">
       <li class="nav-item<%= ' active' if action_name == 'bio' %>"><%= link_to t(".nav.bio"), profile_bio_path, class: 'nav-link' %></li>
       <li class="nav-item<%= ' active' if action_name == 'edit_publications' %>"><%= link_to t(".nav.publications"), edit_profile_publications_path, class: 'nav-link' %></li>
       <li class="nav-item<%= ' active' if action_name == 'edit_presentations' %>"><%= link_to t(".nav.presentations"), edit_profile_presentations_path, class: 'nav-link' %></li>
       <li class="nav-item<%= ' active' if action_name == 'edit_performances' %>"><%= link_to t(".nav.performances"), edit_profile_performances_path, class: 'nav-link' %></li>
       <li class="nav-item<%= ' active' if action_name == 'edit_other_publications' %>"><%= link_to t(".nav.other_works"), edit_profile_other_publications_path, class: 'nav-link' %></li>
     </ul>
-    <ul class="navbar-nav ml-auto">
+    <ul class="navbar-nav ms-auto">
       <li class="nav-item"><%= link_to t(".nav.home"), root_path, class: 'nav-link' %></li>
       <li class="nav-item"><%= link_to t(".nav.public_profile"), profile_path(webaccess_id: current_user.webaccess_id), class: 'nav-link' %></li>
       <li class="nav-item"><%= link_to t(".nav.deputies"), deputy_assignments_path, class: "nav-link" %></li>
@@ -38,24 +38,8 @@
       <li class="nav-item"><%= link_to t(".nav.sign_out"), destroy_user_session_path, class: "nav-link" %></li>
     </ul>
   </nav>
-  <% if flash[:alert].present? %>
-    <section>
-      <div class="alert alert-danger">
-        <%= flash[:alert] %>
-      </div>
-    </section>
-  <% end %>
-  <% if flash[:notice].present? %>
-    <section>
-      <div class="alert alert-success alert-dismissable">
-        <button type="button" class="close" data-dismiss="alert">
-          <span aria-hidden="true">&times;</span>
-          <span class="sr-only">Close</span>
-        </button>
-        <%= flash[:notice] %>
-      </div>
-    </section>
-  <% end %>
+  <%= render partial: 'shared/flash_notice' %>
+  <%= render partial: 'shared/flash_alert' %>
   <div class="container">
     <div class="row">
       <div class="col">
