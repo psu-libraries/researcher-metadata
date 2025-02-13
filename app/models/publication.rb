@@ -334,6 +334,42 @@ class Publication < ApplicationRecord
       )
   }
 
+  scope :eligible_for_cleanup_check, -> {
+    where(
+      <<-SQL.squish
+        (
+          EXISTS (
+            SELECT id FROM publication_imports
+            WHERE publication_imports.publication_id = publications.id
+              AND publication_imports.source = 'Activity Insight'
+          ) OR
+          EXISTS (
+            SELECT id FROM publication_imports
+            WHERE publication_imports.publication_id = publications.id
+              AND publication_imports.source = 'Pure'
+          )
+        ) AND NOT EXISTS (
+          SELECT id FROM publication_imports
+          WHERE publication_imports.publication_id = publications.id
+            AND publication_imports.source != 'Pure'
+            AND publication_imports.source != 'Activity Insight'
+        ) AND NOT EXISTS (
+          SELECT id FROM activity_insight_oa_files
+          WHERE activity_insight_oa_files.publication_id = publications.id
+        ) AND NOT EXISTS (
+          SELECT id FROM open_access_locations
+          WHERE open_access_locations.publication_id = publications.id
+            AND (open_access_locations.source = 'user' OR open_access_locations.source ='scholarsphere')
+        ) AND publications.id NOT IN (
+          SELECT publication_id FROM authorships
+          WHERE authorships.id IN (
+            SELECT authorship_id FROM internal_publication_waivers
+          )
+        )
+      SQL
+    )
+  }
+
   accepts_nested_attributes_for :authorships, allow_destroy: true
   accepts_nested_attributes_for :contributor_names, allow_destroy: true
   accepts_nested_attributes_for :taggings, allow_destroy: true
@@ -677,8 +713,16 @@ class Publication < ApplicationRecord
     merge([self, publication_to_merge]) { PublicationMergeOnMatchingPolicy.new(self, publication_to_merge).merge! }
   end
 
+  def pure_imports
+    imports.where(source: 'Pure')
+  end
+
+  def ai_imports
+    imports.where(source: 'Activity Insight')
+  end
+
   def has_pure_import?
-    imports.where(source: 'Pure').any?
+    pure_imports.any?
   end
 
   def has_single_import_from_pure?

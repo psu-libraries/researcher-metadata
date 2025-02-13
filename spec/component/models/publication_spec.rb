@@ -1341,6 +1341,83 @@ describe Publication, type: :model do
     end
   end
 
+  describe '.eligible_for_cleanup_check' do
+    let!(:pub1) { create(:publication) }
+    let!(:pub2) { create(:publication) }
+    let!(:pub3) { create(:publication) }
+    let!(:pub4) { create(:publication) }
+    let!(:pub5) { create(:publication) }
+    let!(:pub6) { create(:publication) }
+    let!(:pub7) { create(:publication) }
+    let!(:pub8) { create(:publication) }
+    let!(:pub9) { create(:publication) }
+    let!(:pub10) { create(:publication) }
+    let!(:pub11) { create(:publication) }
+    let!(:pub12) { create(:publication) }
+    let!(:pub13) { create(:publication) }
+    let!(:pub14) { create(:publication) }
+    let!(:pub15) { create(:publication) }
+    let!(:pub16) { create(:publication) }
+    let!(:pub17) { create(:publication) }
+
+    before do
+      create(:publication_import, publication: pub2, source: 'Activity Insight')
+
+      create(:publication_import, publication: pub3, source: 'Pure')
+
+      create(:publication_import, publication: pub4, source: 'Activity Insight')
+      create(:publication_import, publication: pub4, source: 'Pure')
+
+      create(:publication_import, publication: pub5, source: 'Activity Insight')
+      create(:publication_import, publication: pub5, source: 'Web of Science')
+
+      create(:publication_import, publication: pub6, source: 'Pure')
+      create(:publication_import, publication: pub6, source: 'Web of Science')
+
+      create(:publication_import, publication: pub7, source: 'Web of Science')
+
+      create(:publication_import, publication: pub8, source: 'Activity Insight')
+      create(:publication_import, publication: pub8, source: 'Pure')
+      create(:publication_import, publication: pub8, source: 'Web of Science')
+
+      create(:publication_import, publication: pub9, source: 'Activity Insight')
+      create(:publication_import, publication: pub9, source: 'Activity Insight')
+      create(:publication_import, publication: pub9, source: 'Pure')
+
+      create(:publication_import, publication: pub10, source: 'Activity Insight')
+      create(:activity_insight_oa_file, publication: pub10)
+
+      create(:publication_import, publication: pub11, source: 'Activity Insight')
+      create(:open_access_location, publication: pub11, source: 'user')
+
+      create(:publication_import, publication: pub12, source: 'Activity Insight')
+      create(:open_access_location, publication: pub12, source: 'scholarsphere')
+
+      create(:publication_import, publication: pub13, source: 'Activity Insight')
+      pub13_authorship = create(:authorship, publication: pub13)
+      create(:internal_publication_waiver, authorship: pub13_authorship)
+
+      create(:publication_import, publication: pub14, source: 'Activity Insight')
+      create(:authorship, publication: pub14)
+
+      create(:publication_import, publication: pub15, source: 'Activity Insight')
+      create(:open_access_location, publication: pub15, source: 'unpaywall')
+
+      create(:publication_import, publication: pub16, source: 'Activity Insight')
+      create(:open_access_location, publication: pub16, source: 'unpaywall')
+      create(:open_access_location, publication: pub16, source: 'scholarsphere')
+
+      create(:publication_import, publication: pub17, source: 'Activity Insight')
+      pub17_authorship = create(:authorship, publication: pub17)
+      create(:authorship, publication: pub17)
+      create(:internal_publication_waiver, authorship: pub17_authorship)
+    end
+
+    it 'returns publications that have a Pure or Activity Insight import, no imports from other sources, no files, no waivers, and no user or ScholarSphere open access locations' do
+      expect(described_class.eligible_for_cleanup_check).to contain_exactly(pub2, pub3, pub4, pub9, pub14, pub15)
+    end
+  end
+
   describe '.find_by_wos_pub' do
     let(:wos_pub) { double 'WoS publication',
                            doi: doi,
@@ -3883,6 +3960,64 @@ describe Publication, type: :model do
 
     it 'returns the IDs of all publications that are known to not be duplicates of the publication' do
       expect(pub.all_non_duplicate_ids).to eq [800000, 900000]
+    end
+  end
+
+  describe '#pure_imports' do
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+
+    context 'when the publication has an import from Pure' do
+      let(:pub) { create(:publication, imports: [pure_import]) }
+
+      it 'returns an array containing the import' do
+        expect(pub.pure_imports).to contain_exactly(pure_import)
+      end
+    end
+
+    context 'when the publication has an import from another source' do
+      let(:pub) { create(:publication, imports: [ai_import]) }
+
+      it 'returns an empty array' do
+        expect(pub.pure_imports).to eq []
+      end
+    end
+
+    context 'when the publication does not have any imports' do
+      let(:pub) { create(:publication) }
+
+      it 'returns an empty array' do
+        expect(pub.pure_imports).to eq []
+      end
+    end
+  end
+
+  describe '#ai_imports' do
+    let(:pure_import) { build(:publication_import, source: 'Pure') }
+    let(:ai_import) { build(:publication_import, source: 'Activity Insight') }
+
+    context 'when the publication has an import from Activity Insight' do
+      let(:pub) { create(:publication, imports: [ai_import]) }
+
+      it 'returns an array containing the import' do
+        expect(pub.ai_imports).to contain_exactly(ai_import)
+      end
+    end
+
+    context 'when the publication has an import from another source' do
+      let(:pub) { create(:publication, imports: [pure_import]) }
+
+      it 'returns an empty array' do
+        expect(pub.ai_imports).to eq []
+      end
+    end
+
+    context 'when the publication does not have any imports' do
+      let(:pub) { create(:publication) }
+
+      it 'returns an empty array' do
+        expect(pub.ai_imports).to eq []
+      end
     end
   end
 
