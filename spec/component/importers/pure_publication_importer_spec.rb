@@ -267,13 +267,13 @@ describe PurePublicationImporter do
           let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
           before do
-            allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
+            allow_any_instance_of(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
           end
 
           it 'runs the auto-merge methods' do
+            expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge)
+            expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge_matching)
             importer.call
-            expect(DuplicatePublicationGroup).to have_received(:auto_merge)
-            expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
           end
 
           it 'groups possible duplicates of new publication records' do
@@ -287,7 +287,6 @@ describe PurePublicationImporter do
 
           it 'hides existing publications that might be duplicates' do
             importer.call
-
             p2 = found_pub2.publication
 
             expect(p2.visible).to be true
@@ -534,13 +533,13 @@ describe PurePublicationImporter do
             let!(:duplicate_pub2) { create(:publication, title: 'Third Test Publication With a Really Unique Title', visible: true) }
 
             before do
-              allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
+              allow_any_instance_of(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
             end
 
             it 'runs the auto-merge methods' do
+              expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge)
+              expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge_matching)
               importer.call
-              expect(DuplicatePublicationGroup).to have_received(:auto_merge)
-              expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
             end
 
             it 'groups possible duplicates of new publication records' do
@@ -759,9 +758,9 @@ describe PurePublicationImporter do
             end
 
             it 'runs the auto-merge methods' do
+              expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge)
+              expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge_matching)
               importer.call
-              expect_any_instance_of(DuplicatePublicationGroup).to have_received(:auto_merge)
-              expect_any_instance_of(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
             end
 
             it 'groups possible duplicates of new publication records' do
