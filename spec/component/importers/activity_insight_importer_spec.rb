@@ -917,12 +917,6 @@ describe ActivityInsightImporter do
           expect(group.publications).to contain_exactly(p1, duplicate_pub)
         end
 
-        it 'calls the auto-merge methods' do
-          expect(DuplicatePublicationGroup).to receive(:auto_merge).twice
-          expect(DuplicatePublicationGroup).to receive(:auto_merge_matching).twice
-          importer.call
-        end
-
         it 'hides new publications that might be duplicates' do
           importer.call
 
@@ -930,6 +924,21 @@ describe ActivityInsightImporter do
                                          source_identifier: '190706413568').publication
 
           expect(p1.visible).to be false
+        end
+
+        context 'when some publications can be automerged' do
+          let!(:identical_publication) { create(:publication, title: 'First Test Publication With a Really Unique Title',
+                                                              doi: 'https://doi.org/10.1186/s40168-020-00798-w') }
+
+          it 'automatically merges them' do
+            # This is a bit wonky but by creating a publication that will match the removal criteria
+            # we can see that it is no longer saved after the importer is raised.
+            # allow_any_instance_of only works for the First instance, and since there are multiple
+            # matches in this context, it falls apart.
+            expect { identical_publication.reload }.not_to raise_error ActiveRecord::RecordNotFound
+            importer.call
+            expect { identical_publication.reload }.to raise_error ActiveRecord::RecordNotFound
+          end
         end
 
         it 'creates a new authorship record for every faculty author for each imported publication' do

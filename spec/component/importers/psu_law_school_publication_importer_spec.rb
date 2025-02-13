@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/AnyInstance
+
 require 'component/component_spec_helper'
 
 describe PSULawSchoolPublicationImporter do
@@ -146,13 +148,13 @@ describe PSULawSchoolPublicationImporter do
       let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
 
       before do
-        allow(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
+        allow_any_instance_of(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
       end
 
       it 'calls the auto-merge methods' do
+        expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge)
+        expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge_matching)
         importer.call
-        expect(DuplicatePublicationGroup).to have_received(:auto_merge)
-        expect(DuplicatePublicationGroup).to have_received(:auto_merge_matching)
       end
 
       it 'groups duplicates of new publication records' do
@@ -190,3 +192,5 @@ describe PSULawSchoolPublicationImporter do
     end
   end
 end
+
+# rubocop:enable RSpec/AnyInstance

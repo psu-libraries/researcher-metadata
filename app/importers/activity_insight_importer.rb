@@ -184,8 +184,9 @@ class ActivityInsightImporter
             DuplicatePublicationGroup.group_duplicates_of(pub_record)
             if pub_record.reload&.duplicate_group
               pub_record.update!(visible: false)
-              DuplicatePublicationGroup.auto_merge
-              DuplicatePublicationGroup.auto_merge_matching
+              unless pub_record.duplicate_group.auto_merge
+                pub_record.duplicate_group.auto_merge_matching
+              end
             end
           end
 

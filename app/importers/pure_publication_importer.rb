@@ -57,10 +57,10 @@ class PurePublicationImporter < PureImporter
 
             DuplicatePublicationGroup.group_duplicates_of(p)
             if p.reload&.duplicate_group
-              other_pubs = p.reload.duplicate_group.publications.where.not(id: p.id)
-              other_pubs.update_all(visible: false)
-              DuplicatePublicationGroup.auto_merge
-              DuplicatePublicationGroup.auto_merge_matching
+              p.update!(visible: false)
+              unless p.duplicate_group.auto_merge
+                p.duplicate_group.auto_merge_matching
+              end
             end
           end
 
