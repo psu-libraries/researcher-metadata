@@ -5162,6 +5162,7 @@ describe ActivityInsightImporter do
             expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
             expect(File.exists?(file_download_directory1)).to be false
             expect(pub1.reload.activity_insight_postprint_status).to be_nil
+            expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, nil)
           end
         end
 
@@ -5225,12 +5226,12 @@ describe ActivityInsightImporter do
                                         location: 'abc123/intellcont/some_other_file.pdf') }
 
           it 'creates a new ActivityInsightOAFile for that publication' do
-            expect(AiOAStatusExportJob).to receive(:perform_later).once
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location).sort).to eq(['abc123/intellcont/file.pdf',
                                                                                               'abc123/intellcont/some_other_file.pdf'].sort)
             expect(existing_pub2.reload.activity_insight_postprint_status).to eq 'In Progress'
+            expect(AiOAStatusExportJob).to have_received(:perform_later).with(existing_pub2.activity_insight_oa_files.last.id, 'In Progress')
           end
 
           context 'when imported file has a postprint status' do
