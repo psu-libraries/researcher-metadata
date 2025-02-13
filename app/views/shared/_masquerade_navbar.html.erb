@@ -4,7 +4,7 @@
     You are logged in as <%= current_user.impersonator.webaccess_id %>, but acting on behalf of <%= current_user.webaccess_id %>
   </span>
 
-  <ul class="navbar-nav ml-auto">
+  <ul class="navbar-nav ms-auto">
     <li class="nav-item">
       <%= button_to "Stop being #{current_user.webaccess_id}",
                   current_user.impersonator.admin? ? admin_unbecomes_user_path(current_user) : unbecomes_user_path(current_user),

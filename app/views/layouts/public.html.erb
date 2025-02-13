@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Penn State University Libraries | Researcher Metadata Database</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= stylesheet_link_tag    'bundle', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-regular-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-bold-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto/roboto-italic-webfont.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Slab/static/RobotoSlab-Bold.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="preload" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/Roboto_Condensed/RobotoCondensed-VariableFont_wght.woff2" as="font" type="font/woff2" crossorigin="crossorigin">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/assets/fonts/fonts.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/peripheral.min.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header_mark/header_mark.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/header/header.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/footer/footer.css">
+    <link rel="stylesheet" href="https://assets.libraries.psu.edu/psulib_base/dist/peripheral/components/sidebar_menu/sidebar_menu.css">
+    <%= stylesheet_link_tag    'public', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag "application", "data-turbo-track": "reload", defer: true %>
+    <%= javascript_include_tag "bundle", "data-turbo-track": "reload", defer: true %>
+  </head>
+
+  <body>
+    <%= render partial: 'shared/header' %>
+    <%= render partial: 'shared/flash_notice' %>
+    <%= render partial: 'shared/flash_alert' %>
+    <%= render partial: 'shared/offcanvas_main' %>
+    <%= yield %>
+    <%= render partial: 'shared/footer' %>
+  </body>
+</html>

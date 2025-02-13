@@ -1,0 +1,9 @@
+<% if flash[:notice].present? %>
+      <section>
+        <div class="alert alert-success alert-dismissable">
+        </button>
+        <%= flash[:notice] %>
+        <button type="button" class="btn-close float-end" data-bs-dismiss="alert" aria-label="Close">
+        </div>
+      </section>
+    <% end %>
