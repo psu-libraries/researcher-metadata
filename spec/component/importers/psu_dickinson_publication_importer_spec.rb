@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable RSpec/AnyInstance
+
 require 'component/component_spec_helper'
 
 describe PSUDickinsonPublicationImporter do
@@ -47,8 +49,6 @@ describe PSUDickinsonPublicationImporter do
   let!(:existing_import) { create(:publication_import,
                                   source: 'Dickinson Law IDEAS Repo',
                                   source_identifier: 'existing-identifier') }
-
-  let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
 
   before do
     allow(Fieldhand::Repository).to receive(:new).with('https://ideas.dickinsonlaw.psu.edu/do/oai').and_return dickinson_law_repo
@@ -144,26 +144,38 @@ describe PSUDickinsonPublicationImporter do
       expect(oal.url).to eq 'https://example.com/article'
     end
 
-    it 'groups duplicates of new publication records' do
-      expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+    context 'when there are duplicate records' do
+      let!(:duplicate_pub) { create(:publication, title: 'A Penn State Law Article') }
 
-      import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                         source_identifier: 'non-existing-identifier')
-      pub = import.publication
+      before do
+        allow_any_instance_of(DuplicatePublicationGroup).to receive_messages(auto_merge: nil, auto_merge_matching: nil)
+      end
 
-      group = pub.duplicate_group
+      it 'calls the auto-merge methods' do
+        expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge)
+        expect_any_instance_of(DuplicatePublicationGroup).to receive(:auto_merge_matching)
+        importer.call
+      end
 
-      expect(group.publications).to contain_exactly(pub, duplicate_pub)
-    end
+      it 'groups duplicates of new publication records' do
+        expect { importer.call }.to change(DuplicatePublicationGroup, :count).by 1
+        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                           source_identifier: 'non-existing-identifier')
+        pub = import.publication
 
-    it 'hides new publications that might be duplicates' do
-      importer.call
+        group = pub.duplicate_group
 
-      import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
-                                         source_identifier: 'non-existing-identifier')
-      pub = import.publication
+        expect(group.publications).to contain_exactly(pub, duplicate_pub)
+      end
 
-      expect(pub.visible).to be false
+      it 'hides new publications that might be duplicates' do
+        importer.call
+
+        import = PublicationImport.find_by(source: 'Dickinson Law IDEAS Repo',
+                                           source_identifier: 'non-existing-identifier')
+        pub = import.publication
+        expect(pub.visible).to be false
+      end
     end
 
     it 'runs the DOI verification' do
@@ -178,3 +190,4 @@ describe PSUDickinsonPublicationImporter do
     end
   end
 end
+# rubocop:enable RSpec/AnyInstance

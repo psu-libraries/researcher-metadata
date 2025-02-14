@@ -63,9 +63,11 @@ class OAIImporter
             end
 
             DuplicatePublicationGroup.group_duplicates_of(p)
-
-            if p.reload.duplicate_group
+            if p.reload&.duplicate_group
               p.update!(visible: false)
+              unless p.duplicate_group.auto_merge
+                p.duplicate_group.auto_merge_matching
+              end
             end
           end
 
