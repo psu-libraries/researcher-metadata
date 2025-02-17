@@ -12,6 +12,9 @@ $(document).ready(function () {
   $('tbody#authorships').sortable({
     update: function (event, ui) {
       $.ajax({
+        headers: {
+          "X-CSRF-Token": $("meta[name='csrf-token']").attr("content")
+        },
         method: 'PUT',
         url: '/authorships/sort',
         data: $(this).sortable('serialize')
@@ -22,6 +25,9 @@ $(document).ready(function () {
   $('tbody#presentation-contributions').sortable({
     update: function (event, ui) {
       $.ajax({
+        headers: {
+          "X-CSRF-Token": $("meta[name='csrf-token']").attr("content")
+        },
         method: 'PUT',
         url: '/presentation_contributions/sort',
         data: $(this).sortable('serialize')
@@ -32,6 +38,9 @@ $(document).ready(function () {
   $('tbody#user-performances').sortable({
     update: function (event, ui) {
       $.ajax({
+        headers: {
+          "X-CSRF-Token": $("meta[name='csrf-token']").attr("content")
+        },
         method: 'PUT',
         url: '/user_performances/sort',
         data: $(this).sortable('serialize')

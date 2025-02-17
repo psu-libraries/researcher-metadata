@@ -13,13 +13,13 @@
     <%= javascript_include_tag "bundle", "data-turbo-track": "reload", defer: true %>
   </head>
   <body>
-    <nav class="navbar navbar-expand-md navbar-dark mb-4">
+    <nav class="navbar navbar-expand-md navbar-dark mb-4 p-2">
       <a class="navbar-brand" href="#"><%= image_tag('penn-state-libraries-logo.png', alt: 'Penn State Libraries') %></a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse" aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarCollapse">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <%= link_to "Home", root_path, class: "nav-link" %>
           </li>
