@@ -5175,7 +5175,7 @@ describe ActivityInsightImporter do
             importer.call
 
             expect(ActivityInsightOAFile.exists?(aif1.id)).to be false
-            expect(File.exists?(file_download_directory1)).to be false
+            expect(File.exist?(file_download_directory1)).to be false
             expect(pub1.reload.activity_insight_postprint_status).to be_nil
             expect(AiOAStatusExportJob).to have_received(:perform_later).with(aif1.id, nil)
           end
@@ -5223,7 +5223,7 @@ describe ActivityInsightImporter do
             importer.call
 
             expect(existing_pub.reload.activity_insight_oa_files.map(&:location)).to eq(['abc123/intellcont/file.pdf'])
-            expect(File.exists?(existing_aif.file_download_location.model_object_dir)).to be true
+            expect(File.exist?(existing_aif.file_download_location.model_object_dir)).to be true
           end
         end
 

@@ -110,7 +110,7 @@ class FileVersionChecker
           filename&.include?(what_to_search)
         end
       else
-        re = Regexp.new(what_to_search, 'gium')
+        re = Regexp.new(what_to_search, 'im')
         if where_to_search == 'file'
           content.downcase.match?(re)
         else

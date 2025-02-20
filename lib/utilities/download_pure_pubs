@@ -5,7 +5,7 @@ require_relative 'pure_downloader'
 
 downloader = Utilities::PureDownloader.new
 
-if Dir.exists?(downloader.pure_pub_dir) && !Dir.empty?(downloader.pure_pub_dir)
+if Dir.exist?(downloader.pure_pub_dir) && !Dir.empty?(downloader.pure_pub_dir)
   print 'Pure publication data is already present. Overwrite (Yn)?  '
   overwrite = gets.chomp
 

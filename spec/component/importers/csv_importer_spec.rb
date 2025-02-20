@@ -63,7 +63,7 @@ describe CSVImporter do
       let(:csv_importer) { described_class.new(filename: file_with_no_records) }
       let(:called_importer) { csv_importer.call }
 
-      it 'raises a an error' do
+      it 'raises an error' do
         expect { called_importer }.to raise_error CSVImporter::ParseError
       end
 

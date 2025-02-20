@@ -52,7 +52,7 @@ describe PublicationDownloadJob, type: :job do
         ai_oa_file.update(downloaded: true)
         job.perform_now(ai_oa_file.id)
         expect(ai_oa_file.reload.stored_file_path).to be_nil
-        expect(File.exists?(file_path)).to be false
+        expect(File.exist?(file_path)).to be false
         expect(ai_oa_file.reload.downloaded).to be false
       end
     end
@@ -65,7 +65,7 @@ describe PublicationDownloadJob, type: :job do
         ai_oa_file.update(downloaded: true)
         job.perform_now(ai_oa_file.id)
         expect(ai_oa_file.reload.stored_file_path).to be_nil
-        expect(File.exists?(file_path)).to be false
+        expect(File.exist?(file_path)).to be false
         expect(ai_oa_file.reload.downloaded).to be false
       end
     end
