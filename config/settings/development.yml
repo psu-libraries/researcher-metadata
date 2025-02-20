@@ -8,3 +8,6 @@ action_mailer:
 default_url_options:
   host: metadata.test
   protocol: http
+
+external_assets:
+  endpoint: https://assets.qa.k8s.libraries.psu.edu
