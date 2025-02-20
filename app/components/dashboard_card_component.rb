@@ -15,7 +15,7 @@ class DashboardCardComponent < ViewComponent::Base
     count.nonzero?
   end
 
-  def i18n(key, **options)
-    I18n.t("view_component.activity_insight_oa_dashboard_component.#{key}", **options)
+  def i18n(key, **)
+    I18n.t("view_component.activity_insight_oa_dashboard_component.#{key}", **)
   end
 end

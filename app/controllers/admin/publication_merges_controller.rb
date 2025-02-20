@@ -24,7 +24,7 @@ class Admin::PublicationMergesController < RailsAdmin::ApplicationController
             total[e] += 1
             total
           end
-        ids_to_delete = hashed_kwn_non_dup.map { |k, v| k if v > 1 }.compact
+        ids_to_delete = hashed_kwn_non_dup.filter_map { |k, v| k if v > 1 }
         ids_to_delete.each do |id|
           NonDuplicatePublicationGroup.destroy(id)
         end
