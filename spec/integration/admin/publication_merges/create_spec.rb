@@ -212,7 +212,9 @@ describe 'managing duplicate publication groups', type: :feature do
 
       describe 'cancelling the merge' do
         before do
-          click_on 'Cancel'
+          within('.modal-dialog') do
+            click_on 'Cancel'
+          end
         end
 
         it 'redirects to the duplicate group edit page without merging' do

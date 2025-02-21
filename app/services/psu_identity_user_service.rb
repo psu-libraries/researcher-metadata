@@ -33,6 +33,8 @@ class PSUIdentityUserService
         PsuIdentity::SearchService::Client.new.userid(webaccess_id)
       rescue URI::InvalidURIError
         nil
+      rescue PsuIdentity::SearchService::NotFound
+        nil
       rescue StandardError => e
         raise IdentityServiceError
       end

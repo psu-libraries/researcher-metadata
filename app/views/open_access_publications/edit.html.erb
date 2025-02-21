@@ -57,7 +57,7 @@
             rules, you will have a chance to change this file. With questions, please contact the Office of Scholarly
             Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>.
           </p>
-
+          <% byebug %>
           <%= simple_form_for @deposit, url: scholarsphere_file_version_path, method: :post do |f| %>
             <div class="file-uploads">
               <%= f.simple_fields_for :file_uploads do |sfu| %>
