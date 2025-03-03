@@ -47,7 +47,7 @@ describe CSVImporter do
       after { FileUtils.rm empty_file }
 
       it 'raises a an error' do
-        expect { called_importer }.to raise_error EOFError
+        expect { called_importer }.to raise_error CSVImporter::ParseError
       end
 
       it 'sets fatal errors' do
