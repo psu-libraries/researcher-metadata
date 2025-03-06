@@ -137,13 +137,12 @@ GEM
     capybara-email (3.0.2)
       capybara (>= 2.4, < 4.0)
       mail
-    carrierwave (2.2.6)
-      activemodel (>= 5.0.0)
-      activesupport (>= 5.0.0)
+    carrierwave (3.1.1)
+      activemodel (>= 6.0.0)
+      activesupport (>= 6.0.0)
       addressable (~> 2.6)
       image_processing (~> 1.1)
       marcel (~> 1.0.0)
-      mini_mime (>= 0.1.3)
       ssrf_filter (~> 1.0)
     childprocess (5.1.0)
       logger (~> 1.5)
@@ -577,7 +576,7 @@ GEM
       rexml (~> 3.2, >= 3.2.5)
       rubyzip (>= 1.2.2, < 3.0)
       websocket (~> 1.0)
-    shoulda-matchers (5.3.0)
+    shoulda-matchers (6.4.0)
       activesupport (>= 5.2.0)
     simple_form (5.3.1)
       actionpack (>= 5.2)
@@ -685,7 +684,7 @@ DEPENDENCIES
   cancancan (~> 3.3)
   capybara (>= 2.15, < 4.0)
   capybara-email
-  carrierwave (~> 2.2)
+  carrierwave (~> 3.1)
   cocoon
   coffee-rails (~> 5)
   config (~> 5.1)
@@ -736,8 +735,8 @@ DEPENDENCIES
   rswag-specs
   sass-rails
   scholarsphere-client (~> 0.3)
-  selenium-webdriver
-  shoulda-matchers (~> 5.0)
+  selenium-webdriver (~> 4.10)
+  shoulda-matchers (~> 6.4)
   simple_form
   simplecov (~> 0.18)
   smarter_csv
@@ -750,7 +749,7 @@ DEPENDENCIES
   vcr
   view_component
   web-console (>= 3.3.0)
-  webdrivers (~> 5.3.0)
+  webdrivers (~> 5.3.1)
   webmock
 
 BUNDLED WITH

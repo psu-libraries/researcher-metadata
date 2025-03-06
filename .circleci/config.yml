@@ -67,7 +67,7 @@ jobs:
       - checkout
       - ruby/install-deps
       - node/install:
-          node-version: '18'
+          node-version: '22'
       - run: node --version
 
   test:
@@ -94,7 +94,7 @@ jobs:
       - checkout
       - ruby/install-deps
       - node/install:
-          node-version: '18'
+          node-version: '22'
       - run: node --version
       # Here we make sure that the secondary container boots
       # up before we run operations on the database.
