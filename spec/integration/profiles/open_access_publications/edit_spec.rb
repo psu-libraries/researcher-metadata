@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
-describe 'visiting the page to edit the open acess status of a publication', type: :feature do
+describe 'visiting the page to edit the open access status of a publication', type: :feature do
   let(:user) { create(:user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author') }
   let(:pub) { create(:publication,
                      title: 'Test Publication',
@@ -117,7 +117,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           click_on 'Submit URL'
         end
 
-        it 'updates the publication with the sumbitted URL' do
+        it 'updates the publication with the submitted URL' do
           expect(pub.reload.user_submitted_open_access_url).to eq 'https://example.org/pubs/1.pdf'
         end
 
@@ -136,7 +136,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           click_on 'Submit URL'
         end
 
-        it 'does not update the publication with the sumbitted data' do
+        it 'does not update the publication with the submitted data' do
           expect(pub.reload.user_submitted_open_access_url).to be_nil
         end
 

@@ -43,6 +43,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @jobs ||= []
+    @authorship = Authorship.find_by(user: current_user, publication: publication)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
 
     if file_handler.valid?
       @cache_files = file_handler.cache_files
