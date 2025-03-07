@@ -59,6 +59,8 @@ jobs:
           tag: "$CIRCLE_SHA1"
 
   build:
+    docker:
+      - image: cimg/ruby:3.4.1-node
     executor: ruby/default
     steps:
       - checkout
