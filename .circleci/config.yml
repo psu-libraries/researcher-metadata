@@ -78,7 +78,7 @@ jobs:
       #     node-version: '22'
       - run: ruby --version
       - run: node --version
-      - run: exit 1
+      - run: bundle install
 
   test:
     docker:
