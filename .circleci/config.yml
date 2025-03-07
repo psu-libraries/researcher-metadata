@@ -71,8 +71,8 @@ jobs:
       - image: cimg/ruby:3.4.1-node
     steps:
       - checkout
-      # - ruby/install:
-      #     version: '3.4.1'
+      - ruby/install:
+          version: '3.4.1'
       - ruby/install-deps
       - node/install:
           node-version: '22'
