@@ -54,7 +54,7 @@ jobs:
           command: |
             mkdir -p ~/.docker/cli-plugins && \
             LATEST_BUILDX_VERSION=$(curl -sSL https://api.github.com/repos/docker/buildx/releases/latest | jq -r ".tag_name") && \
-            curl -fsSL "https://github.com/docker/buildx/releases/download/${LATEST_BUILDX_VERSION}/buildx-linux-amd64" -o ~/.docker/cli-plugins/docker-buildx && \
+            curl -fsSL "https://github.com/docker/buildx/releases/download/${LATEST_BUILDX_VERSION}/buildx-${LATEST_BUILDX_VERSION}.linux-amd64" -o ~/.docker/cli-plugins/docker-buildx && \
             chmod +x ~/.docker/cli-plugins/docker-buildx
       - docker/build:
           image: library/researcher-metadata
