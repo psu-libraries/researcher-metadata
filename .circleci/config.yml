@@ -39,9 +39,8 @@ jobs:
             ./bin/generate_app
 
   publish:
-    docker:
-      - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
-        user: root
+    executor:
+      name: docker/docker
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
