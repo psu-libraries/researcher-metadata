@@ -9,11 +9,12 @@ WORKDIR /app
 RUN groupadd -g $GID app
 RUN useradd -l -u $UID app -g $GID -d /app
 RUN mkdir /app/tmp && mkdir -p /app/vendor/cache
-RUN chown -R app /app
 
-USER app
 COPY Gemfile Gemfile.lock /app/
 # in the event that bundler runs outside of docker, we get in sync with it's bundler version
+
+RUN chown -R app /app
+USER app
 RUN gem install bundler -v "$(grep -A 1 "BUNDLED WITH" Gemfile.lock | tail -n 1)"
 RUN bundle config set path 'vendor/bundle'
 COPY vendor/cache vendor/cache
