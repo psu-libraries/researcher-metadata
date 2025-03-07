@@ -31,11 +31,9 @@ class PSUIdentityUserService
 
       def query_psu_identity(webaccess_id)
         PsuIdentity::SearchService::Client.new.userid(webaccess_id)
-      rescue URI::InvalidURIError
+      rescue URI::InvalidURIError, PsuIdentity::SearchService::NotFound
         nil
-      rescue PsuIdentity::SearchService::NotFound
-        nil
-      rescue StandardError => e
+      rescue StandardError
         raise IdentityServiceError
       end
 
