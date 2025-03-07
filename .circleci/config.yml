@@ -1,9 +1,9 @@
 version: 2.1
 orbs:
-  docker: circleci/docker@2.8.2
-  ruby: circleci/ruby@2.5.0
-  node: circleci/node@7.1.0
-  browser-tools: circleci/browser-tools@1.5.2
+  docker: circleci/docker@2.6.0
+  ruby: circleci/ruby@2.3.1
+  node: circleci/node@6.3.0
+  browser-tools: circleci/browser-tools@1.4.8
 
 jobs:
   release:
@@ -39,10 +39,9 @@ jobs:
             ./bin/generate_app
 
   publish:
-    # executor:
-    #   name: docker/docker
     docker:
       - image: harbor.k8s.libraries.psu.edu/library/ci-utils:v4.0.0
+        user: root
     steps:
       - setup_remote_docker:
           docker_layer_caching: false
@@ -69,7 +68,7 @@ jobs:
 
   build:
     docker:
-      - image: cimg/ruby:3.4.1-node
+      - image: cimg/ruby:3.1.6-node
     executor: ruby/default
     steps:
       - checkout
