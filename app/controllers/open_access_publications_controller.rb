@@ -112,7 +112,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
         .first
 
       render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version,
-                                                                            cache_files: cache_files, deposit: @deposit }
+                                                                                cache_files: cache_files, deposit: @deposit }
     else
       head :no_content
     end

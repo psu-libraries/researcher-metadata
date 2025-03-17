@@ -80,8 +80,8 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
     context 'when requesting a publication that belongs to the user' do
       before do
-          sleep 0.5
-          visit edit_open_access_publication_path(pub)
+        sleep 0.5
+        visit edit_open_access_publication_path(pub)
       end
 
       it_behaves_like 'a profile management page'
