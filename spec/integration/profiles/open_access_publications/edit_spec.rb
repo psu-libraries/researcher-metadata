@@ -79,7 +79,10 @@ describe 'visiting the page to edit the open access status of a publication', ty
     before { authenticate_as(user) }
 
     context 'when requesting a publication that belongs to the user' do
-      before { visit edit_open_access_publication_path(pub) }
+      before do
+          sleep 0.5
+          visit edit_open_access_publication_path(pub)
+      end
 
       it_behaves_like 'a profile management page'
 
@@ -288,6 +291,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
             end
             click_on 'Submit Files'
             find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
+            sleep 0.25
             choose 'scholarsphere_work_deposit_file_version_acceptedversion'
             click_on 'Submit'
           end
@@ -332,6 +336,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
                 select 'May', from: 'scholarsphere_work_deposit_embargoed_until_2i'
                 select '22', from: 'scholarsphere_work_deposit_embargoed_until_3i'
                 click_button 'Submit Files'
+                sleep 0.5
               end
             end
           end

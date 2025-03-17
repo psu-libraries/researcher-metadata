@@ -17,7 +17,7 @@ gem 'activerecord-import'               # library for bulk inserting data using 
 gem 'bootstrap', '5.3'
 gem 'bugsnag', '~> 6.26'                # notify the team of any exceptions
 gem 'cancancan', '~> 3.3'               # for authorization
-gem 'carrierwave', '~> 3.1'             # file uploading
+gem 'carrierwave', '~> 2.2'             # file uploading
 gem 'cocoon'                            # build nested HTML forms
 gem 'coffee-rails', '~> 5'              # support for coffeescript
 gem 'config', '~> 5.1'

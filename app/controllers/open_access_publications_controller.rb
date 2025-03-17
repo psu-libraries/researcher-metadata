@@ -60,7 +60,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                                         publication_id: publication.id)
           @jobs.push({ provider_id: file_version_job.provider_job_id, job_id: file_version_job.job_id })
         end
-
         render :scholarsphere_file_version, locals: { file_version: nil,
                                                       cache_files: @cache_files.pluck(:cache_path) }
       end
@@ -77,6 +76,8 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     jobs = params[:jobs]
     pdf_file_versions = []
     cache_files = []
+    @authorship = Authorship.find_by(user: current_user, publication: publication)
+    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
 
     # Remove failed Delayed::Job and log an error
     jobs&.reject! do |job|
@@ -111,7 +112,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
         .first
 
       render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version,
-                                                                                cache_files: cache_files }
+                                                                            cache_files: cache_files, deposit: @deposit }
     else
       head :no_content
     end
