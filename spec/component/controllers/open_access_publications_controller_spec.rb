@@ -494,11 +494,11 @@ describe OpenAccessPublicationsController, type: :controller do
 
           it 'renders the file version result partial with acceptedVersion as file_version and cache_files locals' do
             allow(controller).to receive(:render).and_call_original
-
             perform_request
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'acceptedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'],
+                                                                        deposit: anything })
           end
         end
 
@@ -512,7 +512,8 @@ describe OpenAccessPublicationsController, type: :controller do
             perform_request
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'publishedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'],
+                                                                        deposit: anything })
           end
         end
 
@@ -526,7 +527,8 @@ describe OpenAccessPublicationsController, type: :controller do
             perform_request
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'acceptedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'] })
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf', '/path/to/file3.pdf'],
+                                                                        deposit: anything })
           end
         end
 
@@ -550,7 +552,8 @@ describe OpenAccessPublicationsController, type: :controller do
           it 'proceeds with analysis of the other job' do
             expect(controller).to have_received(:render).with(partial: 'open_access_publications/file_version_result',
                                                               locals: { file_version: 'publishedVersion',
-                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'] })
+                                                                        cache_files: ['/path/to/file1.pdf', '/path/to/file2.pdf'],
+                                                                        deposit: anything })
           end
         end
       end
