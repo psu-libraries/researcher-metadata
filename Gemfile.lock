@@ -25,7 +25,7 @@ GEM
     actionpack (7.2.2.1)
       actionview (= 7.2.2.1)
       activesupport (= 7.2.2.1)
-      nokogiri (>= 1.8.5)
+      nokogiri (>= 1.8.3)
       racc
       rack (>= 2.2.4, < 3.2)
       rack-session (>= 1.0.1)

@@ -71,11 +71,6 @@ jobs:
       - image: cimg/ruby:3.4.1-node
     steps:
       - checkout
-      # - ruby/install:
-      #     version: '3.4.1'
-      # - ruby/install-deps
-      # - node/install:
-      #     node-version: '22'
       - run: ruby --version
       - run: node --version
       - run: bundle install
@@ -102,7 +97,6 @@ jobs:
       - browser-tools/install-chrome
       - browser-tools/install-chromedriver
       - checkout
-      # - ruby/install-deps
       - run: bundle install
       - node/install:
           node-version: '22'
