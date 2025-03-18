@@ -43,8 +43,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
   def scholarsphere_file_version
     file_handler = ScholarsphereFileHandler.new(publication, deposit_params)
     @jobs ||= []
-    @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
 
     if file_handler.valid?
       @cache_files = file_handler.cache_files
@@ -76,8 +74,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     jobs = params[:jobs]
     pdf_file_versions = []
     cache_files = []
-    @authorship = Authorship.find_by(user: current_user, publication: publication)
-    @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship)
 
     # Remove failed Delayed::Job and log an error
     jobs&.reject! do |job|
@@ -112,7 +108,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
         .first
 
       render partial: 'open_access_publications/file_version_result', locals: { file_version: file_version,
-                                                                                cache_files: cache_files, deposit: @deposit }
+                                                                                cache_files: cache_files }
     else
       head :no_content
     end
@@ -134,7 +130,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     else
       @cache_files = params[:scholarsphere_work_deposit][:cache_files]
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @permissions = OABPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
+      @permissions = OABPermissionsService.new(@authorship.doi_url_path, params['file_version'])
       @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                               { rights: @permissions.licence,
                                                                 embargoed_until: @permissions.embargo_end_date,

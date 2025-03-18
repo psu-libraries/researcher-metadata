@@ -20,7 +20,7 @@
 
 <div class="container">
   <div class="row">
-    <%= form_with model: @deposit, url: scholarsphere_deposit_form_path, method: :post do |f| %>
+    <%= form_with url: scholarsphere_deposit_form_path, method: :post do |f| %>
       <% cache_files.each_with_index do |file_path, key| %>
       <%= f.hidden_field "cache_files", value: File.basename(file_path),
         name: "scholarsphere_work_deposit[cache_files][#{key}][original_filename]",

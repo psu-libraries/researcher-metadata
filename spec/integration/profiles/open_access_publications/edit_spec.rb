@@ -180,8 +180,8 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'does not preselect anything' do
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
 
@@ -193,7 +193,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+            expect(find_field('file_version_acceptedversion').checked?).to be true
           end
         end
 
@@ -205,7 +205,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+            expect(find_field('file_version_acceptedversion').checked?).to be true
           end
         end
 
@@ -217,7 +217,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.')
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+            expect(find_field('file_version_publishedversion').checked?).to be true
           end
         end
 
@@ -229,7 +229,7 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+            expect(find_field('file_version_publishedversion').checked?).to be true
           end
         end
 
@@ -241,8 +241,8 @@ describe 'visiting the page to edit the open access status of a publication', ty
 
           it 'does not preselect anything' do
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
 
@@ -267,8 +267,8 @@ describe 'visiting the page to edit the open access status of a publication', ty
             expect(page).to have_content('Attempting to determine file version, please wait...')
             expect(page).to have_no_content('Attempting to determine file version, please wait...', wait: 15)
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article.', wait: 15)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
       end
@@ -290,9 +290,9 @@ describe 'visiting the page to edit the open access status of a publication', ty
               file.attach_file("#{Rails.root}/spec/fixtures/test_file.pdf")
             end
             click_on 'Submit Files'
-            find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
+            find_field('file_version_acceptedversion', wait: 10)
             sleep 0.25
-            choose 'scholarsphere_work_deposit_file_version_acceptedversion'
+            choose 'file_version_acceptedversion'
             click_on 'Submit'
           end
         end
@@ -433,8 +433,8 @@ describe 'visiting the page to edit the open access status of a publication', ty
             suppress(RuntimeError) do
               attach_file('File', "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf")
               click_on 'Submit Files'
-              find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
-              choose 'scholarsphere_work_deposit_file_version_acceptedversion'
+              find_field('file_version_acceptedversion', wait: 10)
+              choose 'file_version_acceptedversion'
               click_on 'Submit'
 
               fill_in 'Subtitle', with: 'New Subtitle'
