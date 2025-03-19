@@ -10,7 +10,7 @@ class CSVImporter
   def initialize(filename:, batch_size: 500)
     @fatal_errors = []
     @filename = filename
-    @fatal_errors << "Cannot find file #{filename.inspect}" unless File.exists?(filename)
+    @fatal_errors << "Cannot find file #{filename.inspect}" unless File.exist?(filename)
     @fatal_errors << "File is empty #{filename.inspect}" if File.empty?(filename)
     @fatal_errors << "File has no records #{filename.inspect}" unless File.new(filename).readlines.size > 1
     @batch_size = batch_size
@@ -37,6 +37,9 @@ class CSVImporter
       bulk_import(objects)
       chunk_number += 1
     end
+  rescue SmarterCSV::Error => e
+    add_error(message: e.message, row_number: 'unknown')
+  ensure
     pbar.finish
     raise ParseError, fatal_errors if fatal_errors_encountered?
   end

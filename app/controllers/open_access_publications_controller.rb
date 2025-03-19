@@ -58,7 +58,6 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
                                                                         publication_id: publication.id)
           @jobs.push({ provider_id: file_version_job.provider_job_id, job_id: file_version_job.job_id })
         end
-
         render :scholarsphere_file_version, locals: { file_version: nil,
                                                       cache_files: @cache_files.pluck(:cache_path) }
       end
@@ -131,7 +130,7 @@ class OpenAccessPublicationsController < OpenAccessWorkflowController
     else
       @cache_files = params[:scholarsphere_work_deposit][:cache_files]
       @authorship = Authorship.find_by(user: current_user, publication: publication)
-      @permissions = OABPermissionsService.new(@authorship.doi_url_path, params['scholarsphere_work_deposit']['file_version'])
+      @permissions = OABPermissionsService.new(@authorship.doi_url_path, params['file_version'])
       @deposit = ScholarsphereWorkDeposit.new_from_authorship(@authorship,
                                                               { rights: @permissions.licence,
                                                                 embargoed_until: @permissions.embargo_end_date,

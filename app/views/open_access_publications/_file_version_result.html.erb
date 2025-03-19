@@ -20,22 +20,26 @@
 
 <div class="container">
   <div class="row">
-    <%= form_for :scholarsphere_work_deposit, url: scholarsphere_deposit_form_path, method: :post do |f| %>
-    <% cache_files.each_with_index do |file_path, key| %>
-      <%= f.hidden_field "cache_files[#{key}][original_filename]", value: File.basename(file_path) %>
-      <%= f.hidden_field "cache_files[#{key}][cache_path]", value: file_path %>
-    <% end %>
-      <div class='form-group'>
-        <div class="form-check">
-            <%= f.radio_button :file_version, I18n.t('file_versions.accepted_version'), class: 'form-check-input', checked: file_version == I18n.t('file_versions.accepted_version'), required: true %>
-            <%= f.label :file_version, I18n.t('file_versions.accepted_version_display'), class: 'form-check-label' %>
-        </div>
-        <div class="form-check">
-            <%= f.radio_button :file_version, I18n.t('file_versions.published_version'), class: 'form-check-input', checked: file_version == I18n.t('file_versions.published_version') %>
-            <%= f.label :file_version, I18n.t('file_versions.published_version_display'), class: 'form-check-label' %>
-        </div>
-    </div>
-      <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
+    <%= form_with url: scholarsphere_deposit_form_path, method: :post do |f| %>
+      <% cache_files.each_with_index do |file_path, key| %>
+      <%= f.hidden_field "cache_files", value: File.basename(file_path),
+        name: "scholarsphere_work_deposit[cache_files][#{key}][original_filename]",
+        id: "scholarsphere_work_deposit_cache_files_#{key}_original_filename" %>
+      <%= f.hidden_field "cache_files", value: file_path,
+        name: "scholarsphere_work_deposit[cache_files][#{key}][cache_path]",
+        id: "scholarsphere_work_deposit_cache_files_#{key}_cache_path" %>
+      <% end %>
+        <div class='form-group'>
+          <div class="form-check">
+              <%= f.radio_button :file_version, I18n.t('file_versions.accepted_version'), class: 'form-check-input', checked: file_version == I18n.t('file_versions.accepted_version'), required: true %>
+              <%= f.label :file_version, I18n.t('file_versions.accepted_version_display'), class: 'form-check-label' %>
+          </div>
+          <div class="form-check">
+              <%= f.radio_button :file_version, I18n.t('file_versions.published_version'), class: 'form-check-input', checked: file_version == I18n.t('file_versions.published_version') %>
+              <%= f.label :file_version, I18n.t('file_versions.published_version_display'), class: 'form-check-label' %>
+          </div>
+      </div>
+        <%= f.submit 'Submit', class: 'btn btn-primary', data: {disable_with: 'Submit'} %>
     <% end %>
     </div>
 </div>

@@ -207,6 +207,6 @@ class PurePublicationImporter < PureImporter
     end
 
     def importable?(publication)
-      status_value(publication) == 'Published' || status_value(publication) == 'Accepted/In press'
+      ['Published', 'Accepted/In press'].include?(status_value(publication))
     end
 end

@@ -122,6 +122,20 @@ describe 'Admin list of publications by organization', type: :feature do
       end
     end
 
+    describe 'exporting to Activity Insight' do
+      before do
+        visit_index
+        click_on 'Export to Activity Insight'
+      end
+
+      it 'shows the correct page/info for exporting to Activity Insight' do
+        expect(page).to have_current_path RailsAdmin.railtie_routes_url_helpers.export_publications_to_activity_insight_path(model_name: :publication), ignore_query: true
+        expect(page).to have_content 'You have found 2 publications from test organization'
+        expect(page).to have_button 'Integrate with Beta'
+        expect(page).to have_button 'Integrate with Production'
+      end
+    end
+
     describe 'exporting found publications' do
       before do
         visit_index
@@ -150,20 +164,6 @@ describe 'Admin list of publications by organization', type: :feature do
         it 'produces a CSV file' do
           expect(download_directory.children.count).to eq(1)
         end
-      end
-    end
-
-    describe 'exporting to Activity Insight' do
-      before do
-        visit_index
-        click_on 'Export to Activity Insight'
-      end
-
-      it 'shows the correct page/info for exporting to Activity Insight' do
-        expect(page).to have_current_path RailsAdmin.railtie_routes_url_helpers.export_publications_to_activity_insight_path(model_name: :publication), ignore_query: true
-        expect(page).to have_content 'You have found 2 publications from test organization'
-        expect(page).to have_button 'Integrate with Beta'
-        expect(page).to have_button 'Integrate with Production'
       end
     end
 

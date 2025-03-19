@@ -9,7 +9,7 @@
     "foundation-sites": "^6.9.0",
     "mini-css-extract-plugin": "^2.7.6",
     "node-polyfill-webpack-plugin": "^2.0.1",
-    "rails_admin": "3.2.1",
+    "rails_admin": "3.3.0",
     "sass": "^1.80.6",
     "sass-loader": "^13.3.2",
     "swagger-ui-dist": "5.1.0",

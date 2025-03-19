@@ -3,15 +3,14 @@
 class OpenAccessLocation < ApplicationRecord
   include DeputyUser
 
-  enum source: to_enum_hash([
-                              Source::USER,
-                              Source::SCHOLARSPHERE,
-                              Source::OPEN_ACCESS_BUTTON,
-                              Source::UNPAYWALL,
-                              Source::DICKINSON_IDEAS,
-                              Source::PSU_LAW_ELIBRARY
-                            ]),
-       _prefix: :source
+  enum :source, to_enum_hash([
+                               Source::USER,
+                               Source::SCHOLARSPHERE,
+                               Source::OPEN_ACCESS_BUTTON,
+                               Source::UNPAYWALL,
+                               Source::DICKINSON_IDEAS,
+                               Source::PSU_LAW_ELIBRARY
+                             ]), prefix: :source
 
   belongs_to :publication, inverse_of: :open_access_locations
 

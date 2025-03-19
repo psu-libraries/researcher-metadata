@@ -47,7 +47,7 @@
         <div class="open-access-action">
           <h5>Upload to ScholarSphere</h5>
           <p>
-            If there isn’t already an open access version of your work available on the web, please
+            If there isn't already an open access version of your work available on the web, please
             consider uploading the <a href="https://psu.libanswers.com/faq/279953" target="_blank">Accepted
             Manuscript</a> to ScholarSphere. You can attach as many files as needed, but you must attach at least one.
           </p>
@@ -57,7 +57,6 @@
             rules, you will have a chance to change this file. With questions, please contact the Office of Scholarly
             Communications and Copyright at <a href="mailto:openaccess@psu.edu">openaccess@psu.edu</a>.
           </p>
-
           <%= simple_form_for @deposit, url: scholarsphere_file_version_path, method: :post do |f| %>
             <div class="file-uploads">
               <%= f.simple_fields_for :file_uploads do |sfu| %>

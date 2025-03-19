@@ -3,7 +3,7 @@
 require 'integration/integration_spec_helper'
 require 'integration/profiles/shared_examples_for_profile_management_page'
 
-describe 'visiting the page to edit the open acess status of a publication', type: :feature do
+describe 'visiting the page to edit the open access status of a publication', type: :feature do
   let(:user) { create(:user, webaccess_id: 'xyz123', first_name: 'Robert', last_name: 'Author') }
   let(:pub) { create(:publication,
                      title: 'Test Publication',
@@ -79,7 +79,10 @@ describe 'visiting the page to edit the open acess status of a publication', typ
     before { authenticate_as(user) }
 
     context 'when requesting a publication that belongs to the user' do
-      before { visit edit_open_access_publication_path(pub) }
+      before do
+        sleep 0.5
+        visit edit_open_access_publication_path(pub)
+      end
 
       it_behaves_like 'a profile management page'
 
@@ -117,7 +120,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           click_on 'Submit URL'
         end
 
-        it 'updates the publication with the sumbitted URL' do
+        it 'updates the publication with the submitted URL' do
           expect(pub.reload.user_submitted_open_access_url).to eq 'https://example.org/pubs/1.pdf'
         end
 
@@ -136,7 +139,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
           click_on 'Submit URL'
         end
 
-        it 'does not update the publication with the sumbitted data' do
+        it 'does not update the publication with the submitted data' do
           expect(pub.reload.user_submitted_open_access_url).to be_nil
         end
 
@@ -177,8 +180,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'does not preselect anything' do
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
 
@@ -190,7 +193,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.')
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+            expect(find_field('file_version_acceptedversion').checked?).to be true
           end
         end
 
@@ -202,7 +205,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'preselects Accepted Manuscript' do
             expect(page).to have_content('This looks like the Accepted Manuscript of the article.', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be true
+            expect(find_field('file_version_acceptedversion').checked?).to be true
           end
         end
 
@@ -214,7 +217,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.')
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+            expect(find_field('file_version_publishedversion').checked?).to be true
           end
         end
 
@@ -226,7 +229,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'preselects Final Published Version' do
             expect(page).to have_content('This looks like the Final Published Version of the article.', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be true
+            expect(find_field('file_version_publishedversion').checked?).to be true
           end
         end
 
@@ -238,8 +241,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
 
           it 'does not preselect anything' do
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article', wait: 10)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
 
@@ -264,8 +267,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             expect(page).to have_content('Attempting to determine file version, please wait...')
             expect(page).to have_no_content('Attempting to determine file version, please wait...', wait: 15)
             expect(page).to have_content('We were not able to determine the version of your uploaded publication article.', wait: 15)
-            expect(find_field('scholarsphere_work_deposit_file_version_acceptedversion').checked?).to be false
-            expect(find_field('scholarsphere_work_deposit_file_version_publishedversion').checked?).to be false
+            expect(find_field('file_version_acceptedversion').checked?).to be false
+            expect(find_field('file_version_publishedversion').checked?).to be false
           end
         end
       end
@@ -287,8 +290,9 @@ describe 'visiting the page to edit the open acess status of a publication', typ
               file.attach_file("#{Rails.root}/spec/fixtures/test_file.pdf")
             end
             click_on 'Submit Files'
-            find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
-            choose 'scholarsphere_work_deposit_file_version_acceptedversion'
+            find_field('file_version_acceptedversion', wait: 10)
+            sleep 0.25
+            choose 'file_version_acceptedversion'
             click_on 'Submit'
           end
         end
@@ -332,6 +336,7 @@ describe 'visiting the page to edit the open acess status of a publication', typ
                 select 'May', from: 'scholarsphere_work_deposit_embargoed_until_2i'
                 select '22', from: 'scholarsphere_work_deposit_embargoed_until_3i'
                 click_button 'Submit Files'
+                sleep 0.5
               end
             end
           end
@@ -428,8 +433,8 @@ describe 'visiting the page to edit the open acess status of a publication', typ
             suppress(RuntimeError) do
               attach_file('File', "#{Rails.root}/spec/fixtures/pdf_check_published_versionS123456abc.pdf")
               click_on 'Submit Files'
-              find_field('scholarsphere_work_deposit_file_version_acceptedversion', wait: 10)
-              choose 'scholarsphere_work_deposit_file_version_acceptedversion'
+              find_field('file_version_acceptedversion', wait: 10)
+              choose 'file_version_acceptedversion'
               click_on 'Submit'
 
               fill_in 'Subtitle', with: 'New Subtitle'

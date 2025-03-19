@@ -9,7 +9,7 @@ def nsf_data_dir
   Pathname.new(File.expand_path("#{File.dirname(__FILE__)}/../..")).join('db', 'data', 'nsf_grants')
 end
 
-unless Dir.exists? nsf_data_dir
+unless Dir.exist? nsf_data_dir
   puts "Creating directory #{nsf_data_dir}..."
   Dir.mkdir nsf_data_dir
 end

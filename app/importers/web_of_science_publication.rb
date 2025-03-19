@@ -77,7 +77,7 @@ class WebOfSciencePublication
   end
 
   def orcids
-    contributors.map(&:orcid).compact
+    contributors.filter_map(&:orcid)
   end
 
   private

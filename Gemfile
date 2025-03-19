@@ -6,7 +6,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 gem 'rails', '~> 7.2'
 
 # RailsAdmin is a Rails engine that provides an easy-to-use interface for managing your data
-gem 'rails_admin', '~> 3.2'
+gem 'rails_admin', '~> 3.3.0'
 
 # Support for Penn State Azure Active Directory authentication
 gem 'omniauth', '~> 2.1'
@@ -85,10 +85,10 @@ group :test do
   gem 'rails-controller-testing'
   gem 'rspec-its'
   gem 'rspec-rails'
-  gem 'selenium-webdriver'
-  gem 'shoulda-matchers', '~> 5.0'
+  gem 'selenium-webdriver', '~> 4.10'
+  gem 'shoulda-matchers', '~> 6.4'
   gem 'simplecov', '~> 0.18'
   gem 'vcr'
-  gem 'webdrivers'
+  gem 'webdrivers', '~> 5.3.1'
   gem 'webmock'
 end

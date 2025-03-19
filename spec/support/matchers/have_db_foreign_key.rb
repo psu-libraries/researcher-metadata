@@ -50,7 +50,7 @@ RSpec::Matchers.define :have_db_foreign_key do |expected|
     expected_table_name = expected_class_name.tableize
     expected_column_name = expected_class_name.foreign_key
 
-    foreign_keys.find { |fk| (fk.to_table == expected_table_name || fk.to_table == @expected_to_table_name) && fk.options[:column] == expected_column_name }
+    foreign_keys.find { |fk| [expected_table_name, @expected_to_table_name].include?(fk.to_table) && fk.options[:column] == expected_column_name }
   end
 
   def matched_key_name

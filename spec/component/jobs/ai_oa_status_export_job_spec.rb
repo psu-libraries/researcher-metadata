@@ -32,7 +32,7 @@ describe AiOAStatusExportJob, type: :job do
       it 'calls the ActivityInsightOAStatusExporter without error' do
         expect(exporter).to receive(:export)
         job.perform_now(aif1.id, export_status)
-        expect(File.exists?(aif1.file_download_location.model_object_dir)).to be true
+        expect(File.exist?(aif1.file_download_location.model_object_dir)).to be true
         expect(aif1.stored_file_path).not_to be_nil
       end
 
@@ -47,7 +47,7 @@ describe AiOAStatusExportJob, type: :job do
       it 'calls the ActivityInsightOAStatusExporter without error and removes the file download directory' do
         expect(exporter).to receive(:export)
         job.perform_now(aif1.id, export_status)
-        expect(File.exists?(aif1.file_download_location.model_object_dir)).to be false
+        expect(File.exist?(aif1.file_download_location.model_object_dir)).to be false
         expect(aif1.reload.stored_file_path).to be_nil
       end
 
@@ -62,7 +62,7 @@ describe AiOAStatusExportJob, type: :job do
       it 'calls the ActivityInsightOAStatusExporter without error' do
         expect(exporter).to receive(:export)
         job.perform_now(aif1.id, export_status)
-        expect(File.exists?(aif1.file_download_location.model_object_dir)).to be true
+        expect(File.exist?(aif1.file_download_location.model_object_dir)).to be true
         expect(aif1.stored_file_path).not_to be_nil
       end
 

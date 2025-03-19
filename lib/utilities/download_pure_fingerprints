@@ -5,7 +5,7 @@ require_relative 'pure_downloader'
 
 downloader = Utilities::PureDownloader.new
 
-if File.exists? downloader.fingerprint_data_file
+if File.exist? downloader.fingerprint_data_file
   print 'Publication fingerprint data file already exists. Overwrite (Yn)?  '
   overwrite = gets.chomp
 
